@@ -25,4 +25,28 @@ public final class SavedPlace implements Place {
 	public Position getPosition() {
 		return new Position(latitude, longitude);
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		SavedPlace that = (SavedPlace) o;
+
+		return name.equals(that.name);
+
+	}
+
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return "SavedPlace{" +
+				"name='" + name + '\'' +
+				", position=" + getPosition() +
+				'}';
+	}
 }
