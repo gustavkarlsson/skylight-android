@@ -28,6 +28,7 @@ public class KpIndexService extends WakefulIntentService {
 
 	private void update() {
 		Log.v(TAG, "update");
+		// TODO Get Kp index from service and broadcast/notify
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 }
