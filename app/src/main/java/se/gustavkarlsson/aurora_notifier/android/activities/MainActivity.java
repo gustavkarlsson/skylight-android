@@ -7,19 +7,19 @@ import android.view.MenuItem;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
 
-public class PlacesActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_places);
+        setContentView(R.layout.activity_main);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_places, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 

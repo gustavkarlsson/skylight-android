@@ -1,7 +1,7 @@
 package se.gustavkarlsson.aurora_notifier.android.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +11,14 @@ import se.gustavkarlsson.aurora_notifier.android.R;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class PlacesActivityFragment extends ListFragment {
+public class CurrentLocationFragment extends Fragment {
 
-    public PlacesActivityFragment() {
+    public CurrentLocationFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_places, container, false);
+        return inflater.inflate(R.layout.fragment_current_location, container, false);
     }
 }

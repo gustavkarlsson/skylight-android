@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name" translatable="false">Aurora Notifier</string>
-	<string name="title_activity_places">Places</string>
 	<string name="action_settings">Settings</string>
 </resources>
