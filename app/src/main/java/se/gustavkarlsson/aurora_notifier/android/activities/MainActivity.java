@@ -10,7 +10,7 @@ import se.gustavkarlsson.aurora_notifier.android.R;
 
 public class MainActivity extends AppCompatActivity {
 
-	private static final String TAG = "PlacesActivity";
+	private static final String TAG = MainActivity.class.getSimpleName();
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {

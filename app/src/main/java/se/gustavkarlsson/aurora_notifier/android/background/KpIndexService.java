@@ -7,7 +7,7 @@ import com.commonsware.cwac.wakeful.WakefulIntentService;
 
 public class KpIndexService extends WakefulIntentService {
 
-	private static final String TAG = "KpIndexService";
+	private static final String TAG = KpIndexService.class.getSimpleName();
 
     public static final String ACTION_UPDATE = "se.gustavkarlsson.aurora_notifier.android.action.UPDATE";
 

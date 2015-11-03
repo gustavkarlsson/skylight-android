@@ -14,7 +14,7 @@ import se.gustavkarlsson.aurora_notifier.android.R;
  */
 public class CurrentLocationFragment extends Fragment {
 
-	private static final String TAG = "CurrentLocationFragment";
+	private static final String TAG = CurrentLocationFragment.class.getSimpleName();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
