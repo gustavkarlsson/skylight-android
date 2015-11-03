@@ -5,6 +5,15 @@ import se.gustavkarlsson.aurora_notifier.android.R;
 
 public final class CurrentPlace implements Place {
 
+    private static CurrentPlace instance = new CurrentPlace();
+
+    public static CurrentPlace getInstance() {
+        return instance;
+    }
+
+    private CurrentPlace() {
+    }
+
 	@Override
 	public String getName() {
 		return AuroraNotifier.getContext().getResources().getString(R.string.current_place);
