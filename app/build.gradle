@@ -33,10 +33,14 @@ android {
 }
 
 dependencies {
+	ext {
+		retrofitVersion = "2.0.0-beta2"
+	}
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.1.0"
 	compile "io.realm:realm-android:0.84.1"
 	compile "com.commonsware.cwac:wakeful:1.0.5"
-	compile "com.squareup.retrofit:retrofit:2.0.0-beta1"
-	compile "com.github.gustavkarlsson:aurora-notifier-common:release-1.0.0"
+	compile "com.squareup.retrofit:retrofit:" + retrofitVersion
+	compile "com.squareup.retrofit:converter-gson:" + retrofitVersion
+	compile "com.github.gustavkarlsson:aurora-notifier-common:aurora-notifier-common-1.4.0"
 }
