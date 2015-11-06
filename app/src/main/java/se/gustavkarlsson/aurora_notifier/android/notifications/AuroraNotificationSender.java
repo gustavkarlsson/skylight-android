@@ -12,10 +12,11 @@ public class AuroraNotificationSender implements NotificationSender<Timestamped<
 	public static final int NOTIFICATION_ID_PERFECT_CONDITIONS = 0;
 
 	private final Context context;
+	private final NotificationManager notificationManager;
 
-
-	public AuroraNotificationSender(Context context) {
+	public AuroraNotificationSender(Context context, NotificationManager notificationManager) {
 		this.context = context;
+		this.notificationManager = notificationManager;
 	}
 
 	@Override
@@ -24,8 +25,6 @@ public class AuroraNotificationSender implements NotificationSender<Timestamped<
 				.setSmallIcon(android.R.drawable.ic_dialog_alert)
 				.setContentTitle("KP Index updated")
 				.setContentText(kpIndex.toString()).build();
-
-		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationManager.notify(NOTIFICATION_ID_PERFECT_CONDITIONS, notification);
 	}
 }
