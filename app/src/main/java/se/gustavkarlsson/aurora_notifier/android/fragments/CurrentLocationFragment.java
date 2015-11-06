@@ -7,19 +7,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import se.gustavkarlsson.aurora_notifier.android.R;
+import se.gustavkarlsson.aurora_notifier.android.databinding.FragmentCurrentLocationBinding;
+import se.gustavkarlsson.aurora_notifier.android.models.KpIndexModel;
+import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class CurrentLocationFragment extends Fragment {
 
 	private static final String TAG = CurrentLocationFragment.class.getSimpleName();
 
-    @Override
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+	}
+
+	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 		Log.v(TAG, "onCreateView");
-        return inflater.inflate(R.layout.fragment_current_location, container, false);
+		FragmentCurrentLocationBinding binding = FragmentCurrentLocationBinding.inflate(inflater, container, false);
+		KpIndexModel kpIndexModel = new KpIndexModel();
+		kpIndexModel.setKpIndex(new Timestamped<>(3f));
+		binding.setKpIndex(kpIndexModel);
+        return binding.getRoot();
     }
 }

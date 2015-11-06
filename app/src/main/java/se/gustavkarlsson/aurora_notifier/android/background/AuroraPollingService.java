@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.commonsware.cwac.wakeful.WakefulIntentService;
@@ -26,6 +27,7 @@ public class AuroraPollingService extends WakefulIntentService {
 
 	private final KpIndexService kpIndexService;
 	private final NotificationSender<Timestamped<Float>> notificationSender;
+	private LocalBroadcastManager broadcaster;
 
 	AuroraPollingService(KpIndexService kpIndexService, NotificationSender<Timestamped<Float>> notificationSender) {
 		super(AuroraPollingService.class.getSimpleName());
@@ -54,6 +56,12 @@ public class AuroraPollingService extends WakefulIntentService {
 	}
 
 	@Override
+	public void onCreate() {
+		super.onCreate();
+		broadcaster = LocalBroadcastManager.getInstance(this);
+	}
+
+	@Override
 	protected void doWakefulWork(Intent intent) {
 		Log.v(TAG, "doWakefulWork");
 		if (intent != null) {
@@ -70,7 +78,9 @@ public class AuroraPollingService extends WakefulIntentService {
 			Response<Timestamped<Float>> response = kpIndexService.get().execute();
 			Log.d(TAG, "Got response: " + response.code() + ", message: " + response.raw().toString());
 			if (response.isSuccess()) {
-				notificationSender.notify(response.body());
+				Timestamped<Float> kpIndex = response.body();
+				notificationSender.notify(kpIndex);
+				// broadcaster.sendBroadcast(createKpIndexIntent(kpIndex));
 				// TODO handle more data
 			}
 		} catch (IOException e) {
