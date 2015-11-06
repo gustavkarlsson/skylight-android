@@ -10,6 +10,7 @@ import java.io.IOException;
 import retrofit.GsonConverterFactory;
 import retrofit.Response;
 import retrofit.Retrofit;
+import se.gustavkarlsson.aurora_notifier.android.notifications.AuroraNotificationSender;
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;
 
@@ -48,11 +49,11 @@ public class AuroraPollingService extends WakefulIntentService {
 		try {
 			Response<Timestamped<Float>> response = kpIndexService.get().execute();
 			Log.d(TAG, "Got response: " + response.code() + ", message: " + response.raw().toString());
-			// TODO Do something with response
+			if (response.isSuccess()) {
+				new AuroraNotificationSender(this).notify(response.body());
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		throw new UnsupportedOperationException("Not yet implemented");
 	}
 }
