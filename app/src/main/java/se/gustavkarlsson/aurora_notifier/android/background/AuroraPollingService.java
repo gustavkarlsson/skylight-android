@@ -12,14 +12,14 @@ import org.parceler.Parcels;
 
 import java.io.IOException;
 
-import retrofit.GsonConverterFactory;
 import retrofit.Response;
-import retrofit.Retrofit;
 import se.gustavkarlsson.aurora_notifier.android.notifications.AuroraNotificationSender;
 import se.gustavkarlsson.aurora_notifier.android.notifications.NotificationSender;
 import se.gustavkarlsson.aurora_notifier.android.parcels.AuroraUpdate;
+import se.gustavkarlsson.aurora_notifier.android.services.KpIndexService;
+import se.gustavkarlsson.aurora_notifier.android.services.MyKpIndexService;
+import se.gustavkarlsson.aurora_notifier.android.services.ServiceException;
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
-import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;
 
 public class AuroraPollingService extends WakefulIntentService {
 
@@ -39,18 +39,9 @@ public class AuroraPollingService extends WakefulIntentService {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		kpIndexService = createKpIndexService();
+		kpIndexService = new MyKpIndexService();
 		notificationSender = new AuroraNotificationSender(this, (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE));
 		broadcaster = LocalBroadcastManager.getInstance(this);
-	}
-
-	private KpIndexService createKpIndexService() {
-		Retrofit retrofit = new Retrofit.Builder()
-				// TODO Update to more permanent host
-				.baseUrl("http://9698.s.time4vps.eu/rest/")
-				.addConverterFactory(GsonConverterFactory.create())
-				.build();
-		return retrofit.create(KpIndexService.class);
 	}
 
 	@Override
@@ -67,16 +58,11 @@ public class AuroraPollingService extends WakefulIntentService {
 	public void update() {
 		Log.v(TAG, "update");
 		try {
-			Response<Timestamped<Float>> response = kpIndexService.get().execute();
-			Log.d(TAG, "Got response: " + response.code() + ", message: " + response.raw().toString());
-			if (response.isSuccess()) {
-				Timestamped<Float> kpIndex = response.body();
-				broadcaster.sendBroadcast(createUpdatedIntent(kpIndex));
-				notificationSender.notify(kpIndex);
-			}
-		} catch (IOException e) {
+			Timestamped<Float> kpIndex = kpIndexService.getKpIndex();
+			broadcaster.sendBroadcast(createUpdatedIntent(kpIndex));
+			notificationSender.notify(kpIndex);
+		} catch (ServiceException e) {
 			e.printStackTrace();
-			// TODO Handle error
 		}
 	}
 
