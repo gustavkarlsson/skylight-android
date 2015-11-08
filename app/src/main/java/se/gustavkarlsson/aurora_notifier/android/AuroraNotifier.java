@@ -30,9 +30,9 @@ public class AuroraNotifier extends Application {
 
 	private void setupAlarm() {
 		Log.v(TAG, "setupAlarm");
-		Intent intent = new Intent(Intent.ACTION_RUN, null, this, BootReceiver.class);
 		LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
-		localBroadcastManager.registerReceiver(new BootReceiver(), new IntentFilter(Intent.ACTION_RUN));
+		Intent intent = new Intent(BootReceiver.ACTION_SETUP_ALARMS, null, this, BootReceiver.class);
+		localBroadcastManager.registerReceiver(new BootReceiver(), new IntentFilter(BootReceiver.ACTION_SETUP_ALARMS));
 		localBroadcastManager.sendBroadcast(intent);
 	}
 }

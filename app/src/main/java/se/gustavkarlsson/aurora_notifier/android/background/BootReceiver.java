@@ -10,6 +10,7 @@ import android.util.Log;
 public class BootReceiver extends BroadcastReceiver {
 
 	private static final String TAG = BootReceiver.class.getSimpleName();
+	public static final String ACTION_SETUP_ALARMS = TAG + ".SETUP_ALARMS";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -17,27 +18,27 @@ public class BootReceiver extends BroadcastReceiver {
 		if (intent != null) {
 			String action = intent.getAction();
 			if (Intent.ACTION_BOOT_COMPLETED.equals(action)
-					|| Intent.ACTION_RUN.equals(action)) {
+					|| ACTION_SETUP_ALARMS.equals(action)) {
 				setupAlarms(context);
 			}
 		}
-    }
+	}
 
 	private void setupAlarms(Context context) {
 		Log.v(TAG, "setupAlarms");
 		Log.i(TAG, "Setting up alarms");
-		Intent updateIntent = new Intent(AuroraPollingService.ACTION_UPDATE, null, context, AuroraPollingService.class);
+		Intent updateIntent = AuroraPollingService.createUpdateIntent(context);
 		if (!intentAlreadyCreated(context, updateIntent)) {
 			Log.d(TAG, "Alarm is not yet set up");
-			PendingIntent pendingServiceIntent = PendingIntent.getService(context, 0, updateIntent, 0);
-			scheduleAlarm(context, pendingServiceIntent);
+			scheduleAlarm(context, updateIntent);
 			Log.d(TAG, "Alarm is now set up");
 		} else {
 			Log.d(TAG, "Alarm was already set up");
 		}
 	}
 
-	private void scheduleAlarm(Context context, PendingIntent pendingServiceIntent) {
+	private void scheduleAlarm(Context context, Intent intent) {
+		PendingIntent pendingServiceIntent = PendingIntent.getService(context, 0, intent, 0);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 0, AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingServiceIntent);
 	}

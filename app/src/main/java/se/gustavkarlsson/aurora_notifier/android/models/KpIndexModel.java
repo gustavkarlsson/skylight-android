@@ -4,24 +4,29 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 
 import se.gustavkarlsson.aurora_notifier.android.BR;
-import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 
 public class KpIndexModel extends BaseObservable {
 
-	private Timestamped<Float> kpIndex;
-
-	public void setKpIndex(Timestamped<Float> kpIndex) {
-		this.kpIndex = kpIndex;
-		notifyPropertyChanged(BR._all);
-	}
+	private Float value;
+	private long timestamp;
 
 	@Bindable
 	public String getValue() {
-		return kpIndex == null ? "-" : String.valueOf(kpIndex.getValue());
+		return value == null ? "-" : String.valueOf(value);
+	}
+
+	public void setValue(Float value) {
+		this.value = value;
+		this.notifyPropertyChanged(BR.value);
 	}
 
 	@Bindable
 	public String getTimestamp() {
-		return kpIndex == null ? "-" : String.valueOf(kpIndex.getTimestamp());
+		return String.valueOf(timestamp);
+	}
+
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+		this.notifyPropertyChanged(BR.timestamp);
 	}
 }
