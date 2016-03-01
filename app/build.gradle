@@ -9,6 +9,9 @@ repositories {
 	maven {
 		url "https://jitpack.io"
 	}
+	maven {
+		url "https://oss.sonatype.org/content/repositories/snapshots"
+	}
 }
 
 android {
@@ -34,18 +37,31 @@ android {
 	}
 }
 
+configurations {
+	compile.exclude module: "stax"
+	compile.exclude module: "stax-api"
+	compile.exclude module: "xpp3"
+}
+
 dependencies {
 	ext {
 		retrofitVersion = "2.0.0-beta2"
 		parcelerVersion = "1.0.4"
+		powerMockVersion = "1.6.3"
 	}
-    compile fileTree(dir: "libs", include: ["*.jar"])
-    compile "com.android.support:appcompat-v7:23.1.0"
+	compile "com.android.support:appcompat-v7:23.2.0"
 	compile "io.realm:realm-android:0.84.1"
 	compile "com.commonsware.cwac:wakeful:1.0.5"
 	compile "com.squareup.retrofit:retrofit:" + retrofitVersion
 	compile "com.squareup.retrofit:converter-gson:" + retrofitVersion
+	compile "com.squareup.retrofit:converter-simplexml:" + retrofitVersion
 	compile "com.github.gustavkarlsson:aurora-notifier-common:aurora-notifier-common-1.4.0"
+	compile "org.simpleframework:simple-xml:2.7.1"
 	compile "org.parceler:parceler-api:" + parcelerVersion
 	apt "org.parceler:parceler:" + parcelerVersion
+
+	testCompile "junit:junit:4.12"
+	testCompile "org.mockito:mockito-core:1.9.5"
+	testCompile "commons-io:commons-io:2.4"
+	testCompile "org.robolectric:robolectric:3.1-SNAPSHOT"
 }

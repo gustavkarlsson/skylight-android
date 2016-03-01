@@ -9,16 +9,16 @@ import retrofit.Response;
 import retrofit.Retrofit;
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 
-public class MyKpIndexService implements KpIndexService {
+public class RetrofittedKpIndexService implements KpIndexService {
 
-	private static final String TAG = MyKpIndexService.class.getSimpleName();
-
+	private static final String TAG = RetrofittedKpIndexService.class.getSimpleName();
+	public static final String BASE_URL = "http://9698.s.time4vps.eu/rest/";
 	private final se.gustavkarlsson.aurora_notifier.common.service.KpIndexService service;
 
-	public MyKpIndexService() {
+	public RetrofittedKpIndexService() {
 		Retrofit retrofit = new Retrofit.Builder()
 				// TODO Update to more permanent host
-				.baseUrl("http://9698.s.time4vps.eu/rest/")
+				.baseUrl(BASE_URL)
 				.addConverterFactory(GsonConverterFactory.create())
 				.build();
 		service = retrofit.create(se.gustavkarlsson.aurora_notifier.common.service.KpIndexService.class);
