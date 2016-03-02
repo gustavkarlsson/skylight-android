@@ -1,7 +1,6 @@
 package se.gustavkarlsson.aurora_notifier.android.realm.place;
 
 import io.realm.RealmObject;
-import io.realm.annotations.Required;
 import se.gustavkarlsson.aurora_notifier.android.domain.place.Position;
 
 public class RealmPosition extends RealmObject implements Position {
