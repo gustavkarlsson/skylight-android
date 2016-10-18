@@ -3,15 +3,6 @@ package se.gustavkarlsson.aurora_notifier.android.service;
 
 import static org.mockito.Mockito.*;
 
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.HttpUrl;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Protocol;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-import com.squareup.okhttp.ResponseBody;
-
 import junit.framework.Assert;
 
 import org.apache.commons.io.IOUtils;
@@ -23,8 +14,15 @@ import org.simpleframework.xml.core.Persister;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import retrofit.Retrofit;
-import retrofit.SimpleXmlConverterFactory;
+import okhttp3.Call;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+import retrofit2.Retrofit;
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import se.gustavkarlsson.aurora_notifier.android.services.OpenWeatherMapService;
 import se.gustavkarlsson.aurora_notifier.android.services.RetrofittedOpenWeatherMapService;
 import se.gustavkarlsson.aurora_notifier.android.services.Weather;

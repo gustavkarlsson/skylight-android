@@ -1,8 +1,9 @@
 package se.gustavkarlsson.aurora_notifier.android.services;
 
-import retrofit.Call;
-import retrofit.http.GET;
-import retrofit.http.Query;
+
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public interface OpenWeatherMapService {
 

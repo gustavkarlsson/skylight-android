@@ -4,10 +4,11 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import retrofit.GsonConverterFactory;
-import retrofit.Response;
-import retrofit.Retrofit;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
+
 
 public class RetrofittedKpIndexService implements KpIndexService {
 
@@ -29,7 +30,7 @@ public class RetrofittedKpIndexService implements KpIndexService {
 		try {
 			Response<Timestamped<Float>> response = service.get().execute();
 			Log.d(TAG, "Got response: " + response.code() + ", message: " + response.raw().toString());
-			if (!response.isSuccess()) {
+			if (!response.isSuccessful()) {
 				throw new ServiceException(response.errorBody().string());
 			}
 			return response.body();

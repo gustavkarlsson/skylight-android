@@ -2,9 +2,10 @@ package se.gustavkarlsson.aurora_notifier.android.services;
 
 import java.io.IOException;
 
-import retrofit.Response;
-import retrofit.Retrofit;
-import retrofit.SimpleXmlConverterFactory;
+
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 
 public class RetrofittedOpenWeatherMapService implements WeatherService {
@@ -30,7 +31,7 @@ public class RetrofittedOpenWeatherMapService implements WeatherService {
 		try {
 			Response<Weather> response = service.get(latitude, longitude, "xml", OpenWeatherMapService.APP_ID).execute();
 			//Log.d(TAG, "Got response: " + response.code() + ", message: " + response.raw().toString());
-			if (!response.isSuccess()) {
+			if (!response.isSuccessful()) {
 				throw new ServiceException(response.errorBody().string());
 			}
 			return new Timestamped<>(response.body());
