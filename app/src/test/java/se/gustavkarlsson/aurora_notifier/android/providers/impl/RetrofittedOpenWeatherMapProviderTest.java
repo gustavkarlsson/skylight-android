@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.service;
+package se.gustavkarlsson.aurora_notifier.android.providers.impl;
 
 
 import org.apache.commons.io.IOUtils;
@@ -19,16 +19,16 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
-import se.gustavkarlsson.aurora_notifier.android.services.OpenWeatherMapService;
-import se.gustavkarlsson.aurora_notifier.android.services.RetrofittedOpenWeatherMapService;
-import se.gustavkarlsson.aurora_notifier.android.services.Weather;
+import se.gustavkarlsson.aurora_notifier.android.providers.Weather;
+import se.gustavkarlsson.aurora_notifier.android.providers.services.OpenWeatherMapService;
+import se.gustavkarlsson.aurora_notifier.android.providers.services.OpenWeatherMapWeather;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class RetrofittedOpenWeatherMapServiceTest {
+public class RetrofittedOpenWeatherMapProviderTest {
 	private OkHttpClient mockedClient;
 
 	@Before
@@ -68,7 +68,7 @@ public class RetrofittedOpenWeatherMapServiceTest {
 
 	@Test
 	public void parsesCloudinessCorrectly() throws Exception {
-		RetrofittedOpenWeatherMapService service = new RetrofittedOpenWeatherMapService(new Retrofit.Builder()
+		RetrofittedOpenWeatherMapProvider service = new RetrofittedOpenWeatherMapProvider(new Retrofit.Builder()
 				.client(mockedClient)
 				.baseUrl("http://mocked.com")
 				.addConverterFactory(SimpleXmlConverterFactory.create())
@@ -86,7 +86,7 @@ public class RetrofittedOpenWeatherMapServiceTest {
 		String xml = IOUtils.toString(classLoader.getResource("fixtures/open_weather_map_report.xml").openStream(), Charset.forName("UTF-8"));
 
 		Serializer serializer = new Persister();
-		Weather weather = serializer.read(Weather.class, xml);
+		Weather weather = serializer.read(OpenWeatherMapWeather.class, xml);
 
 		String cloudiness = weather.getCloudiness();
 		assertThat(cloudiness).isEqualTo("68");

@@ -13,12 +13,12 @@ import org.parceler.Parcels;
 import se.gustavkarlsson.aurora_notifier.android.notifications.AuroraNotificationSender;
 import se.gustavkarlsson.aurora_notifier.android.notifications.NotificationSender;
 import se.gustavkarlsson.aurora_notifier.android.parcels.AuroraUpdate;
-import se.gustavkarlsson.aurora_notifier.android.services.KpIndexService;
-import se.gustavkarlsson.aurora_notifier.android.services.RetrofittedKpIndexService;
-import se.gustavkarlsson.aurora_notifier.android.services.RetrofittedOpenWeatherMapService;
-import se.gustavkarlsson.aurora_notifier.android.services.ServiceException;
-import se.gustavkarlsson.aurora_notifier.android.services.Weather;
-import se.gustavkarlsson.aurora_notifier.android.services.WeatherService;
+import se.gustavkarlsson.aurora_notifier.android.providers.KpIndexProvider;
+import se.gustavkarlsson.aurora_notifier.android.providers.ProviderException;
+import se.gustavkarlsson.aurora_notifier.android.providers.Weather;
+import se.gustavkarlsson.aurora_notifier.android.providers.WeatherProvider;
+import se.gustavkarlsson.aurora_notifier.android.providers.impl.RetrofittedKpIndexProvider;
+import se.gustavkarlsson.aurora_notifier.android.providers.impl.RetrofittedOpenWeatherMapProvider;
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 
 public class AuroraPollingService extends WakefulIntentService {
@@ -27,8 +27,8 @@ public class AuroraPollingService extends WakefulIntentService {
 	public static final String ACTION_UPDATED = TAG + ".AURORA_UPDATED";
 	private static final String ACTION_UPDATE = TAG + ".UPDATE";
 
-	private KpIndexService kpIndexService;
-	private WeatherService weatherService;
+	private KpIndexProvider kpIndexProvider;
+	private WeatherProvider weatherProvider;
 	private NotificationSender<Timestamped<Float>> notificationSender;
 	private LocalBroadcastManager broadcaster;
 
@@ -40,8 +40,8 @@ public class AuroraPollingService extends WakefulIntentService {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		kpIndexService = new RetrofittedKpIndexService();
-		weatherService = RetrofittedOpenWeatherMapService.createDefault();
+		kpIndexProvider = new RetrofittedKpIndexProvider();
+		weatherProvider = RetrofittedOpenWeatherMapProvider.createDefault();
 		notificationSender = new AuroraNotificationSender(this, (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE));
 		broadcaster = LocalBroadcastManager.getInstance(this);
 	}
@@ -60,11 +60,12 @@ public class AuroraPollingService extends WakefulIntentService {
 	public void update() {
 		Log.v(TAG, "update");
 		try {
-			Timestamped<Float> kpIndex = kpIndexService.getKpIndex();
-			Timestamped<Weather> weather = weatherService.getWeather(63.8342338, 20.2744067); // TODO reset and change appid
+			Timestamped<Float> kpIndex = kpIndexProvider.getKpIndex();
 			broadcaster.sendBroadcast(createUpdatedIntent(kpIndex));
 			notificationSender.notify(kpIndex);
-		} catch (ServiceException e) {
+			Timestamped<? extends Weather> weather = weatherProvider.getWeather(63.8342338, 20.2744067); // TODO reset and change appid
+			// TODO broadcast weather updates
+		} catch (ProviderException e) {
 			// TODO Handle error better
 			e.printStackTrace();
 		}

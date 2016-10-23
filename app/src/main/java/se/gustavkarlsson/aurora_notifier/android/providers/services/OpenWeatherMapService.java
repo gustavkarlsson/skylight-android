@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.services;
+package se.gustavkarlsson.aurora_notifier.android.providers.services;
 
 
 import retrofit2.Call;
@@ -11,5 +11,5 @@ public interface OpenWeatherMapService {
 	String APP_ID = "317cc1cbab742dfda3c96c93e7873b6e";
 
 	@GET("weather")
-	Call<Weather> get(@Query("lat") double latitude, @Query("lon") double longitude, @Query("mode") String mode, @Query("appid") String appId);
+	Call<OpenWeatherMapWeather> get(@Query("lat") double latitude, @Query("lon") double longitude, @Query("mode") String mode, @Query("appid") String appId);
 }
