@@ -9,7 +9,6 @@ import android.util.Log;
 import com.commonsware.cwac.wakeful.WakefulIntentService;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import se.gustavkarlsson.aurora_notifier.android.background.AuroraPollingService;
 import se.gustavkarlsson.aurora_notifier.android.background.BootReceiver;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmKpIndex;
