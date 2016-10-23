@@ -1,10 +1,6 @@
 package se.gustavkarlsson.aurora_notifier.android.service;
 
 
-import static org.mockito.Mockito.*;
-
-import junit.framework.Assert;
-
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,10 +22,13 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import se.gustavkarlsson.aurora_notifier.android.services.OpenWeatherMapService;
 import se.gustavkarlsson.aurora_notifier.android.services.RetrofittedOpenWeatherMapService;
 import se.gustavkarlsson.aurora_notifier.android.services.Weather;
-import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
+
+import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class RetrofittedOpenWeatherMapServiceTest {
-
 	private OkHttpClient mockedClient;
 
 	@Before
@@ -75,19 +74,21 @@ public class RetrofittedOpenWeatherMapServiceTest {
 				.addConverterFactory(SimpleXmlConverterFactory.create())
 				.build()
 				.create(OpenWeatherMapService.class));
-		Timestamped<Weather> weather = service.getWeather(0, 0);
-		Assert.assertEquals("68", weather.getValue().getCloudiness());
 
+		String cloudiness = service.getWeather(0, 0).getValue().getCloudiness();
+
+		assertThat(cloudiness).isEqualTo("68");
 	}
 
 	@Test
-	public void fails2() throws Exception {
+	public void xmlDeserializingWorks() throws Exception {
 		ClassLoader classLoader = getClass().getClassLoader();
 		String xml = IOUtils.toString(classLoader.getResource("fixtures/open_weather_map_report.xml").openStream(), Charset.forName("UTF-8"));
 
 		Serializer serializer = new Persister();
 		Weather weather = serializer.read(Weather.class, xml);
 
-		Assert.assertEquals("68", weather.getCloudiness());
+		String cloudiness = weather.getCloudiness();
+		assertThat(cloudiness).isEqualTo("68");
 	}
 }
