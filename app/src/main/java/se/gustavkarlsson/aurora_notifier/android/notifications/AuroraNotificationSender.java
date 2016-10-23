@@ -9,7 +9,7 @@ import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 
 public class AuroraNotificationSender implements NotificationSender<Timestamped<Float>> {
 
-	public static final int NOTIFICATION_ID_PERFECT_CONDITIONS = 0;
+	private static final int NOTIFICATION_ID_PERFECT_CONDITIONS = 0;
 
 	private final Context context;
 	private final NotificationManager notificationManager;

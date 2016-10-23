@@ -13,7 +13,7 @@ import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 public class RetrofittedKpIndexService implements KpIndexService {
 
 	private static final String TAG = RetrofittedKpIndexService.class.getSimpleName();
-	public static final String BASE_URL = "http://9698.s.time4vps.eu/rest/";
+	private static final String BASE_URL = "http://9698.s.time4vps.eu/rest/";
 	private final se.gustavkarlsson.aurora_notifier.common.service.KpIndexService service;
 
 	public RetrofittedKpIndexService() {

@@ -14,18 +14,11 @@ public class AuroraNotifier extends Application {
 
 	private static final String TAG = AuroraNotifier.class.getSimpleName();
 
-	private static Context mContext;
-
 	@Override
 	public void onCreate() {
 		Log.v(TAG, "onCreate");
 		super.onCreate();
-		mContext = this;
 		setupAlarm();
-	}
-
-	public static Context getContext(){
-		return mContext;
 	}
 
 	private void setupAlarm() {

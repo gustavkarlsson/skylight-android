@@ -9,7 +9,7 @@ gradle.properties
 /.settings/
 
 # IntelliJ
-/.idea/
+.idea/
 *.iml
 
 # Local properties
