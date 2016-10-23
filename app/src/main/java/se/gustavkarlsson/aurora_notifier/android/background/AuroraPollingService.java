@@ -10,6 +10,8 @@ import com.commonsware.cwac.wakeful.WakefulIntentService;
 
 import org.parceler.Parcels;
 
+import retrofit2.Retrofit;
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import se.gustavkarlsson.aurora_notifier.android.notifications.AuroraNotificationSender;
 import se.gustavkarlsson.aurora_notifier.android.notifications.NotificationSender;
 import se.gustavkarlsson.aurora_notifier.android.parcels.AuroraUpdate;
@@ -20,6 +22,7 @@ import se.gustavkarlsson.aurora_notifier.android.providers.WeatherProvider;
 import se.gustavkarlsson.aurora_notifier.android.providers.impl.RetrofittedKpIndexProvider;
 import se.gustavkarlsson.aurora_notifier.android.providers.impl.RetrofittedOpenWeatherMapProvider;
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
+import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;
 
 public class AuroraPollingService extends WakefulIntentService {
 
@@ -40,7 +43,7 @@ public class AuroraPollingService extends WakefulIntentService {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		kpIndexProvider = new RetrofittedKpIndexProvider();
+		kpIndexProvider = RetrofittedKpIndexProvider.createDefault();
 		weatherProvider = RetrofittedOpenWeatherMapProvider.createDefault();
 		notificationSender = new AuroraNotificationSender(this, (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE));
 		broadcaster = LocalBroadcastManager.getInstance(this);

@@ -13,8 +13,10 @@ import se.gustavkarlsson.aurora_notifier.android.providers.services.OpenWeatherM
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 
 public class RetrofittedOpenWeatherMapProvider implements WeatherProvider {
-
 	private static final String TAG = RetrofittedOpenWeatherMapProvider.class.getSimpleName();
+
+	private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/";
+	private static final String APP_ID = "317cc1cbab742dfda3c96c93e7873b6e";
 
 	private final OpenWeatherMapService service;
 
@@ -24,7 +26,7 @@ public class RetrofittedOpenWeatherMapProvider implements WeatherProvider {
 
 	public static RetrofittedOpenWeatherMapProvider createDefault() {
 		OpenWeatherMapService service = new Retrofit.Builder()
-				.baseUrl(OpenWeatherMapService.BASE_URL)
+				.baseUrl(BASE_URL)
 				.addConverterFactory(SimpleXmlConverterFactory.create())
 				.build().create(OpenWeatherMapService.class);
 		return new RetrofittedOpenWeatherMapProvider(service);
@@ -33,7 +35,7 @@ public class RetrofittedOpenWeatherMapProvider implements WeatherProvider {
 	@Override
 	public Timestamped<? extends Weather> getWeather(double latitude, double longitude) throws ProviderException {
 		try {
-			Response<OpenWeatherMapWeather> response = service.get(latitude, longitude, "xml", OpenWeatherMapService.APP_ID).execute();
+			Response<OpenWeatherMapWeather> response = service.get(latitude, longitude, "xml", APP_ID).execute();
 			//Log.d(TAG, "Got response: " + response.code() + ", message: " + response.raw().toString()); TODO Needs mock for testing
 			if (!response.isSuccessful()) {
 				throw new ProviderException(response.errorBody().string());
