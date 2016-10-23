@@ -1,5 +1,7 @@
 package se.gustavkarlsson.aurora_notifier.android.providers.impl;
 
+import android.util.Log;
+
 import java.io.IOException;
 
 import retrofit2.Response;
@@ -36,7 +38,7 @@ public class RetrofittedOpenWeatherMapProvider implements WeatherProvider {
 	public Timestamped<? extends Weather> getWeather(double latitude, double longitude) throws ProviderException {
 		try {
 			Response<OpenWeatherMapWeather> response = service.get(latitude, longitude, "xml", APP_ID).execute();
-			//Log.d(TAG, "Got response: " + response.code() + ", message: " + response.raw().toString()); TODO Needs mock for testing
+			Log.d(TAG, "Got response: " + response.code() + ", message: " + response.raw().toString());
 			if (!response.isSuccessful()) {
 				throw new ProviderException(response.errorBody().string());
 			}

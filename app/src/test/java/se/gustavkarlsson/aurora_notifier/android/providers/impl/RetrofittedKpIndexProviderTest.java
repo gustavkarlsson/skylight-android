@@ -1,14 +1,17 @@
 package se.gustavkarlsson.aurora_notifier.android.providers.impl;
 
 
+import android.util.Log;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 
 import okhttp3.Call;
 import okhttp3.MediaType;
@@ -19,10 +22,6 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
-import se.gustavkarlsson.aurora_notifier.android.providers.Weather;
-import se.gustavkarlsson.aurora_notifier.android.providers.services.OpenWeatherMapService;
-import se.gustavkarlsson.aurora_notifier.android.providers.services.OpenWeatherMapWeather;
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -30,12 +29,16 @@ import static org.assertj.core.api.Java6Assertions.within;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Log.class})
 public class RetrofittedKpIndexProviderTest {
 	private OkHttpClient mockedClient;
 
 	@Before
 	public void setUp() throws Exception {
+		mockStatic(Log.class);
 		mockedClient = mockClient(200, "fixtures/kp_index_report.json", "application/json");
 	}
 

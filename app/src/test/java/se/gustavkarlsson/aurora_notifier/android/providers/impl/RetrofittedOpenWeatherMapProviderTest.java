@@ -1,9 +1,15 @@
 package se.gustavkarlsson.aurora_notifier.android.providers.impl;
 
 
+import android.util.Log;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 
@@ -27,12 +33,16 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Log.class})
 public class RetrofittedOpenWeatherMapProviderTest {
 	private OkHttpClient mockedClient;
 
 	@Before
 	public void setUp() throws Exception {
+		mockStatic(Log.class);
 		mockedClient = mockClient(200, "fixtures/open_weather_map_report.xml", "application/xml");
 	}
 

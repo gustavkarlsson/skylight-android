@@ -1,5 +1,7 @@
 package se.gustavkarlsson.aurora_notifier.android.providers.impl;
 
+import android.util.Log;
+
 import java.io.IOException;
 
 import retrofit2.Response;
@@ -23,7 +25,7 @@ public class RetrofittedKpIndexProvider implements KpIndexProvider {
 
 	public static RetrofittedKpIndexProvider createDefault() {
 		KpIndexService service = new Retrofit.Builder()
-				// TODO Update to more permanent host
+				// TODO Update to more permanent hostname
 				.baseUrl(BASE_URL)
 				.addConverterFactory(GsonConverterFactory.create())
 				.build().create(KpIndexService.class);
@@ -34,7 +36,7 @@ public class RetrofittedKpIndexProvider implements KpIndexProvider {
 	public Timestamped<Float> getKpIndex() throws ProviderException {
 		try {
 			Response<Timestamped<Float>> response = service.get().execute();
-			//Log.d(TAG, "Got response: " + response.code() + ", message: " + response.raw().toString()); TODO Needs mock for testing
+			Log.d(TAG, "Got response: " + response.code() + ", message: " + response.raw().toString());
 			if (!response.isSuccessful()) {
 				throw new ProviderException(response.errorBody().string());
 			}
