@@ -1,36 +1,29 @@
 package se.gustavkarlsson.aurora_notifier.android.background;
 
-import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.commonsware.cwac.wakeful.WakefulIntentService;
 
-import org.parceler.Parcels;
-
-import se.gustavkarlsson.aurora_notifier.android.notifications.AuroraNotificationSender;
-import se.gustavkarlsson.aurora_notifier.android.notifications.NotificationSender;
-import se.gustavkarlsson.aurora_notifier.android.parcels.AuroraUpdate;
+import io.realm.Realm;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.KpIndexProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.ProviderException;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.Weather;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.RetrofittedKpIndexProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.RetrofittedOpenWeatherMapProvider;
+import se.gustavkarlsson.aurora_notifier.android.realm.RealmKpIndex;
+import se.gustavkarlsson.aurora_notifier.android.realm.RealmWeather;
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 
 public class AuroraPollingService extends WakefulIntentService {
 
 	private static final String TAG = AuroraPollingService.class.getSimpleName();
-	public static final String ACTION_UPDATED = TAG + ".AURORA_UPDATED";
 	private static final String ACTION_UPDATE = TAG + ".UPDATE";
 
 	private KpIndexProvider kpIndexProvider;
 	private WeatherProvider weatherProvider;
-	private NotificationSender<Timestamped<Float>> notificationSender;
-	private LocalBroadcastManager broadcaster;
 
 	// Default constructor required
 	public AuroraPollingService() {
@@ -42,8 +35,6 @@ public class AuroraPollingService extends WakefulIntentService {
 		super.onCreate();
 		kpIndexProvider = RetrofittedKpIndexProvider.createDefault();
 		weatherProvider = RetrofittedOpenWeatherMapProvider.createDefault();
-		notificationSender = new AuroraNotificationSender(this, (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE));
-		broadcaster = LocalBroadcastManager.getInstance(this);
 	}
 
 	@Override
@@ -60,11 +51,32 @@ public class AuroraPollingService extends WakefulIntentService {
 	public void update() {
 		Log.v(TAG, "update");
 		try {
+			Realm realm = Realm.getDefaultInstance();
+			Log.d(TAG, "Getting KP index...");
 			Timestamped<Float> kpIndex = kpIndexProvider.getKpIndex();
-			broadcaster.sendBroadcast(createUpdatedIntent(kpIndex));
-			notificationSender.notify(kpIndex);
-			Timestamped<? extends Weather> weather = weatherProvider.getWeather(63.8342338, 20.2744067); // TODO reset and change appid
-			// TODO broadcast weather updates
+			Log.d(TAG, "KP Index is: " + kpIndex);
+
+			Log.d(TAG, "Getting Weather...");
+			Timestamped<? extends Weather> weather = weatherProvider.getWeather(63.8342338, 20.2744067); // TODO set coordinates properly and change appid
+			Log.d(TAG, "Weather is:  " + weather);
+
+			Log.d(TAG, "Looking up KP index from realm...");
+			RealmKpIndex realmKpIndex = realm.where(RealmKpIndex.class).findFirst();
+			Log.d(TAG, "Realm KP index is:  " + realmKpIndex);
+
+			Log.d(TAG, "Looking up Weather from realm...");
+			RealmWeather realmWeather = realm.where(RealmWeather.class).findFirst();
+			Log.d(TAG, "Realm Weather is:  " + realmWeather);
+
+			Log.d(TAG, "Storing to realm");
+			realm.beginTransaction();
+			realmKpIndex.setKpIndex(kpIndex.getValue());
+			realmKpIndex.setTimestamp(kpIndex.getTimestamp());
+			realmWeather.setCloudPercentage(weather.getValue().getCloudPercentage());
+			realmWeather.setTimestamp(weather.getTimestamp());
+			realm.commitTransaction();
+			realm.close();
+			Log.d(TAG, "Stored in realm");
 		} catch (ProviderException e) {
 			// TODO Handle error better
 			e.printStackTrace();
@@ -75,9 +87,8 @@ public class AuroraPollingService extends WakefulIntentService {
 		return new Intent(ACTION_UPDATE, null, context, AuroraPollingService.class);
 	}
 
-	private Intent createUpdatedIntent(Timestamped<Float> kpIndex) {
-		Intent intent = new Intent(ACTION_UPDATED);
-		intent.putExtra(AuroraUpdate.TAG, Parcels.wrap(new AuroraUpdate(kpIndex)));
-		return intent;
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
 	}
 }

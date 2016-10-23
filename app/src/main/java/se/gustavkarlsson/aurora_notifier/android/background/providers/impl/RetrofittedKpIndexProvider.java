@@ -15,7 +15,7 @@ import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;
 public class RetrofittedKpIndexProvider implements KpIndexProvider {
 	private static final String TAG = RetrofittedKpIndexProvider.class.getSimpleName();
 
-	private static final String BASE_URL = "http://9698.s.time4vps.eu/rest/";
+	private static final String BASE_URL = "http://9698.s.t4vps.eu/rest/";
 
 	private final KpIndexService service;
 

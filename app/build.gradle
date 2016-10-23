@@ -1,6 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "com.android.databinding"
 apply plugin: "com.neenbedankt.android-apt"
+apply plugin: "realm-android"
 
 repositories {
 	maven {
@@ -49,7 +50,6 @@ dependencies {
 		parcelerVersion = "1.1.5"
 	}
 	compile "com.android.support:appcompat-v7:23.4.0"
-	compile "io.realm:realm-android:0.87.5"
 	compile "com.commonsware.cwac:wakeful:1.1.0"
 	compile "com.squareup.retrofit2:retrofit:" + retrofitVersion
 	compile "com.squareup.retrofit2:converter-gson:" + retrofitVersion

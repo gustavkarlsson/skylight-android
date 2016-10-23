@@ -24,7 +24,7 @@ public class BootReceiver extends BroadcastReceiver {
 		}
 	}
 
-	private void setupAlarms(Context context) {
+	private static void setupAlarms(Context context) {
 		Log.v(TAG, "setupAlarms");
 		Log.i(TAG, "Setting up alarms");
 		Intent updateIntent = AuroraPollingService.createUpdateIntent(context);
@@ -37,13 +37,13 @@ public class BootReceiver extends BroadcastReceiver {
 		}
 	}
 
-	private void scheduleAlarm(Context context, Intent intent) {
+	private static void scheduleAlarm(Context context, Intent intent) {
 		PendingIntent pendingServiceIntent = PendingIntent.getService(context, 0, intent, 0);
 		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 0, AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingServiceIntent);
 	}
 
-	private boolean intentAlreadyCreated(Context context, Intent intent) {
+	private static boolean intentAlreadyCreated(Context context, Intent intent) {
 		return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_NO_CREATE) != null;
 	}
 
