@@ -1,12 +1,17 @@
 package se.gustavkarlsson.aurora_notifier.android.gui.activities;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.commonsware.cwac.wakeful.WakefulIntentService;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
+import se.gustavkarlsson.aurora_notifier.android.background.AuroraPollingService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,4 +48,9 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+	public void sendUpdateRequest(View view) {
+		Intent updateIntent = AuroraPollingService.createUpdateIntent(this);
+		WakefulIntentService.sendWakefulWork(this, updateIntent);
+	}
 }

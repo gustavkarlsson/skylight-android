@@ -1,13 +1,19 @@
 package se.gustavkarlsson.aurora_notifier.android.gui.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import com.commonsware.cwac.wakeful.WakefulIntentService;
 
 import io.realm.Realm;
+import se.gustavkarlsson.aurora_notifier.android.R;
+import se.gustavkarlsson.aurora_notifier.android.background.AuroraPollingService;
 import se.gustavkarlsson.aurora_notifier.android.databinding.FragmentCurrentLocationBinding;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.KpIndexViewModel;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.ViewModelUpdater;
