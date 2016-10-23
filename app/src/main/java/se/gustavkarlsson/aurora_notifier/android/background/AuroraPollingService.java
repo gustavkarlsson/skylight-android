@@ -24,7 +24,6 @@ public class AuroraPollingService extends WakefulIntentService {
 
 	private KpIndexProvider kpIndexProvider;
 	private WeatherProvider weatherProvider;
-	private Realm realm;
 
 	// Default constructor required
 	public AuroraPollingService() {
@@ -34,7 +33,6 @@ public class AuroraPollingService extends WakefulIntentService {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		realm = Realm.getDefaultInstance();
 		kpIndexProvider = RetrofittedKpIndexProvider.createDefault();
 		weatherProvider = RetrofittedOpenWeatherMapProvider.createDefault();
 	}
@@ -52,11 +50,13 @@ public class AuroraPollingService extends WakefulIntentService {
 
 	public void update() {
 		Log.v(TAG, "update");
-		updateKpIndex();
-		updateWeather();
+		Realm realm = Realm.getDefaultInstance();
+		updateKpIndex(realm);
+		updateWeather(realm);
+		realm.close();
 	}
 
-	private void updateKpIndex() {
+	private void updateKpIndex(Realm realm) {
 		try {
 			Log.d(TAG, "Getting KP index...");
 			Timestamped<Float> kpIndex = kpIndexProvider.getKpIndex();
@@ -71,7 +71,7 @@ public class AuroraPollingService extends WakefulIntentService {
 			realmKpIndex.setKpIndex(kpIndex.getValue());
 			realmKpIndex.setTimestamp(kpIndex.getTimestamp());
 			realm.commitTransaction();
-			Log.d(TAG, "Stored new KP index in realm");
+			Log.d(TAG, "Stored KP index in realm");
 		} catch (ProviderException e) {
 			realm.cancelTransaction();
 			// TODO Handle errors better
@@ -79,7 +79,7 @@ public class AuroraPollingService extends WakefulIntentService {
 		}
 	}
 
-	private void updateWeather() {
+	private void updateWeather(Realm realm) {
 		try {
 			Log.d(TAG, "Getting weather...");
 			Timestamped<? extends Weather> weather = weatherProvider.getWeather(63.8342338, 20.2744067); // TODO set coordinates properly and change appid
@@ -107,7 +107,6 @@ public class AuroraPollingService extends WakefulIntentService {
 
 	@Override
 	public void onDestroy() {
-		realm.close();
 		super.onDestroy();
 	}
 }

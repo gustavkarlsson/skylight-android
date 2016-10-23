@@ -14,6 +14,7 @@ import se.gustavkarlsson.aurora_notifier.android.background.providers.services.O
 import se.gustavkarlsson.aurora_notifier.android.background.providers.services.OpenWeatherMapWeather;
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 
+// TODO Look into using their json API
 public class RetrofittedOpenWeatherMapProvider implements WeatherProvider {
 	private static final String TAG = RetrofittedOpenWeatherMapProvider.class.getSimpleName();
 
