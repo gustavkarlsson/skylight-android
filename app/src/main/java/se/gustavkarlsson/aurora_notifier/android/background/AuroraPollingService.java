@@ -52,33 +52,51 @@ public class AuroraPollingService extends WakefulIntentService {
 
 	public void update() {
 		Log.v(TAG, "update");
+		updateKpIndex();
+		updateWeather();
+	}
+
+	private void updateKpIndex() {
 		try {
 			Log.d(TAG, "Getting KP index...");
 			Timestamped<Float> kpIndex = kpIndexProvider.getKpIndex();
 			Log.d(TAG, "KP Index is: " + kpIndex);
 
-			Log.d(TAG, "Getting Weather...");
-			Timestamped<? extends Weather> weather = weatherProvider.getWeather(63.8342338, 20.2744067); // TODO set coordinates properly and change appid
-			Log.d(TAG, "Weather is:  " + weather);
-
 			Log.d(TAG, "Looking up KP index from realm...");
 			RealmKpIndex realmKpIndex = realm.where(RealmKpIndex.class).findFirst();
 			Log.d(TAG, "Realm KP index is:  " + realmKpIndex);
 
-			Log.d(TAG, "Looking up Weather from realm...");
-			RealmWeather realmWeather = realm.where(RealmWeather.class).findFirst();
-			Log.d(TAG, "Realm Weather is:  " + realmWeather);
-
-			Log.d(TAG, "Storing to realm");
+			Log.d(TAG, "Storing KP index in realm");
 			realm.beginTransaction();
 			realmKpIndex.setKpIndex(kpIndex.getValue());
 			realmKpIndex.setTimestamp(kpIndex.getTimestamp());
+			realm.commitTransaction();
+			Log.d(TAG, "Stored new KP index in realm");
+		} catch (ProviderException e) {
+			realm.cancelTransaction();
+			// TODO Handle errors better
+			e.printStackTrace();
+		}
+	}
+
+	private void updateWeather() {
+		try {
+			Log.d(TAG, "Getting weather...");
+			Timestamped<? extends Weather> weather = weatherProvider.getWeather(63.8342338, 20.2744067); // TODO set coordinates properly and change appid
+			Log.d(TAG, "Weather is:  " + weather);
+
+			Log.d(TAG, "Looking up weather from realm...");
+			RealmWeather realmWeather = realm.where(RealmWeather.class).findFirst();
+			Log.d(TAG, "Realm weather is:  " + realmWeather);
+
+			Log.d(TAG, "Storing weather in realm");
+			realm.beginTransaction();
 			realmWeather.setCloudPercentage(weather.getValue().getCloudPercentage());
 			realmWeather.setTimestamp(weather.getTimestamp());
 			realm.commitTransaction();
-			Log.d(TAG, "Stored in realm");
+			Log.d(TAG, "Stored weather in realm");
 		} catch (ProviderException e) {
-			// TODO Handle error better
+			// TODO Handle errors better
 			e.printStackTrace();
 		}
 	}
