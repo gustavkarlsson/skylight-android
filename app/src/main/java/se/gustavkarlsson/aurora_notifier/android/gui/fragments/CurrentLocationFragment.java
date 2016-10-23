@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.fragments;
+package se.gustavkarlsson.aurora_notifier.android.gui.fragments;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,7 +16,7 @@ import org.parceler.Parcels;
 
 import se.gustavkarlsson.aurora_notifier.android.background.AuroraPollingService;
 import se.gustavkarlsson.aurora_notifier.android.databinding.FragmentCurrentLocationBinding;
-import se.gustavkarlsson.aurora_notifier.android.models.KpIndexModel;
+import se.gustavkarlsson.aurora_notifier.android.gui.models.KpIndexModel;
 import se.gustavkarlsson.aurora_notifier.android.parcels.AuroraUpdate;
 
 public class CurrentLocationFragment extends Fragment {

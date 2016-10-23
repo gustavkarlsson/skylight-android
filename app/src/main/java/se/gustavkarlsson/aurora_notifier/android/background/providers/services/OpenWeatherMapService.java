@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.providers.services;
+package se.gustavkarlsson.aurora_notifier.android.background.providers.services;
 
 
 import retrofit2.Call;

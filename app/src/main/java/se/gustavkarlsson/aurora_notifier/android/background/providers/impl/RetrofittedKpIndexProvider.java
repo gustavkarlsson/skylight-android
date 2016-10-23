@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.providers.impl;
+package se.gustavkarlsson.aurora_notifier.android.background.providers.impl;
 
 import android.util.Log;
 
@@ -7,8 +7,8 @@ import java.io.IOException;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import se.gustavkarlsson.aurora_notifier.android.providers.KpIndexProvider;
-import se.gustavkarlsson.aurora_notifier.android.providers.ProviderException;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.KpIndexProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.ProviderException;
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;
 

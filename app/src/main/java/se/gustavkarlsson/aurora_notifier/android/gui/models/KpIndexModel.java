@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.models;
+package se.gustavkarlsson.aurora_notifier.android.gui.models;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;

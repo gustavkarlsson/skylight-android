@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.providers;
+package se.gustavkarlsson.aurora_notifier.android.background.providers;
 
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 

@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.providers;
+package se.gustavkarlsson.aurora_notifier.android.background.providers;
 
 public class ProviderException extends Exception {
 

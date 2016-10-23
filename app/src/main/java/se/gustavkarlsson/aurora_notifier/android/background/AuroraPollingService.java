@@ -10,19 +10,16 @@ import com.commonsware.cwac.wakeful.WakefulIntentService;
 
 import org.parceler.Parcels;
 
-import retrofit2.Retrofit;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import se.gustavkarlsson.aurora_notifier.android.notifications.AuroraNotificationSender;
 import se.gustavkarlsson.aurora_notifier.android.notifications.NotificationSender;
 import se.gustavkarlsson.aurora_notifier.android.parcels.AuroraUpdate;
-import se.gustavkarlsson.aurora_notifier.android.providers.KpIndexProvider;
-import se.gustavkarlsson.aurora_notifier.android.providers.ProviderException;
-import se.gustavkarlsson.aurora_notifier.android.providers.Weather;
-import se.gustavkarlsson.aurora_notifier.android.providers.WeatherProvider;
-import se.gustavkarlsson.aurora_notifier.android.providers.impl.RetrofittedKpIndexProvider;
-import se.gustavkarlsson.aurora_notifier.android.providers.impl.RetrofittedOpenWeatherMapProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.KpIndexProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.ProviderException;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.Weather;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.RetrofittedKpIndexProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.RetrofittedOpenWeatherMapProvider;
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
-import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;
 
 public class AuroraPollingService extends WakefulIntentService {
 

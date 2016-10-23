@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.providers.impl;
+package se.gustavkarlsson.aurora_notifier.android.background.providers.impl;
 
 import android.util.Log;
 
@@ -7,11 +7,11 @@ import java.io.IOException;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
-import se.gustavkarlsson.aurora_notifier.android.providers.ProviderException;
-import se.gustavkarlsson.aurora_notifier.android.providers.Weather;
-import se.gustavkarlsson.aurora_notifier.android.providers.WeatherProvider;
-import se.gustavkarlsson.aurora_notifier.android.providers.services.OpenWeatherMapService;
-import se.gustavkarlsson.aurora_notifier.android.providers.services.OpenWeatherMapWeather;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.ProviderException;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.Weather;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.services.OpenWeatherMapService;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.services.OpenWeatherMapWeather;
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 
 public class RetrofittedOpenWeatherMapProvider implements WeatherProvider {

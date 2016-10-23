@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-	tools:context="se.gustavkarlsson.aurora_notifier.android.fragments.CurrentLocationFragment" >
+	tools:context=".gui.fragments.CurrentLocationFragment" >
 
 	<data>
-		<variable name="kpIndex" type="se.gustavkarlsson.aurora_notifier.android.models.KpIndexModel" />
+		<variable name="kpIndex" type="se.gustavkarlsson.aurora_notifier.android.gui.models.KpIndexModel" />
 	</data>
 
 	<RelativeLayout
