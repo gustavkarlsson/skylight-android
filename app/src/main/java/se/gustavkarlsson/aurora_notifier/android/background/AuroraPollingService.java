@@ -73,7 +73,6 @@ public class AuroraPollingService extends WakefulIntentService {
 			realm.commitTransaction();
 			Log.d(TAG, "Stored KP index in realm");
 		} catch (ProviderException e) {
-			realm.cancelTransaction();
 			// TODO Handle errors better
 			e.printStackTrace();
 		}
