@@ -24,22 +24,10 @@
 			android:text="@{kpIndex.kpIndex}"/>
 
 		<TextView
-			android:id="@+id/kp_index_timestamp"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@{kpIndex.timestamp}"/>
-
-		<TextView
 			android:id="@+id/cloudPercentage"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@{weather.cloudPercentage}"/>
-
-		<TextView
-			android:id="@+id/weather_timestamp"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@{weather.timestamp}"/>
 
 		<Button
 			android:id="@+id/refresh_button"

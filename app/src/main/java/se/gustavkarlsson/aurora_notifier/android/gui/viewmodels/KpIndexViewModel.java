@@ -14,11 +14,6 @@ public class KpIndexViewModel extends BaseObservable {
 
 	@Bindable
 	public String getKpIndex() {
-		return realmKpIndex.getKpIndex() == null ? "-" : String.valueOf(realmKpIndex.getKpIndex());
-	}
-
-	@Bindable
-	public String getTimestamp() {
-		return realmKpIndex.getTimestamp() == null ? "-" : String.valueOf(realmKpIndex.getTimestamp());
+		return realmKpIndex.getKpIndex() == null ? "-" : "" + realmKpIndex.getKpIndex() + " @ " + realmKpIndex.getTimestamp();
 	}
 }

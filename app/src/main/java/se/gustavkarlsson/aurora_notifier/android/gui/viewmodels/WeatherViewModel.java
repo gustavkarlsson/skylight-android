@@ -14,11 +14,6 @@ public class WeatherViewModel extends BaseObservable {
 
 	@Bindable
 	public String getCloudPercentage() {
-		return realmWeather.getCloudPercentage() == null ? "-" : String.valueOf(realmWeather.getCloudPercentage());
-	}
-
-	@Bindable
-	public String getTimestamp() {
-		return realmWeather.getTimestamp() == null ? "-" : String.valueOf(realmWeather.getTimestamp());
+		return realmWeather.getCloudPercentage() == null ? "-" : "" + realmWeather.getCloudPercentage() + "% @ " + realmWeather.getTimestamp();
 	}
 }
