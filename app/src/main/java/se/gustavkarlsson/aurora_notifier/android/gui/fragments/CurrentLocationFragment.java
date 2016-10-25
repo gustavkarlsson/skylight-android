@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import io.realm.Realm;
+import io.realm.RealmObject;
 import se.gustavkarlsson.aurora_notifier.android.databinding.FragmentCurrentLocationBinding;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.GeomagneticCoordinatesViewModel;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.KpIndexViewModel;
+import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.RealmViewModel;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.SunPositionViewModel;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.ViewModelUpdater;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.WeatherViewModel;
@@ -35,23 +37,24 @@ public class CurrentLocationFragment extends Fragment {
 
 		RealmKpIndex realmKpIndex = realm.where(RealmKpIndex.class).findFirst();
 		kpIndexViewModel = new KpIndexViewModel(realmKpIndex);
-		ViewModelUpdater realmKpIndexListener = new ViewModelUpdater(kpIndexViewModel);
-		realmKpIndex.addChangeListener(realmKpIndexListener);
+		setupChangeListener(realmKpIndex, kpIndexViewModel);
 
 		RealmWeather realmWeather = realm.where(RealmWeather.class).findFirst();
 		weatherViewModel = new WeatherViewModel(realmWeather);
-		ViewModelUpdater realmWeatherListener = new ViewModelUpdater(weatherViewModel);
-		realmWeather.addChangeListener(realmWeatherListener);
+		setupChangeListener(realmWeather, weatherViewModel);
 
 		RealmSunPosition realmSunPosition = realm.where(RealmSunPosition.class).findFirst();
 		sunPositionViewModel = new SunPositionViewModel(realmSunPosition);
-		ViewModelUpdater realmSunPositionListener = new ViewModelUpdater(sunPositionViewModel);
-		realmSunPosition.addChangeListener(realmSunPositionListener);
+		setupChangeListener(realmSunPosition, sunPositionViewModel);
 
 		RealmGeomagneticCoordinates realmGeomagneticCoordinates = realm.where(RealmGeomagneticCoordinates.class).findFirst();
 		geomagneticCoordinatesViewModel = new GeomagneticCoordinatesViewModel(realmGeomagneticCoordinates);
-		ViewModelUpdater realmGeomagneticCoordinatesListener = new ViewModelUpdater(geomagneticCoordinatesViewModel);
-		realmGeomagneticCoordinates.addChangeListener(realmGeomagneticCoordinatesListener);
+		setupChangeListener(realmGeomagneticCoordinates, geomagneticCoordinatesViewModel);
+	}
+
+	private <T extends RealmObject> void setupChangeListener(T realmObject, RealmViewModel<T> viewModel) {
+		ViewModelUpdater listener = new ViewModelUpdater(viewModel);
+		realmObject.addChangeListener(listener);
 	}
 
 	@Override

@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -16,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.commonsware.cwac.wakeful.WakefulIntentService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -38,7 +36,13 @@ public class MainActivity extends AppCompatActivity {
 
 	@Override
 	protected void onResume() {
+		Log.v(TAG, "onResume");
 		super.onResume();
+		ensureGooglePlayServicesAvailable();
+		ensureLocationPermissionExists();
+	}
+
+	private void ensureGooglePlayServicesAvailable() {
 		GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
 		int returnCode = availability.isGooglePlayServicesAvailable(this);
 		if (returnCode != ConnectionResult.SUCCESS) {
@@ -47,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
 			} else {
 				new AlertDialog.Builder(this)
 						.setTitle(R.string.google_play_services_not_supported)
-						.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+						.setMessage(R.string.app_will_close)
+						.setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int which) {
 								System.exit(1);
 							}
@@ -56,11 +61,6 @@ public class MainActivity extends AppCompatActivity {
 						.show();
 			}
 		}
-
-		if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-			Log.i(TAG, "Fine location permission missing. Requesting from user");
-			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_FINE_LOCATION);
-		}
 	}
 
 	@Override
@@ -68,8 +68,9 @@ public class MainActivity extends AppCompatActivity {
 		if (requestCode == REQUEST_GOOGLE_PLAY_SERVICES) {
 			if (resultCode != Activity.RESULT_OK) {
 				new AlertDialog.Builder(this)
-						.setTitle(R.string.google_play_services_not_installed)
-						.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+						.setTitle(R.string.google_play_services_was_not_installed)
+						.setMessage(R.string.app_will_close)
+						.setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int which) {
 								System.exit(2);
 							}
@@ -82,23 +83,36 @@ public class MainActivity extends AppCompatActivity {
 		}
 	}
 
-	@Override
-	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-		if (requestCode == REQUEST_FINE_LOCATION) {
-			if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+	private void ensureLocationPermissionExists() {
+		if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+			Log.i(TAG, "ACCESS_FINE_LOCATION permission missing. Requesting from user");
+			if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 				new AlertDialog.Builder(this)
-						.setTitle(R.string.location_fine_permission_not_given)
+						.setTitle(getString(R.string.location_permission_required))
+						.setMessage(getString(R.string.location_permission_required_rationale))
+						.setIcon(android.R.drawable.ic_dialog_alert)
 						.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								requestLocationPermission();
+							}
+						})
+						.setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
+							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								System.exit(3);
 							}
 						})
-						.setIcon(android.R.drawable.ic_dialog_alert)
 						.show();
+			} else {
+				requestLocationPermission();
 			}
 		} else {
-			super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+			AuroraPollingService.sendUpdateRequest(this);
 		}
+	}
+
+	private void requestLocationPermission() {
+		ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_FINE_LOCATION);
 	}
 
 	@Override
@@ -112,9 +126,6 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Log.v(TAG, "onOptionsItemSelected");
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 
 		//noinspection SimplifiableIfStatement
@@ -126,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void sendUpdateRequest(View view) {
-		Intent updateIntent = AuroraPollingService.createUpdateIntent(this);
-		WakefulIntentService.sendWakefulWork(this, updateIntent);
+		AuroraPollingService.sendUpdateRequest(this);
 	}
 }

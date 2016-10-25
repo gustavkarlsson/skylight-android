@@ -21,4 +21,12 @@ public class RealmSunPosition extends RealmObject {
 	public void setTimestamp(Long timestamp) {
 		this.timestamp = timestamp;
 	}
+
+	@Override
+	public String toString() {
+		return "RealmSunPosition{" +
+				"zenithAngle=" + getZenithAngle() +
+				", timestamp=" + getTimestamp() +
+				'}' ;
+	}
 }

@@ -21,4 +21,12 @@ public class RealmKpIndex extends RealmObject {
 	public void setTimestamp(Long timestamp) {
 		this.timestamp = timestamp;
 	}
+
+	@Override
+	public String toString() {
+		return "RealmKpIndex{" +
+				"kpIndex=" + getKpIndex() +
+				", timestamp=" + getTimestamp() +
+				'}' ;
+	}
 }

@@ -21,4 +21,12 @@ public class RealmGeomagneticCoordinates extends RealmObject {
 	public void setTimestamp(Long timestamp) {
 		this.timestamp = timestamp;
 	}
+
+	@Override
+	public String toString() {
+		return "RealmGeomagneticCoordinates{" +
+				"degreesFromClosestPole=" + getDegreesFromClosestPole() +
+				", timestamp=" + getTimestamp() +
+				'}' ;
+	}
 }

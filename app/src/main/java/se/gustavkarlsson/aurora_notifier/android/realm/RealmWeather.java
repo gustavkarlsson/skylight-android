@@ -21,4 +21,12 @@ public class RealmWeather extends RealmObject {
 	public void setTimestamp(Long timestamp) {
 		this.timestamp = timestamp;
 	}
+
+	@Override
+	public String toString() {
+		return "RealmWeather{" +
+				"cloudPercentage=" + getCloudPercentage() +
+				", timestamp=" + getTimestamp() +
+				'}' ;
+	}
 }

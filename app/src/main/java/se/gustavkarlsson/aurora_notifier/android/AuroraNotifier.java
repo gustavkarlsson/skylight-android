@@ -6,9 +6,11 @@ import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.commonsware.cwac.wakeful.WakefulIntentService;
+import java.util.Arrays;
+import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmObject;
 import se.gustavkarlsson.aurora_notifier.android.background.AuroraPollingService;
 import se.gustavkarlsson.aurora_notifier.android.background.BootReceiver;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmGeomagneticCoordinates;
@@ -24,67 +26,37 @@ public class AuroraNotifier extends Application {
 		Log.v(TAG, "onCreate");
 		super.onCreate();
 		setupRealm();
-		setupAlarm();
-		Intent updateIntent = AuroraPollingService.createUpdateIntent(this);
-		WakefulIntentService.sendWakefulWork(this, updateIntent);
+		setupAlarms();
 	}
 
 	private void setupRealm() {
 		Realm.init(this);
 		Realm realm = Realm.getDefaultInstance();
-		ensureRealmKpIndexExists(realm);
-		ensureRealmWeatherExists(realm);
-		ensureRealmSunPositionExists(realm);
-		ensureRealmGeomagneticCoordinatesExist(realm);
+		List<Class<? extends RealmObject>> classes = Arrays.asList(
+				RealmKpIndex.class,
+				RealmWeather.class,
+				RealmSunPosition.class,
+				RealmGeomagneticCoordinates.class);
+		for (Class<? extends RealmObject> clazz : classes) {
+			ensureRealmSingletonExists(realm, clazz);
+		}
 		realm.close();
 	}
 
-	private static void ensureRealmSunPositionExists(Realm realm) {
-		if (realm.where(RealmSunPosition.class).count() == 0) {
-			Log.i(TAG, "No RealmSunPosition exists. Creating one");
+	private void ensureRealmSingletonExists(Realm realm, Class<? extends RealmObject> realmClass) {
+		Log.i(TAG, "Ensuring that an instance of " + realmClass.getSimpleName() + " exists.");
+		if (realm.where(realmClass).count() == 0) {
+			Log.d(TAG, "No instance of " + realmClass.getSimpleName() + " exists. Creating one");
 			realm.beginTransaction();
-			realm.createObject(RealmSunPosition.class);
+			realm.createObject(realmClass);
 			realm.commitTransaction();
 		} else {
-			Log.i(TAG, "A RealmSunPosition already exists. Will not create one");
+			Log.d(TAG, "An instance of " + realmClass + " already exists.");
 		}
 	}
 
-	private static void ensureRealmKpIndexExists(Realm realm) {
-		if (realm.where(RealmKpIndex.class).count() == 0) {
-			Log.i(TAG, "No RealmKpIndex exists. Creating one");
-			realm.beginTransaction();
-			realm.createObject(RealmKpIndex.class);
-			realm.commitTransaction();
-		} else {
-			Log.i(TAG, "A RealmKpIndex already exists. Will not create one");
-		}
-	}
-
-	private static void ensureRealmWeatherExists(Realm realm) {
-		if (realm.where(RealmWeather.class).count() == 0) {
-			Log.i(TAG, "No RealmWeather exists. Creating one");
-			realm.beginTransaction();
-			realm.createObject(RealmWeather.class);
-			realm.commitTransaction();
-		} else {
-			Log.i(TAG, "A RealmWeather already exists. Will not create one");
-		}
-	}
-
-	private static void ensureRealmGeomagneticCoordinatesExist(Realm realm) {
-		if (realm.where(RealmGeomagneticCoordinates.class).count() == 0) {
-			Log.i(TAG, "No RealmGeomagneticCoordinates exists. Creating one");
-			realm.beginTransaction();
-			realm.createObject(RealmGeomagneticCoordinates.class);
-			realm.commitTransaction();
-		} else {
-			Log.i(TAG, "A RealmGeomagneticCoordinates already exists. Will not create one");
-		}
-	}
-
-	private void setupAlarm() {
-		Log.v(TAG, "setupAlarm");
+	private void setupAlarms() {
+		Log.v(TAG, "setupAlarms");
 		LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(this);
 		Intent intent = new Intent(BootReceiver.ACTION_SETUP_ALARMS, null, this, BootReceiver.class);
 		localBroadcastManager.registerReceiver(new BootReceiver(), new IntentFilter(BootReceiver.ACTION_SETUP_ALARMS));

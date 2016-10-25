@@ -213,4 +213,9 @@ public class AuroraPollingService extends WakefulIntentService {
 	public static Intent createUpdateIntent(Context context) {
 		return new Intent(ACTION_UPDATE, null, context, AuroraPollingService.class);
 	}
+
+	public static void sendUpdateRequest(Context context) {
+		Intent updateIntent = createUpdateIntent(context);
+		WakefulIntentService.sendWakefulWork(context, updateIntent);
+	}
 }
