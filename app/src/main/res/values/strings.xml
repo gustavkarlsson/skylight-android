@@ -5,5 +5,5 @@
 	<string name="refresh">Refresh</string>
 	<string name="google_play_services_not_installed">Google Play Services was not installed</string>
 	<string name="google_play_services_not_supported">Google Play Services is not required but supported on this device</string>
-	<string name="location_coarse_permission_not_given">Location permission not given</string>
+	<string name="location_fine_permission_not_given">Location permission not given</string>
 </resources>

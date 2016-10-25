@@ -11,14 +11,17 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
 import io.realm.Realm;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagneticCoordinatesProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.KpIndexProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.ProviderException;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SunPositionProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.Weather;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.GeomagneticCoordinatesProviderImpl;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.KlausBrunnerSunPositionProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.RetrofittedKpIndexProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.RetrofittedOpenWeatherMapProvider;
+import se.gustavkarlsson.aurora_notifier.android.realm.RealmGeomagneticCoordinates;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmKpIndex;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmSunPosition;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmWeather;
@@ -32,6 +35,7 @@ public class AuroraPollingService extends WakefulIntentService {
 	private KpIndexProvider kpIndexProvider;
 	private WeatherProvider weatherProvider;
 	private SunPositionProvider sunPositionProvider;
+	private GeomagneticCoordinatesProvider geomagneticCoordinatesProvider;
 	private GoogleApiClient googleApiClient;
 
 	// Default constructor required
@@ -51,6 +55,9 @@ public class AuroraPollingService extends WakefulIntentService {
 		}
 		if (sunPositionProvider == null) {
 			sunPositionProvider = new KlausBrunnerSunPositionProvider();
+		}
+		if (geomagneticCoordinatesProvider == null) {
+			geomagneticCoordinatesProvider = new GeomagneticCoordinatesProviderImpl();
 		}
 		if (googleApiClient == null) {
 			googleApiClient = new GoogleApiClient.Builder(this)
@@ -86,6 +93,7 @@ public class AuroraPollingService extends WakefulIntentService {
 					Log.d(TAG, "Location is: " + location);
 					updateWeather(realm, location);
 					updateSunPosition(realm, location, System.currentTimeMillis());
+					updateGeomagneticCoordinates(realm, location);
 				} else {
 					Log.w(TAG, "Could not get location");
 				}
@@ -180,6 +188,26 @@ public class AuroraPollingService extends WakefulIntentService {
 			// TODO Handle errors better
 			e.printStackTrace();
 		}
+	}
+
+	private void updateGeomagneticCoordinates(Realm realm, Location location) {
+		Log.d(TAG, "Getting degrees from closest pole...");
+		final Timestamped<Float> degreesFromClosestPole = geomagneticCoordinatesProvider.getDegreesFromClosestPole(location.getLatitude(), location.getLongitude());
+		Log.d(TAG, "Degrees from closest pole is: " + degreesFromClosestPole);
+
+		Log.d(TAG, "Looking up geomagnetic coordinates from realm...");
+		final RealmGeomagneticCoordinates realmGeomagneticCoordinates = realm.where(RealmGeomagneticCoordinates.class).findFirst();
+		Log.d(TAG, "Realm geomagnetic coordinates are:  " + realmGeomagneticCoordinates);
+
+		Log.d(TAG, "Storing degrees from closest pole in realm");
+		realm.executeTransaction(new Realm.Transaction() {
+			@Override
+			public void execute(Realm realm) {
+				realmGeomagneticCoordinates.setDegreesFromClosestPole(degreesFromClosestPole.getValue());
+				realmGeomagneticCoordinates.setTimestamp(degreesFromClosestPole.getTimestamp());
+			}
+		});
+		Log.d(TAG, "Stored geomagnetic coordinates in realm");
 	}
 
 	public static Intent createUpdateIntent(Context context) {

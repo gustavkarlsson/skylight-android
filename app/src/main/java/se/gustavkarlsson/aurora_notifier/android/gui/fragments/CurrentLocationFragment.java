@@ -9,10 +9,12 @@ import android.view.ViewGroup;
 
 import io.realm.Realm;
 import se.gustavkarlsson.aurora_notifier.android.databinding.FragmentCurrentLocationBinding;
+import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.GeomagneticCoordinatesViewModel;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.KpIndexViewModel;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.SunPositionViewModel;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.ViewModelUpdater;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.WeatherViewModel;
+import se.gustavkarlsson.aurora_notifier.android.realm.RealmGeomagneticCoordinates;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmKpIndex;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmSunPosition;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmWeather;
@@ -24,6 +26,7 @@ public class CurrentLocationFragment extends Fragment {
 	private KpIndexViewModel kpIndexViewModel;
 	private WeatherViewModel weatherViewModel;
 	private SunPositionViewModel sunPositionViewModel;
+	private GeomagneticCoordinatesViewModel geomagneticCoordinatesViewModel;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,12 @@ public class CurrentLocationFragment extends Fragment {
 		RealmSunPosition realmSunPosition = realm.where(RealmSunPosition.class).findFirst();
 		sunPositionViewModel = new SunPositionViewModel(realmSunPosition);
 		ViewModelUpdater realmSunPositionListener = new ViewModelUpdater(sunPositionViewModel);
-		realmWeather.addChangeListener(realmSunPositionListener);
+		realmSunPosition.addChangeListener(realmSunPositionListener);
+
+		RealmGeomagneticCoordinates realmGeomagneticCoordinates = realm.where(RealmGeomagneticCoordinates.class).findFirst();
+		geomagneticCoordinatesViewModel = new GeomagneticCoordinatesViewModel(realmGeomagneticCoordinates);
+		ViewModelUpdater realmGeomagneticCoordinatesListener = new ViewModelUpdater(geomagneticCoordinatesViewModel);
+		realmGeomagneticCoordinates.addChangeListener(realmGeomagneticCoordinatesListener);
 	}
 
 	@Override
@@ -53,6 +61,7 @@ public class CurrentLocationFragment extends Fragment {
 		binding.setKpIndex(kpIndexViewModel);
 		binding.setWeather(weatherViewModel);
 		binding.setSunPosition(sunPositionViewModel);
+		binding.setGeomagneticCoordinates(geomagneticCoordinatesViewModel);
 		return binding.getRoot();
 	}
 

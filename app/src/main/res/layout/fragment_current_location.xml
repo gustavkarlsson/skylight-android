@@ -7,6 +7,7 @@
 		<variable name="kpIndex" type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.KpIndexViewModel" />
 		<variable name="weather" type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.WeatherViewModel" />
 		<variable name="sunPosition" type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.SunPositionViewModel" />
+		<variable name="geomagneticCoordinates" type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.GeomagneticCoordinatesViewModel" />
 	</data>
 
 	<LinearLayout
@@ -35,6 +36,12 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@{sunPosition.zenithAngle}"/>
+
+		<TextView
+			android:id="@+id/degreesFromClosestPole"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@{geomagneticCoordinates.degreesFromClosestPole}"/>
 
 		<Button
 			android:id="@+id/refresh_button"

@@ -11,6 +11,7 @@ import com.commonsware.cwac.wakeful.WakefulIntentService;
 import io.realm.Realm;
 import se.gustavkarlsson.aurora_notifier.android.background.AuroraPollingService;
 import se.gustavkarlsson.aurora_notifier.android.background.BootReceiver;
+import se.gustavkarlsson.aurora_notifier.android.realm.RealmGeomagneticCoordinates;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmKpIndex;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmSunPosition;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmWeather;
@@ -34,6 +35,7 @@ public class AuroraNotifier extends Application {
 		ensureRealmKpIndexExists(realm);
 		ensureRealmWeatherExists(realm);
 		ensureRealmSunPositionExists(realm);
+		ensureRealmGeomagneticCoordinatesExist(realm);
 		realm.close();
 	}
 
@@ -67,6 +69,17 @@ public class AuroraNotifier extends Application {
 			realm.commitTransaction();
 		} else {
 			Log.i(TAG, "A RealmWeather already exists. Will not create one");
+		}
+	}
+
+	private static void ensureRealmGeomagneticCoordinatesExist(Realm realm) {
+		if (realm.where(RealmGeomagneticCoordinates.class).count() == 0) {
+			Log.i(TAG, "No RealmGeomagneticCoordinates exists. Creating one");
+			realm.beginTransaction();
+			realm.createObject(RealmGeomagneticCoordinates.class);
+			realm.commitTransaction();
+		} else {
+			Log.i(TAG, "A RealmGeomagneticCoordinates already exists. Will not create one");
 		}
 	}
 
