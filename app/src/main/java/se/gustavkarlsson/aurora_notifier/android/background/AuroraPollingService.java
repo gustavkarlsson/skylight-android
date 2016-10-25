@@ -2,18 +2,25 @@ package se.gustavkarlsson.aurora_notifier.android.background;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
 import android.util.Log;
 
 import com.commonsware.cwac.wakeful.WakefulIntentService;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
 import io.realm.Realm;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.KpIndexProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.ProviderException;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.SunPositionProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.Weather;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.KlausBrunnerSunPositionProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.RetrofittedKpIndexProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.RetrofittedOpenWeatherMapProvider;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmKpIndex;
+import se.gustavkarlsson.aurora_notifier.android.realm.RealmSunPosition;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmWeather;
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 
@@ -24,6 +31,8 @@ public class AuroraPollingService extends WakefulIntentService {
 
 	private KpIndexProvider kpIndexProvider;
 	private WeatherProvider weatherProvider;
+	private SunPositionProvider sunPositionProvider;
+	private GoogleApiClient googleApiClient;
 
 	// Default constructor required
 	public AuroraPollingService() {
@@ -32,9 +41,22 @@ public class AuroraPollingService extends WakefulIntentService {
 
 	@Override
 	public void onCreate() {
+		Log.v(TAG, "onCreate");
 		super.onCreate();
-		kpIndexProvider = RetrofittedKpIndexProvider.createDefault();
-		weatherProvider = RetrofittedOpenWeatherMapProvider.createDefault();
+		if (kpIndexProvider == null) {
+			kpIndexProvider = RetrofittedKpIndexProvider.createDefault();
+		}
+		if (weatherProvider == null) {
+			weatherProvider = RetrofittedOpenWeatherMapProvider.createDefault();
+		}
+		if (sunPositionProvider == null) {
+			sunPositionProvider = new KlausBrunnerSunPositionProvider();
+		}
+		if (googleApiClient == null) {
+			googleApiClient = new GoogleApiClient.Builder(this)
+					.addApi(LocationServices.API)
+					.build();
+		}
 	}
 
 	@Override
@@ -51,26 +73,58 @@ public class AuroraPollingService extends WakefulIntentService {
 	public void update() {
 		Log.v(TAG, "update");
 		Realm realm = Realm.getDefaultInstance();
-		updateKpIndex(realm);
-		updateWeather(realm);
-		realm.close();
+		try {
+			updateKpIndex(realm);
+
+			Log.d(TAG, "Connecting to Google Play Servides...");
+			ConnectionResult connectionResult = googleApiClient.blockingConnect();
+			if (connectionResult.isSuccess()) {
+				Log.d(TAG, "Successfully connected to Google Play Services");
+				Log.d(TAG, "Getting location");
+				Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+				if (location != null) {
+					Log.d(TAG, "Location is: " + location);
+					updateWeather(realm, location);
+					updateSunPosition(realm, location, System.currentTimeMillis());
+				} else {
+					Log.w(TAG, "Could not get location");
+				}
+			} else {
+				Log.e(TAG, "Failed to connect to Google Play Services: " + connectionResult.getErrorMessage());
+			}
+		} catch (SecurityException e) {
+			Log.e(TAG, "Location permission not given");
+			// TODO Handle errors better
+			e.printStackTrace();
+		} finally {
+			if (!realm.isClosed()) {
+				realm.close();
+			}
+			if (googleApiClient.isConnected()) {
+				Log.d(TAG, "Disconnecting from Google Play Services");
+				googleApiClient.disconnect();
+			}
+		}
 	}
 
 	private void updateKpIndex(Realm realm) {
 		try {
 			Log.d(TAG, "Getting KP index...");
-			Timestamped<Float> kpIndex = kpIndexProvider.getKpIndex();
+			final Timestamped<Float> kpIndex = kpIndexProvider.getKpIndex();
 			Log.d(TAG, "KP Index is: " + kpIndex);
 
 			Log.d(TAG, "Looking up KP index from realm...");
-			RealmKpIndex realmKpIndex = realm.where(RealmKpIndex.class).findFirst();
+			final RealmKpIndex realmKpIndex = realm.where(RealmKpIndex.class).findFirst();
 			Log.d(TAG, "Realm KP index is:  " + realmKpIndex);
 
 			Log.d(TAG, "Storing KP index in realm");
-			realm.beginTransaction();
-			realmKpIndex.setKpIndex(kpIndex.getValue());
-			realmKpIndex.setTimestamp(kpIndex.getTimestamp());
-			realm.commitTransaction();
+			realm.executeTransaction(new Realm.Transaction() {
+				@Override
+				public void execute(Realm realm) {
+					realmKpIndex.setKpIndex(kpIndex.getValue());
+					realmKpIndex.setTimestamp(kpIndex.getTimestamp());
+				}
+			});
 			Log.d(TAG, "Stored KP index in realm");
 		} catch (ProviderException e) {
 			// TODO Handle errors better
@@ -78,22 +132,50 @@ public class AuroraPollingService extends WakefulIntentService {
 		}
 	}
 
-	private void updateWeather(Realm realm) {
+	private void updateWeather(Realm realm, Location location) {
 		try {
 			Log.d(TAG, "Getting weather...");
-			Timestamped<? extends Weather> weather = weatherProvider.getWeather(63.8342338, 20.2744067); // TODO set coordinates properly and change appid
+			final Timestamped<? extends Weather> weather = weatherProvider.getWeather(location.getLatitude(), location.getLongitude());
 			Log.d(TAG, "Weather is:  " + weather);
 
 			Log.d(TAG, "Looking up weather from realm...");
-			RealmWeather realmWeather = realm.where(RealmWeather.class).findFirst();
+			final RealmWeather realmWeather = realm.where(RealmWeather.class).findFirst();
 			Log.d(TAG, "Realm weather is:  " + realmWeather);
 
 			Log.d(TAG, "Storing weather in realm");
-			realm.beginTransaction();
-			realmWeather.setCloudPercentage(weather.getValue().getCloudPercentage());
-			realmWeather.setTimestamp(weather.getTimestamp());
-			realm.commitTransaction();
+			realm.executeTransaction(new Realm.Transaction() {
+				@Override
+				public void execute(Realm realm) {
+					realmWeather.setCloudPercentage(weather.getValue().getCloudPercentage());
+					realmWeather.setTimestamp(weather.getTimestamp());
+				}
+			});
 			Log.d(TAG, "Stored weather in realm");
+		} catch (ProviderException e) {
+			// TODO Handle errors better
+			e.printStackTrace();
+		}
+	}
+
+	private void updateSunPosition(Realm realm, Location location, long timeMillis) {
+		try {
+			Log.d(TAG, "Getting sun position...");
+			final Timestamped<Float> zenithAngle = sunPositionProvider.getZenithAngle(timeMillis, location.getLatitude(), location.getLongitude());
+			Log.d(TAG, "Sun position is: " + zenithAngle);
+
+			Log.d(TAG, "Looking up sun position from realm...");
+			final RealmSunPosition realmSunPosition = realm.where(RealmSunPosition.class).findFirst();
+			Log.d(TAG, "Realm sun position is:  " + realmSunPosition);
+
+			Log.d(TAG, "Storing sun position in realm");
+			realm.executeTransaction(new Realm.Transaction() {
+				@Override
+				public void execute(Realm realm) {
+					realmSunPosition.setZenithAngle(zenithAngle.getValue());
+					realmSunPosition.setTimestamp(zenithAngle.getTimestamp());
+				}
+			});
+			Log.d(TAG, "Stored sun position in realm");
 		} catch (ProviderException e) {
 			// TODO Handle errors better
 			e.printStackTrace();
@@ -102,10 +184,5 @@ public class AuroraPollingService extends WakefulIntentService {
 
 	public static Intent createUpdateIntent(Context context) {
 		return new Intent(ACTION_UPDATE, null, context, AuroraPollingService.class);
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
 	}
 }

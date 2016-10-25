@@ -15,6 +15,7 @@ import se.gustavkarlsson.aurora_notifier.android.background.providers.services.O
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 
 // TODO Look into using their json API
+// TODO Change location of APP ID
 public class RetrofittedOpenWeatherMapProvider implements WeatherProvider {
 	private static final String TAG = RetrofittedOpenWeatherMapProvider.class.getSimpleName();
 

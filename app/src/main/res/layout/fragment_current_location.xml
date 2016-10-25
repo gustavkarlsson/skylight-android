@@ -6,6 +6,7 @@
 	<data>
 		<variable name="kpIndex" type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.KpIndexViewModel" />
 		<variable name="weather" type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.WeatherViewModel" />
+		<variable name="sunPosition" type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.SunPositionViewModel" />
 	</data>
 
 	<LinearLayout
@@ -28,6 +29,12 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@{weather.cloudPercentage}"/>
+
+		<TextView
+			android:id="@+id/sunZenithAngle"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@{sunPosition.zenithAngle}"/>
 
 		<Button
 			android:id="@+id/refresh_button"

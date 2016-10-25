@@ -1,24 +1,20 @@
 package se.gustavkarlsson.aurora_notifier.android.gui.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-
-import com.commonsware.cwac.wakeful.WakefulIntentService;
 
 import io.realm.Realm;
-import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.background.AuroraPollingService;
 import se.gustavkarlsson.aurora_notifier.android.databinding.FragmentCurrentLocationBinding;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.KpIndexViewModel;
+import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.SunPositionViewModel;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.ViewModelUpdater;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.WeatherViewModel;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmKpIndex;
+import se.gustavkarlsson.aurora_notifier.android.realm.RealmSunPosition;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmWeather;
 
 public class CurrentLocationFragment extends Fragment {
@@ -27,6 +23,7 @@ public class CurrentLocationFragment extends Fragment {
 	private Realm realm;
 	private KpIndexViewModel kpIndexViewModel;
 	private WeatherViewModel weatherViewModel;
+	private SunPositionViewModel sunPositionViewModel;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +39,11 @@ public class CurrentLocationFragment extends Fragment {
 		weatherViewModel = new WeatherViewModel(realmWeather);
 		ViewModelUpdater realmWeatherListener = new ViewModelUpdater(weatherViewModel);
 		realmWeather.addChangeListener(realmWeatherListener);
+
+		RealmSunPosition realmSunPosition = realm.where(RealmSunPosition.class).findFirst();
+		sunPositionViewModel = new SunPositionViewModel(realmSunPosition);
+		ViewModelUpdater realmSunPositionListener = new ViewModelUpdater(sunPositionViewModel);
+		realmWeather.addChangeListener(realmSunPositionListener);
 	}
 
 	@Override
@@ -50,6 +52,7 @@ public class CurrentLocationFragment extends Fragment {
 		FragmentCurrentLocationBinding binding = FragmentCurrentLocationBinding.inflate(inflater, container, false);
 		binding.setKpIndex(kpIndexViewModel);
 		binding.setWeather(weatherViewModel);
+		binding.setSunPosition(sunPositionViewModel);
 		return binding.getRoot();
 	}
 
