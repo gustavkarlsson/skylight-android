@@ -27,7 +27,7 @@ public class BootReceiver extends BroadcastReceiver {
 	private static void setupAlarms(Context context) {
 		Log.v(TAG, "setupAlarms");
 		Log.i(TAG, "Setting up alarms");
-		Intent updateIntent = AuroraPollingService.createUpdateIntent(context);
+		Intent updateIntent = PollingService.createUpdateIntent(context);
 		if (!intentAlreadyCreated(context, updateIntent)) {
 			Log.d(TAG, "Alarm is not yet set up");
 			scheduleAlarm(context, updateIntent);

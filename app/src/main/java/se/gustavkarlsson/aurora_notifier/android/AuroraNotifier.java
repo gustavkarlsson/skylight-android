@@ -11,7 +11,6 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmObject;
-import se.gustavkarlsson.aurora_notifier.android.background.AuroraPollingService;
 import se.gustavkarlsson.aurora_notifier.android.background.BootReceiver;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmGeomagneticCoordinates;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmKpIndex;

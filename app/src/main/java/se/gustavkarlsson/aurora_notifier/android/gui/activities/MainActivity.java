@@ -19,7 +19,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.background.AuroraPollingService;
+import se.gustavkarlsson.aurora_notifier.android.background.PollingService;
 
 public class MainActivity extends AppCompatActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 				requestLocationPermission();
 			}
 		} else {
-			AuroraPollingService.sendUpdateRequest(this);
+			PollingService.sendUpdateRequest(this);
 		}
 	}
 
@@ -137,6 +137,6 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void sendUpdateRequest(View view) {
-		AuroraPollingService.sendUpdateRequest(this);
+		PollingService.sendUpdateRequest(this);
 	}
 }

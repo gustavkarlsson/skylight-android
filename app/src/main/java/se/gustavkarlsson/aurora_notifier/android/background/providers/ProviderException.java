@@ -2,9 +2,6 @@ package se.gustavkarlsson.aurora_notifier.android.background.providers;
 
 public class ProviderException extends Exception {
 
-	public ProviderException() {
-	}
-
 	public ProviderException(String detailMessage) {
 		super(detailMessage);
 	}
