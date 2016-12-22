@@ -6,13 +6,13 @@ import io.realm.RealmObject;
 
 
 public abstract class RealmViewModel<T extends RealmObject> extends BaseObservable {
-	private final T value;
+	private final T object;
 
-	RealmViewModel(T value) {
-		this.value = value;
+	RealmViewModel(T object) {
+		this.object = object;
 	}
 
-	T getValue() {
-		return value;
+	T getObject() {
+		return object;
 	}
 }
