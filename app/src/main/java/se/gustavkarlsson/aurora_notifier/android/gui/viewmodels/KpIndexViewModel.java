@@ -5,13 +5,13 @@ import android.databinding.Bindable;
 import java.util.Locale;
 
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmKpIndex;
-import se.gustavkarlsson.aurora_notifier.android.util.DumbTimeFormatter;
+import se.gustavkarlsson.aurora_notifier.android.util.RelativeTimeFormatter;
 import se.gustavkarlsson.aurora_notifier.android.util.TimeFormatter;
 
 public class KpIndexViewModel extends RealmViewModel<RealmKpIndex> {
 	private static final String NO_VALUE = "-";
 
-	private final TimeFormatter timeFormatter = new DumbTimeFormatter();
+	private final TimeFormatter timeFormatter = new RelativeTimeFormatter();
 
 	public KpIndexViewModel(RealmKpIndex value) {
 		super(value);
@@ -23,8 +23,8 @@ public class KpIndexViewModel extends RealmViewModel<RealmKpIndex> {
 		if (kpIndex == null) {
 			return NO_VALUE;
 		} else {
-			String formattedTime = timeFormatter.formatTime(getObject().getTimestamp());
-			return String.format(Locale.getDefault(), "Kp index: %.1f\n%s", kpIndex, formattedTime);
+			CharSequence formattedTime = timeFormatter.formatTime(getObject().getTimestamp());
+			return String.format(Locale.getDefault(), "Kp index: %.1f @ %s", kpIndex, formattedTime);
 		}
 	}
 }

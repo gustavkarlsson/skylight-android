@@ -5,13 +5,13 @@ import android.databinding.Bindable;
 import java.util.Locale;
 
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmWeather;
-import se.gustavkarlsson.aurora_notifier.android.util.DumbTimeFormatter;
+import se.gustavkarlsson.aurora_notifier.android.util.RelativeTimeFormatter;
 import se.gustavkarlsson.aurora_notifier.android.util.TimeFormatter;
 
 public class WeatherViewModel extends RealmViewModel<RealmWeather> {
 	private static final String NO_VALUE = "-";
 
-	private final TimeFormatter timeFormatter = new DumbTimeFormatter();
+	private final TimeFormatter timeFormatter = new RelativeTimeFormatter();
 
 	public WeatherViewModel(RealmWeather value) {
 		super(value);
@@ -23,8 +23,8 @@ public class WeatherViewModel extends RealmViewModel<RealmWeather> {
 		if (cloudPercentage == null) {
 			return NO_VALUE;
 		} else {
-			String formattedTime = timeFormatter.formatTime(getObject().getTimestamp());
-			return String.format(Locale.getDefault(), "Clouds: %d%%\n%s", cloudPercentage, formattedTime);
+			CharSequence formattedTime = timeFormatter.formatTime(getObject().getTimestamp());
+			return String.format(Locale.getDefault(), "Clouds: %d%% @ %s", cloudPercentage, formattedTime);
 		}
 	}
 }
