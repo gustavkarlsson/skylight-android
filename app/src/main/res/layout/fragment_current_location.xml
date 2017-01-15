@@ -4,6 +4,7 @@
 	tools:context=".gui.fragments.CurrentLocationFragment" >
 
 	<data>
+		<variable name="auroraEvaluation" type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.AuroraEvaluationViewModel" />
 		<variable name="kpIndex" type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.KpIndexViewModel" />
 		<variable name="weather" type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.WeatherViewModel" />
 		<variable name="sunPosition" type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.SunPositionViewModel" />
@@ -18,6 +19,18 @@
 		android:paddingRight="@dimen/activity_horizontal_margin"
 		android:paddingTop="@dimen/activity_vertical_margin"
 		android:orientation="vertical">
+
+		<TextView
+			android:id="@+id/auroraChance"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@{auroraEvaluation.chance}"/>
+
+		<TextView
+			android:id="@+id/auroraComplications"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="@{auroraEvaluation.complications}"/>
 
 		<TextView
 			android:id="@+id/kp_index"

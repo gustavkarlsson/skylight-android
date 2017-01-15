@@ -1,6 +1,7 @@
 package se.gustavkarlsson.aurora_notifier.android.util;
 
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayDeque;
@@ -18,23 +19,28 @@ public class ParallelTaskRunner {
 	private final Queue<AsyncTask> tasks = new ArrayDeque<>();
 	private final Executor executor = AsyncTask.THREAD_POOL_EXECUTOR;
 
-	public synchronized void start(AsyncTask... tasksToStart) {
+	public synchronized TaskExecutionReport executeInParallel(long timeoutMillis, AsyncTask... tasksToStart) {
+		long startMillis = System.currentTimeMillis();
+		startTasks(tasksToStart);
+		return waitForTasksToFinish(timeoutMillis, startMillis);
+	}
+
+	private void startTasks(AsyncTask[] tasksToStart) {
 		for (AsyncTask task : tasksToStart) {
 			tasks.offer(task);
 			task.executeOnExecutor(executor);
 		}
 	}
 
-	public synchronized TaskExecutionReport waitForTasks(long timeoutMillis) {
-		long start = System.currentTimeMillis();
+	@NonNull
+	private TaskExecutionReport waitForTasksToFinish(long timeoutMillis, long startMillis) {
 		TaskExecutionReport report = new TaskExecutionReport();
 		while (!tasks.isEmpty()) {
-			long timePassedMillis = System.currentTimeMillis() - start;
+			long timePassedMillis = System.currentTimeMillis() - startMillis;
 			long timeLeft = timeoutMillis - timePassedMillis;
-			AsyncTask task = tasks.peek();
+			AsyncTask task = tasks.poll();
 			try {
 				task.get(timeLeft, TimeUnit.MILLISECONDS);
-				tasks.remove();
 			} catch (InterruptedException e) {
 				Log.e(TAG, "Thread was interrupted. This should not happen!");
 			} catch (ExecutionException e) {

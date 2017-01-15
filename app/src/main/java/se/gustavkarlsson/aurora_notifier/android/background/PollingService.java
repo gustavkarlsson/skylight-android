@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.commonsware.cwac.wakeful.WakefulIntentService;
@@ -31,6 +32,9 @@ import se.gustavkarlsson.aurora_notifier.android.util.ParallelTaskRunner;
 public class PollingService extends WakefulIntentService {
 
 	private static final String TAG = PollingService.class.getSimpleName();
+
+	public static final String ACTION_UPDATE_FINISHED = TAG + ".UPDATE_FINISHED";
+
 	private static final String ACTION_UPDATE = TAG + ".UPDATE";
 	private static final long UPDATE_TIMEOUT_MILLIS = 60_000;
 
@@ -39,6 +43,7 @@ public class PollingService extends WakefulIntentService {
 	private SunPositionProvider sunPositionProvider;
 	private GeomagneticCoordinatesProvider geomagneticCoordinatesProvider;
 	private GoogleApiClient googleApiClient;
+	private LocalBroadcastManager broadcastManager;
 
 	// Default constructor required
 	public PollingService() {
@@ -66,6 +71,7 @@ public class PollingService extends WakefulIntentService {
 					.addApi(LocationServices.API)
 					.build();
 		}
+		broadcastManager = LocalBroadcastManager.getInstance(this);
 	}
 
 	@Override
@@ -91,8 +97,9 @@ public class PollingService extends WakefulIntentService {
 			ParallelTaskRunner.TaskExecutionReport report = runUpdateTasks(UPDATE_TIMEOUT_MILLIS, location);
 			if (report.hasErrors()) {
 				logTaskExecutionErrors(report);
+				// TODO Handle report (report.hasErrors() etc...)
 			}
-			// TODO Handle report (report.hasErrors() etc...)
+			notifyListeners();
 		} catch (SecurityException e) {
 			Log.e(TAG, "Location permission not given", e);
 		} finally {
@@ -101,6 +108,11 @@ public class PollingService extends WakefulIntentService {
 				googleApiClient.disconnect();
 			}
 		}
+	}
+
+	private void notifyListeners() {
+		Intent intent = new Intent(ACTION_UPDATE_FINISHED);
+		broadcastManager.sendBroadcast(intent);
 	}
 
 	private static Location getLocation(GoogleApiClient googleApiClient) {
@@ -128,9 +140,11 @@ public class PollingService extends WakefulIntentService {
 		AsyncTask updateSunPositionTask = new UpdateSunPositionTask(sunPositionProvider, location, System.currentTimeMillis());
 		AsyncTask updateGeomagneticCoordinatesTask = new UpdateGeomagneticCoordinatesTask(geomagneticCoordinatesProvider, location);
 
-		ParallelTaskRunner taskRunner = new ParallelTaskRunner();
-		taskRunner.start(updateKpIndexTask, updateWeatherTask, updateSunPositionTask, updateGeomagneticCoordinatesTask);
-		return taskRunner.waitForTasks(timeoutMillis);
+		return new ParallelTaskRunner().executeInParallel(timeoutMillis,
+				updateKpIndexTask,
+				updateWeatherTask,
+				updateSunPositionTask,
+				updateGeomagneticCoordinatesTask);
 	}
 
 	private static void logTaskExecutionErrors(ParallelTaskRunner.TaskExecutionReport report) {
