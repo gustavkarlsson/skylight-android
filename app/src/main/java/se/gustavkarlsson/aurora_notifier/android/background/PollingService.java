@@ -172,7 +172,7 @@ public class PollingService extends WakefulIntentService {
 		return new Intent(ACTION_UPDATE, null, context, PollingService.class);
 	}
 
-	public static void sendUpdateRequest(Context context) {
+	public static void requestUpdate(Context context) {
 		Intent updateIntent = createUpdateIntent(context);
 		WakefulIntentService.sendWakefulWork(context, updateIntent);
 	}

@@ -43,6 +43,7 @@ public class CurrentLocationFragment extends Fragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		realm = Realm.getDefaultInstance();
 
@@ -87,7 +88,7 @@ public class CurrentLocationFragment extends Fragment {
 			@Override
 			public void onRefresh() {
 				swipeView.setRefreshing(true);
-				PollingService.sendUpdateRequest(getContext());
+				PollingService.requestUpdate(getContext());
 			}
 		});
 		binding.setAuroraEvaluation(auroraEvaluationViewModel);
@@ -99,14 +100,8 @@ public class CurrentLocationFragment extends Fragment {
 	}
 
 	@Override
-	public void onDestroyView() {
-		swipeView.setOnRefreshListener(null);
-		broadcastReceiver.abortBroadcast();
-		super.onDestroyView();
-	}
-
-	@Override
 	public void onStart() {
+		Log.v(TAG, "onStart");
 		super.onStart();
 		LocalBroadcastManager.getInstance(getContext()).registerReceiver((broadcastReceiver),
 				new IntentFilter(PollingService.ACTION_UPDATE_FINISHED)
@@ -115,12 +110,22 @@ public class CurrentLocationFragment extends Fragment {
 
 	@Override
 	public void onStop() {
+		Log.v(TAG, "onStop");
 		LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(broadcastReceiver);
 		super.onStop();
 	}
 
 	@Override
+	public void onDestroyView() {
+		Log.v(TAG, "onDestroyView");
+		swipeView.setOnRefreshListener(null);
+		broadcastReceiver.abortBroadcast();
+		super.onDestroyView();
+	}
+
+	@Override
 	public void onDestroy() {
+		Log.v(TAG, "onDestroy");
 		realm.close();
 		super.onDestroy();
 	}
