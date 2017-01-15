@@ -34,6 +34,7 @@ public class PollingService extends WakefulIntentService {
 	private static final String TAG = PollingService.class.getSimpleName();
 
 	public static final String ACTION_UPDATE_FINISHED = TAG + ".UPDATE_FINISHED";
+	public static final String ACTION_UPDATE_FINISHED_MESSAGE = TAG + ".UPDATE_FINISHED_MESSAGE";
 
 	private static final String ACTION_UPDATE = TAG + ".UPDATE";
 	private static final long UPDATE_TIMEOUT_MILLIS = 60_000;
@@ -97,9 +98,9 @@ public class PollingService extends WakefulIntentService {
 			ParallelTaskRunner.TaskExecutionReport report = runUpdateTasks(UPDATE_TIMEOUT_MILLIS, location);
 			if (report.hasErrors()) {
 				logTaskExecutionErrors(report);
-				// TODO Handle report (report.hasErrors() etc...)
+				notifyListeners("Updated finished with errors");
 			}
-			notifyListeners();
+			notifyListeners(null);
 		} catch (SecurityException e) {
 			Log.e(TAG, "Location permission not given", e);
 		} finally {
@@ -110,8 +111,11 @@ public class PollingService extends WakefulIntentService {
 		}
 	}
 
-	private void notifyListeners() {
+	private void notifyListeners(String message) {
 		Intent intent = new Intent(ACTION_UPDATE_FINISHED);
+		if (message != null) {
+			intent.putExtra(ACTION_UPDATE_FINISHED_MESSAGE, message);
+		}
 		broadcastManager.sendBroadcast(intent);
 	}
 

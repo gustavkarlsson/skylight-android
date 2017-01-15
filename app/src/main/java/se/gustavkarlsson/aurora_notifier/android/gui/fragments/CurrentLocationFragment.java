@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import io.realm.Realm;
 import se.gustavkarlsson.aurora_notifier.android.R;
@@ -75,6 +76,10 @@ public class CurrentLocationFragment extends Fragment {
 				geomagneticCoordinatesViewModel.notifyChange();
 				auroraEvaluationViewModel.notifyChange();
 				swipeView.setRefreshing(false);
+				if (intent.hasExtra(PollingService.ACTION_UPDATE_FINISHED_MESSAGE)) {
+					String message = intent.getStringExtra(PollingService.ACTION_UPDATE_FINISHED_MESSAGE);
+					Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+				}
 			}
 		};
 		swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe);
