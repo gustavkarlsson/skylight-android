@@ -20,12 +20,12 @@ public class AuroraEvaluationViewModel extends BaseObservable {
 	@Bindable
 	public String getChance() {
 		AuroraChance chance = auroraEvaluator.evaluate().getChance();
-		return chance.toString();
+		return "Chance: " + chance.toString();
 	}
 
 	@Bindable
 	public String getComplications() {
 		List<String> complications = auroraEvaluator.evaluate().getComplications();
-		return TextUtils.join("\n", complications);
+		return "Reasons:\n    " + TextUtils.join("\n    ", complications);
 	}
 }
