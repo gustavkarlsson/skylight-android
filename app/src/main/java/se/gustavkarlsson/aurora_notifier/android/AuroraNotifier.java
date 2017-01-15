@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import io.realm.RealmObject;
 import se.gustavkarlsson.aurora_notifier.android.background.BootReceiver;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmGeomagneticCoordinates;
@@ -30,6 +31,10 @@ public class AuroraNotifier extends Application {
 
 	private void setupRealm() {
 		Realm.init(this);
+		RealmConfiguration config = new RealmConfiguration.Builder()
+				.deleteRealmIfMigrationNeeded()
+				.build();
+		Realm.setDefaultConfiguration(config);
 		Realm realm = Realm.getDefaultInstance();
 		List<Class<? extends RealmObject>> classes = Arrays.asList(
 				RealmKpIndex.class,
