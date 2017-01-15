@@ -7,12 +7,14 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import io.realm.Realm;
+import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.PollingService;
 import se.gustavkarlsson.aurora_notifier.android.databinding.FragmentCurrentLocationBinding;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.AuroraEvaluationViewModel;
@@ -36,6 +38,7 @@ public class CurrentLocationFragment extends Fragment {
 	private GeomagneticCoordinatesViewModel geomagneticCoordinatesViewModel;
 	private AuroraEvaluationViewModel auroraEvaluationViewModel;
 	private BroadcastReceiver broadcastReceiver;
+	private SwipeRefreshLayout swipeView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,13 @@ public class CurrentLocationFragment extends Fragment {
 
 		auroraEvaluationViewModel = new AuroraEvaluationViewModel(new AuroraEvaluator(realmWeather, realmSunPosition, realmKpIndex, realmGeomagneticCoordinates));
 
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		Log.v(TAG, "onCreateView");
+		FragmentCurrentLocationBinding binding = FragmentCurrentLocationBinding.inflate(inflater, container, false);
+		View rootView = binding.getRoot();
 		broadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
@@ -64,20 +74,30 @@ public class CurrentLocationFragment extends Fragment {
 				sunPositionViewModel.notifyChange();
 				geomagneticCoordinatesViewModel.notifyChange();
 				auroraEvaluationViewModel.notifyChange();
+				swipeView.setRefreshing(false);
 			}
 		};
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		Log.v(TAG, "onCreateView");
-		FragmentCurrentLocationBinding binding = FragmentCurrentLocationBinding.inflate(inflater, container, false);
+		swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe);
+		swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+				swipeView.setRefreshing(true);
+				PollingService.sendUpdateRequest(getContext());
+			}
+		});
 		binding.setAuroraEvaluation(auroraEvaluationViewModel);
 		binding.setKpIndex(kpIndexViewModel);
 		binding.setWeather(weatherViewModel);
 		binding.setSunPosition(sunPositionViewModel);
 		binding.setGeomagneticCoordinates(geomagneticCoordinatesViewModel);
-		return binding.getRoot();
+		return rootView;
+	}
+
+	@Override
+	public void onDestroyView() {
+		swipeView.setOnRefreshListener(null);
+		broadcastReceiver.abortBroadcast();
+		super.onDestroyView();
 	}
 
 	@Override

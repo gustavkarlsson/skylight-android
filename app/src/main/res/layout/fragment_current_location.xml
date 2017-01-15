@@ -11,57 +11,55 @@
 		<variable name="geomagneticCoordinates" type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.GeomagneticCoordinatesViewModel" />
 	</data>
 
-	<LinearLayout
+	<android.support.v4.widget.SwipeRefreshLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:paddingBottom="@dimen/activity_vertical_margin"
-		android:paddingLeft="@dimen/activity_horizontal_margin"
-		android:paddingRight="@dimen/activity_horizontal_margin"
-		android:paddingTop="@dimen/activity_vertical_margin"
-		android:orientation="vertical">
+		android:id="@+id/swipe">
+		<ScrollView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical">
 
-		<TextView
-			android:id="@+id/auroraChance"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@{auroraEvaluation.chance}"/>
+				<TextView
+					android:id="@+id/auroraChance"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@{auroraEvaluation.chance}"/>
 
-		<TextView
-			android:id="@+id/auroraComplications"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@{auroraEvaluation.complications}"/>
+				<TextView
+					android:id="@+id/auroraComplications"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@{auroraEvaluation.complications}"/>
 
-		<TextView
-			android:id="@+id/kp_index"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@{kpIndex.kpIndex}"/>
+				<TextView
+					android:id="@+id/kp_index"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@{kpIndex.kpIndex}"/>
 
-		<TextView
-			android:id="@+id/cloudPercentage"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@{weather.cloudPercentage}"/>
+				<TextView
+					android:id="@+id/cloudPercentage"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@{weather.cloudPercentage}"/>
 
-		<TextView
-			android:id="@+id/sunZenithAngle"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@{sunPosition.zenithAngle}"/>
+				<TextView
+					android:id="@+id/sunZenithAngle"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@{sunPosition.zenithAngle}"/>
 
-		<TextView
-			android:id="@+id/degreesFromClosestPole"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@{geomagneticCoordinates.degreesFromClosestPole}"/>
+				<TextView
+					android:id="@+id/degreesFromClosestPole"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@{geomagneticCoordinates.degreesFromClosestPole}"/>
 
-		<Button
-			android:id="@+id/refresh_button"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/refresh"
-			android:onClick="sendUpdateRequest"/>
-
-	</LinearLayout>
+			</LinearLayout>
+		</ScrollView>
+	</android.support.v4.widget.SwipeRefreshLayout>
 </layout>
