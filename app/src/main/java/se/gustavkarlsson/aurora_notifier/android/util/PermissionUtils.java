@@ -16,6 +16,9 @@ public class PermissionUtils {
 	private static final int REQUEST_FINE_LOCATION = 1973;
 	private static final String LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION;
 
+	private PermissionUtils() {
+	}
+
 	public static boolean hasLocationPermission(final Activity activity) {
 		return ContextCompat.checkSelfPermission(activity, LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED;
 	}

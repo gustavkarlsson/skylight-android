@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.util;
+package se.gustavkarlsson.aurora_notifier.android.gui.time;
 
 import android.text.format.DateUtils;
 

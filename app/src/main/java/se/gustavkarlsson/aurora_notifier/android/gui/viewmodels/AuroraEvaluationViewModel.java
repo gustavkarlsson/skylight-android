@@ -6,8 +6,8 @@ import android.text.TextUtils;
 
 import java.util.List;
 
-import se.gustavkarlsson.aurora_notifier.android.util.AuroraChance;
-import se.gustavkarlsson.aurora_notifier.android.util.AuroraEvaluator;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraEvaluator;
 
 public class AuroraEvaluationViewModel extends BaseObservable {
 

@@ -5,8 +5,8 @@ import android.databinding.Bindable;
 import java.util.Locale;
 
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmGeomagneticCoordinates;
-import se.gustavkarlsson.aurora_notifier.android.util.RelativeTimeFormatter;
-import se.gustavkarlsson.aurora_notifier.android.util.TimeFormatter;
+import se.gustavkarlsson.aurora_notifier.android.gui.time.RelativeTimeFormatter;
+import se.gustavkarlsson.aurora_notifier.android.gui.time.TimeFormatter;
 
 public class GeomagneticCoordinatesViewModel extends RealmViewModel<RealmGeomagneticCoordinates> {
 	private static final String NO_VALUE = "-";
@@ -24,7 +24,7 @@ public class GeomagneticCoordinatesViewModel extends RealmViewModel<RealmGeomagn
 			return NO_VALUE;
 		} else {
 			CharSequence formattedTime = timeFormatter.formatTime(getObject().getTimestamp());
-			return String.format(Locale.getDefault(), "Degrees: %.1f° @ %s", degreesFromClosestPole, formattedTime);
+			return String.format(Locale.getDefault(), "Distance from pole: %.1f° @ %s", degreesFromClosestPole, formattedTime);
 		}
 	}
 }

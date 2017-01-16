@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.util;
+package se.gustavkarlsson.aurora_notifier.android.background;
 
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -13,13 +13,13 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-public class ParallelTaskRunner {
+class ParallelTaskRunner {
 	private static final String TAG = ParallelTaskRunner.class.getSimpleName();
 
 	private final Queue<AsyncTask> tasks = new ArrayDeque<>();
 	private final Executor executor = AsyncTask.THREAD_POOL_EXECUTOR;
 
-	public synchronized TaskExecutionReport executeInParallel(long timeoutMillis, AsyncTask... tasksToStart) {
+	synchronized TaskExecutionReport executeInParallel(long timeoutMillis, AsyncTask... tasksToStart) {
 		long startMillis = System.currentTimeMillis();
 		startTasks(tasksToStart);
 		return waitForTasksToFinish(timeoutMillis, startMillis);
@@ -52,7 +52,7 @@ public class ParallelTaskRunner {
 		return report;
 	}
 
-	public static class TaskExecutionReport {
+	static class TaskExecutionReport {
 		private Map<AsyncTask, ExecutionException> executionExceptions = new IdentityHashMap<>();
 		private Map<AsyncTask, TimeoutException> timeoutExceptions = new IdentityHashMap<>();
 

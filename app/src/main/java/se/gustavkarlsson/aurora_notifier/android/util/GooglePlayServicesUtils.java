@@ -13,6 +13,9 @@ import se.gustavkarlsson.aurora_notifier.android.R;
 public class GooglePlayServicesUtils {
 	private static final int REQUEST_GOOGLE_PLAY_SERVICES = 1972;
 
+	private GooglePlayServicesUtils() {
+	}
+
 	public static void ensureAvailable(Activity activity) {
 		GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
 		int connectionResult = availability.isGooglePlayServicesAvailable(activity);

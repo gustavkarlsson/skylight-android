@@ -27,7 +27,6 @@ import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateG
 import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateKpIndexTask;
 import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateSunPositionTask;
 import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateWeatherTask;
-import se.gustavkarlsson.aurora_notifier.android.util.ParallelTaskRunner;
 
 public class PollingService extends WakefulIntentService {
 

@@ -10,6 +10,10 @@ import se.gustavkarlsson.aurora_notifier.android.AuroraNotifier;
 import se.gustavkarlsson.aurora_notifier.android.background.BootReceiver;
 
 public class AlarmUtils {
+
+	private AlarmUtils() {
+	}
+
 	private static final String TAG = AlarmUtils.class.getSimpleName();
 
 	public static void setupAlarms(Context context) {

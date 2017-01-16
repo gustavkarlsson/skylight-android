@@ -27,7 +27,7 @@ import se.gustavkarlsson.aurora_notifier.android.realm.RealmGeomagneticCoordinat
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmKpIndex;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmSunPosition;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmWeather;
-import se.gustavkarlsson.aurora_notifier.android.util.AuroraEvaluator;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraEvaluator;
 
 public class CurrentLocationFragment extends Fragment {
 	private static final String TAG = CurrentLocationFragment.class.getSimpleName();
@@ -120,6 +120,10 @@ public class CurrentLocationFragment extends Fragment {
 		Log.v(TAG, "onDestroyView");
 		swipeView.setOnRefreshListener(null);
 		broadcastReceiver.abortBroadcast();
+
+		swipeView = null;
+		broadcastReceiver = null;
+
 		super.onDestroyView();
 	}
 
@@ -127,6 +131,16 @@ public class CurrentLocationFragment extends Fragment {
 	public void onDestroy() {
 		Log.v(TAG, "onDestroy");
 		realm.close();
+
+		realm = null;
+		kpIndexViewModel = null;
+		weatherViewModel = null;
+		sunPositionViewModel = null;
+		geomagneticCoordinatesViewModel = null;
+		auroraEvaluationViewModel = null;
+		broadcastReceiver = null;
+		swipeView = null;
+
 		super.onDestroy();
 	}
 

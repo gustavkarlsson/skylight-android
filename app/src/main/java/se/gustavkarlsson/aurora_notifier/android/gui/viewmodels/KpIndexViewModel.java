@@ -5,8 +5,8 @@ import android.databinding.Bindable;
 import java.util.Locale;
 
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmKpIndex;
-import se.gustavkarlsson.aurora_notifier.android.util.RelativeTimeFormatter;
-import se.gustavkarlsson.aurora_notifier.android.util.TimeFormatter;
+import se.gustavkarlsson.aurora_notifier.android.gui.time.RelativeTimeFormatter;
+import se.gustavkarlsson.aurora_notifier.android.gui.time.TimeFormatter;
 
 public class KpIndexViewModel extends RealmViewModel<RealmKpIndex> {
 	private static final String NO_VALUE = "-";

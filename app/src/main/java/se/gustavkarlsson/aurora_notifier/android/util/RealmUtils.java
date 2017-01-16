@@ -17,6 +17,9 @@ import se.gustavkarlsson.aurora_notifier.android.realm.RealmWeather;
 public class RealmUtils {
 	private static final String TAG = RealmUtils.class.getSimpleName();
 
+	private RealmUtils() {
+	}
+
 	public static void setupRealm(Context context) {
 		Realm.init(context);
 		deleteRealmDatabaseIfMigrationNeeded();
