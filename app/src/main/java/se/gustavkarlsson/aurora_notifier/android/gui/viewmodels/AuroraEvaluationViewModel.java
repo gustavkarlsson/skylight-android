@@ -7,14 +7,14 @@ import android.text.TextUtils;
 import java.util.List;
 
 import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance;
-import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraEvaluator;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.Evaluator;
 
 public class AuroraEvaluationViewModel extends BaseObservable {
 
-	private final AuroraEvaluator auroraEvaluator;
+	private final Evaluator auroraEvaluator;
 
-	public AuroraEvaluationViewModel(AuroraEvaluator auroraEvaluator) {
-		this.auroraEvaluator = auroraEvaluator;
+	public AuroraEvaluationViewModel(Evaluator evaluator) {
+		this.auroraEvaluator = evaluator;
 	}
 
 	@Bindable
