@@ -10,4 +10,5 @@
 	<string name="close">Close</string>
 	<string name="location_permission_required">Location permission required</string>
 	<string name="location_permission_required_rationale">This app needs access to your location to calculate the chances of seeing northern lights. Please allow access to your location.</string>
+	<string name="why_not">Why not?</string>
 </resources>

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -12,12 +13,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import io.realm.Realm;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.PollingService;
 import se.gustavkarlsson.aurora_notifier.android.databinding.FragmentCurrentLocationBinding;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.AuroraEvaluationViewModel;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.GeomagneticCoordinatesViewModel;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.KpIndexViewModel;
@@ -27,7 +30,6 @@ import se.gustavkarlsson.aurora_notifier.android.realm.RealmGeomagneticCoordinat
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmKpIndex;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmSunPosition;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmWeather;
-import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraEvaluator;
 
 public class CurrentLocationFragment extends Fragment {
 	private static final String TAG = CurrentLocationFragment.class.getSimpleName();
@@ -91,6 +93,20 @@ public class CurrentLocationFragment extends Fragment {
 				PollingService.requestUpdate(getContext());
 			}
 		});
+		LinearLayout bottomSheetLayout
+				= (LinearLayout) rootView.findViewById(R.id.linear_layout_bottom_sheet);
+		final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
+		bottomSheetBehavior.setHideable(false);
+		bottomSheetLayout.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+					bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+				} else {
+					bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+				}
+			}
+		});
 		binding.setAuroraEvaluation(auroraEvaluationViewModel);
 		binding.setKpIndex(kpIndexViewModel);
 		binding.setWeather(weatherViewModel);
@@ -119,7 +135,6 @@ public class CurrentLocationFragment extends Fragment {
 	public void onDestroyView() {
 		Log.v(TAG, "onDestroyView");
 		swipeView.setOnRefreshListener(null);
-		broadcastReceiver.abortBroadcast();
 
 		swipeView = null;
 		broadcastReceiver = null;
