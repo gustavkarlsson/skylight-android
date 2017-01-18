@@ -25,19 +25,19 @@ public class KpIndexAndCoordinatesEvaluator implements Evaluator {
 
 		if (kpIndex == null) {
 			evaluation.updateChance(AuroraChance.UNKNOWN);
-			evaluation.addComplication("Could not determine the current solar activity");
+			evaluation.addComplication("Unable to get solar activity");
 		}
 		if (degreesFromClosestPole == null) {
 			evaluation.updateChance(AuroraChance.UNKNOWN);
-			evaluation.addComplication("Could not determine your position");
+			evaluation.addComplication("Unable to get location");
 		}
 		if (kpIndex != null && kpIndex < 1) {
 			evaluation.updateChance(NONE);
-			evaluation.addComplication("There is not enough solar activity");
+			evaluation.addComplication("Not enough solar activity");
 		}
 		if (degreesFromClosestPole != null && degreesFromClosestPole > 35) {
 			evaluation.updateChance(NONE);
-			evaluation.addComplication("You are too far away from any magnetic pole");
+			evaluation.addComplication("Too far away");
 		}
 		if (kpIndex == null || degreesFromClosestPole == null) {
 			return evaluation;

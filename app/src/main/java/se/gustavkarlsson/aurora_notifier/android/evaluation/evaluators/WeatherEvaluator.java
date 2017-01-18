@@ -22,15 +22,15 @@ public class WeatherEvaluator implements Evaluator {
 
 		if (cloudPercentage == null) {
 			evaluation.updateChance(UNKNOWN);
-			evaluation.addComplication("Could not get the current weather");
+			evaluation.addComplication("Unable to get current weather");
 			return evaluation;
 		}
 		if (cloudPercentage > 50) {
 			evaluation.updateChance(NONE);
-			evaluation.addComplication("It's too cloudy");
+			evaluation.addComplication("Too cloudy");
 		} else if (cloudPercentage > 25) {
 			evaluation.updateChance(LOW);
-			evaluation.addComplication("Clouds might obstruct the view");
+			evaluation.addComplication("Probably too cloudy");
 		}
 		return evaluation;
 	}

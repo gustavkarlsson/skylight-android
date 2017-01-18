@@ -27,7 +27,7 @@
 	</data>
 
 	<android.support.design.widget.CoordinatorLayout
-		android:id="@+id/root"
+		android:id="@+id/root_layout"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
@@ -40,48 +40,68 @@
 			android:paddingRight="@dimen/activity_horizontal_margin"
 			android:paddingTop="@dimen/activity_vertical_margin">
 
-			<ScrollView
+			<RelativeLayout
 				android:layout_width="match_parent"
 				android:layout_height="match_parent">
 
-				<LinearLayout
-					android:layout_width="match_parent"
+				<TextView
+					android:id="@+id/aurora_chance_header"
+					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:orientation="vertical">
+					android:layout_centerHorizontal="true"
+					android:text="@string/aurora_chance"/>
 
-					<TextView
-						android:id="@+id/auroraChance"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="@{auroraEvaluation.chance}"/>
+				<TextView
+					android:id="@+id/aurora_chance"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerHorizontal="true"
+					android:layout_below="@id/aurora_chance_header"
+					android:textSize="32sp"
+					android:text="@{auroraEvaluation.chance}"/>
 
-					<TextView
-						android:id="@+id/kp_index"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="@{kpIndex.kpIndex}"/>
+				<TextView
+					android:id="@+id/debug_data"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerHorizontal="true"
+					android:layout_below="@id/aurora_chance"
+					android:layout_marginTop="@dimen/activity_vertical_margin"
+					android:text="@string/debug_data"/>
 
-					<TextView
-						android:id="@+id/cloudPercentage"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="@{weather.cloudPercentage}"/>
+				<TextView
+					android:id="@+id/kp_index"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerHorizontal="true"
+					android:layout_below="@id/debug_data"
+					android:text="@{kpIndex.kpIndex}"/>
 
-					<TextView
-						android:id="@+id/sunZenithAngle"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="@{sunPosition.zenithAngle}"/>
+				<TextView
+					android:id="@+id/cloud_percentage"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerHorizontal="true"
+					android:layout_below="@id/kp_index"
+					android:text="@{weather.cloudPercentage}"/>
 
-					<TextView
-						android:id="@+id/degreesFromClosestPole"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:text="@{geomagneticCoordinates.degreesFromClosestPole}"/>
+				<TextView
+					android:id="@+id/sun_zenith_angle"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerHorizontal="true"
+					android:layout_below="@id/cloud_percentage"
+					android:text="@{sunPosition.zenithAngle}"/>
 
-				</LinearLayout>
+				<TextView
+					android:id="@+id/degrees_from_closest_pole"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_centerHorizontal="true"
+					android:layout_below="@id/sun_zenith_angle"
+					android:text="@{geomagneticCoordinates.degreesFromClosestPole}"/>
 
-			</ScrollView>
+			</RelativeLayout>
 
 		</android.support.v4.widget.SwipeRefreshLayout>
 
@@ -94,18 +114,18 @@
 			android:paddingLeft="@dimen/activity_horizontal_margin"
 			android:paddingRight="@dimen/activity_horizontal_margin"
 			android:paddingTop="@dimen/activity_vertical_margin"
-			android:background="@android:color/background_light"
+			android:background="#424242"
 			app:behavior_hideable="false"
 			app:behavior_peekHeight="56dp"
 			app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
 			<TextView
 				android:id="@+id/why_not"
-				android:layout_width="match_parent"
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:layout_centerHorizontal="true"
 				android:height="56dp"
-				android:textSize="16sp"
-				android:textColor="@android:color/primary_text_light"
+				android:textColor="@android:color/primary_text_dark"
 				android:alpha="0.54"
 				android:text="@string/why_not"/>
 
@@ -114,10 +134,8 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_below="@id/why_not"
-				android:textSize="16sp"
 				android:lineSpacingExtra="32sp"
-				android:textColor="@android:color/primary_text_light"
-				android:alpha="0.87"
+				android:textColor="@android:color/primary_text_dark"
 				android:text="@{auroraEvaluation.complications}"/>
 
 		</RelativeLayout>

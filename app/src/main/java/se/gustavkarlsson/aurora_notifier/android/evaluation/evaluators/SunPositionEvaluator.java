@@ -22,15 +22,15 @@ public class SunPositionEvaluator implements Evaluator {
 
 		if (zenithAngle == null) {
 			evaluation.updateChance(UNKNOWN);
-			evaluation.addComplication("Could not determine your position");
+			evaluation.addComplication("Unable to get location");
 			return evaluation;
 		}
 		if (zenithAngle < 90) {
 			evaluation.updateChance(NONE);
-			evaluation.addComplication("It's too bright outside");
+			evaluation.addComplication("Too bright");
 		} else if (zenithAngle < 95) {
 			evaluation.updateChance(LOW);
-			evaluation.addComplication("It might be too bright outside");
+			evaluation.addComplication("Probably too bright");
 		}
 		return evaluation;
 	}

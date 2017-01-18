@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 		GooglePlayServicesUtils.ensureAvailable(this);
 		if (PermissionUtils.hasLocationPermission(this)) {
 			PollingService.requestUpdate(this); //TODO should this not happen in the fragment instead?
+			// TODO this should only run when no value exists
 		} else {
 			PermissionUtils.requestLocationPermission(this);
 		}

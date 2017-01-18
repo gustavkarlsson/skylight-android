@@ -20,7 +20,7 @@ public class AuroraEvaluationViewModel extends BaseObservable {
 	@Bindable
 	public String getChance() {
 		AuroraChance chance = auroraEvaluator.evaluate().getChance();
-		return "Chance: " + chance.toString();
+		return chance.toString();
 	}
 
 	@Bindable
