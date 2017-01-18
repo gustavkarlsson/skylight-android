@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -13,7 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import io.realm.Realm;
@@ -69,7 +70,15 @@ public class CurrentLocationFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.v(TAG, "onCreateView");
 		FragmentCurrentLocationBinding binding = FragmentCurrentLocationBinding.inflate(inflater, container, false);
-		View rootView = binding.getRoot();
+		final View rootView = binding.getRoot();
+		setUpBroadcastReceiver();
+		setUpSwipeRefresh(rootView);
+		setUpBottomSheetBehavior(rootView);
+		bindViewModels(binding);
+		return rootView;
+	}
+
+	private void setUpBroadcastReceiver() {
 		broadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
@@ -85,7 +94,10 @@ public class CurrentLocationFragment extends Fragment {
 				}
 			}
 		};
-		swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe);
+	}
+
+	private void setUpSwipeRefresh(View rootView) {
+		swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
 		swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {
@@ -93,26 +105,48 @@ public class CurrentLocationFragment extends Fragment {
 				PollingService.requestUpdate(getContext());
 			}
 		});
-		LinearLayout bottomSheetLayout
-				= (LinearLayout) rootView.findViewById(R.id.linear_layout_bottom_sheet);
+	}
+
+	private static void setUpBottomSheetBehavior(View rootView) {
+		RelativeLayout bottomSheetLayout = (RelativeLayout) rootView.findViewById(R.id.linear_layout_bottom_sheet);
 		final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
-		bottomSheetBehavior.setHideable(false);
 		bottomSheetLayout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-					bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-				} else {
+				if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
 					bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 				}
 			}
 		});
+		ensureSizeIsRecalculatedOnInteraction(bottomSheetBehavior);
+	}
+
+	//Workaround for bug described in http://stackoverflow.com/a/40267305/940731
+	private static void ensureSizeIsRecalculatedOnInteraction(BottomSheetBehavior bottomSheetBehavior) {
+		bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+			@Override
+			public void onStateChanged(@NonNull final View bottomSheet, int newState) {
+				bottomSheet.post(new Runnable() {
+					@Override
+					public void run() {
+						bottomSheet.requestLayout();
+						bottomSheet.invalidate();
+					}
+				});
+			}
+
+			@Override
+			public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+			}
+		});
+	}
+
+	private void bindViewModels(FragmentCurrentLocationBinding binding) {
 		binding.setAuroraEvaluation(auroraEvaluationViewModel);
 		binding.setKpIndex(kpIndexViewModel);
 		binding.setWeather(weatherViewModel);
 		binding.setSunPosition(sunPositionViewModel);
 		binding.setGeomagneticCoordinates(geomagneticCoordinatesViewModel);
-		return rootView;
 	}
 
 	@Override
