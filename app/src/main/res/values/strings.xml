@@ -1,6 +1,5 @@
 <resources>
 	<string name="app_name" translatable="false">Aurora Notifier</string>
-	<string name="action_settings">Settings</string>
 	<string name="current_place">Your position</string>
 	<string name="refresh">Refresh</string>
 	<string name="google_play_services_was_not_installed">Google Play Services was not installed</string>

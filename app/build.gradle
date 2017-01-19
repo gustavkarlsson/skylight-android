@@ -16,22 +16,26 @@ repositories {
 }
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.3"
+	compileSdkVersion 24
+	buildToolsVersion "24.0.3"
 
-    defaultConfig {
-        applicationId "se.gustavkarlsson.aurora_notifier.android"
-        minSdkVersion 15
-        targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-        }
-    }
+	defaultConfig {
+		applicationId "se.gustavkarlsson.aurora_notifier.android"
+		minSdkVersion 15
+		targetSdkVersion 24
+		versionCode 1
+		versionName "1.0"
+	}
+	buildTypes {
+		release {
+			minifyEnabled true
+			proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+		}
+
+		debug {
+			applicationIdSuffix ".debug"
+		}
+	}
 	lintOptions {
 		// use this line to check all rules except those listed
 		disable "InvalidPackage"
