@@ -23,10 +23,6 @@ import se.gustavkarlsson.aurora_notifier.android.background.PollingService;
 import se.gustavkarlsson.aurora_notifier.android.databinding.FragmentCurrentLocationBinding;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.AuroraEvaluationViewModel;
-import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.GeomagneticCoordinatesViewModel;
-import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.KpIndexViewModel;
-import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.SunPositionViewModel;
-import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.WeatherViewModel;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmGeomagneticCoordinates;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmKpIndex;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmSunPosition;
@@ -36,10 +32,6 @@ public class CurrentLocationFragment extends Fragment {
 	private static final String TAG = CurrentLocationFragment.class.getSimpleName();
 
 	private Realm realm;
-	private KpIndexViewModel kpIndexViewModel;
-	private WeatherViewModel weatherViewModel;
-	private SunPositionViewModel sunPositionViewModel;
-	private GeomagneticCoordinatesViewModel geomagneticCoordinatesViewModel;
 	private AuroraEvaluationViewModel auroraEvaluationViewModel;
 	private BroadcastReceiver broadcastReceiver;
 	private SwipeRefreshLayout swipeView;
@@ -51,41 +43,28 @@ public class CurrentLocationFragment extends Fragment {
 		realm = Realm.getDefaultInstance();
 
 		RealmKpIndex realmKpIndex = realm.where(RealmKpIndex.class).findFirst();
-		kpIndexViewModel = new KpIndexViewModel(realmKpIndex);
-
 		RealmWeather realmWeather = realm.where(RealmWeather.class).findFirst();
-		weatherViewModel = new WeatherViewModel(realmWeather);
-
 		RealmSunPosition realmSunPosition = realm.where(RealmSunPosition.class).findFirst();
-		sunPositionViewModel = new SunPositionViewModel(realmSunPosition);
-
 		RealmGeomagneticCoordinates realmGeomagneticCoordinates = realm.where(RealmGeomagneticCoordinates.class).findFirst();
-		geomagneticCoordinatesViewModel = new GeomagneticCoordinatesViewModel(realmGeomagneticCoordinates);
-
 		auroraEvaluationViewModel = new AuroraEvaluationViewModel(new AuroraEvaluator(realmWeather, realmSunPosition, realmKpIndex, realmGeomagneticCoordinates));
-
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.v(TAG, "onCreateView");
 		FragmentCurrentLocationBinding binding = FragmentCurrentLocationBinding.inflate(inflater, container, false);
+		binding.setAuroraEvaluation(auroraEvaluationViewModel);
 		final View rootView = binding.getRoot();
-		setUpBroadcastReceiver();
-		setUpSwipeRefresh(rootView);
+		broadcastReceiver = createBroadcastReceiver();
+		swipeView = createSwipeRefresh(rootView);
 		setUpBottomSheetBehavior(rootView);
-		bindViewModels(binding);
 		return rootView;
 	}
 
-	private void setUpBroadcastReceiver() {
-		broadcastReceiver = new BroadcastReceiver() {
+	private BroadcastReceiver createBroadcastReceiver() {
+		return new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				kpIndexViewModel.notifyChange();
-				weatherViewModel.notifyChange();
-				sunPositionViewModel.notifyChange();
-				geomagneticCoordinatesViewModel.notifyChange();
 				auroraEvaluationViewModel.notifyChange();
 				swipeView.setRefreshing(false);
 				if (intent.hasExtra(PollingService.ACTION_UPDATE_FINISHED_MESSAGE)) {
@@ -96,8 +75,8 @@ public class CurrentLocationFragment extends Fragment {
 		};
 	}
 
-	private void setUpSwipeRefresh(View rootView) {
-		swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
+	private SwipeRefreshLayout createSwipeRefresh(View rootView) {
+		final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
 		swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {
@@ -105,6 +84,7 @@ public class CurrentLocationFragment extends Fragment {
 				PollingService.requestUpdate(getContext());
 			}
 		});
+		return swipeView;
 	}
 
 	private static void setUpBottomSheetBehavior(View rootView) {
@@ -141,14 +121,6 @@ public class CurrentLocationFragment extends Fragment {
 		});
 	}
 
-	private void bindViewModels(FragmentCurrentLocationBinding binding) {
-		binding.setAuroraEvaluation(auroraEvaluationViewModel);
-		binding.setKpIndex(kpIndexViewModel);
-		binding.setWeather(weatherViewModel);
-		binding.setSunPosition(sunPositionViewModel);
-		binding.setGeomagneticCoordinates(geomagneticCoordinatesViewModel);
-	}
-
 	@Override
 	public void onStart() {
 		Log.v(TAG, "onStart");
@@ -182,13 +154,7 @@ public class CurrentLocationFragment extends Fragment {
 		realm.close();
 
 		realm = null;
-		kpIndexViewModel = null;
-		weatherViewModel = null;
-		sunPositionViewModel = null;
-		geomagneticCoordinatesViewModel = null;
 		auroraEvaluationViewModel = null;
-		broadcastReceiver = null;
-		swipeView = null;
 
 		super.onDestroy();
 	}

@@ -28,6 +28,10 @@
             </intent-filter>
         </activity>
 
+		<activity
+			android:name=".gui.activities.DebugActivity">
+		</activity>
+
 		<receiver
 			android:name=".background.BootReceiver" >
 			<intent-filter>

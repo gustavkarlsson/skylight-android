@@ -5,25 +5,10 @@
 		tools:context=".gui.fragments.CurrentLocationFragment">
 
 	<data>
+
 		<variable
 			name="auroraEvaluation"
 			type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.AuroraEvaluationViewModel"/>
-
-		<variable
-			name="kpIndex"
-			type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.KpIndexViewModel"/>
-
-		<variable
-			name="weather"
-			type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.WeatherViewModel"/>
-
-		<variable
-			name="sunPosition"
-			type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.SunPositionViewModel"/>
-
-		<variable
-			name="geomagneticCoordinates"
-			type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.GeomagneticCoordinatesViewModel"/>
 	</data>
 
 	<android.support.design.widget.CoordinatorLayout
@@ -55,51 +40,10 @@
 					android:id="@+id/aurora_chance"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_centerHorizontal="true"
 					android:layout_below="@id/aurora_chance_header"
-					android:textSize="32sp"
-					android:text="@{auroraEvaluation.chance}"/>
-
-				<TextView
-					android:id="@+id/debug_data"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
 					android:layout_centerHorizontal="true"
-					android:layout_below="@id/aurora_chance"
-					android:layout_marginTop="@dimen/activity_vertical_margin"
-					android:text="@string/debug_data"/>
-
-				<TextView
-					android:id="@+id/kp_index"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_centerHorizontal="true"
-					android:layout_below="@id/debug_data"
-					android:text="@{kpIndex.kpIndex}"/>
-
-				<TextView
-					android:id="@+id/cloud_percentage"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_centerHorizontal="true"
-					android:layout_below="@id/kp_index"
-					android:text="@{weather.cloudPercentage}"/>
-
-				<TextView
-					android:id="@+id/sun_zenith_angle"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_centerHorizontal="true"
-					android:layout_below="@id/cloud_percentage"
-					android:text="@{sunPosition.zenithAngle}"/>
-
-				<TextView
-					android:id="@+id/degrees_from_closest_pole"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_centerHorizontal="true"
-					android:layout_below="@id/sun_zenith_angle"
-					android:text="@{geomagneticCoordinates.degreesFromClosestPole}"/>
+					android:text="@{auroraEvaluation.chance}"
+					android:textSize="32sp"/>
 
 			</RelativeLayout>
 
@@ -110,11 +54,11 @@
 			android:id="@+id/linear_layout_bottom_sheet"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:background="#424242"
 			android:paddingBottom="@dimen/activity_vertical_margin"
 			android:paddingLeft="@dimen/activity_horizontal_margin"
 			android:paddingRight="@dimen/activity_horizontal_margin"
 			android:paddingTop="@dimen/activity_vertical_margin"
-			android:background="#424242"
 			app:behavior_hideable="false"
 			app:behavior_peekHeight="56dp"
 			app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
@@ -125,9 +69,9 @@
 				android:layout_height="wrap_content"
 				android:layout_centerHorizontal="true"
 				android:height="56dp"
-				android:textColor="@android:color/primary_text_dark"
 				android:alpha="0.54"
-				android:text="@string/why_not"/>
+				android:text="@string/why_not"
+				android:textColor="@android:color/primary_text_dark"/>
 
 			<TextView
 				android:id="@+id/aurora_complications"
@@ -135,8 +79,8 @@
 				android:layout_height="wrap_content"
 				android:layout_below="@id/why_not"
 				android:lineSpacingExtra="32sp"
-				android:textColor="@android:color/primary_text_dark"
-				android:text="@{auroraEvaluation.complications}"/>
+				android:text="@{auroraEvaluation.complications}"
+				android:textColor="@android:color/primary_text_dark"/>
 
 		</RelativeLayout>
 

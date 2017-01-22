@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
 		//noinspection SimplifiableIfStatement
 		if (id == R.id.action_debug) {
+			Intent intent = new Intent(this, DebugActivity.class);
+			startActivity(intent);
 			return true;
 		}
 
