@@ -31,3 +31,4 @@
   public static final android.os.Parcelable$Creator *;
 }
 -keep class org.parceler.Parceler$$Parcels
+-dontwarn java.lang.invoke.*

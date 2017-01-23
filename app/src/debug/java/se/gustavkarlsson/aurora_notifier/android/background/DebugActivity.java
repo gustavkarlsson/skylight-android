@@ -9,9 +9,7 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -65,16 +63,7 @@ public class DebugActivity extends AppCompatActivity {
 		Switch toggle = (Switch) findViewById(R.id.debug_switch);
 		final RealmDebug realmDebug = realm.where(RealmDebug.class).findFirst();
 		toggle.setChecked(realmDebug.isEnabled());
-		toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			public void onCheckedChanged(CompoundButton buttonView, final boolean isChecked) {
-				realm.executeTransaction(new Realm.Transaction() {
-					@Override
-					public void execute(Realm realm) {
-						realmDebug.setEnabled(isChecked);
-					}
-				});
-			}
-		});
+		toggle.setOnCheckedChangeListener((buttonView, isChecked) -> realm.executeTransaction(r -> realmDebug.setEnabled(isChecked)));
 
 		final EditText setKpIndex = (EditText) findViewById(R.id.debug_set_kp_index);
 		setKpIndex.setText("" + realmKpIndex.getKpIndex(), TextView.BufferType.EDITABLE);
@@ -86,34 +75,22 @@ public class DebugActivity extends AppCompatActivity {
 		setCloudPercentage.setText("" + realmWeather.getCloudPercentage(), TextView.BufferType.EDITABLE);
 
 		Button setValuesButton = (Button) findViewById(R.id.debug_set_values);
-		setValuesButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				final RealmDebug realmDebug = realm.where(RealmDebug.class).findFirst();
-				realm.executeTransaction(new Realm.Transaction() {
-					@Override
-					public void execute(Realm realm) {
-						Float kpIndex = Float.valueOf(setKpIndex.getText().toString());
-						Integer cloudPercentage = Integer.valueOf(setCloudPercentage.getText().toString());
-						Float zenithAngle = Float.valueOf(setSunZenithAngle.getText().toString());
-						Float degreesFromClosestPole = Float.valueOf(setDegreesFromClosestPole.getText().toString());
-						realmDebug.setKpIndex(kpIndex);
-						realmDebug.setCloudPercentage(cloudPercentage);
-						realmDebug.setZenithAngle(zenithAngle);
-						realmDebug.setDegreesFromClosestPole(degreesFromClosestPole);
-					}
-				});
-			}
+		setValuesButton.setOnClickListener(view -> {
+			final RealmDebug realmDebug1 = realm.where(RealmDebug.class).findFirst();
+			realm.executeTransaction(r -> {
+				Float kpIndex = Float.valueOf(setKpIndex.getText().toString());
+				Integer cloudPercentage = Integer.valueOf(setCloudPercentage.getText().toString());
+				Float zenithAngle = Float.valueOf(setSunZenithAngle.getText().toString());
+				Float degreesFromClosestPole = Float.valueOf(setDegreesFromClosestPole.getText().toString());
+				realmDebug1.setKpIndex(kpIndex);
+				realmDebug1.setCloudPercentage(cloudPercentage);
+				realmDebug1.setZenithAngle(zenithAngle);
+				realmDebug1.setDegreesFromClosestPole(degreesFromClosestPole);
+			});
 		});
 
 		Button refreshButton = (Button) findViewById(R.id.debug_refresh);
-		refreshButton.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View view) {
-				PollingService.requestUpdate(DebugActivity.this);
-			}
-		});
+		refreshButton.setOnClickListener(view -> PollingService.requestUpdate(DebugActivity.this));
 
 	}
 

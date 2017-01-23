@@ -29,13 +29,10 @@ public class UpdateKpIndexTask extends RealmEnclosedAsyncTask<Object, Object, Ob
 			Log.d(TAG, "Realm KP index is:  " + realmKpIndex);
 
 			Log.d(TAG, "Storing KP index in realm");
-			realm.executeTransaction(new Realm.Transaction() {
-				@Override
-				public void execute(Realm realm) {
-					realmKpIndex.setKpIndex(kpIndex.getValue());
-					realmKpIndex.setTimestamp(kpIndex.getTimestamp());
-				}
-			});
+			realm.executeTransaction(r -> {
+                realmKpIndex.setKpIndex(kpIndex.getValue());
+                realmKpIndex.setTimestamp(kpIndex.getTimestamp());
+            });
 			Log.i(TAG, "Updated KP index in realm");
 		} catch (ProviderException e) {
 			e.printStackTrace();

@@ -2,7 +2,6 @@ package se.gustavkarlsson.aurora_notifier.android.util;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -30,26 +29,18 @@ public class GooglePlayServicesUtils {
 
 	private static void showNotSupportedErrorAndExit(Context context) {
 		new AlertDialog.Builder(context)
-                .setTitle(R.string.google_play_services_not_supported)
-                .setMessage(R.string.app_will_close)
-                .setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        System.exit(1);
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+				.setTitle(R.string.google_play_services_not_supported)
+				.setMessage(R.string.app_will_close)
+				.setPositiveButton(R.string.close, (dialog, which) -> System.exit(1))
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.show();
 	}
 
 	public static void showNotInstalledErrorAndExit(Context context) {
 		new AlertDialog.Builder(context)
 				.setTitle(R.string.google_play_services_was_not_installed)
 				.setMessage(R.string.app_will_close)
-				.setPositiveButton(R.string.close, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						System.exit(2);
-					}
-				})
+				.setPositiveButton(R.string.close, (dialog, which) -> System.exit(2))
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.show();
 	}

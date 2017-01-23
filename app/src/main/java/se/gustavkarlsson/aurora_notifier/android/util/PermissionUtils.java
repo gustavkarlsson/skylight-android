@@ -2,7 +2,6 @@ package se.gustavkarlsson.aurora_notifier.android.util;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -28,27 +27,18 @@ public class PermissionUtils {
 		if (ActivityCompat.shouldShowRequestPermissionRationale(activity, LOCATION_PERMISSION)) {
 			showLocationRequestRationale(activity);
 		} else {
-            showLocationPermissionRequest(activity);
-        }
+			showLocationPermissionRequest(activity);
+		}
 	}
 
 	private static void showLocationRequestRationale(final Activity activity) {
 		new AlertDialog.Builder(activity)
-                .setTitle(activity.getString(R.string.location_permission_required))
-                .setMessage(activity.getString(R.string.location_permission_required_rationale))
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        showLocationPermissionRequest(activity);
-                    }
-                })
-                .setNegativeButton(R.string.close, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        System.exit(3);
-                    }
-                })
-                .show();
+				.setTitle(activity.getString(R.string.location_permission_required))
+				.setMessage(activity.getString(R.string.location_permission_required_rationale))
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setPositiveButton(android.R.string.yes, (dialog, which) -> showLocationPermissionRequest(activity))
+				.setNegativeButton(R.string.close, (dialog, which) -> System.exit(3))
+				.show();
 	}
 
 	private static void showLocationPermissionRequest(Activity activity) {

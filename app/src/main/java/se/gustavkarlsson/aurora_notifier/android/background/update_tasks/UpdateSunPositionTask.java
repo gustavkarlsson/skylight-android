@@ -34,13 +34,10 @@ public class UpdateSunPositionTask extends RealmEnclosedAsyncTask<Object, Object
 			Log.d(TAG, "Realm sun position is:  " + realmSunPosition);
 
 			Log.d(TAG, "Storing sun position in realm");
-			realm.executeTransaction(new Realm.Transaction() {
-				@Override
-				public void execute(Realm realm) {
-					realmSunPosition.setZenithAngle(zenithAngle.getValue());
-					realmSunPosition.setTimestamp(zenithAngle.getTimestamp());
-				}
-			});
+			realm.executeTransaction(r -> {
+                realmSunPosition.setZenithAngle(zenithAngle.getValue());
+                realmSunPosition.setTimestamp(zenithAngle.getTimestamp());
+            });
 			Log.i(TAG, "Updated sun position in realm");
 		} catch (ProviderException e) {
 			e.printStackTrace();

@@ -24,17 +24,17 @@ public class RealmUtils {
 	public static void setupRealm(Context context) {
 		Realm.init(context);
 		deleteRealmDatabaseIfMigrationNeeded();
-		Realm realm = Realm.getDefaultInstance();
-		List<Class<? extends RealmObject>> classes = Arrays.asList(
-				RealmKpIndex.class,
-				RealmWeather.class,
-				RealmSunPosition.class,
-				RealmGeomagneticCoordinates.class,
-				RealmDebug.class);
-		for (Class<? extends RealmObject> clazz : classes) {
-			ensureRealmSingletonExists(realm, clazz);
+		try (Realm realm = Realm.getDefaultInstance()) {
+			List<Class<? extends RealmObject>> classes = Arrays.asList(
+					RealmKpIndex.class,
+					RealmWeather.class,
+					RealmSunPosition.class,
+					RealmGeomagneticCoordinates.class,
+					RealmDebug.class);
+			for (Class<? extends RealmObject> clazz : classes) {
+				ensureRealmSingletonExists(realm, clazz);
+			}
 		}
-		realm.close();
 	}
 
 	private static void deleteRealmDatabaseIfMigrationNeeded() {

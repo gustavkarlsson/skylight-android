@@ -30,13 +30,10 @@ public class UpdateGeomagneticCoordinatesTask extends RealmEnclosedAsyncTask<Obj
 		Log.d(TAG, "Realm geomagnetic coordinates are:  " + realmGeomagneticCoordinates);
 
 		Log.d(TAG, "Storing degrees from closest pole in realm");
-		realm.executeTransaction(new Realm.Transaction() {
-			@Override
-			public void execute(Realm realm) {
-				realmGeomagneticCoordinates.setDegreesFromClosestPole(degreesFromClosestPole.getValue());
-				realmGeomagneticCoordinates.setTimestamp(degreesFromClosestPole.getTimestamp());
-			}
-		});
+		realm.executeTransaction(r -> {
+            realmGeomagneticCoordinates.setDegreesFromClosestPole(degreesFromClosestPole.getValue());
+            realmGeomagneticCoordinates.setTimestamp(degreesFromClosestPole.getTimestamp());
+        });
 		Log.i(TAG, "Updated geomagnetic coordinates in realm");
 		return null;
 	}

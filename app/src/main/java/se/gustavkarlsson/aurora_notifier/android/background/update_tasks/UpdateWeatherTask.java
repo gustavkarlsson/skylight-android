@@ -33,13 +33,10 @@ public class UpdateWeatherTask extends RealmEnclosedAsyncTask<Object, Object, Ob
 			Log.d(TAG, "Realm weather is:  " + realmWeather);
 
 			Log.d(TAG, "Storing weather in realm");
-			realm.executeTransaction(new Realm.Transaction() {
-				@Override
-				public void execute(Realm realm) {
-					realmWeather.setCloudPercentage(weather.getValue().getCloudPercentage());
-					realmWeather.setTimestamp(weather.getTimestamp());
-				}
-			});
+			realm.executeTransaction(r -> {
+                realmWeather.setCloudPercentage(weather.getValue().getCloudPercentage());
+                realmWeather.setTimestamp(weather.getTimestamp());
+            });
 			Log.i(TAG, "Updated weather in realm");
 		} catch (ProviderException e) {
 			e.printStackTrace();

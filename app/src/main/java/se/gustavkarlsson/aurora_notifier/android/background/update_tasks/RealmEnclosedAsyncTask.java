@@ -8,13 +8,8 @@ abstract class RealmEnclosedAsyncTask<Params, Progress, Result> extends AsyncTas
 
     @Override
     protected final Result doInBackground(Params[] params) {
-        Realm realm = Realm.getDefaultInstance();
-        try {
+        try (Realm realm = Realm.getDefaultInstance()) {
             return doInBackgroundWithRealm(realm, params);
-        } finally {
-            if (!realm.isClosed()) {
-                realm.close();
-            }
         }
     }
 

@@ -77,27 +77,21 @@ public class CurrentLocationFragment extends Fragment {
 
 	private SwipeRefreshLayout createSwipeRefresh(View rootView) {
 		final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
-		swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-			@Override
-			public void onRefresh() {
-				swipeView.setRefreshing(true);
-				PollingService.requestUpdate(getContext());
-			}
-		});
+		swipeView.setOnRefreshListener(() -> {
+            swipeView.setRefreshing(true);
+            PollingService.requestUpdate(getContext());
+        });
 		return swipeView;
 	}
 
 	private static void setUpBottomSheetBehavior(View rootView) {
 		RelativeLayout bottomSheetLayout = (RelativeLayout) rootView.findViewById(R.id.linear_layout_bottom_sheet);
 		final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
-		bottomSheetLayout.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
-					bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-				}
-			}
-		});
+		bottomSheetLayout.setOnClickListener(view -> {
+            if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            }
+        });
 		ensureSizeIsRecalculatedOnInteraction(bottomSheetBehavior);
 	}
 
@@ -106,13 +100,10 @@ public class CurrentLocationFragment extends Fragment {
 		bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
 			@Override
 			public void onStateChanged(@NonNull final View bottomSheet, int newState) {
-				bottomSheet.post(new Runnable() {
-					@Override
-					public void run() {
-						bottomSheet.requestLayout();
-						bottomSheet.invalidate();
-					}
-				});
+				bottomSheet.post(() -> {
+                    bottomSheet.requestLayout();
+                    bottomSheet.invalidate();
+                });
 			}
 
 			@Override
