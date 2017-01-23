@@ -32,3 +32,6 @@
 }
 -keep class org.parceler.Parceler$$Parcels
 -dontwarn java.lang.invoke.*
+-dontwarn okio.**
+-dontwarn java8.**
+-dontwarn retrofit2.Platform$Java8
