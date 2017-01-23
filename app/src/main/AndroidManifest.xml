@@ -10,8 +10,12 @@
 	<uses-feature android:name="android.hardware.location.gps"/>
 
 	<!--
-	TODO App is not indexable by Google Search; consider adding at least one Activity with an ACTION-VIEW intent filter. See issue explanation for more details.
-	TODO On SDK version 23 and up, your app data will be automatically backed up and restored on app install. Consider adding the attribute `android:fullBackupContent` to specify an `@xml` resource which configures which files to backup. More info: https://developer.android.com/training/backup/autosyncapi.html
+	TODO App is not indexable by Google Search; consider adding at least one Activity with an ACTION-VIEW intent filter.
+		See issue explanation for more details.
+	TODO On SDK version 23 and up, your app data will be automatically backed up and restored on app install.
+		Consider adding the attribute `android:fullBackupContent` to specify an `@xml` resource which configures which
+		files to backup. More info: https://developer.android.com/training/backup/autosyncapi.html
+	TODO Consider adding android:fullBackupContent=""
 	-->
 	<application
 		android:name=".AuroraNotifier"
@@ -30,7 +34,7 @@
 		</activity>
 
 		<activity
-			android:name=".gui.activities.DebugActivity">
+			android:name=".background.DebugActivity">
 		</activity>
 
 		<receiver

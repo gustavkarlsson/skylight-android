@@ -15,6 +15,8 @@ import com.google.android.gms.location.LocationServices;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import io.realm.Realm;
+import se.gustavkarlsson.aurora_notifier.android.BuildConfig;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagneticCoordinatesProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.KpIndexProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SunPositionProvider;
@@ -27,6 +29,11 @@ import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateG
 import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateKpIndexTask;
 import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateSunPositionTask;
 import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateWeatherTask;
+import se.gustavkarlsson.aurora_notifier.android.realm.RealmDebug;
+import se.gustavkarlsson.aurora_notifier.android.realm.RealmGeomagneticCoordinates;
+import se.gustavkarlsson.aurora_notifier.android.realm.RealmKpIndex;
+import se.gustavkarlsson.aurora_notifier.android.realm.RealmSunPosition;
+import se.gustavkarlsson.aurora_notifier.android.realm.RealmWeather;
 
 public class PollingService extends WakefulIntentService {
 
@@ -87,6 +94,48 @@ public class PollingService extends WakefulIntentService {
 
 	public void update() {
 		Log.v(TAG, "update");
+		Realm realm = Realm.getDefaultInstance();
+		try {
+			if (BuildConfig.DEBUG) {
+				final RealmDebug realmDebug = realm.where(RealmDebug.class).findFirst();
+				if (updateDebug(realm, realmDebug)) {
+					return;
+				}
+			}
+			updateReal();
+		} finally {
+			realm.close();
+		}
+	}
+
+	// TODO move this to a provider
+	private boolean updateDebug(Realm realm, final RealmDebug realmDebug) {
+		if (realmDebug.isEnabled()) {
+			final RealmKpIndex realmKpIndex = realm.where(RealmKpIndex.class).findFirst();
+			final RealmWeather realmWeather = realm.where(RealmWeather.class).findFirst();
+			final RealmSunPosition realmSunPosition = realm.where(RealmSunPosition.class).findFirst();
+			final RealmGeomagneticCoordinates realmGeomagneticCoordinates = realm.where(RealmGeomagneticCoordinates.class).findFirst();
+			final long timestamp = System.currentTimeMillis();
+			realm.executeTransaction(new Realm.Transaction() {
+				@Override
+				public void execute(Realm realm) {
+					realmKpIndex.setKpIndex(realmDebug.getKpIndex());
+					realmWeather.setCloudPercentage(realmDebug.getCloudPercentage());
+					realmSunPosition.setZenithAngle(realmDebug.getZenithAngle());
+					realmGeomagneticCoordinates.setDegreesFromClosestPole(realmDebug.getDegreesFromClosestPole());
+					realmKpIndex.setTimestamp(timestamp);
+					realmWeather.setTimestamp(timestamp);
+					realmSunPosition.setTimestamp(timestamp);
+					realmGeomagneticCoordinates.setTimestamp(timestamp);
+				}
+			});
+			notifyListeners("Updated with debug values");
+			return true;
+		}
+		return false;
+	}
+
+	private void updateReal() {
 		try {
 			Location location = getLocation(googleApiClient);
 			if (location == null) {

@@ -24,7 +24,7 @@ public class KpIndexViewModel extends RealmViewModel<RealmKpIndex> {
 			return NO_VALUE;
 		} else {
 			CharSequence formattedTime = timeFormatter.formatTime(getObject().getTimestamp());
-			return String.format(Locale.getDefault(), "Kp index: %.1f @ %s", kpIndex, formattedTime);
+			return String.format(Locale.getDefault(), "%.1f @ %s", kpIndex, formattedTime);
 		}
 	}
 }

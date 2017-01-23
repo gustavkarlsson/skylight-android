@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import se.gustavkarlsson.aurora_notifier.android.BuildConfig;
 import se.gustavkarlsson.aurora_notifier.android.R;
+import se.gustavkarlsson.aurora_notifier.android.background.DebugActivity;
 import se.gustavkarlsson.aurora_notifier.android.background.PollingService;
 import se.gustavkarlsson.aurora_notifier.android.util.GooglePlayServicesUtils;
 import se.gustavkarlsson.aurora_notifier.android.util.PermissionUtils;
@@ -48,8 +50,16 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		Log.v(TAG, "onCreateOptionsMenu");
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.menu_main, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		Log.v(TAG, "onPrepareOptionsMenu");
+		if (!BuildConfig.DEBUG) {
+			menu.removeItem(R.id.action_debug);
+		}
 		return true;
 	}
 

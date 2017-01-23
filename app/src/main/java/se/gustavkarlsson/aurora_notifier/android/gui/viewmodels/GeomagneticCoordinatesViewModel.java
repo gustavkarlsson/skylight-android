@@ -24,7 +24,7 @@ public class GeomagneticCoordinatesViewModel extends RealmViewModel<RealmGeomagn
 			return NO_VALUE;
 		} else {
 			CharSequence formattedTime = timeFormatter.formatTime(getObject().getTimestamp());
-			return String.format(Locale.getDefault(), "Distance from pole: %.1f° @ %s", degreesFromClosestPole, formattedTime);
+			return String.format(Locale.getDefault(), "%.1f° @ %s", degreesFromClosestPole, formattedTime);
 		}
 	}
 }

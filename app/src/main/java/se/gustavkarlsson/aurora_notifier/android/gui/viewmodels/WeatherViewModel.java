@@ -24,7 +24,7 @@ public class WeatherViewModel extends RealmViewModel<RealmWeather> {
 			return NO_VALUE;
 		} else {
 			CharSequence formattedTime = timeFormatter.formatTime(getObject().getTimestamp());
-			return String.format(Locale.getDefault(), "Clouds: %d%% @ %s", cloudPercentage, formattedTime);
+			return String.format(Locale.getDefault(), "%d%% @ %s", cloudPercentage, formattedTime);
 		}
 	}
 }
