@@ -29,7 +29,7 @@ public class AuroraEvaluator implements Evaluator {
 		for (Evaluator evaluator : evaluators) {
 			AuroraEvaluation singleEvaluation = evaluator.evaluate();
 			evaluation.updateChance(singleEvaluation.getChance());
-			for (String complication : singleEvaluation.getComplications()) {
+			for (Complication complication : singleEvaluation.getComplications()) {
 				evaluation.addComplication(complication);
 			}
 		}

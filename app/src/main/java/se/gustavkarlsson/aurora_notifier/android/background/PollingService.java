@@ -97,7 +97,7 @@ public class PollingService extends WakefulIntentService {
 		try (Realm realm = Realm.getDefaultInstance()) {
 			if (BuildConfig.DEBUG) {
 				final RealmDebug realmDebug = realm.where(RealmDebug.class).findFirst();
-				if (updateDebug(realm, realmDebug)) {
+				if (tryUpdateDebug(realm, realmDebug)) {
 					return;
 				}
 			}
@@ -106,7 +106,11 @@ public class PollingService extends WakefulIntentService {
 	}
 
 	// TODO move this to a provider
-	private boolean updateDebug(Realm realm, final RealmDebug realmDebug) {
+	private boolean tryUpdateDebug(Realm realm, final RealmDebug realmDebug) {
+		try {
+			Thread.sleep(4000);
+		} catch (InterruptedException ignore) {
+		}
 		if (realmDebug.isEnabled()) {
 			final RealmKpIndex realmKpIndex = realm.where(RealmKpIndex.class).findFirst();
 			final RealmWeather realmWeather = realm.where(RealmWeather.class).findFirst();
@@ -114,15 +118,15 @@ public class PollingService extends WakefulIntentService {
 			final RealmGeomagneticCoordinates realmGeomagneticCoordinates = realm.where(RealmGeomagneticCoordinates.class).findFirst();
 			final long timestamp = System.currentTimeMillis();
 			realm.executeTransaction(r -> {
-                realmKpIndex.setKpIndex(realmDebug.getKpIndex());
-                realmWeather.setCloudPercentage(realmDebug.getCloudPercentage());
-                realmSunPosition.setZenithAngle(realmDebug.getZenithAngle());
-                realmGeomagneticCoordinates.setDegreesFromClosestPole(realmDebug.getDegreesFromClosestPole());
-                realmKpIndex.setTimestamp(timestamp);
-                realmWeather.setTimestamp(timestamp);
-                realmSunPosition.setTimestamp(timestamp);
-                realmGeomagneticCoordinates.setTimestamp(timestamp);
-            });
+				realmKpIndex.setKpIndex(realmDebug.getKpIndex());
+				realmWeather.setCloudPercentage(realmDebug.getCloudPercentage());
+				realmSunPosition.setZenithAngle(realmDebug.getZenithAngle());
+				realmGeomagneticCoordinates.setDegreesFromClosestPole(realmDebug.getDegreesFromClosestPole());
+				realmKpIndex.setTimestamp(timestamp);
+				realmWeather.setTimestamp(timestamp);
+				realmSunPosition.setTimestamp(timestamp);
+				realmGeomagneticCoordinates.setTimestamp(timestamp);
+			});
 			notifyListeners("Updated with debug values");
 			return true;
 		}

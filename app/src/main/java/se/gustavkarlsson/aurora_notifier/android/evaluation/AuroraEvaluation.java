@@ -6,7 +6,7 @@ import java.util.List;
 
 public class AuroraEvaluation {
 	private AuroraChance chance = AuroraChance.HIGH;
-	private final List<String> complications = new LinkedList<>();
+	private final List<Complication> complications = new LinkedList<>();
 
 	public void updateChance(AuroraChance newChance) {
 		if (newChance.ordinal() < chance.ordinal()) {
@@ -14,15 +14,19 @@ public class AuroraEvaluation {
 		}
 	}
 
-	public void addComplication(String complication) {
+	public void addComplication(Complication complication) {
 		complications.add(complication);
+	}
+
+	public void addComplication(int title, int description) {
+		addComplication(new Complication(title, description));
 	}
 
 	public AuroraChance getChance() {
 		return chance;
 	}
 
-	public List<String> getComplications() {
+	public List<Complication> getComplications() {
 		return new ArrayList<>(complications);
 	}
 }

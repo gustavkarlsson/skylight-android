@@ -2,11 +2,12 @@ package se.gustavkarlsson.aurora_notifier.android.gui.viewmodels;
 
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
-import android.text.TextUtils;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 
-import java.util.List;
-
+import java8.util.stream.StreamSupport;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraEvaluation;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.Evaluator;
 
 public class AuroraEvaluationViewModel extends BaseObservable {
@@ -24,8 +25,11 @@ public class AuroraEvaluationViewModel extends BaseObservable {
 	}
 
 	@Bindable
-	public String getComplications() {
-		List<String> complications = auroraEvaluator.evaluate().getComplications();
-		return TextUtils.join("\n", complications);
+	public ObservableList<ComplicationViewModel> getComplications() {
+		ObservableArrayList<ComplicationViewModel> list = new ObservableArrayList<>();
+		StreamSupport.stream(auroraEvaluator.evaluate().getComplications())
+				.map(ComplicationViewModel::new)
+				.forEach(list::add);
+		return list;
 	}
 }

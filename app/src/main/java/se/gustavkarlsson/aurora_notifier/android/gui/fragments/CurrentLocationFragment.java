@@ -4,16 +4,20 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.databinding.BindingAdapter;
+import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -23,6 +27,7 @@ import se.gustavkarlsson.aurora_notifier.android.background.PollingService;
 import se.gustavkarlsson.aurora_notifier.android.databinding.FragmentCurrentLocationBinding;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.AuroraEvaluationViewModel;
+import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.ComplicationViewModel;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmGeomagneticCoordinates;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmKpIndex;
 import se.gustavkarlsson.aurora_notifier.android.realm.RealmSunPosition;
@@ -46,7 +51,11 @@ public class CurrentLocationFragment extends Fragment {
 		RealmWeather realmWeather = realm.where(RealmWeather.class).findFirst();
 		RealmSunPosition realmSunPosition = realm.where(RealmSunPosition.class).findFirst();
 		RealmGeomagneticCoordinates realmGeomagneticCoordinates = realm.where(RealmGeomagneticCoordinates.class).findFirst();
-		auroraEvaluationViewModel = new AuroraEvaluationViewModel(new AuroraEvaluator(realmWeather, realmSunPosition, realmKpIndex, realmGeomagneticCoordinates));
+		auroraEvaluationViewModel = new AuroraEvaluationViewModel(new AuroraEvaluator(
+				realmWeather,
+				realmSunPosition,
+				realmKpIndex,
+				realmGeomagneticCoordinates));
 	}
 
 	@Override
@@ -78,9 +87,9 @@ public class CurrentLocationFragment extends Fragment {
 	private SwipeRefreshLayout createSwipeRefresh(View rootView) {
 		final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
 		swipeView.setOnRefreshListener(() -> {
-            swipeView.setRefreshing(true);
-            PollingService.requestUpdate(getContext());
-        });
+			swipeView.setRefreshing(true);
+			PollingService.requestUpdate(getContext());
+		});
 		return swipeView;
 	}
 
@@ -88,10 +97,10 @@ public class CurrentLocationFragment extends Fragment {
 		RelativeLayout bottomSheetLayout = (RelativeLayout) rootView.findViewById(R.id.linear_layout_bottom_sheet);
 		final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
 		bottomSheetLayout.setOnClickListener(view -> {
-            if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
-                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            }
-        });
+			if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+				bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+			}
+		});
 		ensureSizeIsRecalculatedOnInteraction(bottomSheetBehavior);
 	}
 
@@ -101,9 +110,9 @@ public class CurrentLocationFragment extends Fragment {
 			@Override
 			public void onStateChanged(@NonNull final View bottomSheet, int newState) {
 				bottomSheet.post(() -> {
-                    bottomSheet.requestLayout();
-                    bottomSheet.invalidate();
-                });
+					bottomSheet.requestLayout();
+					bottomSheet.invalidate();
+				});
 			}
 
 			@Override
@@ -148,6 +157,12 @@ public class CurrentLocationFragment extends Fragment {
 		auroraEvaluationViewModel = null;
 
 		super.onDestroy();
+	}
+
+	@BindingAdapter("bind:items")
+	public static void bindList(ListView listView, ObservableList<ComplicationViewModel> complications) {
+		ComplicationsListAdapter adapter = new ComplicationsListAdapter(complications);
+		listView.setAdapter(adapter);
 	}
 
 }
