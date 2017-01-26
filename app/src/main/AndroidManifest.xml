@@ -45,7 +45,7 @@
 		</receiver>
 
 		<service
-			android:name=".background.PollingService">
+			android:name=".background.UpdateService">
 		</service>
 	</application>
 

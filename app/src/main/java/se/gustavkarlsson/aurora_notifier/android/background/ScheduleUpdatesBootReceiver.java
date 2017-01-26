@@ -14,8 +14,7 @@ public class ScheduleUpdatesBootReceiver extends BroadcastReceiver {
 
 	public static final String ACTION_SETUP_ALARMS = TAG + ".ACTION_SETUP_ALARMS";
 
-	public static void requestscheduleUpdates(Context context) {
-		Log.v(TAG, "setupAlarms");
+	public static void requestSheduleUpdates(Context context) {
 		LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
 		Intent intent = new Intent(ScheduleUpdatesBootReceiver.ACTION_SETUP_ALARMS, null, context, ScheduleUpdatesBootReceiver.class);
 		localBroadcastManager.registerReceiver(new ScheduleUpdatesBootReceiver(), new IntentFilter(ScheduleUpdatesBootReceiver.ACTION_SETUP_ALARMS));
@@ -37,7 +36,7 @@ public class ScheduleUpdatesBootReceiver extends BroadcastReceiver {
 	private static void setupAlarms(Context context) {
 		Log.v(TAG, "setupAlarms");
 		Log.i(TAG, "Setting up alarms");
-		Intent updateIntent = PollingService.createUpdateIntent(context);
+		Intent updateIntent = UpdateService.createUpdateIntent(context);
 		if (!intentAlreadyCreated(context, updateIntent)) {
 			Log.d(TAG, "Alarm is not yet set up");
 			scheduleAlarm(context, updateIntent);

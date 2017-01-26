@@ -26,7 +26,7 @@ import org.parceler.Parcels;
 import java.util.List;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.background.PollingService;
+import se.gustavkarlsson.aurora_notifier.android.background.UpdateService;
 import se.gustavkarlsson.aurora_notifier.android.databinding.FragmentCurrentLocationBinding;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.AuroraEvaluationViewModel;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraChance;
@@ -59,7 +59,7 @@ public class CurrentLocationFragment extends Fragment {
 		if (savedInstanceState == null) {
 			auroraEvaluation = createUpdatingEvaluation();
 			if (PermissionUtils.hasLocationPermission(getActivity())) {
-				PollingService.requestUpdate(getContext());
+				UpdateService.requestUpdate(getContext());
 			}
 		} else {
 			Parcelable parcel = savedInstanceState.getParcelable(STATE_AURORA_EVALUATION);
@@ -102,8 +102,8 @@ public class CurrentLocationFragment extends Fragment {
 			public void onReceive(Context context, Intent intent) {
 				swipeView.setRefreshing(false);
 				String action = intent.getAction();
-				if (PollingService.ACTION_UPDATE_FINISHED.equals(action)) {
-					Parcelable evaluationParcel = intent.getParcelableExtra(PollingService.ACTION_UPDATE_FINISHED_EXTRA_EVALUATION);
+				if (UpdateService.ACTION_UPDATE_FINISHED.equals(action)) {
+					Parcelable evaluationParcel = intent.getParcelableExtra(UpdateService.ACTION_UPDATE_FINISHED_EXTRA_EVALUATION);
 					auroraEvaluation = Parcels.unwrap(evaluationParcel);
 					auroraEvaluationViewModel.update(auroraEvaluation);
 					if (auroraEvaluation.getComplications().isEmpty()) {
@@ -111,8 +111,8 @@ public class CurrentLocationFragment extends Fragment {
 					} else if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
 						bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 					}
-				} else if (PollingService.ACTION_UPDATE_ERROR.equals(action)) {
-					String message = intent.getStringExtra(PollingService.ACTION_UPDATE_ERROR_EXTRA_MESSAGE);
+				} else if (UpdateService.ACTION_UPDATE_ERROR.equals(action)) {
+					String message = intent.getStringExtra(UpdateService.ACTION_UPDATE_ERROR_EXTRA_MESSAGE);
 					Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
 				}
 			}
@@ -123,7 +123,7 @@ public class CurrentLocationFragment extends Fragment {
 		final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
 		swipeView.setOnRefreshListener(() -> {
 			swipeView.setRefreshing(true);
-			PollingService.requestUpdate(getContext());
+			UpdateService.requestUpdate(getContext());
 		});
 		return swipeView;
 	}
@@ -176,9 +176,9 @@ public class CurrentLocationFragment extends Fragment {
 		super.onStart();
 		LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getContext());
 		broadcastManager.registerReceiver((broadcastReceiver),
-				new IntentFilter(PollingService.ACTION_UPDATE_FINISHED));
+				new IntentFilter(UpdateService.ACTION_UPDATE_FINISHED));
 		broadcastManager.registerReceiver((broadcastReceiver),
-				new IntentFilter(PollingService.ACTION_UPDATE_ERROR));
+				new IntentFilter(UpdateService.ACTION_UPDATE_ERROR));
 	}
 
 	@Override

@@ -13,7 +13,7 @@ public class AuroraNotifier extends Application {
 		Log.v(TAG, "onCreate");
 		super.onCreate();
 		//RealmUtils.setupRealm(this); TODO enable Realm once I need it again
-		ScheduleUpdatesBootReceiver.requestscheduleUpdates(this);
+		ScheduleUpdatesBootReceiver.requestSheduleUpdates(this);
 	}
 
 }

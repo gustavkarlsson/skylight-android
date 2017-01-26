@@ -21,20 +21,21 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import java8.util.J8Arrays;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagneticLocationProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.SolarActivityProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SunPositionProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.GeomagneticLocationProviderImpl;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.KlausBrunnerSunPositionProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.RetrofittedOpenWeatherMapProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.RetrofittedSolarActivityProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateGeomagneticLocationTask;
 import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateSolarActivityTask;
 import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateSunPositionTask;
 import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateWeatherTask;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdateServiceComponent;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.UpdateServiceComponent;
+import se.gustavkarlsson.aurora_notifier.android.dagger.modules.UpdateServiceModule;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraDataComplicationEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
@@ -49,9 +50,8 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static se.gustavkarlsson.aurora_notifier.android.background.ValueOrError.error;
 import static se.gustavkarlsson.aurora_notifier.android.background.ValueOrError.value;
 
-public class PollingService extends WakefulIntentService {
-
-	private static final String TAG = PollingService.class.getSimpleName();
+public class UpdateService extends WakefulIntentService {
+	private static final String TAG = UpdateService.class.getSimpleName();
 
 	public static final String ACTION_UPDATE_ERROR = TAG + ".ACTION_UPDATE_ERROR";
 	public static final String ACTION_UPDATE_ERROR_EXTRA_MESSAGE = TAG + ".ACTION_UPDATE_ERROR_EXTRA_MESSAGE";
@@ -59,44 +59,42 @@ public class PollingService extends WakefulIntentService {
 	public static final String ACTION_UPDATE_FINISHED_EXTRA_EVALUATION = TAG + ".ACTION_UPDATE_FINISHED_EXTRA_EVALUATION";
 
 	private static final String ACTION_REQUEST_UPDATE = TAG + ".ACTION_REQUEST_UPDATE";
-	private static final long UPDATE_TIMEOUT_MILLIS = 60_000;
-
-	private SolarActivityProvider solarActivityProvider;
-	private WeatherProvider weatherProvider;
-	private SunPositionProvider sunPositionProvider;
-	private GeomagneticLocationProvider geomagneticLocationProvider;
-	private GoogleApiClient googleApiClient;
-	private LocalBroadcastManager broadcastManager;
 
 	private final AtomicBoolean updating = new AtomicBoolean(false);
 
+	@Inject @Named(UpdateServiceModule.NAME_UPDATE_TIMEOUT_MILLIS)
+	long updateTimeoutMillis;
+
+	@Inject
+	WeatherProvider weatherProvider;
+
+	@Inject
+	SunPositionProvider sunPositionProvider;
+
+	@Inject
+	GeomagneticLocationProvider geomagneticLocationProvider;
+
+	@Inject
+	GoogleApiClient googleApiClient;
+
+	@Inject
+	LocalBroadcastManager broadcastManager;
+
+	private UpdateServiceComponent component;
+
 	// Default constructor required
-	public PollingService() {
-		super(PollingService.class.getSimpleName());
+	public UpdateService() {
+		super(UpdateService.class.getSimpleName());
 	}
 
 	@Override
 	public void onCreate() {
 		Log.v(TAG, "onCreate");
 		super.onCreate();
-		if (solarActivityProvider == null) {
-			solarActivityProvider = RetrofittedSolarActivityProvider.createDefault();
-		}
-		if (weatherProvider == null) {
-			weatherProvider = RetrofittedOpenWeatherMapProvider.createDefault();
-		}
-		if (sunPositionProvider == null) {
-			sunPositionProvider = new KlausBrunnerSunPositionProvider();
-		}
-		if (geomagneticLocationProvider == null) {
-			geomagneticLocationProvider = new GeomagneticLocationProviderImpl();
-		}
-		if (googleApiClient == null) {
-			googleApiClient = new GoogleApiClient.Builder(this)
-					.addApi(LocationServices.API)
-					.build();
-		}
-		broadcastManager = LocalBroadcastManager.getInstance(this);
+		component = DaggerUpdateServiceComponent.builder()
+				.updateServiceModule(new UpdateServiceModule(this))
+				.build();
+		component.inject(this);
 	}
 
 	@Override
@@ -114,7 +112,7 @@ public class PollingService extends WakefulIntentService {
 
 	private void update() {
 		Log.v(TAG, "update");
-		Alarm timeoutAlarm = Alarm.start(UPDATE_TIMEOUT_MILLIS);
+		Alarm timeoutAlarm = Alarm.start(updateTimeoutMillis);
 		try {
 			ValueOrError<AuroraEvaluation> possibleEvaluation = getEvaluation(timeoutAlarm);
 			if (!possibleEvaluation.isValue()) {
@@ -178,7 +176,8 @@ public class PollingService extends WakefulIntentService {
 	}
 
 	private ValueOrError<AuroraData> getAuroraData(Alarm timeoutAlarm, Location location) {
-		UpdateSolarActivityTask updateSolarActivityTask = new UpdateSolarActivityTask(solarActivityProvider);
+		UpdateSolarActivityTask updateSolarActivityTask = component.createUpdateSolarActivityTask();
+		// FIXME continue removing provider members and getting updateTasks here
 		UpdateWeatherTask updateWeatherTask = new UpdateWeatherTask(weatherProvider, location);
 		UpdateSunPositionTask updateSunPositionTask = new UpdateSunPositionTask(sunPositionProvider, location, System.currentTimeMillis());
 		UpdateGeomagneticLocationTask updateGeomagneticLocationTask = new UpdateGeomagneticLocationTask(geomagneticLocationProvider, location);
@@ -245,7 +244,7 @@ public class PollingService extends WakefulIntentService {
 	}
 
 	public static Intent createUpdateIntent(Context context) {
-		return new Intent(ACTION_REQUEST_UPDATE, null, context, PollingService.class);
+		return new Intent(ACTION_REQUEST_UPDATE, null, context, UpdateService.class);
 	}
 
 	public static void requestUpdate(Context context) {

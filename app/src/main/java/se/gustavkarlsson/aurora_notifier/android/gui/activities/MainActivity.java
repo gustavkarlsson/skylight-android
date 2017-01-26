@@ -12,7 +12,7 @@ import android.view.MenuItem;
 import se.gustavkarlsson.aurora_notifier.android.BuildConfig;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.DebugActivity;
-import se.gustavkarlsson.aurora_notifier.android.background.PollingService;
+import se.gustavkarlsson.aurora_notifier.android.background.UpdateService;
 import se.gustavkarlsson.aurora_notifier.android.util.GooglePlayServicesUtils;
 import se.gustavkarlsson.aurora_notifier.android.util.PermissionUtils;
 
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 				int result = grantResults[i];
 				if (LOCATION_PERMISSION.equals(permission)) {
 					if (PackageManager.PERMISSION_GRANTED == result) {
-						PollingService.requestUpdate(this);
+						UpdateService.requestUpdate(this);
 					} else {
 						PermissionUtils.requestLocationPermission(this);
 					}
