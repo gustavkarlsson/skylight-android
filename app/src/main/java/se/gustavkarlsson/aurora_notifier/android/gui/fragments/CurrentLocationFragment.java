@@ -12,6 +12,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +39,7 @@ import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
 import se.gustavkarlsson.aurora_notifier.android.util.PermissionUtils;
 
-import static java.util.Collections.singletonList;
+import static java.util.Collections.emptyList;
 
 public class CurrentLocationFragment extends Fragment {
 	private static final String TAG = CurrentLocationFragment.class.getSimpleName();
@@ -49,6 +50,7 @@ public class CurrentLocationFragment extends Fragment {
 	private AuroraEvaluationViewModel auroraEvaluationViewModel;
 	private BroadcastReceiver broadcastReceiver;
 	private SwipeRefreshLayout swipeView;
+	private BottomSheetBehavior bottomSheetBehavior;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -77,7 +79,8 @@ public class CurrentLocationFragment extends Fragment {
 				AuroraChance.UNKNOWN,
 				R.string.complication_updating_title,
 				R.string.complication_updating_desc);
-		return new AuroraEvaluation(System.currentTimeMillis(), data, singletonList(updatingComplication));
+		return new AuroraEvaluation(System.currentTimeMillis(), data, emptyList());
+		//return new AuroraEvaluation(System.currentTimeMillis(), data, singletonList(updatingComplication));
 	}
 
 	@Override
@@ -88,7 +91,8 @@ public class CurrentLocationFragment extends Fragment {
 		final View rootView = binding.getRoot();
 		broadcastReceiver = createBroadcastReceiver();
 		swipeView = createSwipeRefresh(rootView);
-		setUpBottomSheetBehavior(rootView);
+		bottomSheetBehavior = setUpBottomSheetBehavior(rootView);
+		setUpComplicationOnClickListener(rootView);
 		return rootView;
 	}
 
@@ -102,6 +106,11 @@ public class CurrentLocationFragment extends Fragment {
 					Parcelable evaluationParcel = intent.getParcelableExtra(PollingService.ACTION_UPDATE_FINISHED_EXTRA_EVALUATION);
 					auroraEvaluation = Parcels.unwrap(evaluationParcel);
 					auroraEvaluationViewModel.update(auroraEvaluation);
+					if (auroraEvaluation.getComplications().isEmpty()) {
+						bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+					} else if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+						bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+					}
 				} else if (PollingService.ACTION_UPDATE_ERROR.equals(action)) {
 					String message = intent.getStringExtra(PollingService.ACTION_UPDATE_ERROR_EXTRA_MESSAGE);
 					Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
@@ -119,7 +128,7 @@ public class CurrentLocationFragment extends Fragment {
 		return swipeView;
 	}
 
-	private static void setUpBottomSheetBehavior(View rootView) {
+	private static BottomSheetBehavior setUpBottomSheetBehavior(View rootView) {
 		RelativeLayout bottomSheetLayout = (RelativeLayout) rootView.findViewById(R.id.linear_layout_bottom_sheet);
 		final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
 		bottomSheetLayout.setOnClickListener(view -> {
@@ -128,6 +137,20 @@ public class CurrentLocationFragment extends Fragment {
 			}
 		});
 		ensureSizeIsRecalculatedOnInteraction(bottomSheetBehavior);
+		return bottomSheetBehavior;
+	}
+
+	private void setUpComplicationOnClickListener(View rootView) {
+		ListView listView = (ListView) rootView.findViewById(R.id.aurora_complications);
+		listView.setOnItemClickListener((parent, view, position, id) -> {
+            AuroraComplication complication = (AuroraComplication) parent.getItemAtPosition(position);
+            new AlertDialog.Builder(getContext())
+                    .setTitle(complication.getTitleStringResource())
+                    .setMessage(complication.getDescriptionStringResource())
+                    .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
+                    .setIcon(android.R.drawable.ic_dialog_info)
+                    .show();
+        });
 	}
 
 	//Workaround for bug described in http://stackoverflow.com/a/40267305/940731

@@ -26,4 +26,5 @@
 	<string name="aurora_chance_low">Low</string>
 	<string name="aurora_chance_high">High</string>
 	<string name="aurora_chance_unknown">Unknown</string>
+	<string name="ok">OK</string>
 </resources>

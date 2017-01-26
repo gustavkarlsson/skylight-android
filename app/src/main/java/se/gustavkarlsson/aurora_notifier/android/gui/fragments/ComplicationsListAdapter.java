@@ -26,7 +26,7 @@ class ComplicationsListAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public Object getItem(int position) {
+	public AuroraComplication getItem(int position) {
 		return complications.get(position);
 	}
 
