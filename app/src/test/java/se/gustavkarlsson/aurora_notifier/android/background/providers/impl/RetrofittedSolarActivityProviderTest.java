@@ -9,11 +9,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 
 import okhttp3.Call;
 import okhttp3.MediaType;
@@ -23,10 +20,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
+import retrofit2.converter.gson.GsonConverterFactory;
+import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.assertj.core.api.Java6Assertions.within;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -34,13 +32,13 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Log.class})
-public class RetrofittedOpenWeatherMapProviderTest {
+public class RetrofittedSolarActivityProviderTest {
 	private OkHttpClient mockedClient;
 
 	@Before
 	public void setUp() throws Exception {
 		mockStatic(Log.class);
-		mockedClient = mockClient(200, "fixtures/open_weather_map_report.xml", "application/xml");
+		mockedClient = mockClient(200, "fixtures/kp_index_report.json", "application/json");
 	}
 
 	private OkHttpClient mockClient(int statusCode, String bodyResourcePath, String mediaType) throws IOException {
@@ -74,28 +72,16 @@ public class RetrofittedOpenWeatherMapProviderTest {
 	}
 
 	@Test
-	public void parsesCloudinessCorrectly() throws Exception {
-		RetrofittedOpenWeatherMapProvider service = new RetrofittedOpenWeatherMapProvider(new Retrofit.Builder()
+	public void parsesKpIndexCorrectly() throws Exception {
+		RetrofittedSolarActivityProvider service = new RetrofittedSolarActivityProvider(new Retrofit.Builder()
 				.client(mockedClient)
 				.baseUrl("http://mocked.com")
-				.addConverterFactory(SimpleXmlConverterFactory.create())
+				.addConverterFactory(GsonConverterFactory.create())
 				.build()
-				.create(OpenWeatherMapService.class));
+				.create(KpIndexService.class));
 
-		int cloudiness = service.getWeather(0, 0).getCloudPercentage();
+		Float kpIndex = service.getSolarActivity().getKpIndex();
 
-		assertThat(cloudiness).isEqualTo(68);
-	}
-
-	@Test
-	public void xmlDeserializingWorks() throws Exception {
-		ClassLoader classLoader = getClass().getClassLoader();
-		String xml = IOUtils.toString(classLoader.getResource("fixtures/open_weather_map_report.xml").openStream(), Charset.forName("UTF-8"));
-
-		Serializer serializer = new Persister();
-		OpenWeatherMapWeather weather = serializer.read(OpenWeatherMapWeather.class, xml);
-
-		int cloudiness = weather.getCloudPercentage();
-		assertThat(cloudiness).isEqualTo(68);
+		assertThat(kpIndex).isCloseTo(1.33F, within(0.01F));
 	}
 }

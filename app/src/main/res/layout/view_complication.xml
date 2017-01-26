@@ -2,10 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<data>
-
 		<variable
 			name="complication"
-			type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.ComplicationViewModel"/>
+			type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.AuroraComplicationViewModel"/>
 	</data>
 
 	<RelativeLayout
@@ -19,7 +18,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_alignParentStart="true"
-			android:text="@{complication.complication.title}"/>
+			android:text="@{complication.complication.titleStringResource}"/>
 
 		<ImageView
 			android:layout_width="wrap_content"

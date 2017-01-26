@@ -1,16 +1,18 @@
 package se.gustavkarlsson.aurora_notifier.android.background.update_tasks;
 
 import android.location.Location;
+import android.os.AsyncTask;
 import android.util.Log;
 
-import io.realm.Realm;
+import se.gustavkarlsson.aurora_notifier.android.R;
+import se.gustavkarlsson.aurora_notifier.android.background.ValueOrError;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.ProviderException;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.Weather;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherProvider;
-import se.gustavkarlsson.aurora_notifier.android.realm.RealmWeather;
-import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
 
-public class UpdateWeatherTask extends RealmEnclosedAsyncTask<Object, Object, Object> {
+import static se.gustavkarlsson.aurora_notifier.android.background.ValueOrError.value;
+
+public class UpdateWeatherTask extends AsyncTask<Object, Void, ValueOrError<Weather>> {
 	private static final String TAG = UpdateSunPositionTask.class.getSimpleName();
 
 	private final WeatherProvider provider;
@@ -22,25 +24,17 @@ public class UpdateWeatherTask extends RealmEnclosedAsyncTask<Object, Object, Ob
 	}
 
 	@Override
-	protected Object doInBackgroundWithRealm(Realm realm, Object... params) {
+	protected ValueOrError<Weather> doInBackground(Object... params) {
 		try {
 			Log.i(TAG, "Getting weather...");
-			final Timestamped<? extends Weather> weather = provider.getWeather(location.getLatitude(), location.getLongitude());
+			Weather weather = provider.getWeather(location.getLatitude(), location.getLongitude());
 			Log.d(TAG, "Weather is:  " + weather);
-
-			Log.d(TAG, "Looking up weather from realm...");
-			final RealmWeather realmWeather = realm.where(RealmWeather.class).findFirst();
-			Log.d(TAG, "Realm weather is:  " + realmWeather);
-
-			Log.d(TAG, "Storing weather in realm");
-			realm.executeTransaction(r -> {
-                realmWeather.setCloudPercentage(weather.getValue().getCloudPercentage());
-                realmWeather.setTimestamp(weather.getTimestamp());
-            });
-			Log.i(TAG, "Updated weather in realm");
+			if (weather == null) {
+				return ValueOrError.error(R.string.could_not_determine_weather);
+			}
+			return value(weather);
 		} catch (ProviderException e) {
-			e.printStackTrace();
+			return ValueOrError.error(R.string.could_not_determine_weather);
 		}
-		return null;
 	}
 }

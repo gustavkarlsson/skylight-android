@@ -10,7 +10,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import se.gustavkarlsson.aurora_notifier.android.R;
 
 public class GooglePlayServicesUtils {
-	private static final int REQUEST_GOOGLE_PLAY_SERVICES = 1972;
+	private static final int REQUEST_CODE_GOOGLE_PLAY_SERVICES = 1972;
 
 	private GooglePlayServicesUtils() {
 	}
@@ -20,7 +20,7 @@ public class GooglePlayServicesUtils {
 		int connectionResult = availability.isGooglePlayServicesAvailable(activity);
 		if (connectionResult != ConnectionResult.SUCCESS) {
 			if (availability.isUserResolvableError(connectionResult)) {
-				availability.showErrorDialogFragment(activity, connectionResult, REQUEST_GOOGLE_PLAY_SERVICES);
+				availability.showErrorDialogFragment(activity, connectionResult, REQUEST_CODE_GOOGLE_PLAY_SERVICES);
 			} else {
 				showNotSupportedErrorAndExit(activity);
 			}
@@ -46,6 +46,6 @@ public class GooglePlayServicesUtils {
 	}
 
 	public static boolean googlePlayServicesFailedToInstall(int requestCode, int resultCode) {
-		return requestCode == REQUEST_GOOGLE_PLAY_SERVICES && resultCode != Activity.RESULT_OK;
+		return requestCode == REQUEST_CODE_GOOGLE_PLAY_SERVICES && resultCode != Activity.RESULT_OK;
 	}
 }

@@ -10,12 +10,13 @@ import java.util.List;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.databinding.ViewComplicationBinding;
-import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.ComplicationViewModel;
+import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.AuroraComplicationViewModel;
+import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 
 class ComplicationsListAdapter extends BaseAdapter {
-	private final List<ComplicationViewModel> complications;
+	private final List<AuroraComplication> complications;
 
-	ComplicationsListAdapter(List<ComplicationViewModel> complications) {
+	ComplicationsListAdapter(List<AuroraComplication> complications) {
 		this.complications = complications;
 	}
 
@@ -41,7 +42,8 @@ class ComplicationsListAdapter extends BaseAdapter {
 		} else {
 			LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 			ViewComplicationBinding binding = DataBindingUtil.inflate(inflater, R.layout.view_complication, parent, false);
-			binding.setComplication(complications.get(position));
+			AuroraComplicationViewModel viewModel = new AuroraComplicationViewModel(complications.get(position));
+			binding.setComplication(viewModel);
 			return binding.getRoot();
 		}
 	}

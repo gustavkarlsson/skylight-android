@@ -38,7 +38,7 @@
 		</activity>
 
 		<receiver
-			android:name=".background.BootReceiver">
+			android:name=".background.ScheduleUpdatesBootReceiver">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED"/>
 			</intent-filter>

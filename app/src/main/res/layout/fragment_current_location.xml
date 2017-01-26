@@ -7,7 +7,7 @@
 	<data>
 
 		<variable
-			name="auroraEvaluation"
+			name="evaluation"
 			type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.AuroraEvaluationViewModel"/>
 	</data>
 
@@ -42,7 +42,7 @@
 					android:layout_height="wrap_content"
 					android:layout_below="@id/aurora_chance_header"
 					android:layout_centerHorizontal="true"
-					android:text="@{auroraEvaluation.chance}"
+					android:text="@{evaluation.evaluation.chance.resourceId}"
 					android:textSize="32sp"/>
 
 			</RelativeLayout>
@@ -73,7 +73,7 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_below="@id/why_not"
-				app:items="@{auroraEvaluation.complications}"/>
+				app:items="@{evaluation.evaluation.complications}"/>
 
 		</RelativeLayout>
 

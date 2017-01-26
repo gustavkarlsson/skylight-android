@@ -9,11 +9,6 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmObject;
-import se.gustavkarlsson.aurora_notifier.android.realm.RealmDebug;
-import se.gustavkarlsson.aurora_notifier.android.realm.RealmGeomagneticCoordinates;
-import se.gustavkarlsson.aurora_notifier.android.realm.RealmKpIndex;
-import se.gustavkarlsson.aurora_notifier.android.realm.RealmSunPosition;
-import se.gustavkarlsson.aurora_notifier.android.realm.RealmWeather;
 
 public class RealmUtils {
 	private static final String TAG = RealmUtils.class.getSimpleName();
@@ -25,12 +20,7 @@ public class RealmUtils {
 		Realm.init(context);
 		deleteRealmDatabaseIfMigrationNeeded();
 		try (Realm realm = Realm.getDefaultInstance()) {
-			List<Class<? extends RealmObject>> classes = Arrays.asList(
-					RealmKpIndex.class,
-					RealmWeather.class,
-					RealmSunPosition.class,
-					RealmGeomagneticCoordinates.class,
-					RealmDebug.class);
+			List<Class<? extends RealmObject>> classes = Arrays.asList();
 			for (Class<? extends RealmObject> clazz : classes) {
 				ensureRealmSingletonExists(realm, clazz);
 			}

@@ -38,4 +38,8 @@
 	<string name="complication_too_far_away_desc">
 		You are too far away from any magnetic pole to see any aurora right now.
 	</string>
+	<string name="complication_updating_title">Updating…</string>
+	<string name="complication_updating_desc">
+		The app is updating the current information. Please wait, or pull down to refresh.
+	</string>
 </resources>

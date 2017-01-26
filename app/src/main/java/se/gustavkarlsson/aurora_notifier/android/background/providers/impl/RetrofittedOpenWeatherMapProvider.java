@@ -8,11 +8,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.ProviderException;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.Weather;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.services.OpenWeatherMapService;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.services.OpenWeatherMapWeather;
-import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 
 // TODO Look into using their json API
 // TODO Change location of APP ID
@@ -37,14 +34,15 @@ public class RetrofittedOpenWeatherMapProvider implements WeatherProvider {
 	}
 
 	@Override
-	public Timestamped<? extends Weather> getWeather(double latitude, double longitude) throws ProviderException {
+	public Weather getWeather(double latitude, double longitude) throws ProviderException {
 		try {
 			Response<OpenWeatherMapWeather> response = service.get(latitude, longitude, "xml", APP_ID).execute();
 			Log.d(TAG, "Got response: " + response.code() + ", message: " + response.raw().toString());
 			if (!response.isSuccessful()) {
 				throw new ProviderException(response.errorBody().string());
 			}
-			return new Timestamped<>(response.body());
+			OpenWeatherMapWeather openWeatherMapWeather = response.body();
+			return new Weather(openWeatherMapWeather.getCloudPercentage());
 		} catch (IOException e) {
 			throw new ProviderException(e);
 		}

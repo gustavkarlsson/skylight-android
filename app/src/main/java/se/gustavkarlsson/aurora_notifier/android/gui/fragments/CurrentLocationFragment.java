@@ -5,14 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.BindingAdapter;
-import android.databinding.ObservableList;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,22 +20,32 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import io.realm.Realm;
+import org.parceler.Parcels;
+
+import java.util.List;
+
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.PollingService;
 import se.gustavkarlsson.aurora_notifier.android.databinding.FragmentCurrentLocationBinding;
-import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.AuroraEvaluationViewModel;
-import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.ComplicationViewModel;
-import se.gustavkarlsson.aurora_notifier.android.realm.RealmGeomagneticCoordinates;
-import se.gustavkarlsson.aurora_notifier.android.realm.RealmKpIndex;
-import se.gustavkarlsson.aurora_notifier.android.realm.RealmSunPosition;
-import se.gustavkarlsson.aurora_notifier.android.realm.RealmWeather;
+import se.gustavkarlsson.aurora_notifier.android.models.AuroraChance;
+import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
+import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
+import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocation;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.SolarActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
+import se.gustavkarlsson.aurora_notifier.android.util.PermissionUtils;
+
+import static java.util.Collections.singletonList;
 
 public class CurrentLocationFragment extends Fragment {
 	private static final String TAG = CurrentLocationFragment.class.getSimpleName();
 
-	private Realm realm;
+	private static final String STATE_AURORA_EVALUATION = TAG + ".STATE_AURORA_EVALUATION";
+
+	private AuroraEvaluation auroraEvaluation;
 	private AuroraEvaluationViewModel auroraEvaluationViewModel;
 	private BroadcastReceiver broadcastReceiver;
 	private SwipeRefreshLayout swipeView;
@@ -45,24 +54,37 @@ public class CurrentLocationFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
-		realm = Realm.getDefaultInstance();
+		if (savedInstanceState == null) {
+			auroraEvaluation = createUpdatingEvaluation();
+			if (PermissionUtils.hasLocationPermission(getActivity())) {
+				PollingService.requestUpdate(getContext());
+			}
+		} else {
+			Parcelable parcel = savedInstanceState.getParcelable(STATE_AURORA_EVALUATION);
+			auroraEvaluation = Parcels.unwrap(parcel);
+		}
+		auroraEvaluationViewModel = new AuroraEvaluationViewModel(auroraEvaluation);
+	}
 
-		RealmKpIndex realmKpIndex = realm.where(RealmKpIndex.class).findFirst();
-		RealmWeather realmWeather = realm.where(RealmWeather.class).findFirst();
-		RealmSunPosition realmSunPosition = realm.where(RealmSunPosition.class).findFirst();
-		RealmGeomagneticCoordinates realmGeomagneticCoordinates = realm.where(RealmGeomagneticCoordinates.class).findFirst();
-		auroraEvaluationViewModel = new AuroraEvaluationViewModel(new AuroraEvaluator(
-				realmWeather,
-				realmSunPosition,
-				realmKpIndex,
-				realmGeomagneticCoordinates));
+	private static AuroraEvaluation createUpdatingEvaluation() {
+		AuroraData data = new AuroraData(
+				new SolarActivity(0),
+				new GeomagneticLocation(0),
+				new SunPosition(0),
+				new Weather(0)
+		);
+		AuroraComplication updatingComplication = new AuroraComplication(
+				AuroraChance.UNKNOWN,
+				R.string.complication_updating_title,
+				R.string.complication_updating_desc);
+		return new AuroraEvaluation(System.currentTimeMillis(), data, singletonList(updatingComplication));
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.v(TAG, "onCreateView");
 		FragmentCurrentLocationBinding binding = FragmentCurrentLocationBinding.inflate(inflater, container, false);
-		binding.setAuroraEvaluation(auroraEvaluationViewModel);
+		binding.setEvaluation(auroraEvaluationViewModel);
 		final View rootView = binding.getRoot();
 		broadcastReceiver = createBroadcastReceiver();
 		swipeView = createSwipeRefresh(rootView);
@@ -74,10 +96,14 @@ public class CurrentLocationFragment extends Fragment {
 		return new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				auroraEvaluationViewModel.notifyChange();
 				swipeView.setRefreshing(false);
-				if (intent.hasExtra(PollingService.ACTION_UPDATE_FINISHED_MESSAGE)) {
-					String message = intent.getStringExtra(PollingService.ACTION_UPDATE_FINISHED_MESSAGE);
+				String action = intent.getAction();
+				if (PollingService.ACTION_UPDATE_FINISHED.equals(action)) {
+					Parcelable evaluationParcel = intent.getParcelableExtra(PollingService.ACTION_UPDATE_FINISHED_EXTRA_EVALUATION);
+					auroraEvaluation = Parcels.unwrap(evaluationParcel);
+					auroraEvaluationViewModel.update(auroraEvaluation);
+				} else if (PollingService.ACTION_UPDATE_ERROR.equals(action)) {
+					String message = intent.getStringExtra(PollingService.ACTION_UPDATE_ERROR_EXTRA_MESSAGE);
 					Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
 				}
 			}
@@ -125,9 +151,11 @@ public class CurrentLocationFragment extends Fragment {
 	public void onStart() {
 		Log.v(TAG, "onStart");
 		super.onStart();
-		LocalBroadcastManager.getInstance(getContext()).registerReceiver((broadcastReceiver),
-				new IntentFilter(PollingService.ACTION_UPDATE_FINISHED)
-		);
+		LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getContext());
+		broadcastManager.registerReceiver((broadcastReceiver),
+				new IntentFilter(PollingService.ACTION_UPDATE_FINISHED));
+		broadcastManager.registerReceiver((broadcastReceiver),
+				new IntentFilter(PollingService.ACTION_UPDATE_ERROR));
 	}
 
 	@Override
@@ -138,29 +166,22 @@ public class CurrentLocationFragment extends Fragment {
 	}
 
 	@Override
-	public void onDestroyView() {
-		Log.v(TAG, "onDestroyView");
-		swipeView.setOnRefreshListener(null);
-
-		swipeView = null;
-		broadcastReceiver = null;
-
-		super.onDestroyView();
+	public void onSaveInstanceState(Bundle outState) {
+		Log.v(TAG, "onSaveInstanceState");
+		Parcelable parcel = Parcels.wrap(auroraEvaluation);
+		outState.putParcelable(STATE_AURORA_EVALUATION, parcel);
+		super.onSaveInstanceState(outState);
 	}
 
 	@Override
-	public void onDestroy() {
-		Log.v(TAG, "onDestroy");
-		realm.close();
-
-		realm = null;
-		auroraEvaluationViewModel = null;
-
-		super.onDestroy();
+	public void onDestroyView() {
+		Log.v(TAG, "onDestroyView");
+		swipeView.setOnRefreshListener(null);
+		super.onDestroyView();
 	}
 
 	@BindingAdapter("bind:items")
-	public static void bindList(ListView listView, ObservableList<ComplicationViewModel> complications) {
+	public static void bindList(ListView listView, List<AuroraComplication> complications) {
 		ComplicationsListAdapter adapter = new ComplicationsListAdapter(complications);
 		listView.setAdapter(adapter);
 	}

@@ -2,114 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<data>
-
-		<variable
-			name="kpIndex"
-			type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.KpIndexViewModel"/>
-
-		<variable
-			name="weather"
-			type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.WeatherViewModel"/>
-
-		<variable
-			name="sunPosition"
-			type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.SunPositionViewModel"/>
-
-		<variable
-			name="geomagneticCoordinates"
-			type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.GeomagneticCoordinatesViewModel"/>
 	</data>
 
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:orientation="vertical">
-
-		<Switch
-			android:id="@+id/debug_switch"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:text="@string/override_values"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="kp index"/>
-
-		<TextView
-			android:id="@+id/kp_index"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@{kpIndex.kpIndex}"/>
-
-		<EditText
-			android:id="@+id/debug_set_kp_index"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:inputType="numberDecimal"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="cloud percentage"/>
-
-		<TextView
-			android:id="@+id/cloud_percentage"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@{weather.cloudPercentage}"/>
-
-		<EditText
-			android:id="@+id/debug_set_cloud_percentage"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:inputType="number"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="sun zenith angle"/>
-
-		<TextView
-			android:id="@+id/sun_zenith_angle"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@{sunPosition.zenithAngle}"/>
-
-		<EditText
-			android:id="@+id/debug_set_sun_zenith_angle"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:inputType="numberDecimal"/>
-
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="degrees from closest pole"/>
-
-		<TextView
-			android:id="@+id/degrees_from_closest_pole"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@{geomagneticCoordinates.degreesFromClosestPole}"/>
-
-		<EditText
-			android:id="@+id/debug_set_degrees_from_closest_pole"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:inputType="numberDecimal"/>
-
-		<Button
-			android:id="@+id/debug_set_values"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="Set Values"/>
-
-		<Button
-			android:id="@+id/debug_refresh"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="Refresh"/>
 
 	</LinearLayout>
 
