@@ -3,7 +3,6 @@
 	<string name="app_name" translatable="false">Aurora Notifier</string>
 	<string name="google_play_services_could_not_be_installed">Google Play Services could not be installed</string>
 	<string name="google_play_services_not_supported">Google Play Services is required but not supported on this device</string>
-	<string name="location_fine_permission_not_given">Location permission not given</string>
 	<string name="app_will_close">The application will now close</string>
 	<string name="location_permission_required">Location permission required</string>
 	<string name="location_permission_required_rationale">This app needs access to your location to calculate
@@ -29,4 +28,6 @@
 	<string name="ok">OK</string>
 	<string name="connection_to_weather_service_failed">Connection to weather service failed</string>
 	<string name="connection_to_solar_activity_service_failed">Connection to solar activity service failed</string>
+	<string name="google_play_services_required">Google Play Services Required</string>
+	<string name="google_play_services_required_rationale">This app needs Google Play Services to calculate the chances of seeing northern lights. Please install Google Play Services.</string>
 </resources>

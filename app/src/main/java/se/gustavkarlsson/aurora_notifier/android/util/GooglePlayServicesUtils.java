@@ -10,38 +10,59 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import se.gustavkarlsson.aurora_notifier.android.R;
 
 public class GooglePlayServicesUtils {
-	private static final int REQUEST_CODE_GOOGLE_PLAY_SERVICES = 1972;
+	public static final int REQUEST_CODE_GOOGLE_PLAY_SERVICES = 1972;
 
 	private GooglePlayServicesUtils() {
 	}
 
-	public static void ensureAvailable(Activity activity) {
+	public static boolean ensureAvailable(Activity activity) {
 		GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
 		int resultCode = availability.isGooglePlayServicesAvailable(activity);
 		if (resultCode != ConnectionResult.SUCCESS) {
 			if (availability.isUserResolvableError(resultCode)) {
-				availability.showErrorDialogFragment(activity, resultCode, REQUEST_CODE_GOOGLE_PLAY_SERVICES);
+				handleUserResolvableError(activity, availability, resultCode);
 			} else {
 				showNotSupportedErrorAndExit(activity);
 			}
+			return false;
 		}
+		return true;
+	}
+
+	private static void handleUserResolvableError(Activity activity, GoogleApiAvailability availability, int resultCode) {
+		availability.getErrorDialog(activity, resultCode, REQUEST_CODE_GOOGLE_PLAY_SERVICES,
+				dialog -> showRationaleDialog(activity, availability, resultCode))
+				.show();
+	}
+
+	private static void showRationaleDialog(Activity activity, GoogleApiAvailability availability, int resultCode) {
+		new AlertDialog.Builder(activity)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setTitle(activity.getString(R.string.google_play_services_required))
+				.setMessage(activity.getString(R.string.google_play_services_required_rationale))
+				.setPositiveButton(android.R.string.yes, (dialog, which) -> handleUserResolvableError(activity, availability, resultCode))
+				.setNegativeButton(R.string.close, (dialog, which) -> System.exit(1))
+				.setCancelable(false)
+				.show();
 	}
 
 	private static void showNotSupportedErrorAndExit(Context context) {
 		new AlertDialog.Builder(context)
+				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.google_play_services_not_supported)
 				.setMessage(R.string.app_will_close)
-				.setPositiveButton(R.string.close, (dialog, which) -> System.exit(1))
-				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setPositiveButton(R.string.close, (dialog, which) -> System.exit(2))
+				.setCancelable(false)
 				.show();
 	}
 
 	public static void showNotInstalledErrorAndExit(Context context) {
 		new AlertDialog.Builder(context)
+				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.google_play_services_could_not_be_installed)
 				.setMessage(R.string.app_will_close)
-				.setPositiveButton(R.string.close, (dialog, which) -> System.exit(2))
-				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setPositiveButton(R.string.close, (dialog, which) -> System.exit(3))
+				.setCancelable(false)
 				.show();
 	}
 

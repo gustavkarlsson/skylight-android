@@ -28,7 +28,6 @@ import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 import se.gustavkarlsson.aurora_notifier.android.util.Alarm;
-import se.gustavkarlsson.aurora_notifier.android.util.PermissionUtils;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 
@@ -76,7 +75,7 @@ public class UpdateService extends WakefulIntentService {
 		Log.v(TAG, "doWakefulWork");
 		if (intent != null) {
 			if (ACTION_REQUEST_UPDATE.equals(intent.getAction())) {
-				if (PermissionUtils.hasLocationPermission(this) && !updating.getAndSet(true)) {
+				if (!updating.getAndSet(true)) {
 					update();
 					updating.set(false);
 				}

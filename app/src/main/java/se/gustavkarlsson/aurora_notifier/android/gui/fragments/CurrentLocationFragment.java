@@ -37,7 +37,6 @@ import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocat
 import se.gustavkarlsson.aurora_notifier.android.models.factors.SolarActivity;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
-import se.gustavkarlsson.aurora_notifier.android.util.PermissionUtils;
 
 import static java.util.Collections.singletonList;
 
@@ -58,15 +57,9 @@ public class CurrentLocationFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		if (savedInstanceState == null) {
 			auroraEvaluation = createUpdatingEvaluation();
-			if (PermissionUtils.hasLocationPermission(getActivity())) {
-				UpdateService.requestUpdate(getContext());
-			}
 		} else {
 			Parcelable parcel = savedInstanceState.getParcelable(STATE_AURORA_EVALUATION);
 			auroraEvaluation = Parcels.unwrap(parcel);
-			if (AuroraChance.UNKNOWN == auroraEvaluation.getChance()) {
-				UpdateService.requestUpdate(getContext());
-			}
 		}
 		auroraEvaluationViewModel = new AuroraEvaluationViewModel(auroraEvaluation);
 	}
