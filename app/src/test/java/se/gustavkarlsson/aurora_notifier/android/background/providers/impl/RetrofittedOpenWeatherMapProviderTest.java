@@ -24,7 +24,6 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.any;
@@ -80,7 +79,7 @@ public class RetrofittedOpenWeatherMapProviderTest {
 				.baseUrl("http://mocked.com")
 				.addConverterFactory(SimpleXmlConverterFactory.create())
 				.build()
-				.create(OpenWeatherMapService.class));
+				.create(OpenWeatherMapService.class), "fake-app-id");
 
 		int cloudiness = service.getWeather(0, 0).getCloudPercentage();
 
@@ -88,7 +87,7 @@ public class RetrofittedOpenWeatherMapProviderTest {
 	}
 
 	@Test
-	public void xmlDeserializingWorks() throws Exception {
+	public void xmlDeserializationWorks() throws Exception {
 		ClassLoader classLoader = getClass().getClassLoader();
 		String xml = IOUtils.toString(classLoader.getResource("fixtures/open_weather_map_report.xml").openStream(), Charset.forName("UTF-8"));
 

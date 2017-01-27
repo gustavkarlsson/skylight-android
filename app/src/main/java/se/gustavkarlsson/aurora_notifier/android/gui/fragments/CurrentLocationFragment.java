@@ -39,7 +39,7 @@ import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
 import se.gustavkarlsson.aurora_notifier.android.util.PermissionUtils;
 
-import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 
 public class CurrentLocationFragment extends Fragment {
 	private static final String TAG = CurrentLocationFragment.class.getSimpleName();
@@ -64,6 +64,9 @@ public class CurrentLocationFragment extends Fragment {
 		} else {
 			Parcelable parcel = savedInstanceState.getParcelable(STATE_AURORA_EVALUATION);
 			auroraEvaluation = Parcels.unwrap(parcel);
+			if (AuroraChance.UNKNOWN == auroraEvaluation.getChance()) {
+				UpdateService.requestUpdate(getContext());
+			}
 		}
 		auroraEvaluationViewModel = new AuroraEvaluationViewModel(auroraEvaluation);
 	}
@@ -79,8 +82,7 @@ public class CurrentLocationFragment extends Fragment {
 				AuroraChance.UNKNOWN,
 				R.string.complication_updating_title,
 				R.string.complication_updating_desc);
-		return new AuroraEvaluation(System.currentTimeMillis(), data, emptyList());
-		//return new AuroraEvaluation(System.currentTimeMillis(), data, singletonList(updatingComplication));
+		return new AuroraEvaluation(System.currentTimeMillis(), data, singletonList(updatingComplication));
 	}
 
 	@Override

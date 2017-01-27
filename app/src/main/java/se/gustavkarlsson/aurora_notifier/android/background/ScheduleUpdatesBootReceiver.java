@@ -14,7 +14,7 @@ public class ScheduleUpdatesBootReceiver extends BroadcastReceiver {
 
 	public static final String ACTION_SETUP_ALARMS = TAG + ".ACTION_SETUP_ALARMS";
 
-	public static void requestSheduleUpdates(Context context) {
+	public static void requestScheduleUpdates(Context context) {
 		LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
 		Intent intent = new Intent(ScheduleUpdatesBootReceiver.ACTION_SETUP_ALARMS, null, context, ScheduleUpdatesBootReceiver.class);
 		localBroadcastManager.registerReceiver(new ScheduleUpdatesBootReceiver(), new IntentFilter(ScheduleUpdatesBootReceiver.ACTION_SETUP_ALARMS));

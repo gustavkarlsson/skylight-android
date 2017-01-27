@@ -5,9 +5,10 @@ import android.util.Log;
 import java.io.IOException;
 
 import retrofit2.Response;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.ProviderException;
+import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherProvider;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
+import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 // TODO Look into using their json API
 // TODO Change location of APP ID
@@ -23,17 +24,17 @@ public class RetrofittedOpenWeatherMapProvider implements WeatherProvider {
 	}
 
 	@Override
-	public Weather getWeather(double latitude, double longitude) throws ProviderException {
+	public Weather getWeather(double latitude, double longitude) {
 		try {
 			Response<OpenWeatherMapWeather> response = service.get(latitude, longitude, "xml", appId).execute();
 			Log.d(TAG, "Got response: " + response.code() + ", message: " + response.raw().toString());
 			if (!response.isSuccessful()) {
-				throw new ProviderException(response.errorBody().string());
+				throw new UserFriendlyException(R.string.connection_to_weather_service_failed, response.errorBody().string());
 			}
 			OpenWeatherMapWeather openWeatherMapWeather = response.body();
 			return new Weather(openWeatherMapWeather.getCloudPercentage());
 		} catch (IOException e) {
-			throw new ProviderException(e);
+			throw new UserFriendlyException(R.string.connection_to_weather_service_failed, e);
 		}
 	}
 }

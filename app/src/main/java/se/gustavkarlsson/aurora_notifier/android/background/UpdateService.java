@@ -29,9 +29,8 @@ import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 import se.gustavkarlsson.aurora_notifier.android.util.Alarm;
 import se.gustavkarlsson.aurora_notifier.android.util.PermissionUtils;
+import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
-import static se.gustavkarlsson.aurora_notifier.android.background.ValueOrError.error;
-import static se.gustavkarlsson.aurora_notifier.android.background.ValueOrError.value;
 
 public class UpdateService extends WakefulIntentService {
 	private static final String TAG = UpdateService.class.getSimpleName();
@@ -88,34 +87,24 @@ public class UpdateService extends WakefulIntentService {
 	private void update() {
 		Log.v(TAG, "update");
 		try {
-			ValueOrError<AuroraEvaluation> possibleEvaluation = getEvaluation(updateTimeoutMillis);
-			if (!possibleEvaluation.isValue()) {
-				String errorMessage = getApplicationContext().getString(possibleEvaluation.getErrorStringResource());
-				broadcastError(errorMessage);
-			} else {
-				broadcastEvaluation(possibleEvaluation.getValue());
-			}
+			AuroraEvaluation evaluation = getEvaluation(updateTimeoutMillis);
+			broadcastEvaluation(evaluation);
+		} catch (UserFriendlyException e) {
+			String errorMessage = getApplicationContext().getString(e.getStringResourceId());
+			broadcastError(errorMessage);
 		} catch (Exception e) {
 			String errorMessage = getApplicationContext().getString(R.string.unknown_update_error);
 			broadcastError(errorMessage);
 		}
 	}
 
-	private ValueOrError<AuroraEvaluation> getEvaluation(long timeoutMillis) {
+	private AuroraEvaluation getEvaluation(long timeoutMillis) {
 		Alarm timeoutAlarm = Alarm.start(timeoutMillis);
-		ValueOrError<Location> locationOrError = locationProvider.getLocation(timeoutAlarm.getRemainingTimeMillis());
-		if (!locationOrError.isValue()) {
-			return error(locationOrError.getErrorStringResource());
-		}
+		Location location = locationProvider.getLocation(timeoutAlarm.getRemainingTimeMillis());
 
-		ValueOrError<AuroraData> auroraDataOrError = auroraDataProvider.getAuroraData(timeoutAlarm.getRemainingTimeMillis(), locationOrError.getValue());
-		if (!auroraDataOrError.isValue()) {
-			return error(auroraDataOrError.getErrorStringResource());
-		}
-		AuroraData data = auroraDataOrError.getValue();
-		List<AuroraComplication> complications = new AuroraDataComplicationEvaluator(data).evaluate();
-		AuroraEvaluation evaluation = new AuroraEvaluation(System.currentTimeMillis(), data, complications);
-		return value(evaluation);
+		AuroraData auroraData = auroraDataProvider.getAuroraData(timeoutAlarm.getRemainingTimeMillis(), location);
+		List<AuroraComplication> complications = new AuroraDataComplicationEvaluator(auroraData).evaluate();
+		return new AuroraEvaluation(System.currentTimeMillis(), auroraData, complications);
 	}
 
 	private void broadcastEvaluation(AuroraEvaluation evaluation) {

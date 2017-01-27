@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name" translatable="false">Aurora Notifier</string>
-	<string name="google_play_services_was_not_installed">Google Play Services was not installed</string>
+	<string name="google_play_services_could_not_be_installed">Google Play Services could not be installed</string>
 	<string name="google_play_services_not_supported">Google Play Services is required but not supported on this device</string>
 	<string name="location_fine_permission_not_given">Location permission not given</string>
 	<string name="app_will_close">The application will now close</string>
@@ -27,4 +27,6 @@
 	<string name="aurora_chance_high">High</string>
 	<string name="aurora_chance_unknown">Unknown</string>
 	<string name="ok">OK</string>
+	<string name="connection_to_weather_service_failed">Connection to weather service failed</string>
+	<string name="connection_to_solar_activity_service_failed">Connection to solar activity service failed</string>
 </resources>

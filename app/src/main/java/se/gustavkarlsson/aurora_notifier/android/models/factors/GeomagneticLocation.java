@@ -4,23 +4,23 @@ import org.parceler.Parcel;
 
 @Parcel
 public class GeomagneticLocation {
-	float degreesFromCLosestPole;
+	float degreesFromClosestPole;
 
 	GeomagneticLocation() {
 	}
 
-	public GeomagneticLocation(float degreesFromCLosestPole) {
-		this.degreesFromCLosestPole = degreesFromCLosestPole;
+	public GeomagneticLocation(float degreesFromClosestPole) {
+		this.degreesFromClosestPole = degreesFromClosestPole;
 	}
 
 	public float getDegreesFromClosestPole() {
-		return degreesFromCLosestPole;
+		return degreesFromClosestPole;
 	}
 
 	@Override
 	public String toString() {
 		return "GeomagneticLocation{" +
-				"degreesFromCLosestPole=" + degreesFromCLosestPole +
+				"degreesFromClosestPole=" + degreesFromClosestPole +
 				'}';
 	}
 }

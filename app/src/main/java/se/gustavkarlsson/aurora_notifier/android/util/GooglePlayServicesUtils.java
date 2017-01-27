@@ -17,10 +17,10 @@ public class GooglePlayServicesUtils {
 
 	public static void ensureAvailable(Activity activity) {
 		GoogleApiAvailability availability = GoogleApiAvailability.getInstance();
-		int connectionResult = availability.isGooglePlayServicesAvailable(activity);
-		if (connectionResult != ConnectionResult.SUCCESS) {
-			if (availability.isUserResolvableError(connectionResult)) {
-				availability.showErrorDialogFragment(activity, connectionResult, REQUEST_CODE_GOOGLE_PLAY_SERVICES);
+		int resultCode = availability.isGooglePlayServicesAvailable(activity);
+		if (resultCode != ConnectionResult.SUCCESS) {
+			if (availability.isUserResolvableError(resultCode)) {
+				availability.showErrorDialogFragment(activity, resultCode, REQUEST_CODE_GOOGLE_PLAY_SERVICES);
 			} else {
 				showNotSupportedErrorAndExit(activity);
 			}
@@ -38,7 +38,7 @@ public class GooglePlayServicesUtils {
 
 	public static void showNotInstalledErrorAndExit(Context context) {
 		new AlertDialog.Builder(context)
-				.setTitle(R.string.google_play_services_was_not_installed)
+				.setTitle(R.string.google_play_services_could_not_be_installed)
 				.setMessage(R.string.app_will_close)
 				.setPositiveButton(R.string.close, (dialog, which) -> System.exit(2))
 				.setIcon(android.R.drawable.ic_dialog_alert)

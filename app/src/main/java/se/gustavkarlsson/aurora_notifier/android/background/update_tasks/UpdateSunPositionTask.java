@@ -4,16 +4,11 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.background.ValueOrError;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.ProviderException;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SunPositionProvider;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
 
-import static se.gustavkarlsson.aurora_notifier.android.background.ValueOrError.error;
-import static se.gustavkarlsson.aurora_notifier.android.background.ValueOrError.value;
 
-public class UpdateSunPositionTask extends AsyncTask<Object, Void, ValueOrError<SunPosition>> {
+public class UpdateSunPositionTask extends AsyncTask<Object, Void, SunPosition> {
 	private static final String TAG = UpdateSunPositionTask.class.getSimpleName();
 
 	private final SunPositionProvider provider;
@@ -27,17 +22,10 @@ public class UpdateSunPositionTask extends AsyncTask<Object, Void, ValueOrError<
 	}
 
 	@Override
-	protected ValueOrError<SunPosition> doInBackground(Object... params) {
-		try {
-			Log.i(TAG, "Getting sun position...");
-			SunPosition sunPosition = provider.getSunPosition(timeMillis, location.getLatitude(), location.getLongitude());
-			Log.d(TAG, "Sun position is: " + sunPosition);
-			if (sunPosition == null) {
-				return error(R.string.could_not_determine_sun_position);
-			}
-			return value(sunPosition);
-		} catch (ProviderException e) {
-			return error(R.string.could_not_determine_sun_position);
-		}
+	protected SunPosition doInBackground(Object... params) {
+		Log.i(TAG, "Getting sun position...");
+		SunPosition sunPosition = provider.getSunPosition(timeMillis, location.getLatitude(), location.getLongitude());
+		Log.d(TAG, "Sun position is: " + sunPosition);
+		return sunPosition;
 	}
 }

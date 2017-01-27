@@ -26,7 +26,7 @@ public class AuroraEvaluation {
 		this.chance = calculateChance(complications);
 	}
 
-	private AuroraChance calculateChance(List<AuroraComplication> complications) {
+	private static AuroraChance calculateChance(List<AuroraComplication> complications) {
 		return stream(complications)
 				.map(AuroraComplication::getChance)
 				.reduce((c1, c2) -> c1.ordinal() > c2.ordinal() ? c1 : c2)
