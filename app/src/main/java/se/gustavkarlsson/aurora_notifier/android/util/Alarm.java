@@ -1,17 +1,17 @@
-package se.gustavkarlsson.aurora_notifier.android.background;
+package se.gustavkarlsson.aurora_notifier.android.util;
 
-class Alarm {
+public class Alarm {
 	private final long expiryTimeMillis;
 
 	private Alarm(long expiryTimeMillis) {
 		this.expiryTimeMillis = expiryTimeMillis;
 	}
 
-	static Alarm start(long durationMillis) {
+	public static Alarm start(long durationMillis) {
 		return new Alarm(System.currentTimeMillis() + durationMillis);
 	}
 
-	long getRemainingTimeMillis() {
+	public long getRemainingTimeMillis() {
 		long remainingTIme = expiryTimeMillis - System.currentTimeMillis();
 		return Math.max(remainingTIme, 0);
 	}

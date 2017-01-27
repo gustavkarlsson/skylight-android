@@ -14,16 +14,19 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 import se.gustavkarlsson.aurora_notifier.android.background.UpdateService;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraDataProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagneticLocationProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.LocationProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SolarActivityProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SunPositionProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.AuroraDataProviderImpl;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.GeomagneticLocationProviderImpl;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.GoogleLocationProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.KlausBrunnerSunPositionProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.OpenWeatherMapService;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.RetrofittedOpenWeatherMapProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.RetrofittedSolarActivityProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateSolarActivityTask;
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;
 
 @Module
@@ -95,14 +98,27 @@ public class UpdateServiceModule {
 	}
 
 	@Provides
-	@Named(NAME_UPDATE_TIMEOUT_MILLIS)
-	long provideTimeoutMillis() {
-		return 60_000;
+	@Singleton
+	LocationProvider provideLocationProvider(GoogleApiClient googleApiClient) {
+		return new GoogleLocationProvider(googleApiClient);
 	}
 
 	@Provides
-	UpdateSolarActivityTask provideUpdateSolarActivityTask(SolarActivityProvider solarActivityProvider) {
-		return new UpdateSolarActivityTask(solarActivityProvider);
+	@Singleton
+	AuroraDataProvider provideAuroraDataProvider(
+			SolarActivityProvider solarActivityProvider,
+			WeatherProvider weatherProvider,
+			SunPositionProvider sunPositionProvider,
+			GeomagneticLocationProvider geomagneticLocationProvider) {
+		return new AuroraDataProviderImpl(solarActivityProvider,
+				weatherProvider,
+				sunPositionProvider,geomagneticLocationProvider);
+	}
+
+	@Provides
+	@Named(NAME_UPDATE_TIMEOUT_MILLIS)
+	long provideTimeoutMillis() {
+		return 60_000;
 	}
 
 }
