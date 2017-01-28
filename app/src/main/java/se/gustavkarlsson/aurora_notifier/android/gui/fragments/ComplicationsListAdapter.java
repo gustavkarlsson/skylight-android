@@ -1,23 +1,24 @@
 package se.gustavkarlsson.aurora_notifier.android.gui.fragments;
 
-import android.databinding.DataBindingUtil;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
+import java.util.Collections;
 import java.util.List;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.databinding.ViewComplicationBinding;
-import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.AuroraComplicationViewModel;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 
 class ComplicationsListAdapter extends BaseAdapter {
-	private final List<AuroraComplication> complications;
+	private final LayoutInflater inflater;
+	private List<AuroraComplication> complications = Collections.emptyList();
 
-	ComplicationsListAdapter(List<AuroraComplication> complications) {
-		this.complications = complications;
+	ComplicationsListAdapter(Context context) {
+		this.inflater = LayoutInflater.from(context);
 	}
 
 	@Override
@@ -40,11 +41,14 @@ class ComplicationsListAdapter extends BaseAdapter {
 		if (convertView != null) {
 			return convertView;
 		} else {
-			LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-			ViewComplicationBinding binding = DataBindingUtil.inflate(inflater, R.layout.view_complication, parent, false);
-			AuroraComplicationViewModel viewModel = new AuroraComplicationViewModel(complications.get(position));
-			binding.setComplication(viewModel);
-			return binding.getRoot();
+			View view = inflater.inflate(R.layout.view_complication, parent, false);
+			TextView titleTextView = (TextView) view.findViewById(R.id.complication_title);
+			titleTextView.setText(complications.get(position).getTitleStringResource());
+			return view;
 		}
+	}
+
+	void setItems(List<AuroraComplication> complications) {
+		this.complications = complications;
 	}
 }

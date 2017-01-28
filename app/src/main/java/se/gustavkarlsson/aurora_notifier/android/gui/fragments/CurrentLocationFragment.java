@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.databinding.BindingAdapter;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -19,16 +18,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.parceler.Parcels;
 
-import java.util.List;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnItemClick;
+import butterknife.Unbinder;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.UpdateService;
-import se.gustavkarlsson.aurora_notifier.android.databinding.FragmentCurrentLocationBinding;
-import se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.AuroraEvaluationViewModel;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraChance;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
@@ -48,8 +48,21 @@ public class CurrentLocationFragment extends Fragment {
 	private LocalBroadcastManager broadcastManager;
 	private BroadcastReceiver broadcastReceiver;
 	private AuroraEvaluation auroraEvaluation;
-	private AuroraEvaluationViewModel auroraEvaluationViewModel;
-	private SwipeRefreshLayout swipeView;
+	private ComplicationsListAdapter complicationsAdapter;
+
+	@BindView(R.id.swipe_refresh_layout)
+	SwipeRefreshLayout swipeRefreshLayout;
+
+	@BindView(R.id.bottom_sheet_layout)
+	RelativeLayout bottomSheetLayout;
+
+	@BindView(R.id.complications_list_view)
+	ListView complicationsListView;
+
+	@BindView(R.id.chance)
+	TextView chanceTextView;
+
+	private Unbinder unbinder;
 	private BottomSheetBehavior bottomSheetBehavior;
 
 	@Override
@@ -64,24 +77,21 @@ public class CurrentLocationFragment extends Fragment {
 			Parcelable parcel = savedInstanceState.getParcelable(STATE_AURORA_EVALUATION);
 			auroraEvaluation = Parcels.unwrap(parcel);
 		}
-		auroraEvaluationViewModel = new AuroraEvaluationViewModel(auroraEvaluation);
+		complicationsAdapter = new ComplicationsListAdapter(getContext());
 	}
 
 	private BroadcastReceiver createBroadcastReceiver() {
 		return new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				swipeView.setRefreshing(false);
+				if (swipeRefreshLayout != null) {
+					swipeRefreshLayout.setRefreshing(false);
+				}
 				String action = intent.getAction();
 				if (UpdateService.RESPONSE_UPDATE_FINISHED.equals(action)) {
 					Parcelable evaluationParcel = intent.getParcelableExtra(UpdateService.RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION);
 					auroraEvaluation = Parcels.unwrap(evaluationParcel);
-					auroraEvaluationViewModel.update(auroraEvaluation);
-					if (auroraEvaluation.getComplications().isEmpty()) {
-						bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-					} else if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
-						bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-					}
+					updateViews();
 				} else if (UpdateService.RESPONSE_UPDATE_ERROR.equals(action)) {
 					String message = intent.getStringExtra(UpdateService.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE);
 					Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
@@ -107,26 +117,37 @@ public class CurrentLocationFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.v(TAG, "onCreateView");
-		FragmentCurrentLocationBinding binding = FragmentCurrentLocationBinding.inflate(inflater, container, false);
-		binding.setEvaluation(auroraEvaluationViewModel);
-		final View rootView = binding.getRoot();
-		swipeView = createSwipeRefresh(rootView);
-		bottomSheetBehavior = setUpBottomSheetBehavior(rootView);
-		setUpComplicationOnClickListener(rootView);
+		View rootView = inflater.inflate(R.layout.fragment_current_location, container, false);
+		ButterKnife.setDebug(true);
+		unbinder = ButterKnife.bind(this, rootView);
+
+		setupSwipeToRefresh();
+		bottomSheetBehavior = createBottomSheetBehavior();
+		complicationsListView.setAdapter(complicationsAdapter);
+		updateViews();
 		return rootView;
 	}
 
-	private SwipeRefreshLayout createSwipeRefresh(View rootView) {
-		final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
-		swipeView.setOnRefreshListener(() -> {
-			swipeView.setRefreshing(true);
-			UpdateService.start(getContext());
-		});
-		return swipeView;
+	private void updateViews() {
+		chanceTextView.setText(auroraEvaluation.getChance().getResourceId());
+		chanceTextView.invalidate();
+		complicationsAdapter.setItems(auroraEvaluation.getComplications());
+		complicationsAdapter.notifyDataSetChanged();
+		if (auroraEvaluation.getComplications().isEmpty()) {
+			bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+		} else if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+			bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+		}
 	}
 
-	private static BottomSheetBehavior setUpBottomSheetBehavior(View rootView) {
-		RelativeLayout bottomSheetLayout = (RelativeLayout) rootView.findViewById(R.id.linear_layout_bottom_sheet);
+	private void setupSwipeToRefresh() {
+		swipeRefreshLayout.setOnRefreshListener(() -> {
+			swipeRefreshLayout.setRefreshing(true);
+			UpdateService.start(getContext());
+		});
+	}
+
+	private BottomSheetBehavior createBottomSheetBehavior() {
 		final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
 		bottomSheetLayout.setOnClickListener(view -> {
 			if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
@@ -154,17 +175,15 @@ public class CurrentLocationFragment extends Fragment {
 		});
 	}
 
-	private void setUpComplicationOnClickListener(View rootView) {
-		ListView listView = (ListView) rootView.findViewById(R.id.aurora_complications);
-		listView.setOnItemClickListener((parent, view, position, id) -> {
-			AuroraComplication complication = (AuroraComplication) parent.getItemAtPosition(position);
-			new AlertDialog.Builder(getContext())
-					.setTitle(complication.getTitleStringResource())
-					.setMessage(complication.getDescriptionStringResource())
-					.setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
-					.setIcon(android.R.drawable.ic_dialog_info)
-					.show();
-		});
+	@OnItemClick(R.id.complications_list_view)
+	public void onItemClick(int position) {
+		AuroraComplication complication = auroraEvaluation.getComplications().get(position);
+		new AlertDialog.Builder(getContext())
+				.setTitle(complication.getTitleStringResource())
+				.setMessage(complication.getDescriptionStringResource())
+				.setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
+				.setIcon(android.R.drawable.ic_dialog_info)
+				.show();
 	}
 
 	@Override
@@ -195,14 +214,9 @@ public class CurrentLocationFragment extends Fragment {
 	@Override
 	public void onDestroyView() {
 		Log.v(TAG, "onDestroyView");
-		swipeView.setOnRefreshListener(null);
+		swipeRefreshLayout.setOnRefreshListener(null);
+		unbinder.unbind();
 		super.onDestroyView();
-	}
-
-	@BindingAdapter("bind:items")
-	public static void bindList(ListView listView, List<AuroraComplication> complications) {
-		ComplicationsListAdapter adapter = new ComplicationsListAdapter(complications);
-		listView.setAdapter(adapter);
 	}
 
 }

@@ -1,5 +1,4 @@
 apply plugin: "com.android.application"
-apply plugin: "com.android.databinding"
 apply plugin: "com.neenbedankt.android-apt"
 apply plugin: "realm-android"
 apply plugin: "me.tatarka.retrolambda"
@@ -74,6 +73,7 @@ dependencies {
 		daggerVersion = "2.8"
 		powermockVersion = "1.6.5"
 		googlePlayServicesVersion = "10.0.1"
+		butterKnifeVersion = "8.5.1"
 	}
 	compile "com.android.support:appcompat-v7:24.2.1"
 	compile "com.google.android.gms:play-services-location:" + googlePlayServicesVersion
@@ -92,6 +92,10 @@ dependencies {
 	// Parceler
 	compile "org.parceler:parceler-api:" + parcelerVersion
 	apt "org.parceler:parceler:" + parcelerVersion
+
+	// Butter Knife
+	compile "com.jakewharton:butterknife:" + butterKnifeVersion
+	apt "com.jakewharton:butterknife-compiler:" + butterKnifeVersion
 
 	// Stream support
 	compile "net.sourceforge.streamsupport:streamsupport:" + streamsupportVersion

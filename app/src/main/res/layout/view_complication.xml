@@ -1,32 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	android:padding="@dimen/activity_vertical_margin">
 
-	<data>
-		<variable
-			name="complication"
-			type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.AuroraComplicationViewModel"/>
-	</data>
-
-	<RelativeLayout
-		android:layout_width="match_parent"
+	<!-- Consider laying these out in a safer way (if text gets long) -->
+	<TextView
+		android:id="@+id/complication_title"
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		android:padding="@dimen/activity_vertical_margin">
+		android:layout_alignParentStart="true" />
 
-		<!-- Consider laying these out in a safer way (if text gets long) -->
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignParentStart="true"
-			android:text="@{complication.complication.titleStringResource}"/>
+	<ImageView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentEnd="true"
+		android:contentDescription="@string/learn_more"
+		android:src="@drawable/ic_info_outline_white_24dp" />
 
-		<ImageView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_alignParentEnd="true"
-			android:contentDescription="@string/learn_more"
-			android:src="@drawable/ic_info_outline_white_24dp"/>
-
-	</RelativeLayout>
-
-</layout>
+</RelativeLayout>

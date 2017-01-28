@@ -1,81 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:app="http://schemas.android.com/apk/res-auto"
-		xmlns:tools="http://schemas.android.com/tools"
-		tools:context=".gui.fragments.CurrentLocationFragment">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/root_layout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".gui.fragments.CurrentLocationFragment">
 
-	<data>
-
-		<variable
-			name="evaluation"
-			type="se.gustavkarlsson.aurora_notifier.android.gui.viewmodels.AuroraEvaluationViewModel"/>
-	</data>
-
-	<android.support.design.widget.CoordinatorLayout
-		android:id="@+id/root_layout"
+	<android.support.v4.widget.SwipeRefreshLayout
+		android:id="@+id/swipe_refresh_layout"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_height="match_parent"
+		android:paddingBottom="@dimen/activity_vertical_margin"
+		android:paddingLeft="@dimen/activity_horizontal_margin"
+		android:paddingRight="@dimen/activity_horizontal_margin"
+		android:paddingTop="@dimen/activity_vertical_margin">
 
-		<android.support.v4.widget.SwipeRefreshLayout
-			android:id="@+id/swipe_refresh_layout"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:paddingBottom="@dimen/activity_vertical_margin"
-			android:paddingLeft="@dimen/activity_horizontal_margin"
-			android:paddingRight="@dimen/activity_horizontal_margin"
-			android:paddingTop="@dimen/activity_vertical_margin">
-
-			<RelativeLayout
-				android:layout_width="match_parent"
-				android:layout_height="match_parent">
-
-				<TextView
-					android:id="@+id/aurora_chance_header"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_centerHorizontal="true"
-					android:text="@string/aurora_chance"/>
-
-				<TextView
-					android:id="@+id/aurora_chance"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_below="@id/aurora_chance_header"
-					android:layout_centerHorizontal="true"
-					android:text="@{evaluation.evaluation.chance.resourceId}"
-					android:textSize="32sp"/>
-
-			</RelativeLayout>
-
-		</android.support.v4.widget.SwipeRefreshLayout>
-
-		<!-- bottom sheet layout -->
 		<RelativeLayout
-			android:id="@+id/linear_layout_bottom_sheet"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:background="@color/background_dark"
-			android:paddingTop="@dimen/activity_vertical_margin"
-			app:behavior_hideable="false"
-			app:behavior_peekHeight="56dp"
-			app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+			android:layout_height="match_parent">
 
 			<TextView
-				android:id="@+id/why_not"
+				android:id="@+id/chance_header"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_centerHorizontal="true"
-				android:height="56dp"
-				android:text="@string/why_not"/>
+				android:text="@string/aurora_chance" />
 
-			<ListView
-				android:id="@+id/aurora_complications"
-				android:layout_width="match_parent"
+			<TextView
+				android:id="@+id/chance"
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_below="@id/why_not"
-				app:items="@{evaluation.evaluation.complications}"/>
+				android:layout_below="@id/chance_header"
+				android:layout_centerHorizontal="true"
+				android:textSize="32sp" />
 
 		</RelativeLayout>
 
-	</android.support.design.widget.CoordinatorLayout>
-</layout>
+	</android.support.v4.widget.SwipeRefreshLayout>
+
+	<!-- bottom sheet layout -->
+	<RelativeLayout
+		android:id="@+id/bottom_sheet_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@color/background_dark"
+		android:paddingTop="@dimen/activity_vertical_margin"
+		app:behavior_hideable="false"
+		app:behavior_peekHeight="56dp"
+		app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+		<TextView
+			android:id="@+id/why_not"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:height="56dp"
+			android:text="@string/why_not" />
+
+		<ListView
+			android:id="@+id/complications_list_view"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/why_not" />
+
+	</RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>
