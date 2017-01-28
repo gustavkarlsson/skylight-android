@@ -42,7 +42,7 @@ public class ScheduleUpdatesBootReceiver extends BroadcastReceiver {
 	private static void trySetAlarms(Context context) {
 		Log.v(TAG, "trySetAlarms");
 		Log.i(TAG, "Trying to set up alarms");
-		Intent updateIntent = UpdateService.createUpdateIntent(context);
+		Intent updateIntent = UpdateService.createRequestAuroraTryCacheIntent(context);
 		if (intentAlreadyCreated(context, updateIntent)) {
 			Log.d(TAG, "Alarm was already set up");
 			return;
@@ -55,7 +55,7 @@ public class ScheduleUpdatesBootReceiver extends BroadcastReceiver {
 	private static void tryUnsetAlarms(Context context) {
 		Log.v(TAG, "tryUnsetAlarms");
 		Log.i(TAG, "Trying to unset alarms");
-		Intent updateIntent = UpdateService.createUpdateIntent(context);
+		Intent updateIntent = UpdateService.createRequestAuroraTryCacheIntent(context);
 		if (!intentAlreadyCreated(context, updateIntent)) {
 			Log.d(TAG, "Alarm is set up");
 			unscheduleAlarm(context, updateIntent);

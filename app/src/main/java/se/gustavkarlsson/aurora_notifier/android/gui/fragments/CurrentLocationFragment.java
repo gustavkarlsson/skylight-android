@@ -118,7 +118,7 @@ public class CurrentLocationFragment extends Fragment {
 		final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
 		swipeView.setOnRefreshListener(() -> {
 			swipeView.setRefreshing(true);
-			UpdateService.requestUpdate(getContext());
+			UpdateService.requestLatestAurora(getContext());
 		});
 		return swipeView;
 	}

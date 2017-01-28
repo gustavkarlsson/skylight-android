@@ -12,7 +12,6 @@ import com.commonsware.cwac.wakeful.WakefulIntentService;
 import org.parceler.Parcels;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -39,9 +38,8 @@ public class UpdateService extends WakefulIntentService {
 	public static final String ACTION_UPDATE_FINISHED = TAG + ".ACTION_UPDATE_FINISHED";
 	public static final String ACTION_UPDATE_FINISHED_EXTRA_EVALUATION = TAG + ".ACTION_UPDATE_FINISHED_EXTRA_EVALUATION";
 
-	private static final String ACTION_REQUEST_UPDATE = TAG + ".ACTION_REQUEST_UPDATE";
-
-	private final AtomicBoolean updating = new AtomicBoolean(false);
+	private static final String ACTION_REQUEST_CACHED_AURORA = TAG + ".ACTION_REQUEST_CACHED_AURORA";
+	private static final String ACTION_REQUEST_LATEST_AURORA = TAG + ".ACTION_REQUEST_LATEST_AURORA";
 
 	@Inject @Named(UpdateServiceModule.NAME_UPDATE_TIMEOUT_MILLIS)
 	long updateTimeoutMillis;
@@ -74,17 +72,16 @@ public class UpdateService extends WakefulIntentService {
 	protected void doWakefulWork(Intent intent) {
 		Log.v(TAG, "doWakefulWork");
 		if (intent != null) {
-			if (ACTION_REQUEST_UPDATE.equals(intent.getAction())) {
-				if (!updating.getAndSet(true)) {
-					update();
-					updating.set(false);
-				}
+			String action = intent.getAction();
+			if (ACTION_REQUEST_CACHED_AURORA.equals(action)
+					|| ACTION_REQUEST_LATEST_AURORA.equals(action)) {
+					requestAurora();
 			}
 		}
 	}
 
-	private void update() {
-		Log.v(TAG, "update");
+	private void requestAurora() {
+		Log.v(TAG, "requestAurora");
 		try {
 			AuroraEvaluation evaluation = getEvaluation(updateTimeoutMillis);
 			broadcastEvaluation(evaluation);
@@ -121,13 +118,18 @@ public class UpdateService extends WakefulIntentService {
 		broadcastManager.sendBroadcast(intent);
 	}
 
-	public static Intent createUpdateIntent(Context context) {
-		return new Intent(ACTION_REQUEST_UPDATE, null, context, UpdateService.class);
+	public static Intent createRequestAuroraTryCacheIntent(Context context) {
+		return new Intent(ACTION_REQUEST_CACHED_AURORA, null, context, UpdateService.class);
 	}
 
-	public static void requestUpdate(Context context) {
-		Intent updateIntent = createUpdateIntent(context);
-		WakefulIntentService.sendWakefulWork(context, updateIntent);
+	public static void requestCachedAurora(Context context) {
+		Intent intent = createRequestAuroraTryCacheIntent(context);
+		WakefulIntentService.sendWakefulWork(context, intent);
+	}
+
+	public static void requestLatestAurora(Context context) {
+		Intent intent = new Intent(ACTION_REQUEST_LATEST_AURORA, null, context, UpdateService.class);
+		WakefulIntentService.sendWakefulWork(context, intent);
 	}
 
 }

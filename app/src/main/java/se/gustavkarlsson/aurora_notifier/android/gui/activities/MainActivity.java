@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 		if (isGooglePlayServicesAvailable && hasLocationPermission) {
 			Requirements.setFulfilled(true);
 			ScheduleUpdatesBootReceiver.setupUpdateScheduling(this);
-			UpdateService.requestUpdate(this);
+			UpdateService.requestCachedAurora(this);
 		}
 	}
 
