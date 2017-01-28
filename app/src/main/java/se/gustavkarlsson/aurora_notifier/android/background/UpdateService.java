@@ -3,11 +3,17 @@ package se.gustavkarlsson.aurora_notifier.android.background;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.Parcelable;
+import android.os.Process;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.commonsware.cwac.wakeful.WakefulIntentService;
+import com.google.android.gms.gcm.GcmNetworkManager;
+import com.google.android.gms.gcm.GcmTaskService;
+import com.google.android.gms.gcm.TaskParams;
 
 import org.parceler.Parcels;
 
@@ -30,18 +36,19 @@ import se.gustavkarlsson.aurora_notifier.android.util.Alarm;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 
-public class UpdateService extends WakefulIntentService {
+public class UpdateService extends GcmTaskService {
 	private static final String TAG = UpdateService.class.getSimpleName();
 
-	public static final String ACTION_UPDATE_ERROR = TAG + ".ACTION_UPDATE_ERROR";
-	public static final String ACTION_UPDATE_ERROR_EXTRA_MESSAGE = TAG + ".ACTION_UPDATE_ERROR_EXTRA_MESSAGE";
-	public static final String ACTION_UPDATE_FINISHED = TAG + ".ACTION_UPDATE_FINISHED";
-	public static final String ACTION_UPDATE_FINISHED_EXTRA_EVALUATION = TAG + ".ACTION_UPDATE_FINISHED_EXTRA_EVALUATION";
+	public static final String REQUEST_UPDATE = TAG + ".REQUEST_UPDATE";
+	public static final String RESPONSE_UPDATE_ERROR = TAG + ".RESPONSE_UPDATE_ERROR";
+	public static final String RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE = TAG + ".RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE";
+	public static final String RESPONSE_UPDATE_FINISHED = TAG + ".RESPONSE_UPDATE_FINISHED";
+	public static final String RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION = TAG + ".RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION";
 
-	private static final String ACTION_REQUEST_CACHED_AURORA = TAG + ".ACTION_REQUEST_CACHED_AURORA";
-	private static final String ACTION_REQUEST_LATEST_AURORA = TAG + ".ACTION_REQUEST_LATEST_AURORA";
+	private Handler handler;
 
-	@Inject @Named(UpdateServiceModule.NAME_UPDATE_TIMEOUT_MILLIS)
+	@Inject
+	@Named(UpdateServiceModule.NAME_UPDATE_TIMEOUT_MILLIS)
 	long updateTimeoutMillis;
 
 	@Inject
@@ -53,44 +60,67 @@ public class UpdateService extends WakefulIntentService {
 	@Inject
 	AuroraDataProvider auroraDataProvider;
 
-	// Default constructor required
-	public UpdateService() {
-		super(UpdateService.class.getSimpleName());
-	}
-
 	@Override
 	public void onCreate() {
 		Log.v(TAG, "onCreate");
 		super.onCreate();
+		handler = createHandler();
 		UpdateServiceComponent component = DaggerUpdateServiceComponent.builder()
 				.updateServiceModule(new UpdateServiceModule(this))
 				.build();
 		component.inject(this);
 	}
 
-	@Override
-	protected void doWakefulWork(Intent intent) {
-		Log.v(TAG, "doWakefulWork");
-		if (intent != null) {
-			String action = intent.getAction();
-			if (ACTION_REQUEST_CACHED_AURORA.equals(action)
-					|| ACTION_REQUEST_LATEST_AURORA.equals(action)) {
-					requestAurora();
-			}
-		}
+	private static Handler createHandler() {
+		HandlerThread thread = new HandlerThread(TAG + ".updater", Process.THREAD_PRIORITY_BACKGROUND);
+		thread.start();
+		Looper looper = thread.getLooper();
+		return new Handler(looper);
 	}
 
-	private void requestAurora() {
-		Log.v(TAG, "requestAurora");
+	@Override
+	public int onRunTask(TaskParams taskParams) {
+		Log.v(TAG, "onRunTask");
+		String tag = taskParams.getTag();
+		if (REQUEST_UPDATE.equals(tag)) {
+			boolean successful = update();
+			if (successful) {
+				return GcmNetworkManager.RESULT_SUCCESS;
+			}
+			return GcmNetworkManager.RESULT_RESCHEDULE;
+		}
+		return GcmNetworkManager.RESULT_FAILURE;
+	}
+
+	@Override
+	public int onStartCommand(Intent intent, int i, int i1) {
+		handler.post(this::update);
+		return super.onStartCommand(intent, i, i1);
+	}
+
+	@Override
+	public void onInitializeTasks() {
+		Log.v(TAG, "onInitializeTasks");
+		// TODO reschedule tasks
+		super.onInitializeTasks();
+	}
+
+	private boolean update() {
+		Log.v(TAG, "update");
 		try {
 			AuroraEvaluation evaluation = getEvaluation(updateTimeoutMillis);
 			broadcastEvaluation(evaluation);
+			return true;
 		} catch (UserFriendlyException e) {
 			String errorMessage = getApplicationContext().getString(e.getStringResourceId());
+			Log.e(TAG, "A user friendly exception occurred: " + errorMessage, e);
 			broadcastError(errorMessage);
+			return false;
 		} catch (Exception e) {
+			Log.e(TAG, "An unexpected error occurred.", e);
 			String errorMessage = getApplicationContext().getString(R.string.unknown_update_error);
 			broadcastError(errorMessage);
+			return false;
 		}
 	}
 
@@ -104,32 +134,22 @@ public class UpdateService extends WakefulIntentService {
 	}
 
 	private void broadcastEvaluation(AuroraEvaluation evaluation) {
-		Intent intent = new Intent(ACTION_UPDATE_FINISHED);
+		Intent intent = new Intent(RESPONSE_UPDATE_FINISHED);
 		Parcelable wrappedEvaluation = Parcels.wrap(evaluation);
-		intent.putExtra(ACTION_UPDATE_FINISHED_EXTRA_EVALUATION, wrappedEvaluation);
+		intent.putExtra(RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION, wrappedEvaluation);
 		broadcastManager.sendBroadcast(intent);
 	}
 
 	private void broadcastError(String message) {
-		Intent intent = new Intent(ACTION_UPDATE_ERROR);
+		Intent intent = new Intent(RESPONSE_UPDATE_ERROR);
 		if (message != null) {
-			intent.putExtra(ACTION_UPDATE_ERROR_EXTRA_MESSAGE, message);
+			intent.putExtra(RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE, message);
 		}
 		broadcastManager.sendBroadcast(intent);
 	}
 
-	public static Intent createRequestAuroraTryCacheIntent(Context context) {
-		return new Intent(ACTION_REQUEST_CACHED_AURORA, null, context, UpdateService.class);
+	public static void start(Context context) {
+		Intent intent = new Intent(context, UpdateService.class);
+		context.startService(intent);
 	}
-
-	public static void requestCachedAurora(Context context) {
-		Intent intent = createRequestAuroraTryCacheIntent(context);
-		WakefulIntentService.sendWakefulWork(context, intent);
-	}
-
-	public static void requestLatestAurora(Context context) {
-		Intent intent = new Intent(ACTION_REQUEST_LATEST_AURORA, null, context, UpdateService.class);
-		WakefulIntentService.sendWakefulWork(context, intent);
-	}
-
 }

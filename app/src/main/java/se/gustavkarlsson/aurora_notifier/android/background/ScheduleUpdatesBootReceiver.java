@@ -1,13 +1,15 @@
 package se.gustavkarlsson.aurora_notifier.android.background;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+
+import com.google.android.gms.gcm.GcmNetworkManager;
+import com.google.android.gms.gcm.PeriodicTask;
+import com.google.android.gms.gcm.Task;
 
 import se.gustavkarlsson.aurora_notifier.android.realm.Requirements;
 
@@ -31,54 +33,37 @@ public class ScheduleUpdatesBootReceiver extends BroadcastReceiver {
 			if (Intent.ACTION_BOOT_COMPLETED.equals(action)
 					|| ACTION_SCHEDULE_UPDATES.equals(action)) {
 				if (Requirements.isFulfilled()) {
-					trySetAlarms(context);
+					scheduleUpdates(context);
 				} else {
-					tryUnsetAlarms(context);
+					cancelUpdates(context);
 				}
 			}
 		}
 	}
 
-	private static void trySetAlarms(Context context) {
-		Log.v(TAG, "trySetAlarms");
-		Log.i(TAG, "Trying to set up alarms");
-		Intent updateIntent = UpdateService.createRequestAuroraTryCacheIntent(context);
-		if (intentAlreadyCreated(context, updateIntent)) {
-			Log.d(TAG, "Alarm was already set up");
-			return;
-		}
-		Log.d(TAG, "Alarm is not yet set up");
-		scheduleAlarm(context, updateIntent);
-		Log.d(TAG, "Alarm is now set up");
+	private static void scheduleUpdates(Context context) {
+		Log.v(TAG, "scheduleUpdates");
+		GcmNetworkManager manager = GcmNetworkManager.getInstance(context);
+		Task task = createTask();
+		manager.schedule(task);
+		Log.d(TAG, "Schedule set");
 	}
 
-	private static void tryUnsetAlarms(Context context) {
-		Log.v(TAG, "tryUnsetAlarms");
-		Log.i(TAG, "Trying to unset alarms");
-		Intent updateIntent = UpdateService.createRequestAuroraTryCacheIntent(context);
-		if (!intentAlreadyCreated(context, updateIntent)) {
-			Log.d(TAG, "Alarm is set up");
-			unscheduleAlarm(context, updateIntent);
-			Log.d(TAG, "Alarm is no longer set");
-			return;
-		}
-		Log.d(TAG, "Alarm is not yet set up");
+	private static void cancelUpdates(Context context) {
+		Log.v(TAG, "cancelUpdates");
+		GcmNetworkManager manager = GcmNetworkManager.getInstance(context);
+		manager.cancelTask(UpdateService.REQUEST_UPDATE, UpdateService.class);
 	}
 
-	private static boolean intentAlreadyCreated(Context context, Intent intent) {
-		return PendingIntent.getService(context, 0, intent, PendingIntent.FLAG_NO_CREATE) != null;
-	}
-
-	private static void scheduleAlarm(Context context, Intent intent) {
-		PendingIntent pendingServiceIntent = PendingIntent.getService(context, 0, intent, 0);
-		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, AlarmManager.INTERVAL_FIFTEEN_MINUTES, AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingServiceIntent);
-	}
-
-	private static void unscheduleAlarm(Context context, Intent intent) {
-		PendingIntent pendingServiceIntent = PendingIntent.getService(context, 0, intent, 0);
-		AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		alarmManager.cancel(pendingServiceIntent);
+	private static Task createTask() {
+		return new PeriodicTask.Builder()
+				.setService(UpdateService.class)
+				.setPeriod(20 * 60)
+				.setFlex(10 * 60)
+				.setTag(UpdateService.REQUEST_UPDATE)
+				.setPersisted(true)
+				.setUpdateCurrent(true)
+				.build();
 	}
 
 

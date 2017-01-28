@@ -97,8 +97,8 @@ public class CurrentLocationFragment extends Fragment {
 			public void onReceive(Context context, Intent intent) {
 				swipeView.setRefreshing(false);
 				String action = intent.getAction();
-				if (UpdateService.ACTION_UPDATE_FINISHED.equals(action)) {
-					Parcelable evaluationParcel = intent.getParcelableExtra(UpdateService.ACTION_UPDATE_FINISHED_EXTRA_EVALUATION);
+				if (UpdateService.RESPONSE_UPDATE_FINISHED.equals(action)) {
+					Parcelable evaluationParcel = intent.getParcelableExtra(UpdateService.RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION);
 					auroraEvaluation = Parcels.unwrap(evaluationParcel);
 					auroraEvaluationViewModel.update(auroraEvaluation);
 					if (auroraEvaluation.getComplications().isEmpty()) {
@@ -106,8 +106,8 @@ public class CurrentLocationFragment extends Fragment {
 					} else if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
 						bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 					}
-				} else if (UpdateService.ACTION_UPDATE_ERROR.equals(action)) {
-					String message = intent.getStringExtra(UpdateService.ACTION_UPDATE_ERROR_EXTRA_MESSAGE);
+				} else if (UpdateService.RESPONSE_UPDATE_ERROR.equals(action)) {
+					String message = intent.getStringExtra(UpdateService.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE);
 					Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
 				}
 			}
@@ -118,7 +118,7 @@ public class CurrentLocationFragment extends Fragment {
 		final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
 		swipeView.setOnRefreshListener(() -> {
 			swipeView.setRefreshing(true);
-			UpdateService.requestLatestAurora(getContext());
+			UpdateService.start(getContext());
 		});
 		return swipeView;
 	}
@@ -138,14 +138,14 @@ public class CurrentLocationFragment extends Fragment {
 	private void setUpComplicationOnClickListener(View rootView) {
 		ListView listView = (ListView) rootView.findViewById(R.id.aurora_complications);
 		listView.setOnItemClickListener((parent, view, position, id) -> {
-            AuroraComplication complication = (AuroraComplication) parent.getItemAtPosition(position);
-            new AlertDialog.Builder(getContext())
-                    .setTitle(complication.getTitleStringResource())
-                    .setMessage(complication.getDescriptionStringResource())
-                    .setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
-                    .setIcon(android.R.drawable.ic_dialog_info)
-                    .show();
-        });
+			AuroraComplication complication = (AuroraComplication) parent.getItemAtPosition(position);
+			new AlertDialog.Builder(getContext())
+					.setTitle(complication.getTitleStringResource())
+					.setMessage(complication.getDescriptionStringResource())
+					.setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
+					.setIcon(android.R.drawable.ic_dialog_info)
+					.show();
+		});
 	}
 
 	//Workaround for bug described in http://stackoverflow.com/a/40267305/940731
@@ -171,9 +171,9 @@ public class CurrentLocationFragment extends Fragment {
 		super.onStart();
 		LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getContext());
 		broadcastManager.registerReceiver((broadcastReceiver),
-				new IntentFilter(UpdateService.ACTION_UPDATE_FINISHED));
+				new IntentFilter(UpdateService.RESPONSE_UPDATE_FINISHED));
 		broadcastManager.registerReceiver((broadcastReceiver),
-				new IntentFilter(UpdateService.ACTION_UPDATE_ERROR));
+				new IntentFilter(UpdateService.RESPONSE_UPDATE_ERROR));
 	}
 
 	@Override

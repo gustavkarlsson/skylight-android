@@ -14,7 +14,6 @@ import se.gustavkarlsson.aurora_notifier.android.BuildConfig;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.DebugActivity;
 import se.gustavkarlsson.aurora_notifier.android.background.ScheduleUpdatesBootReceiver;
-import se.gustavkarlsson.aurora_notifier.android.background.UpdateService;
 import se.gustavkarlsson.aurora_notifier.android.realm.Requirements;
 import se.gustavkarlsson.aurora_notifier.android.util.GooglePlayServicesUtils;
 import se.gustavkarlsson.aurora_notifier.android.util.LocationPermissionUtils;
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 		if (!hasLocationPermission) {
 			LocationPermissionUtils.requestPermission(this);
 		}
-		tryStartUpdating();
+		trySetUpUpdateService();
 	}
 
 	@Override
@@ -50,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 			if (!isGooglePlayServicesAvailable) {
 				GooglePlayServicesUtils.showNotInstalledErrorAndExit(this);
 			}
-			tryStartUpdating();
+			trySetUpUpdateService();
 		} else {
 			super.onActivityResult(requestCode, resultCode, data);
 		}
@@ -68,17 +67,16 @@ public class MainActivity extends AppCompatActivity {
 					if (!hasLocationPermission) {
 						LocationPermissionUtils.requestPermission(this);
 					}
-					tryStartUpdating();
+					trySetUpUpdateService();
 				}
 			}
 		}
 	}
 
-	private void tryStartUpdating() {
+	private void trySetUpUpdateService() {
 		if (isGooglePlayServicesAvailable && hasLocationPermission) {
 			Requirements.setFulfilled(true);
 			ScheduleUpdatesBootReceiver.setupUpdateScheduling(this);
-			UpdateService.requestCachedAurora(this);
 		}
 	}
 
@@ -103,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
 		Log.v(TAG, "onOptionsItemSelected");
 		int id = item.getItemId();
 
-		//noinspection SimplifiableIfStatement
 		if (id == R.id.action_debug) {
 			Intent intent = new Intent(this, DebugActivity.class);
 			startActivity(intent);
