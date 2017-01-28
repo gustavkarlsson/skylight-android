@@ -8,6 +8,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
+import se.gustavkarlsson.aurora_notifier.android.realm.Requirements;
 
 public class GooglePlayServicesUtils {
 	public static final int REQUEST_CODE_GOOGLE_PLAY_SERVICES = 1972;
@@ -41,7 +42,10 @@ public class GooglePlayServicesUtils {
 				.setTitle(activity.getString(R.string.google_play_services_required))
 				.setMessage(activity.getString(R.string.google_play_services_required_rationale))
 				.setPositiveButton(android.R.string.yes, (dialog, which) -> handleUserResolvableError(activity, availability, resultCode))
-				.setNegativeButton(R.string.close, (dialog, which) -> System.exit(1))
+				.setNegativeButton(R.string.close, (dialog, which) -> {
+					Requirements.setFulfilled(false);
+					System.exit(1);
+				})
 				.setCancelable(false)
 				.show();
 	}
@@ -51,7 +55,10 @@ public class GooglePlayServicesUtils {
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.google_play_services_not_supported)
 				.setMessage(R.string.app_will_close)
-				.setPositiveButton(R.string.close, (dialog, which) -> System.exit(2))
+				.setPositiveButton(R.string.close, (dialog, which) -> {
+					Requirements.setFulfilled(false);
+					System.exit(2);
+				})
 				.setCancelable(false)
 				.show();
 	}
@@ -61,12 +68,11 @@ public class GooglePlayServicesUtils {
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.google_play_services_could_not_be_installed)
 				.setMessage(R.string.app_will_close)
-				.setPositiveButton(R.string.close, (dialog, which) -> System.exit(3))
+				.setPositiveButton(R.string.close, (dialog, which) -> {
+					Requirements.setFulfilled(false);
+					System.exit(3);
+				})
 				.setCancelable(false)
 				.show();
-	}
-
-	public static boolean googlePlayServicesFailedToInstall(int requestCode, int resultCode) {
-		return requestCode == REQUEST_CODE_GOOGLE_PLAY_SERVICES && resultCode != Activity.RESULT_OK;
 	}
 }

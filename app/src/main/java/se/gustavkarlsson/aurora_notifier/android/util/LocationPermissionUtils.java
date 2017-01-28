@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
+import se.gustavkarlsson.aurora_notifier.android.realm.Requirements;
 
 public class LocationPermissionUtils {
 	private static final String TAG = LocationPermissionUtils.class.getSimpleName();
@@ -39,7 +40,10 @@ public class LocationPermissionUtils {
 				.setTitle(activity.getString(R.string.location_permission_required))
 				.setMessage(activity.getString(R.string.location_permission_required_rationale))
 				.setPositiveButton(android.R.string.yes, (dialog, which) -> showLocationPermissionRequest(activity))
-				.setNegativeButton(R.string.close, (dialog, which) -> System.exit(4))
+				.setNegativeButton(R.string.close, (dialog, which) -> {
+					Requirements.setFulfilled(false);
+					System.exit(4);
+				})
 				.setCancelable(false)
 				.show();
 	}

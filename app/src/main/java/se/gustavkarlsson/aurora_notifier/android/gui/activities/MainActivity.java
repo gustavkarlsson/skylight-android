@@ -15,6 +15,7 @@ import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.DebugActivity;
 import se.gustavkarlsson.aurora_notifier.android.background.ScheduleUpdatesBootReceiver;
 import se.gustavkarlsson.aurora_notifier.android.background.UpdateService;
+import se.gustavkarlsson.aurora_notifier.android.realm.Requirements;
 import se.gustavkarlsson.aurora_notifier.android.util.GooglePlayServicesUtils;
 import se.gustavkarlsson.aurora_notifier.android.util.LocationPermissionUtils;
 
@@ -75,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
 
 	private void tryStartUpdating() {
 		if (isGooglePlayServicesAvailable && hasLocationPermission) {
-			ScheduleUpdatesBootReceiver.requestScheduleUpdates(this);
+			Requirements.setFulfilled(true);
+			ScheduleUpdatesBootReceiver.setupUpdateScheduling(this);
 			UpdateService.requestUpdate(this);
 		}
 	}
