@@ -45,9 +45,10 @@ public class CurrentLocationFragment extends Fragment {
 
 	private static final String STATE_AURORA_EVALUATION = TAG + ".STATE_AURORA_EVALUATION";
 
+	private LocalBroadcastManager broadcastManager;
+	private BroadcastReceiver broadcastReceiver;
 	private AuroraEvaluation auroraEvaluation;
 	private AuroraEvaluationViewModel auroraEvaluationViewModel;
-	private BroadcastReceiver broadcastReceiver;
 	private SwipeRefreshLayout swipeView;
 	private BottomSheetBehavior bottomSheetBehavior;
 
@@ -55,6 +56,8 @@ public class CurrentLocationFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
+		broadcastManager = LocalBroadcastManager.getInstance(getContext());
+		broadcastReceiver = createBroadcastReceiver();
 		if (savedInstanceState == null) {
 			auroraEvaluation = createUpdatingEvaluation();
 		} else {
@@ -62,33 +65,6 @@ public class CurrentLocationFragment extends Fragment {
 			auroraEvaluation = Parcels.unwrap(parcel);
 		}
 		auroraEvaluationViewModel = new AuroraEvaluationViewModel(auroraEvaluation);
-	}
-
-	private static AuroraEvaluation createUpdatingEvaluation() {
-		AuroraData data = new AuroraData(
-				new SolarActivity(0),
-				new GeomagneticLocation(0),
-				new SunPosition(0),
-				new Weather(0)
-		);
-		AuroraComplication updatingComplication = new AuroraComplication(
-				AuroraChance.UNKNOWN,
-				R.string.complication_updating_title,
-				R.string.complication_updating_desc);
-		return new AuroraEvaluation(System.currentTimeMillis(), data, singletonList(updatingComplication));
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		Log.v(TAG, "onCreateView");
-		FragmentCurrentLocationBinding binding = FragmentCurrentLocationBinding.inflate(inflater, container, false);
-		binding.setEvaluation(auroraEvaluationViewModel);
-		final View rootView = binding.getRoot();
-		broadcastReceiver = createBroadcastReceiver();
-		swipeView = createSwipeRefresh(rootView);
-		bottomSheetBehavior = setUpBottomSheetBehavior(rootView);
-		setUpComplicationOnClickListener(rootView);
-		return rootView;
 	}
 
 	private BroadcastReceiver createBroadcastReceiver() {
@@ -114,6 +90,32 @@ public class CurrentLocationFragment extends Fragment {
 		};
 	}
 
+	private static AuroraEvaluation createUpdatingEvaluation() {
+		AuroraData data = new AuroraData(
+				new SolarActivity(0),
+				new GeomagneticLocation(0),
+				new SunPosition(0),
+				new Weather(0)
+		);
+		AuroraComplication updatingComplication = new AuroraComplication(
+				AuroraChance.UNKNOWN,
+				R.string.complication_updating_title,
+				R.string.complication_updating_desc);
+		return new AuroraEvaluation(System.currentTimeMillis(), data, singletonList(updatingComplication));
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		Log.v(TAG, "onCreateView");
+		FragmentCurrentLocationBinding binding = FragmentCurrentLocationBinding.inflate(inflater, container, false);
+		binding.setEvaluation(auroraEvaluationViewModel);
+		final View rootView = binding.getRoot();
+		swipeView = createSwipeRefresh(rootView);
+		bottomSheetBehavior = setUpBottomSheetBehavior(rootView);
+		setUpComplicationOnClickListener(rootView);
+		return rootView;
+	}
+
 	private SwipeRefreshLayout createSwipeRefresh(View rootView) {
 		final SwipeRefreshLayout swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
 		swipeView.setOnRefreshListener(() -> {
@@ -135,19 +137,6 @@ public class CurrentLocationFragment extends Fragment {
 		return bottomSheetBehavior;
 	}
 
-	private void setUpComplicationOnClickListener(View rootView) {
-		ListView listView = (ListView) rootView.findViewById(R.id.aurora_complications);
-		listView.setOnItemClickListener((parent, view, position, id) -> {
-			AuroraComplication complication = (AuroraComplication) parent.getItemAtPosition(position);
-			new AlertDialog.Builder(getContext())
-					.setTitle(complication.getTitleStringResource())
-					.setMessage(complication.getDescriptionStringResource())
-					.setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
-					.setIcon(android.R.drawable.ic_dialog_info)
-					.show();
-		});
-	}
-
 	//Workaround for bug described in http://stackoverflow.com/a/40267305/940731
 	private static void ensureSizeIsRecalculatedOnInteraction(BottomSheetBehavior bottomSheetBehavior) {
 		bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -165,11 +154,23 @@ public class CurrentLocationFragment extends Fragment {
 		});
 	}
 
+	private void setUpComplicationOnClickListener(View rootView) {
+		ListView listView = (ListView) rootView.findViewById(R.id.aurora_complications);
+		listView.setOnItemClickListener((parent, view, position, id) -> {
+			AuroraComplication complication = (AuroraComplication) parent.getItemAtPosition(position);
+			new AlertDialog.Builder(getContext())
+					.setTitle(complication.getTitleStringResource())
+					.setMessage(complication.getDescriptionStringResource())
+					.setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
+					.setIcon(android.R.drawable.ic_dialog_info)
+					.show();
+		});
+	}
+
 	@Override
 	public void onStart() {
 		Log.v(TAG, "onStart");
 		super.onStart();
-		LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(getContext());
 		broadcastManager.registerReceiver((broadcastReceiver),
 				new IntentFilter(UpdateService.RESPONSE_UPDATE_FINISHED));
 		broadcastManager.registerReceiver((broadcastReceiver),
@@ -179,7 +180,7 @@ public class CurrentLocationFragment extends Fragment {
 	@Override
 	public void onStop() {
 		Log.v(TAG, "onStop");
-		LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(broadcastReceiver);
+		broadcastManager.unregisterReceiver(broadcastReceiver);
 		super.onStop();
 	}
 
