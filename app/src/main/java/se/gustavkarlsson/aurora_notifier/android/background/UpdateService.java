@@ -28,7 +28,7 @@ import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdateS
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.UpdateServiceComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GoogleLocationModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.WeatherModule;
-import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraDataComplicationEvaluator;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraDataComplicationsEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
@@ -125,7 +125,7 @@ public class UpdateService extends GcmTaskService {
 		Location location = locationProvider.getLocation(timeoutAlarm.getRemainingTimeMillis());
 
 		AuroraData auroraData = auroraDataProvider.getAuroraData(timeoutAlarm.getRemainingTimeMillis(), location);
-		List<AuroraComplication> complications = new AuroraDataComplicationEvaluator(auroraData).evaluate();
+		List<AuroraComplication> complications = new AuroraDataComplicationsEvaluator(auroraData).evaluate();
 		return new AuroraEvaluation(System.currentTimeMillis(), auroraData, complications);
 	}
 

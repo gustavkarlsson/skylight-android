@@ -3,6 +3,8 @@ package se.gustavkarlsson.aurora_notifier.android.models;
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static java8.util.stream.StreamSupport.stream;
@@ -17,19 +19,26 @@ public class AuroraEvaluation {
 	AuroraEvaluation() {
 	}
 
-	public AuroraEvaluation(long timestampMillis, AuroraData data, List<AuroraComplication> complications) {
+	public AuroraEvaluation(long timestampMillis, AuroraData data, Collection<AuroraComplication> complications) {
 		this.timestampMillis = timestampMillis;
 		this.data = data;
-		this.complications = complications != null ?
-				new ArrayList<>(complications) :
-				new ArrayList<>();
+		this.complications = sortComplications(complications);
 		this.chance = calculateChance(complications);
 	}
 
-	private static AuroraChance calculateChance(List<AuroraComplication> complications) {
+	private ArrayList<AuroraComplication> sortComplications(Collection<AuroraComplication> complications) {
+		if (complications.isEmpty()) {
+			return new ArrayList<>();
+		}
+		ArrayList<AuroraComplication> sorted = new ArrayList<>(complications);
+		Collections.sort(sorted);
+		return sorted;
+	}
+
+	private static AuroraChance calculateChance(Collection<AuroraComplication> complications) {
 		return stream(complications)
 				.map(AuroraComplication::getChance)
-				.reduce((c1, c2) -> c1.ordinal() > c2.ordinal() ? c1 : c2)
+				.reduce((c1, c2) -> c1.ordinal() < c2.ordinal() ? c1 : c2)
 				.orElse(AuroraChance.HIGH);
 	}
 

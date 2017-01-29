@@ -29,6 +29,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.Unbinder;
 import se.gustavkarlsson.aurora_notifier.android.R;
@@ -180,13 +181,15 @@ public class CurrentLocationFragment extends Fragment {
 
 	private BottomSheetBehavior createBottomSheetBehavior() {
 		final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
-		bottomSheetLayout.setOnClickListener(view -> {
-			if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
-				bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-			}
-		});
 		ensureSizeIsRecalculatedOnInteraction(bottomSheetBehavior);
 		return bottomSheetBehavior;
+	}
+
+	@OnClick(R.id.bottom_sheet_layout)
+	void onClick() {
+		if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+			bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+		}
 	}
 
 	//Workaround for bug described in http://stackoverflow.com/a/40267305/940731

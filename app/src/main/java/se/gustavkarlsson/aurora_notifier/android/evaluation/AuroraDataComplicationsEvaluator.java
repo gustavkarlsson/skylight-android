@@ -14,10 +14,10 @@ import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
 import static java8.util.stream.StreamSupport.stream;
 
 
-public class AuroraDataComplicationEvaluator implements ComplicationEvaluator {
+public class AuroraDataComplicationsEvaluator implements ComplicationEvaluator {
 	private final List<ComplicationEvaluator> complicationEvaluators;
 
-	public AuroraDataComplicationEvaluator(AuroraData data) {
+	public AuroraDataComplicationsEvaluator(AuroraData data) {
 		complicationEvaluators = Arrays.asList(
 				new WeatherComplicationEvaluator(data.getWeather()),
 				new SunPositionComplicationEvaluator(data.getSunPosition()),
@@ -29,7 +29,6 @@ public class AuroraDataComplicationEvaluator implements ComplicationEvaluator {
 	public List<AuroraComplication> evaluate() {
 		return stream(complicationEvaluators)
 				.flatMap(evaluator -> stream(evaluator.evaluate()))
-				.sorted()
 				.collect(Collectors.toList());
 	}
 }
