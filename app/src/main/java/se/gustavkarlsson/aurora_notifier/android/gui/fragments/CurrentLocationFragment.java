@@ -154,7 +154,6 @@ public class CurrentLocationFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.v(TAG, "onCreateView");
 		View rootView = inflater.inflate(R.layout.fragment_current_location, container, false);
-		ButterKnife.setDebug(true);
 		unbinder = ButterKnife.bind(this, rootView);
 
 		setupSwipeToRefresh();
