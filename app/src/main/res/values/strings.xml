@@ -14,7 +14,7 @@
 	<string name="aurora_chance_low">Low</string>
 	<string name="aurora_chance_high">High</string>
 	<string name="aurora_chance_unknown">Unknown</string>
-	<string name="why_not">Why not?</string>
+	<string name="why">Why?</string>
 	<string name="learn_more">Learn more</string>
 
 	<string name="menu_action_debug">Debug</string>

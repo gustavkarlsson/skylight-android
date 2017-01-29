@@ -56,7 +56,7 @@
 			android:layout_height="wrap_content"
 			android:layout_centerHorizontal="true"
 			android:height="56dp"
-			android:text="@string/why_not" />
+			android:text="@string/why" />
 
 		<ListView
 			android:id="@+id/complications_list_view"

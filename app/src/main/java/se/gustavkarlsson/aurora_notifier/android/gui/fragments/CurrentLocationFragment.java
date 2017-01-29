@@ -233,6 +233,7 @@ public class CurrentLocationFragment extends Fragment {
 	@Override
 	public void onStop() {
 		Log.v(TAG, "onStop");
+		swipeRefreshLayout.setRefreshing(false);
 		broadcastManager.unregisterReceiver(broadcastReceiver);
 		super.onStop();
 	}
