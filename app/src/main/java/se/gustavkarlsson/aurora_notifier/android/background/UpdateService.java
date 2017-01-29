@@ -45,9 +45,8 @@ public class UpdateService extends GcmTaskService {
 	public static final String RESPONSE_UPDATE_FINISHED = TAG + ".RESPONSE_UPDATE_FINISHED";
 	public static final String RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION = TAG + ".RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION";
 
-	private static final long UPDATE_TIMEOUT_MILLIS = R.integer.update_timeout_millis;
-
 	private Handler handler;
+	private int updateTimeoutMillis;
 
 	@Inject
 	LocationProvider locationProvider;
@@ -60,6 +59,7 @@ public class UpdateService extends GcmTaskService {
 		Log.v(TAG, "onCreate");
 		super.onCreate();
 		handler = createHandler();
+		updateTimeoutMillis = getResources().getInteger(R.integer.update_timeout_millis);
 		UpdateServiceComponent component = DaggerUpdateServiceComponent.builder()
 				.googleLocationModule(new GoogleLocationModule(this))
 				.weatherModule(new WeatherModule(this.getString(R.string.api_key_openweathermap)))
@@ -104,7 +104,7 @@ public class UpdateService extends GcmTaskService {
 	private boolean update() {
 		Log.v(TAG, "update");
 		try {
-			AuroraEvaluation evaluation = getEvaluation(UPDATE_TIMEOUT_MILLIS);
+			AuroraEvaluation evaluation = getEvaluation(updateTimeoutMillis);
 			broadcastEvaluation(evaluation);
 			return true;
 		} catch (UserFriendlyException e) {

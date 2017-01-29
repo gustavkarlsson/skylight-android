@@ -10,6 +10,8 @@ import android.widget.TextView;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 
@@ -38,13 +40,27 @@ class ComplicationsListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		View view = inflater.inflate(R.layout.view_complication, parent, false);
-		TextView titleTextView = (TextView) view.findViewById(R.id.complication_title);
-		titleTextView.setText(complications.get(position).getTitleStringResource());
-		return view;
+		ViewHolder holder;
+		if (convertView != null) {
+			holder = (ViewHolder) convertView.getTag();
+		} else {
+			convertView = inflater.inflate(R.layout.view_complication, parent, false);
+			holder = new ViewHolder(convertView);
+			convertView.setTag(holder);
+		}
+		holder.titleTextView.setText(complications.get(position).getTitleStringResource());
+		return convertView;
 	}
 
 	void setItems(List<AuroraComplication> complications) {
 		this.complications = complications;
+	}
+
+	static class ViewHolder {
+		@BindView(R.id.complication_title) TextView titleTextView;
+
+		ViewHolder(View view) {
+			ButterKnife.bind(this, view);
+		}
 	}
 }

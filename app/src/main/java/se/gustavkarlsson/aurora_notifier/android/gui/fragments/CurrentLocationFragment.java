@@ -54,12 +54,12 @@ public class CurrentLocationFragment extends Fragment {
 
 	private static final String STATE_AURORA_EVALUATION = "STATE_AURORA_EVALUATION";
 	private static final String CACHE_KEY_EVALUATION = "CACHE_KEY_EVALUATION";
-	private static final long CACHE_MAX_AGE_MILLIS = R.integer.cache_life_millis;
 
 	private LocalBroadcastManager broadcastManager;
 	private BroadcastReceiver broadcastReceiver;
-	private AuroraEvaluation evaluation;
 	private ComplicationsListAdapter complicationsAdapter;
+	private int cacheLifeMillis;
+	private AuroraEvaluation evaluation;
 
 	@Inject
 	PersistentCache<Parcelable> evaluationPersistentCache;
@@ -84,14 +84,15 @@ public class CurrentLocationFragment extends Fragment {
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		CurrentLocationComponent component = DaggerCurrentLocationComponent.builder()
-				.persistentCacheModule(new PersistentCacheModule(getContext()))
+				.persistentCacheModule(new PersistentCacheModule(getContext(), getResources().getInteger(R.integer.cache_size_bytes)))
 				.build();
 		component.inject(this);
 		broadcastManager = LocalBroadcastManager.getInstance(getContext());
 		broadcastReceiver = createBroadcastReceiver();
+		complicationsAdapter = new ComplicationsListAdapter(getContext());
+		cacheLifeMillis = getResources().getInteger(R.integer.cache_life_millis);
 		evaluation = getSavedEvaluation(savedInstanceState);
 		updateEvaluationIfExpired();
-		complicationsAdapter = new ComplicationsListAdapter(getContext());
 	}
 
 	private BroadcastReceiver createBroadcastReceiver() {
@@ -127,7 +128,7 @@ public class CurrentLocationFragment extends Fragment {
 	}
 
 	private void updateEvaluationIfExpired() {
-		long expiryTime = evaluation.getTimestampMillis() + CACHE_MAX_AGE_MILLIS;
+		long expiryTime = evaluation.getTimestampMillis() + cacheLifeMillis;
 		if (expiryTime < System.currentTimeMillis()) {
 			UpdateService.start(getContext());
 		}
@@ -144,7 +145,7 @@ public class CurrentLocationFragment extends Fragment {
 				AuroraChance.UNKNOWN,
 				R.string.complication_updating_title,
 				R.string.complication_updating_desc);
-		return new AuroraEvaluation(System.currentTimeMillis(), data, singletonList(updatingComplication));
+		return new AuroraEvaluation(0, data, singletonList(updatingComplication));
 	}
 
 	@Override
@@ -216,7 +217,6 @@ public class CurrentLocationFragment extends Fragment {
 				.setTitle(complication.getTitleStringResource())
 				.setMessage(complication.getDescriptionStringResource())
 				.setPositiveButton(android.R.string.ok, (dialog, which) -> dialog.dismiss())
-				.setIcon(android.R.drawable.ic_dialog_info)
 				.show();
 	}
 
@@ -242,6 +242,13 @@ public class CurrentLocationFragment extends Fragment {
 		Log.v(TAG, "onSaveInstanceState");
 		Parcelable parcel = Parcels.wrap(evaluation);
 		outState.putParcelable(STATE_AURORA_EVALUATION, parcel);
+		try {
+			Parcelable parcelable = Parcels.wrap(evaluation);
+			evaluationPersistentCache.set(CACHE_KEY_EVALUATION, parcelable);
+			evaluationPersistentCache.close();
+		} catch (IOException e) {
+			Log.e(TAG, "Failed to close cache", e);
+		}
 		super.onSaveInstanceState(outState);
 	}
 
@@ -256,13 +263,6 @@ public class CurrentLocationFragment extends Fragment {
 	@Override
 	public void onDestroy() {
 		Log.v(TAG, "onDestroy");
-		try {
-			Parcelable parcelable = Parcels.wrap(evaluation);
-			evaluationPersistentCache.set(CACHE_KEY_EVALUATION, parcelable);
-			evaluationPersistentCache.close();
-		} catch (IOException e) {
-			Log.e(TAG, "Failed to close cache", e);
-		}
 		super.onDestroy();
 	}
 }

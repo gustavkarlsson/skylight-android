@@ -8,7 +8,6 @@ import java.io.IOException;
 
 import dagger.Module;
 import dagger.Provides;
-import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.caching.ParcelPersistentCache;
 import se.gustavkarlsson.aurora_notifier.android.caching.PersistentCache;
 
@@ -17,15 +16,17 @@ public class PersistentCacheModule {
 	private static final String TAG = PersistentCacheModule.class.getSimpleName();
 
 	private final Context context;
+	private final int cacheSizeBytes;
 
-	public PersistentCacheModule(Context context) {
+	public PersistentCacheModule(Context context, int cacheSizeBytes) {
 		this.context = context;
+		this.cacheSizeBytes = cacheSizeBytes;
 	}
 
 	@Provides
 	PersistentCache<Parcelable> provideParcelableCache() {
 		try {
-			return ParcelPersistentCache.open(context, "cache", R.integer.cache_size_bytes);
+			return ParcelPersistentCache.open(context, "cache", cacheSizeBytes);
 		} catch (IOException e) {
 			Log.e(TAG, "Filed to open ParcelPersistentCache. Falling back to NullPersistentCache", e);
 			return new NullPersistentCache<>();
