@@ -39,7 +39,7 @@ public class AuroraDataProviderImpl implements AuroraDataProvider {
 	private final GeomagneticLocationProvider geomagneticLocationProvider;
 
 	@Inject
-	public AuroraDataProviderImpl(SolarActivityProvider solarActivityProvider, WeatherProvider weatherProvider, SunPositionProvider sunPositionProvider, GeomagneticLocationProvider geomagneticLocationProvider) {
+	AuroraDataProviderImpl(SolarActivityProvider solarActivityProvider, WeatherProvider weatherProvider, SunPositionProvider sunPositionProvider, GeomagneticLocationProvider geomagneticLocationProvider) {
 		this.solarActivityProvider = solarActivityProvider;
 		this.weatherProvider = weatherProvider;
 		this.sunPositionProvider = sunPositionProvider;

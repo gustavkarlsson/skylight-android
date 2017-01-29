@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!--TODO Look into getting a new openweathermap API key-->
+	<string name="api_key_openweathermap">"317cc1cbab742dfda3c96c93e7873b6e"</string>
+</resources>

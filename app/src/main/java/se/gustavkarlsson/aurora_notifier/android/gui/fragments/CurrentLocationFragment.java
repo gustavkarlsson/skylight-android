@@ -33,10 +33,10 @@ import butterknife.OnItemClick;
 import butterknife.Unbinder;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.UpdateService;
-import se.gustavkarlsson.aurora_notifier.android.caching.Cache;
+import se.gustavkarlsson.aurora_notifier.android.caching.PersistentCache;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.CurrentLocationComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerCurrentLocationComponent;
-import se.gustavkarlsson.aurora_notifier.android.dagger.modules.CacheModule;
+import se.gustavkarlsson.aurora_notifier.android.dagger.modules.PersistentCacheModule;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraChance;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
@@ -61,7 +61,7 @@ public class CurrentLocationFragment extends Fragment {
 	private ComplicationsListAdapter complicationsAdapter;
 
 	@Inject
-	Cache<Parcelable> evaluationCache;
+	PersistentCache<Parcelable> evaluationPersistentCache;
 
 	@BindView(R.id.swipe_refresh_layout)
 	SwipeRefreshLayout swipeRefreshLayout;
@@ -83,7 +83,7 @@ public class CurrentLocationFragment extends Fragment {
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		CurrentLocationComponent component = DaggerCurrentLocationComponent.builder()
-				.cacheModule(new CacheModule(getContext()))
+				.persistentCacheModule(new PersistentCacheModule(getContext()))
 				.build();
 		component.inject(this);
 		broadcastManager = LocalBroadcastManager.getInstance(getContext());
@@ -118,8 +118,8 @@ public class CurrentLocationFragment extends Fragment {
 			Parcelable parcel = savedInstanceState.getParcelable(STATE_AURORA_EVALUATION);
 			return Parcels.unwrap(parcel);
 		}
-		if (evaluationCache.exists(CACHE_KEY_EVALUATION)) {
-			Parcelable parcelable = evaluationCache.get(CACHE_KEY_EVALUATION);
+		if (evaluationPersistentCache.exists(CACHE_KEY_EVALUATION)) {
+			Parcelable parcelable = evaluationPersistentCache.get(CACHE_KEY_EVALUATION);
 			return Parcels.unwrap(parcelable);
 		}
 		return createUpdatingEvaluation();
@@ -255,8 +255,8 @@ public class CurrentLocationFragment extends Fragment {
 		Log.v(TAG, "onDestroy");
 		try {
 			Parcelable parcelable = Parcels.wrap(evaluation);
-			evaluationCache.set(CACHE_KEY_EVALUATION, parcelable);
-			evaluationCache.close();
+			evaluationPersistentCache.set(CACHE_KEY_EVALUATION, parcelable);
+			evaluationPersistentCache.close();
 		} catch (IOException e) {
 			Log.e(TAG, "Failed to close cache", e);
 		}

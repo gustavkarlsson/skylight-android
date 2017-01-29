@@ -22,7 +22,7 @@ public class RetrofittedSolarActivityProvider implements SolarActivityProvider {
 	private final KpIndexService service;
 
 	@Inject
-	public RetrofittedSolarActivityProvider(KpIndexService service) {
+	RetrofittedSolarActivityProvider(KpIndexService service) {
 		this.service = service;
 	}
 

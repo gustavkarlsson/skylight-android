@@ -7,12 +7,10 @@ import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GeomagneticLocat
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GoogleLocationModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.KpIndexModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.SunPositionModule;
-import se.gustavkarlsson.aurora_notifier.android.dagger.modules.LocalBroadcastManagerModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.WeatherModule;
 
 @Component(modules = {
 		GoogleLocationModule.class,
-		LocalBroadcastManagerModule.class,
 		WeatherModule.class,
 		KpIndexModule.class,
 		SunPositionModule.class,

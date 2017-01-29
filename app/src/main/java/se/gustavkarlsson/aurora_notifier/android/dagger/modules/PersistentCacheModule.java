@@ -9,30 +9,30 @@ import java.io.IOException;
 import dagger.Module;
 import dagger.Provides;
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.caching.Cache;
-import se.gustavkarlsson.aurora_notifier.android.caching.ParcelCache;
+import se.gustavkarlsson.aurora_notifier.android.caching.ParcelPersistentCache;
+import se.gustavkarlsson.aurora_notifier.android.caching.PersistentCache;
 
 @Module
-public class CacheModule {
-	private static final String TAG = CacheModule.class.getSimpleName();
+public class PersistentCacheModule {
+	private static final String TAG = PersistentCacheModule.class.getSimpleName();
 
 	private final Context context;
 
-	public CacheModule(Context context) {
+	public PersistentCacheModule(Context context) {
 		this.context = context;
 	}
 
 	@Provides
-	Cache<Parcelable> provideParcelableCache() {
+	PersistentCache<Parcelable> provideParcelableCache() {
 		try {
-			return ParcelCache.open(context, "cache", R.integer.cache_size_bytes);
+			return ParcelPersistentCache.open(context, "cache", R.integer.cache_size_bytes);
 		} catch (IOException e) {
-			Log.e(TAG, "Filed to open ParcelCache. Falling back to NullCache", e);
-			return new NullCache<>();
+			Log.e(TAG, "Filed to open ParcelPersistentCache. Falling back to NullPersistentCache", e);
+			return new NullPersistentCache<>();
 		}
 	}
 
-	private static class NullCache<T> implements Cache<T> {
+	private static class NullPersistentCache<T> implements PersistentCache<T> {
 		@Override
 		public T get(String key) {
 			return null;

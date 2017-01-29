@@ -13,7 +13,7 @@ import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
 public class KlausBrunnerSunPositionProvider implements SunPositionProvider {
 
 	@Inject
-	public KlausBrunnerSunPositionProvider() {
+	KlausBrunnerSunPositionProvider() {
 	}
 
 	@Override

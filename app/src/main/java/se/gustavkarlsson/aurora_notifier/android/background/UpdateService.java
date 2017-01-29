@@ -27,7 +27,7 @@ import se.gustavkarlsson.aurora_notifier.android.background.providers.LocationPr
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdateServiceComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.UpdateServiceComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GoogleLocationModule;
-import se.gustavkarlsson.aurora_notifier.android.dagger.modules.LocalBroadcastManagerModule;
+import se.gustavkarlsson.aurora_notifier.android.dagger.modules.WeatherModule;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraDataComplicationEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
@@ -50,9 +50,6 @@ public class UpdateService extends GcmTaskService {
 	private Handler handler;
 
 	@Inject
-	LocalBroadcastManager broadcastManager;
-
-	@Inject
 	LocationProvider locationProvider;
 
 	@Inject
@@ -64,8 +61,8 @@ public class UpdateService extends GcmTaskService {
 		super.onCreate();
 		handler = createHandler();
 		UpdateServiceComponent component = DaggerUpdateServiceComponent.builder()
-				.localBroadcastManagerModule(new LocalBroadcastManagerModule(this))
 				.googleLocationModule(new GoogleLocationModule(this))
+				.weatherModule(new WeatherModule(this.getString(R.string.api_key_openweathermap)))
 				.build();
 		component.inject(this);
 	}
@@ -136,7 +133,7 @@ public class UpdateService extends GcmTaskService {
 		Intent intent = new Intent(RESPONSE_UPDATE_FINISHED);
 		Parcelable wrappedEvaluation = Parcels.wrap(evaluation);
 		intent.putExtra(RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION, wrappedEvaluation);
-		broadcastManager.sendBroadcast(intent);
+		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 	}
 
 	private void broadcastError(String message) {
@@ -144,7 +141,7 @@ public class UpdateService extends GcmTaskService {
 		if (message != null) {
 			intent.putExtra(RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE, message);
 		}
-		broadcastManager.sendBroadcast(intent);
+		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 	}
 
 	public static void start(Context context) {

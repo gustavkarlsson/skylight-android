@@ -11,6 +11,11 @@ import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.Retro
 
 @Module
 public class WeatherModule {
+	private final String openWeatherMapApiKey;
+
+	public WeatherModule(String openWeatherMapApiKey) {
+		this.openWeatherMapApiKey = openWeatherMapApiKey;
+	}
 
 	@Provides
 	@Reusable
@@ -23,8 +28,7 @@ public class WeatherModule {
 
 	@Provides
 	@Reusable
-	static WeatherProvider provideWeatherProvider(OpenWeatherMapService openWeatherMapService) {
-		// TODO Look into getting a new API key
-		return new RetrofittedOpenWeatherMapProvider(openWeatherMapService, "317cc1cbab742dfda3c96c93e7873b6e");
+	WeatherProvider provideWeatherProvider(OpenWeatherMapService openWeatherMapService) {
+		return new RetrofittedOpenWeatherMapProvider(openWeatherMapService, openWeatherMapApiKey);
 	}
 }

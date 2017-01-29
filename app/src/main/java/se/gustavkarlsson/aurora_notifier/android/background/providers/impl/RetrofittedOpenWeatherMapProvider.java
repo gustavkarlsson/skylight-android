@@ -11,7 +11,6 @@ import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 // TODO Look into using their json API
-// TODO Change location of APP ID
 public class RetrofittedOpenWeatherMapProvider implements WeatherProvider {
 	private static final String TAG = RetrofittedOpenWeatherMapProvider.class.getSimpleName();
 

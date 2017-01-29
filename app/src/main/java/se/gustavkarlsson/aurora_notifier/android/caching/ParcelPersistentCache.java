@@ -16,15 +16,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class ParcelCache<T extends Parcelable> implements Cache<T> {
-	private static final String TAG = ParcelCache.class.getSimpleName();
+public class ParcelPersistentCache<T extends Parcelable> implements PersistentCache<T> {
+	private static final String TAG = ParcelPersistentCache.class.getSimpleName();
 
 	private static final int MAX_KEY_SYMBOLS = 62;
 
 	private final ClassLoader classLoader;
 	private final DiskLruCache cache;
 
-	private ParcelCache(Context context, String name, long maxSizeBytes) throws IOException {
+	private ParcelPersistentCache(Context context, String name, long maxSizeBytes) throws IOException {
 		File rootCacheDir = determineCacheDir(context);
 		this.classLoader = context.getClassLoader();
 		File cacheDir = new File(rootCacheDir, name);
@@ -51,8 +51,8 @@ public class ParcelCache<T extends Parcelable> implements Cache<T> {
 		return result;
 	}
 
-	public static <T extends Parcelable> ParcelCache<T> open(Context context, String name, long maxSize) throws IOException {
-		return new ParcelCache<>(context, name, maxSize);
+	public static <T extends Parcelable> ParcelPersistentCache<T> open(Context context, String name, long maxSize) throws IOException {
+		return new ParcelPersistentCache<>(context, name, maxSize);
 	}
 
 	@Override

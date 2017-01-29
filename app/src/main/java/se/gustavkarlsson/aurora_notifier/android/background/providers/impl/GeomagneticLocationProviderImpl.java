@@ -22,7 +22,7 @@ public class GeomagneticLocationProviderImpl implements GeomagneticLocationProvi
 	private static final double MAGNETIC_SOUTH_POLE_LONGITUDE = 107.4;
 
 	@Inject
-	public GeomagneticLocationProviderImpl() {
+	GeomagneticLocationProviderImpl() {
 	}
 
 	@Override
