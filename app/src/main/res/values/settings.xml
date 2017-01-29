@@ -2,4 +2,5 @@
 <resources>
 	<integer name="cache_life_millis">560000</integer>
 	<integer name="update_timeout_millis">60000</integer>
+	<integer name="cache_size_bytes">10000000</integer>
 </resources>

@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import dagger.Module;
 import dagger.Provides;
+import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.caching.Cache;
 import se.gustavkarlsson.aurora_notifier.android.caching.ParcelCache;
 
@@ -24,7 +25,7 @@ public class CacheModule {
 	@Provides
 	Cache<Parcelable> provideParcelableCache() {
 		try {
-			return ParcelCache.open(context, "cache", 10_000_000l);
+			return ParcelCache.open(context, "cache", R.integer.cache_size_bytes);
 		} catch (IOException e) {
 			Log.e(TAG, "Filed to open ParcelCache. Falling back to NullCache", e);
 			return new NullCache<>();
