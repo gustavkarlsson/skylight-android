@@ -9,7 +9,6 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.background.ScheduleUpdatesBootReceiver;
 import se.gustavkarlsson.aurora_notifier.android.realm.Requirements;
 
 public class LocationPermissionUtils {

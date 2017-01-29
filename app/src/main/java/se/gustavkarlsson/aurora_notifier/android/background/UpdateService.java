@@ -101,7 +101,7 @@ public class UpdateService extends GcmTaskService {
 	@Override
 	public void onInitializeTasks() {
 		Log.v(TAG, "onInitializeTasks");
-		// TODO reschedule tasks
+		ScheduleUpdatesBootReceiver.setupUpdateScheduling(this);
 		super.onInitializeTasks();
 	}
 
