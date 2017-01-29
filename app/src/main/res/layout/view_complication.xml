@@ -17,6 +17,6 @@
 		android:layout_height="wrap_content"
 		android:layout_alignParentEnd="true"
 		android:contentDescription="@string/learn_more"
-		android:src="@drawable/ic_info_outline_white_24dp" />
+		android:src="@drawable/ic_help_outline_white_24dp" />
 
 </RelativeLayout>
