@@ -14,7 +14,6 @@ public class AuroraNotifier extends Application {
 		Log.v(TAG, "onCreate");
 		super.onCreate();
 		RealmUtils.setupRealm(this);
-		ScheduleUpdatesBootReceiver.setupUpdateScheduling(this);
 	}
 
 }

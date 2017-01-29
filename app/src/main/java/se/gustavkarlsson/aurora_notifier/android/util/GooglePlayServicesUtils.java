@@ -8,6 +8,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
+import se.gustavkarlsson.aurora_notifier.android.background.ScheduleUpdatesBootReceiver;
 import se.gustavkarlsson.aurora_notifier.android.realm.Requirements;
 
 public class GooglePlayServicesUtils {
