@@ -2,10 +2,9 @@ package se.gustavkarlsson.aurora_notifier.android.dagger.modules;
 
 import android.content.Context;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.io.IOException;
-
-import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
@@ -14,7 +13,7 @@ import se.gustavkarlsson.aurora_notifier.android.caching.ParcelCache;
 
 @Module
 public class CacheModule {
-	public static final String NAME_CACHE_MAX_AGE_MILLIS = "cacheMaxAgeMillis";
+	private static final String TAG = CacheModule.class.getSimpleName();
 
 	private final Context context;
 
@@ -27,46 +26,38 @@ public class CacheModule {
 		try {
 			return ParcelCache.open(context, "cache", 10_000_000l);
 		} catch (IOException e) {
-			// Todo log error
-			e.printStackTrace();
-			return new Cache<Parcelable>() {
-				@Override
-				public Parcelable get(String key) {
-					return null;
-				}
-
-				@Override
-				public void set(String key, Parcelable value) {
-
-				}
-
-				@Override
-				public boolean remove(String key) {
-					return false;
-				}
-
-				@Override
-				public void clear() {
-
-				}
-
-				@Override
-				public boolean exists(String key) {
-					return false;
-				}
-
-				@Override
-				public void close() throws IOException {
-
-				}
-			};
+			Log.e(TAG, "Filed to open ParcelCache. Falling back to NullCache", e);
+			return new NullCache<>();
 		}
 	}
 
-	@Provides
-	@Named(NAME_CACHE_MAX_AGE_MILLIS)
-	long provideCacheMaxAgeMillis() {
-		return 5_60_000;
+	private static class NullCache<T> implements Cache<T> {
+		@Override
+		public T get(String key) {
+			return null;
+		}
+
+		@Override
+		public void set(String key, T value) {
+		}
+
+		@Override
+		public boolean remove(String key) {
+			return false;
+		}
+
+		@Override
+		public void clear() {
+		}
+
+		@Override
+		public boolean exists(String key) {
+			return false;
+		}
+
+		@Override
+		public void close() throws IOException {
+		}
 	}
 
 }

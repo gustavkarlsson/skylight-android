@@ -1,5 +1,7 @@
 package se.gustavkarlsson.aurora_notifier.android.background.providers.impl;
 
+import javax.inject.Inject;
+
 import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagneticLocationProvider;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocation;
 
@@ -18,6 +20,10 @@ public class GeomagneticLocationProviderImpl implements GeomagneticLocationProvi
 	private static final double MAGNETIC_NORTH_POLE_LONGITUDE = -72.6;
 	private static final double MAGNETIC_SOUTH_POLE_LATITUDE = -80.4;
 	private static final double MAGNETIC_SOUTH_POLE_LONGITUDE = 107.4;
+
+	@Inject
+	public GeomagneticLocationProviderImpl() {
+	}
 
 	@Override
 	public GeomagneticLocation getGeomagneticLocation(double longitude, double latitude) {

@@ -26,7 +26,6 @@ import org.parceler.Parcels;
 import java.io.IOException;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,6 +53,7 @@ public class CurrentLocationFragment extends Fragment {
 
 	private static final String STATE_AURORA_EVALUATION = "STATE_AURORA_EVALUATION";
 	private static final String CACHE_KEY_EVALUATION = "CACHE_KEY_EVALUATION";
+	private static final long CACHE_MAX_AGE_MILLIS = R.integer.cache_life_millis;
 
 	private LocalBroadcastManager broadcastManager;
 	private BroadcastReceiver broadcastReceiver;
@@ -62,10 +62,6 @@ public class CurrentLocationFragment extends Fragment {
 
 	@Inject
 	Cache<Parcelable> evaluationCache;
-
-	@Inject
-	@Named(CacheModule.NAME_CACHE_MAX_AGE_MILLIS)
-	long cacheMaxAgeMillis;
 
 	@BindView(R.id.swipe_refresh_layout)
 	SwipeRefreshLayout swipeRefreshLayout;
@@ -130,7 +126,7 @@ public class CurrentLocationFragment extends Fragment {
 	}
 
 	private void updateEvaluationIfExpired() {
-		long expiryTime = evaluation.getTimestampMillis() + cacheMaxAgeMillis;
+		long expiryTime = evaluation.getTimestampMillis() + CACHE_MAX_AGE_MILLIS;
 		if (expiryTime < System.currentTimeMillis()) {
 			UpdateService.start(getContext());
 		}

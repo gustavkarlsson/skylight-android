@@ -7,6 +7,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeoutException;
 
+import javax.inject.Inject;
+
+import dagger.Reusable;
 import java8.util.J8Arrays;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraDataProvider;
@@ -28,12 +31,14 @@ import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
+@Reusable
 public class AuroraDataProviderImpl implements AuroraDataProvider {
 	private final SolarActivityProvider solarActivityProvider;
 	private final WeatherProvider weatherProvider;
 	private final SunPositionProvider sunPositionProvider;
 	private final GeomagneticLocationProvider geomagneticLocationProvider;
 
+	@Inject
 	public AuroraDataProviderImpl(SolarActivityProvider solarActivityProvider, WeatherProvider weatherProvider, SunPositionProvider sunPositionProvider, GeomagneticLocationProvider geomagneticLocationProvider) {
 		this.solarActivityProvider = solarActivityProvider;
 		this.weatherProvider = weatherProvider;

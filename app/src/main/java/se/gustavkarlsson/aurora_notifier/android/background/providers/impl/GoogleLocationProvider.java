@@ -8,6 +8,9 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import javax.inject.Inject;
+
+import dagger.Reusable;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.LocationProvider;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
@@ -15,11 +18,13 @@ import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 
+@Reusable
 public class GoogleLocationProvider implements LocationProvider {
 	private static final String TAG = GoogleLocationProvider.class.getSimpleName();
 
 	private final GoogleApiClient googleApiClient;
 
+	@Inject
 	public GoogleLocationProvider(GoogleApiClient googleApiClient) {
 		this.googleApiClient = googleApiClient;
 	}
@@ -57,7 +62,7 @@ public class GoogleLocationProvider implements LocationProvider {
 	@NonNull
 	private static String createErrorMessage(ConnectionResult connectionResult) {
 		return "Could not connect to Google Play Services" +
-                ". Error code: " + connectionResult.getErrorCode() +
-                ". Error message: " + connectionResult.getErrorMessage();
+				". Error code: " + connectionResult.getErrorCode() +
+				". Error message: " + connectionResult.getErrorMessage();
 	}
 }

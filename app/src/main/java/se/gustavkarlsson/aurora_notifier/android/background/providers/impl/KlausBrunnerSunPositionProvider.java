@@ -5,10 +5,17 @@ import net.e175.klaus.solarpositioning.Grena3;
 
 import java.util.GregorianCalendar;
 
+import javax.inject.Inject;
+
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SunPositionProvider;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
 
 public class KlausBrunnerSunPositionProvider implements SunPositionProvider {
+
+	@Inject
+	public KlausBrunnerSunPositionProvider() {
+	}
+
 	@Override
 	public SunPosition getSunPosition(long timeMillis, double latitude, double longitude) {
 		GregorianCalendar date = new GregorianCalendar();

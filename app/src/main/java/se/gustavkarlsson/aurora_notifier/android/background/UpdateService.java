@@ -20,14 +20,14 @@ import org.parceler.Parcels;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraDataProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.LocationProvider;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdateServiceComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.UpdateServiceComponent;
-import se.gustavkarlsson.aurora_notifier.android.dagger.modules.UpdateServiceModule;
+import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GoogleLocationModule;
+import se.gustavkarlsson.aurora_notifier.android.dagger.modules.LocalBroadcastManagerModule;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraDataComplicationEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
@@ -45,11 +45,9 @@ public class UpdateService extends GcmTaskService {
 	public static final String RESPONSE_UPDATE_FINISHED = TAG + ".RESPONSE_UPDATE_FINISHED";
 	public static final String RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION = TAG + ".RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION";
 
-	private Handler handler;
+	private static final long UPDATE_TIMEOUT_MILLIS = R.integer.update_timeout_millis;
 
-	@Inject
-	@Named(UpdateServiceModule.NAME_UPDATE_TIMEOUT_MILLIS)
-	long updateTimeoutMillis;
+	private Handler handler;
 
 	@Inject
 	LocalBroadcastManager broadcastManager;
@@ -66,7 +64,8 @@ public class UpdateService extends GcmTaskService {
 		super.onCreate();
 		handler = createHandler();
 		UpdateServiceComponent component = DaggerUpdateServiceComponent.builder()
-				.updateServiceModule(new UpdateServiceModule(this))
+				.localBroadcastManagerModule(new LocalBroadcastManagerModule(this))
+				.googleLocationModule(new GoogleLocationModule(this))
 				.build();
 		component.inject(this);
 	}
@@ -108,7 +107,7 @@ public class UpdateService extends GcmTaskService {
 	private boolean update() {
 		Log.v(TAG, "update");
 		try {
-			AuroraEvaluation evaluation = getEvaluation(updateTimeoutMillis);
+			AuroraEvaluation evaluation = getEvaluation(UPDATE_TIMEOUT_MILLIS);
 			broadcastEvaluation(evaluation);
 			return true;
 		} catch (UserFriendlyException e) {
