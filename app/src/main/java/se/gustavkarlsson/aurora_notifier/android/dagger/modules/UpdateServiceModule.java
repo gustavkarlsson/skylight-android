@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import dagger.Reusable;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
@@ -40,19 +41,19 @@ public class UpdateServiceModule {
 	}
 
 	@Provides
-	@Singleton
+	@Reusable
 	SunPositionProvider provideSunPositionProvider() {
 		return new KlausBrunnerSunPositionProvider();
 	}
 
 	@Provides
-	@Singleton
+	@Reusable
 	GeomagneticLocationProvider provideGeomagneticLocationProvider() {
 		return new GeomagneticLocationProviderImpl();
 	}
 
 	@Provides
-	@Singleton
+	@Reusable
 	GoogleApiClient provideGoogleApiClient() {
 		return new GoogleApiClient.Builder(updateService)
 				.addApi(LocationServices.API)
@@ -60,7 +61,7 @@ public class UpdateServiceModule {
 	}
 
 	@Provides
-	@Singleton
+	@Reusable
 	LocalBroadcastManager provideLocalBroadcastManager() {
 		return LocalBroadcastManager.getInstance(updateService);
 	}
@@ -75,14 +76,14 @@ public class UpdateServiceModule {
 	}
 
 	@Provides
-	@Singleton
+	@Reusable
 	WeatherProvider provideWeatherProvider(OpenWeatherMapService openWeatherMapService) {
 		// TODO Look into getting a new API key
 		return new RetrofittedOpenWeatherMapProvider(openWeatherMapService, "317cc1cbab742dfda3c96c93e7873b6e");
 	}
 
 	@Provides
-	@Singleton
+	@Reusable
 	KpIndexService provideKpIndexService() {
 		return new Retrofit.Builder()
 				// TODO Update to more permanent hostname
@@ -92,19 +93,19 @@ public class UpdateServiceModule {
 	}
 
 	@Provides
-	@Singleton
+	@Reusable
 	SolarActivityProvider provideSolarActivityProvider(KpIndexService kpIndexService) {
 		return new RetrofittedSolarActivityProvider(kpIndexService);
 	}
 
 	@Provides
-	@Singleton
+	@Reusable
 	LocationProvider provideLocationProvider(GoogleApiClient googleApiClient) {
 		return new GoogleLocationProvider(googleApiClient);
 	}
 
 	@Provides
-	@Singleton
+	@Reusable
 	AuroraDataProvider provideAuroraDataProvider(
 			SolarActivityProvider solarActivityProvider,
 			WeatherProvider weatherProvider,

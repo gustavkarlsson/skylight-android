@@ -38,14 +38,10 @@ class ComplicationsListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		if (convertView != null) {
-			return convertView;
-		} else {
-			View view = inflater.inflate(R.layout.view_complication, parent, false);
-			TextView titleTextView = (TextView) view.findViewById(R.id.complication_title);
-			titleTextView.setText(complications.get(position).getTitleStringResource());
-			return view;
-		}
+		View view = inflater.inflate(R.layout.view_complication, parent, false);
+		TextView titleTextView = (TextView) view.findViewById(R.id.complication_title);
+		titleTextView.setText(complications.get(position).getTitleStringResource());
+		return view;
 	}
 
 	void setItems(List<AuroraComplication> complications) {

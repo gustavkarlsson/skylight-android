@@ -23,12 +23,21 @@ import android.widget.Toast;
 
 import org.parceler.Parcels;
 
+import java.io.IOException;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import butterknife.Unbinder;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.UpdateService;
+import se.gustavkarlsson.aurora_notifier.android.caching.Cache;
+import se.gustavkarlsson.aurora_notifier.android.dagger.modules.CacheModule;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.CurrentLocationComponent;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerCurrentLocationComponent;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraChance;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
@@ -43,12 +52,20 @@ import static java.util.Collections.singletonList;
 public class CurrentLocationFragment extends Fragment {
 	private static final String TAG = CurrentLocationFragment.class.getSimpleName();
 
-	private static final String STATE_AURORA_EVALUATION = TAG + ".STATE_AURORA_EVALUATION";
+	private static final String STATE_AURORA_EVALUATION = "STATE_AURORA_EVALUATION";
+	private static final String CACHE_KEY_EVALUATION = "CACHE_KEY_EVALUATION";
 
 	private LocalBroadcastManager broadcastManager;
 	private BroadcastReceiver broadcastReceiver;
-	private AuroraEvaluation auroraEvaluation;
+	private AuroraEvaluation evaluation;
 	private ComplicationsListAdapter complicationsAdapter;
+
+	@Inject
+	Cache<Parcelable> evaluationCache;
+
+	@Inject
+	@Named(CacheModule.NAME_CACHE_MAX_AGE_MILLIS)
+	long cacheMaxAgeMillis;
 
 	@BindView(R.id.swipe_refresh_layout)
 	SwipeRefreshLayout swipeRefreshLayout;
@@ -69,14 +86,14 @@ public class CurrentLocationFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
+		CurrentLocationComponent component = DaggerCurrentLocationComponent.builder()
+				.cacheModule(new CacheModule(getContext()))
+				.build();
+		component.inject(this);
 		broadcastManager = LocalBroadcastManager.getInstance(getContext());
 		broadcastReceiver = createBroadcastReceiver();
-		if (savedInstanceState == null) {
-			auroraEvaluation = createUpdatingEvaluation();
-		} else {
-			Parcelable parcel = savedInstanceState.getParcelable(STATE_AURORA_EVALUATION);
-			auroraEvaluation = Parcels.unwrap(parcel);
-		}
+		evaluation = getSavedEvaluation(savedInstanceState);
+		updateEvaluationIfExpired();
 		complicationsAdapter = new ComplicationsListAdapter(getContext());
 	}
 
@@ -90,7 +107,7 @@ public class CurrentLocationFragment extends Fragment {
 				String action = intent.getAction();
 				if (UpdateService.RESPONSE_UPDATE_FINISHED.equals(action)) {
 					Parcelable evaluationParcel = intent.getParcelableExtra(UpdateService.RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION);
-					auroraEvaluation = Parcels.unwrap(evaluationParcel);
+					evaluation = Parcels.unwrap(evaluationParcel);
 					updateViews();
 				} else if (UpdateService.RESPONSE_UPDATE_ERROR.equals(action)) {
 					String message = intent.getStringExtra(UpdateService.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE);
@@ -98,6 +115,25 @@ public class CurrentLocationFragment extends Fragment {
 				}
 			}
 		};
+	}
+
+	private AuroraEvaluation getSavedEvaluation(Bundle savedInstanceState) {
+		if (savedInstanceState != null) {
+			Parcelable parcel = savedInstanceState.getParcelable(STATE_AURORA_EVALUATION);
+			return Parcels.unwrap(parcel);
+		}
+		if (evaluationCache.exists(CACHE_KEY_EVALUATION)) {
+			Parcelable parcelable = evaluationCache.get(CACHE_KEY_EVALUATION);
+			return Parcels.unwrap(parcelable);
+		}
+		return createUpdatingEvaluation();
+	}
+
+	private void updateEvaluationIfExpired() {
+		long expiryTime = evaluation.getTimestampMillis() + cacheMaxAgeMillis;
+		if (expiryTime < System.currentTimeMillis()) {
+			UpdateService.start(getContext());
+		}
 	}
 
 	private static AuroraEvaluation createUpdatingEvaluation() {
@@ -129,11 +165,11 @@ public class CurrentLocationFragment extends Fragment {
 	}
 
 	private void updateViews() {
-		chanceTextView.setText(auroraEvaluation.getChance().getResourceId());
+		chanceTextView.setText(evaluation.getChance().getResourceId());
 		chanceTextView.invalidate();
-		complicationsAdapter.setItems(auroraEvaluation.getComplications());
+		complicationsAdapter.setItems(evaluation.getComplications());
 		complicationsAdapter.notifyDataSetChanged();
-		if (auroraEvaluation.getComplications().isEmpty()) {
+		if (evaluation.getComplications().isEmpty()) {
 			bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 		} else if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
 			bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -177,7 +213,7 @@ public class CurrentLocationFragment extends Fragment {
 
 	@OnItemClick(R.id.complications_list_view)
 	public void onItemClick(int position) {
-		AuroraComplication complication = auroraEvaluation.getComplications().get(position);
+		AuroraComplication complication = evaluation.getComplications().get(position);
 		new AlertDialog.Builder(getContext())
 				.setTitle(complication.getTitleStringResource())
 				.setMessage(complication.getDescriptionStringResource())
@@ -206,7 +242,7 @@ public class CurrentLocationFragment extends Fragment {
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		Log.v(TAG, "onSaveInstanceState");
-		Parcelable parcel = Parcels.wrap(auroraEvaluation);
+		Parcelable parcel = Parcels.wrap(evaluation);
 		outState.putParcelable(STATE_AURORA_EVALUATION, parcel);
 		super.onSaveInstanceState(outState);
 	}
@@ -219,4 +255,16 @@ public class CurrentLocationFragment extends Fragment {
 		super.onDestroyView();
 	}
 
+	@Override
+	public void onDestroy() {
+		Log.v(TAG, "onDestroy");
+		try {
+			Parcelable parcelable = Parcels.wrap(evaluation);
+			evaluationCache.set(CACHE_KEY_EVALUATION, parcelable);
+			evaluationCache.close();
+		} catch (IOException e) {
+			Log.e(TAG, "Failed to close cache", e);
+		}
+		super.onDestroy();
+	}
 }

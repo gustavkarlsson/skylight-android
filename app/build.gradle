@@ -83,6 +83,7 @@ dependencies {
 	compile "org.simpleframework:simple-xml:2.7.1"
 	compile "net.e175.klaus:solarpositioning:0.0.9"
 	compile "com.android.support:design:24.2.1"
+	compile "com.jakewharton:disklrucache:2.0.2"
 
 	// Retrofit
 	compile "com.squareup.retrofit2:retrofit:" + retrofitVersion

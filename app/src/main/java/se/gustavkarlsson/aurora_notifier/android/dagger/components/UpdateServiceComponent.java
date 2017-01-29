@@ -8,6 +8,6 @@ import se.gustavkarlsson.aurora_notifier.android.dagger.modules.UpdateServiceMod
 
 @Singleton
 @Component(modules = UpdateServiceModule.class)
-public interface UpdateServiceComponent { // Must be public
+public interface UpdateServiceComponent {
 	void inject(UpdateService updateService);
 }
