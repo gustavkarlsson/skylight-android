@@ -40,10 +40,10 @@ public class LocationPermissionUtils {
 	private static void showLocationRequestRationale(Activity activity) {
 		new AlertDialog.Builder(activity)
 				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setTitle(activity.getString(R.string.location_permission_required))
-				.setMessage(activity.getString(R.string.location_permission_required_rationale))
+				.setTitle(activity.getString(R.string.location_permission_required_title))
+				.setMessage(activity.getString(R.string.location_permission_required_description))
 				.setPositiveButton(android.R.string.yes, (dialog, which) -> showLocationPermissionRequest(activity))
-				.setNegativeButton(R.string.close, (dialog, which) -> {
+				.setNegativeButton(R.string.exit, (dialog, which) -> {
 					Requirements.setFulfilled(false);
 					System.exit(4);
 				})

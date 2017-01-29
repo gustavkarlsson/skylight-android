@@ -4,10 +4,12 @@
 	<string name="complication_unable_to_get_weather_desc">
 		The application could not determine the current weather for your location.
 	</string>
+
 	<string name="complication_too_cloudy_title">Too cloudy</string>
 	<string name="complication_too_cloudy_desc">
 		It\'s too cloudy to see any aurora right now.
 	</string>
+
 	<string name="complication_probably_too_cloudy_title">Probably too cloudy</string>
 	<string name="complication_probably_too_cloudy_desc">
 		It\'s probably too cloudy to see any aurora right now.
@@ -17,10 +19,12 @@
 	<string name="complication_unable_to_get_location_desc">
 		The application could not determine your location.
 	</string>
+
 	<string name="complication_too_bright_title">It\'s too bright outside</string>
 	<string name="complication_too_bright_desc">
 		It\'s too bright outside to see any aurora.
 	</string>
+
 	<string name="complication_probably_too_bright_title">Probably too bright</string>
 	<string name="complication_probably_too_bright_desc">
 		It\'s probably too bright outside to see any aurora.
@@ -30,14 +34,17 @@
 	<string name="complication_unable_to_get_solar_activity_desc">
 		The application could not determine the current solar activity.
 	</string>
+
 	<string name="complication_not_enough_solar_activity_title">Not enough solar activity</string>
 	<string name="complication_not_enough_solar_activity_desc">
 		There is not enough solar activity to see any aurora right now.
 	</string>
+
 	<string name="complication_too_far_away_title">Too far away</string>
 	<string name="complication_too_far_away_desc">
 		You are too far away from any magnetic pole to see any aurora right now.
 	</string>
+
 	<string name="complication_updating_title">Updating…</string>
 	<string name="complication_updating_desc">
 		The app is updating the current information. Please wait, or pull down to refresh.

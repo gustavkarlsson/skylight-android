@@ -118,7 +118,7 @@ public class UpdateService extends GcmTaskService {
 			return false;
 		} catch (Exception e) {
 			Log.e(TAG, "An unexpected error occurred.", e);
-			String errorMessage = getApplicationContext().getString(R.string.unknown_update_error);
+			String errorMessage = getApplicationContext().getString(R.string.error_unknown_update_error);
 			broadcastError(errorMessage);
 			return false;
 		}

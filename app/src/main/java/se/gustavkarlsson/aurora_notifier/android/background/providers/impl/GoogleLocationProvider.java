@@ -31,7 +31,7 @@ public class GoogleLocationProvider implements LocationProvider {
 			ConnectionResult connectionResult = googleApiClient.blockingConnect(timeoutMillis, MILLISECONDS);
 			if (!connectionResult.isSuccess()) {
 				if (connectionResult.getErrorCode() == ConnectionResult.TIMEOUT) {
-					throw new UserFriendlyException(R.string.update_took_too_long, "Connecting to Google API timed out after " + timeoutMillis + "ms");
+					throw new UserFriendlyException(R.string.error_update_took_too_long, "Connecting to Google API timed out after " + timeoutMillis + "ms");
 				}
 				throw new UserFriendlyException(R.string.could_not_connect_to_google_play_services, createErrorMessage(connectionResult));
 			}
@@ -40,12 +40,12 @@ public class GoogleLocationProvider implements LocationProvider {
 			Location location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
 			Log.d(TAG, "Location is: " + location);
 			if (location == null) {
-				throw new UserFriendlyException(R.string.could_not_determine_location, "Location API returned null");
+				throw new UserFriendlyException(R.string.error_could_not_determine_location, "Location API returned null");
 			}
 			return location;
 		} catch (SecurityException e) {
 			Log.w(TAG, "Location permission missing", e);
-			throw new UserFriendlyException(R.string.location_permission_missing, e);
+			throw new UserFriendlyException(R.string.error_location_permission_missing, e);
 		} finally {
 			if (googleApiClient.isConnected()) {
 				Log.d(TAG, "Disconnecting from Google Play Services");

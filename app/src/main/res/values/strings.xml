@@ -1,33 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name" translatable="false">Aurora Notifier</string>
-	<string name="google_play_services_could_not_be_installed">Google Play Services could not be installed</string>
-	<string name="google_play_services_not_supported">Google Play Services is required but not supported on this device</string>
+	<string name="exit">Exit</string>
 	<string name="app_will_close">The application will now close</string>
-	<string name="location_permission_required">Location permission required</string>
-	<string name="location_permission_required_rationale">This app needs access to your location to calculate
-		the chances of seeing northern lights. Please allow access to your location.</string>
-	<string name="why_not">Why not?</string>
+
+	<string name="location_permission_required_title">Location permission required</string>
+	<string name="location_permission_required_description">This app needs access to your location to calculate the chances of seeing northern lights. Please allow access to your location.</string>
+	<string name="google_play_services_required_title">Google Play Services required</string>
+	<string name="google_play_services_required_description">This app needs Google Play Services to calculate the chances of seeing northern lights. Please install Google Play Services.</string>
+
 	<string name="aurora_chance">Aurora Chance</string>
-	<string name="action_debug">Debug</string>
-	<string name="close">Close</string>
-	<string name="learn_more">Learn more</string>
-	<string name="could_not_connect_to_google_play_services">Could not connect to Google Play Services.
-		Check your internet connection.</string>
-	<string name="location_permission_missing">The app does not have permission to access the current location.</string>
-	<string name="could_not_determine_location">Could not determine current location.</string>
-	<string name="unknown_update_error">An unknown error occurred while updating.</string>
-	<string name="could_not_determine_solar_activity">Could not determine current solar activity.</string>
-	<string name="could_not_determine_weather">Could not determine current weather.</string>
-	<string name="could_not_determine_sun_position">Could not determine current sun position.</string>
-	<string name="update_took_too_long">Update took too long</string>
 	<string name="aurora_chance_none">None</string>
 	<string name="aurora_chance_low">Low</string>
 	<string name="aurora_chance_high">High</string>
 	<string name="aurora_chance_unknown">Unknown</string>
-	<string name="ok">OK</string>
-	<string name="connection_to_weather_service_failed">Connection to weather service failed</string>
-	<string name="connection_to_solar_activity_service_failed">Connection to solar activity service failed</string>
-	<string name="google_play_services_required">Google Play Services Required</string>
-	<string name="google_play_services_required_rationale">This app needs Google Play Services to calculate the chances of seeing northern lights. Please install Google Play Services.</string>
+	<string name="why_not">Why not?</string>
+	<string name="learn_more">Learn more</string>
+
+	<string name="menu_action_debug">Debug</string>
 </resources>

@@ -27,12 +27,12 @@ public class RetrofittedSolarActivityProvider implements SolarActivityProvider {
 			Response<Timestamped<Float>> response = service.get().execute();
 			Log.d(TAG, "Got response: " + response.code() + ", message: " + response.raw().toString());
 			if (!response.isSuccessful()) {
-				throw new UserFriendlyException(R.string.connection_to_solar_activity_service_failed, response.errorBody().string());
+				throw new UserFriendlyException(R.string.error_connection_to_solar_activity_service_failed, response.errorBody().string());
 			}
 			Timestamped<Float> kpIndex = response.body();
 			return new SolarActivity(kpIndex.getValue());
 		} catch (IOException e) {
-			throw new UserFriendlyException(R.string.connection_to_solar_activity_service_failed, e);
+			throw new UserFriendlyException(R.string.error_connection_to_solar_activity_service_failed, e);
 		}
 	}
 }

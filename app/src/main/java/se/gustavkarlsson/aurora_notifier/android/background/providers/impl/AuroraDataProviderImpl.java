@@ -62,9 +62,9 @@ public class AuroraDataProviderImpl implements AuroraDataProvider {
 			GeomagneticLocation geomagneticLocation = updateGeomagneticLocationTask.get(timeoutAlarm.getRemainingTimeMillis(), MILLISECONDS);
 			return new AuroraData(solarActivity, geomagneticLocation, sunPosition, weather);
 		} catch (TimeoutException e) {
-			throw new UserFriendlyException(R.string.update_took_too_long, "Getting aurora data timed out after " + timeoutMillis + "ms", e);
+			throw new UserFriendlyException(R.string.error_update_took_too_long, "Getting aurora data timed out after " + timeoutMillis + "ms", e);
 		} catch (InterruptedException | ExecutionException e) {
-			throw new UserFriendlyException(R.string.unknown_update_error, e);
+			throw new UserFriendlyException(R.string.error_unknown_update_error, e);
 		}
 	}
 

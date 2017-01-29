@@ -35,9 +35,9 @@ import butterknife.Unbinder;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.UpdateService;
 import se.gustavkarlsson.aurora_notifier.android.caching.Cache;
-import se.gustavkarlsson.aurora_notifier.android.dagger.modules.CacheModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.CurrentLocationComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerCurrentLocationComponent;
+import se.gustavkarlsson.aurora_notifier.android.dagger.modules.CacheModule;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraChance;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
@@ -216,7 +216,7 @@ public class CurrentLocationFragment extends Fragment {
 		new AlertDialog.Builder(getContext())
 				.setTitle(complication.getTitleStringResource())
 				.setMessage(complication.getDescriptionStringResource())
-				.setPositiveButton(R.string.ok, (dialog, which) -> dialog.dismiss())
+				.setPositiveButton(android.R.string.ok, (dialog, which) -> dialog.dismiss())
 				.setIcon(android.R.drawable.ic_dialog_info)
 				.show();
 	}
