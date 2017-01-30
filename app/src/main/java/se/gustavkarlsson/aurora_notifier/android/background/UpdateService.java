@@ -1,10 +1,11 @@
 package se.gustavkarlsson.aurora_notifier.android.background;
 
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.IBinder;
 import android.os.Looper;
 import android.os.Parcelable;
 import android.os.Process;
@@ -36,7 +37,7 @@ import se.gustavkarlsson.aurora_notifier.android.util.Alarm;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 
-public class UpdateService extends GcmTaskService {
+public class UpdateService extends GcmTaskService implements Updater {
 	private static final String TAG = UpdateService.class.getSimpleName();
 
 	public static final String REQUEST_UPDATE = TAG + ".REQUEST_UPDATE";
@@ -54,6 +55,8 @@ public class UpdateService extends GcmTaskService {
 	@Inject
 	AuroraDataProvider auroraDataProvider;
 
+	private Binder binder;
+
 	@Override
 	public void onCreate() {
 		Log.v(TAG, "onCreate");
@@ -65,6 +68,7 @@ public class UpdateService extends GcmTaskService {
 				.weatherModule(new WeatherModule(this.getString(R.string.api_key_openweathermap)))
 				.build();
 		component.inject(this);
+		binder = new UpdaterBinder(this);
 	}
 
 	private static Handler createHandler() {
@@ -72,6 +76,11 @@ public class UpdateService extends GcmTaskService {
 		thread.start();
 		Looper looper = thread.getLooper();
 		return new Handler(looper);
+	}
+
+	@Override
+	public IBinder onBind(Intent intent) {
+		return binder;
 	}
 
 	@Override
@@ -101,7 +110,8 @@ public class UpdateService extends GcmTaskService {
 		super.onInitializeTasks();
 	}
 
-	private boolean update() {
+	@Override
+	public boolean update() {
 		Log.v(TAG, "update");
 		try {
 			AuroraEvaluation evaluation = getEvaluation(updateTimeoutMillis);
@@ -144,8 +154,15 @@ public class UpdateService extends GcmTaskService {
 		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 	}
 
-	public static void start(Context context) {
-		Intent intent = new Intent(context, UpdateService.class);
-		context.startService(intent);
+	public static class UpdaterBinder extends Binder {
+		private final Updater updater;
+
+		private UpdaterBinder(Updater updater) {
+			this.updater = updater;
+		}
+
+		public Updater getUpdater() {
+			return updater;
+		}
 	}
 }

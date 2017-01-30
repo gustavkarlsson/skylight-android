@@ -1,10 +1,14 @@
 package se.gustavkarlsson.aurora_notifier.android.gui.fragments;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -34,6 +38,7 @@ import butterknife.OnItemClick;
 import butterknife.Unbinder;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.UpdateService;
+import se.gustavkarlsson.aurora_notifier.android.background.Updater;
 import se.gustavkarlsson.aurora_notifier.android.caching.PersistentCache;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.CurrentLocationComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerCurrentLocationComponent;
@@ -55,14 +60,16 @@ public class CurrentLocationFragment extends Fragment {
 	private static final String STATE_AURORA_EVALUATION = "STATE_AURORA_EVALUATION";
 	private static final String CACHE_KEY_EVALUATION = "CACHE_KEY_EVALUATION";
 
-	private LocalBroadcastManager broadcastManager;
-	private BroadcastReceiver broadcastReceiver;
-	private ComplicationsListAdapter complicationsAdapter;
-	private int cacheLifeMillis;
-	private AuroraEvaluation evaluation;
+	private final ServiceConnection updaterConnection = new UpdaterConnection();
 
 	@Inject
 	PersistentCache<Parcelable> evaluationPersistentCache;
+
+	private LocalBroadcastManager broadcastManager;
+	private BroadcastReceiver broadcastReceiver;
+	private ComplicationsListAdapter complicationsAdapter;
+	private int evaluationLifeMillis;
+	private AuroraEvaluation evaluation;
 
 	@BindView(R.id.swipe_refresh_layout)
 	SwipeRefreshLayout swipeRefreshLayout;
@@ -79,6 +86,9 @@ public class CurrentLocationFragment extends Fragment {
 	private Unbinder unbinder;
 	private BottomSheetBehavior bottomSheetBehavior;
 
+	private Updater updater;
+	private boolean updaterBound;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		Log.v(TAG, "onCreate");
@@ -90,9 +100,8 @@ public class CurrentLocationFragment extends Fragment {
 		broadcastManager = LocalBroadcastManager.getInstance(getContext());
 		broadcastReceiver = createBroadcastReceiver();
 		complicationsAdapter = new ComplicationsListAdapter(getContext());
-		cacheLifeMillis = getResources().getInteger(R.integer.cache_life_millis);
+		evaluationLifeMillis = getResources().getInteger(R.integer.foreground_evaluation_life_millis);
 		evaluation = getSavedEvaluation(savedInstanceState);
-		updateEvaluationIfExpired();
 	}
 
 	private BroadcastReceiver createBroadcastReceiver() {
@@ -117,21 +126,14 @@ public class CurrentLocationFragment extends Fragment {
 
 	private AuroraEvaluation getSavedEvaluation(Bundle savedInstanceState) {
 		if (savedInstanceState != null) {
-			Parcelable parcel = savedInstanceState.getParcelable(STATE_AURORA_EVALUATION);
-			return Parcels.unwrap(parcel);
+			Parcelable parcelable = savedInstanceState.getParcelable(STATE_AURORA_EVALUATION);
+			return Parcels.unwrap(parcelable);
 		}
 		if (evaluationPersistentCache.exists(CACHE_KEY_EVALUATION)) {
 			Parcelable parcelable = evaluationPersistentCache.get(CACHE_KEY_EVALUATION);
 			return Parcels.unwrap(parcelable);
 		}
 		return createUpdatingEvaluation();
-	}
-
-	private void updateEvaluationIfExpired() {
-		long expiryTime = evaluation.getTimestampMillis() + cacheLifeMillis;
-		if (expiryTime < System.currentTimeMillis()) {
-			UpdateService.start(getContext());
-		}
 	}
 
 	private static AuroraEvaluation createUpdatingEvaluation() {
@@ -175,8 +177,10 @@ public class CurrentLocationFragment extends Fragment {
 
 	private void setupSwipeToRefresh() {
 		swipeRefreshLayout.setOnRefreshListener(() -> {
-			swipeRefreshLayout.setRefreshing(true);
-			UpdateService.start(getContext());
+			if (updaterBound) {
+				swipeRefreshLayout.setRefreshing(true);
+				AsyncTask.execute(updater::update);
+			}
 		});
 	}
 
@@ -228,6 +232,12 @@ public class CurrentLocationFragment extends Fragment {
 				new IntentFilter(UpdateService.RESPONSE_UPDATE_FINISHED));
 		broadcastManager.registerReceiver((broadcastReceiver),
 				new IntentFilter(UpdateService.RESPONSE_UPDATE_ERROR));
+		bindUpdater();
+	}
+
+	private void bindUpdater() {
+		Intent intent = new Intent(getContext(), UpdateService.class);
+		getActivity().bindService(intent, updaterConnection, Context.BIND_AUTO_CREATE);
 	}
 
 	@Override
@@ -235,7 +245,15 @@ public class CurrentLocationFragment extends Fragment {
 		Log.v(TAG, "onStop");
 		swipeRefreshLayout.setRefreshing(false);
 		broadcastManager.unregisterReceiver(broadcastReceiver);
+		unbindUpdater();
 		super.onStop();
+	}
+
+	private void unbindUpdater() {
+		if (updaterBound) {
+			getActivity().unbindService(updaterConnection);
+			updaterBound = false;
+		}
 	}
 
 	@Override
@@ -243,13 +261,8 @@ public class CurrentLocationFragment extends Fragment {
 		Log.v(TAG, "onSaveInstanceState");
 		Parcelable parcel = Parcels.wrap(evaluation);
 		outState.putParcelable(STATE_AURORA_EVALUATION, parcel);
-		try {
-			Parcelable parcelable = Parcels.wrap(evaluation);
-			evaluationPersistentCache.set(CACHE_KEY_EVALUATION, parcelable);
-			evaluationPersistentCache.close();
-		} catch (IOException e) {
-			Log.e(TAG, "Failed to close cache", e);
-		}
+		Parcelable parcelable = Parcels.wrap(evaluation);
+		evaluationPersistentCache.set(CACHE_KEY_EVALUATION, parcelable);
 		super.onSaveInstanceState(outState);
 	}
 
@@ -264,6 +277,36 @@ public class CurrentLocationFragment extends Fragment {
 	@Override
 	public void onDestroy() {
 		Log.v(TAG, "onDestroy");
+		try {
+			evaluationPersistentCache.close();
+		} catch (IOException e) {
+			Log.e(TAG, "Failed to close cache", e);
+		}
 		super.onDestroy();
+	}
+
+	private boolean evaluationExpired() {
+		long expiryTime = evaluation.getTimestampMillis() + evaluationLifeMillis;
+		return System.currentTimeMillis() > expiryTime;
+	}
+
+	private class UpdaterConnection implements ServiceConnection {
+
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			Log.v(TAG, "onServiceConnected");
+			UpdateService.UpdaterBinder updaterBinder = (UpdateService.UpdaterBinder) service;
+			updater = updaterBinder.getUpdater();
+			updaterBound = true;
+			if (evaluationExpired()) {
+				AsyncTask.execute(updater::update);
+			}
+		}
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+			Log.v(TAG, "onServiceDisconnected");
+			updaterBound = false;
+		}
+
 	}
 }
