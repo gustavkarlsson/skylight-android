@@ -3,12 +3,8 @@ package se.gustavkarlsson.aurora_notifier.android.background;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Binder;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.IBinder;
-import android.os.Looper;
 import android.os.Parcelable;
-import android.os.Process;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -46,14 +42,13 @@ public class UpdateService extends GcmTaskService implements Updater {
 	public static final String RESPONSE_UPDATE_FINISHED = TAG + ".RESPONSE_UPDATE_FINISHED";
 	public static final String RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION = TAG + ".RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION";
 
-	private Handler handler;
-	private int updateTimeoutMillis;
-
 	@Inject
 	LocationProvider locationProvider;
 
 	@Inject
 	AuroraDataProvider auroraDataProvider;
+
+	private int updateTimeoutMillis;
 
 	private Binder binder;
 
@@ -61,21 +56,13 @@ public class UpdateService extends GcmTaskService implements Updater {
 	public void onCreate() {
 		Log.v(TAG, "onCreate");
 		super.onCreate();
-		handler = createHandler();
-		updateTimeoutMillis = getResources().getInteger(R.integer.update_timeout_millis);
 		UpdateServiceComponent component = DaggerUpdateServiceComponent.builder()
 				.googleLocationModule(new GoogleLocationModule(this))
 				.weatherModule(new WeatherModule(this.getString(R.string.api_key_openweathermap)))
 				.build();
 		component.inject(this);
+		updateTimeoutMillis = getResources().getInteger(R.integer.update_timeout_millis);
 		binder = new UpdaterBinder(this);
-	}
-
-	private static Handler createHandler() {
-		HandlerThread thread = new HandlerThread(TAG + ".updater", Process.THREAD_PRIORITY_BACKGROUND);
-		thread.start();
-		Looper looper = thread.getLooper();
-		return new Handler(looper);
 	}
 
 	@Override
@@ -95,12 +82,6 @@ public class UpdateService extends GcmTaskService implements Updater {
 			return GcmNetworkManager.RESULT_RESCHEDULE;
 		}
 		return GcmNetworkManager.RESULT_FAILURE;
-	}
-
-	@Override
-	public int onStartCommand(Intent intent, int i, int i1) {
-		handler.post(this::update);
-		return super.onStartCommand(intent, i, i1);
 	}
 
 	@Override
