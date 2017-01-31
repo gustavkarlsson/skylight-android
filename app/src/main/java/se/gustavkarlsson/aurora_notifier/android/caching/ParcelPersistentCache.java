@@ -3,6 +3,7 @@ package se.gustavkarlsson.aurora_notifier.android.caching;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.BadParcelableException;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -64,7 +65,11 @@ public class ParcelPersistentCache<T extends Parcelable> implements PersistentCa
 		}
 		try {
             return parcel.readParcelable(classLoader);
-        } catch (Exception e) {
+        } catch (BadParcelableException e) {
+			Log.w(TAG, "Bad parcelable detected. Removing from cache", e);
+			remove(key);
+			return null;
+		} catch (Exception e) {
             Log.e(TAG, "Failed to read parcelable", e);
             return null;
         } finally {

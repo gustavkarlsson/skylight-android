@@ -1,5 +1,7 @@
 package se.gustavkarlsson.aurora_notifier.android.models;
 
+import android.location.Address;
+
 import org.parceler.Parcel;
 
 import java.util.ArrayList;
@@ -12,6 +14,7 @@ import static java8.util.stream.StreamSupport.stream;
 @Parcel
 public class AuroraEvaluation {
 	long timestampMillis;
+	Address address;
 	AuroraData data;
 	List<AuroraComplication> complications;
 	AuroraChance chance;
@@ -19,8 +22,9 @@ public class AuroraEvaluation {
 	AuroraEvaluation() {
 	}
 
-	public AuroraEvaluation(long timestampMillis, AuroraData data, Collection<AuroraComplication> complications) {
+	public AuroraEvaluation(long timestampMillis, Address address, AuroraData data, Collection<AuroraComplication> complications) {
 		this.timestampMillis = timestampMillis;
+		this.address = address;
 		this.data = data;
 		this.complications = sortComplications(complications);
 		this.chance = calculateChance(complications);
@@ -46,6 +50,10 @@ public class AuroraEvaluation {
 		return timestampMillis;
 	}
 
+	public Address getAddress() {
+		return address;
+	}
+
 	public AuroraData getData() {
 		return data;
 	}
@@ -62,6 +70,7 @@ public class AuroraEvaluation {
 	public String toString() {
 		return "AuroraEvaluation{" +
 				"timestampMillis=" + timestampMillis +
+				", address=" + address +
 				", data=" + data +
 				", complications=" + complications +
 				", chance=" + chance +

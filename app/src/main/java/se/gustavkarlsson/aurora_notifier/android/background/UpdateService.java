@@ -1,6 +1,7 @@
 package se.gustavkarlsson.aurora_notifier.android.background;
 
 import android.content.Intent;
+import android.location.Address;
 import android.location.Location;
 import android.os.Binder;
 import android.os.IBinder;
@@ -19,6 +20,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.AddressProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraDataProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.LocationProvider;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdateServiceComponent;
@@ -47,6 +49,9 @@ public class UpdateService extends GcmTaskService implements Updater {
 
 	@Inject
 	AuroraDataProvider auroraDataProvider;
+
+	@Inject
+	AddressProvider addressProvider;
 
 	private int updateTimeoutMillis;
 
@@ -114,10 +119,10 @@ public class UpdateService extends GcmTaskService implements Updater {
 	private AuroraEvaluation getEvaluation(long timeoutMillis) {
 		Alarm timeoutAlarm = Alarm.start(timeoutMillis);
 		Location location = locationProvider.getLocation(timeoutAlarm.getRemainingTimeMillis());
-
+		Address address = addressProvider.getAddress(location.getLatitude(), location.getLongitude(), timeoutAlarm.getRemainingTimeMillis());
 		AuroraData auroraData = auroraDataProvider.getAuroraData(timeoutAlarm.getRemainingTimeMillis(), location);
 		List<AuroraComplication> complications = new AuroraDataComplicationsEvaluator(auroraData).evaluate();
-		return new AuroraEvaluation(System.currentTimeMillis(), auroraData, complications);
+		return new AuroraEvaluation(System.currentTimeMillis(), address, auroraData, complications);
 	}
 
 	private void broadcastEvaluation(AuroraEvaluation evaluation) {

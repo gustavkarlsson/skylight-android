@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -71,6 +72,9 @@ public class CurrentLocationFragment extends Fragment {
 	private int evaluationLifeMillis;
 	private AuroraEvaluation evaluation;
 
+	@BindView(R.id.root_layout)
+	View rootView;
+
 	@BindView(R.id.swipe_refresh_layout)
 	SwipeRefreshLayout swipeRefreshLayout;
 
@@ -82,6 +86,9 @@ public class CurrentLocationFragment extends Fragment {
 
 	@BindView(R.id.chance)
 	TextView chanceTextView;
+
+	@BindView(R.id.location)
+	TextView locationTextView;
 
 	private Unbinder unbinder;
 	private BottomSheetBehavior bottomSheetBehavior;
@@ -131,7 +138,10 @@ public class CurrentLocationFragment extends Fragment {
 		}
 		if (evaluationPersistentCache.exists(CACHE_KEY_EVALUATION)) {
 			Parcelable parcelable = evaluationPersistentCache.get(CACHE_KEY_EVALUATION);
-			return Parcels.unwrap(parcelable);
+			AuroraEvaluation evaluation = Parcels.unwrap(parcelable);
+			if (evaluation != null) {
+				return evaluation;
+			}
 		}
 		return createUpdatingEvaluation();
 	}
@@ -147,7 +157,7 @@ public class CurrentLocationFragment extends Fragment {
 				AuroraChance.UNKNOWN,
 				R.string.complication_updating_title,
 				R.string.complication_updating_desc);
-		return new AuroraEvaluation(0, data, singletonList(updatingComplication));
+		return new AuroraEvaluation(0, null, data, singletonList(updatingComplication));
 	}
 
 	@Override
@@ -164,10 +174,26 @@ public class CurrentLocationFragment extends Fragment {
 	}
 
 	private void updateViews() {
+		updateLocationView();
 		chanceTextView.setText(evaluation.getChance().getResourceId());
-		chanceTextView.invalidate();
 		complicationsAdapter.setItems(evaluation.getComplications());
 		complicationsAdapter.notifyDataSetChanged();
+		updateBottomSheetState();
+		rootView.invalidate();
+	}
+
+	private void updateLocationView() {
+		Address address = evaluation.getAddress();
+		if (address == null) {
+			locationTextView.setVisibility(View.INVISIBLE);
+		} else {
+			locationTextView.setVisibility(View.VISIBLE);
+			String locationString = address.getLocality();
+			locationTextView.setText(locationString);
+		}
+	}
+
+	private void updateBottomSheetState() {
 		if (evaluation.getComplications().isEmpty()) {
 			bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 		} else if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
