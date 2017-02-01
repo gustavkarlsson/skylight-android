@@ -183,16 +183,16 @@ public class CurrentLocationFragment extends Fragment {
 
 	private void updateViews() {
 		updateLocationView();
-		timeSinceUpdateTextView.setText(formatRelativeTime(evaluation.getTimestampMillis()));
+		updateTimeSinceUpdate();
 		scheduleTimeSinceUpdateRefresh();
 		chanceTextView.setText(evaluation.getChance().getResourceId());
 		complicationsAdapter.setItems(evaluation.getComplications());
 		complicationsAdapter.notifyDataSetChanged();
+		updateBottomSheetState();
 		rootView.invalidate();
 	}
 
 	private void scheduleTimeSinceUpdateRefresh() {
-		updateBottomSheetState();
 		if (timeUpdateTimer != null) {
 			timeUpdateTimer.cancel();
 		}
@@ -200,13 +200,22 @@ public class CurrentLocationFragment extends Fragment {
 		timeUpdateTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				long timestampMillis = evaluation.getTimestampMillis();
 				timeSinceUpdateTextView.post(() -> {
-					timeSinceUpdateTextView.setText(formatRelativeTime(timestampMillis));
-					timeSinceUpdateTextView.invalidate();
+					updateTimeSinceUpdate();
 				});
 			}
 		}, 1000L, TIME_RESOLUTION_MILLIS);
+	}
+
+	private void updateTimeSinceUpdate() {
+		if (System.currentTimeMillis() - evaluation.getTimestampMillis() <= TIME_RESOLUTION_MILLIS) {
+			timeSinceUpdateTextView.setVisibility(View.INVISIBLE);
+			return;
+		}
+		CharSequence text = formatRelativeTime(evaluation.getTimestampMillis());
+		timeSinceUpdateTextView.setVisibility(View.VISIBLE);
+		timeSinceUpdateTextView.setText(text);
+		timeSinceUpdateTextView.invalidate();
 	}
 
 	private static CharSequence formatRelativeTime(long startTimeMillis) {
