@@ -208,14 +208,18 @@ public class CurrentLocationFragment extends Fragment {
 	}
 
 	private void updateTimeSinceUpdate() {
-		if (System.currentTimeMillis() - evaluation.getTimestampMillis() <= TIME_RESOLUTION_MILLIS) {
-			timeSinceUpdateTextView.setVisibility(View.INVISIBLE);
+		if (isJustNow(evaluation.getTimestampMillis())) {
+			timeSinceUpdateTextView.setText(R.string.just_now);
 			return;
 		}
 		CharSequence text = formatRelativeTime(evaluation.getTimestampMillis());
-		timeSinceUpdateTextView.setVisibility(View.VISIBLE);
 		timeSinceUpdateTextView.setText(text);
 		timeSinceUpdateTextView.invalidate();
+	}
+
+	private static boolean isJustNow(long timestampMillis) {
+		long ageMillis = System.currentTimeMillis() - timestampMillis;
+		return ageMillis <= TIME_RESOLUTION_MILLIS;
 	}
 
 	private static CharSequence formatRelativeTime(long startTimeMillis) {
