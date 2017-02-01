@@ -29,14 +29,14 @@ public class SolarActivityAndGeomagneticLocationComplicationEvaluator implements
 		if (kpIndex < 1) {
 			complications.add(new AuroraComplication(
 					NONE,
-					R.string.complication_not_enough_solar_activity_title,
-					R.string.complication_not_enough_solar_activity_desc));
+					R.string.complication_weak_solar_activity_title,
+					R.string.complication_weak_solar_activity_desc));
 		}
 		if (degreesFromClosestPole > 35) {
 			complications.add(new AuroraComplication(
 					NONE,
-					R.string.complication_too_far_away_title,
-					R.string.complication_too_far_away_desc));
+					R.string.complication_bad_location_title,
+					R.string.complication_bad_location_desc));
 		}
 		return complications;
 		// TODO fill out the rest

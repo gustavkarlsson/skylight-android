@@ -36,7 +36,7 @@ public class GeocoderAddressProvider implements AddressProvider {
 		} catch (InterruptedException | ExecutionException e) {
 			throw new UserFriendlyException(R.string.error_unknown_update_error, e);
 		} catch (TimeoutException e) {
-			throw new UserFriendlyException(R.string.error_update_took_too_long, e);
+			throw new UserFriendlyException(R.string.error_updating_took_too_long, e);
 		}
 	}
 
