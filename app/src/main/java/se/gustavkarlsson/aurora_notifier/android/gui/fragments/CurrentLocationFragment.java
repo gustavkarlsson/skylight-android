@@ -17,6 +17,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,8 @@ import android.widget.Toast;
 import org.parceler.Parcels;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -60,6 +63,7 @@ public class CurrentLocationFragment extends Fragment {
 
 	private static final String STATE_AURORA_EVALUATION = "STATE_AURORA_EVALUATION";
 	private static final String CACHE_KEY_EVALUATION = "CACHE_KEY_EVALUATION";
+	private static final long TIME_RESOLUTION_MILLIS = DateUtils.MINUTE_IN_MILLIS;
 
 	private final ServiceConnection updaterConnection = new UpdaterConnection();
 
@@ -87,11 +91,15 @@ public class CurrentLocationFragment extends Fragment {
 	@BindView(R.id.chance)
 	TextView chanceTextView;
 
+	@BindView(R.id.time_since_update)
+	TextView timeSinceUpdateTextView;
+
 	@BindView(R.id.location)
 	TextView locationTextView;
 
 	private Unbinder unbinder;
 	private BottomSheetBehavior bottomSheetBehavior;
+	private Timer timeUpdateTimer;
 
 	private Updater updater;
 	private boolean updaterBound;
@@ -143,21 +151,21 @@ public class CurrentLocationFragment extends Fragment {
 				return evaluation;
 			}
 		}
-		return createUpdatingEvaluation();
+		return createUnknownEvaluation();
 	}
 
-	private static AuroraEvaluation createUpdatingEvaluation() {
+	private static AuroraEvaluation createUnknownEvaluation() {
 		AuroraData data = new AuroraData(
 				new SolarActivity(0),
 				new GeomagneticLocation(0),
 				new SunPosition(0),
 				new Weather(0)
 		);
-		AuroraComplication updatingComplication = new AuroraComplication(
+		AuroraComplication unknownComplication = new AuroraComplication(
 				AuroraChance.UNKNOWN,
-				R.string.complication_updating_title,
-				R.string.complication_updating_desc);
-		return new AuroraEvaluation(0, null, data, singletonList(updatingComplication));
+				R.string.complication_no_data_title,
+				R.string.complication_no_data_desc);
+		return new AuroraEvaluation(0, null, data, singletonList(unknownComplication));
 	}
 
 	@Override
@@ -175,11 +183,34 @@ public class CurrentLocationFragment extends Fragment {
 
 	private void updateViews() {
 		updateLocationView();
+		timeSinceUpdateTextView.setText(formatRelativeTime(evaluation.getTimestampMillis()));
+		scheduleTimeSinceUpdateRefresh();
 		chanceTextView.setText(evaluation.getChance().getResourceId());
 		complicationsAdapter.setItems(evaluation.getComplications());
 		complicationsAdapter.notifyDataSetChanged();
-		updateBottomSheetState();
 		rootView.invalidate();
+	}
+
+	private void scheduleTimeSinceUpdateRefresh() {
+		updateBottomSheetState();
+		if (timeUpdateTimer != null) {
+			timeUpdateTimer.cancel();
+		}
+		timeUpdateTimer = new Timer();
+		timeUpdateTimer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				long timestampMillis = evaluation.getTimestampMillis();
+				timeSinceUpdateTextView.post(() -> {
+					timeSinceUpdateTextView.setText(formatRelativeTime(timestampMillis));
+					timeSinceUpdateTextView.invalidate();
+				});
+			}
+		}, 1000L, TIME_RESOLUTION_MILLIS);
+	}
+
+	private static CharSequence formatRelativeTime(long startTimeMillis) {
+		return DateUtils.getRelativeTimeSpanString(startTimeMillis, System.currentTimeMillis(), TIME_RESOLUTION_MILLIS);
 	}
 
 	private void updateLocationView() {
@@ -295,6 +326,7 @@ public class CurrentLocationFragment extends Fragment {
 	@Override
 	public void onDestroyView() {
 		Log.v(TAG, "onDestroyView");
+		timeUpdateTimer.cancel();
 		swipeRefreshLayout.setOnRefreshListener(null);
 		unbinder.unbind();
 		super.onDestroyView();
@@ -328,6 +360,7 @@ public class CurrentLocationFragment extends Fragment {
 				AsyncTask.execute(updater::update);
 			}
 		}
+
 		@Override
 		public void onServiceDisconnected(ComponentName name) {
 			Log.v(TAG, "onServiceDisconnected");

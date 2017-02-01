@@ -45,8 +45,8 @@
 		You are too far away from any magnetic pole to see any aurora right now.
 	</string>
 
-	<string name="complication_updating_title">Updating…</string>
-	<string name="complication_updating_desc">
-		The app is updating the current information. Please wait, or pull down to refresh.
+	<string name="complication_no_data_title">No data</string>
+	<string name="complication_no_data_desc">
+		The app does not have enough data to evaluate the current aurora chance. Please wait a bit, or pull down to refresh.
 	</string>
 </resources>

@@ -26,9 +26,17 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_centerInParent="true"
-				android:textSize="64sp"
+				android:textSize="40sp"
 				android:textStyle="bold"
-				tools:text="Medium" />
+				tools:text="Medium Chance" />
+
+			<TextView
+				android:id="@+id/time_since_update"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_alignStart="@id/chance"
+				android:layout_above="@id/chance"
+				tools:text="3 minutes ago" />
 
 			<TextView
 				android:id="@+id/location"
