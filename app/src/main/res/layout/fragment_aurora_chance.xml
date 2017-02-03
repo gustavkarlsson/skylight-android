@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/fragment_aurora_chance_root_view"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".gui.fragments.AuroraChanceFragment">
+
+	<TextView
+		android:id="@+id/chance"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		android:textSize="40sp"
+		android:textStyle="bold"
+		tools:text="Medium Chance" />
+
+	<TextView
+		android:id="@+id/time_since_update"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_above="@id/chance"
+		android:layout_alignStart="@id/chance"
+		tools:text="3 minutes ago" />
+
+	<TextView
+		android:id="@+id/location"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignEnd="@id/chance"
+		android:layout_below="@id/chance"
+		tools:text="Frankfurt" />
+
+</RelativeLayout>

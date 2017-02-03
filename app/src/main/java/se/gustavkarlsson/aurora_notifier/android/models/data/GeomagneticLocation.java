@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.models.factors;
+package se.gustavkarlsson.aurora_notifier.android.models.data;
 
 import org.parceler.Parcel;
 

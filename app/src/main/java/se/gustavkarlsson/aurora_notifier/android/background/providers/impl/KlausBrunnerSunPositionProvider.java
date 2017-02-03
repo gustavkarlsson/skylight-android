@@ -8,7 +8,7 @@ import java.util.GregorianCalendar;
 import javax.inject.Inject;
 
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SunPositionProvider;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
+import se.gustavkarlsson.aurora_notifier.android.models.data.SunPosition;
 
 public class KlausBrunnerSunPositionProvider implements SunPositionProvider {
 

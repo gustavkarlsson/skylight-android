@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SolarActivityProvider;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.SolarActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.data.SolarActivity;
 
 
 public class UpdateSolarActivityTask extends AsyncTask<Object, Void, SolarActivity> {

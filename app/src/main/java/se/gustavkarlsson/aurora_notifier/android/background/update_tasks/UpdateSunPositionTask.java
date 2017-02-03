@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SunPositionProvider;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
+import se.gustavkarlsson.aurora_notifier.android.models.data.SunPosition;
 
 
 public class UpdateSunPositionTask extends AsyncTask<Object, Void, SunPosition> {

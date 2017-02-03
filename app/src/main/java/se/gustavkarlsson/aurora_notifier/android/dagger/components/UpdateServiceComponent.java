@@ -17,6 +17,7 @@ import se.gustavkarlsson.aurora_notifier.android.dagger.modules.WeatherModule;
 		GeomagneticLocationModule.class,
 		AuroraDataModule.class
 })
+@SuppressWarnings("WeakerAccess")
 public interface UpdateServiceComponent {
 	void inject(UpdateService updateService);
 }

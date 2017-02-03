@@ -22,10 +22,10 @@ import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateS
 import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateSunPositionTask;
 import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateWeatherTask;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocation;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.SolarActivity;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
+import se.gustavkarlsson.aurora_notifier.android.models.data.GeomagneticLocation;
+import se.gustavkarlsson.aurora_notifier.android.models.data.SolarActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.data.SunPosition;
+import se.gustavkarlsson.aurora_notifier.android.models.data.Weather;
 import se.gustavkarlsson.aurora_notifier.android.util.Alarm;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 

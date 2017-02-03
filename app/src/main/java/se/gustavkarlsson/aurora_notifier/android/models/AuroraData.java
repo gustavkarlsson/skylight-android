@@ -2,10 +2,10 @@ package se.gustavkarlsson.aurora_notifier.android.models;
 
 import org.parceler.Parcel;
 
-import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocation;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.SolarActivity;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
+import se.gustavkarlsson.aurora_notifier.android.models.data.GeomagneticLocation;
+import se.gustavkarlsson.aurora_notifier.android.models.data.SolarActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.data.SunPosition;
+import se.gustavkarlsson.aurora_notifier.android.models.data.Weather;
 
 @Parcel
 public class AuroraData {

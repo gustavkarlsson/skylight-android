@@ -10,7 +10,7 @@ import dagger.Reusable;
 import retrofit2.Response;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SolarActivityProvider;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.SolarActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.data.SolarActivity;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/fragment_aurora_complications_root_view"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".gui.fragments.AuroraComplicationsFragment">
+
+	<TextView
+		android:id="@+id/why"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+		android:paddingTop="@dimen/activity_vertical_margin"
+		android:height="56dp"
+		android:text="@string/why" />
+
+	<ListView
+		android:id="@+id/complications_list_view"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/why"
+		tools:listitem="@layout/view_complication" />
+
+</RelativeLayout>

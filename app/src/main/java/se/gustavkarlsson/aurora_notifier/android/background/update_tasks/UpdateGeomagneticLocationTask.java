@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagneticLocationProvider;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocation;
+import se.gustavkarlsson.aurora_notifier.android.models.data.GeomagneticLocation;
 
 
 public class UpdateGeomagneticLocationTask extends AsyncTask<Object, Void, GeomagneticLocation> {

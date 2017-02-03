@@ -24,7 +24,6 @@ import se.gustavkarlsson.aurora_notifier.android.background.providers.AddressPro
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraDataProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.LocationProvider;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdateServiceComponent;
-import se.gustavkarlsson.aurora_notifier.android.dagger.components.UpdateServiceComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GoogleLocationModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.WeatherModule;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraDataComplicationsEvaluator;
@@ -61,11 +60,11 @@ public class UpdateService extends GcmTaskService implements Updater {
 	public void onCreate() {
 		Log.v(TAG, "onCreate");
 		super.onCreate();
-		UpdateServiceComponent component = DaggerUpdateServiceComponent.builder()
+		DaggerUpdateServiceComponent.builder()
 				.googleLocationModule(new GoogleLocationModule(this))
 				.weatherModule(new WeatherModule(this.getString(R.string.api_key_openweathermap)))
-				.build();
-		component.inject(this);
+				.build()
+				.inject(this);
 		updateTimeoutMillis = getResources().getInteger(R.integer.update_timeout_millis);
 		binder = new UpdaterBinder(this);
 	}

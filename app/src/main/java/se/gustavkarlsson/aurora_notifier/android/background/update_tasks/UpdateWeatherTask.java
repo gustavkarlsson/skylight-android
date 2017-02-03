@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherProvider;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
+import se.gustavkarlsson.aurora_notifier.android.models.data.Weather;
 
 
 public class UpdateWeatherTask extends AsyncTask<Object, Void, Weather> {
