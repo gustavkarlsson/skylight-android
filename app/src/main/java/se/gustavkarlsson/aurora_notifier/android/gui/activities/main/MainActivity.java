@@ -71,12 +71,12 @@ public class MainActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 		evaluation = getBestEvaluation(savedInstanceState);
 		swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+		setupSwipeToRefresh();
 		updateReceivers = getUpdateReceivers();
 		broadcastManager = LocalBroadcastManager.getInstance(this);
 		broadcastReceiver = createBroadcastReceiver();
 		bottomSheetPresenter = new BottomSheetPresenter(findViewById(R.id.bottom_sheet));
 		update(evaluation);
-		setupSwipeToRefresh();
 	}
 
 	private AuroraEvaluation getBestEvaluation(Bundle savedInstanceState) {
@@ -92,6 +92,15 @@ public class MainActivity extends AppCompatActivity {
 			}
 		}
 		return AuroraEvaluation.createFallback();
+	}
+
+	private void setupSwipeToRefresh() {
+		swipeRefreshLayout.setOnRefreshListener(() -> {
+			if (updaterBound) {
+				swipeRefreshLayout.setRefreshing(true);
+				AsyncTask.execute(updater::update);
+			}
+		});
 	}
 
 	private List<AuroraEvaluationUpdateListener> getUpdateReceivers() {
@@ -121,15 +130,6 @@ public class MainActivity extends AppCompatActivity {
 				}
 			}
 		};
-	}
-
-	private void setupSwipeToRefresh() {
-		swipeRefreshLayout.setOnRefreshListener(() -> {
-			if (updaterBound) {
-				swipeRefreshLayout.setRefreshing(true);
-				AsyncTask.execute(updater::update);
-			}
-		});
 	}
 
 	private void update(AuroraEvaluation evaluation) {
@@ -173,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
 	public void onStart() {
 		Log.v(TAG, "onStart");
 		super.onStart();
+		swipeRefreshLayout.setRefreshing(false);
 		broadcastManager.registerReceiver((broadcastReceiver),
 				new IntentFilter(UpdateService.RESPONSE_UPDATE_FINISHED));
 		broadcastManager.registerReceiver((broadcastReceiver),
