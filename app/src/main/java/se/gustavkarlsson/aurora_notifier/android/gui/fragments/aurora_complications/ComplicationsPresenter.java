@@ -11,12 +11,12 @@ import java.util.List;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 
 class ComplicationsPresenter {
-	private final ComplicationsListAdapter complicationsListAdapter;
 	private final Context context;
+	private final ComplicationsListAdapter complicationsListAdapter;
 
-	ComplicationsPresenter(ListView complicationsListView, Context context) {
-		this.complicationsListAdapter = new ComplicationsListAdapter(context);
-		this.context = context;
+	ComplicationsPresenter(ListView complicationsListView) {
+		context = complicationsListView.getContext();
+		complicationsListAdapter = new ComplicationsListAdapter(context);
 		complicationsListView.setAdapter(complicationsListAdapter);
 		complicationsListView.setOnItemClickListener(new PopupDescriptionClickListener());
 	}

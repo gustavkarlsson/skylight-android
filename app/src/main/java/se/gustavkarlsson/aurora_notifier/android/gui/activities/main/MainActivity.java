@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 				.inject(this);
 		setContentView(R.layout.activity_main);
 		evaluation = getBestEvaluation(savedInstanceState);
-		swipeToRefreshPresenter = new SwipeToRefreshPresenter(this, (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout));
+		swipeToRefreshPresenter = new SwipeToRefreshPresenter((SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout));
 		updateReceivers = getUpdateReceivers();
 		broadcastReceiver = createBroadcastReceiver();
 		bottomSheetPresenter = new BottomSheetPresenter(findViewById(R.id.bottom_sheet));

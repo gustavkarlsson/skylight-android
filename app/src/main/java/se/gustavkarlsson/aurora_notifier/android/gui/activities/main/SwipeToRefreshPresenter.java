@@ -22,8 +22,8 @@ class SwipeToRefreshPresenter {
 	private Updater updater;
 	private boolean updaterBound;
 
-	SwipeToRefreshPresenter(Context context, SwipeRefreshLayout swipeRefreshLayout) {
-		this.context = context;
+	SwipeToRefreshPresenter(SwipeRefreshLayout swipeRefreshLayout) {
+		this.context = swipeRefreshLayout.getContext();
 		this.swipeRefreshLayout = swipeRefreshLayout;
 
 		// TODO extract inner class

@@ -24,7 +24,7 @@ public class AuroraComplicationsFragment extends Fragment implements AuroraEvalu
 		Log.v(TAG, "onCreateView");
 		rootView = inflater.inflate(R.layout.fragment_aurora_complications, container, false);
 
-		complicationsPresenter = new ComplicationsPresenter((ListView) rootView.findViewById(R.id.complications_list_view), getContext());
+		complicationsPresenter = new ComplicationsPresenter((ListView) rootView.findViewById(R.id.complications_list_view));
 		return rootView;
 	}
 
