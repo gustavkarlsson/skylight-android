@@ -17,7 +17,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import org.parceler.Parcels;
@@ -28,8 +27,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import se.gustavkarlsson.aurora_notifier.android.BuildConfig;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.DebugActivity;
@@ -53,12 +50,7 @@ public class MainActivity extends AppCompatActivity {
 	@Inject
 	PersistentCache<Parcelable> persistentCache;
 
-	@BindView(R.id.swipe_refresh_layout)
-	SwipeRefreshLayout swipeRefreshLayout;
-
-	@BindView(R.id.bottom_sheet)
-	View bottomSheetView;
-
+	private SwipeRefreshLayout swipeRefreshLayout;
 	private AuroraEvaluation evaluation;
 	private List<AuroraEvaluationUpdateListener> updateReceivers;
 	private LocalBroadcastManager broadcastManager;
@@ -77,12 +69,12 @@ public class MainActivity extends AppCompatActivity {
 				.build()
 				.inject(this);
 		setContentView(R.layout.activity_main);
-		ButterKnife.bind(this);
 		evaluation = getBestEvaluation(savedInstanceState);
+		swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
 		updateReceivers = getUpdateReceivers();
 		broadcastManager = LocalBroadcastManager.getInstance(this);
 		broadcastReceiver = createBroadcastReceiver();
-		bottomSheetPresenter = new BottomSheetPresenter(bottomSheetView);
+		bottomSheetPresenter = new BottomSheetPresenter(findViewById(R.id.bottom_sheet));
 		update(evaluation);
 		setupSwipeToRefresh();
 	}

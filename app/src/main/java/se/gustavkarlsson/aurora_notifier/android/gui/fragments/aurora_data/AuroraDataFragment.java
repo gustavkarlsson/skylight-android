@@ -7,9 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
 import se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView;
@@ -19,27 +16,12 @@ import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 public class AuroraDataFragment extends Fragment implements AuroraEvaluationUpdateListener {
 	private static final String TAG = AuroraDataFragment.class.getSimpleName();
 
-	@BindView(R.id.fragment_aurora_data_root_view)
-	View rootView;
-
-	@BindView(R.id.aurora_data_solar_activity)
-	AuroraDataView solarActivityView;
-
-	@BindView(R.id.aurora_data_geomagnetic_location)
-	AuroraDataView geomagneticLocationView;
-
-	@BindView(R.id.aurora_data_weather)
-	AuroraDataView weatherView;
-
-	@BindView(R.id.aurora_data_sun_position)
-	AuroraDataView sunPositionView;
+	private View rootView;
 
 	private SolarActivityPresenter solarActivityPresenter;
 	private GeomagneticLocationPresenter geomagneticLocationPresenter;
 	private WeatherPresenter weatherPresenter;
 	private SunPositionPresenter sunPositionPresenter;
-
-	private Unbinder unbinder;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,21 +32,13 @@ public class AuroraDataFragment extends Fragment implements AuroraEvaluationUpda
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.v(TAG, "onCreateView");
-		View rootView = inflater.inflate(R.layout.fragment_aurora_data, container, false);
-		unbinder = ButterKnife.bind(this, rootView);
+		rootView = inflater.inflate(R.layout.fragment_aurora_data, container, false);
 
-		solarActivityPresenter = new SolarActivityPresenter(solarActivityView);
-		geomagneticLocationPresenter = new GeomagneticLocationPresenter(geomagneticLocationView);
-		weatherPresenter = new WeatherPresenter(weatherView);
-		sunPositionPresenter = new SunPositionPresenter(sunPositionView);
+		solarActivityPresenter = new SolarActivityPresenter((AuroraDataView) getActivity().findViewById(R.id.aurora_data_solar_activity));
+		geomagneticLocationPresenter = new GeomagneticLocationPresenter((AuroraDataView) getActivity().findViewById(R.id.aurora_data_geomagnetic_location));
+		weatherPresenter = new WeatherPresenter((AuroraDataView) getActivity().findViewById(R.id.aurora_data_weather));
+		sunPositionPresenter = new SunPositionPresenter((AuroraDataView) getActivity().findViewById(R.id.aurora_data_sun_position));
 		return rootView;
-	}
-
-	@Override
-	public void onDestroyView() {
-		Log.v(TAG, "onDestroyView");
-		unbinder.unbind();
-		super.onDestroyView();
 	}
 
 	@Override

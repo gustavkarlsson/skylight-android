@@ -9,9 +9,6 @@ import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 
@@ -57,10 +54,10 @@ class ComplicationsListAdapter extends BaseAdapter {
 	}
 
 	static class ViewHolder {
-		@BindView(R.id.complication_title) TextView titleTextView;
+		private final TextView titleTextView;
 
 		ViewHolder(View view) {
-			ButterKnife.bind(this, view);
+			titleTextView = (TextView) view.findViewById(R.id.complication_title);
 		}
 	}
 }

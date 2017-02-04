@@ -9,9 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
@@ -19,32 +16,20 @@ import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 public class AuroraChanceFragment extends Fragment implements AuroraEvaluationUpdateListener {
 	private static final String TAG = AuroraChanceFragment.class.getSimpleName();
 
-	@BindView(R.id.fragment_aurora_chance_root_view)
-	View rootView;
-
-	@BindView(R.id.chance)
-	TextView chanceTextView;
-
-	@BindView(R.id.time_since_update)
-	TextView timeSinceUpdateTextView;
-
-	@BindView(R.id.location)
-	TextView locationTextView;
+	private View rootView;
 
 	private LocationPresenter locationPresenter;
 	private TimeSinceUpdatePresenter timeSinceUpdatePresenter;
 	private ChancePresenter chancePresenter;
 
-	private Unbinder unbinder;
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.v(TAG, "onCreateView");
-		View rootView = inflater.inflate(R.layout.fragment_aurora_chance, container, false);
-		unbinder = ButterKnife.bind(this, rootView);
-		locationPresenter = new LocationPresenter(locationTextView);
-		timeSinceUpdatePresenter = new TimeSinceUpdatePresenter(timeSinceUpdateTextView, DateUtils.MINUTE_IN_MILLIS);
-		chancePresenter = new ChancePresenter(chanceTextView);
+		rootView = inflater.inflate(R.layout.fragment_aurora_chance, container, false);
+
+		locationPresenter = new LocationPresenter((TextView) getActivity().findViewById(R.id.location));
+		timeSinceUpdatePresenter = new TimeSinceUpdatePresenter((TextView) getActivity().findViewById(R.id.time_since_update), DateUtils.MINUTE_IN_MILLIS);
+		chancePresenter = new ChancePresenter((TextView) getActivity().findViewById(R.id.chance));
 		return rootView;
 	}
 
@@ -60,7 +45,6 @@ public class AuroraChanceFragment extends Fragment implements AuroraEvaluationUp
 	public void onDestroyView() {
 		Log.v(TAG, "onDestroyView");
 		timeSinceUpdatePresenter.destroy();
-		unbinder.unbind();
 		super.onDestroyView();
 	}
 }
