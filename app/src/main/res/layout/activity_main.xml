@@ -30,7 +30,7 @@
 
 			<fragment
 				android:id="@+id/fragment_aurora_data"
-				android:name="se.gustavkarlsson.aurora_notifier.android.gui.fragments.AuroraDataFragment"
+				android:name="se.gustavkarlsson.aurora_notifier.android.gui.fragments.aurora_data.AuroraDataFragment"
 				android:layout_width="match_parent"
 				android:layout_height="0dp"
 				android:layout_weight="6"

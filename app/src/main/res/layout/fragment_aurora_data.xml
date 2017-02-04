@@ -5,7 +5,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:orientation="vertical"
-	tools:context=".gui.fragments.AuroraDataFragment">
+	tools:context=".gui.fragments.aurora_data.AuroraDataFragment">
 
 	<Space
 		android:id="@+id/grid_center"
@@ -13,44 +13,32 @@
 		android:layout_height="wrap_content"
 		android:layout_centerInParent="true" />
 
-	<ImageView
+	<se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView
+		android:id="@+id/aurora_data_solar_activity"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignBottom="@id/grid_center"
-		android:layout_alignEnd="@id/grid_center"
-		android:minHeight="100dp"
-		android:minWidth="100dp"
-		android:scaleType="fitCenter"
-		tools:src="@drawable/common_google_signin_btn_icon_dark_pressed" />
+		android:layout_alignEnd="@id/grid_center" />
 
-	<ImageView
+	<se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView
+		android:id="@+id/aurora_data_geomagnetic_location"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignBottom="@id/grid_center"
-		android:layout_alignStart="@id/grid_center"
-		android:minHeight="100dp"
-		android:minWidth="100dp"
-		android:scaleType="fitCenter"
-		tools:src="@drawable/common_google_signin_btn_icon_dark_pressed" />
+		android:layout_alignStart="@id/grid_center" />
 
-	<ImageView
+	<se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView
+		android:id="@+id/aurora_data_weather"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_alignEnd="@id/grid_center"
 		android:layout_alignTop="@id/grid_center"
-		android:minHeight="100dp"
-		android:minWidth="100dp"
-		android:scaleType="fitCenter"
-		tools:src="@drawable/common_google_signin_btn_icon_dark_pressed" />
+		android:layout_alignEnd="@id/grid_center" />
 
-	<ImageView
+	<se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView
+		android:id="@+id/aurora_data_sun_position"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_alignStart="@id/grid_center"
 		android:layout_alignTop="@id/grid_center"
-		android:minHeight="100dp"
-		android:minWidth="100dp"
-		android:scaleType="fitCenter"
-		tools:src="@drawable/common_google_signin_btn_icon_dark_pressed" />
+		android:layout_alignStart="@id/grid_center" />
 
 </RelativeLayout>
