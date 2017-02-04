@@ -1,5 +1,6 @@
 package se.gustavkarlsson.aurora_notifier.android.gui.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
@@ -29,19 +30,23 @@ public class AuroraDataView extends LinearLayout {
 		init(context, attrs);
 	}
 
+	@SuppressLint("SetTextI18n")
 	private void init(Context context, AttributeSet attrs) {
 		inflate(getContext(), R.layout.view_aurora_data, this);
 		if (attrs != null) {
-			TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.AuroraDataView, 0, 0);
+			TypedArray auroraDataViewAttributes = context.obtainStyledAttributes(attrs, R.styleable.AuroraDataView);
 			try {
-				Drawable drawable = a.getDrawable(R.styleable.AuroraDataView_drawable);
+				Drawable drawable = auroraDataViewAttributes.getDrawable(R.styleable.AuroraDataView_drawable);
 				ImageView imageView = (ImageView) findViewById(R.id.aurora_data_image);
 				imageView.setImageDrawable(drawable);
 			} finally {
-				a.recycle();
+				auroraDataViewAttributes.recycle();
 			}
 		}
 		dataValueView = (TextView) findViewById(R.id.aurora_data_value);
+		if (isInEditMode()) {
+			dataValueView.setText("value");
+		}
 	}
 
 	public void setValue(String value) {

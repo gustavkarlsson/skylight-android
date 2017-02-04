@@ -20,7 +20,9 @@
 		android:layout_height="wrap_content"
 		android:layout_alignBottom="@id/grid_center"
 		android:layout_alignEnd="@id/grid_center"
-		custom:drawable="@drawable/ic_timeline_white_96dp"/>
+		android:paddingBottom="16dp"
+		android:paddingEnd="16dp"
+		custom:drawable="@drawable/ic_timeline_white_48dp"/>
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView
 		android:id="@+id/aurora_data_geomagnetic_location"
@@ -28,7 +30,9 @@
 		android:layout_height="wrap_content"
 		android:layout_alignBottom="@id/grid_center"
 		android:layout_alignStart="@id/grid_center"
-		custom:drawable="@drawable/ic_timeline_white_96dp" />
+		android:paddingBottom="16dp"
+		android:paddingStart="16dp"
+		custom:drawable="@drawable/earth_white_48dp" />
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView
 		android:id="@+id/aurora_data_weather"
@@ -36,7 +40,9 @@
 		android:layout_height="wrap_content"
 		android:layout_alignTop="@id/grid_center"
 		android:layout_alignEnd="@id/grid_center"
-		custom:drawable="@drawable/ic_timeline_white_96dp" />
+		android:paddingTop="16dp"
+		android:paddingEnd="16dp"
+		custom:drawable="@drawable/partly_cloudy_white_48dp" />
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView
 		android:id="@+id/aurora_data_sun_position"
@@ -44,6 +50,8 @@
 		android:layout_height="wrap_content"
 		android:layout_alignTop="@id/grid_center"
 		android:layout_alignStart="@id/grid_center"
-		custom:drawable="@drawable/ic_timeline_white_96dp" />
+		android:paddingTop="16dp"
+		android:paddingStart="16dp"
+		custom:drawable="@drawable/sunset_white_48dp" />
 
 </RelativeLayout>
