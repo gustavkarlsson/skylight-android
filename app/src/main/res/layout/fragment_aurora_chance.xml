@@ -16,19 +16,19 @@
 		tools:text="Medium Chance" />
 
 	<TextView
-		android:id="@+id/time_since_update"
+		android:id="@+id/location"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_above="@id/chance"
 		android:layout_alignStart="@id/chance"
-		tools:text="3 minutes ago" />
+		tools:text="Frankfurt" />
 
 	<TextView
-		android:id="@+id/location"
+		android:id="@+id/time_since_update"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignEnd="@id/chance"
 		android:layout_below="@id/chance"
-		tools:text="Frankfurt" />
+		tools:text="3 minutes ago" />
 
 </RelativeLayout>
