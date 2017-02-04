@@ -28,7 +28,7 @@ public class PersistentCacheModule {
 		try {
 			return ParcelPersistentCache.open(context, "cache", cacheSizeBytes);
 		} catch (IOException e) {
-			Log.e(TAG, "Filed to open ParcelPersistentCache. Falling back to NullPersistentCache", e);
+			Log.e(TAG, "Failed to open ParcelPersistentCache. Falling back to NullPersistentCache", e);
 			return new NullPersistentCache<>();
 		}
 	}
