@@ -9,7 +9,7 @@ abstract class AbstractAuroraDataPresenter {
 		this.dataView = dataView;
 	}
 
-	protected void setDataValue(String value) {
+	void setDataValue(String value) {
 		dataView.setValue(value);
 	}
 }

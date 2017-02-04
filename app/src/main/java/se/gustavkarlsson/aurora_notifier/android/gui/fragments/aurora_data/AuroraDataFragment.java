@@ -34,10 +34,10 @@ public class AuroraDataFragment extends Fragment implements AuroraEvaluationUpda
 		Log.v(TAG, "onCreateView");
 		rootView = inflater.inflate(R.layout.fragment_aurora_data, container, false);
 
-		solarActivityPresenter = new SolarActivityPresenter((AuroraDataView) getActivity().findViewById(R.id.aurora_data_solar_activity));
-		geomagneticLocationPresenter = new GeomagneticLocationPresenter((AuroraDataView) getActivity().findViewById(R.id.aurora_data_geomagnetic_location));
-		weatherPresenter = new WeatherPresenter((AuroraDataView) getActivity().findViewById(R.id.aurora_data_weather));
-		sunPositionPresenter = new SunPositionPresenter((AuroraDataView) getActivity().findViewById(R.id.aurora_data_sun_position));
+		solarActivityPresenter = new SolarActivityPresenter((AuroraDataView) rootView.findViewById(R.id.aurora_data_solar_activity));
+		geomagneticLocationPresenter = new GeomagneticLocationPresenter((AuroraDataView) rootView.findViewById(R.id.aurora_data_geomagnetic_location));
+		weatherPresenter = new WeatherPresenter((AuroraDataView) rootView.findViewById(R.id.aurora_data_weather));
+		sunPositionPresenter = new SunPositionPresenter((AuroraDataView) rootView.findViewById(R.id.aurora_data_sun_position));
 		return rootView;
 	}
 
