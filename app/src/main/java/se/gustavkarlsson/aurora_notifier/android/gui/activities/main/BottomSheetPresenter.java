@@ -9,11 +9,9 @@ import java.util.List;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 
 class BottomSheetPresenter {
-	private final View bottomSheetView;
 	private final BottomSheetBehavior bottomSheetBehavior;
 
 	BottomSheetPresenter(View bottomSheetView) {
-		this.bottomSheetView = bottomSheetView;
 		bottomSheetBehavior = createBottomSheetBehavior(bottomSheetView);
 		bottomSheetView.setOnClickListener(new ExpandOnClickListener());
 	}
