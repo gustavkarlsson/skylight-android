@@ -3,7 +3,7 @@
 	<string name="geomagnetic_location_title">Geomagnetic location</string>
 	<string name="geomagnetic_location_desc">
 		Your geomagnetic location is the distance from your closest geomagnetic pole.
-		The best place to see the aurora is at around 23&#176;.
+		The best place to see the aurora is at around 23°.
 		Earth\'s geomagnetic poles are located close to its geographic poles.
 	</string>
 	<string name="solar_activity_title">Geomagnetic activity</string>
@@ -20,8 +20,8 @@
 	<string name="sun_position_title">Sun position</string>
 	<string name="sun_position_desc">
 		As the aurora is only visible in the dark, the position of the sun is highly important.
-		This value shows the sun\'s position in degrees, ranging for 0&#176;
-		(right above your head) to 180&#176; (other side of the globe).
-		The sun sets at 90&#176; and a value higher than 108&#176; is considered twilight.
+		This value shows the sun\'s position in degrees, ranging for 0°
+		(right above your head) to 180° (other side of the globe).
+		The sun sets at 90° and a value higher than 108° is considered twilight.
 	</string>
 </resources>
