@@ -10,10 +10,10 @@ import android.view.ViewGroup;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateReceiver;
+import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 
-public class AuroraDataFragment extends Fragment implements AuroraEvaluationUpdateReceiver {
+public class AuroraDataFragment extends Fragment implements AuroraEvaluationUpdateListener {
 	private static final String TAG = AuroraDataFragment.class.getSimpleName();
 
 	private Unbinder unbinder;
@@ -40,7 +40,7 @@ public class AuroraDataFragment extends Fragment implements AuroraEvaluationUpda
 	}
 
 	@Override
-	public void update(AuroraEvaluation evaluation) {
+	public void onUpdate(AuroraEvaluation evaluation) {
 
 	}
 }

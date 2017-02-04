@@ -42,7 +42,7 @@ import se.gustavkarlsson.aurora_notifier.android.caching.PersistentCache;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerMainActivityComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.PersistentCacheModule;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationProvider;
-import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateReceiver;
+import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraChance;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements AuroraEvaluationP
 
 	private int evaluationLifeMillis;
 	private AuroraEvaluation evaluation;
-	private List<AuroraEvaluationUpdateReceiver> updateReceivers = emptyList();
+	private List<AuroraEvaluationUpdateListener> updateReceivers = emptyList();
 	private LocalBroadcastManager broadcastManager;
 	private BroadcastReceiver broadcastReceiver;
 	private BottomSheetBehavior bottomSheetBehavior;
@@ -132,12 +132,12 @@ public class MainActivity extends AppCompatActivity implements AuroraEvaluationP
 		return new AuroraEvaluation(0, null, data, singletonList(unknownComplication));
 	}
 
-	private List<AuroraEvaluationUpdateReceiver> findUpdateReceivers() {
+	private List<AuroraEvaluationUpdateListener> findUpdateReceivers() {
 		FragmentManager fragmentManager = getSupportFragmentManager();
-		List<AuroraEvaluationUpdateReceiver> updateReceivers = new LinkedList<>();
-		updateReceivers.add((AuroraEvaluationUpdateReceiver) fragmentManager.findFragmentById(R.id.fragment_aurora_chance));
-		updateReceivers.add((AuroraEvaluationUpdateReceiver) fragmentManager.findFragmentById(R.id.fragment_aurora_data));
-		updateReceivers.add((AuroraEvaluationUpdateReceiver) fragmentManager.findFragmentById(R.id.fragment_aurora_complications));
+		List<AuroraEvaluationUpdateListener> updateReceivers = new LinkedList<>();
+		updateReceivers.add((AuroraEvaluationUpdateListener) fragmentManager.findFragmentById(R.id.fragment_aurora_chance));
+		updateReceivers.add((AuroraEvaluationUpdateListener) fragmentManager.findFragmentById(R.id.fragment_aurora_data));
+		updateReceivers.add((AuroraEvaluationUpdateListener) fragmentManager.findFragmentById(R.id.fragment_aurora_complications));
 		return updateReceivers;
 	}
 
@@ -202,8 +202,8 @@ public class MainActivity extends AppCompatActivity implements AuroraEvaluationP
 
 	private void update(AuroraEvaluation evaluation) {
 		updateBottomSheetState(evaluation);
-		for (AuroraEvaluationUpdateReceiver receiver : updateReceivers) {
-			receiver.update(evaluation);
+		for (AuroraEvaluationUpdateListener receiver : updateReceivers) {
+			receiver.onUpdate(evaluation);
 		}
 	}
 

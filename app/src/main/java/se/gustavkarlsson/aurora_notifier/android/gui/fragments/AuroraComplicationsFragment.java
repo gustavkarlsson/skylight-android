@@ -17,12 +17,12 @@ import butterknife.OnItemClick;
 import butterknife.Unbinder;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationProvider;
-import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateReceiver;
+import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.MainActivity;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 
-public class AuroraComplicationsFragment extends Fragment implements AuroraEvaluationUpdateReceiver {
+public class AuroraComplicationsFragment extends Fragment implements AuroraEvaluationUpdateListener {
 	private static final String TAG = AuroraComplicationsFragment.class.getSimpleName();
 
 	@BindView(R.id.fragment_aurora_complications_root_view)
@@ -78,7 +78,7 @@ public class AuroraComplicationsFragment extends Fragment implements AuroraEvalu
 	}
 
 	@Override
-	public void update(AuroraEvaluation evaluation) {
+	public void onUpdate(AuroraEvaluation evaluation) {
 		complicationsAdapter.setItems(evaluation.getComplications());
 		complicationsAdapter.notifyDataSetChanged();
 		rootView.invalidate();

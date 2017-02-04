@@ -1,6 +1,5 @@
-package se.gustavkarlsson.aurora_notifier.android.gui.fragments;
+package se.gustavkarlsson.aurora_notifier.android.gui.fragments.aurora_chance;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.format.DateUtils;
@@ -17,12 +16,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationProvider;
-import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateReceiver;
-import se.gustavkarlsson.aurora_notifier.android.gui.activities.MainActivity;
+import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 
-public class AuroraChanceFragment extends Fragment implements AuroraEvaluationUpdateReceiver {
+public class AuroraChanceFragment extends Fragment implements AuroraEvaluationUpdateListener {
 	private static final String TAG = AuroraChanceFragment.class.getSimpleName();
 
 	private static final long UPDATE_TIME_RESOLUTION_MILLIS = DateUtils.MINUTE_IN_MILLIS;
@@ -40,7 +37,6 @@ public class AuroraChanceFragment extends Fragment implements AuroraEvaluationUp
 	TextView locationTextView;
 
 	private Unbinder unbinder;
-	private AuroraEvaluationProvider evaluationProvider;
 	private Timer timeUpdateTimer;
 
 	@Override
@@ -48,25 +44,17 @@ public class AuroraChanceFragment extends Fragment implements AuroraEvaluationUp
 		Log.v(TAG, "onCreateView");
 		View rootView = inflater.inflate(R.layout.fragment_aurora_chance, container, false);
 		unbinder = ButterKnife.bind(this, rootView);
-		update(getEvaluation());
 		return rootView;
 	}
 
 	@Override
-	public void onAttach(Context context) {
-		Log.v(TAG, "onAttach");
-		super.onAttach(context);
-		evaluationProvider = (MainActivity) context;
-	}
-
-	@Override
-	public void update(AuroraEvaluation evaluation) {
+	public void onUpdate(AuroraEvaluation evaluation) {
 		if (evaluation == null) {
 			return;
 		}
 		updateLocationView(evaluation);
-		scheduleTimeSinceUpdateRefresh();
-		updateTimeSinceUpdate(getEvaluation());
+		scheduleTimeSinceUpdateRefresh(evaluation.getTimestampMillis());
+		updateTimeSinceUpdate(evaluation.getTimestampMillis());
 		chanceTextView.setText(evaluation.getChance().getResourceId());
 		rootView.invalidate();
 	}
@@ -81,7 +69,7 @@ public class AuroraChanceFragment extends Fragment implements AuroraEvaluationUp
 		}
 	}
 
-	private void scheduleTimeSinceUpdateRefresh() {
+	private void scheduleTimeSinceUpdateRefresh(long updateTimestampMillis) {
 		if (timeUpdateTimer != null) {
 			timeUpdateTimer.cancel();
 		}
@@ -89,37 +77,28 @@ public class AuroraChanceFragment extends Fragment implements AuroraEvaluationUp
 		timeUpdateTimer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				timeSinceUpdateTextView.post(() -> {
-					AuroraEvaluation evaluation = getEvaluation();
-					if (evaluation != null) {
-						updateTimeSinceUpdate(evaluation);
-					}
-				});
+				timeSinceUpdateTextView.post(() -> updateTimeSinceUpdate(updateTimestampMillis));
 			}
 		}, 1000L, UPDATE_TIME_RESOLUTION_MILLIS);
 	}
 
-	private void updateTimeSinceUpdate(AuroraEvaluation evaluation) {
-		if (isJustNow(evaluation.getTimestampMillis())) {
+	private void updateTimeSinceUpdate(long updateTimeMillis) {
+		if (isJustNow(updateTimeMillis)) {
 			timeSinceUpdateTextView.setText(R.string.just_now);
 			return;
 		}
-		CharSequence text = formatRelativeTime(evaluation.getTimestampMillis());
+		CharSequence text = formatRelativeTime(updateTimeMillis);
 		timeSinceUpdateTextView.setText(text);
 		timeSinceUpdateTextView.invalidate();
 	}
 
-	private static boolean isJustNow(long timestampMillis) {
-		long ageMillis = System.currentTimeMillis() - timestampMillis;
+	private static boolean isJustNow(long timeMillis) {
+		long ageMillis = System.currentTimeMillis() - timeMillis;
 		return ageMillis <= UPDATE_TIME_RESOLUTION_MILLIS;
 	}
 
 	private static CharSequence formatRelativeTime(long startTimeMillis) {
 		return DateUtils.getRelativeTimeSpanString(startTimeMillis, System.currentTimeMillis(), UPDATE_TIME_RESOLUTION_MILLIS);
-	}
-
-	private AuroraEvaluation getEvaluation() {
-		return evaluationProvider == null ? null : evaluationProvider.getEvaluation();
 	}
 
 	@Override

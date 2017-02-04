@@ -97,7 +97,7 @@ public class UpdateService extends GcmTaskService implements Updater {
 
 	@Override
 	public boolean update() {
-		Log.v(TAG, "update");
+		Log.v(TAG, "onUpdate");
 		try {
 			AuroraEvaluation evaluation = getEvaluation(updateTimeoutMillis);
 			broadcastEvaluation(evaluation);
