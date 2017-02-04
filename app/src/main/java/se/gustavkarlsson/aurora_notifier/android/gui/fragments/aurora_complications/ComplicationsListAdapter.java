@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.gui.fragments;
+package se.gustavkarlsson.aurora_notifier.android.gui.fragments.aurora_complications;
 
 import android.content.Context;
 import android.view.LayoutInflater;

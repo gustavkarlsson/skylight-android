@@ -52,7 +52,7 @@
 
 		<fragment
 			android:id="@+id/fragment_aurora_complications"
-			android:name="se.gustavkarlsson.aurora_notifier.android.gui.fragments.AuroraComplicationsFragment"
+			android:name="se.gustavkarlsson.aurora_notifier.android.gui.fragments.aurora_complications.AuroraComplicationsFragment"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			tools:layout="@layout/fragment_aurora_complications" />
