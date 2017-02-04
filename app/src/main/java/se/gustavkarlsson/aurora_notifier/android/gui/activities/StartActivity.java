@@ -11,6 +11,7 @@ import android.util.Log;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.ScheduleUpdatesBootReceiver;
+import se.gustavkarlsson.aurora_notifier.android.gui.activities.main.MainActivity;
 import se.gustavkarlsson.aurora_notifier.android.realm.Requirements;
 import se.gustavkarlsson.aurora_notifier.android.util.GooglePlayServicesUtils;
 import se.gustavkarlsson.aurora_notifier.android.util.LocationPermissionUtils;

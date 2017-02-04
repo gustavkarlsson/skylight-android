@@ -2,7 +2,7 @@ package se.gustavkarlsson.aurora_notifier.android.dagger.components;
 
 import dagger.Component;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.PersistentCacheModule;
-import se.gustavkarlsson.aurora_notifier.android.gui.activities.MainActivity;
+import se.gustavkarlsson.aurora_notifier.android.gui.activities.main.MainActivity;
 
 @Component(modules = PersistentCacheModule.class)
 @SuppressWarnings("WeakerAccess")

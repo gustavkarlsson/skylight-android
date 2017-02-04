@@ -25,7 +25,7 @@ public class PersistentCacheModule {
 	}
 
 	@Provides
-	PersistentCache<Parcelable> provideParcelableCache() {
+	PersistentCache<Parcelable> providePersistentCache() {
 		try {
 			return ParcelPersistentCache.open(context, "cache", cacheSizeBytes);
 		} catch (IOException e) {

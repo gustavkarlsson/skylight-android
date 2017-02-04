@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.gui.activities;
+package se.gustavkarlsson.aurora_notifier.android.gui.activities.main;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -10,8 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -32,7 +30,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import se.gustavkarlsson.aurora_notifier.android.BuildConfig;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.DebugActivity;
@@ -41,21 +38,12 @@ import se.gustavkarlsson.aurora_notifier.android.background.Updater;
 import se.gustavkarlsson.aurora_notifier.android.caching.PersistentCache;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerMainActivityComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.PersistentCacheModule;
-import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationProvider;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
-import se.gustavkarlsson.aurora_notifier.android.models.AuroraChance;
-import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
-import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
-import se.gustavkarlsson.aurora_notifier.android.models.data.GeomagneticLocation;
-import se.gustavkarlsson.aurora_notifier.android.models.data.SolarActivity;
-import se.gustavkarlsson.aurora_notifier.android.models.data.SunPosition;
-import se.gustavkarlsson.aurora_notifier.android.models.data.Weather;
 
-import static java.util.Collections.singletonList;
 import static se.gustavkarlsson.aurora_notifier.android.background.UpdateService.CACHE_KEY_EVALUATION;
 
-public class MainActivity extends AppCompatActivity implements AuroraEvaluationProvider {
+public class MainActivity extends AppCompatActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
 
 	private static final String STATE_AURORA_EVALUATION = "STATE_AURORA_EVALUATION";
@@ -71,12 +59,11 @@ public class MainActivity extends AppCompatActivity implements AuroraEvaluationP
 	@BindView(R.id.bottom_sheet)
 	View bottomSheetView;
 
-	private int evaluationLifeMillis;
 	private AuroraEvaluation evaluation;
 	private List<AuroraEvaluationUpdateListener> updateReceivers;
 	private LocalBroadcastManager broadcastManager;
 	private BroadcastReceiver broadcastReceiver;
-	private BottomSheetBehavior bottomSheetBehavior;
+	private BottomSheetPresenter bottomSheetPresenter;
 
 	private Updater updater;
 	private boolean updaterBound;
@@ -91,17 +78,16 @@ public class MainActivity extends AppCompatActivity implements AuroraEvaluationP
 				.inject(this);
 		setContentView(R.layout.activity_main);
 		ButterKnife.bind(this);
-		evaluationLifeMillis = getResources().getInteger(R.integer.foreground_evaluation_life_millis);
-		evaluation = getSavedEvaluation(savedInstanceState);
-		updateReceivers = findUpdateReceivers();
+		evaluation = getBestEvaluation(savedInstanceState);
+		updateReceivers = getUpdateReceivers();
 		broadcastManager = LocalBroadcastManager.getInstance(this);
 		broadcastReceiver = createBroadcastReceiver();
-		bottomSheetBehavior = createBottomSheetBehavior(bottomSheetView);
+		bottomSheetPresenter = new BottomSheetPresenter(bottomSheetView);
 		update(evaluation);
 		setupSwipeToRefresh();
 	}
 
-	private AuroraEvaluation getSavedEvaluation(Bundle savedInstanceState) {
+	private AuroraEvaluation getBestEvaluation(Bundle savedInstanceState) {
 		if (savedInstanceState != null) {
 			Parcelable parcelable = savedInstanceState.getParcelable(STATE_AURORA_EVALUATION);
 			return Parcels.unwrap(parcelable);
@@ -113,25 +99,10 @@ public class MainActivity extends AppCompatActivity implements AuroraEvaluationP
 				return evaluation;
 			}
 		}
-		return createUnknownEvaluation();
+		return AuroraEvaluation.createFallback();
 	}
 
-	// TODO Move this somewhere else
-	private static AuroraEvaluation createUnknownEvaluation() {
-		AuroraData data = new AuroraData(
-				new SolarActivity(0),
-				new GeomagneticLocation(0),
-				new SunPosition(0),
-				new Weather(0)
-		);
-		AuroraComplication unknownComplication = new AuroraComplication(
-				AuroraChance.UNKNOWN,
-				R.string.complication_no_data_title,
-				R.string.complication_no_data_desc);
-		return new AuroraEvaluation(0, null, data, singletonList(unknownComplication));
-	}
-
-	private List<AuroraEvaluationUpdateListener> findUpdateReceivers() {
+	private List<AuroraEvaluationUpdateListener> getUpdateReceivers() {
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		List<AuroraEvaluationUpdateListener> updateReceivers = new LinkedList<>();
 		updateReceivers.add((AuroraEvaluationUpdateListener) fragmentManager.findFragmentById(R.id.fragment_aurora_chance));
@@ -160,29 +131,6 @@ public class MainActivity extends AppCompatActivity implements AuroraEvaluationP
 		};
 	}
 
-	private static BottomSheetBehavior createBottomSheetBehavior(View bottomSheetView) {
-		final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView);
-		ensureSizeIsRecalculatedOnInteraction(bottomSheetBehavior);
-		return bottomSheetBehavior;
-	}
-
-	//Workaround for bug described in http://stackoverflow.com/a/40267305/940731
-	private static void ensureSizeIsRecalculatedOnInteraction(BottomSheetBehavior bottomSheetBehavior) {
-		bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-			@Override
-			public void onStateChanged(@NonNull final View bottomSheet, int newState) {
-				bottomSheet.post(() -> {
-					bottomSheet.requestLayout();
-					bottomSheet.invalidate();
-				});
-			}
-
-			@Override
-			public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-			}
-		});
-	}
-
 	private void setupSwipeToRefresh() {
 		swipeRefreshLayout.setOnRefreshListener(() -> {
 			if (updaterBound) {
@@ -192,25 +140,10 @@ public class MainActivity extends AppCompatActivity implements AuroraEvaluationP
 		});
 	}
 
-	@OnClick(R.id.bottom_sheet)
-	void onClick() {
-		if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
-			bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-		}
-	}
-
 	private void update(AuroraEvaluation evaluation) {
-		updateBottomSheetState(evaluation);
+		bottomSheetPresenter.update(evaluation.getComplications());
 		for (AuroraEvaluationUpdateListener receiver : updateReceivers) {
 			receiver.onUpdate(evaluation);
-		}
-	}
-
-	private void updateBottomSheetState(AuroraEvaluation evaluation) {
-		if (evaluation.getComplications().isEmpty()) {
-			bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-		} else if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
-			bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 		}
 	}
 
@@ -281,7 +214,6 @@ public class MainActivity extends AppCompatActivity implements AuroraEvaluationP
 		Log.v(TAG, "onSaveInstanceState");
 		Parcelable parcel = Parcels.wrap(evaluation);
 		outState.putParcelable(STATE_AURORA_EVALUATION, parcel);
-		persistentCache.set(CACHE_KEY_EVALUATION, parcel);
 		super.onSaveInstanceState(outState);
 	}
 
@@ -298,16 +230,6 @@ public class MainActivity extends AppCompatActivity implements AuroraEvaluationP
 		super.onDestroy();
 	}
 
-	@Override
-	public AuroraEvaluation getEvaluation() {
-		return evaluation;
-	}
-
-	private boolean evaluationExpired() {
-		long expiryTime = evaluation.getTimestampMillis() + evaluationLifeMillis;
-		return System.currentTimeMillis() > expiryTime;
-	}
-
 	private class UpdaterConnection implements ServiceConnection {
 
 		@Override
@@ -316,9 +238,6 @@ public class MainActivity extends AppCompatActivity implements AuroraEvaluationP
 			UpdateService.UpdaterBinder updaterBinder = (UpdateService.UpdaterBinder) service;
 			updater = updaterBinder.getUpdater();
 			updaterBound = true;
-			if (evaluationExpired()) {
-				AsyncTask.execute(updater::update);
-			}
 		}
 
 		@Override
