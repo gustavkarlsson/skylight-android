@@ -1,14 +1,10 @@
 package se.gustavkarlsson.aurora_notifier.android.gui.activities.main;
 
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
@@ -31,7 +27,6 @@ import se.gustavkarlsson.aurora_notifier.android.BuildConfig;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.DebugActivity;
 import se.gustavkarlsson.aurora_notifier.android.background.UpdateService;
-import se.gustavkarlsson.aurora_notifier.android.background.Updater;
 import se.gustavkarlsson.aurora_notifier.android.caching.PersistentCache;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerMainActivityComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.PersistentCacheModule;
@@ -45,20 +40,14 @@ public class MainActivity extends AppCompatActivity {
 
 	private static final String STATE_AURORA_EVALUATION = "STATE_AURORA_EVALUATION";
 
-	private final ServiceConnection updaterConnection = new MainActivity.UpdaterConnection();
-
 	@Inject
 	PersistentCache<Parcelable> persistentCache;
 
-	private SwipeRefreshLayout swipeRefreshLayout;
 	private AuroraEvaluation evaluation;
+	private SwipeToRefreshPresenter swipeToRefreshPresenter;
 	private List<AuroraEvaluationUpdateListener> updateReceivers;
-	private LocalBroadcastManager broadcastManager;
 	private BroadcastReceiver broadcastReceiver;
 	private BottomSheetPresenter bottomSheetPresenter;
-
-	private Updater updater;
-	private boolean updaterBound;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,10 +59,8 @@ public class MainActivity extends AppCompatActivity {
 				.inject(this);
 		setContentView(R.layout.activity_main);
 		evaluation = getBestEvaluation(savedInstanceState);
-		swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-		setupSwipeToRefresh();
+		swipeToRefreshPresenter = new SwipeToRefreshPresenter(this, (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout));
 		updateReceivers = getUpdateReceivers();
-		broadcastManager = LocalBroadcastManager.getInstance(this);
 		broadcastReceiver = createBroadcastReceiver();
 		bottomSheetPresenter = new BottomSheetPresenter(findViewById(R.id.bottom_sheet));
 		update(evaluation);
@@ -94,15 +81,6 @@ public class MainActivity extends AppCompatActivity {
 		return AuroraEvaluation.createFallback();
 	}
 
-	private void setupSwipeToRefresh() {
-		swipeRefreshLayout.setOnRefreshListener(() -> {
-			if (updaterBound) {
-				swipeRefreshLayout.setRefreshing(true);
-				AsyncTask.execute(updater::update);
-			}
-		});
-	}
-
 	private List<AuroraEvaluationUpdateListener> getUpdateReceivers() {
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		List<AuroraEvaluationUpdateListener> updateReceivers = new LinkedList<>();
@@ -116,9 +94,7 @@ public class MainActivity extends AppCompatActivity {
 		return new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				if (swipeRefreshLayout != null) {
-					swipeRefreshLayout.setRefreshing(false);
-				}
+				swipeToRefreshPresenter.setRefreshing(false);
 				String action = intent.getAction();
 				if (UpdateService.RESPONSE_UPDATE_FINISHED.equals(action)) {
 					Parcelable evaluationParcel = intent.getParcelableExtra(UpdateService.RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION);
@@ -126,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
 					update(evaluation);
 				} else if (UpdateService.RESPONSE_UPDATE_ERROR.equals(action)) {
 					String message = intent.getStringExtra(UpdateService.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE);
-					Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+					Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
 				}
 			}
 		};
@@ -173,33 +149,19 @@ public class MainActivity extends AppCompatActivity {
 	public void onStart() {
 		Log.v(TAG, "onStart");
 		super.onStart();
-		swipeRefreshLayout.setRefreshing(false);
-		broadcastManager.registerReceiver((broadcastReceiver),
+		swipeToRefreshPresenter.start();
+		LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver),
 				new IntentFilter(UpdateService.RESPONSE_UPDATE_FINISHED));
-		broadcastManager.registerReceiver((broadcastReceiver),
+		LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver),
 				new IntentFilter(UpdateService.RESPONSE_UPDATE_ERROR));
-		bindUpdater();
-	}
-
-	private void bindUpdater() {
-		Intent intent = new Intent(this, UpdateService.class);
-		bindService(intent, updaterConnection, Context.BIND_AUTO_CREATE);
 	}
 
 	@Override
 	public void onStop() {
 		Log.v(TAG, "onStop");
-		swipeRefreshLayout.setRefreshing(false);
-		broadcastManager.unregisterReceiver(broadcastReceiver);
-		unbindUpdater();
+		swipeToRefreshPresenter.stop();
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
 		super.onStop();
-	}
-
-	private void unbindUpdater() {
-		if (updaterBound) {
-			unbindService(updaterConnection);
-			updaterBound = false;
-		}
 	}
 
 	@Override
@@ -213,31 +175,11 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onDestroy() {
 		Log.v(TAG, "onDestroy");
-
-		swipeRefreshLayout.setOnRefreshListener(null);
 		try {
 			persistentCache.close();
 		} catch (IOException e) {
 			Log.e(TAG, "Failed to close cache", e);
 		}
 		super.onDestroy();
-	}
-
-	private class UpdaterConnection implements ServiceConnection {
-
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder service) {
-			Log.v(TAG, "onServiceConnected");
-			UpdateService.UpdaterBinder updaterBinder = (UpdateService.UpdaterBinder) service;
-			updater = updaterBinder.getUpdater();
-			updaterBound = true;
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName name) {
-			Log.v(TAG, "onServiceDisconnected");
-			updaterBound = false;
-		}
-
 	}
 }
