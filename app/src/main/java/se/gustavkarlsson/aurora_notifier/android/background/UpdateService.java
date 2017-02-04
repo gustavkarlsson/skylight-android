@@ -15,6 +15,7 @@ import com.google.android.gms.gcm.TaskParams;
 
 import org.parceler.Parcels;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -23,8 +24,10 @@ import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AddressProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraDataProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.LocationProvider;
+import se.gustavkarlsson.aurora_notifier.android.caching.PersistentCache;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdateServiceComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GoogleLocationModule;
+import se.gustavkarlsson.aurora_notifier.android.dagger.modules.PersistentCacheModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.WeatherModule;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraDataComplicationsEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
@@ -37,6 +40,7 @@ import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 public class UpdateService extends GcmTaskService implements Updater {
 	private static final String TAG = UpdateService.class.getSimpleName();
 
+	public static final String CACHE_KEY_EVALUATION = "CACHE_KEY_EVALUATION";
 	public static final String REQUEST_UPDATE = TAG + ".REQUEST_UPDATE";
 	public static final String RESPONSE_UPDATE_ERROR = TAG + ".RESPONSE_UPDATE_ERROR";
 	public static final String RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE = TAG + ".RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE";
@@ -52,6 +56,9 @@ public class UpdateService extends GcmTaskService implements Updater {
 	@Inject
 	AddressProvider addressProvider;
 
+	@Inject
+	PersistentCache<Parcelable> persistentCache;
+
 	private int updateTimeoutMillis;
 
 	private Binder binder;
@@ -63,6 +70,7 @@ public class UpdateService extends GcmTaskService implements Updater {
 		DaggerUpdateServiceComponent.builder()
 				.googleLocationModule(new GoogleLocationModule(this))
 				.weatherModule(new WeatherModule(this.getString(R.string.api_key_openweathermap)))
+				.persistentCacheModule(new PersistentCacheModule(this))
 				.build()
 				.inject(this);
 		updateTimeoutMillis = getResources().getInteger(R.integer.update_timeout_millis);
@@ -101,6 +109,7 @@ public class UpdateService extends GcmTaskService implements Updater {
 		try {
 			AuroraEvaluation evaluation = getEvaluation(updateTimeoutMillis);
 			broadcastEvaluation(evaluation);
+			saveToCache(evaluation);
 			return true;
 		} catch (UserFriendlyException e) {
 			String errorMessage = getApplicationContext().getString(e.getStringResourceId());
@@ -137,6 +146,22 @@ public class UpdateService extends GcmTaskService implements Updater {
 			intent.putExtra(RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE, message);
 		}
 		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+	}
+
+	private void saveToCache(AuroraEvaluation evaluation) {
+		Parcelable parcel = Parcels.wrap(evaluation);
+		persistentCache.set(CACHE_KEY_EVALUATION, parcel);
+	}
+
+	@Override
+	public void onDestroy() {
+		Log.v(TAG, "onUpdate");
+		try {
+			persistentCache.close();
+		} catch (IOException e) {
+			Log.e(TAG, "Failed to close cache", e);
+		}
+		super.onDestroy();
 	}
 
 	public static class UpdaterBinder extends Binder {

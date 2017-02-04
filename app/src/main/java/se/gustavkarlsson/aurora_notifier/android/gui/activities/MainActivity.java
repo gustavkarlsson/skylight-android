@@ -1,6 +1,5 @@
 package se.gustavkarlsson.aurora_notifier.android.gui.activities;
 
-import android.support.v4.app.FragmentManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -13,6 +12,7 @@ import android.os.IBinder;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -52,19 +52,18 @@ import se.gustavkarlsson.aurora_notifier.android.models.data.SolarActivity;
 import se.gustavkarlsson.aurora_notifier.android.models.data.SunPosition;
 import se.gustavkarlsson.aurora_notifier.android.models.data.Weather;
 
-import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
+import static se.gustavkarlsson.aurora_notifier.android.background.UpdateService.CACHE_KEY_EVALUATION;
 
 public class MainActivity extends AppCompatActivity implements AuroraEvaluationProvider {
 	private static final String TAG = MainActivity.class.getSimpleName();
 
 	private static final String STATE_AURORA_EVALUATION = "STATE_AURORA_EVALUATION";
-	private static final String CACHE_KEY_EVALUATION = "CACHE_KEY_EVALUATION";
 
 	private final ServiceConnection updaterConnection = new MainActivity.UpdaterConnection();
 
 	@Inject
-	PersistentCache<Parcelable> evaluationPersistentCache;
+	PersistentCache<Parcelable> persistentCache;
 
 	@BindView(R.id.swipe_refresh_layout)
 	SwipeRefreshLayout swipeRefreshLayout;
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements AuroraEvaluationP
 
 	private int evaluationLifeMillis;
 	private AuroraEvaluation evaluation;
-	private List<AuroraEvaluationUpdateListener> updateReceivers = emptyList();
+	private List<AuroraEvaluationUpdateListener> updateReceivers;
 	private LocalBroadcastManager broadcastManager;
 	private BroadcastReceiver broadcastReceiver;
 	private BottomSheetBehavior bottomSheetBehavior;
@@ -87,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements AuroraEvaluationP
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		DaggerMainActivityComponent.builder()
-				.persistentCacheModule(new PersistentCacheModule(this, getResources().getInteger(R.integer.cache_size_bytes)))
+				.persistentCacheModule(new PersistentCacheModule(this))
 				.build()
 				.inject(this);
 		setContentView(R.layout.activity_main);
@@ -107,8 +106,8 @@ public class MainActivity extends AppCompatActivity implements AuroraEvaluationP
 			Parcelable parcelable = savedInstanceState.getParcelable(STATE_AURORA_EVALUATION);
 			return Parcels.unwrap(parcelable);
 		}
-		if (evaluationPersistentCache.exists(CACHE_KEY_EVALUATION)) {
-			Parcelable parcelable = evaluationPersistentCache.get(CACHE_KEY_EVALUATION);
+		if (persistentCache.exists(CACHE_KEY_EVALUATION)) {
+			Parcelable parcelable = persistentCache.get(CACHE_KEY_EVALUATION);
 			AuroraEvaluation evaluation = Parcels.unwrap(parcelable);
 			if (evaluation != null) {
 				return evaluation;
@@ -282,8 +281,7 @@ public class MainActivity extends AppCompatActivity implements AuroraEvaluationP
 		Log.v(TAG, "onSaveInstanceState");
 		Parcelable parcel = Parcels.wrap(evaluation);
 		outState.putParcelable(STATE_AURORA_EVALUATION, parcel);
-		Parcelable parcelable = Parcels.wrap(evaluation);
-		evaluationPersistentCache.set(CACHE_KEY_EVALUATION, parcelable);
+		persistentCache.set(CACHE_KEY_EVALUATION, parcel);
 		super.onSaveInstanceState(outState);
 	}
 
@@ -293,7 +291,7 @@ public class MainActivity extends AppCompatActivity implements AuroraEvaluationP
 
 		swipeRefreshLayout.setOnRefreshListener(null);
 		try {
-			evaluationPersistentCache.close();
+			persistentCache.close();
 		} catch (IOException e) {
 			Log.e(TAG, "Failed to close cache", e);
 		}

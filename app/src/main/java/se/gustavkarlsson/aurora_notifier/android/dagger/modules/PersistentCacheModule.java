@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import dagger.Module;
 import dagger.Provides;
+import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.caching.ParcelPersistentCache;
 import se.gustavkarlsson.aurora_notifier.android.caching.PersistentCache;
 
@@ -18,9 +19,9 @@ public class PersistentCacheModule {
 	private final Context context;
 	private final int cacheSizeBytes;
 
-	public PersistentCacheModule(Context context, int cacheSizeBytes) {
+	public PersistentCacheModule(Context context) {
 		this.context = context;
-		this.cacheSizeBytes = cacheSizeBytes;
+		this.cacheSizeBytes = context.getResources().getInteger(R.integer.cache_size_bytes);
 	}
 
 	@Provides
