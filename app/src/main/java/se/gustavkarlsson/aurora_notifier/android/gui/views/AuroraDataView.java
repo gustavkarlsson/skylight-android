@@ -1,6 +1,8 @@
 package se.gustavkarlsson.aurora_notifier.android.gui.views;
 
 import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -10,32 +12,36 @@ import se.gustavkarlsson.aurora_notifier.android.R;
 
 
 public class AuroraDataView extends LinearLayout {
-	private ImageView dataImageView;
 	private TextView dataValueView;
 
 	public AuroraDataView(Context context) {
 		super(context);
-		setViews();
+		init(context, null);
 	}
 
 	public AuroraDataView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		setViews();
+		init(context, attrs);
 	}
 
 	public AuroraDataView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
-		setViews();
+		init(context, attrs);
 	}
 
-	private void setViews() {
+	private void init(Context context, AttributeSet attrs) {
 		inflate(getContext(), R.layout.view_aurora_data, this);
-		dataImageView = (ImageView) findViewById(R.id.aurora_data_image);
+		if (attrs != null) {
+			TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.AuroraDataView, 0, 0);
+			try {
+				Drawable drawable = a.getDrawable(R.styleable.AuroraDataView_drawable);
+				ImageView imageView = (ImageView) findViewById(R.id.aurora_data_image);
+				imageView.setImageDrawable(drawable);
+			} finally {
+				a.recycle();
+			}
+		}
 		dataValueView = (TextView) findViewById(R.id.aurora_data_value);
-	}
-
-	public void setImage(int resourceId) {
-		dataImageView.setImageResource(resourceId);
 	}
 
 	public void setValue(String value) {

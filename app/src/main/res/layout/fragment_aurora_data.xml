@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
+	xmlns:custom="http://schemas.android.com/apk/res-auto"
 	android:id="@+id/fragment_aurora_data_root_view"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
@@ -18,27 +19,31 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignBottom="@id/grid_center"
-		android:layout_alignEnd="@id/grid_center" />
+		android:layout_alignEnd="@id/grid_center"
+		custom:drawable="@drawable/ic_timeline_white_96dp"/>
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView
 		android:id="@+id/aurora_data_geomagnetic_location"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignBottom="@id/grid_center"
-		android:layout_alignStart="@id/grid_center" />
+		android:layout_alignStart="@id/grid_center"
+		custom:drawable="@drawable/ic_timeline_white_96dp" />
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView
 		android:id="@+id/aurora_data_weather"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignTop="@id/grid_center"
-		android:layout_alignEnd="@id/grid_center" />
+		android:layout_alignEnd="@id/grid_center"
+		custom:drawable="@drawable/ic_timeline_white_96dp" />
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView
 		android:id="@+id/aurora_data_sun_position"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignTop="@id/grid_center"
-		android:layout_alignStart="@id/grid_center" />
+		android:layout_alignStart="@id/grid_center"
+		custom:drawable="@drawable/ic_timeline_white_96dp" />
 
 </RelativeLayout>

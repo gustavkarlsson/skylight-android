@@ -53,12 +53,6 @@ public class AuroraDataFragment extends Fragment implements AuroraEvaluationUpda
 		View rootView = inflater.inflate(R.layout.fragment_aurora_data, container, false);
 		unbinder = ButterKnife.bind(this, rootView);
 
-		// TODO set these in layout instead
-		solarActivityView.setImage(R.drawable.ic_timeline_white_96dp);
-		geomagneticLocationView.setImage(R.drawable.ic_timeline_white_96dp);
-		weatherView.setImage(R.drawable.ic_timeline_white_96dp);
-		sunPositionView.setImage(R.drawable.ic_timeline_white_96dp);
-
 		solarActivityPresenter = new SolarActivityPresenter(solarActivityView);
 		geomagneticLocationPresenter = new GeomagneticLocationPresenter(geomagneticLocationView);
 		weatherPresenter = new WeatherPresenter(weatherView);
