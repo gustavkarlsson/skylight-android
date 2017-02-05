@@ -61,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
 		evaluation = getBestEvaluation(savedInstanceState);
 		swipeToRefreshPresenter = new SwipeToRefreshPresenter((SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout));
 		updateReceivers = getUpdateReceivers();
-		broadcastReceiver = createBroadcastReceiver();
 		bottomSheetPresenter = new BottomSheetPresenter(findViewById(R.id.bottom_sheet));
+		broadcastReceiver = createBroadcastReceiver();
 		update(evaluation);
 	}
 
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private BroadcastReceiver createBroadcastReceiver() {
-		return new BroadcastReceiver() {
+		BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				swipeToRefreshPresenter.setRefreshing(false);
@@ -106,6 +106,11 @@ public class MainActivity extends AppCompatActivity {
 				}
 			}
 		};
+		LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver),
+				new IntentFilter(UpdateService.RESPONSE_UPDATE_FINISHED));
+		LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver),
+				new IntentFilter(UpdateService.RESPONSE_UPDATE_ERROR));
+		return broadcastReceiver;
 	}
 
 	private void update(AuroraEvaluation evaluation) {
@@ -150,17 +155,12 @@ public class MainActivity extends AppCompatActivity {
 		Log.v(TAG, "onStart");
 		super.onStart();
 		swipeToRefreshPresenter.onStart();
-		LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver),
-				new IntentFilter(UpdateService.RESPONSE_UPDATE_FINISHED));
-		LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver),
-				new IntentFilter(UpdateService.RESPONSE_UPDATE_ERROR));
 	}
 
 	@Override
 	public void onStop() {
 		Log.v(TAG, "onStop");
 		swipeToRefreshPresenter.onStop();
-		LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
 		super.onStop();
 	}
 
@@ -175,6 +175,7 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onDestroy() {
 		Log.v(TAG, "onDestroy");
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
 		try {
 			persistentCache.close();
 		} catch (IOException e) {
