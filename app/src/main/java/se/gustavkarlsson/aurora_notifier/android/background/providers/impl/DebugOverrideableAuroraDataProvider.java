@@ -10,6 +10,7 @@ import java.util.concurrent.TimeoutException;
 import javax.inject.Inject;
 
 import dagger.Reusable;
+import io.realm.Realm;
 import java8.util.J8Arrays;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraDataProvider;
@@ -26,20 +27,21 @@ import se.gustavkarlsson.aurora_notifier.android.models.data.GeomagneticLocation
 import se.gustavkarlsson.aurora_notifier.android.models.data.SolarActivity;
 import se.gustavkarlsson.aurora_notifier.android.models.data.SunPosition;
 import se.gustavkarlsson.aurora_notifier.android.models.data.Weather;
+import se.gustavkarlsson.aurora_notifier.android.realm.DebugSettings;
 import se.gustavkarlsson.aurora_notifier.android.util.Alarm;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 @Reusable
-public class AuroraDataProviderImpl implements AuroraDataProvider {
+public class DebugOverrideableAuroraDataProvider implements AuroraDataProvider {
 	private final SolarActivityProvider solarActivityProvider;
 	private final WeatherProvider weatherProvider;
 	private final SunPositionProvider sunPositionProvider;
 	private final GeomagneticLocationProvider geomagneticLocationProvider;
 
 	@Inject
-	AuroraDataProviderImpl(SolarActivityProvider solarActivityProvider, WeatherProvider weatherProvider, SunPositionProvider sunPositionProvider, GeomagneticLocationProvider geomagneticLocationProvider) {
+	DebugOverrideableAuroraDataProvider(SolarActivityProvider solarActivityProvider, WeatherProvider weatherProvider, SunPositionProvider sunPositionProvider, GeomagneticLocationProvider geomagneticLocationProvider) {
 		this.solarActivityProvider = solarActivityProvider;
 		this.weatherProvider = weatherProvider;
 		this.sunPositionProvider = sunPositionProvider;
@@ -48,6 +50,12 @@ public class AuroraDataProviderImpl implements AuroraDataProvider {
 
 	@Override
 	public AuroraData getAuroraData(long timeoutMillis, Location location) {
+		try (Realm realm = Realm.getDefaultInstance()) {
+			DebugSettings debugSettings = DebugSettings.get(realm);
+			if (debugSettings.isEnabled()) {
+				return getDebugData(debugSettings);
+			}
+		}
 		Alarm timeoutAlarm = Alarm.start(timeoutMillis);
 		UpdateSolarActivityTask updateSolarActivityTask = new UpdateSolarActivityTask(solarActivityProvider);
 		UpdateWeatherTask updateWeatherTask = new UpdateWeatherTask(weatherProvider, location);
@@ -71,6 +79,14 @@ public class AuroraDataProviderImpl implements AuroraDataProvider {
 		} catch (InterruptedException | ExecutionException e) {
 			throw new UserFriendlyException(R.string.error_unknown_update_error, e);
 		}
+	}
+
+	private static AuroraData getDebugData(DebugSettings debugSettings) {
+		return new AuroraData(
+				new SolarActivity(debugSettings.getKpIndex()),
+				new GeomagneticLocation(debugSettings.getDegreesFromGeomagneticPole()),
+				new SunPosition(debugSettings.getSunPosition()),
+				new Weather(debugSettings.getCloudPercentage()));
 	}
 
 	private static void executeInParallel(AsyncTask... tasks) {
