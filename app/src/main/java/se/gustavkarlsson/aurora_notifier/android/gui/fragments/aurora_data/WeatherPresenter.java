@@ -19,7 +19,7 @@ class WeatherPresenter extends AbstractAuroraDataPresenter {
 		return R.string.weather_desc;
 	}
 
-	void update(Weather weather) {
+	void onUpdate(Weather weather) {
 		setDataValue(Integer.toString(weather.getCloudPercentage()) + '%');
 	}
 }

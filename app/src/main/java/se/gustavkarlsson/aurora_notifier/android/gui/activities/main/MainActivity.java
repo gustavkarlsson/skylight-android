@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void update(AuroraEvaluation evaluation) {
-		bottomSheetPresenter.update(evaluation.getComplications());
+		bottomSheetPresenter.onUpdate(evaluation.getComplications());
 		for (AuroraEvaluationUpdateListener receiver : updateReceivers) {
 			receiver.onUpdate(evaluation);
 		}
@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
 	public void onStart() {
 		Log.v(TAG, "onStart");
 		super.onStart();
-		swipeToRefreshPresenter.start();
+		swipeToRefreshPresenter.onStart();
 		LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver),
 				new IntentFilter(UpdateService.RESPONSE_UPDATE_FINISHED));
 		LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver),
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public void onStop() {
 		Log.v(TAG, "onStop");
-		swipeToRefreshPresenter.stop();
+		swipeToRefreshPresenter.onStop();
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
 		super.onStop();
 	}

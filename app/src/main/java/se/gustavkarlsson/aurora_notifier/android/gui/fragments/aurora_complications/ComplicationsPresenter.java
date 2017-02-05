@@ -21,7 +21,7 @@ class ComplicationsPresenter {
 		complicationsListView.setOnItemClickListener(new PopupDescriptionClickListener());
 	}
 
-	void update(List<AuroraComplication> complications) {
+	void onUpdate(List<AuroraComplication> complications) {
 		complicationsListAdapter.setItems(complications);
 		complicationsListAdapter.notifyDataSetChanged();
 	}

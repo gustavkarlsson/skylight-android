@@ -30,7 +30,7 @@ public class AuroraComplicationsFragment extends Fragment implements AuroraEvalu
 
 	@Override
 	public void onUpdate(AuroraEvaluation evaluation) {
-		complicationsPresenter.update(evaluation.getComplications());
+		complicationsPresenter.onUpdate(evaluation.getComplications());
 		rootView.invalidate();
 	}
 }

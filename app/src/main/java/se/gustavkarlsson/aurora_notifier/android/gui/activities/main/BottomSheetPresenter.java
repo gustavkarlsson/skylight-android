@@ -39,7 +39,7 @@ class BottomSheetPresenter {
 		});
 	}
 
-	void update(List<AuroraComplication> complications) {
+	void onUpdate(List<AuroraComplication> complications) {
 		if (complications.isEmpty()) {
 			bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 		} else if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {

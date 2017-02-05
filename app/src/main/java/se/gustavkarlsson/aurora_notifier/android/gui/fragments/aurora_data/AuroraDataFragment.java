@@ -44,10 +44,10 @@ public class AuroraDataFragment extends Fragment implements AuroraEvaluationUpda
 	@Override
 	public void onUpdate(AuroraEvaluation evaluation) {
 		AuroraData data = evaluation.getData();
-		solarActivityPresenter.update(data.getSolarActivity());
-		geomagneticLocationPresenter.update(data.getGeomagneticLocation());
-		weatherPresenter.update(data.getWeather());
-		sunPositionPresenter.update(data.getSunPosition());
+		solarActivityPresenter.onUpdate(data.getSolarActivity());
+		geomagneticLocationPresenter.onUpdate(data.getGeomagneticLocation());
+		weatherPresenter.onUpdate(data.getWeather());
+		sunPositionPresenter.onUpdate(data.getSunPosition());
 		rootView.invalidate();
 	}
 }

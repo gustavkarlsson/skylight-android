@@ -21,7 +21,7 @@ class SunPositionPresenter extends AbstractAuroraDataPresenter {
 		return R.string.sun_position_desc;
 	}
 
-	void update(SunPosition sunPosition) {
+	void onUpdate(SunPosition sunPosition) {
 		float zenithAngle = sunPosition.getZenithAngle();
 		setDataValue(String.format(Locale.getDefault(), "%.2f°", zenithAngle));
 	}

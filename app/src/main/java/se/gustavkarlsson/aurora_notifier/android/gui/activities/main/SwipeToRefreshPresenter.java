@@ -39,13 +39,13 @@ class SwipeToRefreshPresenter {
 		swipeRefreshLayout.setRefreshing(refreshing);
 	}
 
-	void start() {
+	void onStart() {
 		setRefreshing(false);
 		Intent intent = new Intent(context, UpdateService.class);
 		context.bindService(intent, updaterConnection, Context.BIND_AUTO_CREATE);
 	}
 
-	void stop() {
+	void onStop() {
 		setRefreshing(false);
 		if (updaterBound) {
 			context.unbindService(updaterConnection);

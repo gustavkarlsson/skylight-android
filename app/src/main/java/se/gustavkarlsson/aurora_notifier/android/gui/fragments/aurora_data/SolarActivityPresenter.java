@@ -19,7 +19,7 @@ class SolarActivityPresenter extends AbstractAuroraDataPresenter {
 		return R.string.solar_activity_desc;
 	}
 
-	void update(SolarActivity solarActivity) {
+	void onUpdate(SolarActivity solarActivity) {
 		float kpIndex = solarActivity.getKpIndex();
 		int whole = (int) kpIndex;
 		float part = kpIndex - whole;

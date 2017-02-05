@@ -34,10 +34,17 @@ public class AuroraChanceFragment extends Fragment implements AuroraEvaluationUp
 	}
 
 	@Override
+	public void onStart() {
+		Log.v(TAG, "onStart");
+		super.onStart();
+		timeSinceUpdatePresenter.onStart();
+	}
+
+	@Override
 	public void onUpdate(AuroraEvaluation evaluation) {
-		locationPresenter.update(evaluation.getAddress());
-		timeSinceUpdatePresenter.update(evaluation.getTimestampMillis());
-		chancePresenter.update(evaluation.getChance());
+		locationPresenter.onUpdate(evaluation.getAddress());
+		timeSinceUpdatePresenter.onUpdate(evaluation.getTimestampMillis());
+		chancePresenter.onUpdate(evaluation.getChance());
 		rootView.invalidate();
 	}
 

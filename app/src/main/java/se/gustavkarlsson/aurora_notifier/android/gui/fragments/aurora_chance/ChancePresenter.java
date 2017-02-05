@@ -11,7 +11,7 @@ class ChancePresenter {
 		this.chanceTextView = chanceTextView;
 	}
 
-	void update(AuroraChance chance) {
+	void onUpdate(AuroraChance chance) {
 		chanceTextView.setText(chance.getResourceId());
 	}
 }
