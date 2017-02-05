@@ -1,8 +1,6 @@
 package se.gustavkarlsson.aurora_notifier.android.background;
 
 import android.content.Intent;
-import android.location.Address;
-import android.location.Location;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Parcelable;
@@ -16,24 +14,17 @@ import com.google.android.gms.gcm.TaskParams;
 import org.parceler.Parcels;
 
 import java.io.IOException;
-import java.util.List;
 
 import javax.inject.Inject;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.AddressProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraDataProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.LocationProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraEvaluationProvider;
 import se.gustavkarlsson.aurora_notifier.android.caching.PersistentCache;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdateServiceComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GoogleLocationModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.PersistentCacheModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.WeatherModule;
-import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraDataComplicationsEvaluator;
-import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
-import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
-import se.gustavkarlsson.aurora_notifier.android.util.Alarm;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 
@@ -48,13 +39,7 @@ public class UpdateService extends GcmTaskService implements Updater {
 	public static final String RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION = TAG + ".RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION";
 
 	@Inject
-	LocationProvider locationProvider;
-
-	@Inject
-	AuroraDataProvider auroraDataProvider;
-
-	@Inject
-	AddressProvider addressProvider;
+	AuroraEvaluationProvider evaluationProvider;
 
 	@Inject
 	PersistentCache<Parcelable> persistentCache;
@@ -107,7 +92,7 @@ public class UpdateService extends GcmTaskService implements Updater {
 	public boolean update() {
 		Log.v(TAG, "onUpdate");
 		try {
-			AuroraEvaluation evaluation = getEvaluation(updateTimeoutMillis);
+			AuroraEvaluation evaluation = evaluationProvider.getEvaluation(updateTimeoutMillis);
 			broadcastEvaluation(evaluation);
 			saveToCache(evaluation);
 			return true;
@@ -122,15 +107,6 @@ public class UpdateService extends GcmTaskService implements Updater {
 			broadcastError(errorMessage);
 			return false;
 		}
-	}
-
-	private AuroraEvaluation getEvaluation(long timeoutMillis) {
-		Alarm timeoutAlarm = Alarm.start(timeoutMillis);
-		Location location = locationProvider.getLocation(timeoutAlarm.getRemainingTimeMillis());
-		Address address = addressProvider.getAddress(location.getLatitude(), location.getLongitude(), timeoutAlarm.getRemainingTimeMillis());
-		AuroraData auroraData = auroraDataProvider.getAuroraData(timeoutAlarm.getRemainingTimeMillis(), location);
-		List<AuroraComplication> complications = new AuroraDataComplicationsEvaluator(auroraData).evaluate();
-		return new AuroraEvaluation(System.currentTimeMillis(), address, auroraData, complications);
 	}
 
 	private void broadcastEvaluation(AuroraEvaluation evaluation) {
