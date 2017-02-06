@@ -84,6 +84,7 @@ dependencies {
 	compile "net.e175.klaus:solarpositioning:0.0.9"
 	compile "com.android.support:design:24.2.1"
 	compile "com.jakewharton:disklrucache:2.0.2"
+	compile "com.google.guava:guava:20.0" // Skip v21 as it doesn't work well with android. v22 should though
 
 	// Retrofit
 	compile "com.squareup.retrofit2:retrofit:" + retrofitVersion

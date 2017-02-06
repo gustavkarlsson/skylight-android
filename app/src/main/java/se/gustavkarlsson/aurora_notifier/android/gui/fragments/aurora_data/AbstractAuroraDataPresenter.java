@@ -6,11 +6,13 @@ import android.view.View;
 
 import se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 abstract class AbstractAuroraDataPresenter {
 	private final AuroraDataView dataView;
 
 	AbstractAuroraDataPresenter(AuroraDataView dataView) {
-		this.dataView = dataView;
+		this.dataView = checkNotNull(dataView, "dataView may not be null");
 		Context context = dataView.getContext();
 		String title = context.getString(getTitleResourceId());
 		String description = context.getString(getDescriptionResourceId());
