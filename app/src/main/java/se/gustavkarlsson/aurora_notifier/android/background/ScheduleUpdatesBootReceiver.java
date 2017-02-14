@@ -50,6 +50,7 @@ public class ScheduleUpdatesBootReceiver extends BroadcastReceiver {
 		Task task = new PeriodicTask.Builder()
 				.setService(UpdateService.class)
 				.setPeriod(periodSeconds)
+				.setRequiredNetwork(PeriodicTask.NETWORK_STATE_CONNECTED)
 				.setFlex(flexSeconds)
 				.setTag(UpdateService.REQUEST_UPDATE)
 				.setPersisted(true)
