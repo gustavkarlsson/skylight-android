@@ -38,12 +38,9 @@ import static se.gustavkarlsson.aurora_notifier.android.background.UpdateService
 public class MainActivity extends AppCompatActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
 
-	private static final String STATE_AURORA_EVALUATION = "STATE_AURORA_EVALUATION";
-
 	@Inject
 	PersistentCache<Parcelable> persistentCache;
 
-	private AuroraEvaluation evaluation;
 	private SwipeToRefreshPresenter swipeToRefreshPresenter;
 	private List<AuroraEvaluationUpdateListener> updateReceivers;
 	private BroadcastReceiver broadcastReceiver;
@@ -58,27 +55,10 @@ public class MainActivity extends AppCompatActivity {
 				.build()
 				.inject(this);
 		setContentView(R.layout.activity_main);
-		evaluation = getBestEvaluation(savedInstanceState);
 		swipeToRefreshPresenter = new SwipeToRefreshPresenter((SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout));
 		updateReceivers = getUpdateReceivers();
 		bottomSheetPresenter = new BottomSheetPresenter(findViewById(R.id.bottom_sheet));
 		broadcastReceiver = createBroadcastReceiver();
-		update(evaluation);
-	}
-
-	private AuroraEvaluation getBestEvaluation(Bundle savedInstanceState) {
-		if (savedInstanceState != null) {
-			Parcelable parcelable = savedInstanceState.getParcelable(STATE_AURORA_EVALUATION);
-			return Parcels.unwrap(parcelable);
-		}
-		if (persistentCache.exists(CACHE_KEY_EVALUATION)) {
-			Parcelable parcelable = persistentCache.get(CACHE_KEY_EVALUATION);
-			AuroraEvaluation evaluation = Parcels.unwrap(parcelable);
-			if (evaluation != null) {
-				return evaluation;
-			}
-		}
-		return AuroraEvaluation.createFallback();
 	}
 
 	private List<AuroraEvaluationUpdateListener> getUpdateReceivers() {
@@ -98,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 				String action = intent.getAction();
 				if (UpdateService.RESPONSE_UPDATE_FINISHED.equals(action)) {
 					Parcelable evaluationParcel = intent.getParcelableExtra(UpdateService.RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION);
-					evaluation = Parcels.unwrap(evaluationParcel);
+					AuroraEvaluation evaluation = Parcels.unwrap(evaluationParcel);
 					update(evaluation);
 				} else if (UpdateService.RESPONSE_UPDATE_ERROR.equals(action)) {
 					String message = intent.getStringExtra(UpdateService.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE);
@@ -154,7 +134,19 @@ public class MainActivity extends AppCompatActivity {
 	public void onStart() {
 		Log.v(TAG, "onStart");
 		super.onStart();
+		update(getBestEvaluation());
 		swipeToRefreshPresenter.onStart();
+	}
+
+	private AuroraEvaluation getBestEvaluation() {
+		if (persistentCache.exists(CACHE_KEY_EVALUATION)) {
+			Parcelable parcelable = persistentCache.get(CACHE_KEY_EVALUATION);
+			AuroraEvaluation evaluation = Parcels.unwrap(parcelable);
+			if (evaluation != null) {
+				return evaluation;
+			}
+		}
+		return AuroraEvaluation.createFallback();
 	}
 
 	@Override
@@ -162,14 +154,6 @@ public class MainActivity extends AppCompatActivity {
 		Log.v(TAG, "onStop");
 		swipeToRefreshPresenter.onStop();
 		super.onStop();
-	}
-
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		Log.v(TAG, "onSaveInstanceState");
-		Parcelable parcel = Parcels.wrap(evaluation);
-		outState.putParcelable(STATE_AURORA_EVALUATION, parcel);
-		super.onSaveInstanceState(outState);
 	}
 
 	@Override
