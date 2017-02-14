@@ -16,8 +16,8 @@ repositories {
 }
 
 android {
-	compileSdkVersion 24
-	buildToolsVersion "24.0.3"
+	compileSdkVersion 25
+	buildToolsVersion "25.0.2"
 
 	compileOptions {
 		sourceCompatibility JavaVersion.VERSION_1_8
@@ -27,9 +27,10 @@ android {
 	defaultConfig {
 		applicationId "se.gustavkarlsson.aurora_notifier.android"
 		minSdkVersion 19
-		targetSdkVersion 24
+		targetSdkVersion 25
 		versionCode 1
 		versionName "1.0"
+		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 	}
 	buildTypes {
 		release {
@@ -75,14 +76,14 @@ dependencies {
 		googlePlayServicesVersion = "10.0.1"
 		butterKnifeVersion = "8.5.1"
 	}
-	compile "com.android.support:appcompat-v7:24.2.1"
+	compile "com.android.support:appcompat-v7:25.1.1"
 	compile "com.google.android.gms:play-services-location:" + googlePlayServicesVersion
 	compile "com.google.android.gms:play-services-gcm:" + googlePlayServicesVersion
 
 	compile "com.github.gustavkarlsson:aurora-notifier-common:aurora-notifier-common-1.5.0"
 	compile "org.simpleframework:simple-xml:2.7.1"
 	compile "net.e175.klaus:solarpositioning:0.0.9"
-	compile "com.android.support:design:24.2.1"
+	compile "com.android.support:design:25.1.1"
 	compile "com.jakewharton:disklrucache:2.0.2"
 	compile "com.google.guava:guava:20.0" // Skip v21 as it doesn't work well with android. v22 should though
 
@@ -112,9 +113,13 @@ dependencies {
 	testCompile "org.mockito:mockito-core:1.10.19"
 	testCompile "commons-io:commons-io:2.4"
 	testCompile "org.assertj:assertj-core:2.5.0"
-	testCompile "org.robolectric:robolectric:3.2.2"
 	testCompile "org.powermock:powermock-api-mockito:" + powermockVersion
 	testCompile "org.powermock:powermock-module-junit4-rule-agent:" + powermockVersion
 	testCompile "org.powermock:powermock-module-junit4-rule:" + powermockVersion
 	testCompile "org.powermock:powermock-module-junit4:" + powermockVersion
+
+	androidTestCompile "com.android.support:support-annotations:25.1.1"
+	androidTestCompile "com.android.support.test:runner:0.5"
+	androidTestCompile "com.android.support.test:rules:0.5"
+	androidTestCompile "com.android.support.test.espresso:espresso-core:2.2.2"
 }
