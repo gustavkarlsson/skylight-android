@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 	@Inject
 	PersistentCache<Parcelable> persistentCache;
 
+	private long evaluationLifetimeMillis;
 	private SwipeToRefreshPresenter swipeToRefreshPresenter;
 	private List<AuroraEvaluationUpdateListener> updateReceivers;
 	private BroadcastReceiver broadcastReceiver;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 				.build()
 				.inject(this);
 		setContentView(R.layout.activity_main);
+		evaluationLifetimeMillis = getResources().getInteger(R.integer.foreground_evaluation_lifetime_millis);
 		swipeToRefreshPresenter = new SwipeToRefreshPresenter((SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout));
 		updateReceivers = getUpdateReceivers();
 		bottomSheetPresenter = new BottomSheetPresenter(findViewById(R.id.bottom_sheet));
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
 				if (UpdateService.RESPONSE_UPDATE_FINISHED.equals(action)) {
 					Parcelable evaluationParcel = intent.getParcelableExtra(UpdateService.RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION);
 					AuroraEvaluation evaluation = Parcels.unwrap(evaluationParcel);
-					update(evaluation);
+					updateGui(evaluation);
 				} else if (UpdateService.RESPONSE_UPDATE_ERROR.equals(action)) {
 					String message = intent.getStringExtra(UpdateService.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE);
 					Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
@@ -93,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 		return broadcastReceiver;
 	}
 
-	private void update(AuroraEvaluation evaluation) {
+	private void updateGui(AuroraEvaluation evaluation) {
 		bottomSheetPresenter.onUpdate(evaluation.getComplications());
 		for (AuroraEvaluationUpdateListener receiver : updateReceivers) {
 			receiver.onUpdate(evaluation);
@@ -134,7 +136,8 @@ public class MainActivity extends AppCompatActivity {
 	public void onStart() {
 		Log.v(TAG, "onStart");
 		super.onStart();
-		update(getBestEvaluation());
+		AuroraEvaluation evaluation = getBestEvaluation();
+		updateGui(evaluation);
 		swipeToRefreshPresenter.onStart();
 	}
 
