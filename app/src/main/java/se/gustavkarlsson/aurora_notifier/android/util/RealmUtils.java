@@ -24,7 +24,6 @@ public class RealmUtils {
 		try (Realm realm = Realm.getDefaultInstance()) {
 			List<Class<? extends RealmObject>> classes = singletonList(Requirements.class);
 			for (Class<? extends RealmObject> clazz : classes) {
-				// TODO do these in a single transaction
 				ensureRealmSingletonExists(realm, clazz);
 			}
 		}
