@@ -25,15 +25,15 @@ import javax.inject.Inject;
 
 import se.gustavkarlsson.aurora_notifier.android.BuildConfig;
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.background.DebugActivity;
-import se.gustavkarlsson.aurora_notifier.android.background.UpdateService;
+import se.gustavkarlsson.aurora_notifier.android.gui.activities.DebugActivity;
+import se.gustavkarlsson.aurora_notifier.android.background.UpdateJob;
 import se.gustavkarlsson.aurora_notifier.android.caching.PersistentCache;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerMainActivityComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.PersistentCacheModule;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 
-import static se.gustavkarlsson.aurora_notifier.android.background.UpdateService.CACHE_KEY_EVALUATION;
+import static se.gustavkarlsson.aurora_notifier.android.background.UpdateJob.CACHE_KEY_EVALUATION;
 
 public class MainActivity extends AppCompatActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
@@ -78,20 +78,20 @@ public class MainActivity extends AppCompatActivity {
 			public void onReceive(Context context, Intent intent) {
 				swipeToRefreshPresenter.setRefreshing(false);
 				String action = intent.getAction();
-				if (UpdateService.RESPONSE_UPDATE_FINISHED.equals(action)) {
-					Parcelable evaluationParcel = intent.getParcelableExtra(UpdateService.RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION);
+				if (UpdateJob.RESPONSE_UPDATE_FINISHED.equals(action)) {
+					Parcelable evaluationParcel = intent.getParcelableExtra(UpdateJob.RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION);
 					AuroraEvaluation evaluation = Parcels.unwrap(evaluationParcel);
 					updateGui(evaluation);
-				} else if (UpdateService.RESPONSE_UPDATE_ERROR.equals(action)) {
-					String message = intent.getStringExtra(UpdateService.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE);
+				} else if (UpdateJob.RESPONSE_UPDATE_ERROR.equals(action)) {
+					String message = intent.getStringExtra(UpdateJob.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE);
 					Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
 				}
 			}
 		};
 		LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver),
-				new IntentFilter(UpdateService.RESPONSE_UPDATE_FINISHED));
+				new IntentFilter(UpdateJob.RESPONSE_UPDATE_FINISHED));
 		LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver),
-				new IntentFilter(UpdateService.RESPONSE_UPDATE_ERROR));
+				new IntentFilter(UpdateJob.RESPONSE_UPDATE_ERROR));
 		return broadcastReceiver;
 	}
 

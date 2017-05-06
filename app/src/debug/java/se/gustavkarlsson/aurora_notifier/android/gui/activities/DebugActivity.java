@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.background;
+package se.gustavkarlsson.aurora_notifier.android.gui.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

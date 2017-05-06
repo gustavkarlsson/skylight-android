@@ -1,15 +1,12 @@
 package se.gustavkarlsson.aurora_notifier.android.background;
 
 import android.content.Intent;
-import android.os.Binder;
-import android.os.IBinder;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-import com.google.android.gms.gcm.GcmNetworkManager;
-import com.google.android.gms.gcm.GcmTaskService;
-import com.google.android.gms.gcm.TaskParams;
+import com.evernote.android.job.Job;
 
 import org.parceler.Parcels;
 
@@ -28,11 +25,10 @@ import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 
-public class UpdateService extends GcmTaskService implements Updater {
-	private static final String TAG = UpdateService.class.getSimpleName();
+public class UpdateJob extends Job {
+	private static final String TAG = UpdateJob.class.getSimpleName();
 
 	public static final String CACHE_KEY_EVALUATION = "CACHE_KEY_EVALUATION";
-	public static final String REQUEST_UPDATE = TAG + ".REQUEST_UPDATE";
 	public static final String RESPONSE_UPDATE_ERROR = TAG + ".RESPONSE_UPDATE_ERROR";
 	public static final String RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE = TAG + ".RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE";
 	public static final String RESPONSE_UPDATE_FINISHED = TAG + ".RESPONSE_UPDATE_FINISHED";
@@ -46,50 +42,31 @@ public class UpdateService extends GcmTaskService implements Updater {
 
 	private int updateTimeoutMillis;
 
-	private Binder binder;
-
+	@NonNull
 	@Override
-	public void onCreate() {
-		Log.v(TAG, "onCreate");
-		super.onCreate();
+	protected Result onRunJob(Params params) {
+		setup();
+		boolean successful = update();
+		try {
+			persistentCache.close();
+		} catch (IOException e) {
+			Log.e(TAG, "Failed to close cache", e);
+		}
+		return successful ? Result.SUCCESS : Result.FAILURE;
+	}
+
+	private void setup() {
+		Log.v(TAG, "setup");
 		DaggerUpdateServiceComponent.builder()
-				.googleLocationModule(new GoogleLocationModule(this))
-				.weatherModule(new WeatherModule(this.getString(R.string.api_key_openweathermap)))
-				.persistentCacheModule(new PersistentCacheModule(this))
+				.googleLocationModule(new GoogleLocationModule(getContext()))
+				.weatherModule(new WeatherModule(getContext().getString(R.string.api_key_openweathermap)))
+				.persistentCacheModule(new PersistentCacheModule(getContext()))
 				.build()
 				.inject(this);
-		updateTimeoutMillis = getResources().getInteger(R.integer.update_timeout_millis);
-		binder = new UpdaterBinder(this);
+		updateTimeoutMillis = getContext().getResources().getInteger(R.integer.update_timeout_millis);
 	}
 
-	@Override
-	public IBinder onBind(Intent intent) {
-		return binder;
-	}
-
-	@Override
-	public int onRunTask(TaskParams taskParams) {
-		Log.v(TAG, "onRunTask");
-		String tag = taskParams.getTag();
-		if (REQUEST_UPDATE.equals(tag)) {
-			boolean successful = update();
-			if (successful) {
-				return GcmNetworkManager.RESULT_SUCCESS;
-			}
-			return GcmNetworkManager.RESULT_RESCHEDULE;
-		}
-		return GcmNetworkManager.RESULT_FAILURE;
-	}
-
-	@Override
-	public void onInitializeTasks() {
-		Log.v(TAG, "onInitializeTasks");
-		ScheduleUpdatesBootReceiver.setupUpdateScheduling(this);
-		super.onInitializeTasks();
-	}
-
-	@Override
-	public boolean update() {
+	private boolean update() {
 		Log.v(TAG, "onUpdate");
 		try {
 			AuroraEvaluation evaluation = evaluationProvider.getEvaluation(updateTimeoutMillis);
@@ -97,13 +74,13 @@ public class UpdateService extends GcmTaskService implements Updater {
 			saveToCache(evaluation);
 			return true;
 		} catch (UserFriendlyException e) {
-			String errorMessage = getApplicationContext().getString(e.getStringResourceId());
+			String errorMessage = getContext().getString(e.getStringResourceId());
 			Log.e(TAG, "A user friendly exception occurred: " + errorMessage, e);
 			broadcastError(errorMessage);
 			return false;
 		} catch (Exception e) {
 			Log.e(TAG, "An unexpected error occurred.", e);
-			String errorMessage = getApplicationContext().getString(R.string.error_unknown_update_error);
+			String errorMessage = getContext().getString(R.string.error_unknown_update_error);
 			broadcastError(errorMessage);
 			return false;
 		}
@@ -113,7 +90,7 @@ public class UpdateService extends GcmTaskService implements Updater {
 		Intent intent = new Intent(RESPONSE_UPDATE_FINISHED);
 		Parcelable wrappedEvaluation = Parcels.wrap(evaluation);
 		intent.putExtra(RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION, wrappedEvaluation);
-		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+		LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
 	}
 
 	private void broadcastError(String message) {
@@ -121,34 +98,11 @@ public class UpdateService extends GcmTaskService implements Updater {
 		if (message != null) {
 			intent.putExtra(RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE, message);
 		}
-		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+		LocalBroadcastManager.getInstance(getContext()).sendBroadcast(intent);
 	}
 
 	private void saveToCache(AuroraEvaluation evaluation) {
 		Parcelable parcel = Parcels.wrap(evaluation);
 		persistentCache.set(CACHE_KEY_EVALUATION, parcel);
-	}
-
-	@Override
-	public void onDestroy() {
-		Log.v(TAG, "onUpdate");
-		try {
-			persistentCache.close();
-		} catch (IOException e) {
-			Log.e(TAG, "Failed to close cache", e);
-		}
-		super.onDestroy();
-	}
-
-	public static class UpdaterBinder extends Binder {
-		private final Updater updater;
-
-		private UpdaterBinder(Updater updater) {
-			this.updater = updater;
-		}
-
-		public Updater getUpdater() {
-			return updater;
-		}
 	}
 }

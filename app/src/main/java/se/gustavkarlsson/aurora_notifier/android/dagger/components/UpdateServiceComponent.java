@@ -1,7 +1,7 @@
 package se.gustavkarlsson.aurora_notifier.android.dagger.components;
 
 import dagger.Component;
-import se.gustavkarlsson.aurora_notifier.android.background.UpdateService;
+import se.gustavkarlsson.aurora_notifier.android.background.UpdateJob;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.AuroraDataModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.AuroraEvaluationModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GeomagneticLocationModule;
@@ -23,5 +23,5 @@ import se.gustavkarlsson.aurora_notifier.android.dagger.modules.WeatherModule;
 })
 @SuppressWarnings("WeakerAccess")
 public interface UpdateServiceComponent {
-	void inject(UpdateService updateService);
+	void inject(UpdateJob updateJob);
 }

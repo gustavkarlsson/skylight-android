@@ -15,7 +15,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.tasks.Task;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.background.ScheduleUpdatesBootReceiver;
+import se.gustavkarlsson.aurora_notifier.android.background.UpdateScheduler;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.main.MainActivity;
 import se.gustavkarlsson.aurora_notifier.android.realm.Requirements;
 
@@ -107,7 +107,7 @@ public class StartActivity extends AppCompatActivity {
 
 	private void startMain() {
 		Requirements.setFulfilled(true);
-		ScheduleUpdatesBootReceiver.setupUpdateScheduling(this);
+		UpdateScheduler.setupUpdateScheduling(this, true);
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 		finish();
