@@ -13,34 +13,30 @@ import se.gustavkarlsson.aurora_notifier.android.realm.Requirements;
 public class UpdateScheduler {
 	private static final String TAG = UpdateScheduler.class.getSimpleName();
 
-	static final String UPDATE_NOW = TAG + ".UPDATE_NOW";
-	static final String UPDATE_PERIODIC = TAG + ".UPDATE_PERIODIC";
+	private static final String UPDATE_JOB = TAG + ".UPDATE_JOB";
 
 	public static void initJobManager(Application application) {
 		JobManager.create(application).addJobCreator(tag -> {
-			if (tag.equals(UPDATE_NOW) || tag.equals(UPDATE_PERIODIC)) {
+			if (tag.equals(UPDATE_JOB)) {
 				return new UpdateJob();
 			}
 			return null;
 		});
 	}
 
-	// TODO Don't use a boolean here
-	public static void setupUpdateScheduling(Context context, boolean periodic) {
+	public static void setupUpdateScheduling(Context context) {
 		if (!Requirements.isFulfilled()) {
-			cancelPeriodic();
-		} else if (periodic) {
-			int periodSeconds = context.getResources().getInteger(R.integer.scheduled_update_period_seconds);
-			int flexSeconds = context.getResources().getInteger(R.integer.scheduled_update_flex_seconds);
-			schedulePeriodic(periodSeconds, flexSeconds);
+			cancelJobs();
 		} else {
-			scheduleNow();
+			int periodSeconds = context.getResources().getInteger(R.integer.scheduled_update_period_millis);
+			int flexSeconds = context.getResources().getInteger(R.integer.scheduled_update_flex_millis);
+			scheduleJob(periodSeconds, flexSeconds);
 		}
 	}
 
-	private static void schedulePeriodic(int periodSeconds, int flexSeconds) {
-		new JobRequest.Builder(UPDATE_PERIODIC)
-				.setPeriodic(periodSeconds * 1000, flexSeconds * 1000)
+	private static void scheduleJob(int periodMillis, int flexMillis) {
+		new JobRequest.Builder(UPDATE_JOB)
+				.setPeriodic(periodMillis, flexMillis)
 				.setRequiredNetworkType(JobRequest.NetworkType.NOT_ROAMING)
 				.setRequirementsEnforced(true)
 				.setPersisted(true)
@@ -50,17 +46,8 @@ public class UpdateScheduler {
 		Log.d(TAG, "Scheduling update to run periodically");
 	}
 
-	private static void cancelPeriodic() {
-		JobManager.instance().cancelAllForTag(UPDATE_PERIODIC);
+	private static void cancelJobs() {
+		JobManager.instance().cancelAllForTag(UPDATE_JOB);
 	}
-
-	private static void scheduleNow() {
-		new JobRequest.Builder(UPDATE_NOW)
-				.setExact(1)
-				.build()
-				.schedule();
-		Log.d(TAG, "Scheduling update to run NOW");
-	}
-
 
 }

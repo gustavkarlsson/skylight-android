@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<integer name="update_timeout_millis">30000</integer> <!-- 30 seconds -->
+	<integer name="background_update_timeout_millis">30000</integer> <!-- 30 seconds -->
+	<integer name="foreground_update_timeout_millis">10000</integer> <!-- 10 seconds -->
 	<integer name="foreground_evaluation_lifetime_millis">300000</integer> <!-- 5 minutes -->
 	<integer name="cache_size_bytes">10000000</integer> <!-- 10 MB -->
-	<integer name="scheduled_update_period_seconds">1200</integer>
-	<integer name="scheduled_update_flex_seconds">600</integer>
+	<integer name="scheduled_update_period_millis">1200000</integer> <!-- 20 minutes -->
+	<integer name="scheduled_update_flex_millis">600000</integer> <!-- 10 minutes -->
 </resources>

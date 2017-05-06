@@ -3,14 +3,14 @@ package se.gustavkarlsson.aurora_notifier.android.util;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.Arrays;
 import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmObject;
+import se.gustavkarlsson.aurora_notifier.android.realm.EvaluationCache;
 import se.gustavkarlsson.aurora_notifier.android.realm.Requirements;
-
-import static java.util.Collections.singletonList;
 
 public class RealmUtils {
 	private static final String TAG = RealmUtils.class.getSimpleName();
@@ -22,7 +22,7 @@ public class RealmUtils {
 		Realm.init(context);
 		deleteRealmDatabaseIfMigrationNeeded();
 		try (Realm realm = Realm.getDefaultInstance()) {
-			List<Class<? extends RealmObject>> classes = singletonList(Requirements.class);
+			List<Class<? extends RealmObject>> classes = Arrays.asList(Requirements.class, EvaluationCache.class);
 			for (Class<? extends RealmObject> clazz : classes) {
 				ensureRealmSingletonExists(realm, clazz);
 			}

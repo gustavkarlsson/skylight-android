@@ -107,7 +107,7 @@ public class StartActivity extends AppCompatActivity {
 
 	private void startMain() {
 		Requirements.setFulfilled(true);
-		UpdateScheduler.setupUpdateScheduling(this, true);
+		UpdateScheduler.setupUpdateScheduling(this);
 		Intent intent = new Intent(this, MainActivity.class);
 		startActivity(intent);
 		finish();
