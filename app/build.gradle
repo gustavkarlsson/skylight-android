@@ -68,24 +68,24 @@ gradle.projectsEvaluated {
 
 dependencies {
 	ext {
-		retrofitVersion = "2.1.0"
-		parcelerVersion = "1.1.5"
-		streamsupportVersion = "1.5.3"
-		daggerVersion = "2.8"
-		powermockVersion = "1.6.5"
-		googlePlayServicesVersion = "10.0.1"
-		butterKnifeVersion = "8.5.1"
+		retrofitVersion = "2.2.0"
+		parcelerVersion = "1.1.6"
+		streamsupportVersion = "1.5.4"
+		daggerVersion = "2.10"
+		powermockVersion = "1.6.6"
+		googlePlayServicesVersion = "10.2.4"
+		androidSupportVersion = "25.3.1"
 	}
-	compile "com.android.support:appcompat-v7:25.3.1"
+	compile "com.android.support:appcompat-v7:" + androidSupportVersion
+	compile "com.android.support:design:" + androidSupportVersion
 	compile "com.google.android.gms:play-services-location:" + googlePlayServicesVersion
 	compile "com.google.android.gms:play-services-gcm:" + googlePlayServicesVersion
-	compile "com.evernote:android-job:1.1.10"
 
+	compile "com.google.guava:guava:20.0" // Skip v21 as it doesn't work well with android. v22 should though
+	compile "com.evernote:android-job:1.1.10"
 	compile "com.github.gustavkarlsson:aurora-notifier-common:aurora-notifier-common-1.5.0"
 	compile "org.simpleframework:simple-xml:2.7.1"
 	compile "net.e175.klaus:solarpositioning:0.0.9"
-	compile "com.android.support:design:25.3.1"
-	compile "com.google.guava:guava:20.0" // Skip v21 as it doesn't work well with android. v22 should though
 
 	// Retrofit
 	compile "com.squareup.retrofit2:retrofit:" + retrofitVersion
@@ -118,7 +118,7 @@ dependencies {
 	testCompile "org.powermock:powermock-module-junit4-rule:" + powermockVersion
 	testCompile "org.powermock:powermock-module-junit4:" + powermockVersion
 
-	androidTestCompile "com.android.support:support-annotations:25.3.1"
+	androidTestCompile "com.android.support:support-annotations:" + androidSupportVersion
 	androidTestCompile "com.android.support.test:runner:0.5"
 	androidTestCompile "com.android.support.test:rules:0.5"
 	androidTestCompile "com.android.support.test.espresso:espresso-core:2.2.2"
