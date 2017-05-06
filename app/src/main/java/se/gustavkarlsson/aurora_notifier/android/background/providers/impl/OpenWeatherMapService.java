@@ -1,6 +1,5 @@
 package se.gustavkarlsson.aurora_notifier.android.background.providers.impl;
 
-
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;

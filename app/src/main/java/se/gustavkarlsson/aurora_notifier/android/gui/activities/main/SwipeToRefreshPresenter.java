@@ -9,7 +9,7 @@ import se.gustavkarlsson.aurora_notifier.android.background.Updater;
 
 class SwipeToRefreshPresenter {
 	private final SwipeRefreshLayout swipeRefreshLayout;
-	private int timeoutMillis;
+	private final int timeoutMillis;
 
 	SwipeToRefreshPresenter(SwipeRefreshLayout swipeRefreshLayout, Activity activity) {
 		this.swipeRefreshLayout = swipeRefreshLayout;

@@ -28,19 +28,19 @@ public class UpdateScheduler {
 		if (!Requirements.isFulfilled()) {
 			cancelJobs();
 		} else {
-			int periodSeconds = context.getResources().getInteger(R.integer.scheduled_update_period_millis);
-			int flexSeconds = context.getResources().getInteger(R.integer.scheduled_update_flex_millis);
-			scheduleJob(periodSeconds, flexSeconds);
+			int intervalMillis = context.getResources().getInteger(R.integer.scheduled_update_interval_millis);
+			int flexMillis = context.getResources().getInteger(R.integer.scheduled_update_flex_millis);
+			scheduleJob(intervalMillis, flexMillis);
 		}
 	}
 
-	private static void scheduleJob(int periodMillis, int flexMillis) {
+	private static void scheduleJob(int intervalMillis, int flexMillis) {
 		new JobRequest.Builder(UPDATE_JOB)
-				.setPeriodic(periodMillis, flexMillis)
-				.setRequiredNetworkType(JobRequest.NetworkType.NOT_ROAMING)
-				.setRequirementsEnforced(true)
+				.setPeriodic(intervalMillis, flexMillis)
 				.setPersisted(true)
 				.setUpdateCurrent(true)
+				.setRequiredNetworkType(JobRequest.NetworkType.NOT_ROAMING)
+				.setRequirementsEnforced(true)
 				.build()
 				.schedule();
 		Log.d(TAG, "Scheduling update to run periodically");

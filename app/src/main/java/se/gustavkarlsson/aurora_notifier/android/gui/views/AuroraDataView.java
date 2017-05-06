@@ -44,6 +44,7 @@ public class AuroraDataView extends LinearLayout {
 			}
 		}
 		dataValueView = (TextView) findViewById(R.id.aurora_data_value);
+		// Used by IDE to display something
 		if (isInEditMode()) {
 			dataValueView.setText("value");
 		}

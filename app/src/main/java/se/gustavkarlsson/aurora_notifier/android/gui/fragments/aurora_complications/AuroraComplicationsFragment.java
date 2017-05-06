@@ -16,14 +16,12 @@ public class AuroraComplicationsFragment extends Fragment implements AuroraEvalu
 	private static final String TAG = AuroraComplicationsFragment.class.getSimpleName();
 
 	private View rootView;
-
 	private ComplicationsPresenter complicationsPresenter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.v(TAG, "onCreateView");
 		rootView = inflater.inflate(R.layout.fragment_aurora_complications, container, false);
-
 		complicationsPresenter = new ComplicationsPresenter((ListView) rootView.findViewById(R.id.complications_list_view));
 		return rootView;
 	}

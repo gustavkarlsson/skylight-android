@@ -19,13 +19,13 @@ class TimeSinceUpdatePresenter {
 		this.updateTimeResolutionMillis = updateTimeResolutionMillis;
 	}
 
-	void onUpdate(long lastUpdateMillis) {
-		this.lastUpdateMillis = lastUpdateMillis;
+	synchronized void onStart() {
 		scheduleTimeSinceUpdateRefresh();
 		updateTimeSinceUpdate();
 	}
 
-	void onStart() {
+	synchronized void onUpdate(long lastUpdateMillis) {
+		this.lastUpdateMillis = lastUpdateMillis;
 		scheduleTimeSinceUpdateRefresh();
 		updateTimeSinceUpdate();
 	}
@@ -65,7 +65,7 @@ class TimeSinceUpdatePresenter {
 		return DateUtils.getRelativeTimeSpanString(startTimeMillis, System.currentTimeMillis(), updateTimeResolutionMillis);
 	}
 
-	void destroy() {
+	synchronized void destroy() {
 		if (timeUpdateTimer != null) {
 			timeUpdateTimer.cancel();
 		}

@@ -11,6 +11,8 @@ import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.Retro
 
 @Module
 public class WeatherModule {
+	private static final String API_URL = "http://api.openweathermap.org/data/2.5/";
+
 	private final String openWeatherMapApiKey;
 
 	public WeatherModule(String openWeatherMapApiKey) {
@@ -21,7 +23,7 @@ public class WeatherModule {
 	@Reusable
 	static OpenWeatherMapService provideOpenWeatherMapService() {
 		return new Retrofit.Builder()
-				.baseUrl("http://api.openweathermap.org/data/2.5/")
+				.baseUrl(API_URL)
 				.addConverterFactory(SimpleXmlConverterFactory.create())
 				.build().create(OpenWeatherMapService.class);
 	}

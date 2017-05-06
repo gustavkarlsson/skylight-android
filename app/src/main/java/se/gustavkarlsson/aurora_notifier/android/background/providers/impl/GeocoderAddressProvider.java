@@ -19,7 +19,6 @@ import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-
 public class GeocoderAddressProvider implements AddressProvider {
 	private final Executor executor = Executors.newCachedThreadPool();
 	private final Geocoder geocoder;
@@ -54,7 +53,7 @@ public class GeocoderAddressProvider implements AddressProvider {
 				}
 				return addresses.get(0);
 			} catch (IOException e) {
-				Log.e(TAG, String.format(Locale.ENGLISH, "Failed to perform reverse geocoding latitude: %f, longitude: %f", latitude, longitude));
+				Log.e(TAG, String.format(Locale.ENGLISH, "Failed to perform reverse geocoding latitude: %f, longitude: %f", latitude, longitude), e);
 				return null;
 			}
 		}

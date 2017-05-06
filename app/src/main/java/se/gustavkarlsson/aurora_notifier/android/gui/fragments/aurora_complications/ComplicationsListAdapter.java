@@ -53,10 +53,10 @@ class ComplicationsListAdapter extends BaseAdapter {
 		this.complications = complications;
 	}
 
-	static class ViewHolder {
+	private static class ViewHolder {
 		private final TextView titleTextView;
 
-		ViewHolder(View view) {
+		private ViewHolder(View view) {
 			titleTextView = (TextView) view.findViewById(R.id.complication_title);
 		}
 	}

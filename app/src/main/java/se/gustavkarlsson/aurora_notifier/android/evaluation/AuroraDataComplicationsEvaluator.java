@@ -1,6 +1,5 @@
 package se.gustavkarlsson.aurora_notifier.android.evaluation;
 
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
 
 import static java8.util.stream.StreamSupport.stream;
-
 
 public class AuroraDataComplicationsEvaluator implements ComplicationEvaluator {
 	private final List<ComplicationEvaluator> complicationEvaluators;

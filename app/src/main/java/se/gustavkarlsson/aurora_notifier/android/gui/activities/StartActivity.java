@@ -27,60 +27,64 @@ public class StartActivity extends AppCompatActivity {
 
 	public static final int REQUEST_CODE_LOCATION_PERMISSION = 1973;
 	public static final String LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION;
+	private AlertDialog gpsCouldNotBeInstalledAppWillCloseDialog;
+	private AlertDialog locationRequestRationaleDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
+		gpsCouldNotBeInstalledAppWillCloseDialog = buildGooglePlayServicesCouldNotBeInstalledDialog();
+		locationRequestRationaleDialog = buildLocationRequestRationaleDialog();
 		setContentView(R.layout.activity_start);
 		Task<Void> gpsAvaliable = GoogleApiAvailability.getInstance().makeGooglePlayServicesAvailable(this);
-		gpsAvaliable.addOnFailureListener(e -> showGooglePlayServicesNotInstalledErrorAndExit());
-		gpsAvaliable.addOnSuccessListener(aVoid -> checkLocationPermission(this::startMain, this::requestLocationPermission));
+		gpsAvaliable.addOnFailureListener(e -> gpsCouldNotBeInstalledAppWillCloseDialog.show());
+		gpsAvaliable.addOnSuccessListener(aVoid -> checkLocationPermission());
 	}
 
-	private void showGooglePlayServicesNotInstalledErrorAndExit() {
-		new AlertDialog.Builder(this)
+	private AlertDialog buildGooglePlayServicesCouldNotBeInstalledDialog() {
+		return new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.error_google_play_services_could_not_be_installed)
 				.setMessage(R.string.app_will_close)
 				.setPositiveButton(R.string.exit, (dialog, which) -> {
 					Requirements.setFulfilled(false);
-					System.exit(3);
+					System.exit(1);
 				})
 				.setCancelable(false)
-				.show();
+				.create();
 	}
 
-	private void checkLocationPermission(Runnable onSuccess, Runnable onFailure) {
-		boolean hasPermission = ContextCompat.checkSelfPermission(this, LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED;
-		if (!hasPermission) {
-			onFailure.run();
-		} else {
-			onSuccess.run();
-		}
-	}
-
-	public void requestLocationPermission() {
-		Log.i(TAG, LOCATION_PERMISSION + " permission missing. Requesting from user");
-		if (ActivityCompat.shouldShowRequestPermissionRationale(this, LOCATION_PERMISSION)) {
-			showLocationRequestRationale();
-		} else {
-			showLocationPermissionRequest();
-		}
-	}
-
-	private void showLocationRequestRationale() {
-		new AlertDialog.Builder(this)
+	private AlertDialog buildLocationRequestRationaleDialog() {
+		return new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(getString(R.string.location_permission_required_title))
 				.setMessage(getString(R.string.location_permission_required_description))
 				.setPositiveButton(android.R.string.yes, (dialog, which) -> showLocationPermissionRequest())
 				.setNegativeButton(R.string.exit, (dialog, which) -> {
 					Requirements.setFulfilled(false);
-					System.exit(4);
+					System.exit(2);
 				})
 				.setCancelable(false)
-				.show();
+				.create();
+	}
+
+	private void checkLocationPermission() {
+		boolean hasPermission = ContextCompat.checkSelfPermission(this, LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED;
+		if (!hasPermission) {
+			requestLocationPermission();
+		} else {
+			startMain();
+		}
+	}
+
+	public void requestLocationPermission() {
+		Log.i(TAG, LOCATION_PERMISSION + " permission missing. Requesting from user");
+		if (ActivityCompat.shouldShowRequestPermissionRationale(this, LOCATION_PERMISSION)) {
+			locationRequestRationaleDialog.show();
+		} else {
+			showLocationPermissionRequest();
+		}
 	}
 
 	private void showLocationPermissionRequest() {

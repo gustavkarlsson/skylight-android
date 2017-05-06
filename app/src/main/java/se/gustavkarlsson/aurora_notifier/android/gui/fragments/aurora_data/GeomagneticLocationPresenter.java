@@ -23,6 +23,6 @@ class GeomagneticLocationPresenter extends AbstractAuroraDataPresenter {
 
 	void onUpdate(GeomagneticLocation geomagneticLocation) {
 		float degreesFromClosestPole = geomagneticLocation.getDegreesFromClosestPole();
-		setDataValue(String.format(Locale.getDefault(), "%.2f°", degreesFromClosestPole));
+		setDataValue(String.format(Locale.ENGLISH, "%.2f°", degreesFromClosestPole));
 	}
 }

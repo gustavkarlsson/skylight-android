@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.background.update_tasks;
+package se.gustavkarlsson.aurora_notifier.android.background.tasks;
 
 import android.location.Location;
 import android.os.AsyncTask;
@@ -7,14 +7,13 @@ import android.util.Log;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherProvider;
 import se.gustavkarlsson.aurora_notifier.android.models.data.Weather;
 
-
-public class UpdateWeatherTask extends AsyncTask<Object, Void, Weather> {
-	private static final String TAG = UpdateSunPositionTask.class.getSimpleName();
+public class GetWeatherTask extends AsyncTask<Object, Void, Weather> {
+	private static final String TAG = GetWeatherTask.class.getSimpleName();
 
 	private final WeatherProvider provider;
 	private final Location location;
 
-	public UpdateWeatherTask(WeatherProvider provider, Location location) {
+	public GetWeatherTask(WeatherProvider provider, Location location) {
 		this.provider = provider;
 		this.location = location;
 	}

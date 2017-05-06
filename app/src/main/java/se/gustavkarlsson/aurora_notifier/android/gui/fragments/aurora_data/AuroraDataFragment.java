@@ -17,7 +17,6 @@ public class AuroraDataFragment extends Fragment implements AuroraEvaluationUpda
 	private static final String TAG = AuroraDataFragment.class.getSimpleName();
 
 	private View rootView;
-
 	private SolarActivityPresenter solarActivityPresenter;
 	private GeomagneticLocationPresenter geomagneticLocationPresenter;
 	private WeatherPresenter weatherPresenter;
@@ -33,7 +32,6 @@ public class AuroraDataFragment extends Fragment implements AuroraEvaluationUpda
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.v(TAG, "onCreateView");
 		rootView = inflater.inflate(R.layout.fragment_aurora_data, container, false);
-
 		solarActivityPresenter = new SolarActivityPresenter((AuroraDataView) rootView.findViewById(R.id.aurora_data_solar_activity));
 		geomagneticLocationPresenter = new GeomagneticLocationPresenter((AuroraDataView) rootView.findViewById(R.id.aurora_data_geomagnetic_location));
 		weatherPresenter = new WeatherPresenter((AuroraDataView) rootView.findViewById(R.id.aurora_data_weather));

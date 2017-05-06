@@ -12,7 +12,7 @@ class OpenWeatherMapWeather {
 	@Attribute(name = "value")
 	private String cloudPercentage;
 
-	public int getCloudPercentage() {
+	int getCloudPercentage() {
 		return parseInt(cloudPercentage);
 	}
 

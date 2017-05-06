@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.background.update_tasks;
+package se.gustavkarlsson.aurora_notifier.android.background.tasks;
 
 import android.location.Location;
 import android.os.AsyncTask;
@@ -7,14 +7,13 @@ import android.util.Log;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagneticLocationProvider;
 import se.gustavkarlsson.aurora_notifier.android.models.data.GeomagneticLocation;
 
-
-public class UpdateGeomagneticLocationTask extends AsyncTask<Object, Void, GeomagneticLocation> {
-	private static final String TAG = UpdateGeomagneticLocationTask.class.getSimpleName();
+public class GetGeomagneticLocationTask extends AsyncTask<Object, Void, GeomagneticLocation> {
+	private static final String TAG = GetGeomagneticLocationTask.class.getSimpleName();
 
 	private final GeomagneticLocationProvider provider;
 	private final Location location;
 
-	public UpdateGeomagneticLocationTask(GeomagneticLocationProvider provider, Location location) {
+	public GetGeomagneticLocationTask(GeomagneticLocationProvider provider, Location location) {
 		this.provider = provider;
 		this.location = location;
 	}

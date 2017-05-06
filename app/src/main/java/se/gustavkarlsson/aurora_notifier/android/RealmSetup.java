@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.util;
+package se.gustavkarlsson.aurora_notifier.android;
 
 import android.content.Context;
 import android.util.Log;
@@ -12,13 +12,13 @@ import io.realm.RealmObject;
 import se.gustavkarlsson.aurora_notifier.android.realm.EvaluationCache;
 import se.gustavkarlsson.aurora_notifier.android.realm.Requirements;
 
-public class RealmUtils {
-	private static final String TAG = RealmUtils.class.getSimpleName();
+class RealmSetup {
+	private static final String TAG = RealmSetup.class.getSimpleName();
 
-	private RealmUtils() {
+	private RealmSetup() {
 	}
 
-	public static void setupRealm(Context context) {
+	static void run(Context context) {
 		Realm.init(context);
 		deleteRealmDatabaseIfMigrationNeeded();
 		try (Realm realm = Realm.getDefaultInstance()) {

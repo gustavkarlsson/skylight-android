@@ -1,8 +1,10 @@
 package se.gustavkarlsson.aurora_notifier.android.gui.fragments.aurora_chance;
 
 import android.location.Address;
-import android.view.View;
 import android.widget.TextView;
+
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 
 class LocationPresenter {
 	private final TextView locationTextView;
@@ -13,9 +15,9 @@ class LocationPresenter {
 
 	void onUpdate(Address address) {
 		if (address == null) {
-			locationTextView.setVisibility(View.INVISIBLE);
+			locationTextView.setVisibility(INVISIBLE);
 		} else {
-			locationTextView.setVisibility(View.VISIBLE);
+			locationTextView.setVisibility(VISIBLE);
 			String locationString = address.getLocality();
 			locationTextView.setText(locationString);
 		}

@@ -12,13 +12,14 @@ import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;
 
 @Module
 public abstract class KpIndexModule {
+	// TODO Update to more permanent hostname
+	private static final String API_URL = "http://9698.s.t4vps.eu/rest/";
 
 	@Provides
 	@Reusable
 	static KpIndexService provideKpIndexService() {
 		return new Retrofit.Builder()
-				// TODO Update to more permanent hostname
-				.baseUrl("http://9698.s.t4vps.eu/rest/")
+				.baseUrl(API_URL)
 				.addConverterFactory(GsonConverterFactory.create())
 				.build().create(KpIndexService.class);
 	}

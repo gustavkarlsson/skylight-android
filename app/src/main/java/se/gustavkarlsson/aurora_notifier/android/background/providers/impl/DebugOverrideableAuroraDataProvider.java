@@ -18,17 +18,17 @@ import se.gustavkarlsson.aurora_notifier.android.background.providers.Geomagneti
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SolarActivityProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SunPositionProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateGeomagneticLocationTask;
-import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateSolarActivityTask;
-import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateSunPositionTask;
-import se.gustavkarlsson.aurora_notifier.android.background.update_tasks.UpdateWeatherTask;
+import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetGeomagneticLocationTask;
+import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetSolarActivityTask;
+import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetSunPositionTask;
+import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetWeatherTask;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
 import se.gustavkarlsson.aurora_notifier.android.models.data.GeomagneticLocation;
 import se.gustavkarlsson.aurora_notifier.android.models.data.SolarActivity;
 import se.gustavkarlsson.aurora_notifier.android.models.data.SunPosition;
 import se.gustavkarlsson.aurora_notifier.android.models.data.Weather;
 import se.gustavkarlsson.aurora_notifier.android.realm.DebugSettings;
-import se.gustavkarlsson.aurora_notifier.android.util.Alarm;
+import se.gustavkarlsson.aurora_notifier.android.util.CountdownTimer;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -49,30 +49,30 @@ public class DebugOverrideableAuroraDataProvider implements AuroraDataProvider {
 	}
 
 	@Override
-	public AuroraData getAuroraData(long timeoutMillis, Location location) {
+	public AuroraData getAuroraData(Location location, long timeoutMillis) {
 		try (Realm realm = Realm.getDefaultInstance()) {
 			DebugSettings debugSettings = DebugSettings.get(realm);
 			if (debugSettings.isEnabled()) {
 				return getDebugData(debugSettings);
 			}
 		}
-		Alarm timeoutAlarm = Alarm.start(timeoutMillis);
-		UpdateSolarActivityTask updateSolarActivityTask = new UpdateSolarActivityTask(solarActivityProvider);
-		UpdateWeatherTask updateWeatherTask = new UpdateWeatherTask(weatherProvider, location);
-		UpdateSunPositionTask updateSunPositionTask = new UpdateSunPositionTask(sunPositionProvider, location, System.currentTimeMillis());
-		UpdateGeomagneticLocationTask updateGeomagneticLocationTask = new UpdateGeomagneticLocationTask(geomagneticLocationProvider, location);
+		CountdownTimer timeoutTimer = CountdownTimer.start(timeoutMillis);
+		GetSolarActivityTask getSolarActivityTask = new GetSolarActivityTask(solarActivityProvider);
+		GetWeatherTask getWeatherTask = new GetWeatherTask(weatherProvider, location);
+		GetSunPositionTask getSunPositionTask = new GetSunPositionTask(sunPositionProvider, location, System.currentTimeMillis());
+		GetGeomagneticLocationTask getGeomagneticLocationTask = new GetGeomagneticLocationTask(geomagneticLocationProvider, location);
 
 		executeInParallel(
-				updateSolarActivityTask,
-				updateWeatherTask,
-				updateSunPositionTask,
-				updateGeomagneticLocationTask);
+				getSolarActivityTask,
+				getWeatherTask,
+				getSunPositionTask,
+				getGeomagneticLocationTask);
 
 		try {
-			SolarActivity solarActivity = updateSolarActivityTask.get(timeoutAlarm.getRemainingTimeMillis(), MILLISECONDS);
-			Weather weather = updateWeatherTask.get(timeoutAlarm.getRemainingTimeMillis(), MILLISECONDS);
-			SunPosition sunPosition = updateSunPositionTask.get(timeoutAlarm.getRemainingTimeMillis(), MILLISECONDS);
-			GeomagneticLocation geomagneticLocation = updateGeomagneticLocationTask.get(timeoutAlarm.getRemainingTimeMillis(), MILLISECONDS);
+			SolarActivity solarActivity = getSolarActivityTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
+			Weather weather = getWeatherTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
+			SunPosition sunPosition = getSunPositionTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
+			GeomagneticLocation geomagneticLocation = getGeomagneticLocationTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
 			return new AuroraData(solarActivity, geomagneticLocation, sunPosition, weather);
 		} catch (TimeoutException e) {
 			throw new UserFriendlyException(R.string.error_updating_took_too_long, "Getting aurora data timed out after " + timeoutMillis + "ms", e);
@@ -89,7 +89,8 @@ public class DebugOverrideableAuroraDataProvider implements AuroraDataProvider {
 				new Weather(debugSettings.getCloudPercentage()));
 	}
 
-	private static void executeInParallel(AsyncTask... tasks) {
+	@SafeVarargs
+	private static void executeInParallel(AsyncTask<Object, Void, ?>... tasks) {
 		Executor executor = AsyncTask.THREAD_POOL_EXECUTOR;
 		J8Arrays.stream(tasks)
 				.forEach(task -> task.executeOnExecutor(executor));

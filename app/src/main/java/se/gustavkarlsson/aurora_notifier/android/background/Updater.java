@@ -20,7 +20,7 @@ import se.gustavkarlsson.aurora_notifier.android.realm.EvaluationCache;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 public class Updater {
-	private static final String TAG = UpdateJob.class.getSimpleName();
+	private static final String TAG = Updater.class.getSimpleName();
 
 	public static final String RESPONSE_UPDATE_ERROR = TAG + ".RESPONSE_UPDATE_ERROR";
 	public static final String RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE = TAG + ".RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE";
@@ -31,17 +31,17 @@ public class Updater {
 	AuroraEvaluationProvider evaluationProvider;
 
 	private final Context context;
-	private int updateTimeoutMillis;
+	private final int updateTimeoutMillis;
 
 	public Updater(Context context, int updateTimeoutMillis) {
 		Log.v(TAG, "Updater");
 		this.context = context;
+		this.updateTimeoutMillis = updateTimeoutMillis;
 		DaggerUpdateJobComponent.builder()
 				.googleLocationModule(new GoogleLocationModule(context))
 				.weatherModule(new WeatherModule(context.getString(R.string.api_key_openweathermap)))
 				.build()
 				.inject(this);
-		this.updateTimeoutMillis = updateTimeoutMillis;
 	}
 
 	public boolean update() {

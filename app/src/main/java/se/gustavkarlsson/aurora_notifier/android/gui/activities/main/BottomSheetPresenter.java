@@ -1,6 +1,5 @@
 package se.gustavkarlsson.aurora_notifier.android.gui.activities.main;
 
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.view.View;
 
@@ -13,32 +12,9 @@ class BottomSheetPresenter {
 	private final boolean defaultHideable;
 
 	BottomSheetPresenter(View bottomSheetView) {
-		bottomSheetBehavior = createBottomSheetBehavior(bottomSheetView);
+		bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView);
 		defaultHideable = bottomSheetBehavior.isHideable();
 		bottomSheetView.setOnClickListener(new ExpandOnClickListener());
-	}
-
-	private static BottomSheetBehavior createBottomSheetBehavior(View bottomSheetView) {
-		final BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView);
-		ensureSizeIsRecalculatedOnInteraction(bottomSheetBehavior);
-		return bottomSheetBehavior;
-	}
-
-	//Workaround for bug described in http://stackoverflow.com/a/40267305/940731
-	private static void ensureSizeIsRecalculatedOnInteraction(BottomSheetBehavior bottomSheetBehavior) {
-		bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-			@Override
-			public void onStateChanged(@NonNull final View bottomSheet, int newState) {
-				bottomSheet.post(() -> {
-					bottomSheet.requestLayout();
-					bottomSheet.invalidate();
-				});
-			}
-
-			@Override
-			public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-			}
-		});
 	}
 
 	void onUpdate(List<AuroraComplication> complications) {

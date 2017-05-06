@@ -17,7 +17,6 @@ public class AuroraChanceFragment extends Fragment implements AuroraEvaluationUp
 	private static final String TAG = AuroraChanceFragment.class.getSimpleName();
 
 	private View rootView;
-
 	private LocationPresenter locationPresenter;
 	private TimeSinceUpdatePresenter timeSinceUpdatePresenter;
 	private ChancePresenter chancePresenter;
@@ -26,7 +25,6 @@ public class AuroraChanceFragment extends Fragment implements AuroraEvaluationUp
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.v(TAG, "onCreateView");
 		rootView = inflater.inflate(R.layout.fragment_aurora_chance, container, false);
-
 		locationPresenter = new LocationPresenter((TextView) rootView.findViewById(R.id.location));
 		timeSinceUpdatePresenter = new TimeSinceUpdatePresenter((TextView) rootView.findViewById(R.id.time_since_update), DateUtils.MINUTE_IN_MILLIS);
 		chancePresenter = new ChancePresenter((TextView) rootView.findViewById(R.id.chance));
@@ -42,6 +40,7 @@ public class AuroraChanceFragment extends Fragment implements AuroraEvaluationUp
 
 	@Override
 	public void onUpdate(AuroraEvaluation evaluation) {
+		Log.v(TAG, "onUpdate");
 		locationPresenter.onUpdate(evaluation.getAddress());
 		timeSinceUpdatePresenter.onUpdate(evaluation.getTimestampMillis());
 		chancePresenter.onUpdate(evaluation.getChance());

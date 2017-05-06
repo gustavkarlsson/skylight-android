@@ -29,15 +29,20 @@ import se.gustavkarlsson.aurora_notifier.android.gui.activities.DebugActivity;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 import se.gustavkarlsson.aurora_notifier.android.realm.EvaluationCache;
 
+import static se.gustavkarlsson.aurora_notifier.android.background.Updater.RESPONSE_UPDATE_ERROR;
+import static se.gustavkarlsson.aurora_notifier.android.background.Updater.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE;
+import static se.gustavkarlsson.aurora_notifier.android.background.Updater.RESPONSE_UPDATE_FINISHED;
+import static se.gustavkarlsson.aurora_notifier.android.background.Updater.RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION;
+
 public class MainActivity extends AppCompatActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
 
 	private int evaluationLifetimeMillis;
 	private int backgroundUpdateTimeoutMillis;
 	private SwipeToRefreshPresenter swipeToRefreshPresenter;
+	private BottomSheetPresenter bottomSheetPresenter;
 	private List<AuroraEvaluationUpdateListener> updateReceivers;
 	private BroadcastReceiver broadcastReceiver;
-	private BottomSheetPresenter bottomSheetPresenter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +52,11 @@ public class MainActivity extends AppCompatActivity {
 		evaluationLifetimeMillis = getResources().getInteger(R.integer.foreground_evaluation_lifetime_millis);
 		backgroundUpdateTimeoutMillis = getResources().getInteger(R.integer.background_update_timeout_millis);
 		swipeToRefreshPresenter = new SwipeToRefreshPresenter((SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout), this);
-		updateReceivers = getUpdateReceivers();
 		bottomSheetPresenter = new BottomSheetPresenter(findViewById(R.id.bottom_sheet));
+		updateReceivers = getUpdateReceivers();
 		broadcastReceiver = createBroadcastReceiver();
+		LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver), new IntentFilter(RESPONSE_UPDATE_FINISHED));
+		LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver), new IntentFilter(RESPONSE_UPDATE_ERROR));
 	}
 
 	private List<AuroraEvaluationUpdateListener> getUpdateReceivers() {
@@ -62,23 +69,20 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private BroadcastReceiver createBroadcastReceiver() {
-		BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+		return new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				String action = intent.getAction();
-				if (Updater.RESPONSE_UPDATE_FINISHED.equals(action)) {
-					Parcelable evaluationParcel = intent.getParcelableExtra(Updater.RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION);
+				if (RESPONSE_UPDATE_FINISHED.equals(action)) {
+					Parcelable evaluationParcel = intent.getParcelableExtra(RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION);
 					AuroraEvaluation evaluation = Parcels.unwrap(evaluationParcel);
 					updateGui(evaluation);
-				} else if (Updater.RESPONSE_UPDATE_ERROR.equals(action)) {
-					String message = intent.getStringExtra(Updater.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE);
+				} else if (RESPONSE_UPDATE_ERROR.equals(action)) {
+					String message = intent.getStringExtra(RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE);
 					Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
 				}
 			}
 		};
-		LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver), new IntentFilter(Updater.RESPONSE_UPDATE_FINISHED));
-		LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver), new IntentFilter(Updater.RESPONSE_UPDATE_ERROR));
-		return broadcastReceiver;
 	}
 
 	private void updateGui(AuroraEvaluation evaluation) {
@@ -108,13 +112,11 @@ public class MainActivity extends AppCompatActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Log.v(TAG, "onOptionsItemSelected");
 		int id = item.getItemId();
-
 		if (id == R.id.action_debug) {
 			Intent intent = new Intent(this, DebugActivity.class);
 			startActivity(intent);
 			return true;
 		}
-
 		return super.onOptionsItemSelected(item);
 	}
 

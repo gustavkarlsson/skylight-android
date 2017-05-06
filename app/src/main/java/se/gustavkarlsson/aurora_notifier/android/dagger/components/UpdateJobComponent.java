@@ -11,13 +11,13 @@ import se.gustavkarlsson.aurora_notifier.android.dagger.modules.SunPositionModul
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.WeatherModule;
 
 @Component(modules = {
+		AuroraDataModule.class,
+		AuroraEvaluationModule.class,
+		GeomagneticLocationModule.class,
 		GoogleLocationModule.class,
-		WeatherModule.class,
 		KpIndexModule.class,
 		SunPositionModule.class,
-		GeomagneticLocationModule.class,
-		AuroraDataModule.class,
-		AuroraEvaluationModule.class
+		WeatherModule.class
 })
 @SuppressWarnings("WeakerAccess")
 public interface UpdateJobComponent {

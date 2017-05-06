@@ -4,7 +4,6 @@ import android.app.Application;
 import android.util.Log;
 
 import se.gustavkarlsson.aurora_notifier.android.background.UpdateScheduler;
-import se.gustavkarlsson.aurora_notifier.android.util.RealmUtils;
 
 public class AuroraNotifier extends Application {
 	private static final String TAG = AuroraNotifier.class.getSimpleName();
@@ -13,7 +12,7 @@ public class AuroraNotifier extends Application {
 	public void onCreate() {
 		Log.v(TAG, "onCreate");
 		super.onCreate();
-		RealmUtils.setupRealm(this);
+		RealmSetup.run(this);
 		UpdateScheduler.initJobManager(this);
 	}
 

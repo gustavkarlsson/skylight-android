@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.background.update_tasks;
+package se.gustavkarlsson.aurora_notifier.android.background.tasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -6,13 +6,12 @@ import android.util.Log;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SolarActivityProvider;
 import se.gustavkarlsson.aurora_notifier.android.models.data.SolarActivity;
 
-
-public class UpdateSolarActivityTask extends AsyncTask<Object, Void, SolarActivity> {
-	private static final String TAG = UpdateSolarActivityTask.class.getSimpleName();
+public class GetSolarActivityTask extends AsyncTask<Object, Void, SolarActivity> {
+	private static final String TAG = GetSolarActivityTask.class.getSimpleName();
 
 	private final SolarActivityProvider provider;
 
-	public UpdateSolarActivityTask(SolarActivityProvider provider) {
+	public GetSolarActivityTask(SolarActivityProvider provider) {
 		this.provider = provider;
 	}
 

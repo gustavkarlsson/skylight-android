@@ -28,25 +28,25 @@ abstract class AbstractAuroraDataPresenter {
 	abstract int getDescriptionResourceId();
 
 	private static class PopupDescriptionClickListener implements View.OnClickListener {
-		private final Context context;
-		private final String title;
-		private final String description;
+		private AlertDialog dialog;
 
 		PopupDescriptionClickListener(Context context, String title, String description) {
-			this.context = context;
-			this.title = title;
-			this.description = description;
+			dialog = buildDialog(context, title, description);
 		}
 
-		@Override
-		public void onClick(View v) {
-			new AlertDialog.Builder(context)
+		private static AlertDialog buildDialog(Context context, String title, String description) {
+			return new AlertDialog.Builder(context)
 					.setIcon(android.R.drawable.ic_dialog_info)
 					.setTitle(title)
 					.setMessage(description)
 					.setPositiveButton(android.R.string.yes, (dialog, which) -> dialog.dismiss())
 					.setCancelable(true)
-					.show();
+					.create();
+		}
+
+		@Override
+		public void onClick(View v) {
+			dialog.show();
 		}
 	}
 }

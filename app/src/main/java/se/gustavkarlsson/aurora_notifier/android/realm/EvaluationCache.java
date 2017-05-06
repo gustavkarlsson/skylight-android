@@ -29,7 +29,7 @@ public class EvaluationCache extends RealmObject {
 			parcel.recycle();
 			return evaluation;
 		} catch (RuntimeException e) {
-			Log.e(TAG, "Error when getting evaluation from cache. Clearing cache.");
+			Log.e(TAG, "Error when getting evaluation from cache. Clearing cache.", e);
 			clear();
 			return null;
 		}
@@ -45,6 +45,7 @@ public class EvaluationCache extends RealmObject {
 			Parcel parcel = Parcel.obtain();
 			parcelable.writeToParcel(parcel, 0);
 			byte[] bytes = parcel.marshall();
+			parcel.recycle();
 			EvaluationCache cache = getSingleton(realm);
 			realm.executeTransaction(r -> cache.data = bytes);
 		}

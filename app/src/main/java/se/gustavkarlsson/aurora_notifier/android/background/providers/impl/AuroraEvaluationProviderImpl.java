@@ -15,16 +15,15 @@ import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraDataComplicati
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
-import se.gustavkarlsson.aurora_notifier.android.util.Alarm;
+import se.gustavkarlsson.aurora_notifier.android.util.CountdownTimer;
 
 public class AuroraEvaluationProviderImpl implements AuroraEvaluationProvider {
-
 	private final LocationProvider locationProvider;
 	private final AuroraDataProvider auroraDataProvider;
 	private final AddressProvider addressProvider;
 
 	@Inject
-	public AuroraEvaluationProviderImpl(LocationProvider locationProvider, AuroraDataProvider auroraDataProvider, AddressProvider addressProvider) {
+	AuroraEvaluationProviderImpl(LocationProvider locationProvider, AuroraDataProvider auroraDataProvider, AddressProvider addressProvider) {
 		this.locationProvider = locationProvider;
 		this.auroraDataProvider = auroraDataProvider;
 		this.addressProvider = addressProvider;
@@ -32,10 +31,10 @@ public class AuroraEvaluationProviderImpl implements AuroraEvaluationProvider {
 
 	@Override
 	public AuroraEvaluation getEvaluation(long timeoutMillis) {
-		Alarm timeoutAlarm = Alarm.start(timeoutMillis);
-		Location location = locationProvider.getLocation(timeoutAlarm.getRemainingTimeMillis());
-		Address address = addressProvider.getAddress(location.getLatitude(), location.getLongitude(), timeoutAlarm.getRemainingTimeMillis());
-		AuroraData auroraData = auroraDataProvider.getAuroraData(timeoutAlarm.getRemainingTimeMillis(), location);
+		CountdownTimer timeoutTimer = CountdownTimer.start(timeoutMillis);
+		Location location = locationProvider.getLocation(timeoutTimer.getRemainingTimeMillis());
+		Address address = addressProvider.getAddress(location.getLatitude(), location.getLongitude(), timeoutTimer.getRemainingTimeMillis());
+		AuroraData auroraData = auroraDataProvider.getAuroraData(location, timeoutTimer.getRemainingTimeMillis());
 		List<AuroraComplication> complications = new AuroraDataComplicationsEvaluator(auroraData).evaluate();
 		return new AuroraEvaluation(System.currentTimeMillis(), address, auroraData, complications);
 	}

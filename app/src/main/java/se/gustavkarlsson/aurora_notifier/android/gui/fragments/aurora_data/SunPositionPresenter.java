@@ -23,6 +23,6 @@ class SunPositionPresenter extends AbstractAuroraDataPresenter {
 
 	void onUpdate(SunPosition sunPosition) {
 		float zenithAngle = sunPosition.getZenithAngle();
-		setDataValue(String.format(Locale.getDefault(), "%.2f°", zenithAngle));
+		setDataValue(String.format(Locale.ENGLISH, "%.2f°", zenithAngle));
 	}
 }

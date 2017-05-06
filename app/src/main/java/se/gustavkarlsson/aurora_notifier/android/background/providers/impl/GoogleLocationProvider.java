@@ -1,7 +1,6 @@
 package se.gustavkarlsson.aurora_notifier.android.background.providers.impl;
 
 import android.location.Location;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -13,7 +12,6 @@ import se.gustavkarlsson.aurora_notifier.android.background.providers.LocationPr
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-
 
 public class GoogleLocationProvider implements LocationProvider {
 	private static final String TAG = GoogleLocationProvider.class.getSimpleName();
@@ -54,7 +52,6 @@ public class GoogleLocationProvider implements LocationProvider {
 		}
 	}
 
-	@NonNull
 	private static String createErrorMessage(ConnectionResult connectionResult) {
 		return "Could not connect to Google Play Services" +
 				". Error code: " + connectionResult.getErrorCode() +

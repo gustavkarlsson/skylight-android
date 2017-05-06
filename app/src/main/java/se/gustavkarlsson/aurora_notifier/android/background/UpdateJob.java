@@ -6,7 +6,6 @@ import com.evernote.android.job.Job;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
 
-
 class UpdateJob extends Job {
 
 	@NonNull
