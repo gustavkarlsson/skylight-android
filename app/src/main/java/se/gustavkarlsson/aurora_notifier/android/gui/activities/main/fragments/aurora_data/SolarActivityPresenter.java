@@ -18,13 +18,12 @@ class SolarActivityPresenter extends AbstractAuroraDataPresenter {
 		return R.string.data_solar_activity_desc;
 	}
 
-	// TODO make this more understandable
 	void onUpdate(SolarActivity solarActivity) {
 		float kpIndex = solarActivity.getKpIndex();
 		int whole = (int) kpIndex;
 		float part = kpIndex - whole;
 		String partString = parsePart(part);
-		String wholeString = partString.equals("-") ? Integer.toString(whole + 1) : Integer.toString(whole);
+		String wholeString = parseWhole(whole, partString);
 		setDataValue(wholeString + partString);
 	}
 
@@ -36,5 +35,10 @@ class SolarActivityPresenter extends AbstractAuroraDataPresenter {
 			return "+";
 		}
 		return "-";
+	}
+
+	private static String parseWhole(int whole, String partString) {
+		int wholeAdjusted = partString.equals("-") ? whole + 1 : whole;
+		return Integer.toString(wholeAdjusted);
 	}
 }
