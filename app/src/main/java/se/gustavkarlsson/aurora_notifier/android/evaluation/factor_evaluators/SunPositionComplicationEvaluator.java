@@ -26,13 +26,13 @@ public class SunPositionComplicationEvaluator implements ComplicationEvaluator {
 		if (zenithAngle < 90) {
 			complications.add(new AuroraComplication(
 					NONE,
-					R.string.complication_too_bright_title,
-					R.string.complication_too_bright_desc));
+					R.string.complication_daylight_title,
+					R.string.complication_daylight_desc));
 		} else if (zenithAngle < 95) {
 			complications.add(new AuroraComplication(
 					LOW,
-					R.string.complication_probably_too_bright_title,
-					R.string.complication_probably_too_bright_desc));
+					R.string.complication_twilight_title,
+					R.string.complication_twilight_desc));
 		}
 		return complications;
 	}

@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="geomagnetic_location_title">Geomagnetic location</string>
-	<string name="geomagnetic_location_desc">
+	<string name="data_geomagnetic_location_title">Geomagnetic location</string>
+	<string name="data_geomagnetic_location_desc">
 		Your geomagnetic location is the distance from your closest geomagnetic pole.
 		The best place to see the aurora is at around 23°.
-		Earth\'s geomagnetic poles are located close to its geographic poles.
+		Earth\'s geomagnetic poles are located close to the north and south pole.
 	</string>
-	<string name="solar_activity_title">Geomagnetic activity</string>
-	<string name="solar_activity_desc">
-		Geomagnetic activity is the cause the aurora and ranges from 0 to 9
-		(sometimes with a trailing  minus or plus sign to show a weak or strong value).
+	<string name="data_solar_activity_title">Geomagnetic activity</string>
+	<string name="data_solar_activity_desc">
+		Geomagnetic activity is the cause the aurora and ranges from 0 to 9.
 		The higher this value is, the higher the chance of seeing the aurora.
 	</string>
-	<string name="weather_title">Clouds</string>
-	<string name="weather_desc" formatted="false">
-		Clouds in the sky can block your view of the aurora. This shows the amount of
+	<string name="data_weather_title">Clouds</string>
+	<string name="data_weather_desc" formatted="false">
+		Clouds can block your view of the aurora. This shows the amount of
 		clouds at your location as a percentage. A value of 0% is optimal.
 	</string>
-	<string name="sun_position_title">Sun position</string>
-	<string name="sun_position_desc">
-		As the aurora is only visible in the dark, the position of the sun is highly important.
+	<string name="data_sun_position_title">Sun position</string>
+	<string name="data_sun_position_desc">
+		Because the aurora is only visible in the dark, the position of the sun is important.
 		This value shows the sun\'s position in degrees, ranging for 0°
 		(right above your head) to 180° (other side of the globe).
-		The sun sets at 90° and a value higher than 108° is considered twilight.
 	</string>
 </resources>

@@ -10,7 +10,7 @@ public class UpgradeReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.i(TAG, "onReceive: Package was upgraded");
+		Log.i(TAG, "Package was upgraded");
 		RealmSetup.clearCache();
 	}
 }

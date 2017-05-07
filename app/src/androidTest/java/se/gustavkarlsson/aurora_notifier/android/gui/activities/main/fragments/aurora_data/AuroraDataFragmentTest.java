@@ -41,22 +41,22 @@ public class AuroraDataFragmentTest {
 
 	@Test
 	public void clickSolarActivity_detailViewShown() throws Exception {
-		whenDataViewClickedDetailViewOpens(R.id.aurora_data_solar_activity, R.string.solar_activity_title, R.string.solar_activity_desc);
+		whenDataViewClickedDetailViewOpens(R.id.aurora_data_solar_activity, R.string.data_solar_activity_title, R.string.data_solar_activity_desc);
 	}
 
 	@Test
 	public void clickGeomagneticLocation_detailViewShown() throws Exception {
-		whenDataViewClickedDetailViewOpens(R.id.aurora_data_geomagnetic_location, R.string.geomagnetic_location_title, R.string.geomagnetic_location_desc);
+		whenDataViewClickedDetailViewOpens(R.id.aurora_data_geomagnetic_location, R.string.data_geomagnetic_location_title, R.string.data_geomagnetic_location_desc);
 	}
 
 	@Test
 	public void clickWeather_detailViewShown() throws Exception {
-		whenDataViewClickedDetailViewOpens(R.id.aurora_data_weather, R.string.weather_title, R.string.weather_desc);
+		whenDataViewClickedDetailViewOpens(R.id.aurora_data_weather, R.string.data_weather_title, R.string.data_weather_desc);
 	}
 
 	@Test
 	public void clickSunPosition_detailViewShown() throws Exception {
-		whenDataViewClickedDetailViewOpens(R.id.aurora_data_sun_position, R.string.sun_position_title, R.string.sun_position_desc);
+		whenDataViewClickedDetailViewOpens(R.id.aurora_data_sun_position, R.string.data_sun_position_title, R.string.data_sun_position_desc);
 	}
 
 	private static void whenDataViewClickedDetailViewOpens(int viewId, int titleString, int descriptionString) {

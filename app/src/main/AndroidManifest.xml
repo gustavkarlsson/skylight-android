@@ -40,10 +40,6 @@
 			android:name=".gui.activities.settings.SettingsActivity"
 			android:label="@string/settings"
 			android:parentActivityName=".gui.activities.main.MainActivity">
-			<!-- Parent activity meta-data to support 4.0 and lower -->
-			<meta-data
-				android:name="android.support.PARENT_ACTIVITY"
-				android:value=".gui.activities.main.MainActivity"/>
 		</activity>
 
 		<activity

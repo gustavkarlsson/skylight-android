@@ -34,7 +34,6 @@ public class Updater {
 	private final int updateTimeoutMillis;
 
 	public Updater(Context context, int updateTimeoutMillis) {
-		Log.v(TAG, "Updater");
 		this.context = context;
 		this.updateTimeoutMillis = updateTimeoutMillis;
 		DaggerUpdateJobComponent.builder()

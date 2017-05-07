@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<integer name="background_update_timeout_millis">30000</integer> <!-- 30 seconds -->
-	<integer name="foreground_update_timeout_millis">10000</integer> <!-- 10 seconds -->
+	<integer name="setting_background_update_timeout_millis">30000</integer> <!-- 30 seconds -->
+	<integer name="setting_foreground_update_timeout_millis">10000</integer> <!-- 10 seconds -->
 
-	<integer name="foreground_evaluation_lifetime_millis">300000</integer> <!-- 5 minutes -->
+	<integer name="setting_foreground_evaluation_lifetime_millis">300000</integer> <!-- 5 minutes -->
 
-	<integer name="scheduled_update_interval_millis">1200000</integer> <!-- 20 minutes -->
-	<integer name="scheduled_update_flex_millis">600000</integer> <!-- 10 minutes -->
+	<integer name="setting_scheduled_update_interval_millis">1200000</integer> <!-- 20 minutes -->
+	<integer name="setting_scheduled_update_flex_millis">600000</integer> <!-- 10 minutes -->
 
-	<bool name="default_notifications_enabled">true</bool>
+	<bool name="setting_default_notifications_enabled">true</bool>
 </resources>

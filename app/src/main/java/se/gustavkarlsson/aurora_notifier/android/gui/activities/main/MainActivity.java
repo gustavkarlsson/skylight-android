@@ -50,8 +50,8 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		evaluationLifetimeMillis = getResources().getInteger(R.integer.foreground_evaluation_lifetime_millis);
-		backgroundUpdateTimeoutMillis = getResources().getInteger(R.integer.background_update_timeout_millis);
+		evaluationLifetimeMillis = getResources().getInteger(R.integer.setting_foreground_evaluation_lifetime_millis);
+		backgroundUpdateTimeoutMillis = getResources().getInteger(R.integer.setting_background_update_timeout_millis);
 		swipeToRefreshPresenter = new SwipeToRefreshPresenter((SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout), this);
 		bottomSheetPresenter = new BottomSheetPresenter(findViewById(R.id.bottom_sheet));
 		updateReceivers = getUpdateReceivers();

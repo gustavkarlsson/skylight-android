@@ -40,7 +40,7 @@ public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivi
 		return new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.error_google_play_services_could_not_be_installed_title)
-				.setMessage(R.string.error_google_play_services_could_not_be_installed_description)
+				.setMessage(R.string.error_google_play_services_could_not_be_installed_desc)
 				.setPositiveButton(R.string.exit, (dialog, which) -> System.exit(1))
 				.setCancelable(false)
 				.create();
@@ -50,7 +50,7 @@ public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivi
 		return new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(getString(R.string.location_permission_required_title))
-				.setMessage(R.string.location_permission_required_description)
+				.setMessage(R.string.location_permission_required_desc)
 				.setPositiveButton(android.R.string.yes, (dialog, which) -> showLocationPermissionRequest())
 				.setNegativeButton(R.string.exit, (dialog, which) -> System.exit(2))
 				.setCancelable(false)
@@ -61,7 +61,7 @@ public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivi
 		return new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(getString(R.string.error_location_permission_denied_title))
-				.setMessage(R.string.error_location_permission_denied_description)
+				.setMessage(R.string.error_location_permission_denied_desc)
 				.setPositiveButton(R.string.exit, (dialog, which) -> System.exit(3))
 				.setCancelable(false)
 				.create();
@@ -106,7 +106,7 @@ public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivi
 			Log.i(TAG, "Showing rationale to user for another chance");
 			locationPermissionRequiredDialog.show();
 		} else {
-			Log.i(TAG, "Explaining to user why location permission is required and exiting");
+			Log.i(TAG, "Showing permission denied dialog and exiting");
 			locationPermissionDeniedDialog.show();
 		}
 	}

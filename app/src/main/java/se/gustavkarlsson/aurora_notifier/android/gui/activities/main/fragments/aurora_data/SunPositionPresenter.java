@@ -12,12 +12,12 @@ class SunPositionPresenter extends AbstractAuroraDataPresenter {
 
 	@Override
 	int getTitleResourceId() {
-		return R.string.sun_position_title;
+		return R.string.data_sun_position_title;
 	}
 
 	@Override
 	int getDescriptionResourceId() {
-		return R.string.sun_position_desc;
+		return R.string.data_sun_position_desc;
 	}
 
 	void onUpdate(SunPosition sunPosition) {

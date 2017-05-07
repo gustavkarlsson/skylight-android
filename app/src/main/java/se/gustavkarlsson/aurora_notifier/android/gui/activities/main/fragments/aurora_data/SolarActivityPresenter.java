@@ -10,12 +10,12 @@ class SolarActivityPresenter extends AbstractAuroraDataPresenter {
 
 	@Override
 	int getTitleResourceId() {
-		return R.string.solar_activity_title;
+		return R.string.data_solar_activity_title;
 	}
 
 	@Override
 	int getDescriptionResourceId() {
-		return R.string.solar_activity_desc;
+		return R.string.data_solar_activity_desc;
 	}
 
 	// TODO make this more understandable

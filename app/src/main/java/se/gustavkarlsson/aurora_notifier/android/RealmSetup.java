@@ -50,9 +50,9 @@ class RealmSetup {
 		try (Realm realm = Realm.getDefaultInstance()) {
 			if (realm.where(EvaluationCache.class).findFirst() != null) {
 				EvaluationCache.clear();
-				Log.d(TAG, "clearCache: Cleared EvaluationCache");
+				Log.d(TAG, "Cleared EvaluationCache");
 			} else {
-				Log.d(TAG, "clearCache: No EvaluationCache found");
+				Log.d(TAG, "No EvaluationCache found");
 			}
 		}
 	}

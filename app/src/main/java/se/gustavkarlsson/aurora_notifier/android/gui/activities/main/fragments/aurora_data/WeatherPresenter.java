@@ -10,12 +10,12 @@ class WeatherPresenter extends AbstractAuroraDataPresenter {
 
 	@Override
 	int getTitleResourceId() {
-		return R.string.weather_title;
+		return R.string.data_weather_title;
 	}
 
 	@Override
 	int getDescriptionResourceId() {
-		return R.string.weather_desc;
+		return R.string.data_weather_desc;
 	}
 
 	void onUpdate(Weather weather) {

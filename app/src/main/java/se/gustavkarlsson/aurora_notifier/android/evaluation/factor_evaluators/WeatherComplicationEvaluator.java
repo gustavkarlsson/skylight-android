@@ -30,8 +30,8 @@ public class WeatherComplicationEvaluator implements ComplicationEvaluator {
 		} else if (cloudPercentage > 25) {
 			complications.add(new AuroraComplication(
 					LOW,
-					R.string.complication_probably_too_cloudy_title,
-					R.string.complication_probably_too_cloudy_desc));
+					R.string.complication_cloudy_title,
+					R.string.complication_cloudy_desc));
 		}
 		return complications;
 	}

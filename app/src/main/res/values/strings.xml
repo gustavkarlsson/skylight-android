@@ -4,10 +4,14 @@
 	<string name="exit">Exit</string>
 
 	<string name="location_permission_required_title">Location permission required</string>
-	<string name="location_permission_required_description">This app needs access to your location to calculate the chances of seeing northern lights. Please allow access to your location.</string>
+	<string name="location_permission_required_desc">
+		This app needs access to your location to calculate the chances of seeing the aurora. Please allow access to your location.
+	</string>
 
 	<string name="google_play_services_required_title">Google Play Services required</string>
-	<string name="google_play_services_required_description">This app needs Google Play Services to calculate the chances of seeing northern lights. Please install Google Play Services.</string>
+	<string name="google_play_services_required_desc">
+		This app needs Google Play Services to calculate the chances of seeing the aurora. Please install Google Play Services.
+	</string>
 
 	<string name="just_now">Just now</string>
 	<string name="aurora_chance_none">No Chance</string>

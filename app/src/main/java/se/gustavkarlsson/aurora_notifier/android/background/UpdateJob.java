@@ -32,7 +32,7 @@ class UpdateJob extends Job {
 			sendErrorNotification();
 			return FAILURE;
 		}
-		int timeoutMillis = getContext().getResources().getInteger(R.integer.background_update_timeout_millis);
+		int timeoutMillis = getContext().getResources().getInteger(R.integer.setting_background_update_timeout_millis);
 		Updater updater = new Updater(getContext(), timeoutMillis);
 		boolean successful = updater.update();
 		return successful ? SUCCESS : FAILURE;

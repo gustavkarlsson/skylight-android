@@ -12,12 +12,12 @@ class GeomagneticLocationPresenter extends AbstractAuroraDataPresenter {
 
 	@Override
 	int getTitleResourceId() {
-		return R.string.geomagnetic_location_title;
+		return R.string.data_geomagnetic_location_title;
 	}
 
 	@Override
 	int getDescriptionResourceId() {
-		return R.string.geomagnetic_location_desc;
+		return R.string.data_geomagnetic_location_desc;
 	}
 
 	void onUpdate(GeomagneticLocation geomagneticLocation) {

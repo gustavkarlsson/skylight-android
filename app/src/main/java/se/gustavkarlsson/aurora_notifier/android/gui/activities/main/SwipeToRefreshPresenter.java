@@ -15,7 +15,7 @@ class SwipeToRefreshPresenter {
 	SwipeToRefreshPresenter(SwipeRefreshLayout swipeRefreshLayout, Activity activity) {
 		this.swipeRefreshLayout = swipeRefreshLayout;
 		this.activity = activity;
-		this.timeoutMillis = activity.getResources().getInteger(R.integer.foreground_update_timeout_millis);
+		this.timeoutMillis = activity.getResources().getInteger(R.integer.setting_foreground_update_timeout_millis);
 	}
 
 	private void update(SwipeRefreshLayout swipeRefreshLayout, Activity activity) {

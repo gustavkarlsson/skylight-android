@@ -32,8 +32,8 @@ public class UpdateScheduler {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 		boolean enabled = sharedPreferences.getBoolean(key, true);
 		if (enabled && !scheduled) {
-			int intervalMillis = context.getResources().getInteger(R.integer.scheduled_update_interval_millis);
-			int flexMillis = context.getResources().getInteger(R.integer.scheduled_update_flex_millis);
+			int intervalMillis = context.getResources().getInteger(R.integer.setting_scheduled_update_interval_millis);
+			int flexMillis = context.getResources().getInteger(R.integer.setting_scheduled_update_flex_millis);
 			scheduleJob(intervalMillis, flexMillis);
 		} else if (!enabled && scheduled) {
 			cancelJobs();
