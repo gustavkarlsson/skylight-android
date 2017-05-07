@@ -3,7 +3,7 @@ package se.gustavkarlsson.aurora_notifier.android.realm;
 import io.realm.Realm;
 import io.realm.RealmObject;
 
-
+// TODO replace with preferences
 public class DebugSettings extends RealmObject {
 	private boolean enabled;
 	private float kpIndex;

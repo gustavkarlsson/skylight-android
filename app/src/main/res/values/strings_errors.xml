@@ -1,15 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="error_google_play_services_could_not_be_installed">Google Play Services could not be installed.</string>
-	<string name="error_google_play_services_not_supported">Google Play Services is required but not supported on this device.</string>
 	<string name="error_could_not_connect_to_google_play_services">Could not connect to Google Play Services. Check your internet connection.</string>
-	<string name="error_location_permission_missing">The app does not have permission to access the current location.</string>
-	<string name="error_could_not_determine_location">Could not determine current location.</string>
-	<string name="error_unknown_update_error">An unknown error occurred while updating.</string>
-	<string name="error_could_not_determine_solar_activity">Could not determine current solar activity.</string>
-	<string name="error_could_not_determine_weather">Could not determine current weather.</string>
-	<string name="error_could_not_determine_sun_position">Could not determine current sun position.</string>
-	<string name="error_updating_took_too_long">Updating took too long.</string>
-	<string name="error_connection_to_weather_service_failed">Connection to weather service failed.</string>
-	<string name="error_connection_to_solar_activity_service_failed">Connection to solar activity service failed.</string>
+	<string name="error_location_permission_missing">The app does not have permission to access the current location</string>
+	<string name="error_could_not_determine_location">Could not determine current location</string>
+	<string name="error_unknown_update_error">An unknown error occurred while updating</string>
+	<string name="error_could_not_determine_solar_activity">Could not determine current solar activity</string>
+	<string name="error_could_not_determine_weather">Could not determine current weather</string>
+	<string name="error_could_not_determine_sun_position">Could not determine current sun position</string>
+	<string name="error_updating_took_too_long">Updating took too long</string>
+	<string name="error_connection_to_weather_service_failed">Connection to weather service failed</string>
+	<string name="error_connection_to_solar_activity_service_failed">Connection to solar activity service failed</string>
+
+	<string name="error_location_permission_denied_title">Location permission denied</string>
+	<string name="error_location_permission_denied_description">
+		This app requires access to your location to calculate the chances of seeing northern lights.\n
+		\n
+		The application will now close.
+	</string>
+
+	<string name="error_google_play_services_could_not_be_installed_title">Google Play Services could not be installed</string>
+	<string name="error_google_play_services_could_not_be_installed_description">
+		This app requires Google Play Services to calculate the chances of seeing northern lights.\n
+		\n
+		The application will now close.
+	</string>
+
+	<string name="error_aurora_notifications_not_possible_title">Aurora notifications disabled</string>
+	<string name="error_aurora_notifications_not_possible_touch_to_fix">Touch to fix</string>
 </resources>

@@ -2,10 +2,10 @@
 <resources>
 	<string name="app_name" translatable="false">Aurora Notifier</string>
 	<string name="exit">Exit</string>
-	<string name="app_will_close">The application will now close</string>
 
 	<string name="location_permission_required_title">Location permission required</string>
 	<string name="location_permission_required_description">This app needs access to your location to calculate the chances of seeing northern lights. Please allow access to your location.</string>
+
 	<string name="google_play_services_required_title">Google Play Services required</string>
 	<string name="google_play_services_required_description">This app needs Google Play Services to calculate the chances of seeing northern lights. Please install Google Play Services.</string>
 

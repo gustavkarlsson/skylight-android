@@ -9,12 +9,13 @@ import se.gustavkarlsson.aurora_notifier.android.background.Updater;
 
 class SwipeToRefreshPresenter {
 	private final SwipeRefreshLayout swipeRefreshLayout;
+	private final Activity activity;
 	private final int timeoutMillis;
 
 	SwipeToRefreshPresenter(SwipeRefreshLayout swipeRefreshLayout, Activity activity) {
 		this.swipeRefreshLayout = swipeRefreshLayout;
+		this.activity = activity;
 		this.timeoutMillis = activity.getResources().getInteger(R.integer.foreground_update_timeout_millis);
-		swipeRefreshLayout.setOnRefreshListener(() -> update(swipeRefreshLayout, activity));
 	}
 
 	private void update(SwipeRefreshLayout swipeRefreshLayout, Activity activity) {
@@ -26,12 +27,16 @@ class SwipeToRefreshPresenter {
         });
 	}
 
-	void onStart() {
+	void enable() {
+		swipeRefreshLayout.setEnabled(true);
 		setRefreshing(false);
+		swipeRefreshLayout.setOnRefreshListener(() -> update(swipeRefreshLayout, activity));
 	}
 
-	void onStop() {
+	void disable() {
 		setRefreshing(false);
+		swipeRefreshLayout.setOnRefreshListener(null);
+		swipeRefreshLayout.setEnabled(false);
 	}
 
 	private void setRefreshing(boolean refreshing) {

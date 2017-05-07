@@ -10,7 +10,6 @@ import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +24,7 @@ import se.gustavkarlsson.aurora_notifier.android.BuildConfig;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.Updater;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
+import se.gustavkarlsson.aurora_notifier.android.gui.activities.AuroraRequirementsCheckingActivity;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.DebugActivity;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.settings.SettingsActivity;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
@@ -35,7 +35,7 @@ import static se.gustavkarlsson.aurora_notifier.android.background.Updater.RESPO
 import static se.gustavkarlsson.aurora_notifier.android.background.Updater.RESPONSE_UPDATE_FINISHED;
 import static se.gustavkarlsson.aurora_notifier.android.background.Updater.RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AuroraRequirementsCheckingActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
 
 	private int evaluationLifetimeMillis;
@@ -132,8 +132,19 @@ public class MainActivity extends AppCompatActivity {
 		Log.v(TAG, "onStart");
 		super.onStart();
 		AuroraEvaluation evaluation = getBestEvaluation();
+		ensureRequirementsMet();
 		updateGui(evaluation);
-		swipeToRefreshPresenter.onStart();
+	}
+
+	@Override
+	protected void onRequirementsMet() {
+		swipeToRefreshPresenter.enable();
+		AuroraEvaluation evaluation = getBestEvaluation();
+		long evaluationTimestampMillis = evaluation == null ? 0 : evaluation.getTimestampMillis();
+		long ageMillis = System.currentTimeMillis() - evaluationTimestampMillis;
+		if (ageMillis > evaluationLifetimeMillis) {
+			updateInBackground();
+		}
 	}
 
 	private AuroraEvaluation getBestEvaluation() {
@@ -142,18 +153,6 @@ public class MainActivity extends AppCompatActivity {
 			return evaluation;
 		}
 		return AuroraEvaluation.createFallback();
-	}
-
-	@Override
-	protected void onResume() {
-		Log.v(TAG, "onResume");
-		super.onResume();
-		AuroraEvaluation evaluation = EvaluationCache.get();
-		long evaluationTimestampMillis = evaluation == null ? 0 : evaluation.getTimestampMillis();
-		long ageMillis = System.currentTimeMillis() - evaluationTimestampMillis;
-		if (ageMillis > evaluationLifetimeMillis) {
-			updateInBackground();
-		}
 	}
 
 	private void updateInBackground() {
@@ -166,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public void onStop() {
 		Log.v(TAG, "onStop");
-		swipeToRefreshPresenter.onStop();
+		swipeToRefreshPresenter.disable();
 		super.onStop();
 	}
 
