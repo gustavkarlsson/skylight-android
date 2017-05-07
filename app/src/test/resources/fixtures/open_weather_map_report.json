@@ -1,0 +1,39 @@
+{
+  "coord": {
+	"lon": 50,
+	"lat": 30
+  },
+  "weather": [{
+	"id": 803,
+	"main": "Clouds",
+	"description": "broken clouds",
+	"icon": "04n"
+  }],
+  "base": "stations",
+  "main": {
+	"temp": 299.473,
+	"pressure": 1023.04,
+	"humidity": 83,
+	"temp_min": 299.473,
+	"temp_max": 299.473,
+	"sea_level": 1023.31,
+	"grnd_level": 1023.04
+  },
+  "wind": {
+	"speed": 9.9,
+	"deg": 94.0082
+  },
+  "clouds": {
+	"all": 68
+  },
+  "dt": 1494113465,
+  "sys": {
+	"message": 0.0021,
+	"country": "IR",
+	"sunrise": 1494035536,
+	"sunset": 1494084074
+  },
+  "id": 134217,
+  "name": "Bandar-e Ganaveh",
+  "cod": 200
+}

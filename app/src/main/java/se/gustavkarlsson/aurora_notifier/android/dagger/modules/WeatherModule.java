@@ -4,7 +4,7 @@ import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
 import retrofit2.Retrofit;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.OpenWeatherMapService;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.RetrofittedOpenWeatherMapProvider;
@@ -24,7 +24,7 @@ public class WeatherModule {
 	static OpenWeatherMapService provideOpenWeatherMapService() {
 		return new Retrofit.Builder()
 				.baseUrl(API_URL)
-				.addConverterFactory(SimpleXmlConverterFactory.create())
+				.addConverterFactory(GsonConverterFactory.create())
 				.build().create(OpenWeatherMapService.class);
 	}
 

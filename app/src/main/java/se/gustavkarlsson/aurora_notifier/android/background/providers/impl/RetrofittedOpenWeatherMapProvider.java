@@ -10,7 +10,6 @@ import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherPro
 import se.gustavkarlsson.aurora_notifier.android.models.data.Weather;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
-// TODO Look into using their json API
 public class RetrofittedOpenWeatherMapProvider implements WeatherProvider {
 	private static final String TAG = RetrofittedOpenWeatherMapProvider.class.getSimpleName();
 
@@ -25,13 +24,13 @@ public class RetrofittedOpenWeatherMapProvider implements WeatherProvider {
 	@Override
 	public Weather getWeather(double latitude, double longitude) {
 		try {
-			Response<OpenWeatherMapWeather> response = service.get(latitude, longitude, "xml", appId).execute();
+			Response<OpenWeatherMapWeather> response = service.get(latitude, longitude, "json", appId).execute();
 			Log.d(TAG, "Got response: " + response.code() + ", message: " + response.raw().toString());
 			if (!response.isSuccessful()) {
 				throw new UserFriendlyException(R.string.error_connection_to_weather_service_failed, response.errorBody().string());
 			}
 			OpenWeatherMapWeather openWeatherMapWeather = response.body();
-			return new Weather(openWeatherMapWeather.getCloudPercentage());
+			return new Weather(openWeatherMapWeather.getClouds().getAll());
 		} catch (IOException e) {
 			throw new UserFriendlyException(R.string.error_connection_to_weather_service_failed, e);
 		}

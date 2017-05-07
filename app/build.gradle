@@ -84,7 +84,6 @@ dependencies {
 	compile "com.google.guava:guava:20.0" // Skip v21 as it doesn't work well with android. v22 should though
 	compile "com.evernote:android-job:1.1.10"
 	compile "com.github.gustavkarlsson:aurora-notifier-common:aurora-notifier-common-1.5.0"
-	compile "org.simpleframework:simple-xml:2.7.1"
 	compile "net.e175.klaus:solarpositioning:0.0.9"
 
 	// Retrofit

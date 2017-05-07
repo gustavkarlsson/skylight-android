@@ -3,14 +3,14 @@ package se.gustavkarlsson.aurora_notifier.android.background.providers.impl;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.simpleframework.xml.Serializer;
-import org.simpleframework.xml.core.Persister;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -23,7 +23,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.any;
@@ -39,7 +39,7 @@ public class RetrofittedOpenWeatherMapProviderTest {
 	@Before
 	public void setUp() throws Exception {
 		mockStatic(Log.class);
-		mockedClient = mockClient(200, "fixtures/open_weather_map_report.xml", "application/xml");
+		mockedClient = mockClient(200, "fixtures/open_weather_map_report.json", "application/json");
 	}
 
 	private OkHttpClient mockClient(int statusCode, String bodyResourcePath, String mediaType) throws IOException {
@@ -77,7 +77,7 @@ public class RetrofittedOpenWeatherMapProviderTest {
 		RetrofittedOpenWeatherMapProvider service = new RetrofittedOpenWeatherMapProvider(new Retrofit.Builder()
 				.client(mockedClient)
 				.baseUrl("http://mocked.com")
-				.addConverterFactory(SimpleXmlConverterFactory.create())
+				.addConverterFactory(GsonConverterFactory.create())
 				.build()
 				.create(OpenWeatherMapService.class), "fake-app-id");
 
@@ -87,14 +87,14 @@ public class RetrofittedOpenWeatherMapProviderTest {
 	}
 
 	@Test
-	public void xmlDeserializationWorks() throws Exception {
+	public void jsonDeserializationWorks() throws Exception {
 		ClassLoader classLoader = getClass().getClassLoader();
-		String xml = IOUtils.toString(classLoader.getResource("fixtures/open_weather_map_report.xml").openStream(), Charset.forName("UTF-8"));
+		String xml = IOUtils.toString(classLoader.getResource("fixtures/open_weather_map_report.json").openStream(), Charset.forName("UTF-8"));
 
-		Serializer serializer = new Persister();
-		OpenWeatherMapWeather weather = serializer.read(OpenWeatherMapWeather.class, xml);
+		Gson gson = new Gson();
+		OpenWeatherMapWeather weather = gson.fromJson(xml, OpenWeatherMapWeather.class);
 
-		int cloudiness = weather.getCloudPercentage();
+		int cloudiness = weather.getClouds().getAll();
 		assertThat(cloudiness).isEqualTo(68);
 	}
 }

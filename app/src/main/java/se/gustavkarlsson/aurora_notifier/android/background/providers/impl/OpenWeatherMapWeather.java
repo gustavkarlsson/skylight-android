@@ -1,19 +1,14 @@
 package se.gustavkarlsson.aurora_notifier.android.background.providers.impl;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Path;
-import org.simpleframework.xml.Root;
+import com.google.gson.annotations.SerializedName;
 
-import static java.lang.Integer.parseInt;
-
-@Root(strict = false, name = "current")
 class OpenWeatherMapWeather {
-	@Path("clouds")
-	@Attribute(name = "value")
-	private String cloudPercentage;
 
-	int getCloudPercentage() {
-		return parseInt(cloudPercentage);
+	@SerializedName("clouds")
+	private Clouds clouds;
+
+	Clouds getClouds() {
+		return clouds;
 	}
 
 	@Override
@@ -23,19 +18,51 @@ class OpenWeatherMapWeather {
 
 		OpenWeatherMapWeather that = (OpenWeatherMapWeather) o;
 
-		return cloudPercentage != null ? cloudPercentage.equals(that.cloudPercentage) : that.cloudPercentage == null;
+		return clouds != null ? clouds.equals(that.clouds) : that.clouds == null;
 
 	}
 
 	@Override
 	public int hashCode() {
-		return cloudPercentage != null ? cloudPercentage.hashCode() : 0;
+		return clouds != null ? clouds.hashCode() : 0;
 	}
 
 	@Override
 	public String toString() {
 		return "OpenWeatherMapWeather{" +
-				"cloudPercentage='" + cloudPercentage + '\'' +
+				"clouds='" + clouds + '\'' +
 				'}';
+	}
+
+	static class Clouds {
+
+		@SerializedName("all")
+		private Integer all;
+
+		int getAll() {
+			return all;
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+
+			Clouds that = (Clouds) o;
+
+			return all != null ? all.equals(that.all) : that.all == null;
+		}
+
+		@Override
+		public int hashCode() {
+			return all != null ? all.hashCode() : 0;
+		}
+
+		@Override
+		public String toString() {
+			return "Clouds{" +
+					"all=" + all +
+					'}';
+		}
 	}
 }
