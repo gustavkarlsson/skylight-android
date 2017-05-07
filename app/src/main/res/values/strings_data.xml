@@ -19,7 +19,7 @@
 	<string name="data_sun_position_title">Sun position</string>
 	<string name="data_sun_position_desc">
 		Because the aurora is only visible in the dark, the position of the sun is important.
-		This value shows the sun\'s position in degrees, ranging for 0°
+		This value shows the sun\'s position in degrees, ranging from 0°
 		(right above your head) to 180° (other side of the globe).
 	</string>
 </resources>
