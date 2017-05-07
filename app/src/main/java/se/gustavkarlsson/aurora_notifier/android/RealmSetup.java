@@ -11,7 +11,6 @@ import io.realm.RealmConfiguration;
 import io.realm.RealmObject;
 import se.gustavkarlsson.aurora_notifier.android.realm.EvaluationCache;
 import se.gustavkarlsson.aurora_notifier.android.realm.Requirements;
-import se.gustavkarlsson.aurora_notifier.android.realm.Settings;
 
 class RealmSetup {
 	private static final String TAG = RealmSetup.class.getSimpleName();
@@ -27,7 +26,6 @@ class RealmSetup {
 			for (Class<? extends RealmObject> clazz : classes) {
 				ensureRealmSingletonExists(realm, clazz);
 			}
-			ensureSettingsExist(realm, context);
 		}
 	}
 
@@ -45,19 +43,6 @@ class RealmSetup {
 			realm.executeTransaction(r -> realm.createObject(realmClass));
 		} else {
 			Log.d(TAG, "An instance of " + realmClass + " already exists.");
-		}
-	}
-
-	private static void ensureSettingsExist(Realm realm, Context context) {
-		Log.i(TAG, "Ensuring that Settings exist");
-		if (realm.where(Settings.class).count() == 0) {
-			Log.d(TAG, "No instance of " + Settings.class.getSimpleName() + " exists. Creating one with defaults");
-			realm.executeTransaction(r -> {
-				Settings settings = realm.createObject(Settings.class);
-				settings.setNotifications(context.getResources().getBoolean(R.bool.default_notifications_enabled));
-			});
-		} else {
-			Log.d(TAG, "An instance of " + Settings.class + " already exists.");
 		}
 	}
 }
