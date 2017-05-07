@@ -44,7 +44,7 @@ class UpdateJob extends Job {
 		return googlePlayServicesAvailable && hasLocationPermission;
 	}
 
-	// TODO improve notification
+	// TODO improve notification (flags can make two MainActivity stack)
 	private void sendErrorNotification() {
 		Context context = getContext();
 		Intent intent = new Intent(context, MainActivity.class);
