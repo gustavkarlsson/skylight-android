@@ -14,11 +14,6 @@ public class AuroraNotifier extends Application {
 		super.onCreate();
 		RealmSetup.run(this);
 		UpdateScheduler.initJobManager(this);
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 
 }
