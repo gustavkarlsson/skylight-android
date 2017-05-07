@@ -1,7 +1,6 @@
-package se.gustavkarlsson.aurora_notifier.android.gui.fragments.aurora_data;
+package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_data;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView;
 import se.gustavkarlsson.aurora_notifier.android.models.data.Weather;
 
 class WeatherPresenter extends AbstractAuroraDataPresenter {

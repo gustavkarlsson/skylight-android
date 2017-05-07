@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.gui.fragments.aurora_data;
+package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_data;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
-import se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 

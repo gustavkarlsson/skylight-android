@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.gui.views;
+package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_data;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

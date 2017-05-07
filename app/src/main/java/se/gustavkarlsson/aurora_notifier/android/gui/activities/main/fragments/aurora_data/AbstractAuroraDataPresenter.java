@@ -1,10 +1,8 @@
-package se.gustavkarlsson.aurora_notifier.android.gui.fragments.aurora_data;
+package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_data;
 
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-
-import se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

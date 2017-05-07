@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.gui.fragments.aurora_chance;
+package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_chance;
 
 import android.widget.TextView;
 

@@ -2,6 +2,8 @@ package se.gustavkarlsson.aurora_notifier.android.background;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.evernote.android.job.JobManager;
@@ -24,13 +26,17 @@ public class UpdateScheduler {
 		});
 	}
 
+	// TODO show notification if requirements are not fulfilled
 	public static void setupUpdateScheduling(Context context) {
-		if (!Requirements.isFulfilled()) {
-			cancelJobs();
-		} else {
+		String key = context.getString(R.string.pref_notifications_key);
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		boolean enabled = sharedPreferences.getBoolean(key, true);
+		if (enabled && Requirements.isFulfilled()) {
 			int intervalMillis = context.getResources().getInteger(R.integer.scheduled_update_interval_millis);
 			int flexMillis = context.getResources().getInteger(R.integer.scheduled_update_flex_millis);
 			scheduleJob(intervalMillis, flexMillis);
+		} else {
+			cancelJobs();
 		}
 	}
 
@@ -39,7 +45,7 @@ public class UpdateScheduler {
 				.setPeriodic(intervalMillis, flexMillis)
 				.setPersisted(true)
 				.setUpdateCurrent(true)
-				.setRequiredNetworkType(JobRequest.NetworkType.NOT_ROAMING)
+				.setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
 				.setRequirementsEnforced(true)
 				.build()
 				.schedule();

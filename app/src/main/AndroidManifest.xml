@@ -55,6 +55,12 @@
 			android:name=".gui.activities.DebugActivity"
 			android:label="@string/debug">
 		</activity>
+
+		<receiver android:name=".UpgradeReceiver">
+			<intent-filter>
+				<action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+			</intent-filter>
+		</receiver>
 	</application>
 
 </manifest>

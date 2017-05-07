@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.gui.fragments.aurora_data;
+package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_data;
 
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;

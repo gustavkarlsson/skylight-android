@@ -51,7 +51,7 @@ public class EvaluationCache extends RealmObject {
 		}
 	}
 
-	private static void clear() {
+	public static void clear() {
 		try (Realm realm = Realm.getDefaultInstance()) {
 			EvaluationCache cache = getSingleton(realm);
 			realm.executeTransaction(r -> cache.data = null);

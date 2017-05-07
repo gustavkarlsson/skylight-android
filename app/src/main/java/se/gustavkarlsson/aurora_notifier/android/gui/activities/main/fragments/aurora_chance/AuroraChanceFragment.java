@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.gui.fragments.aurora_chance;
+package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_chance;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

@@ -22,7 +22,7 @@
 
 			<fragment
 				android:id="@+id/fragment_aurora_chance"
-				android:name="se.gustavkarlsson.aurora_notifier.android.gui.fragments.aurora_chance.AuroraChanceFragment"
+				android:name="se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_chance.AuroraChanceFragment"
 				android:layout_width="match_parent"
 				android:layout_height="0dp"
 				android:layout_weight="4"
@@ -30,7 +30,7 @@
 
 			<fragment
 				android:id="@+id/fragment_aurora_data"
-				android:name="se.gustavkarlsson.aurora_notifier.android.gui.fragments.aurora_data.AuroraDataFragment"
+				android:name="se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_data.AuroraDataFragment"
 				android:layout_width="match_parent"
 				android:layout_height="0dp"
 				android:layout_weight="6"
@@ -52,7 +52,7 @@
 
 		<fragment
 			android:id="@+id/fragment_aurora_complications"
-			android:name="se.gustavkarlsson.aurora_notifier.android.gui.fragments.aurora_complications.AuroraComplicationsFragment"
+			android:name="se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_complications.AuroraComplicationsFragment"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			tools:layout="@layout/fragment_aurora_complications" />

@@ -3,7 +3,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	tools:context=".gui.fragments.aurora_complications.AuroraComplicationsFragment">
+	tools:context=".gui.activities.main.fragments.aurora_complications.AuroraComplicationsFragment">
 
 	<TextView
 		android:id="@+id/why"

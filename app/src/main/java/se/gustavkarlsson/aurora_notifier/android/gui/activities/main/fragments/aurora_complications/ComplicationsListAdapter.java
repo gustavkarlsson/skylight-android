@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.gui.fragments.aurora_complications;
+package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_complications;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.List;
+
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 

@@ -5,7 +5,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:orientation="vertical"
-	tools:context=".gui.fragments.aurora_data.AuroraDataFragment">
+	tools:context=".gui.activities.main.fragments.aurora_data.AuroraDataFragment">
 
 	<Space
 		android:id="@+id/grid_center"
@@ -13,7 +13,7 @@
 		android:layout_height="wrap_content"
 		android:layout_centerInParent="true" />
 
-	<se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView
+	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_data.AuroraDataView
 		android:id="@+id/aurora_data_solar_activity"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
 		android:paddingEnd="16dp"
 		custom:drawable="@drawable/ic_timeline_white_48dp"/>
 
-	<se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView
+	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_data.AuroraDataView
 		android:id="@+id/aurora_data_geomagnetic_location"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
 		android:paddingStart="16dp"
 		custom:drawable="@drawable/earth_white_48dp" />
 
-	<se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView
+	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_data.AuroraDataView
 		android:id="@+id/aurora_data_weather"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
 		android:paddingEnd="16dp"
 		custom:drawable="@drawable/partly_cloudy_white_48dp" />
 
-	<se.gustavkarlsson.aurora_notifier.android.gui.views.AuroraDataView
+	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_data.AuroraDataView
 		android:id="@+id/aurora_data_sun_position"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"

@@ -45,4 +45,15 @@ class RealmSetup {
 			Log.d(TAG, "An instance of " + realmClass + " already exists.");
 		}
 	}
+
+	static void clearCache() {
+		try (Realm realm = Realm.getDefaultInstance()) {
+			if (realm.where(EvaluationCache.class).findFirst() != null) {
+				EvaluationCache.clear();
+				Log.d(TAG, "clearCache: Cleared EvaluationCache");
+			} else {
+				Log.d(TAG, "clearCache: No EvaluationCache found");
+			}
+		}
+	}
 }
