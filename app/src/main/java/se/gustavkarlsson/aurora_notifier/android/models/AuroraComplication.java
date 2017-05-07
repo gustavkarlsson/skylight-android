@@ -36,6 +36,8 @@ public class AuroraComplication implements Comparable<AuroraComplication> {
 		return chance.compareTo(other.getChance());
 	}
 
+	// TODO implement equals to conform with compareTo (Generally, the value of compareTo should return zero if and only if equals returns true)
+
 	@Override
 	public String toString() {
 		return "AuroraComplication{" +
