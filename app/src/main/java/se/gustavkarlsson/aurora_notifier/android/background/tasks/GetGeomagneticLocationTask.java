@@ -20,7 +20,7 @@ public class GetGeomagneticLocationTask extends AsyncTask<Object, Void, Geomagne
 
 	@Override
 	protected GeomagneticLocation doInBackground(Object... params) {
-		Log.i(TAG, "Getting degrees from closest pole...");
+		Log.i(TAG, "Getting geomagnetic location...");
 		GeomagneticLocation geomagneticLocation = provider.getGeomagneticLocation(location.getLatitude(), location.getLongitude());
 		Log.d(TAG, "Geomagnetic location is: " + geomagneticLocation);
 		return geomagneticLocation;
