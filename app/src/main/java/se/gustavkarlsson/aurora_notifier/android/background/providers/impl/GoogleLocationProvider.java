@@ -31,7 +31,7 @@ public class GoogleLocationProvider implements LocationProvider {
 				if (connectionResult.getErrorCode() == ConnectionResult.TIMEOUT) {
 					throw new UserFriendlyException(R.string.error_updating_took_too_long, "Connecting to Google API timed out after " + timeoutMillis + "ms");
 				}
-				throw new UserFriendlyException(R.string.could_not_connect_to_google_play_services, createErrorMessage(connectionResult));
+				throw new UserFriendlyException(R.string.error_could_not_connect_to_google_play_services, createErrorMessage(connectionResult));
 			}
 			Log.d(TAG, "Successfully connected to Google Play Services");
 			Log.d(TAG, "Getting location...");

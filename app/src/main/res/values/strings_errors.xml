@@ -2,7 +2,7 @@
 <resources>
 	<string name="error_google_play_services_could_not_be_installed">Google Play Services could not be installed.</string>
 	<string name="error_google_play_services_not_supported">Google Play Services is required but not supported on this device.</string>
-	<string name="could_not_connect_to_google_play_services">Could not connect to Google Play Services. Check your internet connection.</string>
+	<string name="error_could_not_connect_to_google_play_services">Could not connect to Google Play Services. Check your internet connection.</string>
 	<string name="error_location_permission_missing">The app does not have permission to access the current location.</string>
 	<string name="error_could_not_determine_location">Could not determine current location.</string>
 	<string name="error_unknown_update_error">An unknown error occurred while updating.</string>

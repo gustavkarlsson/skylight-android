@@ -4,6 +4,12 @@
 	  xmlns:tools="http://schemas.android.com/tools"
 	  tools:context=".gui.activities.main.MainActivity">
 	<item
+		android:id="@+id/action_settings"
+		android:orderInCategory="1"
+		android:title="@string/settings"
+		android:icon="@drawable/ic_settings_white_24dp"
+		app:showAsAction="ifRoom"/>
+	<item
 		android:id="@+id/action_debug"
 		android:orderInCategory="100"
 		android:title="@string/debug"

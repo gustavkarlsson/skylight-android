@@ -69,18 +69,6 @@ public class DebugActivity extends AppCompatActivity {
 	}
 
 	@Override
-	public void onStart() {
-		Log.v(TAG, "onStart");
-		super.onStart();
-	}
-
-	@Override
-	public void onStop() {
-		Log.v(TAG, "onStop");
-		super.onStop();
-	}
-
-	@Override
 	public void onDestroy() {
 		Log.v(TAG, "onDestroy");
 		realm.close();

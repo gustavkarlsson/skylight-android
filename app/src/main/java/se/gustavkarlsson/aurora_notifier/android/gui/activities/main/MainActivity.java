@@ -26,6 +26,7 @@ import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.Updater;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.DebugActivity;
+import se.gustavkarlsson.aurora_notifier.android.gui.activities.settings.SettingsActivity;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 import se.gustavkarlsson.aurora_notifier.android.realm.EvaluationCache;
 
@@ -111,11 +112,17 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Log.v(TAG, "onOptionsItemSelected");
-		int id = item.getItemId();
-		if (id == R.id.action_debug) {
-			Intent intent = new Intent(this, DebugActivity.class);
-			startActivity(intent);
-			return true;
+		switch (item.getItemId()) {
+			case R.id.action_debug: {
+				Intent intent = new Intent(this, DebugActivity.class);
+				startActivity(intent);
+				return true;
+			}
+			case R.id.action_settings: {
+				Intent intent = new Intent(this, SettingsActivity.class);
+				startActivity(intent);
+				return true;
+			}
 		}
 		return super.onOptionsItemSelected(item);
 	}
