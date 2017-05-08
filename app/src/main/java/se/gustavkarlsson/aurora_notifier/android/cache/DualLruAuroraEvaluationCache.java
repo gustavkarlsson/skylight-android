@@ -17,7 +17,7 @@ public class DualLruAuroraEvaluationCache implements AuroraEvaluationCache {
 
 	private static final String CACHE_NAME = TAG;
 	private static final int SIZE_OF_EVALUATION = 2000; // Very rough estimation
-	private static final String CURRENT_LOCATION_ID = TAG + ".currentLocation";
+	private static final String CURRENT_LOCATION_KEY = "currentLocation";
 
 	private final DualCache<AuroraEvaluation> cache;
 
@@ -34,12 +34,12 @@ public class DualLruAuroraEvaluationCache implements AuroraEvaluationCache {
 
 	@Override
 	public AuroraEvaluation getCurrentLocation() {
-		return cache.get(CURRENT_LOCATION_ID);
+		return cache.get(CURRENT_LOCATION_KEY);
 	}
 
 	@Override
 	public void setCurrentLocation(AuroraEvaluation evaluation) {
-		cache.put(CURRENT_LOCATION_ID, evaluation);
+		cache.put(CURRENT_LOCATION_KEY, evaluation);
 	}
 
 }
