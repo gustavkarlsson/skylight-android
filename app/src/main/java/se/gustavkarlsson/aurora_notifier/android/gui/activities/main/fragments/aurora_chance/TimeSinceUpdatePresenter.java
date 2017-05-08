@@ -48,7 +48,7 @@ class TimeSinceUpdatePresenter {
 			return;
 		}
 		if (isJustNow(lastUpdateMillis)) {
-			timeSinceUpdateTextView.setText(R.string.just_now);
+			timeSinceUpdateTextView.setText(R.string.right_now);
 			return;
 		}
 		CharSequence text = formatRelativeTime(lastUpdateMillis);

@@ -13,7 +13,7 @@
 		This app needs Google Play Services to calculate the chances of seeing the aurora. Please install Google Play Services.
 	</string>
 
-	<string name="just_now">Just now</string>
+	<string name="right_now">Right now</string>
 	<string name="aurora_chance_none">No Chance</string>
 	<string name="aurora_chance_low">Low Chance</string>
 	<string name="aurora_chance_medium">Medium Chance</string>
