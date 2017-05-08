@@ -9,6 +9,7 @@ import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GoogleLocationMo
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.KpIndexModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.SunPositionModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.WeatherModule;
+import se.gustavkarlsson.aurora_notifier.android.dagger.scopes.BackgroundScope;
 
 @Component(modules = {
 		AuroraDataModule.class,
@@ -18,8 +19,12 @@ import se.gustavkarlsson.aurora_notifier.android.dagger.modules.WeatherModule;
 		KpIndexModule.class,
 		SunPositionModule.class,
 		WeatherModule.class
+},
+dependencies = {
+		ApplicationComponent.class
 })
+@BackgroundScope
 @SuppressWarnings("WeakerAccess")
-public interface UpdateJobComponent {
+public interface UpdaterComponent {
 	void inject(Updater updater);
 }

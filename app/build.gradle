@@ -3,18 +3,6 @@ apply plugin: "com.neenbedankt.android-apt"
 apply plugin: "realm-android"
 apply plugin: "me.tatarka.retrolambda"
 
-repositories {
-	maven {
-		url "https://s3.amazonaws.com/repo.commonsware.com"
-	}
-	maven {
-		url "https://jitpack.io"
-	}
-	maven {
-		url "https://oss.sonatype.org/content/repositories/snapshots"
-	}
-}
-
 android {
 	compileSdkVersion 25
 	buildToolsVersion "25.0.2"
@@ -32,6 +20,12 @@ android {
 		versionName "1.0"
 		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 	}
+
+	packagingOptions {
+		exclude "META-INF/LICENSE"
+		exclude "META-INF/NOTICE"
+	}
+
 	buildTypes {
 		release {
 			minifyEnabled true
@@ -42,6 +36,7 @@ android {
 			applicationIdSuffix ".debug"
 		}
 	}
+
 	lintOptions {
 		// use this line to check all rules except those listed
 		disable "InvalidPackage"
@@ -51,12 +46,6 @@ android {
 
 retrolambda {
 	jvmArgs "-noverify"
-}
-
-configurations {
-	compile.exclude module: "stax"
-	compile.exclude module: "stax-api"
-	compile.exclude module: "xpp3"
 }
 
 // Stops dagger compiler errors from truncating
@@ -85,11 +74,11 @@ dependencies {
 	compile "com.evernote:android-job:1.1.10"
 	compile "com.github.gustavkarlsson:aurora-notifier-common:aurora-notifier-common-1.5.0"
 	compile "net.e175.klaus:solarpositioning:0.0.9"
+	compile "com.vincentbrison.openlibraries.android:dualcache:3.1.1"
 
 	// Retrofit
 	compile "com.squareup.retrofit2:retrofit:" + retrofitVersion
 	compile "com.squareup.retrofit2:converter-gson:" + retrofitVersion
-	compile "com.squareup.retrofit2:converter-simplexml:" + retrofitVersion
 
 	// Parceler
 	compile "org.parceler:parceler-api:" + parcelerVersion

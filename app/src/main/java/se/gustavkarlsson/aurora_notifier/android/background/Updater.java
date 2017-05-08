@@ -12,12 +12,14 @@ import javax.inject.Inject;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraEvaluationProvider;
-import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdateJobComponent;
+import se.gustavkarlsson.aurora_notifier.android.cache.AuroraEvaluationCache;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdaterComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GoogleLocationModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.WeatherModule;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
-import se.gustavkarlsson.aurora_notifier.android.realm.EvaluationCache;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
+
+import static se.gustavkarlsson.aurora_notifier.android.AuroraNotifier.getApplicationComponent;
 
 public class Updater {
 	private static final String TAG = Updater.class.getSimpleName();
@@ -30,13 +32,17 @@ public class Updater {
 	@Inject
 	AuroraEvaluationProvider evaluationProvider;
 
+	@Inject
+	AuroraEvaluationCache cache;
+
 	private final Context context;
 	private final int updateTimeoutMillis;
 
 	public Updater(Context context, int updateTimeoutMillis) {
 		this.context = context;
 		this.updateTimeoutMillis = updateTimeoutMillis;
-		DaggerUpdateJobComponent.builder()
+		DaggerUpdaterComponent.builder()
+				.applicationComponent(getApplicationComponent(context))
 				.googleLocationModule(new GoogleLocationModule(context))
 				.weatherModule(new WeatherModule(context.getString(R.string.api_key_openweathermap)))
 				.build()
@@ -47,8 +53,8 @@ public class Updater {
 		Log.v(TAG, "onUpdate");
 		try {
 			AuroraEvaluation evaluation = evaluationProvider.getEvaluation(updateTimeoutMillis);
+			cache.setCurrentLocation(evaluation);
 			broadcastEvaluation(evaluation);
-			EvaluationCache.set(evaluation);
 			return true;
 		} catch (UserFriendlyException e) {
 			String errorMessage = context.getString(e.getStringResourceId());

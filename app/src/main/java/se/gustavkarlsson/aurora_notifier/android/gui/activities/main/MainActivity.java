@@ -20,16 +20,20 @@ import org.parceler.Parcels;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import se.gustavkarlsson.aurora_notifier.android.BuildConfig;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.Updater;
+import se.gustavkarlsson.aurora_notifier.android.cache.AuroraEvaluationCache;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerMainActivityComponent;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.AuroraRequirementsCheckingActivity;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.DebugActivity;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.settings.SettingsActivity;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
-import se.gustavkarlsson.aurora_notifier.android.realm.EvaluationCache;
 
+import static se.gustavkarlsson.aurora_notifier.android.AuroraNotifier.getApplicationComponent;
 import static se.gustavkarlsson.aurora_notifier.android.background.Updater.RESPONSE_UPDATE_ERROR;
 import static se.gustavkarlsson.aurora_notifier.android.background.Updater.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE;
 import static se.gustavkarlsson.aurora_notifier.android.background.Updater.RESPONSE_UPDATE_FINISHED;
@@ -37,6 +41,9 @@ import static se.gustavkarlsson.aurora_notifier.android.background.Updater.RESPO
 
 public class MainActivity extends AuroraRequirementsCheckingActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
+
+	@Inject
+	AuroraEvaluationCache auroraEvaluationCache;
 
 	private int evaluationLifetimeMillis;
 	private int backgroundUpdateTimeoutMillis;
@@ -50,6 +57,10 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		DaggerMainActivityComponent.builder()
+				.applicationComponent(getApplicationComponent(this))
+				.build()
+				.inject(this);
 		evaluationLifetimeMillis = getResources().getInteger(R.integer.setting_foreground_evaluation_lifetime_millis);
 		backgroundUpdateTimeoutMillis = getResources().getInteger(R.integer.setting_background_update_timeout_millis);
 		swipeToRefreshPresenter = new SwipeToRefreshPresenter((SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout), this);
@@ -148,7 +159,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	}
 
 	private AuroraEvaluation getBestEvaluation() {
-		AuroraEvaluation evaluation = EvaluationCache.get();
+		AuroraEvaluation evaluation = auroraEvaluationCache.getCurrentLocation();
 		if (evaluation != null) {
 			return evaluation;
 		}

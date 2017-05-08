@@ -8,5 +8,8 @@
 	<integer name="setting_scheduled_update_interval_millis">1200000</integer> <!-- 20 minutes -->
 	<integer name="setting_scheduled_update_flex_millis">600000</integer> <!-- 10 minutes -->
 
+	<integer name="setting_aurora_evaluation_cache_max_ram_size_bytes">100000</integer> <!-- 100kB -->
+	<integer name="setting_aurora_evaluation_cache_max_disk_size_bytes">100000</integer> <!-- 100kB -->
+
 	<bool name="setting_default_notifications_enabled">true</bool>
 </resources>
