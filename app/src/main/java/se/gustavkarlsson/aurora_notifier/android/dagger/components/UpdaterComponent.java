@@ -4,6 +4,7 @@ import dagger.Component;
 import se.gustavkarlsson.aurora_notifier.android.background.Updater;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.AuroraDataModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.AuroraEvaluationModule;
+import se.gustavkarlsson.aurora_notifier.android.dagger.modules.ContextModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GeomagneticLocationModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GoogleLocationModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.KpIndexModule;
@@ -12,6 +13,7 @@ import se.gustavkarlsson.aurora_notifier.android.dagger.modules.WeatherModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.scopes.BackgroundScope;
 
 @Component(modules = {
+		ContextModule.class,
 		AuroraDataModule.class,
 		AuroraEvaluationModule.class,
 		GeomagneticLocationModule.class,

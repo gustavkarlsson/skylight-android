@@ -15,16 +15,11 @@ import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.Geoco
 import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.GoogleLocationProvider;
 
 @Module
-public class GoogleLocationModule {
-	private final Context context;
-
-	public GoogleLocationModule(Context context) {
-		this.context = context;
-	}
+public abstract class GoogleLocationModule {
 
 	@Provides
 	@Reusable
-	LocationProvider provideLocationProvider() {
+	static LocationProvider provideLocationProvider(Context context) {
 		GoogleApiClient googleApiClient = new GoogleApiClient.Builder(context)
 				.addApi(LocationServices.API)
 				.build();
@@ -33,7 +28,7 @@ public class GoogleLocationModule {
 
 	@Provides
 	@Reusable
-	AddressProvider provideAddressProvider() {
+	static AddressProvider provideAddressProvider(Context context) {
 		Geocoder geocoder = new Geocoder(context);
 		return new GeocoderAddressProvider(geocoder);
 	}

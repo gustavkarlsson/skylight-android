@@ -14,8 +14,7 @@ import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraEvaluationProvider;
 import se.gustavkarlsson.aurora_notifier.android.cache.AuroraEvaluationCache;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdaterComponent;
-import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GoogleLocationModule;
-import se.gustavkarlsson.aurora_notifier.android.dagger.modules.WeatherModule;
+import se.gustavkarlsson.aurora_notifier.android.dagger.modules.ContextModule;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
@@ -43,8 +42,7 @@ public class Updater {
 		this.updateTimeoutMillis = updateTimeoutMillis;
 		DaggerUpdaterComponent.builder()
 				.applicationComponent(getApplicationComponent(context))
-				.googleLocationModule(new GoogleLocationModule(context))
-				.weatherModule(new WeatherModule(context.getString(R.string.api_key_openweathermap)))
+				.contextModule(new ContextModule(context))
 				.build()
 				.inject(this);
 	}

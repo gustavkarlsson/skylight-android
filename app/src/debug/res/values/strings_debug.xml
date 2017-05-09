@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="override_values">Override Values</string>
+	<string name="pref_override_values_key">override_values</string>
+	<string name="pref_override_values_title">Override values</string>
+
+	<string name="pref_kp_index_key">kp_index</string>
+	<string name="pref_kp_index_title">Kp index</string>
+
+	<string name="pref_geomagnetic_location_key">geomagnetic_location</string>
+	<string name="pref_geomagnetic_location_title">Geomagnetic location</string>
+
+	<string name="pref_cloud_percentage_key">cloud_percentage</string>
+	<string name="pref_cloud_percentage_title">Cloud percentage</string>
+
+	<string name="pref_sun_position_key">sun_position</string>
+	<string name="pref_sun_position_title">Sun position</string>
 </resources>

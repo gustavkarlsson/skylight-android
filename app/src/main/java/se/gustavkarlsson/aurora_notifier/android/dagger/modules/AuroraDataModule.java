@@ -4,13 +4,13 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.Reusable;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraDataProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.DebugOverrideableAuroraDataProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.AggregatingAuroraDataProvider;
 
 @Module
 public abstract class AuroraDataModule {
 
 	@Binds
 	@Reusable
-	abstract AuroraDataProvider bindAuroraDataProvider(DebugOverrideableAuroraDataProvider provider);
+	abstract AuroraDataProvider bindAuroraDataProvider(AggregatingAuroraDataProvider provider);
 
 }

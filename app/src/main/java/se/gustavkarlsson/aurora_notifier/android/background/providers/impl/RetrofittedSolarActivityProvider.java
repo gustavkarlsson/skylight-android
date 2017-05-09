@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
-import dagger.Reusable;
 import retrofit2.Response;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SolarActivityProvider;
@@ -15,7 +14,6 @@ import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;
 
-@Reusable
 public class RetrofittedSolarActivityProvider implements SolarActivityProvider {
 	private static final String TAG = RetrofittedSolarActivityProvider.class.getSimpleName();
 

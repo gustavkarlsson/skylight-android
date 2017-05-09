@@ -7,7 +7,7 @@ import android.util.Log;
 import se.gustavkarlsson.aurora_notifier.android.background.UpdateScheduler;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.ApplicationComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerApplicationComponent;
-import se.gustavkarlsson.aurora_notifier.android.dagger.modules.CacheModule;
+import se.gustavkarlsson.aurora_notifier.android.dagger.modules.ContextModule;
 
 public class AuroraNotifier extends Application {
 	private static final String TAG = AuroraNotifier.class.getSimpleName();
@@ -19,9 +19,8 @@ public class AuroraNotifier extends Application {
 		Log.v(TAG, "onCreate");
 		super.onCreate();
 		this.applicationComponent = DaggerApplicationComponent.builder()
-				.cacheModule(new CacheModule(this))
+				.contextModule(new ContextModule(this))
 				.build();
-		RealmSetup.run(this);
 		UpdateScheduler.initJobManager(this);
 	}
 

@@ -1,77 +1,78 @@
 package se.gustavkarlsson.aurora_notifier.android.gui.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
+import android.preference.PreferenceGroup;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ToggleButton;
 
-import io.realm.Realm;
+import java.util.Map;
+
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.realm.DebugSettings;
 
 public class DebugActivity extends AppCompatActivity {
 	private static final String TAG = DebugActivity.class.getSimpleName();
 
-	private Realm realm;
-
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_debug);
-		realm = Realm.getDefaultInstance();
-		DebugSettings debugSettings = DebugSettings.get(realm);
 
-		ToggleButton enabledButton = (ToggleButton) findViewById(R.id.debug_enabled);
-		enabledButton.setChecked(debugSettings.isEnabled());
-
-		EditText kpIndexEditText = (EditText) findViewById(R.id.debug_kp_index);
-		kpIndexEditText.setText("" + debugSettings.getKpIndex());
-
-		EditText geomagneticLocationEditText = (EditText) findViewById(R.id.debug_geomagnetic_location);
-		geomagneticLocationEditText.setText("" + debugSettings.getDegreesFromGeomagneticPole());
-
-		EditText cloudPercentageEditText = (EditText) findViewById(R.id.debug_cloud_percentage);
-		cloudPercentageEditText.setText("" + debugSettings.getCloudPercentage());
-
-		EditText sunPositionEditText = (EditText) findViewById(R.id.debug_sun_position);
-		sunPositionEditText.setText("" + debugSettings.getSunPosition());
-
-		Button setValuesButton = (Button) findViewById(R.id.debug_set_values);
-		setValuesButton.setOnClickListener(v -> {
-			realm.executeTransaction(r -> {
-
-				debugSettings.setEnabled(enabledButton.isChecked());
-
-				String kpIndexString = kpIndexEditText.getText().toString();
-				if (kpIndexString != null && !kpIndexString.isEmpty()) {
-					debugSettings.setKpIndex(Float.valueOf(kpIndexString));
-				}
-
-				String geomagneticLocationString = geomagneticLocationEditText.getText().toString();
-				if (geomagneticLocationString != null && !geomagneticLocationString.isEmpty()) {
-					debugSettings.setDegreesFromGeomagneticPole(Float.valueOf(geomagneticLocationString));
-				}
-
-				String cloudPercentageString = cloudPercentageEditText.getText().toString();
-				if (cloudPercentageString != null && !cloudPercentageString.isEmpty()) {
-					debugSettings.setCloudPercentage(Integer.valueOf(cloudPercentageString));
-				}
-
-				String sunPositionString = sunPositionEditText.getText().toString();
-				if (sunPositionString != null && !sunPositionString.isEmpty()) {
-					debugSettings.setSunPosition(Float.valueOf(sunPositionString));
-				}
-			});
-		});
+		getFragmentManager().beginTransaction()
+				.replace(android.R.id.content, new DebugFragment())
+				.commit();
 	}
 
-	@Override
-	public void onDestroy() {
-		Log.v(TAG, "onDestroy");
-		realm.close();
-		super.onDestroy();
+	public static class DebugFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+		private static final String TAG = DebugFragment.class.getSimpleName();
+
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			Log.v(TAG, "onCreate");
+			super.onCreate(savedInstanceState);
+
+			addPreferencesFromResource(R.xml.debug_preferences);
+
+			getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+		}
+
+		@Override
+		public void onResume() {
+			super.onResume();
+			for (int i = 0; i < getPreferenceScreen().getPreferenceCount(); ++i) {
+				Preference preference = getPreferenceScreen().getPreference(i);
+				if (preference instanceof PreferenceGroup) {
+					PreferenceGroup preferenceGroup = (PreferenceGroup) preference;
+					for (int j = 0; j < preferenceGroup.getPreferenceCount(); ++j) {
+						Preference singlePref = preferenceGroup.getPreference(j);
+						updatePreference(singlePref, singlePref.getKey());
+					}
+				} else {
+					updatePreference(preference, preference.getKey());
+				}
+			}
+		}
+
+		@Override
+		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+			updatePreference(findPreference(key), key);
+		}
+
+		private void updatePreference(Preference preference, String key) {
+			if (preference == null) {
+				return;
+			}
+			if (preference instanceof ListPreference) {
+				ListPreference listPreference = (ListPreference) preference;
+				listPreference.setSummary(listPreference.getEntry());
+				return;
+			}
+			SharedPreferences sharedPrefs = getPreferenceManager().getSharedPreferences();
+			Map<String, ?> all = sharedPrefs.getAll();
+			preference.setSummary(String.valueOf(all.get(key)));
+		}
 	}
 }
