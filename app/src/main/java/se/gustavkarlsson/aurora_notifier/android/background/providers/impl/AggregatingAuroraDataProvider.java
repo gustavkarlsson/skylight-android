@@ -3,13 +3,14 @@ package se.gustavkarlsson.aurora_notifier.android.background.providers.impl;
 import android.location.Location;
 import android.os.AsyncTask;
 
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
+import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
 
-import java8.util.J8Arrays;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraDataProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagneticLocationProvider;
@@ -29,6 +30,7 @@ import se.gustavkarlsson.aurora_notifier.android.util.CountdownTimer;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java8.util.J8Arrays.stream;
 
 public class AggregatingAuroraDataProvider implements AuroraDataProvider {
 	private final SolarActivityProvider solarActivityProvider;
@@ -66,15 +68,19 @@ public class AggregatingAuroraDataProvider implements AuroraDataProvider {
 			return new AuroraData(solarActivity, geomagneticLocation, sunPosition, weather);
 		} catch (TimeoutException e) {
 			throw new UserFriendlyException(R.string.error_updating_took_too_long, "Getting aurora data timed out after " + timeoutMillis + "ms", e);
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (ExecutionException e) {
+			Throwable cause = e.getCause();
+			if (cause instanceof UserFriendlyException) {
+				throw (UserFriendlyException) cause;
+			}
+			throw new UserFriendlyException(R.string.error_unknown_update_error, cause);
+		} catch (InterruptedException | CancellationException e) {
 			throw new UserFriendlyException(R.string.error_unknown_update_error, e);
 		}
 	}
 
-	@SafeVarargs
-	private static void executeInParallel(AsyncTask<Object, Void, ?>... tasks) {
+	private static void executeInParallel(FutureTask<?>... tasks) {
 		Executor executor = AsyncTask.THREAD_POOL_EXECUTOR;
-		J8Arrays.stream(tasks)
-				.forEach(task -> task.executeOnExecutor(executor));
+		stream(tasks).forEach(executor::execute);
 	}
 }

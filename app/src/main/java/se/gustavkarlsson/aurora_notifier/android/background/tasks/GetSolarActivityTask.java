@@ -1,22 +1,20 @@
 package se.gustavkarlsson.aurora_notifier.android.background.tasks;
 
-import android.os.AsyncTask;
 import android.util.Log;
+
+import java.util.concurrent.FutureTask;
 
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SolarActivityProvider;
 import se.gustavkarlsson.aurora_notifier.android.models.data.SolarActivity;
 
-public class GetSolarActivityTask extends AsyncTask<Object, Void, SolarActivity> {
+public class GetSolarActivityTask extends FutureTask<SolarActivity> {
 	private static final String TAG = GetSolarActivityTask.class.getSimpleName();
 
-	private final SolarActivityProvider provider;
-
 	public GetSolarActivityTask(SolarActivityProvider provider) {
-		this.provider = provider;
+		super(() -> call(provider));
 	}
 
-	@Override
-	protected SolarActivity doInBackground(Object... params) {
+	private static SolarActivity call(SolarActivityProvider provider) {
 		Log.i(TAG, "Getting solar activity...");
 		SolarActivity solarActivity = provider.getSolarActivity();
 		Log.d(TAG, "Solar activity is: " + solarActivity);

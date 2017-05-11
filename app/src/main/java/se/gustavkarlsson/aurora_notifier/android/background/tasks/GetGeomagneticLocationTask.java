@@ -1,25 +1,21 @@
 package se.gustavkarlsson.aurora_notifier.android.background.tasks;
 
 import android.location.Location;
-import android.os.AsyncTask;
 import android.util.Log;
+
+import java.util.concurrent.FutureTask;
 
 import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagneticLocationProvider;
 import se.gustavkarlsson.aurora_notifier.android.models.data.GeomagneticLocation;
 
-public class GetGeomagneticLocationTask extends AsyncTask<Object, Void, GeomagneticLocation> {
+public class GetGeomagneticLocationTask extends FutureTask<GeomagneticLocation> {
 	private static final String TAG = GetGeomagneticLocationTask.class.getSimpleName();
 
-	private final GeomagneticLocationProvider provider;
-	private final Location location;
-
 	public GetGeomagneticLocationTask(GeomagneticLocationProvider provider, Location location) {
-		this.provider = provider;
-		this.location = location;
+		super(() -> call(provider, location));
 	}
 
-	@Override
-	protected GeomagneticLocation doInBackground(Object... params) {
+	private static GeomagneticLocation call(GeomagneticLocationProvider provider, Location location) throws Exception {
 		Log.i(TAG, "Getting geomagnetic location...");
 		GeomagneticLocation geomagneticLocation = provider.getGeomagneticLocation(location.getLatitude(), location.getLongitude());
 		Log.d(TAG, "Geomagnetic location is: " + geomagneticLocation);
