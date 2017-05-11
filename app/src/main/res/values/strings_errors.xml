@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="error_no_internet">No internet connection</string>
+
 	<string name="error_could_not_connect_to_google_play_services">Could not connect to Google Play Services. Check your internet connection.</string>
 	<string name="error_location_permission_missing">The app does not have permission to access the current location</string>
 	<string name="error_could_not_determine_location">Could not determine current location</string>
 	<string name="error_unknown_update_error">An unknown error occurred while updating</string>
 	<string name="error_could_not_determine_solar_activity">Could not determine current solar activity</string>
 	<string name="error_could_not_determine_weather">Could not determine current weather</string>
-	<string name="error_could_not_determine_sun_position">Could not determine sun position</string>
 	<string name="error_updating_took_too_long">Updating took too long</string>
-	<string name="error_connection_to_weather_service_failed">Connection to weather service failed</string>
-	<string name="error_connection_to_solar_activity_service_failed">Connection to solar activity service failed</string>
 
 	<string name="error_location_permission_denied_title">Location permission denied</string>
 	<string name="error_location_permission_denied_desc">

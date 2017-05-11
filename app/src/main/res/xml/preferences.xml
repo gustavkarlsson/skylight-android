@@ -4,5 +4,5 @@
 		android:key="@string/pref_notifications_key"
 		android:title="@string/pref_notifications_name"
 		android:summary="@string/pref_notifications_summary"
-		android:defaultValue="true" />
+		android:defaultValue="@bool/setting_default_notifications_enabled" />
 </PreferenceScreen>

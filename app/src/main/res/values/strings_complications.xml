@@ -1,20 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="complication_unknown_weather_title">Unknown weather</string>
-	<string name="complication_unknown_weather_desc">
-		Could not determine current weather for your location. Check your internet connection.
-	</string>
-
-	<string name="complication_unknown_location_title">Unknown location</string>
-	<string name="complication_unknown_location_desc">
-		Could not determine your location. Make sure your device has location turned on.
-	</string>
-
-	<string name="complication_unknown_solar_activity_title">Unknown solar activity</string>
-	<string name="complication_unknown_solar_activity_desc">
-		Could not determine current solar activity. Check your internet connection.
-	</string>
-
 	<string name="complication_cloudy_title">Cloudy</string>
 	<string name="complication_cloudy_desc">
 		It\'s probably too cloudy to see the aurora. Aurora sightings require clear skies.

@@ -2,6 +2,8 @@ package se.gustavkarlsson.aurora_notifier.android.background;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -49,6 +51,14 @@ public class Updater {
 
 	public boolean update() {
 		Log.v(TAG, "onUpdate");
+		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+		if (networkInfo == null || !networkInfo.isConnected()) {
+			String errorMessage = context.getString(R.string.error_no_internet);
+			Log.e(TAG, "A user friendly exception occurred: " + errorMessage);
+			broadcastError(errorMessage);
+			return false;
+		}
 		try {
 			AuroraEvaluation evaluation = evaluationProvider.getEvaluation(updateTimeoutMillis);
 			cache.setCurrentLocation(evaluation);

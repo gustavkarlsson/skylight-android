@@ -27,12 +27,12 @@ public class RetrofittedOpenWeatherMapProvider implements WeatherProvider {
 			Response<OpenWeatherMapWeather> response = service.get(latitude, longitude, "json", appId).execute();
 			Log.d(TAG, "Got response: " + response.code() + ", message: " + response.raw().toString());
 			if (!response.isSuccessful()) {
-				throw new UserFriendlyException(R.string.error_connection_to_weather_service_failed, response.errorBody().string());
+				throw new UserFriendlyException(R.string.error_could_not_determine_weather, response.errorBody().string());
 			}
 			OpenWeatherMapWeather openWeatherMapWeather = response.body();
 			return new Weather(openWeatherMapWeather.getClouds().getAll());
 		} catch (IOException e) {
-			throw new UserFriendlyException(R.string.error_connection_to_weather_service_failed, e);
+			throw new UserFriendlyException(R.string.error_could_not_determine_weather, e);
 		}
 	}
 }

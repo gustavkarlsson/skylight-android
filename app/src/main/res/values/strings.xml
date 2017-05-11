@@ -8,11 +8,6 @@
 		This app needs access to your location to calculate the chances of seeing the aurora. Please allow access to your location.
 	</string>
 
-	<string name="google_play_services_required_title">Google Play Services required</string>
-	<string name="google_play_services_required_desc">
-		This app needs Google Play Services to calculate the chances of seeing the aurora. Please install Google Play Services.
-	</string>
-
 	<string name="right_now">Right now</string>
 	<string name="aurora_chance_none">No Chance</string>
 	<string name="aurora_chance_low">Low Chance</string>
