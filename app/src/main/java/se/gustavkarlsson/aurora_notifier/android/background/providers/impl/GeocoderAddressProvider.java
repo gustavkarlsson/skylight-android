@@ -2,6 +2,7 @@ package se.gustavkarlsson.aurora_notifier.android.background.providers.impl;
 
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.IOException;
@@ -10,7 +11,6 @@ import java.util.Locale;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeoutException;
 
@@ -20,7 +20,7 @@ import static com.google.android.gms.internal.zzt.TAG;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class GeocoderAddressProvider implements AddressProvider {
-	private final Executor executor = Executors.newCachedThreadPool();
+	private static final Executor EXECUTOR = AsyncTask.THREAD_POOL_EXECUTOR;
 	private final Geocoder geocoder;
 
 	public GeocoderAddressProvider(Geocoder geocoder) {
@@ -30,7 +30,7 @@ public class GeocoderAddressProvider implements AddressProvider {
 	@Override
 	public Address getAddress(double latitude, double longitude, long timeoutMillis) {
 		GetAddressTask getAddressTask = new GetAddressTask(latitude, longitude);
-		executor.execute(getAddressTask);
+		EXECUTOR.execute(getAddressTask);
 		try {
 			return getAddressTask.get(timeoutMillis, MILLISECONDS);
 		} catch (TimeoutException e) {

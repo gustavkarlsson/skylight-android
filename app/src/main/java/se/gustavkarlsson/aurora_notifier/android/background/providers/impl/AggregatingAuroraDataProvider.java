@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
-import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeoutException;
 
 import javax.inject.Inject;
@@ -30,9 +29,9 @@ import se.gustavkarlsson.aurora_notifier.android.util.CountdownTimer;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java8.util.J8Arrays.stream;
 
 public class AggregatingAuroraDataProvider implements AuroraDataProvider {
+	private static final Executor EXECUTOR = AsyncTask.THREAD_POOL_EXECUTOR;
 	private final SolarActivityProvider solarActivityProvider;
 	private final WeatherProvider weatherProvider;
 	private final SunPositionProvider sunPositionProvider;
@@ -54,11 +53,10 @@ public class AggregatingAuroraDataProvider implements AuroraDataProvider {
 		GetSunPositionTask getSunPositionTask = new GetSunPositionTask(sunPositionProvider, location, System.currentTimeMillis());
 		GetGeomagneticLocationTask getGeomagneticLocationTask = new GetGeomagneticLocationTask(geomagneticLocationProvider, location);
 
-		executeInParallel(
-				getSolarActivityTask,
-				getWeatherTask,
-				getSunPositionTask,
-				getGeomagneticLocationTask);
+		EXECUTOR.execute(getSolarActivityTask);
+		EXECUTOR.execute(getWeatherTask);
+		EXECUTOR.execute(getSunPositionTask);
+		EXECUTOR.execute(getGeomagneticLocationTask);
 
 		try {
 			SolarActivity solarActivity = getSolarActivityTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
@@ -77,10 +75,5 @@ public class AggregatingAuroraDataProvider implements AuroraDataProvider {
 		} catch (InterruptedException | CancellationException e) {
 			throw new UserFriendlyException(R.string.error_unknown_update_error, e);
 		}
-	}
-
-	private static void executeInParallel(FutureTask<?>... tasks) {
-		Executor executor = AsyncTask.THREAD_POOL_EXECUTOR;
-		stream(tasks).forEach(executor::execute);
 	}
 }
