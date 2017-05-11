@@ -6,6 +6,7 @@ import android.location.Geocoder;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
@@ -28,9 +29,12 @@ public abstract class GoogleLocationModule {
 
 	@Provides
 	@Reusable
-	static AsyncAddressProvider provideAddressProvider(Context context) {
-		Geocoder geocoder = new Geocoder(context);
-		return new GeocoderAsyncAddressProvider(geocoder);
+	static Geocoder provideGeocoder(Context context) {
+		return new Geocoder(context);
 	}
+
+	@Binds
+	@Reusable
+	abstract AsyncAddressProvider bindAsyncAddressProvider(GeocoderAsyncAddressProvider provider);
 
 }

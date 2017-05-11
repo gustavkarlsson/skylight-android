@@ -25,5 +25,6 @@ public abstract class KpIndexModule {
 	}
 
 	@Binds
-	abstract SolarActivityProvider provideSolarActivityProvider(RetrofittedSolarActivityProvider provider);
+	@Reusable
+	abstract SolarActivityProvider bindSolarActivityProvider(RetrofittedSolarActivityProvider provider);
 }

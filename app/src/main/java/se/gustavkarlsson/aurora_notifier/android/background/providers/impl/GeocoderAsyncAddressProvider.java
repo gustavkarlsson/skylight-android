@@ -11,6 +11,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
+import javax.inject.Inject;
+
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AsyncAddressProvider;
 
 public class GeocoderAsyncAddressProvider implements AsyncAddressProvider {
@@ -19,7 +21,8 @@ public class GeocoderAsyncAddressProvider implements AsyncAddressProvider {
 	private static final Executor EXECUTOR = AsyncTask.THREAD_POOL_EXECUTOR;
 	private final Geocoder geocoder;
 
-	public GeocoderAsyncAddressProvider(Geocoder geocoder) {
+	@Inject
+	GeocoderAsyncAddressProvider(Geocoder geocoder) {
 		this.geocoder = geocoder;
 	}
 

@@ -6,12 +6,10 @@ import com.vincentbrison.openlibraries.android.dualcache.Builder;
 import com.vincentbrison.openlibraries.android.dualcache.DualCache;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import se.gustavkarlsson.aurora_notifier.android.BuildConfig;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 
-@Singleton
 public class DualLruAuroraEvaluationCache implements AuroraEvaluationCache {
 	private static final String TAG = DualLruAuroraEvaluationCache.class.getSimpleName();
 
