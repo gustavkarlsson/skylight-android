@@ -9,9 +9,9 @@ import com.google.android.gms.location.LocationServices;
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.AddressProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.AsyncAddressProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.LocationProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.GeocoderAddressProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.GeocoderAsyncAddressProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.GoogleLocationProvider;
 
 @Module
@@ -28,9 +28,9 @@ public abstract class GoogleLocationModule {
 
 	@Provides
 	@Reusable
-	static AddressProvider provideAddressProvider(Context context) {
+	static AsyncAddressProvider provideAddressProvider(Context context) {
 		Geocoder geocoder = new Geocoder(context);
-		return new GeocoderAddressProvider(geocoder);
+		return new GeocoderAsyncAddressProvider(geocoder);
 	}
 
 }
