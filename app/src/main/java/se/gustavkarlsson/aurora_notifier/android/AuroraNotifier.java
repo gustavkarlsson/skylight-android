@@ -19,8 +19,8 @@ public class AuroraNotifier extends Application {
 
 	@Override
 	public void onCreate() {
-		Thread.setDefaultUncaughtExceptionHandler(new LoggingUncaughtExceptionHandler());
 		Log.v(TAG, "onCreate");
+		setExceptionHandler();
 		super.onCreate();
 		this.applicationComponent = DaggerApplicationComponent.builder()
 				.applicationModule(new ApplicationModule(this))
@@ -30,6 +30,12 @@ public class AuroraNotifier extends Application {
 
 	public static ApplicationComponent getApplicationComponent(Context context) {
 		return ((AuroraNotifier) context.getApplicationContext()).applicationComponent;
+	}
+
+	private static void setExceptionHandler() {
+		if (BuildConfig.DEBUG && !(Thread.getDefaultUncaughtExceptionHandler() instanceof LoggingUncaughtExceptionHandler)) {
+			Thread.setDefaultUncaughtExceptionHandler(new LoggingUncaughtExceptionHandler());
+		}
 	}
 
 	private static class LoggingUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
