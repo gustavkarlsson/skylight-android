@@ -26,7 +26,7 @@ import se.gustavkarlsson.aurora_notifier.android.BuildConfig;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.Updater;
 import se.gustavkarlsson.aurora_notifier.android.cache.AuroraEvaluationCache;
-import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerMainActivityComponent;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerActivityComponent;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.AuroraRequirementsCheckingActivity;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.DebugActivity;
@@ -57,7 +57,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		DaggerMainActivityComponent.builder()
+		DaggerActivityComponent.builder()
 				.applicationComponent(getApplicationComponent(this))
 				.build()
 				.inject(this);

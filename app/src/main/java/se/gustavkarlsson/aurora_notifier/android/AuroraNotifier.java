@@ -10,7 +10,7 @@ import java.io.StringWriter;
 import se.gustavkarlsson.aurora_notifier.android.background.UpdateScheduler;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.ApplicationComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerApplicationComponent;
-import se.gustavkarlsson.aurora_notifier.android.dagger.modules.ContextModule;
+import se.gustavkarlsson.aurora_notifier.android.dagger.modules.ApplicationModule;
 
 public class AuroraNotifier extends Application {
 	private static final String TAG = AuroraNotifier.class.getSimpleName();
@@ -23,7 +23,7 @@ public class AuroraNotifier extends Application {
 		Log.v(TAG, "onCreate");
 		super.onCreate();
 		this.applicationComponent = DaggerApplicationComponent.builder()
-				.contextModule(new ContextModule(this))
+				.applicationModule(new ApplicationModule(this))
 				.build();
 		UpdateScheduler.initJobManager(this);
 	}
