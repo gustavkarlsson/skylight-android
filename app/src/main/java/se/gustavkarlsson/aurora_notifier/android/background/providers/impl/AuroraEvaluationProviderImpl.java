@@ -55,12 +55,12 @@ public class AuroraEvaluationProviderImpl implements AuroraEvaluationProvider {
 		try {
 			return addressFuture.get(timeoutMillis, MILLISECONDS);
 		} catch (TimeoutException e) {
-			Log.e(TAG, "Getting address timed out after " + timeoutMillis + "ms", e);
+			Log.w(TAG, "Getting address timed out after " + timeoutMillis + "ms", e);
 		} catch (ExecutionException e) {
 			Throwable cause = e.getCause();
-			Log.e(TAG, "An unexpected exception occurred while", cause);
+			Log.w(TAG, "An unexpected exception occurred while", cause);
 		} catch (InterruptedException | CancellationException e) {
-			Log.e(TAG, "An unexpected exception occurred", e);
+			Log.w(TAG, "An unexpected exception occurred", e);
 		}
 		return null;
 	}

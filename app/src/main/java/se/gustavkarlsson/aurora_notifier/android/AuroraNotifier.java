@@ -45,7 +45,7 @@ public class AuroraNotifier extends Application {
 			PrintWriter pw = new PrintWriter(sw);
 			throwable.printStackTrace(pw);
 			String stackTrace = sw.toString();
-			Log.e(TAG, "The application has crashed!\n" + stackTrace);
+			Log.wtf(TAG, "The application has crashed!\n" + stackTrace);
 			System.exit(-1);
 		}
 	}

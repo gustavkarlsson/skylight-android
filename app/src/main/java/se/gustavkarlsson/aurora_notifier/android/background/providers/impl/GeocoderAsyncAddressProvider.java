@@ -44,7 +44,7 @@ public class GeocoderAsyncAddressProvider implements AsyncAddressProvider {
 					}
 					return addresses.get(0);
 				} catch (IOException e) {
-					Log.e(TAG, String.format("Failed to perform reverse geocoding latitude: %f, longitude: %f", latitude, longitude), e);
+					Log.w(TAG, "Failed to perform reverse geocoding", e);
 					return null;
 				}
 			});
