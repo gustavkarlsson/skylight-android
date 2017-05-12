@@ -9,6 +9,6 @@ import se.gustavkarlsson.aurora_notifier.android.gui.activities.main.MainActivit
 })
 @ActivityScope
 @SuppressWarnings("WeakerAccess")
-public interface ActivityComponent {
+public interface MainActivityComponent {
 	void inject(MainActivity mainActivity);
 }

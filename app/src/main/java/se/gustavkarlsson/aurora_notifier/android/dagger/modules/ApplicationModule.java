@@ -1,6 +1,7 @@
 package se.gustavkarlsson.aurora_notifier.android.dagger.modules;
 
 import android.app.Application;
+import android.content.Context;
 
 import javax.inject.Singleton;
 
@@ -18,6 +19,12 @@ public class ApplicationModule {
 	@Provides
 	@Singleton
 	Application provideApplication() {
+		return application;
+	}
+
+	@Provides
+	@Singleton
+	Context provideContext() {
 		return application;
 	}
 }

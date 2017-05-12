@@ -14,6 +14,8 @@ import com.evernote.android.job.Job;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import java.util.Random;
+
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdateJobComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.UpdateJobComponent;
@@ -22,6 +24,7 @@ import se.gustavkarlsson.aurora_notifier.android.gui.activities.main.MainActivit
 
 import static com.evernote.android.job.Job.Result.FAILURE;
 import static com.evernote.android.job.Job.Result.SUCCESS;
+import static se.gustavkarlsson.aurora_notifier.android.AuroraNotifier.getApplicationComponent;
 import static se.gustavkarlsson.aurora_notifier.android.gui.activities.AuroraRequirementsCheckingActivity.LOCATION_PERMISSION;
 
 public class UpdateJob extends Job {
@@ -33,11 +36,14 @@ public class UpdateJob extends Job {
 	@Override
 	protected Result onRunJob(Params params) {
 		UpdateJobComponent component = DaggerUpdateJobComponent.builder()
+				.applicationComponent(getApplicationComponent(getContext()))
 				.contextModule(new ContextModule(getContext()))
 				.build();
 		NotificationManager notificationManager = component.getNotificationManager();
+		UpdateScheduler updateScheduler = component.getUpdateScheduler();
+
 		if (!requirementsMet()) {
-			UpdateScheduler.cancelBackgroundUpdates();
+			updateScheduler.cancelBackgroundUpdates();
 			sendErrorNotification(notificationManager);
 			return FAILURE;
 		}
@@ -69,6 +75,6 @@ public class UpdateJob extends Job {
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
 		// TODO handle ID
-		notificationManager.notify((int) (Math.random() * 1000), notification);
+		notificationManager.notify(new Random().nextInt(1000), notification);
 	}
 }

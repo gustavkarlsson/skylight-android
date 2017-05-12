@@ -26,7 +26,7 @@ import se.gustavkarlsson.aurora_notifier.android.BuildConfig;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.Updater;
 import se.gustavkarlsson.aurora_notifier.android.cache.AuroraEvaluationCache;
-import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerActivityComponent;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerMainActivityComponent;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.AuroraRequirementsCheckingActivity;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.DebugActivity;
@@ -57,7 +57,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		DaggerActivityComponent.builder()
+		DaggerMainActivityComponent.builder()
 				.applicationComponent(getApplicationComponent(this))
 				.build()
 				.inject(this);
@@ -151,8 +151,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	protected void onRequirementsMet() {
 		swipeToRefreshPresenter.enable();
 		AuroraEvaluation evaluation = getBestEvaluation();
-		long evaluationTimestampMillis = evaluation == null ? 0 : evaluation.getTimestampMillis();
-		long ageMillis = System.currentTimeMillis() - evaluationTimestampMillis;
+		long ageMillis = System.currentTimeMillis() - evaluation.getTimestampMillis();
 		if (ageMillis > evaluationLifetimeMillis) {
 			updateInBackground();
 		}

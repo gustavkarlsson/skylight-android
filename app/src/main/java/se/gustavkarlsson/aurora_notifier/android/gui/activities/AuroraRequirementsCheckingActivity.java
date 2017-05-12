@@ -2,7 +2,9 @@ package se.gustavkarlsson.aurora_notifier.android.gui.activities;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +18,7 @@ import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.UpdateScheduler;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import static se.gustavkarlsson.aurora_notifier.android.AuroraNotifier.getApplicationComponent;
 
 
 public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivity {
@@ -23,9 +26,18 @@ public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivi
 
 	public static final String LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION;
 	private static final int REQUEST_CODE_LOCATION_PERMISSION = 1973;
+
 	private AlertDialog gpsCouldNotBeInstalledAppWillCloseDialog;
 	private AlertDialog locationPermissionRequiredDialog;
 	private AlertDialog locationPermissionDeniedDialog;
+
+	private UpdateScheduler updateScheduler;
+
+	@Override
+	protected void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		updateScheduler = getApplicationComponent(this).getUpdateScheduler();
+	}
 
 	protected final void ensureRequirementsMet() {
 		gpsCouldNotBeInstalledAppWillCloseDialog = buildGooglePlayServicesCouldNotBeInstalledDialog();
@@ -92,7 +104,7 @@ public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivi
 					if (PERMISSION_GRANTED != result) {
 						handlePermissionDenied();
 					} else {
-						UpdateScheduler.setupBackgroundUpdates(this);
+						updateScheduler.setupBackgroundUpdates();
 						onRequirementsMet();
 					}
 				}
