@@ -15,21 +15,30 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdateJobComponent;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.UpdateJobComponent;
+import se.gustavkarlsson.aurora_notifier.android.dagger.modules.ContextModule;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.main.MainActivity;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.evernote.android.job.Job.Result.FAILURE;
 import static com.evernote.android.job.Job.Result.SUCCESS;
 import static se.gustavkarlsson.aurora_notifier.android.gui.activities.AuroraRequirementsCheckingActivity.LOCATION_PERMISSION;
 
-class UpdateJob extends Job {
+public class UpdateJob extends Job {
+	private static final String TAG = UpdateJob.class.getSimpleName();
+
+	public static final String UPDATE_JOB_TAG = TAG + ".UPDATE_JOB";
 
 	@NonNull
 	@Override
 	protected Result onRunJob(Params params) {
+		UpdateJobComponent component = DaggerUpdateJobComponent.builder()
+				.contextModule(new ContextModule(getContext()))
+				.build();
+		NotificationManager notificationManager = component.getNotificationManager();
 		if (!requirementsMet()) {
-			UpdateScheduler.cancelJobs();
-			sendErrorNotification();
+			UpdateScheduler.cancelBackgroundUpdates();
+			sendErrorNotification(notificationManager);
 			return FAILURE;
 		}
 		int timeoutMillis = getContext().getResources().getInteger(R.integer.setting_background_update_timeout_millis);
@@ -45,7 +54,7 @@ class UpdateJob extends Job {
 	}
 
 	// TODO improve notification (flags can make two MainActivity stack)
-	private void sendErrorNotification() {
+	private void sendErrorNotification(NotificationManager notificationManager) {
 		Context context = getContext();
 		Intent intent = new Intent(context, MainActivity.class);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -59,7 +68,6 @@ class UpdateJob extends Job {
 				.build();
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
 
-		NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
 		// TODO handle ID
 		notificationManager.notify((int) (Math.random() * 1000), notification);
 	}

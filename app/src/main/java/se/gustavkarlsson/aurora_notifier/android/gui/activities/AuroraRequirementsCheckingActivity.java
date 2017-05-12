@@ -92,7 +92,7 @@ public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivi
 					if (PERMISSION_GRANTED != result) {
 						handlePermissionDenied();
 					} else {
-						UpdateScheduler.setupUpdateScheduling(this);
+						UpdateScheduler.setupBackgroundUpdates(this);
 						onRequirementsMet();
 					}
 				}

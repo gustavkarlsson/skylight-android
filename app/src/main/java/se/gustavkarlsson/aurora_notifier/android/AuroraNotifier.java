@@ -4,13 +4,17 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.evernote.android.job.JobManager;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import se.gustavkarlsson.aurora_notifier.android.background.UpdateScheduler;
+import se.gustavkarlsson.aurora_notifier.android.background.UpdateJob;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.ApplicationComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerApplicationComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.ApplicationModule;
+
+import static se.gustavkarlsson.aurora_notifier.android.background.UpdateJob.UPDATE_JOB_TAG;
 
 public class AuroraNotifier extends Application {
 	private static final String TAG = AuroraNotifier.class.getSimpleName();
@@ -25,7 +29,7 @@ public class AuroraNotifier extends Application {
 		this.applicationComponent = DaggerApplicationComponent.builder()
 				.applicationModule(new ApplicationModule(this))
 				.build();
-		UpdateScheduler.initJobManager(this);
+		initJobManager();
 	}
 
 	public static ApplicationComponent getApplicationComponent(Context context) {
@@ -36,6 +40,15 @@ public class AuroraNotifier extends Application {
 		if (BuildConfig.DEBUG && !(Thread.getDefaultUncaughtExceptionHandler() instanceof LoggingUncaughtExceptionHandler)) {
 			Thread.setDefaultUncaughtExceptionHandler(new LoggingUncaughtExceptionHandler());
 		}
+	}
+
+	private void initJobManager() {
+		JobManager.create(this).addJobCreator(tag -> {
+			if (tag.equals(UPDATE_JOB_TAG)) {
+				return new UpdateJob();
+			}
+			return null;
+		});
 	}
 
 	private static class LoggingUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
