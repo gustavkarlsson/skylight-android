@@ -29,17 +29,18 @@ public class Updater {
 	private final Context context;
 	private final AuroraEvaluationProvider evaluationProvider;
 	private final AuroraEvaluationCache cache;
+	private final ConnectivityManager connectivityManager;
 
 	@Inject
-	Updater(Context context, AuroraEvaluationProvider evaluationProvider, AuroraEvaluationCache cache) {
+	Updater(Context context, AuroraEvaluationProvider evaluationProvider, AuroraEvaluationCache cache, ConnectivityManager connectivityManager) {
 		this.context = context;
 		this.evaluationProvider = evaluationProvider;
 		this.cache = cache;
+		this.connectivityManager = connectivityManager;
 	}
 
 	public boolean update(int timeoutMillis) {
 		Log.v(TAG, "onUpdate");
-		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE); // TODO Inject
 		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 		if (networkInfo == null || !networkInfo.isConnected()) {
 			String errorMessage = context.getString(R.string.error_no_internet);

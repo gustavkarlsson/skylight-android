@@ -1,7 +1,6 @@
 package se.gustavkarlsson.aurora_notifier.android.dagger.components;
 
 import dagger.Component;
-import se.gustavkarlsson.aurora_notifier.android.background.Updater;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.AuroraDataModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.AuroraEvaluationModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GeomagneticLocationModule;
@@ -29,5 +28,4 @@ import se.gustavkarlsson.aurora_notifier.android.gui.activities.main.MainActivit
 @SuppressWarnings("WeakerAccess")
 public interface MainActivityComponent {
 	void inject(MainActivity mainActivity);
-	Updater getUpdater();
 }
