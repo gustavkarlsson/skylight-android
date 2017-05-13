@@ -10,6 +10,4 @@
 
 	<integer name="setting_aurora_evaluation_cache_max_ram_size_bytes">100000</integer> <!-- 100kB -->
 	<integer name="setting_aurora_evaluation_cache_max_disk_size_bytes">100000</integer> <!-- 100kB -->
-
-	<bool name="setting_default_notifications_enabled">true</bool>
 </resources>

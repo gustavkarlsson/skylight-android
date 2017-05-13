@@ -2,8 +2,6 @@ package se.gustavkarlsson.aurora_notifier.android.background;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -15,8 +13,12 @@ import javax.inject.Inject;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraEvaluationProvider;
 import se.gustavkarlsson.aurora_notifier.android.cache.AuroraEvaluationCache;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdateJobComponent;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.UpdateJobComponent;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
+
+import static se.gustavkarlsson.aurora_notifier.android.AuroraNotifier.getApplicationComponent;
 
 public class Updater {
 	private static final String TAG = Updater.class.getSimpleName();
@@ -27,29 +29,22 @@ public class Updater {
 	public static final String RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION = TAG + ".RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION";
 
 	private final Context context;
-	private final AuroraEvaluationProvider evaluationProvider;
 	private final AuroraEvaluationCache cache;
-	private final ConnectivityManager connectivityManager;
 
 	@Inject
-	Updater(Context context, AuroraEvaluationProvider evaluationProvider, AuroraEvaluationCache cache, ConnectivityManager connectivityManager) {
+	Updater(Context context, AuroraEvaluationCache cache) {
 		this.context = context;
-		this.evaluationProvider = evaluationProvider;
 		this.cache = cache;
-		this.connectivityManager = connectivityManager;
 	}
 
 	public boolean update(int timeoutMillis) {
+		UpdateJobComponent component = DaggerUpdateJobComponent.builder()
+				.applicationComponent(getApplicationComponent(context))
+				.build();
+		AuroraEvaluationProvider provider = component.getAuroraEvaluationProvider();
 		Log.v(TAG, "onUpdate");
-		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-		if (networkInfo == null || !networkInfo.isConnected()) {
-			String errorMessage = context.getString(R.string.error_no_internet);
-			Log.e(TAG, "A user friendly exception occurred: " + errorMessage);
-			broadcastError(errorMessage);
-			return false;
-		}
 		try {
-			AuroraEvaluation evaluation = evaluationProvider.getEvaluation(timeoutMillis);
+			AuroraEvaluation evaluation = provider.getEvaluation(timeoutMillis);
 			cache.setCurrentLocation(evaluation);
 			broadcastEvaluation(evaluation);
 			return true;

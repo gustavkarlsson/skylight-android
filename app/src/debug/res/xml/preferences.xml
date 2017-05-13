@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<SwitchPreference
+		android:key="@string/pref_notifications_key"
+		android:title="@string/pref_notifications_name"
+		android:summary="@string/pref_notifications_summary"
+		android:defaultValue="@bool/pref_notifications_default" />
+
+	<!-- Debug values start here -->
+	<PreferenceCategory
+		android:key="@string/pref_category_debug_key"
+		android:title="@string/pref_category_debug_title">
+		<SwitchPreference
+			android:key="@string/pref_override_values_key"
+			android:title="@string/pref_override_values_title"
+			android:defaultValue="false" />
+		<EditTextPreference
+			android:key="@string/pref_kp_index_key"
+			android:title="@string/pref_kp_index_title"
+			android:defaultValue="0"
+			android:inputType="numberDecimal" />
+		<EditTextPreference
+			android:key="@string/pref_geomagnetic_location_key"
+			android:title="@string/pref_geomagnetic_location_title"
+			android:defaultValue="0"
+			android:inputType="numberDecimal" />
+		<EditTextPreference
+			android:key="@string/pref_cloud_percentage_key"
+			android:title="@string/pref_cloud_percentage_title"
+			android:defaultValue="0"
+			android:inputType="number" />
+		<EditTextPreference
+			android:key="@string/pref_sun_position_key"
+			android:title="@string/pref_sun_position_title"
+			android:defaultValue="0"
+			android:inputType="numberDecimal" />
+	</PreferenceCategory>
+</PreferenceScreen>

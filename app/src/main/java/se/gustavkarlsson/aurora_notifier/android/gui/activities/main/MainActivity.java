@@ -22,14 +22,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import se.gustavkarlsson.aurora_notifier.android.BuildConfig;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.Updater;
 import se.gustavkarlsson.aurora_notifier.android.cache.AuroraEvaluationCache;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerMainActivityComponent;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.AuroraRequirementsCheckingActivity;
-import se.gustavkarlsson.aurora_notifier.android.gui.activities.DebugActivity;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.settings.SettingsActivity;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 
@@ -116,23 +114,9 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	}
 
 	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		Log.v(TAG, "onPrepareOptionsMenu");
-		if (!BuildConfig.DEBUG) {
-			menu.removeItem(R.id.action_debug);
-		}
-		return true;
-	}
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Log.v(TAG, "onOptionsItemSelected");
 		switch (item.getItemId()) {
-			case R.id.action_debug: {
-				Intent intent = new Intent(this, DebugActivity.class);
-				startActivity(intent);
-				return true;
-			}
 			case R.id.action_settings: {
 				Intent intent = new Intent(this, SettingsActivity.class);
 				startActivity(intent);

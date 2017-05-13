@@ -2,6 +2,8 @@ package se.gustavkarlsson.aurora_notifier.android.background.providers.impl;
 
 import android.location.Address;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -11,8 +13,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeoutException;
 
-import javax.inject.Inject;
-
+import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AsyncAddressProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraDataProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraEvaluationProvider;
@@ -22,18 +23,20 @@ import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 import se.gustavkarlsson.aurora_notifier.android.util.CountdownTimer;
+import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class AuroraEvaluationProviderImpl implements AuroraEvaluationProvider {
 	private static final String TAG = AuroraEvaluationProviderImpl.class.getSimpleName();
 
+	private final ConnectivityManager connectivityManager;
 	private final LocationProvider locationProvider;
 	private final AuroraDataProvider auroraDataProvider;
 	private final AsyncAddressProvider asyncAddressProvider;
 
-	@Inject
-	AuroraEvaluationProviderImpl(LocationProvider locationProvider, AuroraDataProvider auroraDataProvider, AsyncAddressProvider asyncAddressProvider) {
+	public AuroraEvaluationProviderImpl(ConnectivityManager connectivityManager, LocationProvider locationProvider, AuroraDataProvider auroraDataProvider, AsyncAddressProvider asyncAddressProvider) {
+		this.connectivityManager = connectivityManager;
 		this.locationProvider = locationProvider;
 		this.auroraDataProvider = auroraDataProvider;
 		this.asyncAddressProvider = asyncAddressProvider;
@@ -41,6 +44,11 @@ public class AuroraEvaluationProviderImpl implements AuroraEvaluationProvider {
 
 	@Override
 	public AuroraEvaluation getEvaluation(long timeoutMillis) {
+		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+		if (networkInfo == null || !networkInfo.isConnected()) {
+			throw new UserFriendlyException(R.string.error_no_internet);
+		}
+
 		CountdownTimer timeoutTimer = CountdownTimer.start(timeoutMillis);
 		Location location = locationProvider.getLocation(timeoutTimer.getRemainingTimeMillis());
 		Future<Address> addressFuture = asyncAddressProvider.execute(location.getLatitude(), location.getLongitude());

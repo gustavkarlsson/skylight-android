@@ -40,11 +40,6 @@
 			android:parentActivityName=".gui.activities.main.MainActivity">
 		</activity>
 
-		<activity
-			android:name=".gui.activities.DebugActivity"
-			android:label="@string/debug">
-		</activity>
-
 	</application>
 
 </manifest>

@@ -2,25 +2,23 @@ package se.gustavkarlsson.aurora_notifier.android.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import javax.inject.Inject;
+import android.preference.PreferenceManager;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
 
 public class Settings {
 	private final Context context;
-	private final SharedPreferences sharedPreferences;
+	private final SharedPreferences defaultPreferences;
 
-	@Inject
-	public Settings(Context context, SharedPreferences sharedPreferences) {
+	public Settings(Context context) {
 		this.context = context;
-		this.sharedPreferences = sharedPreferences;
+		this.defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
 	public boolean isEnableNotifications() {
 		String key = context.getString(R.string.pref_notifications_key);
-		boolean defaultValue = context.getResources().getBoolean(R.bool.setting_default_notifications_enabled);
-		return sharedPreferences.getBoolean(key, defaultValue);
+		boolean defaultValue = context.getResources().getBoolean(R.bool.pref_notifications_default);
+		return defaultPreferences.getBoolean(key, defaultValue);
 	}
 
 }
