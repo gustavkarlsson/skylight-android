@@ -43,6 +43,9 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
 
 	@Inject
+	Updater updater;
+
+	@Inject
 	AuroraEvaluationCache auroraEvaluationCache;
 
 	private int evaluationLifetimeMillis;
@@ -61,9 +64,10 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 				.applicationComponent(getApplicationComponent(this))
 				.build()
 				.inject(this);
+
 		evaluationLifetimeMillis = getResources().getInteger(R.integer.setting_foreground_evaluation_lifetime_millis);
 		backgroundUpdateTimeoutMillis = getResources().getInteger(R.integer.setting_background_update_timeout_millis);
-		swipeToRefreshPresenter = new SwipeToRefreshPresenter((SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout), this);
+		swipeToRefreshPresenter = new SwipeToRefreshPresenter((SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout), this, updater);
 		bottomSheetPresenter = new BottomSheetPresenter(findViewById(R.id.bottom_sheet));
 		updateReceivers = getUpdateReceivers();
 		broadcastReceiver = createBroadcastReceiver();
@@ -166,10 +170,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	}
 
 	private void updateInBackground() {
-		AsyncTask.execute(() -> {
-			Updater updater = new Updater(this, backgroundUpdateTimeoutMillis);
-			updater.update();
-		});
+		AsyncTask.execute(() -> updater.update(backgroundUpdateTimeoutMillis));
 	}
 
 	@Override

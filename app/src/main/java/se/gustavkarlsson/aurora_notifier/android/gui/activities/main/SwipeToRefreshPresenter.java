@@ -10,19 +10,20 @@ import se.gustavkarlsson.aurora_notifier.android.background.Updater;
 class SwipeToRefreshPresenter {
 	private final SwipeRefreshLayout swipeRefreshLayout;
 	private final Activity activity;
+	private final Updater updater;
 	private final int timeoutMillis;
 
-	SwipeToRefreshPresenter(SwipeRefreshLayout swipeRefreshLayout, Activity activity) {
+	SwipeToRefreshPresenter(SwipeRefreshLayout swipeRefreshLayout, Activity activity, Updater updater) {
 		this.swipeRefreshLayout = swipeRefreshLayout;
 		this.activity = activity;
+		this.updater = updater;
 		this.timeoutMillis = activity.getResources().getInteger(R.integer.setting_foreground_update_timeout_millis);
 	}
 
 	private void update(SwipeRefreshLayout swipeRefreshLayout, Activity activity) {
 		swipeRefreshLayout.setRefreshing(true);
 		AsyncTask.execute(() -> {
-			Updater updater = new Updater(activity, timeoutMillis);
-			updater.update();
+			updater.update(timeoutMillis);
 			activity.runOnUiThread(() -> setRefreshing(false));
         });
 	}

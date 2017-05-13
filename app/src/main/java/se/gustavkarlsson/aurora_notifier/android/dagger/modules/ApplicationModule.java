@@ -3,10 +3,9 @@ package se.gustavkarlsson.aurora_notifier.android.dagger.modules;
 import android.app.Application;
 import android.content.Context;
 
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
+import dagger.Reusable;
 
 @Module
 public class ApplicationModule {
@@ -17,13 +16,13 @@ public class ApplicationModule {
 	}
 
 	@Provides
-	@Singleton
+	@Reusable
 	Application provideApplication() {
 		return application;
 	}
 
 	@Provides
-	@Singleton
+	@Reusable
 	Context provideContext() {
 		return application;
 	}

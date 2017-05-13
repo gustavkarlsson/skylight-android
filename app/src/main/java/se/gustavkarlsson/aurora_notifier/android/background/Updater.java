@@ -15,12 +15,8 @@ import javax.inject.Inject;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraEvaluationProvider;
 import se.gustavkarlsson.aurora_notifier.android.cache.AuroraEvaluationCache;
-import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdaterComponent;
-import se.gustavkarlsson.aurora_notifier.android.dagger.modules.ContextModule;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
-
-import static se.gustavkarlsson.aurora_notifier.android.AuroraNotifier.getApplicationComponent;
 
 public class Updater {
 	private static final String TAG = Updater.class.getSimpleName();
@@ -30,28 +26,20 @@ public class Updater {
 	public static final String RESPONSE_UPDATE_FINISHED = TAG + ".RESPONSE_UPDATE_FINISHED";
 	public static final String RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION = TAG + ".RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION";
 
-	@Inject
-	AuroraEvaluationProvider evaluationProvider;
-
-	@Inject
-	AuroraEvaluationCache cache;
-
 	private final Context context;
-	private final int updateTimeoutMillis;
+	private final AuroraEvaluationProvider evaluationProvider;
+	private final AuroraEvaluationCache cache;
 
-	public Updater(Context context, int updateTimeoutMillis) {
+	@Inject
+	Updater(Context context, AuroraEvaluationProvider evaluationProvider, AuroraEvaluationCache cache) {
 		this.context = context;
-		this.updateTimeoutMillis = updateTimeoutMillis;
-		DaggerUpdaterComponent.builder()
-				.applicationComponent(getApplicationComponent(context))
-				.contextModule(new ContextModule(context))
-				.build()
-				.inject(this);
+		this.evaluationProvider = evaluationProvider;
+		this.cache = cache;
 	}
 
-	public boolean update() {
+	public boolean update(int timeoutMillis) {
 		Log.v(TAG, "onUpdate");
-		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE); // TODO Inject
 		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 		if (networkInfo == null || !networkInfo.isConnected()) {
 			String errorMessage = context.getString(R.string.error_no_internet);
@@ -60,7 +48,7 @@ public class Updater {
 			return false;
 		}
 		try {
-			AuroraEvaluation evaluation = evaluationProvider.getEvaluation(updateTimeoutMillis);
+			AuroraEvaluation evaluation = evaluationProvider.getEvaluation(timeoutMillis);
 			cache.setCurrentLocation(evaluation);
 			broadcastEvaluation(evaluation);
 			return true;

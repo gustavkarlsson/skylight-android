@@ -19,7 +19,6 @@ import java.util.Random;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdateJobComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.UpdateJobComponent;
-import se.gustavkarlsson.aurora_notifier.android.dagger.modules.ContextModule;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.main.MainActivity;
 
 import static com.evernote.android.job.Job.Result.FAILURE;
@@ -37,19 +36,18 @@ public class UpdateJob extends Job {
 	protected Result onRunJob(Params params) {
 		UpdateJobComponent component = DaggerUpdateJobComponent.builder()
 				.applicationComponent(getApplicationComponent(getContext()))
-				.contextModule(new ContextModule(getContext()))
 				.build();
 		NotificationManager notificationManager = component.getNotificationManager();
 		UpdateScheduler updateScheduler = component.getUpdateScheduler();
+		Updater updater = component.getUpdater();
+		int updateTimeoutMillis = getContext().getResources().getInteger(R.integer.setting_background_update_timeout_millis);
 
 		if (!requirementsMet()) {
 			updateScheduler.cancelBackgroundUpdates();
 			sendErrorNotification(notificationManager);
 			return FAILURE;
 		}
-		int timeoutMillis = getContext().getResources().getInteger(R.integer.setting_background_update_timeout_millis);
-		Updater updater = new Updater(getContext(), timeoutMillis);
-		boolean successful = updater.update();
+		boolean successful = updater.update(updateTimeoutMillis);
 		return successful ? SUCCESS : FAILURE;
 	}
 

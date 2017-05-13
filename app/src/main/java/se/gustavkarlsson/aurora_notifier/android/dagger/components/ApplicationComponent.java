@@ -1,5 +1,7 @@
 package se.gustavkarlsson.aurora_notifier.android.dagger.components;
 
+import android.content.Context;
+
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -19,6 +21,7 @@ import se.gustavkarlsson.aurora_notifier.android.dagger.modules.UpdateSchedulerM
 @Singleton
 @SuppressWarnings("WeakerAccess")
 public interface ApplicationComponent {
+	Context getContext();
 	AuroraEvaluationCache getAuroraEvaluationCache();
 	UpdateScheduler getUpdateScheduler();
 }
