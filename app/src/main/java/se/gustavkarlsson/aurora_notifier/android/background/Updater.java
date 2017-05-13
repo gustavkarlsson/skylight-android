@@ -8,8 +8,6 @@ import android.util.Log;
 
 import org.parceler.Parcels;
 
-import javax.inject.Inject;
-
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraEvaluationProvider;
 import se.gustavkarlsson.aurora_notifier.android.cache.AuroraEvaluationCache;
@@ -31,8 +29,7 @@ public class Updater {
 	private final Context context;
 	private final AuroraEvaluationCache cache;
 
-	@Inject
-	Updater(Context context, AuroraEvaluationCache cache) {
+	public Updater(Context context, AuroraEvaluationCache cache) {
 		this.context = context;
 		this.cache = cache;
 	}

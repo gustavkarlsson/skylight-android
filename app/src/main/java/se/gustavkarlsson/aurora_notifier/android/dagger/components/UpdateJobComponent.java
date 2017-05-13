@@ -14,6 +14,7 @@ import se.gustavkarlsson.aurora_notifier.android.dagger.modules.KpIndexModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.SettingsModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.SunPositionModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.SystemServiceModule;
+import se.gustavkarlsson.aurora_notifier.android.dagger.modules.UpdaterModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.WeatherModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.scopes.BackgroundScope;
 
@@ -26,7 +27,8 @@ import se.gustavkarlsson.aurora_notifier.android.dagger.scopes.BackgroundScope;
 		KpIndexModule.class,
 		SunPositionModule.class,
 		WeatherModule.class,
-		SettingsModule.class
+		SettingsModule.class,
+		UpdaterModule.class
 }, dependencies = {
 		ApplicationComponent.class
 })

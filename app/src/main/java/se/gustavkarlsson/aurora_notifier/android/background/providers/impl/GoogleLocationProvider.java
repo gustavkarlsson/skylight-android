@@ -7,6 +7,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import javax.inject.Inject;
+
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.LocationProvider;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
@@ -18,7 +20,8 @@ public class GoogleLocationProvider implements LocationProvider {
 
 	private final GoogleApiClient googleApiClient;
 
-	public GoogleLocationProvider(GoogleApiClient googleApiClient) {
+	@Inject
+	GoogleLocationProvider(GoogleApiClient googleApiClient) {
 		this.googleApiClient = googleApiClient;
 	}
 

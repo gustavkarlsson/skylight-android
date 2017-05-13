@@ -18,13 +18,16 @@ import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.Googl
 @Module
 public abstract class GoogleLocationModule {
 
+	@Binds
+	@Reusable
+	abstract LocationProvider bindLocationProvider(GoogleLocationProvider googleLocationProvider);
+
 	@Provides
 	@Reusable
-	static LocationProvider provideLocationProvider(Context context) {
-		GoogleApiClient googleApiClient = new GoogleApiClient.Builder(context)
+	static GoogleApiClient provideGoogleApiClient(Context context) {
+		return new GoogleApiClient.Builder(context)
 				.addApi(LocationServices.API)
 				.build();
-		return new GoogleLocationProvider(googleApiClient);
 	}
 
 	@Provides
