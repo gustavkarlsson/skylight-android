@@ -29,12 +29,12 @@
 				tools:layout="@layout/fragment_aurora_chance" />
 
 			<fragment
-				android:id="@+id/fragment_aurora_data"
-				android:name="se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_data.AuroraDataFragment"
+				android:id="@+id/fragment_aurora_factors"
+				android:name="se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorFragment"
 				android:layout_width="match_parent"
 				android:layout_height="0dp"
 				android:layout_weight="6"
-				tools:layout="@layout/fragment_aurora_data" />
+				tools:layout="@layout/fragment_aurora_factors" />
 
 		</LinearLayout>
 

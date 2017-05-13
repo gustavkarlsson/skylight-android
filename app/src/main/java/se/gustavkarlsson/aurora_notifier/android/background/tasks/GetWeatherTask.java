@@ -6,7 +6,7 @@ import android.util.Log;
 import java.util.concurrent.FutureTask;
 
 import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherProvider;
-import se.gustavkarlsson.aurora_notifier.android.models.data.Weather;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
 
 public class GetWeatherTask extends FutureTask<Weather> {
 	private static final String TAG = GetWeatherTask.class.getSimpleName();

@@ -8,14 +8,14 @@
 	tools:ignore="UseCompoundDrawables">
 
 	<ImageView
-		android:id="@+id/aurora_data_image"
+		android:id="@+id/aurora_factor_image"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		tools:src="@drawable/ic_timeline_white_48dp"
 		tools:ignore="ContentDescription" />
 
 	<TextView
-		android:id="@+id/aurora_data_value"
+		android:id="@+id/aurora_factor_value"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		tools:text="3+" />

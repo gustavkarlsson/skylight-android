@@ -2,22 +2,22 @@ package se.gustavkarlsson.aurora_notifier.android.models;
 
 import org.parceler.Parcel;
 
-import se.gustavkarlsson.aurora_notifier.android.models.data.GeomagneticLocation;
-import se.gustavkarlsson.aurora_notifier.android.models.data.SolarActivity;
-import se.gustavkarlsson.aurora_notifier.android.models.data.SunPosition;
-import se.gustavkarlsson.aurora_notifier.android.models.data.Weather;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocation;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.SolarActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
 
 @Parcel
-public class AuroraData {
+public class AuroraFactors {
 	SolarActivity solarActivity;
 	GeomagneticLocation geomagneticLocation;
 	SunPosition sunPosition;
 	Weather weather;
 
-	AuroraData() {
+	AuroraFactors() {
 	}
 
-	public AuroraData(
+	public AuroraFactors(
 			SolarActivity solarActivity,
 			GeomagneticLocation geomagneticLocation,
 			SunPosition sunPosition,
@@ -46,7 +46,7 @@ public class AuroraData {
 
 	@Override
 	public String toString() {
-		return "AuroraData{" +
+		return "AuroraFactors{" +
 				"solarActivity=" + solarActivity +
 				", geomagneticLocation=" + geomagneticLocation +
 				", sunPosition=" + sunPosition +

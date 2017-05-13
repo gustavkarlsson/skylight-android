@@ -8,18 +8,18 @@ import se.gustavkarlsson.aurora_notifier.android.evaluation.factor_evaluators.So
 import se.gustavkarlsson.aurora_notifier.android.evaluation.factor_evaluators.SunPositionComplicationEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.factor_evaluators.WeatherComplicationEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
-import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
+import se.gustavkarlsson.aurora_notifier.android.models.AuroraFactors;
 
 import static java8.util.stream.StreamSupport.stream;
 
-public class AuroraDataComplicationsEvaluator implements ComplicationEvaluator {
+public class AuroraFactorsComplicationsEvaluator implements ComplicationEvaluator {
 	private final List<ComplicationEvaluator> complicationEvaluators;
 
-	public AuroraDataComplicationsEvaluator(AuroraData data) {
+	public AuroraFactorsComplicationsEvaluator(AuroraFactors factors) {
 		complicationEvaluators = Arrays.asList(
-				new WeatherComplicationEvaluator(data.getWeather()),
-				new SunPositionComplicationEvaluator(data.getSunPosition()),
-				new SolarActivityAndGeomagneticLocationComplicationEvaluator(data.getSolarActivity(), data.getGeomagneticLocation())
+				new WeatherComplicationEvaluator(factors.getWeather()),
+				new SunPositionComplicationEvaluator(factors.getSunPosition()),
+				new SolarActivityAndGeomagneticLocationComplicationEvaluator(factors.getSolarActivity(), factors.getGeomagneticLocation())
 		);
 	}
 

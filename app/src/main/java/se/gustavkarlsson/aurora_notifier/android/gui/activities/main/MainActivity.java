@@ -77,7 +77,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		List<AuroraEvaluationUpdateListener> updateReceivers = new LinkedList<>();
 		updateReceivers.add((AuroraEvaluationUpdateListener) fragmentManager.findFragmentById(R.id.fragment_aurora_chance));
-		updateReceivers.add((AuroraEvaluationUpdateListener) fragmentManager.findFragmentById(R.id.fragment_aurora_data));
+		updateReceivers.add((AuroraEvaluationUpdateListener) fragmentManager.findFragmentById(R.id.fragment_aurora_factors));
 		updateReceivers.add((AuroraEvaluationUpdateListener) fragmentManager.findFragmentById(R.id.fragment_aurora_complications));
 		return updateReceivers;
 	}

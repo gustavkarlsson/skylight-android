@@ -10,10 +10,10 @@ import java.util.Collections;
 import java.util.List;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.models.data.GeomagneticLocation;
-import se.gustavkarlsson.aurora_notifier.android.models.data.SolarActivity;
-import se.gustavkarlsson.aurora_notifier.android.models.data.SunPosition;
-import se.gustavkarlsson.aurora_notifier.android.models.data.Weather;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocation;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.SolarActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
 
 import static java.util.Collections.singletonList;
 import static java8.util.stream.StreamSupport.stream;
@@ -22,17 +22,17 @@ import static java8.util.stream.StreamSupport.stream;
 public class AuroraEvaluation {
 	long timestampMillis;
 	Address address;
-	AuroraData data;
+	AuroraFactors factors;
 	List<AuroraComplication> complications;
 	AuroraChance chance;
 
 	AuroraEvaluation() {
 	}
 
-	public AuroraEvaluation(long timestampMillis, Address address, AuroraData data, Collection<AuroraComplication> complications) {
+	public AuroraEvaluation(long timestampMillis, Address address, AuroraFactors factors, Collection<AuroraComplication> complications) {
 		this.timestampMillis = timestampMillis;
 		this.address = address;
-		this.data = data;
+		this.factors = factors;
 		this.complications = sortComplications(complications);
 		this.chance = calculateChance(complications);
 	}
@@ -54,7 +54,7 @@ public class AuroraEvaluation {
 	}
 
 	public static AuroraEvaluation createFallback() {
-		AuroraData data = new AuroraData(
+		AuroraFactors factors = new AuroraFactors(
 				new SolarActivity(0),
 				new GeomagneticLocation(0),
 				new SunPosition(0),
@@ -64,7 +64,7 @@ public class AuroraEvaluation {
 				AuroraChance.UNKNOWN,
 				R.string.complication_no_data_title,
 				R.string.complication_no_data_desc);
-		return new AuroraEvaluation(0, null, data, singletonList(unknownComplication));
+		return new AuroraEvaluation(0, null, factors, singletonList(unknownComplication));
 	}
 
 	public long getTimestampMillis() {
@@ -75,8 +75,8 @@ public class AuroraEvaluation {
 		return address;
 	}
 
-	public AuroraData getData() {
-		return data;
+	public AuroraFactors getFactors() {
+		return factors;
 	}
 
 	public List<AuroraComplication> getComplications() {
@@ -92,7 +92,7 @@ public class AuroraEvaluation {
 		return "AuroraEvaluation{" +
 				"timestampMillis=" + timestampMillis +
 				", address=" + address +
-				", data=" + data +
+				", factors=" + factors +
 				", complications=" + complications +
 				", chance=" + chance +
 				'}';

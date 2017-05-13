@@ -5,7 +5,7 @@ import android.util.Log;
 import java.util.concurrent.FutureTask;
 
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SolarActivityProvider;
-import se.gustavkarlsson.aurora_notifier.android.models.data.SolarActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.SolarActivity;
 
 public class GetSolarActivityTask extends FutureTask<SolarActivity> {
 	private static final String TAG = GetSolarActivityTask.class.getSimpleName();

@@ -1,21 +1,21 @@
-package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_data;
+package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.models.data.SolarActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.SolarActivity;
 
-class SolarActivityPresenter extends AbstractAuroraDataPresenter {
-	SolarActivityPresenter(AuroraDataView dataView) {
-		super(dataView);
+class SolarActivityPresenter extends AbstractAuroraFactorPresenter {
+	SolarActivityPresenter(AuroraFactorView factorView) {
+		super(factorView);
 	}
 
 	@Override
 	int getTitleResourceId() {
-		return R.string.data_solar_activity_title;
+		return R.string.factor_solar_activity_title;
 	}
 
 	@Override
 	int getDescriptionResourceId() {
-		return R.string.data_solar_activity_desc;
+		return R.string.factor_solar_activity_desc;
 	}
 
 	void onUpdate(SolarActivity solarActivity) {
@@ -24,7 +24,7 @@ class SolarActivityPresenter extends AbstractAuroraDataPresenter {
 		float part = kpIndex - whole;
 		String partString = parsePart(part);
 		String wholeString = parseWhole(whole, partString);
-		setDataValue(wholeString + partString);
+		setFactorValue(wholeString + partString);
 	}
 
 	private static String parsePart(float part) {

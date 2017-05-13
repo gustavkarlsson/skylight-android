@@ -7,7 +7,7 @@ import java.io.IOException;
 import retrofit2.Response;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherProvider;
-import se.gustavkarlsson.aurora_notifier.android.models.data.Weather;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 public class RetrofittedOpenWeatherMapProvider implements WeatherProvider {

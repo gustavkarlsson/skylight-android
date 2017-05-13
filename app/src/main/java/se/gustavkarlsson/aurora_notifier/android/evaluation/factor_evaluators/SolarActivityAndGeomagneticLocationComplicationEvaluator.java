@@ -6,8 +6,8 @@ import java.util.List;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.ComplicationEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
-import se.gustavkarlsson.aurora_notifier.android.models.data.GeomagneticLocation;
-import se.gustavkarlsson.aurora_notifier.android.models.data.SolarActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocation;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.SolarActivity;
 
 import static se.gustavkarlsson.aurora_notifier.android.models.AuroraChance.NONE;
 

@@ -7,14 +7,14 @@ import java.util.List;
 import java.util.Locale;
 
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraEvaluationProvider;
-import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraDataComplicationsEvaluator;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraFactorsComplicationsEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
-import se.gustavkarlsson.aurora_notifier.android.models.AuroraData;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
-import se.gustavkarlsson.aurora_notifier.android.models.data.GeomagneticLocation;
-import se.gustavkarlsson.aurora_notifier.android.models.data.SolarActivity;
-import se.gustavkarlsson.aurora_notifier.android.models.data.SunPosition;
-import se.gustavkarlsson.aurora_notifier.android.models.data.Weather;
+import se.gustavkarlsson.aurora_notifier.android.models.AuroraFactors;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocation;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.SolarActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
 import se.gustavkarlsson.aurora_notifier.android.settings.DebugSettings;
 
 public class DebugAuroraEvaluationProvider implements AuroraEvaluationProvider {
@@ -28,18 +28,18 @@ public class DebugAuroraEvaluationProvider implements AuroraEvaluationProvider {
 	@Override
 	public AuroraEvaluation getEvaluation(long timeoutMillis) {
 		Address location = new Address(Locale.ENGLISH);
-		AuroraData auroraData = createAuroraData();
-		List<AuroraComplication> complications = new AuroraDataComplicationsEvaluator(auroraData).evaluate();
-		return new AuroraEvaluation(System.currentTimeMillis(), location, auroraData, complications);
+		AuroraFactors auroraFactors = createAuroraFactors();
+		List<AuroraComplication> complications = new AuroraFactorsComplicationsEvaluator(auroraFactors).evaluate();
+		return new AuroraEvaluation(System.currentTimeMillis(), location, auroraFactors, complications);
 	}
 
 	@NonNull
-	private AuroraData createAuroraData() {
+	private AuroraFactors createAuroraFactors() {
 		SolarActivity solarActivity = new SolarActivity(debugSettings.getKpIndex());
 		GeomagneticLocation geomagneticLocation = new GeomagneticLocation(debugSettings.getDegreesFromClosestPole());
 		SunPosition sunPosition = new SunPosition(debugSettings.getSunZenithAngle());
 		Weather weather = new Weather(debugSettings.getCloudPercentage());
-		return new AuroraData(
+		return new AuroraFactors(
 				solarActivity,
 				geomagneticLocation,
 				sunPosition,

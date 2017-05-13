@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_data;
+package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors;
 
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
@@ -21,7 +21,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 // TODO these tests take forever...
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class AuroraDataFragmentTest {
+public class AuroraFactorFragmentTest {
 
 	@Rule
 	public ActivityTestRule<MainActivity> testRule =
@@ -33,34 +33,34 @@ public class AuroraDataFragmentTest {
 	}
 
 	@Test
-	public void dataViewsShown() throws Exception {
-		onView(withId(R.id.aurora_data_solar_activity)).check(matches(isDisplayed()));
-		onView(withId(R.id.aurora_data_geomagnetic_location)).check(matches(isDisplayed()));
-		onView(withId(R.id.aurora_data_weather)).check(matches(isDisplayed()));
-		onView(withId(R.id.aurora_data_sun_position)).check(matches(isDisplayed()));
+	public void factorViewsShown() throws Exception {
+		onView(withId(R.id.aurora_factor_solar_activity)).check(matches(isDisplayed()));
+		onView(withId(R.id.aurora_factor_geomagnetic_location)).check(matches(isDisplayed()));
+		onView(withId(R.id.aurora_factor_weather)).check(matches(isDisplayed()));
+		onView(withId(R.id.aurora_factor_sun_position)).check(matches(isDisplayed()));
 	}
 
 	@Test
 	public void clickSolarActivity_detailViewShown() throws Exception {
-		whenDataViewClickedDetailViewOpens(R.id.aurora_data_solar_activity, R.string.data_solar_activity_title, R.string.data_solar_activity_desc);
+		whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_solar_activity, R.string.factor_solar_activity_title, R.string.factor_solar_activity_desc);
 	}
 
 	@Test
 	public void clickGeomagneticLocation_detailViewShown() throws Exception {
-		whenDataViewClickedDetailViewOpens(R.id.aurora_data_geomagnetic_location, R.string.data_geomagnetic_location_title, R.string.data_geomagnetic_location_desc);
+		whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_geomagnetic_location, R.string.factor_geomagnetic_location_title, R.string.factor_geomagnetic_location_desc);
 	}
 
 	@Test
 	public void clickWeather_detailViewShown() throws Exception {
-		whenDataViewClickedDetailViewOpens(R.id.aurora_data_weather, R.string.data_weather_title, R.string.data_weather_desc);
+		whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_weather, R.string.factor_weather_title, R.string.factor_weather_desc);
 	}
 
 	@Test
 	public void clickSunPosition_detailViewShown() throws Exception {
-		whenDataViewClickedDetailViewOpens(R.id.aurora_data_sun_position, R.string.data_sun_position_title, R.string.data_sun_position_desc);
+		whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_sun_position, R.string.factor_sun_position_title, R.string.factor_sun_position_desc);
 	}
 
-	private static void whenDataViewClickedDetailViewOpens(int viewId, int titleString, int descriptionString) {
+	private static void whenFactorViewClickedDetailViewOpens(int viewId, int titleString, int descriptionString) {
 		onView(withId(viewId)).perform(click());
 		onView(withText(titleString)).check(matches(isDisplayed()));
 		onView(withText(descriptionString)).check(matches(isDisplayed()));

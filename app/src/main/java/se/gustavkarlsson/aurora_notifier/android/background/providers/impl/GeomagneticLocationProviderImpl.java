@@ -3,7 +3,7 @@ package se.gustavkarlsson.aurora_notifier.android.background.providers.impl;
 import javax.inject.Inject;
 
 import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagneticLocationProvider;
-import se.gustavkarlsson.aurora_notifier.android.models.data.GeomagneticLocation;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocation;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.atan2;

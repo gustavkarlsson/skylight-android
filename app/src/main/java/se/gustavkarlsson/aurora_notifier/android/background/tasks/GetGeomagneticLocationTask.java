@@ -6,7 +6,7 @@ import android.util.Log;
 import java.util.concurrent.FutureTask;
 
 import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagneticLocationProvider;
-import se.gustavkarlsson.aurora_notifier.android.models.data.GeomagneticLocation;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocation;
 
 public class GetGeomagneticLocationTask extends FutureTask<GeomagneticLocation> {
 	private static final String TAG = GetGeomagneticLocationTask.class.getSimpleName();

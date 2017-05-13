@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_data;
+package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors;
 
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
@@ -6,19 +6,19 @@ import android.view.View;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-abstract class AbstractAuroraDataPresenter {
-	private final AuroraDataView dataView;
+abstract class AbstractAuroraFactorPresenter {
+	private final AuroraFactorView factorView;
 
-	AbstractAuroraDataPresenter(AuroraDataView dataView) {
-		this.dataView = checkNotNull(dataView, "dataView may not be null");
-		Context context = dataView.getContext();
+	AbstractAuroraFactorPresenter(AuroraFactorView factorView) {
+		this.factorView = checkNotNull(factorView, "factorView may not be null");
+		Context context = factorView.getContext();
 		String title = context.getString(getTitleResourceId());
 		String description = context.getString(getDescriptionResourceId());
-		this.dataView.setOnClickListener(new PopupDescriptionClickListener(context, title, description));
+		this.factorView.setOnClickListener(new PopupDescriptionClickListener(context, title, description));
 	}
 
-	void setDataValue(String value) {
-		dataView.setValue(value);
+	void setFactorValue(String value) {
+		factorView.setValue(value);
 	}
 
 	abstract int getTitleResourceId();

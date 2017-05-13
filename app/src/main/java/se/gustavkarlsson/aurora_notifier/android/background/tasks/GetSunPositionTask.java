@@ -6,7 +6,7 @@ import android.util.Log;
 import java.util.concurrent.FutureTask;
 
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SunPositionProvider;
-import se.gustavkarlsson.aurora_notifier.android.models.data.SunPosition;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
 
 public class GetSunPositionTask extends FutureTask<SunPosition> {
 	private static final String TAG = GetSunPositionTask.class.getSimpleName();
