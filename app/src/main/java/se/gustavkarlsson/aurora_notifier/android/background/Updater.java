@@ -11,8 +11,8 @@ import org.parceler.Parcels;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraEvaluationProvider;
 import se.gustavkarlsson.aurora_notifier.android.cache.AuroraEvaluationCache;
-import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdateJobComponent;
-import se.gustavkarlsson.aurora_notifier.android.dagger.components.UpdateJobComponent;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdaterComponent;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.UpdaterComponent;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
@@ -35,11 +35,11 @@ public class Updater {
 	}
 
 	public boolean update(int timeoutMillis) {
-		UpdateJobComponent component = DaggerUpdateJobComponent.builder()
+		Log.v(TAG, "onUpdate");
+		UpdaterComponent component = DaggerUpdaterComponent.builder()
 				.applicationComponent(getApplicationComponent(context))
 				.build();
 		AuroraEvaluationProvider provider = component.getAuroraEvaluationProvider();
-		Log.v(TAG, "onUpdate");
 		try {
 			AuroraEvaluation evaluation = provider.getEvaluation(timeoutMillis);
 			cache.setCurrentLocation(evaluation);
