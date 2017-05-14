@@ -27,10 +27,6 @@ public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivi
 	public static final String LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION;
 	private static final int REQUEST_CODE_LOCATION_PERMISSION = 1973;
 
-	private AlertDialog gpsCouldNotBeInstalledAppWillCloseDialog;
-	private AlertDialog locationPermissionRequiredDialog;
-	private AlertDialog locationPermissionDeniedDialog;
-
 	private UpdateScheduler updateScheduler;
 
 	@Override
@@ -40,43 +36,40 @@ public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivi
 	}
 
 	protected final void ensureRequirementsMet() {
-		gpsCouldNotBeInstalledAppWillCloseDialog = buildGooglePlayServicesCouldNotBeInstalledDialog();
-		locationPermissionRequiredDialog = buildLocationPermissionRequiredDialog();
-		locationPermissionDeniedDialog = buildLocationPermissionDeniedDialog();
 		Task<Void> gpsAvaliable = GoogleApiAvailability.getInstance().makeGooglePlayServicesAvailable(this);
-		gpsAvaliable.addOnFailureListener(e -> gpsCouldNotBeInstalledAppWillCloseDialog.show());
+		gpsAvaliable.addOnFailureListener(e -> showGooglePlayServicesCouldNotBeInstalledDialog());
 		gpsAvaliable.addOnSuccessListener(aVoid -> ensureLocationPermission());
 	}
 
-	private AlertDialog buildGooglePlayServicesCouldNotBeInstalledDialog() {
-		return new AlertDialog.Builder(this)
+	private void showGooglePlayServicesCouldNotBeInstalledDialog() {
+		new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(R.string.error_google_play_services_could_not_be_installed_title)
 				.setMessage(R.string.error_google_play_services_could_not_be_installed_desc)
 				.setPositiveButton(R.string.exit, (dialog, which) -> System.exit(1))
 				.setCancelable(false)
-				.create();
+				.show();
 	}
 
-	private AlertDialog buildLocationPermissionRequiredDialog() {
-		return new AlertDialog.Builder(this)
+	private void showLocationPermissionRequiredDialog() {
+		new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(getString(R.string.location_permission_required_title))
 				.setMessage(R.string.location_permission_required_desc)
 				.setPositiveButton(android.R.string.yes, (dialog, which) -> showLocationPermissionRequest())
 				.setNegativeButton(R.string.exit, (dialog, which) -> System.exit(2))
 				.setCancelable(false)
-				.create();
+				.show();
 	}
 
-	private AlertDialog buildLocationPermissionDeniedDialog() {
-		return new AlertDialog.Builder(this)
+	private void showLocationPermissionDeniedDialog() {
+		new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setTitle(getString(R.string.error_location_permission_denied_title))
 				.setMessage(R.string.error_location_permission_denied_desc)
 				.setPositiveButton(R.string.exit, (dialog, which) -> System.exit(3))
 				.setCancelable(false)
-				.create();
+				.show();
 	}
 
 	private void ensureLocationPermission() {
@@ -116,10 +109,10 @@ public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivi
 		Log.i(TAG, LOCATION_PERMISSION + " permission denied");
 		if (ActivityCompat.shouldShowRequestPermissionRationale(this, LOCATION_PERMISSION)) {
 			Log.i(TAG, "Showing rationale to user for another chance");
-			locationPermissionRequiredDialog.show();
+			showLocationPermissionRequiredDialog();
 		} else {
 			Log.i(TAG, "Showing permission denied dialog and exiting");
-			locationPermissionDeniedDialog.show();
+			showLocationPermissionDeniedDialog();
 		}
 	}
 
