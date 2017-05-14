@@ -14,9 +14,6 @@
 	<string name="aurora_chance_medium">Medium Chance</string>
 	<string name="aurora_chance_high">High Chance</string>
 	<string name="aurora_chance_unknown">Unknown Chance</string>
-	<string name="why">Why?</string>
-	<string name="learn_more">Learn more</string>
 
-	<string name="debug">Debug</string>
 	<string name="settings">Settings</string>
 </resources>

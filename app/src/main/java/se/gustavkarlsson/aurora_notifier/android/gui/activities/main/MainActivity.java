@@ -24,18 +24,18 @@ import javax.inject.Inject;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.Updater;
-import se.gustavkarlsson.aurora_notifier.android.cache.AuroraEvaluationCache;
+import se.gustavkarlsson.aurora_notifier.android.cache.AuroraReportCache;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerMainActivityComponent;
-import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
+import se.gustavkarlsson.aurora_notifier.android.gui.AuroraReportUpdateListener;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.AuroraRequirementsCheckingActivity;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.settings.SettingsActivity;
-import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
+import se.gustavkarlsson.aurora_notifier.android.models.AuroraReport;
 
 import static se.gustavkarlsson.aurora_notifier.android.AuroraNotifier.getApplicationComponent;
 import static se.gustavkarlsson.aurora_notifier.android.background.Updater.RESPONSE_UPDATE_ERROR;
 import static se.gustavkarlsson.aurora_notifier.android.background.Updater.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE;
 import static se.gustavkarlsson.aurora_notifier.android.background.Updater.RESPONSE_UPDATE_FINISHED;
-import static se.gustavkarlsson.aurora_notifier.android.background.Updater.RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION;
+import static se.gustavkarlsson.aurora_notifier.android.background.Updater.RESPONSE_UPDATE_FINISHED_EXTRA_REPORT;
 
 public class MainActivity extends AuroraRequirementsCheckingActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
@@ -44,12 +44,12 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	Updater updater;
 
 	@Inject
-	AuroraEvaluationCache auroraEvaluationCache;
+	AuroraReportCache AuroraReportCache;
 
-	private int evaluationLifetimeMillis;
+	private int reportLifetimeMillis;
 	private int backgroundUpdateTimeoutMillis;
 	private SwipeToRefreshPresenter swipeToRefreshPresenter;
-	private List<AuroraEvaluationUpdateListener> updateReceivers;
+	private List<AuroraReportUpdateListener> updateReceivers;
 	private BroadcastReceiver broadcastReceiver;
 
 	@Override
@@ -62,7 +62,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 				.build()
 				.inject(this);
 
-		evaluationLifetimeMillis = getResources().getInteger(R.integer.setting_foreground_evaluation_lifetime_millis);
+		reportLifetimeMillis = getResources().getInteger(R.integer.setting_foreground_report_lifetime_millis);
 		backgroundUpdateTimeoutMillis = getResources().getInteger(R.integer.setting_background_update_timeout_millis);
 		swipeToRefreshPresenter = new SwipeToRefreshPresenter((SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout), this, updater);
 		updateReceivers = getUpdateReceivers();
@@ -71,11 +71,11 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver), new IntentFilter(RESPONSE_UPDATE_ERROR));
 	}
 
-	private List<AuroraEvaluationUpdateListener> getUpdateReceivers() {
+	private List<AuroraReportUpdateListener> getUpdateReceivers() {
 		FragmentManager fragmentManager = getSupportFragmentManager();
-		List<AuroraEvaluationUpdateListener> updateReceivers = new LinkedList<>();
-		updateReceivers.add((AuroraEvaluationUpdateListener) fragmentManager.findFragmentById(R.id.fragment_aurora_chance));
-		updateReceivers.add((AuroraEvaluationUpdateListener) fragmentManager.findFragmentById(R.id.fragment_aurora_factors));
+		List<AuroraReportUpdateListener> updateReceivers = new LinkedList<>();
+		updateReceivers.add((AuroraReportUpdateListener) fragmentManager.findFragmentById(R.id.fragment_aurora_chance));
+		updateReceivers.add((AuroraReportUpdateListener) fragmentManager.findFragmentById(R.id.fragment_aurora_factors));
 		return updateReceivers;
 	}
 
@@ -85,9 +85,9 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 			public void onReceive(Context context, Intent intent) {
 				String action = intent.getAction();
 				if (RESPONSE_UPDATE_FINISHED.equals(action)) {
-					Parcelable evaluationParcel = intent.getParcelableExtra(RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION);
-					AuroraEvaluation evaluation = Parcels.unwrap(evaluationParcel);
-					updateGui(evaluation);
+					Parcelable reportParcel = intent.getParcelableExtra(RESPONSE_UPDATE_FINISHED_EXTRA_REPORT);
+					AuroraReport report = Parcels.unwrap(reportParcel);
+					updateGui(report);
 				} else if (RESPONSE_UPDATE_ERROR.equals(action)) {
 					String message = intent.getStringExtra(RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE);
 					Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
@@ -96,9 +96,9 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		};
 	}
 
-	private void updateGui(AuroraEvaluation evaluation) {
-		for (AuroraEvaluationUpdateListener receiver : updateReceivers) {
-			receiver.onUpdate(evaluation);
+	private void updateGui(AuroraReport report) {
+		for (AuroraReportUpdateListener receiver : updateReceivers) {
+			receiver.onUpdate(report);
 		}
 	}
 
@@ -126,28 +126,28 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	public void onStart() {
 		Log.v(TAG, "onStart");
 		super.onStart();
-		AuroraEvaluation evaluation = getBestEvaluation();
+		AuroraReport report = getBestReport();
 		swipeToRefreshPresenter.disable();
 		ensureRequirementsMet();
-		updateGui(evaluation);
+		updateGui(report);
 	}
 
 	@Override
 	protected void onRequirementsMet() {
 		swipeToRefreshPresenter.enable();
-		AuroraEvaluation evaluation = getBestEvaluation();
-		long ageMillis = System.currentTimeMillis() - evaluation.getTimestampMillis();
-		if (ageMillis > evaluationLifetimeMillis) {
+		AuroraReport report = getBestReport();
+		long ageMillis = System.currentTimeMillis() - report.getTimestampMillis();
+		if (ageMillis > reportLifetimeMillis) {
 			updateInBackground();
 		}
 	}
 
-	private AuroraEvaluation getBestEvaluation() {
-		AuroraEvaluation evaluation = auroraEvaluationCache.getCurrentLocation();
-		if (evaluation != null) {
-			return evaluation;
+	private AuroraReport getBestReport() {
+		AuroraReport report = AuroraReportCache.getCurrentLocation();
+		if (report != null) {
+			return report;
 		}
-		return AuroraEvaluation.createFallback();
+		return AuroraReport.createFallback();
 	}
 
 	private void updateInBackground() {

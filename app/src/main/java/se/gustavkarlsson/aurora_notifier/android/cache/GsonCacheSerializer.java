@@ -17,7 +17,7 @@ class GsonCacheSerializer<T> implements CacheSerializer<T> {
     }
 
     @Override
-    public String toString(T evaluation) {
-        return gson.toJson(evaluation);
+    public String toString(T report) {
+        return gson.toJson(report);
     }
 }

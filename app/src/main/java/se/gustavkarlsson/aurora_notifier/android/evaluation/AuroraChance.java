@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.models;
+package se.gustavkarlsson.aurora_notifier.android.evaluation;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
 

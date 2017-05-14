@@ -8,11 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
-import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
+import se.gustavkarlsson.aurora_notifier.android.gui.AuroraReportUpdateListener;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraFactors;
+import se.gustavkarlsson.aurora_notifier.android.models.AuroraReport;
 
-public class AuroraFactorFragment extends Fragment implements AuroraEvaluationUpdateListener {
+public class AuroraFactorFragment extends Fragment implements AuroraReportUpdateListener {
 	private static final String TAG = AuroraFactorFragment.class.getSimpleName();
 
 	private View rootView;
@@ -39,8 +39,8 @@ public class AuroraFactorFragment extends Fragment implements AuroraEvaluationUp
 	}
 
 	@Override
-	public void onUpdate(AuroraEvaluation evaluation) {
-		AuroraFactors factors = evaluation.getFactors();
+	public void onUpdate(AuroraReport report) {
+		AuroraFactors factors = report.getFactors();
 		solarActivityPresenter.onUpdate(factors.getSolarActivity());
 		geomagneticLocationPresenter.onUpdate(factors.getGeomagneticLocation());
 		weatherPresenter.onUpdate(factors.getWeather());

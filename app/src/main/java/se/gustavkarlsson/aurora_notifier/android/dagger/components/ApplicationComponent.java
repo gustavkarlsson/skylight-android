@@ -6,7 +6,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import se.gustavkarlsson.aurora_notifier.android.background.UpdateScheduler;
-import se.gustavkarlsson.aurora_notifier.android.cache.AuroraEvaluationCache;
+import se.gustavkarlsson.aurora_notifier.android.cache.AuroraReportCache;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.ApplicationModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.CacheModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.SettingsModule;
@@ -22,6 +22,6 @@ import se.gustavkarlsson.aurora_notifier.android.dagger.modules.UpdateSchedulerM
 @SuppressWarnings("WeakerAccess")
 public interface ApplicationComponent {
 	Context getContext();
-	AuroraEvaluationCache getAuroraEvaluationCache();
+	AuroraReportCache getAuroraReportCache();
 	UpdateScheduler getUpdateScheduler();
 }

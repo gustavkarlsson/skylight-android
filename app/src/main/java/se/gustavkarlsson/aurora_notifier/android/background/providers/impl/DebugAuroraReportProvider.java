@@ -5,28 +5,28 @@ import android.support.annotation.NonNull;
 
 import java.util.Locale;
 
-import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraEvaluationProvider;
-import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraReportProvider;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraFactors;
+import se.gustavkarlsson.aurora_notifier.android.models.AuroraReport;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocation;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.SolarActivity;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
 import se.gustavkarlsson.aurora_notifier.android.settings.DebugSettings;
 
-public class DebugAuroraEvaluationProvider implements AuroraEvaluationProvider {
+public class DebugAuroraReportProvider implements AuroraReportProvider {
 
 	private final DebugSettings debugSettings;
 
-	public DebugAuroraEvaluationProvider(DebugSettings debugSettings) {
+	public DebugAuroraReportProvider(DebugSettings debugSettings) {
 		this.debugSettings = debugSettings;
 	}
 
 	@Override
-	public AuroraEvaluation getEvaluation(long timeoutMillis) {
+	public AuroraReport getReport(long timeoutMillis) {
 		Address location = new Address(Locale.ENGLISH);
 		AuroraFactors auroraFactors = createAuroraFactors();
-		return new AuroraEvaluation(System.currentTimeMillis(), location, auroraFactors);
+		return new AuroraReport(System.currentTimeMillis(), location, auroraFactors);
 	}
 
 	@NonNull

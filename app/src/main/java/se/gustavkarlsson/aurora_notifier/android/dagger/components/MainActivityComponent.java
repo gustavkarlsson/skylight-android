@@ -1,8 +1,8 @@
 package se.gustavkarlsson.aurora_notifier.android.dagger.components;
 
 import dagger.Component;
-import se.gustavkarlsson.aurora_notifier.android.dagger.modules.AuroraEvaluationModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.AuroraFactorsModule;
+import se.gustavkarlsson.aurora_notifier.android.dagger.modules.AuroraReportModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GeomagneticLocationModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GoogleLocationModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.KpIndexModule;
@@ -15,7 +15,7 @@ import se.gustavkarlsson.aurora_notifier.android.gui.activities.main.MainActivit
 
 @Component(modules = {
 		SystemServiceModule.class,
-		AuroraEvaluationModule.class,
+		AuroraReportModule.class,
 		GoogleLocationModule.class,
 		AuroraFactorsModule.class,
 		GeomagneticLocationModule.class,

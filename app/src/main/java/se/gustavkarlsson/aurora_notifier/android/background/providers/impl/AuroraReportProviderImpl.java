@@ -14,25 +14,25 @@ import java.util.concurrent.TimeoutException;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AsyncAddressProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraEvaluationProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraFactorsProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraReportProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.LocationProvider;
-import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraFactors;
+import se.gustavkarlsson.aurora_notifier.android.models.AuroraReport;
 import se.gustavkarlsson.aurora_notifier.android.util.CountdownTimer;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-public class AuroraEvaluationProviderImpl implements AuroraEvaluationProvider {
-	private static final String TAG = AuroraEvaluationProviderImpl.class.getSimpleName();
+public class AuroraReportProviderImpl implements AuroraReportProvider {
+	private static final String TAG = AuroraReportProviderImpl.class.getSimpleName();
 
 	private final ConnectivityManager connectivityManager;
 	private final LocationProvider locationProvider;
 	private final AuroraFactorsProvider auroraFactorsProvider;
 	private final AsyncAddressProvider asyncAddressProvider;
 
-	public AuroraEvaluationProviderImpl(ConnectivityManager connectivityManager, LocationProvider locationProvider, AuroraFactorsProvider auroraFactorsProvider, AsyncAddressProvider asyncAddressProvider) {
+	public AuroraReportProviderImpl(ConnectivityManager connectivityManager, LocationProvider locationProvider, AuroraFactorsProvider auroraFactorsProvider, AsyncAddressProvider asyncAddressProvider) {
 		this.connectivityManager = connectivityManager;
 		this.locationProvider = locationProvider;
 		this.auroraFactorsProvider = auroraFactorsProvider;
@@ -40,7 +40,7 @@ public class AuroraEvaluationProviderImpl implements AuroraEvaluationProvider {
 	}
 
 	@Override
-	public AuroraEvaluation getEvaluation(long timeoutMillis) {
+	public AuroraReport getReport(long timeoutMillis) {
 		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 		if (networkInfo == null || !networkInfo.isConnected()) {
 			throw new UserFriendlyException(R.string.error_no_internet);
@@ -51,7 +51,7 @@ public class AuroraEvaluationProviderImpl implements AuroraEvaluationProvider {
 		Future<Address> addressFuture = asyncAddressProvider.execute(location.getLatitude(), location.getLongitude());
 		AuroraFactors auroraFactors = auroraFactorsProvider.getAuroraFactors(location, timeoutTimer.getRemainingTimeMillis());
 		Address address = getAddressOrNull(addressFuture, timeoutTimer.getRemainingTimeMillis());
-		return new AuroraEvaluation(System.currentTimeMillis(), address, auroraFactors);
+		return new AuroraReport(System.currentTimeMillis(), address, auroraFactors);
 	}
 
 	@Nullable

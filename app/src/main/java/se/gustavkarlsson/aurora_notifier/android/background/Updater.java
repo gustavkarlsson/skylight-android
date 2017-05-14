@@ -9,11 +9,11 @@ import android.util.Log;
 import org.parceler.Parcels;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraEvaluationProvider;
-import se.gustavkarlsson.aurora_notifier.android.cache.AuroraEvaluationCache;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraReportProvider;
+import se.gustavkarlsson.aurora_notifier.android.cache.AuroraReportCache;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdaterComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.UpdaterComponent;
-import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
+import se.gustavkarlsson.aurora_notifier.android.models.AuroraReport;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 import static se.gustavkarlsson.aurora_notifier.android.AuroraNotifier.getApplicationComponent;
@@ -24,12 +24,12 @@ public class Updater {
 	public static final String RESPONSE_UPDATE_ERROR = TAG + ".RESPONSE_UPDATE_ERROR";
 	public static final String RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE = TAG + ".RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE";
 	public static final String RESPONSE_UPDATE_FINISHED = TAG + ".RESPONSE_UPDATE_FINISHED";
-	public static final String RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION = TAG + ".RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION";
+	public static final String RESPONSE_UPDATE_FINISHED_EXTRA_REPORT = TAG + ".RESPONSE_UPDATE_FINISHED_EXTRA_REPORT";
 
 	private final Context context;
-	private final AuroraEvaluationCache cache;
+	private final AuroraReportCache cache;
 
-	public Updater(Context context, AuroraEvaluationCache cache) {
+	public Updater(Context context, AuroraReportCache cache) {
 		this.context = context;
 		this.cache = cache;
 	}
@@ -39,11 +39,11 @@ public class Updater {
 		UpdaterComponent component = DaggerUpdaterComponent.builder()
 				.applicationComponent(getApplicationComponent(context))
 				.build();
-		AuroraEvaluationProvider provider = component.getAuroraEvaluationProvider();
+		AuroraReportProvider provider = component.getAuroraReportProvider();
 		try {
-			AuroraEvaluation evaluation = provider.getEvaluation(timeoutMillis);
-			cache.setCurrentLocation(evaluation);
-			broadcastEvaluation(evaluation);
+			AuroraReport report = provider.getReport(timeoutMillis);
+			cache.setCurrentLocation(report);
+			broadcastReport(report);
 			return true;
 		} catch (UserFriendlyException e) {
 			String errorMessage = context.getString(e.getStringResourceId());
@@ -58,10 +58,10 @@ public class Updater {
 		}
 	}
 
-	private void broadcastEvaluation(AuroraEvaluation evaluation) {
+	private void broadcastReport(AuroraReport report) {
 		Intent intent = new Intent(RESPONSE_UPDATE_FINISHED);
-		Parcelable wrappedEvaluation = Parcels.wrap(evaluation);
-		intent.putExtra(RESPONSE_UPDATE_FINISHED_EXTRA_EVALUATION, wrappedEvaluation);
+		Parcelable wrappedReport = Parcels.wrap(report);
+		intent.putExtra(RESPONSE_UPDATE_FINISHED_EXTRA_REPORT, wrappedReport);
 		LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
 	}
 

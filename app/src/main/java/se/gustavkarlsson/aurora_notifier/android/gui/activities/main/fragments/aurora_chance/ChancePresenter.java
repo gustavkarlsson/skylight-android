@@ -2,7 +2,7 @@ package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.
 
 import android.widget.TextView;
 
-import se.gustavkarlsson.aurora_notifier.android.models.AuroraChance;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance;
 
 class ChancePresenter {
 	private final TextView chanceTextView;

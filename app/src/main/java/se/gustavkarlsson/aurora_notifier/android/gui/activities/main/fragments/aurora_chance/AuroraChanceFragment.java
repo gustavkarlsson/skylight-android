@@ -10,12 +10,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChanceEvaluator;
-import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
-import se.gustavkarlsson.aurora_notifier.android.models.AuroraChance;
-import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
+import se.gustavkarlsson.aurora_notifier.android.gui.AuroraReportUpdateListener;
+import se.gustavkarlsson.aurora_notifier.android.models.AuroraReport;
 
-public class AuroraChanceFragment extends Fragment implements AuroraEvaluationUpdateListener {
+public class AuroraChanceFragment extends Fragment implements AuroraReportUpdateListener {
 	private static final String TAG = AuroraChanceFragment.class.getSimpleName();
 
 	private View rootView;
@@ -43,11 +43,11 @@ public class AuroraChanceFragment extends Fragment implements AuroraEvaluationUp
 	}
 
 	@Override
-	public void onUpdate(AuroraEvaluation evaluation) {
+	public void onUpdate(AuroraReport report) {
 		Log.v(TAG, "onUpdate");
-		locationPresenter.onUpdate(evaluation.getAddress());
-		timeSinceUpdatePresenter.onUpdate(evaluation.getTimestampMillis());
-		AuroraChance chance = evaluator.evaluate(evaluation);
+		locationPresenter.onUpdate(report.getAddress());
+		timeSinceUpdatePresenter.onUpdate(report.getTimestampMillis());
+		AuroraChance chance = evaluator.evaluate(report);
 		chancePresenter.onUpdate(chance);
 		rootView.invalidate();
 	}
