@@ -131,6 +131,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		Log.v(TAG, "onStart");
 		super.onStart();
 		AuroraEvaluation evaluation = getBestEvaluation();
+		swipeToRefreshPresenter.disable();
 		ensureRequirementsMet();
 		updateGui(evaluation);
 	}
@@ -155,13 +156,6 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 
 	private void updateInBackground() {
 		AsyncTask.execute(() -> updater.update(backgroundUpdateTimeoutMillis));
-	}
-
-	@Override
-	public void onStop() {
-		Log.v(TAG, "onStop");
-		swipeToRefreshPresenter.disable();
-		super.onStop();
 	}
 
 	@Override
