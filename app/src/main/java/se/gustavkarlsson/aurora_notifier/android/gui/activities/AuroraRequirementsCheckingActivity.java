@@ -11,8 +11,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.tasks.Task;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.UpdateScheduler;
@@ -36,16 +36,18 @@ public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivi
 	}
 
 	protected final void ensureRequirementsMet() {
-		Task<Void> gpsAvaliable = GoogleApiAvailability.getInstance().makeGooglePlayServicesAvailable(this);
-		gpsAvaliable.addOnFailureListener(e -> showGooglePlayServicesCouldNotBeInstalledDialog());
-		gpsAvaliable.addOnSuccessListener(aVoid -> ensureLocationPermission());
+		if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
+			ensureLocationPermission();
+		} else {
+			showGooglePlayServicesNotAvailable();
+		}
 	}
 
-	private void showGooglePlayServicesCouldNotBeInstalledDialog() {
+	private void showGooglePlayServicesNotAvailable() {
 		new AlertDialog.Builder(this)
 				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setTitle(R.string.error_google_play_services_could_not_be_installed_title)
-				.setMessage(R.string.error_google_play_services_could_not_be_installed_desc)
+				.setTitle(R.string.error_google_play_services_is_not_available_title)
+				.setMessage(R.string.error_google_play_services_is_not_available_desc)
 				.setPositiveButton(R.string.exit, (dialog, which) -> System.exit(1))
 				.setCancelable(false)
 				.show();
