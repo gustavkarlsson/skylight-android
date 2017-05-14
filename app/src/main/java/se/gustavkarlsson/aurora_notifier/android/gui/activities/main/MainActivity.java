@@ -49,7 +49,6 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	private int evaluationLifetimeMillis;
 	private int backgroundUpdateTimeoutMillis;
 	private SwipeToRefreshPresenter swipeToRefreshPresenter;
-	private BottomSheetPresenter bottomSheetPresenter;
 	private List<AuroraEvaluationUpdateListener> updateReceivers;
 	private BroadcastReceiver broadcastReceiver;
 
@@ -66,7 +65,6 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		evaluationLifetimeMillis = getResources().getInteger(R.integer.setting_foreground_evaluation_lifetime_millis);
 		backgroundUpdateTimeoutMillis = getResources().getInteger(R.integer.setting_background_update_timeout_millis);
 		swipeToRefreshPresenter = new SwipeToRefreshPresenter((SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout), this, updater);
-		bottomSheetPresenter = new BottomSheetPresenter(findViewById(R.id.bottom_sheet));
 		updateReceivers = getUpdateReceivers();
 		broadcastReceiver = createBroadcastReceiver();
 		LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver), new IntentFilter(RESPONSE_UPDATE_FINISHED));
@@ -78,7 +76,6 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		List<AuroraEvaluationUpdateListener> updateReceivers = new LinkedList<>();
 		updateReceivers.add((AuroraEvaluationUpdateListener) fragmentManager.findFragmentById(R.id.fragment_aurora_chance));
 		updateReceivers.add((AuroraEvaluationUpdateListener) fragmentManager.findFragmentById(R.id.fragment_aurora_factors));
-		updateReceivers.add((AuroraEvaluationUpdateListener) fragmentManager.findFragmentById(R.id.fragment_aurora_complications));
 		return updateReceivers;
 	}
 
@@ -100,7 +97,6 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	}
 
 	private void updateGui(AuroraEvaluation evaluation) {
-		bottomSheetPresenter.onUpdate(evaluation.getComplications());
 		for (AuroraEvaluationUpdateListener receiver : updateReceivers) {
 			receiver.onUpdate(evaluation);
 		}

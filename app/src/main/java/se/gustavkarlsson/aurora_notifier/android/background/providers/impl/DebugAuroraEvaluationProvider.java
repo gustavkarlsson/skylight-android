@@ -3,12 +3,9 @@ package se.gustavkarlsson.aurora_notifier.android.background.providers.impl;
 import android.location.Address;
 import android.support.annotation.NonNull;
 
-import java.util.List;
 import java.util.Locale;
 
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraEvaluationProvider;
-import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraFactorsComplicationsEvaluator;
-import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraFactors;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocation;
@@ -29,8 +26,7 @@ public class DebugAuroraEvaluationProvider implements AuroraEvaluationProvider {
 	public AuroraEvaluation getEvaluation(long timeoutMillis) {
 		Address location = new Address(Locale.ENGLISH);
 		AuroraFactors auroraFactors = createAuroraFactors();
-		List<AuroraComplication> complications = new AuroraFactorsComplicationsEvaluator(auroraFactors).evaluate();
-		return new AuroraEvaluation(System.currentTimeMillis(), location, auroraFactors, complications);
+		return new AuroraEvaluation(System.currentTimeMillis(), location, auroraFactors);
 	}
 
 	@NonNull

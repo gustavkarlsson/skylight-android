@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChanceEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraEvaluationUpdateListener;
+import se.gustavkarlsson.aurora_notifier.android.models.AuroraChance;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 
 public class AuroraChanceFragment extends Fragment implements AuroraEvaluationUpdateListener {
@@ -20,6 +22,7 @@ public class AuroraChanceFragment extends Fragment implements AuroraEvaluationUp
 	private LocationPresenter locationPresenter;
 	private TimeSinceUpdatePresenter timeSinceUpdatePresenter;
 	private ChancePresenter chancePresenter;
+	private AuroraChanceEvaluator evaluator;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -28,6 +31,7 @@ public class AuroraChanceFragment extends Fragment implements AuroraEvaluationUp
 		locationPresenter = new LocationPresenter((TextView) rootView.findViewById(R.id.location));
 		timeSinceUpdatePresenter = new TimeSinceUpdatePresenter((TextView) rootView.findViewById(R.id.time_since_update), DateUtils.MINUTE_IN_MILLIS);
 		chancePresenter = new ChancePresenter((TextView) rootView.findViewById(R.id.chance));
+		this.evaluator = e -> AuroraChance.UNKNOWN; // FIXME assign evaluator
 		return rootView;
 	}
 
@@ -43,7 +47,8 @@ public class AuroraChanceFragment extends Fragment implements AuroraEvaluationUp
 		Log.v(TAG, "onUpdate");
 		locationPresenter.onUpdate(evaluation.getAddress());
 		timeSinceUpdatePresenter.onUpdate(evaluation.getTimestampMillis());
-		chancePresenter.onUpdate(evaluation.getChance());
+		AuroraChance chance = evaluator.evaluate(evaluation);
+		chancePresenter.onUpdate(chance);
 		rootView.invalidate();
 	}
 

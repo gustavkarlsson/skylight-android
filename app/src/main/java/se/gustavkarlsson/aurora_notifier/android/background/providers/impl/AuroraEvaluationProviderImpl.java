@@ -7,7 +7,6 @@ import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -18,8 +17,6 @@ import se.gustavkarlsson.aurora_notifier.android.background.providers.AsyncAddre
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraEvaluationProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraFactorsProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.LocationProvider;
-import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraFactorsComplicationsEvaluator;
-import se.gustavkarlsson.aurora_notifier.android.models.AuroraComplication;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraEvaluation;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraFactors;
 import se.gustavkarlsson.aurora_notifier.android.util.CountdownTimer;
@@ -54,8 +51,7 @@ public class AuroraEvaluationProviderImpl implements AuroraEvaluationProvider {
 		Future<Address> addressFuture = asyncAddressProvider.execute(location.getLatitude(), location.getLongitude());
 		AuroraFactors auroraFactors = auroraFactorsProvider.getAuroraFactors(location, timeoutTimer.getRemainingTimeMillis());
 		Address address = getAddressOrNull(addressFuture, timeoutTimer.getRemainingTimeMillis());
-		List<AuroraComplication> complications = new AuroraFactorsComplicationsEvaluator(auroraFactors).evaluate();
-		return new AuroraEvaluation(System.currentTimeMillis(), address, auroraFactors, complications);
+		return new AuroraEvaluation(System.currentTimeMillis(), address, auroraFactors);
 	}
 
 	@Nullable
