@@ -65,7 +65,6 @@ public class UpdateJob extends Job {
 		PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
 		Notification notification = new NotificationCompat.Builder(context)
-				.setSmallIcon(R.drawable.ic_error_white_24dp)
 				.setContentTitle(context.getString(R.string.error_aurora_notifications_not_possible_title))
 				.setContentText(context.getString(R.string.error_aurora_notifications_not_possible_touch_to_fix))
 				.setContentIntent(contentIntent)

@@ -13,7 +13,7 @@
 		android:padding="10dp"
 		android:layout_width="160dp"
 		android:layout_height="wrap_content"
-		custom:icon="@drawable/ic_wb_sunny_white_20dp"
+		custom:icon="@drawable/factor_sunpos_white_20dp"
 		custom:name="@string/factor_geomag_activity_title" />
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
@@ -21,7 +21,7 @@
 		android:padding="10dp"
 		android:layout_width="160dp"
 		android:layout_height="wrap_content"
-		custom:icon="@drawable/ic_wb_sunny_white_20dp"
+		custom:icon="@drawable/factor_sunpos_white_20dp"
 		custom:name="@string/factor_geomag_location_title" />
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
@@ -29,7 +29,7 @@
 		android:padding="10dp"
 		android:layout_width="160dp"
 		android:layout_height="wrap_content"
-		custom:icon="@drawable/ic_wb_sunny_white_20dp"
+		custom:icon="@drawable/factor_sunpos_white_20dp"
 		custom:name="@string/factor_weather_title" />
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
@@ -37,7 +37,7 @@
 		android:padding="10dp"
 		android:layout_width="160dp"
 		android:layout_height="wrap_content"
-		custom:icon="@drawable/ic_wb_sunny_white_20dp"
+		custom:icon="@drawable/factor_sunpos_white_20dp"
 		custom:name="@string/factor_sun_position_title" />
 
 </LinearLayout>

@@ -19,7 +19,7 @@
 			android:padding="15dp"
 			android:layout_width="160dp"
 			android:layout_height="wrap_content"
-			custom:icon="@drawable/ic_wb_sunny_white_20dp"
+			custom:icon="@drawable/factor_magact_white_20dp"
 			custom:name="@string/factor_geomag_activity_title" />
 
 		<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
@@ -27,7 +27,7 @@
 			android:padding="15dp"
 			android:layout_width="160dp"
 			android:layout_height="wrap_content"
-			custom:icon="@drawable/ic_wb_sunny_white_20dp"
+			custom:icon="@drawable/factor_location_white_20dp"
 			custom:name="@string/factor_geomag_location_title" />
 
 	</LinearLayout>
@@ -43,7 +43,7 @@
 			android:padding="15dp"
 			android:layout_width="160dp"
 			android:layout_height="wrap_content"
-			custom:icon="@drawable/ic_wb_sunny_white_20dp"
+			custom:icon="@drawable/factor_weather_white_20dp"
 			custom:name="@string/factor_weather_title" />
 
 		<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
@@ -51,7 +51,7 @@
 			android:padding="15dp"
 			android:layout_width="160dp"
 			android:layout_height="wrap_content"
-			custom:icon="@drawable/ic_wb_sunny_white_20dp"
+			custom:icon="@drawable/factor_sunpos_white_20dp"
 			custom:name="@string/factor_sun_position_title" />
 
 	</LinearLayout>
