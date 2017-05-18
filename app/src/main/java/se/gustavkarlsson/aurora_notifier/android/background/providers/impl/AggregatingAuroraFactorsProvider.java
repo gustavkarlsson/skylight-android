@@ -12,17 +12,17 @@ import javax.inject.Inject;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraFactorsProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagneticLocationProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.SolarActivityProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagActivityProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagLocationProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.SunPositionProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetGeomagneticLocationTask;
-import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetSolarActivityTask;
+import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetGeomagActivityTask;
+import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetGeomagLocationTask;
 import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetSunPositionTask;
 import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetWeatherTask;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraFactors;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocation;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.SolarActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagLocation;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
 import se.gustavkarlsson.aurora_notifier.android.util.CountdownTimer;
@@ -32,38 +32,38 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class AggregatingAuroraFactorsProvider implements AuroraFactorsProvider {
 	private static final Executor EXECUTOR = AsyncTask.THREAD_POOL_EXECUTOR;
-	private final SolarActivityProvider solarActivityProvider;
+	private final GeomagActivityProvider geomagActivityProvider;
 	private final WeatherProvider weatherProvider;
 	private final SunPositionProvider sunPositionProvider;
-	private final GeomagneticLocationProvider geomagneticLocationProvider;
+	private final GeomagLocationProvider geomagLocationProvider;
 
 	@Inject
-	AggregatingAuroraFactorsProvider(SolarActivityProvider solarActivityProvider, WeatherProvider weatherProvider, SunPositionProvider sunPositionProvider, GeomagneticLocationProvider geomagneticLocationProvider) {
-		this.solarActivityProvider = solarActivityProvider;
+	AggregatingAuroraFactorsProvider(GeomagActivityProvider geomagActivityProvider, WeatherProvider weatherProvider, SunPositionProvider sunPositionProvider, GeomagLocationProvider geomagLocationProvider) {
+		this.geomagActivityProvider = geomagActivityProvider;
 		this.weatherProvider = weatherProvider;
 		this.sunPositionProvider = sunPositionProvider;
-		this.geomagneticLocationProvider = geomagneticLocationProvider;
+		this.geomagLocationProvider = geomagLocationProvider;
 	}
 
 	@Override
 	public AuroraFactors getAuroraFactors(Location location, long timeoutMillis) {
 		CountdownTimer timeoutTimer = CountdownTimer.start(timeoutMillis);
-		GetSolarActivityTask getSolarActivityTask = new GetSolarActivityTask(solarActivityProvider);
+		GetGeomagActivityTask getGeomagActivityTask = new GetGeomagActivityTask(geomagActivityProvider);
 		GetWeatherTask getWeatherTask = new GetWeatherTask(weatherProvider, location);
 		GetSunPositionTask getSunPositionTask = new GetSunPositionTask(sunPositionProvider, location, System.currentTimeMillis());
-		GetGeomagneticLocationTask getGeomagneticLocationTask = new GetGeomagneticLocationTask(geomagneticLocationProvider, location);
+		GetGeomagLocationTask getGeomagLocationTask = new GetGeomagLocationTask(geomagLocationProvider, location);
 
-		EXECUTOR.execute(getSolarActivityTask);
+		EXECUTOR.execute(getGeomagActivityTask);
 		EXECUTOR.execute(getWeatherTask);
 		EXECUTOR.execute(getSunPositionTask);
-		EXECUTOR.execute(getGeomagneticLocationTask);
+		EXECUTOR.execute(getGeomagLocationTask);
 
 		try {
-			SolarActivity solarActivity = getSolarActivityTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
+			GeomagActivity geomagActivity = getGeomagActivityTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
 			Weather weather = getWeatherTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
 			SunPosition sunPosition = getSunPositionTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
-			GeomagneticLocation geomagneticLocation = getGeomagneticLocationTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
-			return new AuroraFactors(solarActivity, geomagneticLocation, sunPosition, weather);
+			GeomagLocation geomagLocation = getGeomagLocationTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
+			return new AuroraFactors(geomagActivity, geomagLocation, sunPosition, weather);
 		} catch (TimeoutException e) {
 			throw new UserFriendlyException(R.string.error_updating_took_too_long, "Getting aurora data timed out after " + timeoutMillis + "ms", e);
 		} catch (ExecutionException e) {

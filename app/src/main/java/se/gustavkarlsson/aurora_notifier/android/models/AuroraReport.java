@@ -4,8 +4,8 @@ import android.location.Address;
 
 import org.parceler.Parcel;
 
-import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocation;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.SolarActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagLocation;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
 
@@ -26,8 +26,8 @@ public class AuroraReport {
 
 	public static AuroraReport createFallback() {
 		AuroraFactors factors = new AuroraFactors(
-				new SolarActivity(0),
-				new GeomagneticLocation(0),
+				new GeomagActivity(0),
+				new GeomagLocation(0),
 				new SunPosition(0),
 				new Weather(0)
 		);

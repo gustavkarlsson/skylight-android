@@ -31,7 +31,7 @@ public class DebugSettings {
 	}
 
 	public float getDegreesFromClosestPole() {
-		String key = context.getString(R.string.pref_geomagnetic_location_key);
+		String key = context.getString(R.string.pref_geomag_location_key);
 		return parseFloat(defaultPreferences.getString(key, "0"));
 	}
 

@@ -8,8 +8,8 @@ import java.util.Locale;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraReportProvider;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraFactors;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraReport;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocation;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.SolarActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagLocation;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
 import se.gustavkarlsson.aurora_notifier.android.settings.DebugSettings;
@@ -31,13 +31,13 @@ public class DebugAuroraReportProvider implements AuroraReportProvider {
 
 	@NonNull
 	private AuroraFactors createAuroraFactors() {
-		SolarActivity solarActivity = new SolarActivity(debugSettings.getKpIndex());
-		GeomagneticLocation geomagneticLocation = new GeomagneticLocation(debugSettings.getDegreesFromClosestPole());
+		GeomagActivity geomagActivity = new GeomagActivity(debugSettings.getKpIndex());
+		GeomagLocation geomagLocation = new GeomagLocation(debugSettings.getDegreesFromClosestPole());
 		SunPosition sunPosition = new SunPosition(debugSettings.getSunZenithAngle());
 		Weather weather = new Weather(debugSettings.getCloudPercentage());
 		return new AuroraFactors(
-				solarActivity,
-				geomagneticLocation,
+				geomagActivity,
+				geomagLocation,
 				sunPosition,
 				weather);
 	}

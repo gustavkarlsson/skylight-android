@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="factor_geomagnetic_location_title">Geomagnetic location</string>
-	<string name="factor_geomagnetic_location_desc">
+	<string name="factor_geomag_location_title">Location</string>
+	<string name="factor_geomag_location_desc">
 		Your geomagnetic location is the distance from your closest geomagnetic pole.
 		The best place to see the aurora is at around 23°.
 		Earth\'s geomagnetic poles are located close to the north and south pole.
 	</string>
-	<string name="factor_solar_activity_title">Geomagnetic activity</string>
-	<string name="factor_solar_activity_desc">
+	<string name="factor_geomag_activity_title">Geomag. activity</string>
+	<string name="factor_geomag_activity_desc">
 		Geomagnetic activity is the cause the aurora and ranges from 0 to 9.
 		The higher this value is, the higher the chance of seeing the aurora.
 	</string>

@@ -2,8 +2,8 @@ package se.gustavkarlsson.aurora_notifier.android.background.providers.impl;
 
 import javax.inject.Inject;
 
-import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagneticLocationProvider;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocation;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagLocationProvider;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagLocation;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.atan2;
@@ -14,7 +14,7 @@ import static java.lang.Math.sqrt;
 import static java.lang.Math.toDegrees;
 import static java.lang.Math.toRadians;
 
-public class GeomagneticLocationProviderImpl implements GeomagneticLocationProvider {
+public class GeomagLocationProviderImpl implements GeomagLocationProvider {
 	// 2015 data
 	private static final double MAGNETIC_NORTH_POLE_LATITUDE = 80.4;
 	private static final double MAGNETIC_NORTH_POLE_LONGITUDE = -72.6;
@@ -22,15 +22,15 @@ public class GeomagneticLocationProviderImpl implements GeomagneticLocationProvi
 	private static final double MAGNETIC_SOUTH_POLE_LONGITUDE = 107.4;
 
 	@Inject
-	GeomagneticLocationProviderImpl() {
+	GeomagLocationProviderImpl() {
 	}
 
 	@Override
-	public GeomagneticLocation getGeomagneticLocation(double longitude, double latitude) {
+	public GeomagLocation getGeomagLocation(double longitude, double latitude) {
 		double degreesFromNorthPole = calculateDistanceDegrees(latitude, longitude, MAGNETIC_NORTH_POLE_LATITUDE, MAGNETIC_NORTH_POLE_LONGITUDE);
 		double degreesFromSouthPole = calculateDistanceDegrees(latitude, longitude, MAGNETIC_SOUTH_POLE_LATITUDE, MAGNETIC_SOUTH_POLE_LONGITUDE);
 		double degreesFromNearestPole = min(degreesFromNorthPole, degreesFromSouthPole);
-		return new GeomagneticLocation((float) degreesFromNearestPole);
+		return new GeomagLocation((float) degreesFromNearestPole);
 	}
 
 	private static double calculateDistanceDegrees(double latitude1, double longitude1, double latitude2, double longitude2) {

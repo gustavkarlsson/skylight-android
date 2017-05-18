@@ -6,7 +6,7 @@
 	<string name="error_location_permission_missing">The app does not have permission to access the current location</string>
 	<string name="error_could_not_determine_location">Could not determine current location</string>
 	<string name="error_unknown_update_error">An unknown error occurred while updating</string>
-	<string name="error_could_not_determine_solar_activity">Could not determine current solar activity</string>
+	<string name="error_could_not_determine_geomag_activity">Could not determine current geomagnetic activity</string>
 	<string name="error_could_not_determine_weather">Could not determine current weather</string>
 	<string name="error_updating_took_too_long">Updating took too long</string>
 

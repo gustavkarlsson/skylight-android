@@ -8,34 +8,34 @@ import javax.inject.Inject;
 
 import retrofit2.Response;
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.SolarActivityProvider;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.SolarActivity;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagActivityProvider;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagActivity;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;
 
-public class RetrofittedSolarActivityProvider implements SolarActivityProvider {
-	private static final String TAG = RetrofittedSolarActivityProvider.class.getSimpleName();
+public class RetrofittedGeomagActivityProvider implements GeomagActivityProvider {
+	private static final String TAG = RetrofittedGeomagActivityProvider.class.getSimpleName();
 
 	private final KpIndexService service;
 
 	@Inject
-	RetrofittedSolarActivityProvider(KpIndexService service) {
+	RetrofittedGeomagActivityProvider(KpIndexService service) {
 		this.service = service;
 	}
 
 	@Override
-	public SolarActivity getSolarActivity() {
+	public GeomagActivity getGeomagActivity() {
 		try {
 			Response<Timestamped<Float>> response = service.get().execute();
 			Log.d(TAG, "Got response: " + response.code() + ", message: " + response.raw().toString());
 			if (!response.isSuccessful()) {
-				throw new UserFriendlyException(R.string.error_could_not_determine_solar_activity, response.errorBody().string());
+				throw new UserFriendlyException(R.string.error_could_not_determine_geomag_activity, response.errorBody().string());
 			}
 			Timestamped<Float> kpIndex = response.body();
-			return new SolarActivity(kpIndex.getValue());
+			return new GeomagActivity(kpIndex.getValue());
 		} catch (IOException e) {
-			throw new UserFriendlyException(R.string.error_could_not_determine_solar_activity, e);
+			throw new UserFriendlyException(R.string.error_could_not_determine_geomag_activity, e);
 		}
 	}
 }

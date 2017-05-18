@@ -2,15 +2,15 @@ package se.gustavkarlsson.aurora_notifier.android.models;
 
 import org.parceler.Parcel;
 
-import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagneticLocation;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.SolarActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagLocation;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
 
 @Parcel
 public class AuroraFactors {
-	SolarActivity solarActivity;
-	GeomagneticLocation geomagneticLocation;
+	GeomagActivity geomagActivity;
+	GeomagLocation geomagLocation;
 	SunPosition sunPosition;
 	Weather weather;
 
@@ -18,22 +18,22 @@ public class AuroraFactors {
 	}
 
 	public AuroraFactors(
-			SolarActivity solarActivity,
-			GeomagneticLocation geomagneticLocation,
+			GeomagActivity geomagActivity,
+			GeomagLocation geomagLocation,
 			SunPosition sunPosition,
 			Weather weather) {
-		this.solarActivity = solarActivity;
-		this.geomagneticLocation = geomagneticLocation;
+		this.geomagActivity = geomagActivity;
+		this.geomagLocation = geomagLocation;
 		this.sunPosition = sunPosition;
 		this.weather = weather;
 	}
 
-	public SolarActivity getSolarActivity() {
-		return solarActivity;
+	public GeomagActivity getGeomagActivity() {
+		return geomagActivity;
 	}
 
-	public GeomagneticLocation getGeomagneticLocation() {
-		return geomagneticLocation;
+	public GeomagLocation getGeomagLocation() {
+		return geomagLocation;
 	}
 
 	public SunPosition getSunPosition() {
@@ -47,8 +47,8 @@ public class AuroraFactors {
 	@Override
 	public String toString() {
 		return "AuroraFactors{" +
-				"solarActivity=" + solarActivity +
-				", geomagneticLocation=" + geomagneticLocation +
+				"geomagActivity=" + geomagActivity +
+				", geomagLocation=" + geomagLocation +
 				", sunPosition=" + sunPosition +
 				", weather=" + weather +
 				'}';

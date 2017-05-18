@@ -3,13 +3,13 @@ package se.gustavkarlsson.aurora_notifier.android.models.factors;
 import org.parceler.Parcel;
 
 @Parcel
-public class SolarActivity {
+public class GeomagActivity {
 	float kpIndex;
 
-	SolarActivity() {
+	GeomagActivity() {
 	}
 
-	public SolarActivity(float kpIndex) {
+	public GeomagActivity(float kpIndex) {
 		this.kpIndex = kpIndex;
 	}
 
@@ -19,7 +19,7 @@ public class SolarActivity {
 
 	@Override
 	public String toString() {
-		return "SolarActivity{" +
+		return "GeomagActivity{" +
 				"kpIndex=" + kpIndex +
 				'}';
 	}

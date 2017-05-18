@@ -6,8 +6,8 @@ import dagger.Provides;
 import dagger.Reusable;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.SolarActivityProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.RetrofittedSolarActivityProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagActivityProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.RetrofittedGeomagActivityProvider;
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;
 
 @Module
@@ -26,5 +26,5 @@ public abstract class KpIndexModule {
 
 	@Binds
 	@Reusable
-	abstract SolarActivityProvider bindSolarActivityProvider(RetrofittedSolarActivityProvider provider);
+	abstract GeomagActivityProvider bindGeomagActivityProvider(RetrofittedGeomagActivityProvider provider);
 }

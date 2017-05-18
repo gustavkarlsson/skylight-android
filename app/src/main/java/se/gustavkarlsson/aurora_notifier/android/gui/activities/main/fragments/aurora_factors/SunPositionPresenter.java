@@ -3,9 +3,12 @@ package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.
 import java.util.Locale;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.SunPositionEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
 
 class SunPositionPresenter extends AbstractAuroraFactorPresenter {
+	private final SunPositionEvaluator evaluator = new SunPositionEvaluator();
+
 	SunPositionPresenter(AuroraFactorView factorView) {
 		super(factorView);
 	}
@@ -21,7 +24,12 @@ class SunPositionPresenter extends AbstractAuroraFactorPresenter {
 	}
 
 	void onUpdate(SunPosition sunPosition) {
+		setBackgroundColor(evaluator.evaluate(sunPosition));
+		setFactorValue(evaluateText(sunPosition));
+	}
+
+	private static String evaluateText(SunPosition sunPosition) {
 		float zenithAngle = sunPosition.getZenithAngle();
-		setFactorValue(String.format(Locale.ENGLISH, "%.2f°", zenithAngle));
+		return String.format(Locale.ENGLISH, "%.0f°", zenithAngle);
 	}
 }

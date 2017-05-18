@@ -14,24 +14,20 @@
 		android:layout_centerInParent="true" />
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
-		android:id="@+id/aurora_factor_solar_activity"
+		android:id="@+id/aurora_factor_geomag_activity"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignBottom="@id/grid_center"
 		android:layout_alignEnd="@id/grid_center"
-		android:paddingBottom="16dp"
-		android:paddingEnd="16dp"
-		custom:drawable="@drawable/ic_timeline_white_48dp"/>
+		custom:name="@string/factor_geomag_activity_title"/>
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
-		android:id="@+id/aurora_factor_geomagnetic_location"
+		android:id="@+id/aurora_factor_geomag_location"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignBottom="@id/grid_center"
 		android:layout_alignStart="@id/grid_center"
-		android:paddingBottom="16dp"
-		android:paddingStart="16dp"
-		custom:drawable="@drawable/earth_white_48dp" />
+		custom:name="@string/factor_geomag_location_title" />
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 		android:id="@+id/aurora_factor_weather"
@@ -39,9 +35,7 @@
 		android:layout_height="wrap_content"
 		android:layout_alignTop="@id/grid_center"
 		android:layout_alignEnd="@id/grid_center"
-		android:paddingTop="16dp"
-		android:paddingEnd="16dp"
-		custom:drawable="@drawable/partly_cloudy_white_48dp" />
+		custom:name="@string/factor_weather_title" />
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 		android:id="@+id/aurora_factor_sun_position"
@@ -49,8 +43,6 @@
 		android:layout_height="wrap_content"
 		android:layout_alignTop="@id/grid_center"
 		android:layout_alignStart="@id/grid_center"
-		android:paddingTop="16dp"
-		android:paddingStart="16dp"
-		custom:drawable="@drawable/sunset_white_48dp" />
+		custom:name="@string/factor_sun_position_title" />
 
 </RelativeLayout>

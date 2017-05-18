@@ -32,7 +32,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Log.class})
-public class RetrofittedSolarActivityProviderTest {
+public class RetrofittedGeomagActivityProviderTest {
 	private OkHttpClient mockedClient;
 
 	@Before
@@ -73,14 +73,14 @@ public class RetrofittedSolarActivityProviderTest {
 
 	@Test
 	public void parsesKpIndexCorrectly() throws Exception {
-		RetrofittedSolarActivityProvider service = new RetrofittedSolarActivityProvider(new Retrofit.Builder()
+		RetrofittedGeomagActivityProvider service = new RetrofittedGeomagActivityProvider(new Retrofit.Builder()
 				.client(mockedClient)
 				.baseUrl("http://mocked.com")
 				.addConverterFactory(GsonConverterFactory.create())
 				.build()
 				.create(KpIndexService.class));
 
-		Float kpIndex = service.getSolarActivity().getKpIndex();
+		Float kpIndex = service.getGeomagActivity().getKpIndex();
 
 		assertThat(kpIndex).isCloseTo(1.33F, within(0.01F));
 	}

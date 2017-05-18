@@ -16,8 +16,8 @@ public class AuroraFactorFragment extends Fragment implements AuroraReportUpdate
 	private static final String TAG = AuroraFactorFragment.class.getSimpleName();
 
 	private View rootView;
-	private SolarActivityPresenter solarActivityPresenter;
-	private GeomagneticLocationPresenter geomagneticLocationPresenter;
+	private GeomagActivityPresenter geomagActivityPresenter;
+	private GeomagLocationPresenter geomagLocationPresenter;
 	private WeatherPresenter weatherPresenter;
 	private SunPositionPresenter sunPositionPresenter;
 
@@ -31,8 +31,8 @@ public class AuroraFactorFragment extends Fragment implements AuroraReportUpdate
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.v(TAG, "onCreateView");
 		rootView = inflater.inflate(R.layout.fragment_aurora_factors, container, false);
-		solarActivityPresenter = new SolarActivityPresenter((AuroraFactorView) rootView.findViewById(R.id.aurora_factor_solar_activity));
-		geomagneticLocationPresenter = new GeomagneticLocationPresenter((AuroraFactorView) rootView.findViewById(R.id.aurora_factor_geomagnetic_location));
+		geomagActivityPresenter = new GeomagActivityPresenter((AuroraFactorView) rootView.findViewById(R.id.aurora_factor_geomag_activity));
+		geomagLocationPresenter = new GeomagLocationPresenter((AuroraFactorView) rootView.findViewById(R.id.aurora_factor_geomag_location));
 		weatherPresenter = new WeatherPresenter((AuroraFactorView) rootView.findViewById(R.id.aurora_factor_weather));
 		sunPositionPresenter = new SunPositionPresenter((AuroraFactorView) rootView.findViewById(R.id.aurora_factor_sun_position));
 		return rootView;
@@ -41,8 +41,8 @@ public class AuroraFactorFragment extends Fragment implements AuroraReportUpdate
 	@Override
 	public void onUpdate(AuroraReport report) {
 		AuroraFactors factors = report.getFactors();
-		solarActivityPresenter.onUpdate(factors.getSolarActivity());
-		geomagneticLocationPresenter.onUpdate(factors.getGeomagneticLocation());
+		geomagActivityPresenter.onUpdate(factors.getGeomagActivity());
+		geomagLocationPresenter.onUpdate(factors.getGeomagLocation());
 		weatherPresenter.onUpdate(factors.getWeather());
 		sunPositionPresenter.onUpdate(factors.getSunPosition());
 		rootView.invalidate();

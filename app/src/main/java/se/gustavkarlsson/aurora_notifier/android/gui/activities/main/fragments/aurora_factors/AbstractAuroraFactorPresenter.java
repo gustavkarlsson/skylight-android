@@ -4,13 +4,18 @@ import android.content.Context;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 
+import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance;
+import se.gustavkarlsson.aurora_notifier.android.gui.activities.AuroraChanceToColorConverter;
+
 import static com.google.common.base.Preconditions.checkNotNull;
 
 abstract class AbstractAuroraFactorPresenter {
 	private final AuroraFactorView factorView;
+	private final AuroraChanceToColorConverter colorConverter;
 
 	AbstractAuroraFactorPresenter(AuroraFactorView factorView) {
 		this.factorView = checkNotNull(factorView, "factorView may not be null");
+		this.colorConverter = new AuroraChanceToColorConverter(factorView.getContext());
 		Context context = factorView.getContext();
 		String title = context.getString(getTitleResourceId());
 		String description = context.getString(getDescriptionResourceId());
@@ -19,6 +24,11 @@ abstract class AbstractAuroraFactorPresenter {
 
 	void setFactorValue(String value) {
 		factorView.setValue(value);
+	}
+
+	void setBackgroundColor(AuroraChance auroraChance) {
+		int color = colorConverter.convert(auroraChance);
+		factorView.setBackgroundColor(color);
 	}
 
 	abstract int getTitleResourceId();

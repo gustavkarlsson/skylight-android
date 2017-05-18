@@ -3,13 +3,13 @@ package se.gustavkarlsson.aurora_notifier.android.models.factors;
 import org.parceler.Parcel;
 
 @Parcel
-public class GeomagneticLocation {
+public class GeomagLocation {
 	float degreesFromClosestPole;
 
-	GeomagneticLocation() {
+	GeomagLocation() {
 	}
 
-	public GeomagneticLocation(float degreesFromClosestPole) {
+	public GeomagLocation(float degreesFromClosestPole) {
 		this.degreesFromClosestPole = degreesFromClosestPole;
 	}
 
@@ -19,7 +19,7 @@ public class GeomagneticLocation {
 
 	@Override
 	public String toString() {
-		return "GeomagneticLocation{" +
+		return "GeomagLocation{" +
 				"degreesFromClosestPole=" + degreesFromClosestPole +
 				'}';
 	}

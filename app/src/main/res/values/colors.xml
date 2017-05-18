@@ -4,4 +4,10 @@
 	<color name="primary_dark">#00695C</color>
 	<color name="accent">#64FFDA</color>
 	<color name="background_dark">#424242</color>
+
+	<color name="factor_unknown">#616161</color>
+	<color name="factor_none">#dd2c00</color>
+	<color name="factor_low">#f9a825</color>
+	<color name="factor_medium">#c0ca33</color>
+	<color name="factor_high">#7cb342</color>
 </resources>

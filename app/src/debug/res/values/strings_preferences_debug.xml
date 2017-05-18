@@ -10,8 +10,8 @@
 	<string name="pref_kp_index_key">kp_index</string>
 	<string name="pref_kp_index_title">Kp index</string>
 
-	<string name="pref_geomagnetic_location_key">geomagnetic_location</string>
-	<string name="pref_geomagnetic_location_title">Geomagnetic location</string>
+	<string name="pref_geomag_location_key">geomag_location</string>
+	<string name="pref_geomag_location_title">Geomag location</string>
 
 	<string name="pref_cloud_percentage_key">cloud_percentage</string>
 	<string name="pref_cloud_percentage_title">Cloud percentage</string>

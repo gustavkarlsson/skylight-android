@@ -3,9 +3,7 @@ package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -36,9 +34,9 @@ public class AuroraFactorView extends LinearLayout {
 		if (attrs != null) {
 			TypedArray auroraFactorViewAttributes = context.obtainStyledAttributes(attrs, R.styleable.AuroraFactorView);
 			try {
-				Drawable drawable = auroraFactorViewAttributes.getDrawable(R.styleable.AuroraFactorView_drawable);
-				ImageView imageView = (ImageView) findViewById(R.id.aurora_factor_image);
-				imageView.setImageDrawable(drawable);
+				CharSequence name = auroraFactorViewAttributes.getText(R.styleable.AuroraFactorView_name);
+				TextView nameView = (TextView) findViewById(R.id.aurora_factor_name);
+				nameView.setText(name);
 			} finally {
 				auroraFactorViewAttributes.recycle();
 			}

@@ -34,20 +34,20 @@ public class AuroraFactorFragmentTest {
 
 	@Test
 	public void factorViewsShown() throws Exception {
-		onView(withId(R.id.aurora_factor_solar_activity)).check(matches(isDisplayed()));
-		onView(withId(R.id.aurora_factor_geomagnetic_location)).check(matches(isDisplayed()));
+		onView(withId(R.id.aurora_factor_geomag_activity)).check(matches(isDisplayed()));
+		onView(withId(R.id.aurora_factor_geomag_location)).check(matches(isDisplayed()));
 		onView(withId(R.id.aurora_factor_weather)).check(matches(isDisplayed()));
 		onView(withId(R.id.aurora_factor_sun_position)).check(matches(isDisplayed()));
 	}
 
 	@Test
-	public void clickSolarActivity_detailViewShown() throws Exception {
-		whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_solar_activity, R.string.factor_solar_activity_title, R.string.factor_solar_activity_desc);
+	public void clickGeomagActivity_detailViewShown() throws Exception {
+		whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_geomag_activity, R.string.factor_geomag_activity_title, R.string.factor_geomag_activity_desc);
 	}
 
 	@Test
-	public void clickGeomagneticLocation_detailViewShown() throws Exception {
-		whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_geomagnetic_location, R.string.factor_geomagnetic_location_title, R.string.factor_geomagnetic_location_desc);
+	public void clickGeomagLocation_detailViewShown() throws Exception {
+		whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_geomag_location, R.string.factor_geomag_location_title, R.string.factor_geomag_location_desc);
 	}
 
 	@Test
