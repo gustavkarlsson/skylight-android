@@ -25,9 +25,9 @@ public class AuroraReportEvaluator implements AuroraChanceEvaluator {
 	}
 
 	private AuroraChance evaluateGeomagAndLocation(GeomagActivity geomagActivity, GeomagLocation geomagLocation) {
-		double geomagChance = (1.0/9.0) * geomagActivity.getKpIndex() + 0.0;
-		double locationChance = (-1.0/12.0) * geomagLocation.getDegreesFromClosestPole() + (32/12);
-		if (geomagChance <= 0 || locationChance <= 0) {
+		double geomagChance = calculateGeomagChance(geomagActivity);
+		double locationChance = calculateLocationChance(geomagLocation);
+		if (geomagChance <= 0.0 || locationChance <= 0.0) {
 			return NONE;
 		}
 		double chance = geomagChance * locationChance;
@@ -38,5 +38,17 @@ public class AuroraReportEvaluator implements AuroraChanceEvaluator {
 		} else {
 			return HIGH;
 		}
+	}
+
+	private static double calculateGeomagChance(GeomagActivity geomagActivity) {
+		return (1.0/9.0) * geomagActivity.getKpIndex() + 0.0;
+	}
+
+	private static double calculateLocationChance(GeomagLocation geomagLocation) {
+		double chance = (-1.0 / 12.0) * geomagLocation.getDegreesFromClosestPole() + (35.0 / 12.0);
+		if (chance > 1.0) {
+			return 2 - chance;
+		}
+		return chance;
 	}
 }
