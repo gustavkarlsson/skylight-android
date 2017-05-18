@@ -1,43 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="wrap_content"
+	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:clipChildren="false">
 
 	<RelativeLayout
-		android:clipChildren="false"
-		android:layout_marginTop="11dp"
-		android:layout_width="wrap_content"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:background="@color/background_dark">
+		android:layout_marginTop="11dp"
+		android:background="@color/background_dark"
+		android:foreground="?attr/selectableItemBackground"
+		android:clipChildren="false"
+		tools:ignore="UselessParent">
 
 		<ImageView
 			android:id="@+id/badge"
-			android:layout_marginTop="-11dp"
-			android:layout_centerHorizontal="true"
-			android:layout_alignParentTop="true"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_alignParentTop="true"
+			android:layout_centerHorizontal="true"
+			android:layout_marginTop="-11dp"
 			android:background="@drawable/badge"
 			tools:ignore="ContentDescription" />
 
 		<TextView
 			android:id="@+id/aurora_factor_value"
-			android:layout_centerHorizontal="true"
-			android:layout_below="@id/badge"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textSize="20sp"
+			android:layout_below="@id/badge"
+			android:layout_centerHorizontal="true"
+			android:layout_marginTop="10dp"
 			android:gravity="center_horizontal"
+			android:textSize="20sp"
 			tools:text="3+" />
 
 		<TextView
 			android:id="@+id/aurora_factor_name"
-			android:layout_centerHorizontal="true"
-			android:layout_below="@id/aurora_factor_value"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_below="@id/aurora_factor_value"
+			android:layout_centerHorizontal="true"
+			android:layout_marginBottom="10dp"
 			android:gravity="center_horizontal"
 			tools:text="Kp index" />
 
