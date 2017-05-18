@@ -10,7 +10,8 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_centerInParent="true"
-		android:textSize="40sp"
+		android:gravity="center"
+		android:textSize="36sp"
 		android:textStyle="bold"
 		tools:text="Medium Chance" />
 
@@ -20,6 +21,8 @@
 		android:layout_height="wrap_content"
 		android:layout_above="@id/chance"
 		android:layout_alignStart="@id/chance"
+		android:gravity="center"
+		android:textSize="18sp"
 		tools:text="Frankfurt" />
 
 	<TextView
@@ -28,6 +31,7 @@
 		android:layout_height="wrap_content"
 		android:layout_alignEnd="@id/chance"
 		android:layout_below="@id/chance"
+		android:gravity="center"
 		tools:text="3 minutes ago" />
 
 </RelativeLayout>

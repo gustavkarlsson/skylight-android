@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:custom="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="horizontal"
+	android:gravity="center"
+	tools:context=".gui.activities.main.fragments.aurora_factors.AuroraFactorFragment">
+
+	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+		android:id="@+id/aurora_factor_geomag_activity"
+		android:padding="10dp"
+		android:layout_width="160dp"
+		android:layout_height="wrap_content"
+		custom:icon="@drawable/ic_wb_sunny_white_20dp"
+		custom:name="@string/factor_geomag_activity_title" />
+
+	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+		android:id="@+id/aurora_factor_geomag_location"
+		android:padding="10dp"
+		android:layout_width="160dp"
+		android:layout_height="wrap_content"
+		custom:icon="@drawable/ic_wb_sunny_white_20dp"
+		custom:name="@string/factor_geomag_location_title" />
+
+	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+		android:id="@+id/aurora_factor_weather"
+		android:padding="10dp"
+		android:layout_width="160dp"
+		android:layout_height="wrap_content"
+		custom:icon="@drawable/ic_wb_sunny_white_20dp"
+		custom:name="@string/factor_weather_title" />
+
+	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+		android:id="@+id/aurora_factor_sun_position"
+		android:padding="10dp"
+		android:layout_width="160dp"
+		android:layout_height="wrap_content"
+		custom:icon="@drawable/ic_wb_sunny_white_20dp"
+		custom:name="@string/factor_sun_position_title" />
+
+</LinearLayout>

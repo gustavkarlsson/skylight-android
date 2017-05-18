@@ -2,5 +2,4 @@
 <resources>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-	<dimen name="activity_vertical_margin_plus_collapsed_sheet">80dp</dimen>
 </resources>

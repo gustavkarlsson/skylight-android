@@ -17,17 +17,17 @@
 		<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 			android:id="@+id/aurora_factor_geomag_activity"
 			android:padding="15dp"
-			android:layout_width="180dp"
+			android:layout_width="160dp"
 			android:layout_height="wrap_content"
-			custom:icon="@drawable/ic_wb_sunny_white_12dp"
+			custom:icon="@drawable/ic_wb_sunny_white_20dp"
 			custom:name="@string/factor_geomag_activity_title" />
 
 		<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 			android:id="@+id/aurora_factor_geomag_location"
 			android:padding="15dp"
-			android:layout_width="180dp"
+			android:layout_width="160dp"
 			android:layout_height="wrap_content"
-			custom:icon="@drawable/ic_wb_sunny_white_12dp"
+			custom:icon="@drawable/ic_wb_sunny_white_20dp"
 			custom:name="@string/factor_geomag_location_title" />
 
 	</LinearLayout>
@@ -41,17 +41,17 @@
 		<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 			android:id="@+id/aurora_factor_weather"
 			android:padding="15dp"
-			android:layout_width="180dp"
+			android:layout_width="160dp"
 			android:layout_height="wrap_content"
-			custom:icon="@drawable/ic_wb_sunny_white_12dp"
+			custom:icon="@drawable/ic_wb_sunny_white_20dp"
 			custom:name="@string/factor_weather_title" />
 
 		<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 			android:id="@+id/aurora_factor_sun_position"
 			android:padding="15dp"
-			android:layout_width="180dp"
+			android:layout_width="160dp"
 			android:layout_height="wrap_content"
-			custom:icon="@drawable/ic_wb_sunny_white_12dp"
+			custom:icon="@drawable/ic_wb_sunny_white_20dp"
 			custom:name="@string/factor_sun_position_title" />
 
 	</LinearLayout>
