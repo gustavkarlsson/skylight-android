@@ -24,7 +24,7 @@ class GeomagLocationPresenter extends AbstractAuroraFactorPresenter {
 	}
 
 	void onUpdate(GeomagLocation geomagLocation) {
-		setBackgroundColor(evaluator.evaluate(geomagLocation));
+		setColor(evaluator.evaluate(geomagLocation));
 		setFactorValue(evaluateText(geomagLocation));
 	}
 

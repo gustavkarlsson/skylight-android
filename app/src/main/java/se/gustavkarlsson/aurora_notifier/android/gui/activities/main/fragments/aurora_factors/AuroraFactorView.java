@@ -3,7 +3,9 @@ package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,9 +36,8 @@ public class AuroraFactorView extends LinearLayout {
 		if (attrs != null) {
 			TypedArray auroraFactorViewAttributes = context.obtainStyledAttributes(attrs, R.styleable.AuroraFactorView);
 			try {
-				CharSequence name = auroraFactorViewAttributes.getText(R.styleable.AuroraFactorView_name);
-				TextView nameView = (TextView) findViewById(R.id.aurora_factor_name);
-				nameView.setText(name);
+				setNameText(auroraFactorViewAttributes.getText(R.styleable.AuroraFactorView_name));
+				setBadgeIcon(auroraFactorViewAttributes.getDrawable(R.styleable.AuroraFactorView_icon));
 			} finally {
 				auroraFactorViewAttributes.recycle();
 			}
@@ -46,6 +47,16 @@ public class AuroraFactorView extends LinearLayout {
 		if (isInEditMode()) {
 			factorValueView.setText("value");
 		}
+	}
+
+	private void setNameText(CharSequence text) {
+		TextView nameView = (TextView) findViewById(R.id.aurora_factor_name);
+		nameView.setText(text);
+	}
+
+	private void setBadgeIcon(Drawable icon) {
+		ImageView badge = (ImageView) findViewById(R.id.badge);
+		badge.setImageDrawable(icon);
 	}
 
 	public void setValue(String value) {

@@ -22,7 +22,7 @@ class GeomagActivityPresenter extends AbstractAuroraFactorPresenter {
 	}
 
 	void onUpdate(GeomagActivity geomagActivity) {
-		setBackgroundColor(evaluator.evaluate(geomagActivity));
+		setColor(evaluator.evaluate(geomagActivity));
 		setFactorValue(evaluateText(geomagActivity));
 	}
 

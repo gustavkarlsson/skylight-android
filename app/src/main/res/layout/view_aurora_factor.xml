@@ -1,22 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="120dp"
-	android:layout_height="80dp"
-	android:gravity="center"
-	android:orientation="vertical">
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:clipChildren="false">
 
-	<TextView
-		android:id="@+id/aurora_factor_value"
+	<RelativeLayout
+		android:clipChildren="false"
+		android:layout_marginTop="11dp"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:textSize="20sp"
-		tools:text="3+" />
+		android:background="@color/background_dark">
 
-	<TextView
-		android:id="@+id/aurora_factor_name"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		tools:text="Kp index" />
+		<ImageView
+			android:id="@+id/badge"
+			android:layout_marginTop="-11dp"
+			android:layout_centerHorizontal="true"
+			android:layout_alignParentTop="true"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:background="@drawable/badge"
+			tools:ignore="ContentDescription" />
 
-</LinearLayout>
+		<TextView
+			android:id="@+id/aurora_factor_value"
+			android:layout_centerHorizontal="true"
+			android:layout_below="@id/badge"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textSize="20sp"
+			android:gravity="center_horizontal"
+			tools:text="3+" />
+
+		<TextView
+			android:id="@+id/aurora_factor_name"
+			android:layout_centerHorizontal="true"
+			android:layout_below="@id/aurora_factor_value"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:gravity="center_horizontal"
+			tools:text="Kp index" />
+
+	</RelativeLayout>
+
+</FrameLayout>

@@ -22,7 +22,7 @@ class WeatherPresenter extends AbstractAuroraFactorPresenter {
 	}
 
 	void onUpdate(Weather weather) {
-		setBackgroundColor(evaluator.evaluate(weather));
+		setColor(evaluator.evaluate(weather));
 		setFactorValue(evaluateText(weather));
 	}
 

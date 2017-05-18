@@ -19,7 +19,8 @@
 		android:layout_height="wrap_content"
 		android:layout_alignBottom="@id/grid_center"
 		android:layout_alignEnd="@id/grid_center"
-		custom:name="@string/factor_geomag_activity_title"/>
+		custom:name="@string/factor_geomag_activity_title"
+		custom:icon="@drawable/ic_wb_sunny_white_12dp" />
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 		android:id="@+id/aurora_factor_geomag_location"
@@ -27,7 +28,8 @@
 		android:layout_height="wrap_content"
 		android:layout_alignBottom="@id/grid_center"
 		android:layout_alignStart="@id/grid_center"
-		custom:name="@string/factor_geomag_location_title" />
+		custom:name="@string/factor_geomag_location_title"
+		custom:icon="@drawable/ic_wb_sunny_white_12dp" />
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 		android:id="@+id/aurora_factor_weather"
@@ -35,7 +37,8 @@
 		android:layout_height="wrap_content"
 		android:layout_alignTop="@id/grid_center"
 		android:layout_alignEnd="@id/grid_center"
-		custom:name="@string/factor_weather_title" />
+		custom:name="@string/factor_weather_title"
+		custom:icon="@drawable/ic_wb_sunny_white_12dp" />
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 		android:id="@+id/aurora_factor_sun_position"
@@ -43,6 +46,7 @@
 		android:layout_height="wrap_content"
 		android:layout_alignTop="@id/grid_center"
 		android:layout_alignStart="@id/grid_center"
-		custom:name="@string/factor_sun_position_title" />
+		custom:name="@string/factor_sun_position_title"
+		custom:icon="@drawable/ic_wb_sunny_white_12dp" />
 
 </RelativeLayout>

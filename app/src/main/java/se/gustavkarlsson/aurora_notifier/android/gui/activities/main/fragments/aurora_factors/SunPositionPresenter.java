@@ -24,7 +24,7 @@ class SunPositionPresenter extends AbstractAuroraFactorPresenter {
 	}
 
 	void onUpdate(SunPosition sunPosition) {
-		setBackgroundColor(evaluator.evaluate(sunPosition));
+		setColor(evaluator.evaluate(sunPosition));
 		setFactorValue(evaluateText(sunPosition));
 	}
 

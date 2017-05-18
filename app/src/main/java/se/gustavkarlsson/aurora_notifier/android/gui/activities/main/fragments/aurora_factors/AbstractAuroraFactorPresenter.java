@@ -1,9 +1,14 @@
 package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 
+import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.AuroraChanceToColorConverter;
 
@@ -26,9 +31,18 @@ abstract class AbstractAuroraFactorPresenter {
 		factorView.setValue(value);
 	}
 
-	void setBackgroundColor(AuroraChance auroraChance) {
+	void setColor(AuroraChance auroraChance) {
 		int color = colorConverter.convert(auroraChance);
-		factorView.setBackgroundColor(color);
+		View badge = factorView.findViewById(R.id.badge);
+		Drawable background = badge.getBackground();
+		background.mutate();
+		if (background instanceof ShapeDrawable) {
+			((ShapeDrawable) background).getPaint().setColor(color);
+		} else if (background instanceof GradientDrawable) {
+			((GradientDrawable) background).setColor(color);
+		} else if (background instanceof ColorDrawable) {
+			((ColorDrawable) background).setColor(color);
+		}
 	}
 
 	abstract int getTitleResourceId();

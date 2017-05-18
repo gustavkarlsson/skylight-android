@@ -2,5 +2,6 @@
 <resources>
 	<declare-styleable name="AuroraFactorView">
 		<attr name="name" format="string" />
+		<attr name="icon" format="reference" />
 	</declare-styleable>
 </resources>
