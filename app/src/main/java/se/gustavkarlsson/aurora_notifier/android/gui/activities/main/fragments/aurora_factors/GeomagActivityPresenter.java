@@ -27,8 +27,11 @@ class GeomagActivityPresenter extends AbstractAuroraFactorPresenter {
 	}
 
 	private static String evaluateText(GeomagActivity geomagActivity) {
-		float kpIndex = geomagActivity.getKpIndex();
-		int whole = (int) kpIndex;
+		Float kpIndex = geomagActivity.getKpIndex();
+		if (kpIndex == null) {
+			return "?";
+		}
+		int whole = kpIndex.intValue();
 		float part = kpIndex - whole;
 		String partString = parsePart(part);
 		String wholeString = parseWhole(whole, partString);

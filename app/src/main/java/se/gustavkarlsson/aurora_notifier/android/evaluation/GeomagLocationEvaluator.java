@@ -8,12 +8,16 @@ import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.
 import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.LOW;
 import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.MEDIUM;
 import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.NONE;
+import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.UNKNOWN;
 
 public class GeomagLocationEvaluator {
 	private static final float IDEAL = 23;
 
 	public AuroraChance evaluate(GeomagLocation geomagLocation) {
-		float degrees = geomagLocation.getDegreesFromClosestPole();
+		Float degrees = geomagLocation.getDegreesFromClosestPole();
+		if (degrees == null) {
+			return UNKNOWN;
+		}
 		float diff = (max(degrees, IDEAL) - min(degrees, IDEAL));
 		if (diff < 3) {
 			return HIGH;

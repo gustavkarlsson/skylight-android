@@ -29,7 +29,11 @@ class GeomagLocationPresenter extends AbstractAuroraFactorPresenter {
 	}
 
 	private static String evaluateText(GeomagLocation geomagLocation) {
-		return String.format(Locale.ENGLISH, "%.0f°", geomagLocation.getDegreesFromClosestPole());
+		Float degrees = geomagLocation.getDegreesFromClosestPole();
+		if (degrees == null) {
+			return "?";
+		}
+		return String.format(Locale.ENGLISH, "%.0f°", degrees);
 	}
 
 }

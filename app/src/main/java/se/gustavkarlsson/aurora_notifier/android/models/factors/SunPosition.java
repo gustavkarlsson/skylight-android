@@ -4,16 +4,16 @@ import org.parceler.Parcel;
 
 @Parcel
 public class SunPosition {
-	float zenithAngle;
+	Float zenithAngle;
 
 	SunPosition() {
 	}
 
-	public SunPosition(float zenithAngle) {
+	public SunPosition(Float zenithAngle) {
 		this.zenithAngle = zenithAngle;
 	}
 
-	public float getZenithAngle() {
+	public Float getZenithAngle() {
 		return zenithAngle;
 	}
 

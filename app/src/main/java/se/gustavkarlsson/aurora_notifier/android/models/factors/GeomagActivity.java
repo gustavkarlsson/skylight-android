@@ -4,16 +4,16 @@ import org.parceler.Parcel;
 
 @Parcel
 public class GeomagActivity {
-	float kpIndex;
+	Float kpIndex;
 
 	GeomagActivity() {
 	}
 
-	public GeomagActivity(float kpIndex) {
+	public GeomagActivity(Float kpIndex) {
 		this.kpIndex = kpIndex;
 	}
 
-	public float getKpIndex() {
+	public Float getKpIndex() {
 		return kpIndex;
 	}
 

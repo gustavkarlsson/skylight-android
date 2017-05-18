@@ -26,10 +26,10 @@ public class AuroraReport {
 
 	public static AuroraReport createFallback() {
 		AuroraFactors factors = new AuroraFactors(
-				new GeomagActivity(0),
-				new GeomagLocation(0),
-				new SunPosition(0),
-				new Weather(0)
+				new GeomagActivity(null),
+				new GeomagLocation(null),
+				new SunPosition(null),
+				new Weather(null)
 		);
 		return new AuroraReport(0, null, factors);
 	}

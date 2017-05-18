@@ -29,7 +29,10 @@ class SunPositionPresenter extends AbstractAuroraFactorPresenter {
 	}
 
 	private static String evaluateText(SunPosition sunPosition) {
-		float zenithAngle = sunPosition.getZenithAngle();
+		Float zenithAngle = sunPosition.getZenithAngle();
+		if (zenithAngle == null) {
+			return "?";
+		}
 		return String.format(Locale.ENGLISH, "%.0f°", zenithAngle);
 	}
 }

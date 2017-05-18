@@ -4,16 +4,16 @@ import org.parceler.Parcel;
 
 @Parcel
 public class Weather {
-	int cloudPercentage;
+	Integer cloudPercentage;
 
 	Weather() {
 	}
 
-	public Weather(int cloudPercentage) {
+	public Weather(Integer cloudPercentage) {
 		this.cloudPercentage = cloudPercentage;
 	}
 
-	public int getCloudPercentage() {
+	public Integer getCloudPercentage() {
 		return cloudPercentage;
 	}
 

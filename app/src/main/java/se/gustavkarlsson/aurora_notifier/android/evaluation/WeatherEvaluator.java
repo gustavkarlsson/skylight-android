@@ -6,10 +6,14 @@ import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.
 import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.LOW;
 import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.MEDIUM;
 import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.NONE;
+import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.UNKNOWN;
 
 public class WeatherEvaluator {
 	public AuroraChance evaluate(Weather weather) {
-		int clouds = weather.getCloudPercentage();
+		Integer clouds = weather.getCloudPercentage();
+		if (clouds == null) {
+			return UNKNOWN;
+		}
 		if (clouds < 10) {
 			return HIGH;
 		} else if (clouds < 30) {

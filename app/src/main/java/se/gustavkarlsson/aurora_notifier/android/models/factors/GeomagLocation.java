@@ -4,16 +4,16 @@ import org.parceler.Parcel;
 
 @Parcel
 public class GeomagLocation {
-	float degreesFromClosestPole;
+	Float degreesFromClosestPole;
 
 	GeomagLocation() {
 	}
 
-	public GeomagLocation(float degreesFromClosestPole) {
+	public GeomagLocation(Float degreesFromClosestPole) {
 		this.degreesFromClosestPole = degreesFromClosestPole;
 	}
 
-	public float getDegreesFromClosestPole() {
+	public Float getDegreesFromClosestPole() {
 		return degreesFromClosestPole;
 	}
 

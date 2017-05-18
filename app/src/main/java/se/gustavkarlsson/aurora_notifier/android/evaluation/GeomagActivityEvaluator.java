@@ -6,10 +6,14 @@ import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.
 import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.LOW;
 import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.MEDIUM;
 import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.NONE;
+import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.UNKNOWN;
 
 public class GeomagActivityEvaluator {
 	public AuroraChance evaluate(GeomagActivity geomagActivity) {
-		float kpIndex = geomagActivity.getKpIndex();
+		Float kpIndex = geomagActivity.getKpIndex();
+		if (kpIndex == null) {
+			return UNKNOWN;
+		}
 		if (kpIndex < 1) {
 			return NONE;
 		} else if (kpIndex < 3) {

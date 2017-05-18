@@ -27,6 +27,10 @@ class WeatherPresenter extends AbstractAuroraFactorPresenter {
 	}
 
 	private static String evaluateText(Weather weather) {
-		return Integer.toString(weather.getCloudPercentage()) + '%';
+		Integer clouds = weather.getCloudPercentage();
+		if (clouds == null) {
+			return "?";
+		}
+		return Integer.toString(clouds) + '%';
 	}
 }

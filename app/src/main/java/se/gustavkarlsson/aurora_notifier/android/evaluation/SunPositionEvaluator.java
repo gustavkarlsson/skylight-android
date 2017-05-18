@@ -6,10 +6,14 @@ import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.
 import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.LOW;
 import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.MEDIUM;
 import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.NONE;
+import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.UNKNOWN;
 
 public class SunPositionEvaluator {
 	public AuroraChance evaluate(SunPosition sunPosition) {
-		float zenithAngle = sunPosition.getZenithAngle();
+		Float zenithAngle = sunPosition.getZenithAngle();
+		if (zenithAngle == null) {
+			return UNKNOWN;
+		}
 		if (zenithAngle < 96) {
 			return NONE;
 		} else if (zenithAngle < 102) {
