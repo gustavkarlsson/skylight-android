@@ -12,6 +12,7 @@ import android.widget.TextView;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChanceEvaluator;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraReportEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraReportUpdateListener;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraReport;
 
@@ -31,7 +32,7 @@ public class AuroraChanceFragment extends Fragment implements AuroraReportUpdate
 		locationPresenter = new LocationPresenter((TextView) rootView.findViewById(R.id.location));
 		timeSinceUpdatePresenter = new TimeSinceUpdatePresenter((TextView) rootView.findViewById(R.id.time_since_update), DateUtils.MINUTE_IN_MILLIS);
 		chancePresenter = new ChancePresenter((TextView) rootView.findViewById(R.id.chance));
-		this.evaluator = e -> AuroraChance.UNKNOWN; // FIXME assign evaluator
+		this.evaluator = new AuroraReportEvaluator();
 		return rootView;
 	}
 
