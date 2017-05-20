@@ -2,7 +2,7 @@ package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.
 
 import android.widget.TextView;
 
-import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.PresentableChance;
 
 class ChancePresenter {
 	private final TextView chanceTextView;
@@ -11,7 +11,7 @@ class ChancePresenter {
 		this.chanceTextView = chanceTextView;
 	}
 
-	void onUpdate(AuroraChance chance) {
+	void onUpdate(PresentableChance chance) {
 		chanceTextView.setText(chance.getResourceId());
 	}
 }

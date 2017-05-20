@@ -4,7 +4,8 @@ import android.content.Context;
 import android.support.v4.app.ActivityCompat;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.Chance;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.PresentableChance;
 
 public class AuroraChanceToColorConverter {
 	private final Context context;
@@ -13,8 +14,9 @@ public class AuroraChanceToColorConverter {
 		this.context = context;
 	}
 
-	public int convert(AuroraChance auroraChance) {
-		switch (auroraChance) {
+	public int convert(Chance chance) {
+		PresentableChance presentableChance = PresentableChance.fromChance(chance);
+		switch (presentableChance) {
 			case UNKNOWN:
 				return ActivityCompat.getColor(context, R.color.factor_unknown);
 			case NONE:
@@ -26,6 +28,6 @@ public class AuroraChanceToColorConverter {
 			case HIGH:
 				return ActivityCompat.getColor(context, R.color.factor_high);
 		}
-		throw new IllegalArgumentException("Unsupported aurora chance: " + auroraChance);
+		throw new IllegalArgumentException("Unsupported aurora chance: " + presentableChance);
 	}
 }

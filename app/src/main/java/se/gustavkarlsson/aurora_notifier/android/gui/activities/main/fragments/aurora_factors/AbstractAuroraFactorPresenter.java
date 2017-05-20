@@ -9,30 +9,38 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.Chance;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.gui.activities.AuroraChanceToColorConverter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-abstract class AbstractAuroraFactorPresenter {
+abstract class AbstractAuroraFactorPresenter<T> {
 	private final AuroraFactorView factorView;
 	private final AuroraChanceToColorConverter colorConverter;
+	private final ChanceEvaluator<T> evaluator;
 
-	AbstractAuroraFactorPresenter(AuroraFactorView factorView) {
+	AbstractAuroraFactorPresenter(AuroraFactorView factorView, ChanceEvaluator<T> evaluator) {
 		this.factorView = checkNotNull(factorView, "factorView may not be null");
 		this.colorConverter = new AuroraChanceToColorConverter(factorView.getContext());
 		Context context = factorView.getContext();
 		String title = context.getString(getTitleResourceId());
 		String description = context.getString(getDescriptionResourceId());
 		this.factorView.setOnClickListener(new PopupDescriptionClickListener(context, title, description));
+		this.evaluator = evaluator;
 	}
 
-	void setFactorValue(String value) {
+	void onUpdate(T factor) {
+		setFactorValue(evaluateText(factor));
+		setColor(evaluator.evaluate(factor));
+	}
+
+	private void setFactorValue(String value) {
 		factorView.setValue(value);
 	}
 
-	void setColor(AuroraChance auroraChance) {
-		int color = colorConverter.convert(auroraChance);
+	private void setColor(Chance chance) {
+		int color = colorConverter.convert(chance);
 		View badge = factorView.findViewById(R.id.badge);
 		Drawable background = badge.getBackground();
 		background.mutate();
@@ -48,6 +56,8 @@ abstract class AbstractAuroraFactorPresenter {
 	abstract int getTitleResourceId();
 
 	abstract int getDescriptionResourceId();
+
+	abstract String evaluateText(T factor);
 
 	private static class PopupDescriptionClickListener implements View.OnClickListener {
 		private AlertDialog dialog;

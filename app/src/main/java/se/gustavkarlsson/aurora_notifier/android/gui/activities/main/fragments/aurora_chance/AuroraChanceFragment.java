@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance;
-import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChanceEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraReportEvaluator;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.Chance;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.PresentableChance;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraReportUpdateListener;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraReport;
 
@@ -23,7 +23,7 @@ public class AuroraChanceFragment extends Fragment implements AuroraReportUpdate
 	private LocationPresenter locationPresenter;
 	private TimeSinceUpdatePresenter timeSinceUpdatePresenter;
 	private ChancePresenter chancePresenter;
-	private AuroraChanceEvaluator evaluator;
+	private AuroraReportEvaluator evaluator;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,8 +48,8 @@ public class AuroraChanceFragment extends Fragment implements AuroraReportUpdate
 		Log.v(TAG, "onUpdate");
 		locationPresenter.onUpdate(report.getAddress());
 		timeSinceUpdatePresenter.onUpdate(report.getTimestampMillis());
-		AuroraChance chance = evaluator.evaluate(report);
-		chancePresenter.onUpdate(chance);
+		Chance chance = evaluator.evaluate(report);
+		chancePresenter.onUpdate(PresentableChance.fromChance(chance));
 		rootView.invalidate();
 	}
 

@@ -2,31 +2,16 @@ package se.gustavkarlsson.aurora_notifier.android.evaluation;
 
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagLocation;
 
-import static java.lang.Math.max;
-import static java.lang.Math.min;
-import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.HIGH;
-import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.LOW;
-import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.MEDIUM;
-import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.NONE;
-import static se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraChance.UNKNOWN;
-
-public class GeomagLocationEvaluator {
-	private static final float IDEAL = 23;
-
-	public AuroraChance evaluate(GeomagLocation geomagLocation) {
+public class GeomagLocationEvaluator implements ChanceEvaluator<GeomagLocation> {
+	public Chance evaluate(GeomagLocation geomagLocation) {
 		Float degrees = geomagLocation.getDegreesFromClosestPole();
 		if (degrees == null) {
-			return UNKNOWN;
+			return Chance.unknown();
 		}
-		float diff = (max(degrees, IDEAL) - min(degrees, IDEAL));
-		if (diff < 3) {
-			return HIGH;
-		} else if (diff < 6) {
-			return MEDIUM;
-		} else if (diff < 9) {
-			return LOW;
-		} else {
-			return NONE;
+		double chance = (-1.0 / 12.0) * degrees + (35.0 / 12.0); // 23-35
+		if (chance > 1.0) {
+			chance = 2.0 - chance;
 		}
+		return Chance.of(chance);
 	}
 }

@@ -4,11 +4,10 @@ import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.GeomagActivityEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagActivity;
 
-class GeomagActivityPresenter extends AbstractAuroraFactorPresenter {
-	private final GeomagActivityEvaluator evaluator = new GeomagActivityEvaluator();
+class GeomagActivityPresenter extends AbstractAuroraFactorPresenter<GeomagActivity> {
 
 	GeomagActivityPresenter(AuroraFactorView factorView) {
-		super(factorView);
+		super(factorView, new GeomagActivityEvaluator());
 	}
 
 	@Override
@@ -21,12 +20,8 @@ class GeomagActivityPresenter extends AbstractAuroraFactorPresenter {
 		return R.string.factor_geomag_activity_desc;
 	}
 
-	void onUpdate(GeomagActivity geomagActivity) {
-		setColor(evaluator.evaluate(geomagActivity));
-		setFactorValue(evaluateText(geomagActivity));
-	}
-
-	private static String evaluateText(GeomagActivity geomagActivity) {
+	@Override
+	String evaluateText(GeomagActivity geomagActivity) {
 		Float kpIndex = geomagActivity.getKpIndex();
 		if (kpIndex == null) {
 			return "?";

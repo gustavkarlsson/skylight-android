@@ -4,11 +4,10 @@ import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.WeatherEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
 
-class WeatherPresenter extends AbstractAuroraFactorPresenter {
-	private final WeatherEvaluator evaluator = new WeatherEvaluator();
+class WeatherPresenter extends AbstractAuroraFactorPresenter<Weather> {
 
 	WeatherPresenter(AuroraFactorView factorView) {
-		super(factorView);
+		super(factorView, new WeatherEvaluator());
 	}
 
 	@Override
@@ -21,12 +20,8 @@ class WeatherPresenter extends AbstractAuroraFactorPresenter {
 		return R.string.factor_weather_desc;
 	}
 
-	void onUpdate(Weather weather) {
-		setColor(evaluator.evaluate(weather));
-		setFactorValue(evaluateText(weather));
-	}
-
-	private static String evaluateText(Weather weather) {
+	@Override
+	String evaluateText(Weather weather) {
 		Integer clouds = weather.getCloudPercentage();
 		if (clouds == null) {
 			return "?";

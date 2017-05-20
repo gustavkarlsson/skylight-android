@@ -6,11 +6,10 @@ import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.SunPositionEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
 
-class SunPositionPresenter extends AbstractAuroraFactorPresenter {
-	private final SunPositionEvaluator evaluator = new SunPositionEvaluator();
+class SunPositionPresenter extends AbstractAuroraFactorPresenter<SunPosition> {
 
 	SunPositionPresenter(AuroraFactorView factorView) {
-		super(factorView);
+		super(factorView, new SunPositionEvaluator());
 	}
 
 	@Override
@@ -23,12 +22,8 @@ class SunPositionPresenter extends AbstractAuroraFactorPresenter {
 		return R.string.factor_sun_position_desc;
 	}
 
-	void onUpdate(SunPosition sunPosition) {
-		setColor(evaluator.evaluate(sunPosition));
-		setFactorValue(evaluateText(sunPosition));
-	}
-
-	private static String evaluateText(SunPosition sunPosition) {
+	@Override
+	String evaluateText(SunPosition sunPosition) {
 		Float zenithAngle = sunPosition.getZenithAngle();
 		if (zenithAngle == null) {
 			return "?";
