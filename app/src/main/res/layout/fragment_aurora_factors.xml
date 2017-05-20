@@ -43,7 +43,7 @@
 			android:padding="15dp"
 			android:layout_width="160dp"
 			android:layout_height="wrap_content"
-			custom:icon="@drawable/factor_weather_white_20dp"
+			custom:icon="@drawable/factor_visibility_white_20dp"
 			custom:name="@string/factor_visibility_title" />
 
 		<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
@@ -51,7 +51,7 @@
 			android:padding="15dp"
 			android:layout_width="160dp"
 			android:layout_height="wrap_content"
-			custom:icon="@drawable/factor_sunpos_white_20dp"
+			custom:icon="@drawable/factor_darkness_white_20dp"
 			custom:name="@string/factor_darkness_title" />
 
 	</LinearLayout>
