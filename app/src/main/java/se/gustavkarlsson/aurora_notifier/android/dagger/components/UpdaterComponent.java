@@ -10,7 +10,7 @@ import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GoogleLocationMo
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.KpIndexModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.SettingsModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.SystemServiceModule;
-import se.gustavkarlsson.aurora_notifier.android.dagger.modules.WeatherModule;
+import se.gustavkarlsson.aurora_notifier.android.dagger.modules.VisibilityModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.scopes.ActivityScope;
 import se.gustavkarlsson.aurora_notifier.android.dagger.scopes.BackgroundScope;
 
@@ -21,7 +21,7 @@ import se.gustavkarlsson.aurora_notifier.android.dagger.scopes.BackgroundScope;
 		GeomagLocationModule.class,
 		KpIndexModule.class,
 		DarknessModule.class,
-		WeatherModule.class,
+		VisibilityModule.class,
 		SettingsModule.class,
 		SystemServiceModule.class
 }, dependencies = {

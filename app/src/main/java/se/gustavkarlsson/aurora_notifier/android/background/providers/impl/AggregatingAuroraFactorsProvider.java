@@ -15,16 +15,16 @@ import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraFact
 import se.gustavkarlsson.aurora_notifier.android.background.providers.DarknessProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagActivityProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagLocationProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.WeatherProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.VisibilityProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetDarknessTask;
 import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetGeomagActivityTask;
 import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetGeomagLocationTask;
-import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetWeatherTask;
+import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetVisibilityTask;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraFactors;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Darkness;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagActivity;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagLocation;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.Visibility;
 import se.gustavkarlsson.aurora_notifier.android.util.CountdownTimer;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
@@ -33,14 +33,14 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 public class AggregatingAuroraFactorsProvider implements AuroraFactorsProvider {
 	private static final Executor EXECUTOR = AsyncTask.THREAD_POOL_EXECUTOR;
 	private final GeomagActivityProvider geomagActivityProvider;
-	private final WeatherProvider weatherProvider;
+	private final VisibilityProvider visibilityProvider;
 	private final DarknessProvider darknessProvider;
 	private final GeomagLocationProvider geomagLocationProvider;
 
 	@Inject
-	AggregatingAuroraFactorsProvider(GeomagActivityProvider geomagActivityProvider, WeatherProvider weatherProvider, DarknessProvider darknessProvider, GeomagLocationProvider geomagLocationProvider) {
+	AggregatingAuroraFactorsProvider(GeomagActivityProvider geomagActivityProvider, VisibilityProvider visibilityProvider, DarknessProvider darknessProvider, GeomagLocationProvider geomagLocationProvider) {
 		this.geomagActivityProvider = geomagActivityProvider;
-		this.weatherProvider = weatherProvider;
+		this.visibilityProvider = visibilityProvider;
 		this.darknessProvider = darknessProvider;
 		this.geomagLocationProvider = geomagLocationProvider;
 	}
@@ -49,21 +49,21 @@ public class AggregatingAuroraFactorsProvider implements AuroraFactorsProvider {
 	public AuroraFactors getAuroraFactors(Location location, long timeoutMillis) {
 		CountdownTimer timeoutTimer = CountdownTimer.start(timeoutMillis);
 		GetGeomagActivityTask getGeomagActivityTask = new GetGeomagActivityTask(geomagActivityProvider);
-		GetWeatherTask getWeatherTask = new GetWeatherTask(weatherProvider, location);
+		GetVisibilityTask getVisibilityTask = new GetVisibilityTask(visibilityProvider, location);
 		GetDarknessTask getDarknessTask = new GetDarknessTask(darknessProvider, location, System.currentTimeMillis());
 		GetGeomagLocationTask getGeomagLocationTask = new GetGeomagLocationTask(geomagLocationProvider, location);
 
 		EXECUTOR.execute(getGeomagActivityTask);
-		EXECUTOR.execute(getWeatherTask);
+		EXECUTOR.execute(getVisibilityTask);
 		EXECUTOR.execute(getDarknessTask);
 		EXECUTOR.execute(getGeomagLocationTask);
 
 		try {
 			GeomagActivity geomagActivity = getGeomagActivityTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
-			Weather weather = getWeatherTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
+			Visibility visibility = getVisibilityTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
 			Darkness darkness = getDarknessTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
 			GeomagLocation geomagLocation = getGeomagLocationTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
-			return new AuroraFactors(geomagActivity, geomagLocation, darkness, weather);
+			return new AuroraFactors(geomagActivity, geomagLocation, darkness, visibility);
 		} catch (TimeoutException e) {
 			throw new UserFriendlyException(R.string.error_updating_took_too_long, "Getting aurora data timed out after " + timeoutMillis + "ms", e);
 		} catch (ExecutionException e) {

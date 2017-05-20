@@ -11,7 +11,7 @@ import se.gustavkarlsson.aurora_notifier.android.models.AuroraReport;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Darkness;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagActivity;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagLocation;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.Visibility;
 import se.gustavkarlsson.aurora_notifier.android.settings.DebugSettings;
 
 public class DebugAuroraReportProvider implements AuroraReportProvider {
@@ -34,11 +34,11 @@ public class DebugAuroraReportProvider implements AuroraReportProvider {
 		GeomagActivity geomagActivity = new GeomagActivity(debugSettings.getKpIndex());
 		GeomagLocation geomagLocation = new GeomagLocation(debugSettings.getDegreesFromClosestPole());
 		Darkness darkness = new Darkness(debugSettings.getSunZenithAngle());
-		Weather weather = new Weather(debugSettings.getCloudPercentage());
+		Visibility visibility = new Visibility(debugSettings.getCloudPercentage());
 		return new AuroraFactors(
 				geomagActivity,
 				geomagLocation,
 				darkness,
-				weather);
+				visibility);
 	}
 }

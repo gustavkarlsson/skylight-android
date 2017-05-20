@@ -12,14 +12,14 @@
 		Geomagnetic activity is the cause the aurora and ranges from 0 to 9.
 		The higher this value is, the higher the chance of seeing the aurora.
 	</string>
-	<string name="factor_weather_title">Clouds</string>
-	<string name="factor_weather_desc">
+	<string name="factor_visibility_title">Visibility</string>
+	<string name="factor_visibility_desc">
 		Bad weather can block your view of the aurora.
-		This value shows the amount of clouds at your location.
+		This value shows the visibility of the sky based on the weather.
 	</string>
 	<string name="factor_darkness_title">Darkness</string>
 	<string name="factor_darkness_desc">
 		The aurora is only visible in the dark so the position of the sun is critical.
-		This value shows how dark your location is calculated from the sun\'s current position.
+		This value shows how dark your location is based on the sun\'s position.
 	</string>
 </resources>

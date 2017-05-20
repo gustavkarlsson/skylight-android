@@ -36,7 +36,7 @@ public class AuroraFactorFragmentTest {
 	public void factorViewsShown() throws Exception {
 		onView(withId(R.id.aurora_factor_geomag_activity)).check(matches(isDisplayed()));
 		onView(withId(R.id.aurora_factor_geomag_location)).check(matches(isDisplayed()));
-		onView(withId(R.id.aurora_factor_weather)).check(matches(isDisplayed()));
+		onView(withId(R.id.aurora_factor_visibility)).check(matches(isDisplayed()));
 		onView(withId(R.id.aurora_factor_darkness)).check(matches(isDisplayed()));
 	}
 
@@ -51,8 +51,8 @@ public class AuroraFactorFragmentTest {
 	}
 
 	@Test
-	public void clickWeather_detailViewShown() throws Exception {
-		whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_weather, R.string.factor_weather_title, R.string.factor_weather_desc);
+	public void clickVisibility_detailViewShown() throws Exception {
+		whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_visibility, R.string.factor_visibility_title, R.string.factor_visibility_desc);
 	}
 
 	@Test

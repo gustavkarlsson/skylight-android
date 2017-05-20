@@ -7,7 +7,7 @@ import org.parceler.Parcel;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Darkness;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagActivity;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagLocation;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.Visibility;
 
 @Parcel
 public class AuroraReport {
@@ -29,7 +29,7 @@ public class AuroraReport {
 				new GeomagActivity(null),
 				new GeomagLocation(null),
 				new Darkness(null),
-				new Weather(null)
+				new Visibility(null)
 		);
 		return new AuroraReport(0, null, factors);
 	}

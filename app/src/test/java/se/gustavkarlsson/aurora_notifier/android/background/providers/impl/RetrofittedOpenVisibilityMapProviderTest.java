@@ -33,7 +33,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Log.class})
-public class RetrofittedOpenWeatherMapProviderTest {
+public class RetrofittedOpenVisibilityMapProviderTest {
 	private OkHttpClient mockedClient;
 
 	@Before
@@ -74,14 +74,14 @@ public class RetrofittedOpenWeatherMapProviderTest {
 
 	@Test
 	public void parsesCloudinessCorrectly() throws Exception {
-		RetrofittedOpenWeatherMapProvider service = new RetrofittedOpenWeatherMapProvider(new Retrofit.Builder()
+		RetrofittedOpenWeatherMapVisibilityProvider service = new RetrofittedOpenWeatherMapVisibilityProvider(new Retrofit.Builder()
 				.client(mockedClient)
 				.baseUrl("http://mocked.com")
 				.addConverterFactory(GsonConverterFactory.create())
 				.build()
 				.create(OpenWeatherMapService.class), "fake-app-id");
 
-		int cloudiness = service.getWeather(0, 0).getCloudPercentage();
+		int cloudiness = service.getVisibility(0, 0).getCloudPercentage();
 
 		assertThat(cloudiness).isEqualTo(68);
 	}

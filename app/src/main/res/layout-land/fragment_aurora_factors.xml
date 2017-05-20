@@ -25,12 +25,12 @@
 		custom:name="@string/factor_geomag_location_title" />
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
-		android:id="@+id/aurora_factor_weather"
+		android:id="@+id/aurora_factor_visibility"
 		android:padding="10dp"
 		android:layout_width="160dp"
 		android:layout_height="wrap_content"
 		custom:icon="@drawable/factor_sunpos_white_20dp"
-		custom:name="@string/factor_weather_title" />
+		custom:name="@string/factor_visibility_title" />
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 		android:id="@+id/aurora_factor_darkness"
