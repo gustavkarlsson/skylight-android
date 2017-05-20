@@ -6,7 +6,6 @@ import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagLoca
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagLocation;
 
 import static java.lang.Math.PI;
-import static java.lang.Math.abs;
 import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
 import static java.lang.Math.pow;
@@ -16,11 +15,6 @@ import static java.lang.Math.toDegrees;
 import static java.lang.Math.toRadians;
 
 public class GeomagLocationProviderImpl implements GeomagLocationProvider {
-
-	public static void main(String[] args) {
-		System.out.println(new GeomagLocationProviderImpl().getGeomagLocation(64, 19));
-		System.out.println(new GeomagLocationProviderImpl().getGeomagLocation(50, 9));
-	}
 
 	// 2015 data
 	private static final double MAGNETIC_NORTH_POLE_LATITUDE = 80.4;
@@ -33,8 +27,7 @@ public class GeomagLocationProviderImpl implements GeomagLocationProvider {
 	@Override
 	public GeomagLocation getGeomagLocation(double latitude, double longitude) {
 		double geomagneticLatitude = calculateGeomagneticLatitude(latitude, longitude, MAGNETIC_NORTH_POLE_LATITUDE, MAGNETIC_NORTH_POLE_LONGITUDE);
-		double distanceFromClosestPole = 90 - (abs(geomagneticLatitude));
-		return new GeomagLocation((float) distanceFromClosestPole);
+		return new GeomagLocation((float) geomagneticLatitude);
 	}
 
 	// http://stackoverflow.com/a/7949249/940731

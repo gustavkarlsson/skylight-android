@@ -23,7 +23,7 @@
 			android:key="@string/pref_geomag_location_key"
 			android:title="@string/pref_geomag_location_title"
 			android:defaultValue="0"
-			android:inputType="numberDecimal" />
+			android:inputType="numberDecimal|numberSigned" />
 		<EditTextPreference
 			android:key="@string/pref_cloud_percentage_key"
 			android:title="@string/pref_cloud_percentage_title"

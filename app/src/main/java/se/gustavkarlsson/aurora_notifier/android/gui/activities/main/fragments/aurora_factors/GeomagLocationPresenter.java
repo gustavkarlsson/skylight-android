@@ -24,11 +24,11 @@ class GeomagLocationPresenter extends AbstractAuroraFactorPresenter<GeomagLocati
 
 	@Override
 	String evaluateText(GeomagLocation geomagLocation) {
-		Float degrees = geomagLocation.getDegreesFromClosestPole();
-		if (degrees == null) {
+		Float latitude = geomagLocation.getLatitude();
+		if (latitude == null) {
 			return "?";
 		}
-		return String.format(Locale.ENGLISH, "%.0f°", degrees);
+		return String.format(Locale.ENGLISH, "%.0f°", latitude);
 	}
 
 }

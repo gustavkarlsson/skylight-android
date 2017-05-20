@@ -2,9 +2,10 @@
 <resources>
 	<string name="factor_geomag_location_title">Location</string>
 	<string name="factor_geomag_location_desc">
-		Your geomagnetic location is the distance from your closest geomagnetic pole.
-		The best place to see the aurora is at around 23°.
-		Earth\'s geomagnetic poles are located close to the north and south pole.
+		The aurora is only visible at a certain distance from the geomagnetic poles,
+		which are located close to the north and south poles.
+		This value shows your geomagnetic latitude.
+		The best latitude for aurora sightings is around 67°.
 	</string>
 	<string name="factor_geomag_activity_title">Geomag. activity</string>
 	<string name="factor_geomag_activity_desc">
@@ -12,13 +13,13 @@
 		The higher this value is, the higher the chance of seeing the aurora.
 	</string>
 	<string name="factor_weather_title">Clouds</string>
-	<string name="factor_weather_desc" formatted="false">
-		Clouds can block your view of the aurora. This shows the amount of
-		clouds at your location as a percentage. A value of 0% is optimal.
+	<string name="factor_weather_desc">
+		Bad weather can block your view of the aurora.
+		This value shows the amount of clouds at your location.
 	</string>
 	<string name="factor_darkness_title">Darkness</string>
 	<string name="factor_darkness_desc">
-		Because the aurora is only visible in the dark, the position of the sun is important.
-		This shows how dark your location is based on the sun's position.
+		The aurora is only visible in the dark so the position of the sun is critical.
+		This value shows how dark your location is calculated from the sun\'s current position.
 	</string>
 </resources>
