@@ -11,18 +11,18 @@ import android.view.View;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.Chance;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.ChanceEvaluator;
-import se.gustavkarlsson.aurora_notifier.android.gui.activities.AuroraChanceToColorConverter;
+import se.gustavkarlsson.aurora_notifier.android.gui.activities.ChanceToColorConverter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 abstract class AbstractAuroraFactorPresenter<T> {
 	private final AuroraFactorView factorView;
-	private final AuroraChanceToColorConverter colorConverter;
+	private final ChanceToColorConverter colorConverter;
 	private final ChanceEvaluator<T> evaluator;
 
 	AbstractAuroraFactorPresenter(AuroraFactorView factorView, ChanceEvaluator<T> evaluator) {
 		this.factorView = checkNotNull(factorView, "factorView may not be null");
-		this.colorConverter = new AuroraChanceToColorConverter(factorView.getContext());
+		this.colorConverter = new ChanceToColorConverter(factorView.getContext());
 		Context context = factorView.getContext();
 		String title = context.getString(getTitleResourceId());
 		String description = context.getString(getDescriptionResourceId());

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<color name="primary">#009688</color>
-	<color name="primary_dark">#00695C</color>
-	<color name="accent">#64FFDA</color>
-	<color name="background_dark">#424242</color>
+	<color name="primary">#00BCD4</color>
+	<color name="primary_dark">#0097A7</color>
+	<color name="accent">#FF4081</color>
+	<color name="background_darkish">#424242</color>
 
-	<color name="factor_unknown">#616161</color>
-	<color name="factor_none">#dd2c00</color>
-	<color name="factor_low">#f9a825</color>
-	<color name="factor_medium">#c0ca33</color>
-	<color name="factor_high">#7cb342</color>
+	<color name="chance_unknown">#616161</color>
+	<color name="chance_lowest">#F44336</color>
+	<color name="chance_highest">#8BC34A</color>
 </resources>

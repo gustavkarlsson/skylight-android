@@ -9,7 +9,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="15dp"
-		android:background="@color/background_dark"
+		android:background="@color/background_darkish"
 		android:foreground="?attr/selectableItemBackground"
 		android:clipChildren="false"
 		tools:ignore="UselessParent">
