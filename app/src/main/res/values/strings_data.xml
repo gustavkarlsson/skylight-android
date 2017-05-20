@@ -16,10 +16,9 @@
 		Clouds can block your view of the aurora. This shows the amount of
 		clouds at your location as a percentage. A value of 0% is optimal.
 	</string>
-	<string name="factor_sun_position_title">Sun position</string>
-	<string name="factor_sun_position_desc">
+	<string name="factor_darkness_title">Darkness</string>
+	<string name="factor_darkness_desc">
 		Because the aurora is only visible in the dark, the position of the sun is important.
-		This value shows the sun\'s position in degrees, ranging from 0°
-		(right above your head) to 180° (other side of the globe).
+		This shows how dark your location is based on the sun's position.
 	</string>
 </resources>

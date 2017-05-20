@@ -7,20 +7,20 @@ import java.util.GregorianCalendar;
 
 import javax.inject.Inject;
 
-import se.gustavkarlsson.aurora_notifier.android.background.providers.SunPositionProvider;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.DarknessProvider;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.Darkness;
 
-public class KlausBrunnerSunPositionProvider implements SunPositionProvider {
+public class KlausBrunnerDarknessProvider implements DarknessProvider {
 
 	@Inject
-	KlausBrunnerSunPositionProvider() {
+	KlausBrunnerDarknessProvider() {
 	}
 
 	@Override
-	public SunPosition getSunPosition(long timeMillis, double latitude, double longitude) {
+	public Darkness getDarkness(long timeMillis, double latitude, double longitude) {
 		GregorianCalendar date = new GregorianCalendar();
 		date.setTimeInMillis(timeMillis);
 		AzimuthZenithAngle azimuthZenithAngle = Grena3.calculateSolarPosition(date, latitude, longitude, 0);
-		return new SunPosition((float) azimuthZenithAngle.getZenithAngle());
+		return new Darkness((float) azimuthZenithAngle.getZenithAngle());
 	}
 }

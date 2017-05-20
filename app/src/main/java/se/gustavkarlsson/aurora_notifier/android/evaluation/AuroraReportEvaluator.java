@@ -15,11 +15,11 @@ public class AuroraReportEvaluator implements ChanceEvaluator<AuroraReport> {
 	public Chance evaluate(AuroraReport auroraReport) {
 		AuroraFactors factors = auroraReport.getFactors();
 		Chance weatherChance = new WeatherEvaluator().evaluate(factors.getWeather());
-		Chance sunPositionChance = new SunPositionEvaluator().evaluate(factors.getSunPosition());
+		Chance darknessChance = new DarknessEvaluator().evaluate(factors.getDarkness());
 		Chance geomagChance = new GeomagActivityEvaluator().evaluate(factors.getGeomagActivity());
 		Chance locationChance = new GeomagLocationEvaluator().evaluate(factors.getGeomagLocation());
 
-		List<Chance> chances = Arrays.asList(weatherChance, sunPositionChance, geomagChance, locationChance);
+		List<Chance> chances = Arrays.asList(weatherChance, darknessChance, geomagChance, locationChance);
 
 		if (stream(chances).anyMatch(c -> !c.isKnown())) {
 			return Chance.unknown();
@@ -31,7 +31,7 @@ public class AuroraReportEvaluator implements ChanceEvaluator<AuroraReport> {
 
 		Chance geomagAndLocationChance = Chance.of(geomagChance.getValue() * locationChance.getValue());
 
-		return RefStreams.of(weatherChance, sunPositionChance, geomagAndLocationChance)
+		return RefStreams.of(weatherChance, darknessChance, geomagAndLocationChance)
 				.min(Chance::compareTo)
 				.orElseThrow(() -> new IllegalStateException("No PresentableChance supplied"));
 	}

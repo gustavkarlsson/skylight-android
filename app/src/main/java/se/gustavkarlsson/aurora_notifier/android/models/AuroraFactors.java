@@ -2,16 +2,16 @@ package se.gustavkarlsson.aurora_notifier.android.models;
 
 import org.parceler.Parcel;
 
+import se.gustavkarlsson.aurora_notifier.android.models.factors.Darkness;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagActivity;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagLocation;
-import se.gustavkarlsson.aurora_notifier.android.models.factors.SunPosition;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Weather;
 
 @Parcel
 public class AuroraFactors {
 	GeomagActivity geomagActivity;
 	GeomagLocation geomagLocation;
-	SunPosition sunPosition;
+	Darkness darkness;
 	Weather weather;
 
 	AuroraFactors() {
@@ -20,11 +20,11 @@ public class AuroraFactors {
 	public AuroraFactors(
 			GeomagActivity geomagActivity,
 			GeomagLocation geomagLocation,
-			SunPosition sunPosition,
+			Darkness darkness,
 			Weather weather) {
 		this.geomagActivity = geomagActivity;
 		this.geomagLocation = geomagLocation;
-		this.sunPosition = sunPosition;
+		this.darkness = darkness;
 		this.weather = weather;
 	}
 
@@ -36,8 +36,8 @@ public class AuroraFactors {
 		return geomagLocation;
 	}
 
-	public SunPosition getSunPosition() {
-		return sunPosition;
+	public Darkness getDarkness() {
+		return darkness;
 	}
 
 	public Weather getWeather() {
@@ -49,7 +49,7 @@ public class AuroraFactors {
 		return "AuroraFactors{" +
 				"geomagActivity=" + geomagActivity +
 				", geomagLocation=" + geomagLocation +
-				", sunPosition=" + sunPosition +
+				", darkness=" + darkness +
 				", weather=" + weather +
 				'}';
 	}

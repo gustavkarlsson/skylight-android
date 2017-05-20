@@ -19,7 +19,7 @@ public class AuroraFactorFragment extends Fragment implements AuroraReportUpdate
 	private GeomagActivityPresenter geomagActivityPresenter;
 	private GeomagLocationPresenter geomagLocationPresenter;
 	private WeatherPresenter weatherPresenter;
-	private SunPositionPresenter sunPositionPresenter;
+	private DarknessPresenter darknessPresenter;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class AuroraFactorFragment extends Fragment implements AuroraReportUpdate
 		geomagActivityPresenter = new GeomagActivityPresenter((AuroraFactorView) rootView.findViewById(R.id.aurora_factor_geomag_activity));
 		geomagLocationPresenter = new GeomagLocationPresenter((AuroraFactorView) rootView.findViewById(R.id.aurora_factor_geomag_location));
 		weatherPresenter = new WeatherPresenter((AuroraFactorView) rootView.findViewById(R.id.aurora_factor_weather));
-		sunPositionPresenter = new SunPositionPresenter((AuroraFactorView) rootView.findViewById(R.id.aurora_factor_sun_position));
+		darknessPresenter = new DarknessPresenter((AuroraFactorView) rootView.findViewById(R.id.aurora_factor_darkness));
 		return rootView;
 	}
 
@@ -44,7 +44,7 @@ public class AuroraFactorFragment extends Fragment implements AuroraReportUpdate
 		geomagActivityPresenter.onUpdate(factors.getGeomagActivity());
 		geomagLocationPresenter.onUpdate(factors.getGeomagLocation());
 		weatherPresenter.onUpdate(factors.getWeather());
-		sunPositionPresenter.onUpdate(factors.getSunPosition());
+		darknessPresenter.onUpdate(factors.getDarkness());
 		rootView.invalidate();
 	}
 }

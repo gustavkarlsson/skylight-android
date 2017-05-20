@@ -4,11 +4,11 @@ import dagger.Component;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AuroraReportProvider;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.AuroraFactorsModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.AuroraReportModule;
+import se.gustavkarlsson.aurora_notifier.android.dagger.modules.DarknessModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GeomagLocationModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GoogleLocationModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.KpIndexModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.SettingsModule;
-import se.gustavkarlsson.aurora_notifier.android.dagger.modules.SunPositionModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.SystemServiceModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.WeatherModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.scopes.ActivityScope;
@@ -20,7 +20,7 @@ import se.gustavkarlsson.aurora_notifier.android.dagger.scopes.BackgroundScope;
 		AuroraFactorsModule.class,
 		GeomagLocationModule.class,
 		KpIndexModule.class,
-		SunPositionModule.class,
+		DarknessModule.class,
 		WeatherModule.class,
 		SettingsModule.class,
 		SystemServiceModule.class
