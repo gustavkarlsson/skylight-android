@@ -1,59 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:custom="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:orientation="vertical"
-	android:gravity="center"
 	tools:context=".gui.activities.main.fragments.aurora_factors.AuroraFactorFragment">
 
-	<LinearLayout
-		android:layout_width="match_parent"
+	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+		android:id="@+id/aurora_factor_geomag_activity"
+		custom:layout_constraintTop_toTopOf="parent"
+		custom:layout_constraintBottom_toTopOf="@+id/aurora_factor_visibility"
+		custom:layout_constraintLeft_toLeftOf="parent"
+		custom:layout_constraintRight_toLeftOf="@+id/aurora_factor_geomag_location"
+		android:layout_width="140dp"
 		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		android:gravity="center">
+		custom:icon="@drawable/factor_magact_white_20dp"
+		custom:name="@string/factor_geomag_activity_title" />
 
-		<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
-			android:id="@+id/aurora_factor_geomag_activity"
-			android:padding="15dp"
-			android:layout_width="160dp"
-			android:layout_height="wrap_content"
-			custom:icon="@drawable/factor_magact_white_20dp"
-			custom:name="@string/factor_geomag_activity_title" />
-
-		<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
-			android:id="@+id/aurora_factor_geomag_location"
-			android:padding="15dp"
-			android:layout_width="160dp"
-			android:layout_height="wrap_content"
-			custom:icon="@drawable/factor_location_white_20dp"
-			custom:name="@string/factor_geomag_location_title" />
-
-	</LinearLayout>
-
-	<LinearLayout
-		android:layout_width="match_parent"
+	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+		android:id="@+id/aurora_factor_geomag_location"
+		custom:layout_constraintTop_toTopOf="parent"
+		custom:layout_constraintBottom_toTopOf="@+id/aurora_factor_darkness"
+		custom:layout_constraintLeft_toRightOf="@+id/aurora_factor_geomag_activity"
+		custom:layout_constraintRight_toRightOf="parent"
+		android:layout_width="140dp"
 		android:layout_height="wrap_content"
-		android:orientation="horizontal"
-		android:gravity="center">
+		custom:icon="@drawable/factor_location_white_20dp"
+		custom:name="@string/factor_geomag_location_title" />
 
-		<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
-			android:id="@+id/aurora_factor_visibility"
-			android:padding="15dp"
-			android:layout_width="160dp"
-			android:layout_height="wrap_content"
-			custom:icon="@drawable/factor_visibility_white_20dp"
-			custom:name="@string/factor_visibility_title" />
+	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+		android:id="@+id/aurora_factor_visibility"
+		custom:layout_constraintTop_toBottomOf="@+id/aurora_factor_geomag_activity"
+		custom:layout_constraintBottom_toBottomOf="parent"
+		custom:layout_constraintLeft_toLeftOf="parent"
+		custom:layout_constraintRight_toLeftOf="@+id/aurora_factor_darkness"
+		android:layout_width="140dp"
+		android:layout_height="wrap_content"
+		custom:icon="@drawable/factor_visibility_white_20dp"
+		custom:name="@string/factor_visibility_title" />
 
-		<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
-			android:id="@+id/aurora_factor_darkness"
-			android:padding="15dp"
-			android:layout_width="160dp"
-			android:layout_height="wrap_content"
-			custom:icon="@drawable/factor_darkness_white_20dp"
-			custom:name="@string/factor_darkness_title" />
+	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+		android:id="@+id/aurora_factor_darkness"
+		custom:layout_constraintTop_toBottomOf="@id/aurora_factor_geomag_location"
+		custom:layout_constraintBottom_toBottomOf="parent"
+		custom:layout_constraintLeft_toRightOf="@id/aurora_factor_visibility"
+		custom:layout_constraintRight_toRightOf="parent"
+		android:layout_width="140dp"
+		android:layout_height="wrap_content"
+		custom:icon="@drawable/factor_darkness_white_20dp"
+		custom:name="@string/factor_darkness_title" />
 
-	</LinearLayout>
-
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
