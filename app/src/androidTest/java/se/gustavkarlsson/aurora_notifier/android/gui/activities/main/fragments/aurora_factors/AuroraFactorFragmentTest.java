@@ -23,13 +23,7 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 public class AuroraFactorFragmentTest {
 
 	@Rule
-	public ActivityTestRule<MainActivity> testRule =
-			new ActivityTestRule<>(MainActivity.class);
-
-	@Test
-	public void auroraChanceFragmentShown() throws Exception {
-		onView(withId(R.id.fragment_aurora_chance)).check(matches(isDisplayed()));
-	}
+	public ActivityTestRule<MainActivity> testRule = new ActivityTestRule<>(MainActivity.class);
 
 	@Test
 	public void factorViewsShown() throws Exception {
