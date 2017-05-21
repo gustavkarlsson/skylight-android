@@ -15,9 +15,9 @@ public class GetGeomagActivityTask extends FutureTask<GeomagActivity> {
 	}
 
 	private static GeomagActivity call(GeomagActivityProvider provider) {
-		Log.i(TAG, "Getting geomag activity...");
+		Log.i(TAG, "Getting geomagnetic activity...");
 		GeomagActivity geomagActivity = provider.getGeomagActivity();
-		Log.d(TAG, "Geomag activity is: " + geomagActivity);
+		Log.d(TAG, "Geomagnetic activity is: " + geomagActivity);
 		return geomagActivity;
 	}
 }

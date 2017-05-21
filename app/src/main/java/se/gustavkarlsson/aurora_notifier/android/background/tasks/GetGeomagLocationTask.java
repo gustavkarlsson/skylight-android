@@ -16,9 +16,9 @@ public class GetGeomagLocationTask extends FutureTask<GeomagLocation> {
 	}
 
 	private static GeomagLocation call(GeomagLocationProvider provider, Location location) throws Exception {
-		Log.i(TAG, "Getting geomag location...");
+		Log.i(TAG, "Getting geomagnetic location...");
 		GeomagLocation geomagLocation = provider.getGeomagLocation(location.getLatitude(), location.getLongitude());
-		Log.d(TAG, "Geomag location is: " + geomagLocation);
+		Log.d(TAG, "Geomagnetic location is: " + geomagLocation);
 		return geomagLocation;
 	}
 }
