@@ -6,6 +6,43 @@
 	android:layout_height="match_parent"
 	tools:context=".gui.activities.main.fragments.aurora_factors.AuroraFactorFragment">
 
+	<RelativeLayout
+		android:id="@+id/factors_header"
+		custom:layout_constraintBottom_toTopOf="@+id/aurora_factor_geomag_activity"
+		custom:layout_constraintLeft_toLeftOf="parent"
+		custom:layout_constraintRight_toRightOf="parent"
+		android:layout_marginBottom="16dp"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_centerVertical="true">
+
+		<TextView
+			android:id="@+id/text"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerInParent="true"
+			android:layout_marginLeft="10dp"
+			android:layout_marginRight="10dp"
+			android:text="@string/factors"/>
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:layout_centerVertical="true"
+			android:layout_marginStart="@dimen/activity_horizontal_margin"
+			android:layout_toStartOf="@id/text"
+			android:background="@color/divider" />
+
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="1dp"
+			android:layout_centerVertical="true"
+			android:layout_marginEnd="@dimen/activity_horizontal_margin"
+			android:layout_toEndOf="@id/text"
+			android:background="@color/divider" />
+
+	</RelativeLayout>
+
 	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 		android:id="@+id/aurora_factor_geomag_activity"
 		custom:layout_constraintTop_toTopOf="parent"
