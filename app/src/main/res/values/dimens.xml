@@ -1,3 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<dimen name="factor_box_width">140dp</dimen>
+	<dimen name="factor_box_value_size">20sp</dimen>
+	<dimen name="factor_box_padding">10dp</dimen>
+
+	<dimen name="chance_location_size">18sp</dimen>
+	<dimen name="chance_value_size">36sp</dimen>
+
+	<dimen name="full_badge_size">30dp</dimen>
+	<dimen name="half_badge_size">15dp</dimen>
 </resources>

@@ -12,7 +12,7 @@
 		custom:layout_constraintBottom_toBottomOf="parent"
 		custom:layout_constraintLeft_toLeftOf="parent"
 		custom:layout_constraintRight_toLeftOf="@+id/aurora_factor_geomag_location"
-		android:layout_width="140dp"
+		android:layout_width="@dimen/factor_box_width"
 		android:layout_height="wrap_content"
 		custom:icon="@drawable/factor_magact_white_20dp"
 		custom:name="@string/factor_geomag_activity_title" />
@@ -23,7 +23,7 @@
 		custom:layout_constraintBottom_toBottomOf="parent"
 		custom:layout_constraintLeft_toRightOf="@+id/aurora_factor_geomag_activity"
 		custom:layout_constraintRight_toLeftOf="@+id/aurora_factor_visibility"
-		android:layout_width="140dp"
+		android:layout_width="@dimen/factor_box_width"
 		android:layout_height="wrap_content"
 		custom:icon="@drawable/factor_location_white_20dp"
 		custom:name="@string/factor_geomag_location_title" />
@@ -34,7 +34,7 @@
 		custom:layout_constraintBottom_toBottomOf="parent"
 		custom:layout_constraintLeft_toRightOf="@+id/aurora_factor_geomag_location"
 		custom:layout_constraintRight_toLeftOf="@+id/aurora_factor_darkness"
-		android:layout_width="140dp"
+		android:layout_width="@dimen/factor_box_width"
 		android:layout_height="wrap_content"
 		custom:icon="@drawable/factor_visibility_white_20dp"
 		custom:name="@string/factor_visibility_title" />
@@ -45,7 +45,7 @@
 		custom:layout_constraintBottom_toBottomOf="parent"
 		custom:layout_constraintLeft_toRightOf="@+id/aurora_factor_visibility"
 		custom:layout_constraintRight_toRightOf="parent"
-		android:layout_width="140dp"
+		android:layout_width="@dimen/factor_box_width"
 		android:layout_height="wrap_content"
 		custom:icon="@drawable/factor_darkness_white_20dp"
 		custom:name="@string/factor_darkness_title" />

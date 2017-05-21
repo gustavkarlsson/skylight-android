@@ -11,8 +11,8 @@
 		custom:layout_constraintRight_toRightOf="parent"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="15dp"
-		android:padding="10dp"
+		android:layout_marginTop="@dimen/half_badge_size"
+		android:padding="@dimen/factor_box_padding"
 		android:background="@color/background_darkish"
 		android:foreground="?attr/selectableItemBackground">
 
@@ -21,10 +21,10 @@
 			custom:layout_constraintTop_toTopOf="parent"
 			custom:layout_constraintLeft_toLeftOf="parent"
 			custom:layout_constraintRight_toRightOf="parent"
-			android:layout_marginTop="15dp"
+			android:layout_marginTop="@dimen/half_badge_size"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:textSize="20sp"
+			android:textSize="@dimen/factor_box_value_size"
 			tools:text="3+" />
 
 		<TextView
@@ -43,8 +43,8 @@
 		custom:layout_constraintTop_toTopOf="parent"
 		custom:layout_constraintLeft_toLeftOf="parent"
 		custom:layout_constraintRight_toRightOf="parent"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
+		android:layout_width="@dimen/full_badge_size"
+		android:layout_height="@dimen/full_badge_size"
 		android:background="@drawable/badge"
 		tools:src="@drawable/factor_location_white_20dp"/>
 

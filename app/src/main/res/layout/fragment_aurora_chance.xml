@@ -12,7 +12,7 @@
 		custom:layout_constraintLeft_toLeftOf="@+id/chance"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:textSize="18sp"
+		android:textSize="@dimen/chance_location_size"
 		tools:text="Frankfurt" />
 
 	<TextView
@@ -23,7 +23,7 @@
 		custom:layout_constraintRight_toRightOf="parent"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:textSize="36sp"
+		android:textSize="@dimen/chance_value_size"
 		android:textStyle="bold"
 		tools:text="Medium Chance" />
 
