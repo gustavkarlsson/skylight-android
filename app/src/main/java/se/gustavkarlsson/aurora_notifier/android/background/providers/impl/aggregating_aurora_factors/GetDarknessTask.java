@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.background.tasks;
+package se.gustavkarlsson.aurora_notifier.android.background.providers.impl.aggregating_aurora_factors;
 
 import android.location.Location;
 import android.util.Log;
@@ -8,10 +8,10 @@ import java.util.concurrent.FutureTask;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.DarknessProvider;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Darkness;
 
-public class GetDarknessTask extends FutureTask<Darkness> {
+class GetDarknessTask extends FutureTask<Darkness> {
 	private static final String TAG = GetDarknessTask.class.getSimpleName();
 
-	public GetDarknessTask(DarknessProvider provider, Location location, long timeMillis) {
+	GetDarknessTask(DarknessProvider provider, Location location, long timeMillis) {
 		super(() -> call(provider, location, timeMillis));
 	}
 

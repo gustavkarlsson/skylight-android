@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.background.tasks;
+package se.gustavkarlsson.aurora_notifier.android.background.providers.impl.aggregating_aurora_factors;
 
 import android.util.Log;
 
@@ -7,10 +7,10 @@ import java.util.concurrent.FutureTask;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagActivityProvider;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagActivity;
 
-public class GetGeomagActivityTask extends FutureTask<GeomagActivity> {
+class GetGeomagActivityTask extends FutureTask<GeomagActivity> {
 	private static final String TAG = GetGeomagActivityTask.class.getSimpleName();
 
-	public GetGeomagActivityTask(GeomagActivityProvider provider) {
+	GetGeomagActivityTask(GeomagActivityProvider provider) {
 		super(() -> call(provider));
 	}
 

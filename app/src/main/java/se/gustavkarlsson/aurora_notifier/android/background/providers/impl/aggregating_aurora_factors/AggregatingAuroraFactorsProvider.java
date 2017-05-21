@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.background.providers.impl;
+package se.gustavkarlsson.aurora_notifier.android.background.providers.impl.aggregating_aurora_factors;
 
 import android.location.Location;
 import android.os.AsyncTask;
@@ -16,10 +16,6 @@ import se.gustavkarlsson.aurora_notifier.android.background.providers.DarknessPr
 import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagActivityProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagLocationProvider;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.VisibilityProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetDarknessTask;
-import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetGeomagActivityTask;
-import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetGeomagLocationTask;
-import se.gustavkarlsson.aurora_notifier.android.background.tasks.GetVisibilityTask;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraFactors;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Darkness;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagActivity;
