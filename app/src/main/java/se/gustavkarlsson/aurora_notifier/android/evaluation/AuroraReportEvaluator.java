@@ -8,18 +8,22 @@ import javax.inject.Inject;
 import java8.util.stream.RefStreams;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraFactors;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraReport;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.Darkness;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagActivity;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagLocation;
+import se.gustavkarlsson.aurora_notifier.android.models.factors.Visibility;
 
 import static java8.util.stream.StreamSupport.stream;
 
 public class AuroraReportEvaluator implements ChanceEvaluator<AuroraReport> {
 
-	private final GeomagActivityEvaluator geomagActivityEvaluator;
-	private final GeomagLocationEvaluator geomagLocationEvaluator;
-	private final VisibilityEvaluator visibilityEvaluator;
-	private final DarknessEvaluator darknessEvaluator;
+	private final ChanceEvaluator<GeomagActivity> geomagActivityEvaluator;
+	private final ChanceEvaluator<GeomagLocation> geomagLocationEvaluator;
+	private final ChanceEvaluator<Visibility> visibilityEvaluator;
+	private final ChanceEvaluator<Darkness> darknessEvaluator;
 
 	@Inject
-	public AuroraReportEvaluator(GeomagActivityEvaluator geomagActivityEvaluator, GeomagLocationEvaluator geomagLocationEvaluator, VisibilityEvaluator visibilityEvaluator, DarknessEvaluator darknessEvaluator) {
+	AuroraReportEvaluator(ChanceEvaluator<GeomagActivity> geomagActivityEvaluator, ChanceEvaluator<GeomagLocation> geomagLocationEvaluator, ChanceEvaluator<Visibility> visibilityEvaluator, ChanceEvaluator<Darkness> darknessEvaluator) {
 		this.geomagActivityEvaluator = geomagActivityEvaluator;
 		this.geomagLocationEvaluator = geomagLocationEvaluator;
 		this.visibilityEvaluator = visibilityEvaluator;
