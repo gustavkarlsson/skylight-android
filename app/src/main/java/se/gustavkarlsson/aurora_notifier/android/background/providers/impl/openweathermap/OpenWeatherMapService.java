@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.background.providers.impl;
+package se.gustavkarlsson.aurora_notifier.android.background.providers.impl.openweathermap;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

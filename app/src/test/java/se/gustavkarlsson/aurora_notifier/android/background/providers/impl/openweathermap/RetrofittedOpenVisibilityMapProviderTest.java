@@ -1,4 +1,4 @@
-package se.gustavkarlsson.aurora_notifier.android.background.providers.impl;
+package se.gustavkarlsson.aurora_notifier.android.background.providers.impl.openweathermap;
 
 
 import android.util.Log;

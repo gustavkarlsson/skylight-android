@@ -9,8 +9,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.background.providers.VisibilityProvider;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.OpenWeatherMapService;
-import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.RetrofittedOpenWeatherMapVisibilityProvider;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.openweathermap.OpenWeatherMapService;
+import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.openweathermap.RetrofittedOpenWeatherMapVisibilityProvider;
 
 @Module
 public abstract class VisibilityModule {
