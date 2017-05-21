@@ -18,7 +18,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
-// TODO these tests take forever...
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class AuroraFactorFragmentTest {
@@ -28,7 +27,7 @@ public class AuroraFactorFragmentTest {
 			new ActivityTestRule<>(MainActivity.class);
 
 	@Test
-	public void fragmentShown() throws Exception {
+	public void auroraChanceFragmentShown() throws Exception {
 		onView(withId(R.id.fragment_aurora_chance)).check(matches(isDisplayed()));
 	}
 
@@ -42,22 +41,22 @@ public class AuroraFactorFragmentTest {
 
 	@Test
 	public void clickGeomagActivity_detailViewShown() throws Exception {
-		whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_geomag_activity, R.string.factor_geomag_activity_title, R.string.factor_geomag_activity_desc);
+		whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_geomag_activity, R.string.factor_geomag_activity_title_full, R.string.factor_geomag_activity_desc);
 	}
 
 	@Test
 	public void clickGeomagLocation_detailViewShown() throws Exception {
-		whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_geomag_location, R.string.factor_geomag_location_title, R.string.factor_geomag_location_desc);
+		whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_geomag_location, R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc);
 	}
 
 	@Test
 	public void clickVisibility_detailViewShown() throws Exception {
-		whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_visibility, R.string.factor_visibility_title, R.string.factor_visibility_desc);
+		whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_visibility, R.string.factor_visibility_title_full, R.string.factor_visibility_desc);
 	}
 
 	@Test
 	public void clickDarkness_detailViewShown() throws Exception {
-		whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_darkness, R.string.factor_darkness_title, R.string.factor_darkness_desc);
+		whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_darkness, R.string.factor_darkness_title_full, R.string.factor_darkness_desc);
 	}
 
 	private static void whenFactorViewClickedDetailViewOpens(int viewId, int titleString, int descriptionString) {
