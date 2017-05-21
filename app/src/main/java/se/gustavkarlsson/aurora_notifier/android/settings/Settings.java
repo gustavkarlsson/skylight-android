@@ -7,18 +7,18 @@ import android.preference.PreferenceManager;
 import se.gustavkarlsson.aurora_notifier.android.R;
 
 public class Settings {
-	private final Context context;
 	private final SharedPreferences defaultPreferences;
+	private final String notificationsKey;
+	private final boolean notificationsDefaultValue;
 
 	public Settings(Context context) {
-		this.context = context;
 		this.defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		notificationsKey = context.getString(R.string.pref_notifications_key);
+		notificationsDefaultValue = context.getResources().getBoolean(R.bool.pref_notifications_default);
 	}
 
 	public boolean isEnableNotifications() {
-		String key = context.getString(R.string.pref_notifications_key);
-		boolean defaultValue = context.getResources().getBoolean(R.bool.pref_notifications_default);
-		return defaultPreferences.getBoolean(key, defaultValue);
+		return defaultPreferences.getBoolean(notificationsKey, notificationsDefaultValue);
 	}
 
 }

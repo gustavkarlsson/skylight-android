@@ -20,8 +20,8 @@
 			android:defaultValue="0"
 			android:inputType="numberDecimal" />
 		<EditTextPreference
-			android:key="@string/pref_geomag_location_key"
-			android:title="@string/pref_geomag_location_title"
+			android:key="@string/pref_geomag_latitude_key"
+			android:title="@string/pref_geomag_latitude_title"
 			android:defaultValue="0"
 			android:inputType="numberDecimal|numberSigned" />
 		<EditTextPreference

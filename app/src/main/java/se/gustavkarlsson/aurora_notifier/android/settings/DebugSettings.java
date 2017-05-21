@@ -11,38 +11,40 @@ import static java.lang.Integer.parseInt;
 
 public class DebugSettings {
 
-	private final Context context;
 	private final SharedPreferences defaultPreferences;
+	private final String overrideValuesKey;
+	private final String kpIndexKey;
+	private final String geomagLatitudeKey;
+	private final String sunZenithAngleKey;
+	private final String cloudPercentageKey;
 
 	public DebugSettings(Context context) {
-		this.context = context;
-		this.defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		kpIndexKey = context.getString(R.string.pref_kp_index_key);
+		geomagLatitudeKey = context.getString(R.string.pref_geomag_latitude_key);
+		sunZenithAngleKey = context.getString(R.string.pref_sun_position_key);
+		cloudPercentageKey = context.getString(R.string.pref_cloud_percentage_key);
+		overrideValuesKey = context.getString(R.string.pref_override_values_key);
 	}
 
 	public boolean isOverrideValues() {
-		String key = context.getString(R.string.pref_override_values_key);
-		boolean defaultValue = context.getResources().getBoolean(R.bool.pref_override_values_default);
-		return defaultPreferences.getBoolean(key, defaultValue);
+		return defaultPreferences.getBoolean(overrideValuesKey, false);
 	}
 
 	public float getKpIndex() {
-		String key = context.getString(R.string.pref_kp_index_key);
-		return parseFloat(defaultPreferences.getString(key, "0"));
+		return parseFloat(defaultPreferences.getString(kpIndexKey, "0"));
 	}
 
-	public float getDegreesFromClosestPole() {
-		String key = context.getString(R.string.pref_geomag_location_key);
-		return parseFloat(defaultPreferences.getString(key, "0"));
+	public float getGeomagLatitude() {
+		return parseFloat(defaultPreferences.getString(geomagLatitudeKey, "0"));
 	}
 
 	public float getSunZenithAngle() {
-		String key = context.getString(R.string.pref_sun_position_key);
-		return parseFloat(defaultPreferences.getString(key, "0"));
+		return parseFloat(defaultPreferences.getString(sunZenithAngleKey, "0"));
 	}
 
 	public int getCloudPercentage() {
-		String key = context.getString(R.string.pref_cloud_percentage_key);
-		return parseInt(defaultPreferences.getString(key, "0"));
+		return parseInt(defaultPreferences.getString(cloudPercentageKey, "0"));
 	}
 
 }

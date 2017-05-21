@@ -32,7 +32,7 @@ public class DebugAuroraReportProvider implements AuroraReportProvider {
 	@NonNull
 	private AuroraFactors createAuroraFactors() {
 		GeomagActivity geomagActivity = new GeomagActivity(debugSettings.getKpIndex());
-		GeomagLocation geomagLocation = new GeomagLocation(debugSettings.getDegreesFromClosestPole());
+		GeomagLocation geomagLocation = new GeomagLocation(debugSettings.getGeomagLatitude());
 		Darkness darkness = new Darkness(debugSettings.getSunZenithAngle());
 		Visibility visibility = new Visibility(debugSettings.getCloudPercentage());
 		return new AuroraFactors(

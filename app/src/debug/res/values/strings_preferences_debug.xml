@@ -5,13 +5,12 @@
 
 	<string name="pref_override_values_key">override_values</string>
 	<string name="pref_override_values_title">Override values</string>
-	<bool name="pref_override_values_default">false</bool>
 
 	<string name="pref_kp_index_key">kp_index</string>
 	<string name="pref_kp_index_title">Kp index</string>
 
-	<string name="pref_geomag_location_key">geomag_location</string>
-	<string name="pref_geomag_location_title">Geomag location</string>
+	<string name="pref_geomag_latitude_key">geomag_latitude</string>
+	<string name="pref_geomag_latitude_title">Geomag latitude</string>
 
 	<string name="pref_cloud_percentage_key">cloud_percentage</string>
 	<string name="pref_cloud_percentage_title">Cloud percentage</string>
