@@ -1,8 +1,9 @@
-package se.gustavkarlsson.aurora_notifier.android.evaluation;
+package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_chance;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.Chance;
 
-public enum PresentableChance {
+enum PresentableChance {
 	UNKNOWN(R.string.aurora_chance_unknown),
 	NONE(R.string.aurora_chance_none),
 	LOW(R.string.aurora_chance_low),
@@ -15,11 +16,11 @@ public enum PresentableChance {
 		this.resourceId = resourceId;
 	}
 
-	public int getResourceId() {
+	int getResourceId() {
 		return resourceId;
 	}
 
-	public static PresentableChance fromChance(Chance chance) {
+	static PresentableChance fromChance(Chance chance) {
 		if (!chance.isKnown()) {
 			return UNKNOWN;
 		}
