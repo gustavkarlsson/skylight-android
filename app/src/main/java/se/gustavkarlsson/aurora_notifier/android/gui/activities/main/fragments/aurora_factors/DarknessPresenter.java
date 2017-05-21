@@ -1,7 +1,7 @@
 package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.evaluation.DarknessEvaluator;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerEvaluationComponent;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Darkness;
 
 import static java.lang.Math.max;
@@ -11,7 +11,7 @@ import static java.lang.Math.round;
 class DarknessPresenter extends AbstractAuroraFactorPresenter<Darkness> {
 
 	DarknessPresenter(AuroraFactorView factorView) {
-		super(factorView, new DarknessEvaluator());
+		super(factorView, DaggerEvaluationComponent.create().getDarknessEvaluator());
 	}
 
 	@Override

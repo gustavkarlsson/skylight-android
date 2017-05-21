@@ -1,13 +1,13 @@
 package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.evaluation.VisibilityEvaluator;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerEvaluationComponent;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Visibility;
 
 class VisibilityPresenter extends AbstractAuroraFactorPresenter<Visibility> {
 
 	VisibilityPresenter(AuroraFactorView factorView) {
-		super(factorView, new VisibilityEvaluator());
+		super(factorView, DaggerEvaluationComponent.create().getVisibilityEvaluator());
 	}
 
 	@Override

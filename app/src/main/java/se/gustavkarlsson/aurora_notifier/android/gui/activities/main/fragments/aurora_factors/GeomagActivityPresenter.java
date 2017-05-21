@@ -1,13 +1,13 @@
 package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.evaluation.GeomagActivityEvaluator;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerEvaluationComponent;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagActivity;
 
 class GeomagActivityPresenter extends AbstractAuroraFactorPresenter<GeomagActivity> {
 
 	GeomagActivityPresenter(AuroraFactorView factorView) {
-		super(factorView, new GeomagActivityEvaluator());
+		super(factorView, DaggerEvaluationComponent.create().getGeomagActivityEvaluator());
 	}
 
 	@Override

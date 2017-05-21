@@ -3,13 +3,13 @@ package se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.
 import java.util.Locale;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
-import se.gustavkarlsson.aurora_notifier.android.evaluation.GeomagLocationEvaluator;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerEvaluationComponent;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagLocation;
 
 class GeomagLocationPresenter extends AbstractAuroraFactorPresenter<GeomagLocation> {
 
 	GeomagLocationPresenter(AuroraFactorView factorView) {
-		super(factorView, new GeomagLocationEvaluator());
+		super(factorView, DaggerEvaluationComponent.create().getGeomagLocationEvaluator());
 	}
 
 	@Override
