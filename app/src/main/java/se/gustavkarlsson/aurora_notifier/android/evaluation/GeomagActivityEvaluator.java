@@ -1,8 +1,15 @@
 package se.gustavkarlsson.aurora_notifier.android.evaluation;
 
+import javax.inject.Inject;
+
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagActivity;
 
 public class GeomagActivityEvaluator implements ChanceEvaluator<GeomagActivity> {
+
+	@Inject
+	public GeomagActivityEvaluator() {
+	}
+
 	public Chance evaluate(GeomagActivity geomagActivity) {
 		Float kpIndex = geomagActivity.getKpIndex();
 		if (kpIndex == null) {

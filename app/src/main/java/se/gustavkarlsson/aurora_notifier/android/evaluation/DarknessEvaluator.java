@@ -1,8 +1,15 @@
 package se.gustavkarlsson.aurora_notifier.android.evaluation;
 
+import javax.inject.Inject;
+
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Darkness;
 
 public class DarknessEvaluator implements ChanceEvaluator<Darkness> {
+
+	@Inject
+	public DarknessEvaluator() {
+	}
+
 	public Chance evaluate(Darkness darkness) {
 		Float zenithAngle = darkness.getSunZenithAngle();
 		if (zenithAngle == null) {

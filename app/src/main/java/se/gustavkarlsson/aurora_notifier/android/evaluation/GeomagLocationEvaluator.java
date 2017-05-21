@@ -1,8 +1,15 @@
 package se.gustavkarlsson.aurora_notifier.android.evaluation;
 
+import javax.inject.Inject;
+
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagLocation;
 
 public class GeomagLocationEvaluator implements ChanceEvaluator<GeomagLocation> {
+
+	@Inject
+	public GeomagLocationEvaluator() {
+	}
+
 	public Chance evaluate(GeomagLocation geomagLocation) {
 		Float latitude = geomagLocation.getLatitude();
 		if (latitude == null) {

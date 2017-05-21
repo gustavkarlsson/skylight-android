@@ -9,7 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import javax.inject.Inject;
+
 import se.gustavkarlsson.aurora_notifier.android.R;
+import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerEvaluationComponent;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraReportEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.Chance;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraReportUpdateListener;
@@ -18,11 +21,13 @@ import se.gustavkarlsson.aurora_notifier.android.models.AuroraReport;
 public class AuroraChanceFragment extends Fragment implements AuroraReportUpdateListener {
 	private static final String TAG = AuroraChanceFragment.class.getSimpleName();
 
+	@Inject
+	AuroraReportEvaluator evaluator;
+
 	private View rootView;
 	private LocationPresenter locationPresenter;
 	private TimeSinceUpdatePresenter timeSinceUpdatePresenter;
 	private ChancePresenter chancePresenter;
-	private AuroraReportEvaluator evaluator;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,7 +36,7 @@ public class AuroraChanceFragment extends Fragment implements AuroraReportUpdate
 		locationPresenter = new LocationPresenter((TextView) rootView.findViewById(R.id.location));
 		timeSinceUpdatePresenter = new TimeSinceUpdatePresenter((TextView) rootView.findViewById(R.id.time_since_update), DateUtils.MINUTE_IN_MILLIS);
 		chancePresenter = new ChancePresenter((TextView) rootView.findViewById(R.id.chance));
-		this.evaluator = new AuroraReportEvaluator();
+		DaggerEvaluationComponent.create().inject(this);
 		return rootView;
 	}
 
