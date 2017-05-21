@@ -36,7 +36,7 @@ public class AuroraFactorView extends LinearLayout {
 		if (attrs != null) {
 			TypedArray auroraFactorViewAttributes = context.obtainStyledAttributes(attrs, R.styleable.AuroraFactorView);
 			try {
-				setNameText(auroraFactorViewAttributes.getText(R.styleable.AuroraFactorView_name));
+				setCompactTitle(auroraFactorViewAttributes.getText(R.styleable.AuroraFactorView_title_compact));
 				setBadgeIcon(auroraFactorViewAttributes.getDrawable(R.styleable.AuroraFactorView_icon));
 			} finally {
 				auroraFactorViewAttributes.recycle();
@@ -49,9 +49,9 @@ public class AuroraFactorView extends LinearLayout {
 		}
 	}
 
-	private void setNameText(CharSequence text) {
-		TextView nameView = (TextView) findViewById(R.id.aurora_factor_name);
-		nameView.setText(text);
+	private void setCompactTitle(CharSequence text) {
+		TextView compactTitleView = (TextView) findViewById(R.id.aurora_factor_title_compact);
+		compactTitleView.setText(text);
 	}
 
 	private void setBadgeIcon(Drawable icon) {

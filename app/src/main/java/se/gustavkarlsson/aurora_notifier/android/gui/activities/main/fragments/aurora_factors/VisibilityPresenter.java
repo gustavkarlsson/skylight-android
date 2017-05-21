@@ -11,8 +11,8 @@ class VisibilityPresenter extends AbstractAuroraFactorPresenter<Visibility> {
 	}
 
 	@Override
-	int getTitleResourceId() {
-		return R.string.factor_visibility_title;
+	int getFullTitleResourceId() {
+		return R.string.factor_visibility_title_full;
 	}
 
 	@Override

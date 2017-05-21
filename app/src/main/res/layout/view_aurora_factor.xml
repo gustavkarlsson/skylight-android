@@ -28,7 +28,7 @@
 			tools:text="3+" />
 
 		<TextView
-			android:id="@+id/aurora_factor_name"
+			android:id="@+id/aurora_factor_title_compact"
 			custom:layout_constraintTop_toBottomOf="@+id/aurora_factor_value"
 			custom:layout_constraintLeft_toLeftOf="parent"
 			custom:layout_constraintRight_toRightOf="parent"

@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="factor_geomag_location_title">Location</string>
+	<string name="factor_geomag_location_title_full">Geomagnetic location</string>
+	<string name="factor_geomag_location_title_compact">Location</string>
 	<string name="factor_geomag_location_desc">
 		The aurora is only visible at a certain distance from the geomagnetic poles,
 		which are located close to the north and south poles.
 		This value shows your geomagnetic latitude.
 		The best latitude for aurora sightings is around 67°.
 	</string>
-	<string name="factor_geomag_activity_title">Geomag. activity</string>
+	<string name="factor_geomag_activity_title_full">Geomagnetic activity</string>
+	<string name="factor_geomag_activity_title_compact">Activity</string>
 	<string name="factor_geomag_activity_desc">
 		Geomagnetic activity is the cause the aurora and ranges from 0 to 9.
 		The higher this value is, the higher the chance of seeing the aurora.
 	</string>
-	<string name="factor_visibility_title">Visibility</string>
+	<string name="factor_visibility_title_full">Visibility</string>
+	<string name="factor_visibility_title_compact">Visibility</string>
 	<string name="factor_visibility_desc">
 		Bad weather can block your view of the aurora.
 		This value shows the visibility of the sky based on the weather.
 	</string>
-	<string name="factor_darkness_title">Darkness</string>
+	<string name="factor_darkness_title_full">Darkness</string>
+	<string name="factor_darkness_title_compact">Darkness</string>
 	<string name="factor_darkness_desc">
 		The aurora is only visible in the dark so the position of the sun is critical.
 		This value shows how dark your location is based on the sun\'s position.

@@ -13,8 +13,8 @@ class GeomagLocationPresenter extends AbstractAuroraFactorPresenter<GeomagLocati
 	}
 
 	@Override
-	int getTitleResourceId() {
-		return R.string.factor_geomag_location_title;
+	int getFullTitleResourceId() {
+		return R.string.factor_geomag_location_title_full;
 	}
 
 	@Override

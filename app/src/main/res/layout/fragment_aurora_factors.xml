@@ -52,7 +52,7 @@
 		android:layout_width="@dimen/factor_box_width"
 		android:layout_height="wrap_content"
 		custom:icon="@drawable/factor_magact_white_20dp"
-		custom:name="@string/factor_geomag_activity_title" />
+		custom:title_compact="@string/factor_geomag_activity_title_compact" />
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 		android:id="@+id/aurora_factor_geomag_location"
@@ -63,7 +63,7 @@
 		android:layout_width="@dimen/factor_box_width"
 		android:layout_height="wrap_content"
 		custom:icon="@drawable/factor_location_white_20dp"
-		custom:name="@string/factor_geomag_location_title" />
+		custom:title_compact="@string/factor_geomag_location_title_compact" />
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 		android:id="@+id/aurora_factor_visibility"
@@ -74,7 +74,7 @@
 		android:layout_width="@dimen/factor_box_width"
 		android:layout_height="wrap_content"
 		custom:icon="@drawable/factor_visibility_white_20dp"
-		custom:name="@string/factor_visibility_title" />
+		custom:title_compact="@string/factor_visibility_title_compact" />
 
 	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 		android:id="@+id/aurora_factor_darkness"
@@ -85,6 +85,6 @@
 		android:layout_width="@dimen/factor_box_width"
 		android:layout_height="wrap_content"
 		custom:icon="@drawable/factor_darkness_white_20dp"
-		custom:name="@string/factor_darkness_title" />
+		custom:title_compact="@string/factor_darkness_title_compact" />
 
 </android.support.constraint.ConstraintLayout>

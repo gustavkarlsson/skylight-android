@@ -15,8 +15,8 @@ class DarknessPresenter extends AbstractAuroraFactorPresenter<Darkness> {
 	}
 
 	@Override
-	int getTitleResourceId() {
-		return R.string.factor_darkness_title;
+	int getFullTitleResourceId() {
+		return R.string.factor_darkness_title_full;
 	}
 
 	@Override

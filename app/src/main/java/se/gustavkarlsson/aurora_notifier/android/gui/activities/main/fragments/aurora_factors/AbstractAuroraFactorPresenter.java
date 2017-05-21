@@ -24,9 +24,9 @@ abstract class AbstractAuroraFactorPresenter<T> {
 		this.factorView = checkNotNull(factorView, "factorView may not be null");
 		this.colorConverter = new ChanceToColorConverter(factorView.getContext());
 		Context context = factorView.getContext();
-		String title = context.getString(getTitleResourceId());
+		String fullTitle = context.getString(getFullTitleResourceId());
 		String description = context.getString(getDescriptionResourceId());
-		this.factorView.setOnClickListener(new PopupDescriptionClickListener(context, title, description));
+		this.factorView.setOnClickListener(new PopupDescriptionClickListener(context, fullTitle, description));
 		this.evaluator = evaluator;
 	}
 
@@ -53,7 +53,7 @@ abstract class AbstractAuroraFactorPresenter<T> {
 		}
 	}
 
-	abstract int getTitleResourceId();
+	abstract int getFullTitleResourceId();
 
 	abstract int getDescriptionResourceId();
 
