@@ -11,7 +11,6 @@ import android.view.View;
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.Chance;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.ChanceEvaluator;
-import se.gustavkarlsson.aurora_notifier.android.gui.activities.ChanceToColorConverter;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
