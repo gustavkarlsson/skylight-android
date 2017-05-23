@@ -30,11 +30,13 @@ public class Updater {
 
 	private final Context context;
 	private final AuroraReportCache cache;
+	private final LocalBroadcastManager broadcastManager;
 
 	@Inject
-	public Updater(Context context, AuroraReportCache cache) {
+	public Updater(Context context, AuroraReportCache cache, LocalBroadcastManager broadcastManager) {
 		this.context = context;
 		this.cache = cache;
+		this.broadcastManager = broadcastManager;
 	}
 
 	public boolean update(int timeoutMillis) {
@@ -65,7 +67,7 @@ public class Updater {
 		Intent intent = new Intent(RESPONSE_UPDATE_FINISHED);
 		Parcelable wrappedReport = Parcels.wrap(report);
 		intent.putExtra(RESPONSE_UPDATE_FINISHED_EXTRA_REPORT, wrappedReport);
-		LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+		broadcastManager.sendBroadcast(intent);
 	}
 
 	private void broadcastError(String message) {
@@ -73,6 +75,6 @@ public class Updater {
 		if (message != null) {
 			intent.putExtra(RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE, message);
 		}
-		LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+		broadcastManager.sendBroadcast(intent);
 	}
 }

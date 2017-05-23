@@ -3,6 +3,7 @@ package se.gustavkarlsson.aurora_notifier.android.dagger.modules;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.support.v4.content.LocalBroadcastManager;
 
 import dagger.Module;
 import dagger.Provides;
@@ -21,6 +22,12 @@ public abstract class SystemServiceModule {
 	@Reusable
 	static ConnectivityManager provideConnectivityManager(Context context) {
 		return (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+	}
+
+	@Provides
+	@Reusable
+	static LocalBroadcastManager provideLocalBroadcastManager(Context context) {
+		return LocalBroadcastManager.getInstance(context);
 	}
 
 }

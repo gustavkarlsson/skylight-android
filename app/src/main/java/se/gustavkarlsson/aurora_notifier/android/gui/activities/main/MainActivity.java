@@ -46,6 +46,9 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	@Inject
 	AuroraReportCache AuroraReportCache;
 
+	@Inject
+	LocalBroadcastManager broadcastManager;
+
 	private int reportLifetimeMillis;
 	private int backgroundUpdateTimeoutMillis;
 	private SwipeToRefreshPresenter swipeToRefreshPresenter;
@@ -67,8 +70,6 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		swipeToRefreshPresenter = new SwipeToRefreshPresenter((SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout), this, updater);
 		updateReceivers = getUpdateReceivers();
 		broadcastReceiver = createBroadcastReceiver();
-		LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver), new IntentFilter(RESPONSE_UPDATE_FINISHED));
-		LocalBroadcastManager.getInstance(this).registerReceiver((broadcastReceiver), new IntentFilter(RESPONSE_UPDATE_ERROR));
 	}
 
 	private List<AuroraReportUpdateListener> getUpdateReceivers() {
@@ -126,6 +127,8 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	public void onStart() {
 		Log.v(TAG, "onStart");
 		super.onStart();
+		broadcastManager.registerReceiver((broadcastReceiver), new IntentFilter(RESPONSE_UPDATE_ERROR));
+		broadcastManager.registerReceiver((broadcastReceiver), new IntentFilter(RESPONSE_UPDATE_FINISHED));
 		AuroraReport report = getBestReport();
 		swipeToRefreshPresenter.disable();
 		ensureRequirementsMet();
@@ -155,9 +158,15 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	}
 
 	@Override
+	protected void onStop() {
+		Log.v(TAG, "onStop");
+		super.onStop();
+		broadcastManager.unregisterReceiver(broadcastReceiver);
+	}
+
+	@Override
 	protected void onDestroy() {
 		Log.v(TAG, "onDestroy");
-		LocalBroadcastManager.getInstance(this).unregisterReceiver(broadcastReceiver);
 		super.onDestroy();
 	}
 }
