@@ -5,13 +5,11 @@ import android.app.NotificationManager;
 import dagger.Component;
 import se.gustavkarlsson.aurora_notifier.android.background.UpdateScheduler;
 import se.gustavkarlsson.aurora_notifier.android.background.Updater;
-import se.gustavkarlsson.aurora_notifier.android.dagger.modules.SettingsModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.SystemServiceModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.scopes.BackgroundScope;
 
 @Component(modules = {
-		SystemServiceModule.class,
-		SettingsModule.class
+		SystemServiceModule.class
 }, dependencies = {
 		ApplicationComponent.class
 })

@@ -4,11 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import javax.inject.Inject;
+
+import dagger.Reusable;
 import se.gustavkarlsson.aurora_notifier.android.R;
 
 import static java.lang.Float.parseFloat;
 import static java.lang.Integer.parseInt;
 
+@Reusable
 public class DebugSettings {
 
 	private final SharedPreferences defaultPreferences;
@@ -18,6 +22,7 @@ public class DebugSettings {
 	private final String sunZenithAngleKey;
 	private final String cloudPercentageKey;
 
+	@Inject
 	public DebugSettings(Context context) {
 		defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 		kpIndexKey = context.getString(R.string.pref_kp_index_key);

@@ -27,7 +27,7 @@ public abstract class VisibilityModule {
 
 	@Provides
 	@Reusable
-	static VisibilityProvider provideWeatherProvider(Context context, OpenWeatherMapService openWeatherMapService) {
+	static VisibilityProvider provideVisibilityProvider(Context context, OpenWeatherMapService openWeatherMapService) {
 		String apiKey = context.getString(R.string.api_key_openweathermap);
 		return new RetrofittedOpenWeatherMapVisibilityProvider(openWeatherMapService, apiKey);
 	}

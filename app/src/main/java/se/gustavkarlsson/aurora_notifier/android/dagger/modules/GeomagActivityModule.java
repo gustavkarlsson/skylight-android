@@ -11,7 +11,7 @@ import se.gustavkarlsson.aurora_notifier.android.background.providers.impl.Retro
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;
 
 @Module
-public abstract class KpIndexModule {
+public abstract class GeomagActivityModule {
 	// TODO Update to more permanent hostname
 	private static final String API_URL = "http://9698.s.t4vps.eu/rest/";
 

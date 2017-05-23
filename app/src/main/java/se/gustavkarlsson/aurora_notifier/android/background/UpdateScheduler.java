@@ -6,11 +6,15 @@ import android.util.Log;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.settings.Settings;
 
 import static se.gustavkarlsson.aurora_notifier.android.background.UpdateJob.UPDATE_JOB_TAG;
 
+@Singleton
 public class UpdateScheduler {
 	private static final String TAG = UpdateScheduler.class.getSimpleName();
 
@@ -19,6 +23,7 @@ public class UpdateScheduler {
 	private final int flexMillis;
 	private boolean jobScheduled = false;
 
+	@Inject
 	public UpdateScheduler(Context context, Settings settings) {
 		this.settings = settings;
 		intervalMillis = context.getResources().getInteger(R.integer.setting_scheduled_update_interval_millis);

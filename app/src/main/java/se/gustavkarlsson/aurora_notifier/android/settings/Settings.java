@@ -4,13 +4,18 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import javax.inject.Inject;
+
+import dagger.Reusable;
 import se.gustavkarlsson.aurora_notifier.android.R;
 
+@Reusable
 public class Settings {
 	private final SharedPreferences defaultPreferences;
 	private final String notificationsKey;
 	private final boolean notificationsDefaultValue;
 
+	@Inject
 	public Settings(Context context) {
 		this.defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 		notificationsKey = context.getString(R.string.pref_notifications_key);
