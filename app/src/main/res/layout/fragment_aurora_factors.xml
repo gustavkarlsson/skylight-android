@@ -11,7 +11,7 @@
 		custom:layout_constraintBottom_toTopOf="@+id/aurora_factor_geomag_activity"
 		custom:layout_constraintLeft_toLeftOf="parent"
 		custom:layout_constraintRight_toRightOf="parent"
-		android:layout_marginBottom="16dp"
+		android:layout_marginBottom="20dp"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_centerVertical="true">
