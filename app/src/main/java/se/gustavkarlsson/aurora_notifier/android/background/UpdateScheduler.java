@@ -24,7 +24,7 @@ public class UpdateScheduler {
 	private boolean jobScheduled = false;
 
 	@Inject
-	public UpdateScheduler(Context context, Settings settings) {
+	UpdateScheduler(Context context, Settings settings) {
 		this.settings = settings;
 		intervalMillis = context.getResources().getInteger(R.integer.setting_scheduled_update_interval_millis);
 		flexMillis = context.getResources().getInteger(R.integer.setting_scheduled_update_flex_millis);

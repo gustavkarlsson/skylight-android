@@ -7,7 +7,7 @@ import se.gustavkarlsson.aurora_notifier.android.models.factors.Darkness;
 public class DarknessEvaluator implements ChanceEvaluator<Darkness> {
 
 	@Inject
-	public DarknessEvaluator() {
+	DarknessEvaluator() {
 	}
 
 	public Chance evaluate(Darkness darkness) {

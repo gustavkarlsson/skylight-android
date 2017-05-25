@@ -23,7 +23,7 @@ public class DebugSettings {
 	private final String cloudPercentageKey;
 
 	@Inject
-	public DebugSettings(Context context) {
+	DebugSettings(Context context) {
 		defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 		kpIndexKey = context.getString(R.string.pref_kp_index_key);
 		geomagLatitudeKey = context.getString(R.string.pref_geomag_latitude_key);

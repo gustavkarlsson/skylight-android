@@ -3,10 +3,13 @@ package se.gustavkarlsson.aurora_notifier.android.background.providers.impl.aggr
 import android.location.Location;
 import android.util.Log;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeoutException;
+
 import se.gustavkarlsson.aurora_notifier.android.background.providers.DarknessProvider;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Darkness;
 
-class GetDarkness implements DefaultingCallable<Darkness> {
+class GetDarkness implements ErrorHandlingTask<Darkness> {
 	private static final String TAG = GetDarkness.class.getSimpleName();
 
 	private final DarknessProvider provider;
@@ -20,7 +23,11 @@ class GetDarkness implements DefaultingCallable<Darkness> {
 	}
 
 	@Override
-	public Darkness call() {
+	public Callable<Darkness> getCallable() {
+		return this::call;
+	}
+
+	private Darkness call() {
 		Log.i(TAG, "Getting darkness...");
 		Darkness darkness = provider.getDarkness(timeMillis, location.getLatitude(), location.getLongitude());
 		Log.d(TAG, "Darkness is: " + darkness);
@@ -28,7 +35,17 @@ class GetDarkness implements DefaultingCallable<Darkness> {
 	}
 
 	@Override
-	public Darkness getDefault() {
+	public Darkness handleInterruptedException(InterruptedException e) {
+		return new Darkness();
+	}
+
+	@Override
+	public Darkness handleThrowable(Throwable e) {
+		return new Darkness();
+	}
+
+	@Override
+	public Darkness handleTimeoutException(TimeoutException e) {
 		return new Darkness();
 	}
 }

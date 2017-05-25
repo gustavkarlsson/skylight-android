@@ -2,34 +2,37 @@ package se.gustavkarlsson.aurora_notifier.android.background.providers.impl;
 
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import se.gustavkarlsson.aurora_notifier.android.background.providers.AsyncAddressProvider;
+
+import static se.gustavkarlsson.aurora_notifier.android.dagger.modules.ExecutorModule.CACHED_THREAD_POOL;
 
 public class GeocoderAsyncAddressProvider implements AsyncAddressProvider {
 	private static final String TAG = GeocoderAsyncAddressProvider.class.getSimpleName();
 
-	private static final Executor EXECUTOR = AsyncTask.THREAD_POOL_EXECUTOR;
+	private final ExecutorService cachedThreadPool;
 	private final Geocoder geocoder;
 
 	@Inject
-	GeocoderAsyncAddressProvider(Geocoder geocoder) {
+	GeocoderAsyncAddressProvider(Geocoder geocoder, @Named(CACHED_THREAD_POOL) ExecutorService cachedThreadPool) {
 		this.geocoder = geocoder;
+		this.cachedThreadPool = cachedThreadPool;
 	}
 
 	@Override
 	public Future<Address> execute(double latitude, double longitude) {
 		GetAddressTask getAddressTask = new GetAddressTask(latitude, longitude);
-		EXECUTOR.execute(getAddressTask);
+		cachedThreadPool.execute(getAddressTask);
 		return getAddressTask;
 	}
 

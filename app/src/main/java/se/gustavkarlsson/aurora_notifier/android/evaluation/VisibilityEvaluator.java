@@ -7,7 +7,7 @@ import se.gustavkarlsson.aurora_notifier.android.models.factors.Visibility;
 public class VisibilityEvaluator implements ChanceEvaluator<Visibility> {
 
 	@Inject
-	public VisibilityEvaluator() {
+	VisibilityEvaluator() {
 	}
 
 	public Chance evaluate(Visibility visibility) {

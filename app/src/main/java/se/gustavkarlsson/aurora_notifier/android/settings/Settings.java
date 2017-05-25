@@ -16,7 +16,7 @@ public class Settings {
 	private final boolean notificationsDefaultValue;
 
 	@Inject
-	public Settings(Context context) {
+	Settings(Context context) {
 		this.defaultPreferences = PreferenceManager.getDefaultSharedPreferences(context);
 		notificationsKey = context.getString(R.string.pref_notifications_key);
 		notificationsDefaultValue = context.getResources().getBoolean(R.bool.pref_notifications_default);

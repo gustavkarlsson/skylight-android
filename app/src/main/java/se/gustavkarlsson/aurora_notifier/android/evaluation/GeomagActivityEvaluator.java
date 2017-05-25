@@ -7,7 +7,7 @@ import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagActivity;
 public class GeomagActivityEvaluator implements ChanceEvaluator<GeomagActivity> {
 
 	@Inject
-	public GeomagActivityEvaluator() {
+	GeomagActivityEvaluator() {
 	}
 
 	public Chance evaluate(GeomagActivity geomagActivity) {

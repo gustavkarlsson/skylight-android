@@ -3,10 +3,13 @@ package se.gustavkarlsson.aurora_notifier.android.background.providers.impl.aggr
 import android.location.Location;
 import android.util.Log;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeoutException;
+
 import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagLocationProvider;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagLocation;
 
-class GetGeomagLocation implements DefaultingCallable<GeomagLocation> {
+class GetGeomagLocation implements ErrorHandlingTask<GeomagLocation> {
 	private static final String TAG = GetGeomagLocation.class.getSimpleName();
 
 	private final GeomagLocationProvider provider;
@@ -18,7 +21,11 @@ class GetGeomagLocation implements DefaultingCallable<GeomagLocation> {
 	}
 
 	@Override
-	public GeomagLocation call() throws Exception {
+	public Callable<GeomagLocation> getCallable() {
+		return this::call;
+	}
+
+	private GeomagLocation call() throws Exception {
 		Log.i(TAG, "Getting geomagnetic location...");
 		GeomagLocation geomagLocation = provider.getGeomagLocation(location.getLatitude(), location.getLongitude());
 		Log.d(TAG, "Geomagnetic location is: " + geomagLocation);
@@ -26,7 +33,17 @@ class GetGeomagLocation implements DefaultingCallable<GeomagLocation> {
 	}
 
 	@Override
-	public GeomagLocation getDefault() {
+	public GeomagLocation handleInterruptedException(InterruptedException e) {
+		return new GeomagLocation();
+	}
+
+	@Override
+	public GeomagLocation handleThrowable(Throwable e) {
+		return new GeomagLocation();
+	}
+
+	@Override
+	public GeomagLocation handleTimeoutException(TimeoutException e) {
 		return new GeomagLocation();
 	}
 }

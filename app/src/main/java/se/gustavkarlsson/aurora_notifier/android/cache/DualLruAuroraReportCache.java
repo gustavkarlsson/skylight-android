@@ -5,8 +5,6 @@ import android.content.Context;
 import com.vincentbrison.openlibraries.android.dualcache.Builder;
 import com.vincentbrison.openlibraries.android.dualcache.DualCache;
 
-import javax.inject.Inject;
-
 import se.gustavkarlsson.aurora_notifier.android.BuildConfig;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraReport;
 
@@ -19,7 +17,6 @@ public class DualLruAuroraReportCache implements AuroraReportCache {
 
 	private final DualCache<AuroraReport> cache;
 
-	@Inject
 	public DualLruAuroraReportCache(Context context, int maxRamSizeBytes, int maxDiskSizeBytes) {
 		Builder<AuroraReport> builder = new Builder<AuroraReport>(CACHE_NAME, BuildConfig.VERSION_CODE)
 				.useReferenceInRam(maxRamSizeBytes, object -> SIZE_OF_REPORT)

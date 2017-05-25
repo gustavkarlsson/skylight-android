@@ -33,7 +33,7 @@ public class Updater {
 	private final LocalBroadcastManager broadcastManager;
 
 	@Inject
-	public Updater(Context context, AuroraReportCache cache, LocalBroadcastManager broadcastManager) {
+	Updater(Context context, AuroraReportCache cache, LocalBroadcastManager broadcastManager) {
 		this.context = context;
 		this.cache = cache;
 		this.broadcastManager = broadcastManager;
