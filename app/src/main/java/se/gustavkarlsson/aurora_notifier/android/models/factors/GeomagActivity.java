@@ -6,7 +6,7 @@ import org.parceler.Parcel;
 public class GeomagActivity {
 	Float kpIndex;
 
-	GeomagActivity() {
+	public GeomagActivity() {
 	}
 
 	public GeomagActivity(Float kpIndex) {

@@ -3,22 +3,30 @@ package se.gustavkarlsson.aurora_notifier.android.background.providers.impl.aggr
 import android.location.Location;
 import android.util.Log;
 
-import java.util.concurrent.FutureTask;
-
 import se.gustavkarlsson.aurora_notifier.android.background.providers.VisibilityProvider;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Visibility;
 
-class GetVisibilityTask extends FutureTask<Visibility> {
-	private static final String TAG = GetVisibilityTask.class.getSimpleName();
+class GetVisibility implements DefaultingCallable<Visibility> {
+	private static final String TAG = GetVisibility.class.getSimpleName();
 
-	GetVisibilityTask(VisibilityProvider provider, Location location) {
-		super(() -> call(provider, location));
+	private final VisibilityProvider provider;
+	private final Location location;
+
+	GetVisibility(VisibilityProvider provider, Location location) {
+		this.provider = provider;
+		this.location = location;
 	}
 
-	private static Visibility call(VisibilityProvider provider, Location location) throws Exception {
+	@Override
+	public Visibility call() throws Exception {
 		Log.i(TAG, "Getting visibility...");
 		Visibility visibility = provider.getVisibility(location.getLatitude(), location.getLongitude());
 		Log.d(TAG, "Visibility is:  " + visibility);
 		return visibility;
+	}
+
+	@Override
+	public Visibility getDefault() {
+		return new Visibility();
 	}
 }

@@ -2,22 +2,28 @@ package se.gustavkarlsson.aurora_notifier.android.background.providers.impl.aggr
 
 import android.util.Log;
 
-import java.util.concurrent.FutureTask;
-
 import se.gustavkarlsson.aurora_notifier.android.background.providers.GeomagActivityProvider;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagActivity;
 
-class GetGeomagActivityTask extends FutureTask<GeomagActivity> {
-	private static final String TAG = GetGeomagActivityTask.class.getSimpleName();
+class GetGeomagActivity implements DefaultingCallable<GeomagActivity> {
+	private static final String TAG = GetGeomagActivity.class.getSimpleName();
 
-	GetGeomagActivityTask(GeomagActivityProvider provider) {
-		super(() -> call(provider));
+	private final GeomagActivityProvider provider;
+
+	GetGeomagActivity(GeomagActivityProvider provider) {
+		this.provider = provider;
 	}
 
-	private static GeomagActivity call(GeomagActivityProvider provider) {
+	@Override
+	public GeomagActivity call() throws Exception {
 		Log.i(TAG, "Getting geomagnetic activity...");
 		GeomagActivity geomagActivity = provider.getGeomagActivity();
 		Log.d(TAG, "Geomagnetic activity is: " + geomagActivity);
 		return geomagActivity;
+	}
+
+	@Override
+	public GeomagActivity getDefault() {
+		return new GeomagActivity();
 	}
 }

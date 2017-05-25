@@ -6,7 +6,7 @@ import org.parceler.Parcel;
 public class Visibility {
 	Integer cloudPercentage;
 
-	Visibility() {
+	public Visibility() {
 	}
 
 	public Visibility(Integer cloudPercentage) {

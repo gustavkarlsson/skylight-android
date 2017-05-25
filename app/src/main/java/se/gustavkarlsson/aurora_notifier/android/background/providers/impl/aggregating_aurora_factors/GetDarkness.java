@@ -3,22 +3,32 @@ package se.gustavkarlsson.aurora_notifier.android.background.providers.impl.aggr
 import android.location.Location;
 import android.util.Log;
 
-import java.util.concurrent.FutureTask;
-
 import se.gustavkarlsson.aurora_notifier.android.background.providers.DarknessProvider;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Darkness;
 
-class GetDarknessTask extends FutureTask<Darkness> {
-	private static final String TAG = GetDarknessTask.class.getSimpleName();
+class GetDarkness implements DefaultingCallable<Darkness> {
+	private static final String TAG = GetDarkness.class.getSimpleName();
 
-	GetDarknessTask(DarknessProvider provider, Location location, long timeMillis) {
-		super(() -> call(provider, location, timeMillis));
+	private final DarknessProvider provider;
+	private final Location location;
+	private final long timeMillis;
+
+	GetDarkness(DarknessProvider provider, Location location, long timeMillis) {
+		this.provider = provider;
+		this.location = location;
+		this.timeMillis = timeMillis;
 	}
 
-	private static Darkness call(DarknessProvider provider, Location location, long timeMillis) {
+	@Override
+	public Darkness call() {
 		Log.i(TAG, "Getting darkness...");
 		Darkness darkness = provider.getDarkness(timeMillis, location.getLatitude(), location.getLongitude());
 		Log.d(TAG, "Darkness is: " + darkness);
 		return darkness;
+	}
+
+	@Override
+	public Darkness getDefault() {
+		return new Darkness();
 	}
 }

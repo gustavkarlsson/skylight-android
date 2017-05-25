@@ -6,7 +6,7 @@ import org.parceler.Parcel;
 public class GeomagLocation {
 	Float latitude;
 
-	GeomagLocation() {
+	public GeomagLocation() {
 	}
 
 	public GeomagLocation(Float latitude) {

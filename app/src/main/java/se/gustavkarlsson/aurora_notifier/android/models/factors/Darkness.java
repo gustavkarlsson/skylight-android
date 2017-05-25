@@ -6,7 +6,7 @@ import org.parceler.Parcel;
 public class Darkness {
 	Float sunZenithAngle;
 
-	Darkness() {
+	public Darkness() {
 	}
 
 	public Darkness(Float sunZenithAngle) {

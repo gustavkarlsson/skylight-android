@@ -1,12 +1,15 @@
 package se.gustavkarlsson.aurora_notifier.android.background.providers.impl.aggregating_aurora_factors;
 
 import android.location.Location;
-import android.os.AsyncTask;
+import android.util.Log;
+
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
+import com.google.common.util.concurrent.ListeningScheduledExecutorService;
 
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -21,13 +24,15 @@ import se.gustavkarlsson.aurora_notifier.android.models.factors.Darkness;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagActivity;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.GeomagLocation;
 import se.gustavkarlsson.aurora_notifier.android.models.factors.Visibility;
-import se.gustavkarlsson.aurora_notifier.android.util.CountdownTimer;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static com.google.common.util.concurrent.MoreExecutors.listeningDecorator;
+import static java.util.concurrent.Executors.newScheduledThreadPool;
 
 public class AggregatingAuroraFactorsProvider implements AuroraFactorsProvider {
-	private static final Executor EXECUTOR = AsyncTask.THREAD_POOL_EXECUTOR;
+	private static final String TAG = AggregatingAuroraFactorsProvider.class.getSimpleName();
+
+	private static final ListeningScheduledExecutorService EXECUTOR_SERVICE = listeningDecorator(newScheduledThreadPool(10));
 	private final GeomagActivityProvider geomagActivityProvider;
 	private final VisibilityProvider visibilityProvider;
 	private final DarknessProvider darknessProvider;
@@ -43,33 +48,34 @@ public class AggregatingAuroraFactorsProvider implements AuroraFactorsProvider {
 
 	@Override
 	public AuroraFactors getAuroraFactors(Location location, long timeoutMillis) {
-		CountdownTimer timeoutTimer = CountdownTimer.start(timeoutMillis);
-		GetGeomagActivityTask getGeomagActivityTask = new GetGeomagActivityTask(geomagActivityProvider);
-		GetVisibilityTask getVisibilityTask = new GetVisibilityTask(visibilityProvider, location);
-		GetDarknessTask getDarknessTask = new GetDarknessTask(darknessProvider, location, System.currentTimeMillis());
-		GetGeomagLocationTask getGeomagLocationTask = new GetGeomagLocationTask(geomagLocationProvider, location);
+		GetGeomagActivity getGeomagActivity = new GetGeomagActivity(geomagActivityProvider);
+		GetVisibility getVisibility = new GetVisibility(visibilityProvider, location);
+		GetDarkness getDarkness = new GetDarkness(darknessProvider, location, System.currentTimeMillis());
+		GetGeomagLocation getGeomagLocation = new GetGeomagLocation(geomagLocationProvider, location);
 
-		EXECUTOR.execute(getGeomagActivityTask);
-		EXECUTOR.execute(getVisibilityTask);
-		EXECUTOR.execute(getDarknessTask);
-		EXECUTOR.execute(getGeomagLocationTask);
+		ListenableFuture<GeomagActivity> geomagActivityFuture = executeWithDefault(getGeomagActivity, timeoutMillis);
+		ListenableFuture<Visibility> visibilityFuture = executeWithDefault(getVisibility, timeoutMillis);
+		ListenableFuture<Darkness> darknessFuture = executeWithDefault(getDarkness, timeoutMillis);
+		ListenableFuture<GeomagLocation> geomagLocationFuture = executeWithDefault(getGeomagLocation, timeoutMillis);
 
 		try {
-			GeomagActivity geomagActivity = getGeomagActivityTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
-			Visibility visibility = getVisibilityTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
-			Darkness darkness = getDarknessTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
-			GeomagLocation geomagLocation = getGeomagLocationTask.get(timeoutTimer.getRemainingTimeMillis(), MILLISECONDS);
+			GeomagActivity geomagActivity = geomagActivityFuture.get();
+			Visibility visibility = visibilityFuture.get();
+			Darkness darkness = darknessFuture.get();
+			GeomagLocation geomagLocation = geomagLocationFuture.get();
 			return new AuroraFactors(geomagActivity, geomagLocation, darkness, visibility);
-		} catch (TimeoutException e) {
-			throw new UserFriendlyException(R.string.error_updating_took_too_long, "Getting aurora data timed out after " + timeoutMillis + "ms", e);
-		} catch (ExecutionException e) {
-			Throwable cause = e.getCause();
-			if (cause instanceof UserFriendlyException) {
-				throw (UserFriendlyException) cause;
-			}
-			throw new UserFriendlyException(R.string.error_unknown_update_error, cause);
-		} catch (InterruptedException | CancellationException e) {
+		} catch (InterruptedException | ExecutionException | CancellationException e) {
 			throw new UserFriendlyException(R.string.error_unknown_update_error, e);
 		}
+	}
+
+	private <T> ListenableFuture<T> executeWithDefault(DefaultingCallable<T> callable, long timeoutMillis) {
+		ListenableFuture<T> geomagActivityFuture = EXECUTOR_SERVICE.submit(callable);
+		geomagActivityFuture = Futures.withTimeout(geomagActivityFuture, timeoutMillis, TimeUnit.MILLISECONDS, EXECUTOR_SERVICE);
+		geomagActivityFuture = Futures.catching(geomagActivityFuture, Exception.class, e -> {
+			Log.w(TAG, "Task failed", e);
+			return callable.getDefault();
+		});
+		return geomagActivityFuture;
 	}
 }
