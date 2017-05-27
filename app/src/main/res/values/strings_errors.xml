@@ -20,6 +20,6 @@
 		This app needs Google Play Services to calculate the chances of seeing northern lights, but Google Play Services is not installed on your device.
 	</string>
 
-	<string name="error_aurora_notifications_not_possible_title">Aurora notifications disabled</string>
-	<string name="error_aurora_notifications_not_possible_touch_to_fix">Touch to fix</string>
+	<string name="error_aurora_notifications_disabled_title">Aurora notifications disabled</string>
+	<string name="error_aurora_notifications_disabled_content">Location permission missing. Please enable location permission and re-enable notifications.</string>
 </resources>
