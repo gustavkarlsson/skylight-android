@@ -44,11 +44,11 @@ public final class Chance implements Comparable<Chance> {
 		if (!isKnown() && !o.isKnown()) {
 			return 0;
 		}
-		if (isKnown()) {
-			return 1;
-		}
-		if (o.isKnown()) {
+		if (!isKnown()) {
 			return -1;
+		}
+		if (!o.isKnown()) {
+			return 1;
 		}
 		return Double.compare(value, o.value);
 	}

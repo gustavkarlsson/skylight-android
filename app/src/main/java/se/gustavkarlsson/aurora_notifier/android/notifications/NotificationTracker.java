@@ -51,7 +51,7 @@ public class NotificationTracker {
 			return isHighEnoughChance(newReportChance);
 		}
 		PresentableChance lastReportChance = PresentableChance.fromChance(evaluator.evaluate(lastReport));
-		return isHighEnoughChance(newReportChance) && isOutdated(lastReport) && isHigherThan(newReportChance, lastReportChance);
+		return isHighEnoughChance(newReportChance) && (isOutdated(lastReport) || isHigherThan(newReportChance, lastReportChance));
 	}
 
 	// FIXME use settings
