@@ -28,12 +28,12 @@ public class DualLruAuroraReportCache implements AuroraReportCache {
 	}
 
 	@Override
-	public AuroraReport getCurrentLocation() {
+	public AuroraReport get() {
 		return cache.get(CURRENT_LOCATION_KEY);
 	}
 
 	@Override
-	public void setCurrentLocation(AuroraReport report) {
+	public void set(AuroraReport report) {
 		cache.put(CURRENT_LOCATION_KEY, report);
 	}
 

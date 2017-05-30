@@ -47,7 +47,7 @@ public class Updater {
 		AuroraReportProvider provider = component.getAuroraReportProvider();
 		try {
 			AuroraReport report = provider.getReport(timeoutMillis);
-			cache.setCurrentLocation(report);
+			cache.set(report);
 			broadcastReport(report);
 			return true;
 		} catch (UserFriendlyException e) {

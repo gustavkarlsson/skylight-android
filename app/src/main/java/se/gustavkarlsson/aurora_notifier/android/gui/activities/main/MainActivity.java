@@ -146,7 +146,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	}
 
 	private AuroraReport getBestReport() {
-		AuroraReport report = AuroraReportCache.getCurrentLocation();
+		AuroraReport report = AuroraReportCache.get();
 		if (report != null) {
 			return report;
 		}
