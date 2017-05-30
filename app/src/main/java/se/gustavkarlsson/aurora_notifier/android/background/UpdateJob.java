@@ -52,11 +52,13 @@ public class UpdateJob extends Job {
 		Context context = getContext();
 
 		Notification notification = new NotificationCompat.Builder(context)
+				.setSmallIcon(R.drawable.common_google_signin_btn_text_light)
 				.setContentTitle(context.getString(R.string.error_aurora_notifications_disabled_title))
 				.setContentText(context.getString(R.string.error_aurora_notifications_disabled_content))
 				.setCategory(NotificationCompat.CATEGORY_ERROR)
 				.setAutoCancel(true)
 				.setPriority(NotificationCompat.PRIORITY_HIGH)
+				.setDefaults(NotificationCompat.DEFAULT_ALL)
 				.build();
 
 		notificationManager.notify(24656, notification);

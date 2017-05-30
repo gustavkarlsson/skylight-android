@@ -10,6 +10,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 import se.gustavkarlsson.aurora_notifier.android.background.UpdateScheduler;
 import se.gustavkarlsson.aurora_notifier.android.cache.AuroraReportCache;
+import se.gustavkarlsson.aurora_notifier.android.cache.ReportNotificationCache;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.ApplicationModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.CacheModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.ExecutorModule;
@@ -26,6 +27,7 @@ import static se.gustavkarlsson.aurora_notifier.android.dagger.modules.ExecutorM
 public interface ApplicationComponent {
 	Context getContext();
 	AuroraReportCache getAuroraReportCache();
+	ReportNotificationCache getReportNotificationCache();
 	UpdateScheduler getUpdateScheduler();
 	@Named(CACHED_THREAD_POOL) ExecutorService getExecutorService();
 }

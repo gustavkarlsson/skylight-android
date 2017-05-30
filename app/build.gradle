@@ -75,6 +75,7 @@ dependencies {
 	compile "com.github.gustavkarlsson:aurora-notifier-common:aurora-notifier-common-1.5.0"
 	compile "net.e175.klaus:solarpositioning:0.0.9"
 	compile "com.vincentbrison.openlibraries.android:dualcache:3.1.1"
+	compile "com.jakewharton.threetenabp:threetenabp:1.0.5"
 
 	// Retrofit
 	compile "com.squareup.retrofit2:retrofit:" + retrofitVersion

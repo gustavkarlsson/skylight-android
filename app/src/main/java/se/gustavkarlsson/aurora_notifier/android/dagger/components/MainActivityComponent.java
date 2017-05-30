@@ -3,6 +3,7 @@ package se.gustavkarlsson.aurora_notifier.android.dagger.components;
 import dagger.Component;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.AuroraReportModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.DarknessModule;
+import se.gustavkarlsson.aurora_notifier.android.dagger.modules.EvaluationModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GeomagActivityModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GeomagLocationModule;
 import se.gustavkarlsson.aurora_notifier.android.dagger.modules.GoogleLocationModule;
@@ -18,7 +19,8 @@ import se.gustavkarlsson.aurora_notifier.android.gui.activities.main.MainActivit
 		GeomagLocationModule.class,
 		GeomagActivityModule.class,
 		DarknessModule.class,
-		VisibilityModule.class
+		VisibilityModule.class,
+		EvaluationModule.class
 }, dependencies = {
 		ApplicationComponent.class
 })

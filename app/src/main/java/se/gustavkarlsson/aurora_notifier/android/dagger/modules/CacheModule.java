@@ -1,24 +1,23 @@
 package se.gustavkarlsson.aurora_notifier.android.dagger.modules;
 
-import android.content.Context;
-
 import javax.inject.Singleton;
 
+import dagger.Binds;
 import dagger.Module;
-import dagger.Provides;
-import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.cache.AuroraReportCache;
 import se.gustavkarlsson.aurora_notifier.android.cache.DualLruAuroraReportCache;
+import se.gustavkarlsson.aurora_notifier.android.cache.DualLruReportNotificationCache;
+import se.gustavkarlsson.aurora_notifier.android.cache.ReportNotificationCache;
 
 @Module
 public abstract class CacheModule {
 
-	@Provides
+	@Binds
 	@Singleton
-	static AuroraReportCache provideAuroraReportCache(Context context) {
-		int ramSizeBytes = context.getResources().getInteger(R.integer.setting_aurora_report_cache_max_ram_size_bytes);
-		int diskSizeBytes = context.getResources().getInteger(R.integer.setting_aurora_report_cache_max_disk_size_bytes);
-		return new DualLruAuroraReportCache(context, ramSizeBytes, diskSizeBytes);
-	}
+	abstract AuroraReportCache bindAuroraReportCache(DualLruAuroraReportCache dualLruAuroraReportCache);
+
+	@Binds
+	@Singleton
+	abstract ReportNotificationCache bindReportNotificationCache(DualLruReportNotificationCache dualLruReportNotificationCache);
 
 }

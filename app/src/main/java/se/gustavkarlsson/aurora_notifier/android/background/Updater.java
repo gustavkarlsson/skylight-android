@@ -16,6 +16,7 @@ import se.gustavkarlsson.aurora_notifier.android.cache.AuroraReportCache;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerUpdaterComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.UpdaterComponent;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraReport;
+import se.gustavkarlsson.aurora_notifier.android.notifications.NotificationTracker;
 import se.gustavkarlsson.aurora_notifier.android.util.UserFriendlyException;
 
 import static se.gustavkarlsson.aurora_notifier.android.AuroraNotifier.getApplicationComponent;
@@ -31,12 +32,14 @@ public class Updater {
 	private final Context context;
 	private final AuroraReportCache cache;
 	private final LocalBroadcastManager broadcastManager;
+	private final NotificationTracker notificationTracker;
 
 	@Inject
-	Updater(Context context, AuroraReportCache cache, LocalBroadcastManager broadcastManager) {
+	Updater(Context context, AuroraReportCache cache, LocalBroadcastManager broadcastManager, NotificationTracker notificationTracker) {
 		this.context = context;
 		this.cache = cache;
 		this.broadcastManager = broadcastManager;
+		this.notificationTracker = notificationTracker;
 	}
 
 	public boolean update(int timeoutMillis) {
@@ -49,6 +52,7 @@ public class Updater {
 			AuroraReport report = provider.getReport(timeoutMillis);
 			cache.set(report);
 			broadcastReport(report);
+			notificationTracker.reportReceived(report);
 			return true;
 		} catch (UserFriendlyException e) {
 			String errorMessage = context.getString(e.getStringResourceId());

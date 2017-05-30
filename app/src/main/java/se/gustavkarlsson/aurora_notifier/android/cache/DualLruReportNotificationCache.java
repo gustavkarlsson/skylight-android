@@ -10,16 +10,16 @@ import javax.inject.Inject;
 import se.gustavkarlsson.aurora_notifier.android.BuildConfig;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraReport;
 
-public class DualLruAuroraReportCache implements AuroraReportCache {
-	private static final String TAG = DualLruAuroraReportCache.class.getSimpleName();
+public class DualLruReportNotificationCache implements ReportNotificationCache {
+	private static final String TAG = DualLruReportNotificationCache.class.getSimpleName();
 
 	private static final String CACHE_NAME = TAG;
-	private static final String CURRENT_LOCATION_KEY = "current_location"; // Must match [a-z0-9_-]{1,64}
+	private static final String LAST_NOTIFIED_KEY = "last_notified"; // Must match [a-z0-9_-]{1,64}
 
 	private final DualCache<AuroraReport> cache;
 
 	@Inject
-	DualLruAuroraReportCache(Context context) {
+	DualLruReportNotificationCache(Context context) {
 		Builder<AuroraReport> builder = new Builder<AuroraReport>(CACHE_NAME, BuildConfig.VERSION_CODE)
 				.useReferenceInRam(Integer.MAX_VALUE, object -> 1)
 				.useSerializerInDisk(Integer.MAX_VALUE, false, new GsonCacheSerializer<>(AuroraReport.class), context);
@@ -30,13 +30,12 @@ public class DualLruAuroraReportCache implements AuroraReportCache {
 	}
 
 	@Override
-	public AuroraReport get() {
-		return cache.get(CURRENT_LOCATION_KEY);
+	public AuroraReport getLastNotified() {
+		return cache.get(LAST_NOTIFIED_KEY);
 	}
 
 	@Override
-	public void set(AuroraReport report) {
-		cache.put(CURRENT_LOCATION_KEY, report);
+	public void setLastNotified(AuroraReport report) {
+		cache.put(LAST_NOTIFIED_KEY, report);
 	}
-
 }

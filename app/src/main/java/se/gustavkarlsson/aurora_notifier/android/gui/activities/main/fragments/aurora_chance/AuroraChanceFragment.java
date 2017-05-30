@@ -15,6 +15,7 @@ import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerEvaluationComponent;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraReportEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.Chance;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.PresentableChance;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraReportUpdateListener;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraReport;
 

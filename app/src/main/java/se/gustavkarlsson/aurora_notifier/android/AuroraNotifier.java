@@ -5,6 +5,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.evernote.android.job.JobManager;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -26,6 +27,7 @@ public class AuroraNotifier extends Application {
 		Log.v(TAG, "onCreate");
 		setExceptionHandler();
 		super.onCreate();
+		AndroidThreeTen.init(this);
 		this.applicationComponent = DaggerApplicationComponent.builder()
 				.applicationModule(new ApplicationModule(this))
 				.build();
