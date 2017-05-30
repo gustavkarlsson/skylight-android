@@ -13,8 +13,8 @@ import javax.inject.Inject;
 
 import se.gustavkarlsson.aurora_notifier.android.R;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerEvaluationComponent;
-import se.gustavkarlsson.aurora_notifier.android.evaluation.AuroraReportEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.Chance;
+import se.gustavkarlsson.aurora_notifier.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.aurora_notifier.android.evaluation.PresentableChance;
 import se.gustavkarlsson.aurora_notifier.android.gui.AuroraReportUpdateListener;
 import se.gustavkarlsson.aurora_notifier.android.models.AuroraReport;
@@ -23,7 +23,7 @@ public class AuroraChanceFragment extends Fragment implements AuroraReportUpdate
 	private static final String TAG = AuroraChanceFragment.class.getSimpleName();
 
 	@Inject
-	AuroraReportEvaluator evaluator;
+	ChanceEvaluator<AuroraReport> evaluator;
 
 	private View rootView;
 	private LocationPresenter locationPresenter;

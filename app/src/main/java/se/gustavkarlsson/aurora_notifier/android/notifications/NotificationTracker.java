@@ -46,8 +46,11 @@ public class NotificationTracker {
 
 	private boolean shouldNotify(AuroraReport newReport) {
 		AuroraReport lastReport = reportNotificationCache.getLastNotified();
-		PresentableChance lastReportChance = lastReport == null ? PresentableChance.UNKNOWN : PresentableChance.fromChance(evaluator.evaluate(lastReport));
 		PresentableChance newReportChance = PresentableChance.fromChance(evaluator.evaluate(newReport));
+		if (lastReport == null) {
+			return isHighEnoughChance(newReportChance);
+		}
+		PresentableChance lastReportChance = PresentableChance.fromChance(evaluator.evaluate(lastReport));
 		return isHighEnoughChance(newReportChance) && isOutdated(lastReport) && isHigherThan(newReportChance, lastReportChance);
 	}
 
@@ -68,18 +71,22 @@ public class NotificationTracker {
 		return first.ordinal() > second.ordinal();
 	}
 
+	// FIXME Improve notification
 	private void sendNotification(AuroraReport report) {
+		String text = evaluator.evaluate(report).toString();
 		PendingIntent pendingIntent = createActivityPendingIntent();
+
 		Notification notification = new NotificationCompat.Builder(context)
 				.setSmallIcon(R.drawable.common_google_signin_btn_text_light)
 				.setContentTitle("Aurora!")
-				.setContentText(report.toString())
+				.setContentText(text)
 				.setCategory(NotificationCompat.CATEGORY_RECOMMENDATION)
 				.setAutoCancel(true)
 				.setPriority(NotificationCompat.PRIORITY_HIGH)
 				.setDefaults(NotificationCompat.DEFAULT_ALL)
 				.setContentIntent(pendingIntent)
 				.build();
+
 		notificationManager.notify(135551, notification);
 	}
 

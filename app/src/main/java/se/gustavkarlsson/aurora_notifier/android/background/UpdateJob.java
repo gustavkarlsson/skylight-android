@@ -48,6 +48,7 @@ public class UpdateJob extends Job {
 		return ContextCompat.checkSelfPermission(getContext(), LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED;
 	}
 
+	// FIXME Improve notification
 	private void sendLocationPermissionMissingNotification(NotificationManager notificationManager) {
 		Context context = getContext();
 
