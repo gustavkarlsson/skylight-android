@@ -33,7 +33,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Log.class})
-public class RetrofittedOpenVisibilityMapProviderTest {
+public class RetrofittedOpenWeatherMapVisibilityProviderTest {
 	private OkHttpClient mockedClient;
 
 	@Before
