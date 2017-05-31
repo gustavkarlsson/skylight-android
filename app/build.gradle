@@ -12,18 +12,14 @@ android {
 	}
 
 	packagingOptions {
+		// Exclude duplicate files in output
 		exclude "META-INF/LICENSE"
 		exclude "META-INF/NOTICE"
 	}
 
 	lintOptions {
-		// use this line to check all rules except those listed
+		// Fixes dagger errors
 		disable "InvalidPackage"
-		void
-	}
-
-	dexOptions {
-		maxProcessCount 8
 	}
 
 	defaultConfig {
