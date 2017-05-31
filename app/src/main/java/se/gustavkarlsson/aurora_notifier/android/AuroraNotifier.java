@@ -7,9 +7,6 @@ import android.util.Log;
 import com.evernote.android.job.JobManager;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import se.gustavkarlsson.aurora_notifier.android.background.UpdateJob;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.ApplicationComponent;
 import se.gustavkarlsson.aurora_notifier.android.dagger.components.DaggerApplicationComponent;
@@ -25,7 +22,6 @@ public class AuroraNotifier extends Application {
 	@Override
 	public void onCreate() {
 		Log.v(TAG, "onCreate");
-		setExceptionHandler();
 		super.onCreate();
 		AndroidThreeTen.init(this);
 		this.applicationComponent = DaggerApplicationComponent.builder()
@@ -38,12 +34,6 @@ public class AuroraNotifier extends Application {
 		return ((AuroraNotifier) context.getApplicationContext()).applicationComponent;
 	}
 
-	private static void setExceptionHandler() {
-		if (BuildConfig.DEBUG && !(Thread.getDefaultUncaughtExceptionHandler() instanceof LoggingUncaughtExceptionHandler)) {
-			Thread.setDefaultUncaughtExceptionHandler(new LoggingUncaughtExceptionHandler());
-		}
-	}
-
 	private void initJobManager() {
 		JobManager.create(this).addJobCreator(tag -> {
 			if (tag.equals(UPDATE_JOB_TAG)) {
@@ -51,18 +41,6 @@ public class AuroraNotifier extends Application {
 			}
 			return null;
 		});
-	}
-
-	private static class LoggingUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
-		@Override
-		public void uncaughtException(Thread thread, Throwable throwable) {
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			throwable.printStackTrace(pw);
-			String stackTrace = sw.toString();
-			Log.wtf(TAG, "The application has crashed!\n" + stackTrace);
-			System.exit(-1);
-		}
 	}
 
 }
