@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.evaluation;
 import se.gustavkarlsson.skylight.android.R;
 
 public enum PresentableChance {
+	// Warning. These ordinals relate directly to pref_trigger_level_values
 	UNKNOWN(R.string.aurora_chance_unknown),
 	NONE(R.string.aurora_chance_none),
 	LOW(R.string.aurora_chance_low),

@@ -6,30 +6,43 @@
 		android:summary="@string/pref_notifications_summary"
 		android:defaultValue="@bool/pref_notifications_default" />
 
-	<!-- Debug values start here -->
+	<ListPreference
+		android:dependency="@string/pref_notifications_key"
+		android:key="@string/pref_trigger_level_key"
+		android:title="@string/pref_trigger_level_name"
+		android:summary="@string/pref_trigger_level_summary"
+		android:entries="@array/pref_trigger_level_entries"
+		android:entryValues="@array/pref_trigger_level_values"
+		android:defaultValue="@string/pref_trigger_level_default" />
+
+	<!-- Developer values start here -->
 	<PreferenceCategory
-		android:key="@string/pref_category_debug_key"
-		android:title="@string/pref_category_debug_title">
+		android:key="@string/pref_category_developer_key"
+		android:title="@string/pref_category_developer_title">
 		<SwitchPreference
 			android:key="@string/pref_override_values_key"
 			android:title="@string/pref_override_values_title"
 			android:defaultValue="false" />
 		<EditTextPreference
+			android:dependency="@string/pref_override_values_key"
 			android:key="@string/pref_kp_index_key"
 			android:title="@string/pref_kp_index_title"
 			android:defaultValue="0"
 			android:inputType="numberDecimal" />
 		<EditTextPreference
+			android:dependency="@string/pref_override_values_key"
 			android:key="@string/pref_geomag_latitude_key"
 			android:title="@string/pref_geomag_latitude_title"
 			android:defaultValue="0"
 			android:inputType="numberDecimal|numberSigned" />
 		<EditTextPreference
+			android:dependency="@string/pref_override_values_key"
 			android:key="@string/pref_cloud_percentage_key"
 			android:title="@string/pref_cloud_percentage_title"
 			android:defaultValue="0"
 			android:inputType="number" />
 		<EditTextPreference
+			android:dependency="@string/pref_override_values_key"
 			android:key="@string/pref_sun_position_key"
 			android:title="@string/pref_sun_position_title"
 			android:defaultValue="0"
