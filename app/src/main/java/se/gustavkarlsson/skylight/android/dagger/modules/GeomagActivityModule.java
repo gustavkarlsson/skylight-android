@@ -13,7 +13,7 @@ import se.gustavkarlsson.skylight.android.background.providers.impl.RetrofittedG
 @Module
 public abstract class GeomagActivityModule {
 	// TODO Update to more permanent hostname
-	private static final String API_URL = "http://9698.s.t4vps.eu/rest/";
+	private static final String API_URL = "http://skylight-app.net/rest/";
 
 	@Provides
 	@Reusable
