@@ -46,17 +46,6 @@ android {
 			applicationIdSuffix ".debug"
 		}
 	}
-
-	productFlavors {
-		prod {
-			// Must exist to enable
-		}
-
-		dev {
-			minSdkVersion 21
-			resConfigs "en", "xxhdpi"
-		}
-	}
 }
 
 retrolambda {
