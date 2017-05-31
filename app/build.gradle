@@ -11,6 +11,21 @@ android {
 		targetCompatibility JavaVersion.VERSION_1_8
 	}
 
+	packagingOptions {
+		exclude "META-INF/LICENSE"
+		exclude "META-INF/NOTICE"
+	}
+
+	lintOptions {
+		// use this line to check all rules except those listed
+		disable "InvalidPackage"
+		void
+	}
+
+	dexOptions {
+		maxProcessCount 8
+	}
+
 	defaultConfig {
 		applicationId "se.gustavkarlsson.aurora_notifier.android"
 		minSdkVersion 19
@@ -20,11 +35,6 @@ android {
 		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 	}
 
-	packagingOptions {
-		exclude "META-INF/LICENSE"
-		exclude "META-INF/NOTICE"
-	}
-
 	buildTypes {
 		release {
 			minifyEnabled true
@@ -32,14 +42,20 @@ android {
 		}
 
 		debug {
+			versionNameSuffix "-debug"
 			applicationIdSuffix ".debug"
 		}
 	}
 
-	lintOptions {
-		// use this line to check all rules except those listed
-		disable "InvalidPackage"
-		void
+	productFlavors {
+		prod {
+			// Must exist to enable
+		}
+
+		dev {
+			minSdkVersion 21
+			resConfigs "en", "xxhdpi"
+		}
 	}
 }
 
