@@ -23,7 +23,7 @@ android {
 	}
 
 	defaultConfig {
-		applicationId "se.gustavkarlsson.aurora_notifier.android"
+		applicationId "se.gustavkarlsson.skylight.android"
 		minSdkVersion 19
 		targetSdkVersion 25
 		versionCode 1

@@ -43,7 +43,7 @@
 
 	</RelativeLayout>
 
-	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+	<se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 		android:id="@+id/aurora_factor_geomag_activity"
 		custom:layout_constraintTop_toTopOf="parent"
 		custom:layout_constraintBottom_toBottomOf="parent"
@@ -54,7 +54,7 @@
 		custom:icon="@drawable/factor_magact_white_20dp"
 		custom:title_compact="@string/factor_geomag_activity_title_compact" />
 
-	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+	<se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 		android:id="@+id/aurora_factor_geomag_location"
 		custom:layout_constraintTop_toTopOf="parent"
 		custom:layout_constraintBottom_toBottomOf="parent"
@@ -65,7 +65,7 @@
 		custom:icon="@drawable/factor_location_white_20dp"
 		custom:title_compact="@string/factor_geomag_location_title_compact" />
 
-	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+	<se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 		android:id="@+id/aurora_factor_visibility"
 		custom:layout_constraintTop_toTopOf="parent"
 		custom:layout_constraintBottom_toBottomOf="parent"
@@ -76,7 +76,7 @@
 		custom:icon="@drawable/factor_visibility_white_20dp"
 		custom:title_compact="@string/factor_visibility_title_compact" />
 
-	<se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+	<se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 		android:id="@+id/aurora_factor_darkness"
 		custom:layout_constraintTop_toTopOf="parent"
 		custom:layout_constraintBottom_toBottomOf="parent"

@@ -17,7 +17,7 @@
 
 			<fragment
 				android:id="@+id/fragment_aurora_chance"
-				android:name="se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_chance.AuroraChanceFragment"
+				android:name="se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceFragment"
 				custom:layout_constraintTop_toTopOf="parent"
 				custom:layout_constraintBottom_toTopOf="@+id/fragment_aurora_factors"
 				custom:layout_constraintLeft_toLeftOf="parent"
@@ -29,7 +29,7 @@
 
 			<fragment
 				android:id="@+id/fragment_aurora_factors"
-				android:name="se.gustavkarlsson.aurora_notifier.android.gui.activities.main.fragments.aurora_factors.AuroraFactorFragment"
+				android:name="se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorFragment"
 				custom:layout_constraintTop_toBottomOf="@+id/fragment_aurora_chance"
 				custom:layout_constraintBottom_toBottomOf="parent"
 				custom:layout_constraintLeft_toLeftOf="parent"
