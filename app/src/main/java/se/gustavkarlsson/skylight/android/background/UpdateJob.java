@@ -10,10 +10,9 @@ import android.support.v4.content.ContextCompat;
 
 import com.evernote.android.job.Job;
 
+import javax.inject.Inject;
+
 import se.gustavkarlsson.skylight.android.R;
-import se.gustavkarlsson.skylight.android.Skylight;
-import se.gustavkarlsson.skylight.android.dagger.components.DaggerUpdateJobComponent;
-import se.gustavkarlsson.skylight.android.dagger.components.UpdateJobComponent;
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity;
 
 import static com.evernote.android.job.Job.Result.FAILURE;
@@ -24,17 +23,21 @@ public class UpdateJob extends Job {
 
 	public static final String UPDATE_JOB_TAG = TAG + ".UPDATE_JOB";
 
+	private final NotificationManager notificationManager;
+	private final UpdateScheduler updateScheduler;
+	private final Updater updater;
+
+	@Inject
+	UpdateJob(NotificationManager notificationManager, UpdateScheduler updateScheduler, Updater updater) {
+		this.notificationManager = notificationManager;
+		this.updateScheduler = updateScheduler;
+		this.updater = updater;
+	}
+
 	@NonNull
 	@Override
 	protected Result onRunJob(Params params) {
-		UpdateJobComponent component = DaggerUpdateJobComponent.builder()
-				.applicationComponent(Skylight.getApplicationComponent(getContext()))
-				.build();
-		NotificationManager notificationManager = component.getNotificationManager();
-		UpdateScheduler updateScheduler = component.getUpdateScheduler();
-		Updater updater = component.getUpdater();
 		int updateTimeoutMillis = getContext().getResources().getInteger(R.integer.setting_background_update_timeout_millis);
-
 		if (!hasLocationPermission()) {
 			updateScheduler.cancelBackgroundUpdates();
 			sendLocationPermissionMissingNotification(notificationManager);

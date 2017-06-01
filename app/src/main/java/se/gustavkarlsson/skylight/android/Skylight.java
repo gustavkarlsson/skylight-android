@@ -7,9 +7,9 @@ import android.util.Log;
 import com.evernote.android.job.JobManager;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
-import se.gustavkarlsson.skylight.android.background.UpdateJob;
 import se.gustavkarlsson.skylight.android.dagger.components.ApplicationComponent;
 import se.gustavkarlsson.skylight.android.dagger.components.DaggerApplicationComponent;
+import se.gustavkarlsson.skylight.android.dagger.components.DaggerUpdateJobComponent;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ApplicationModule;
 
 import static se.gustavkarlsson.skylight.android.background.UpdateJob.UPDATE_JOB_TAG;
@@ -37,7 +37,10 @@ public class Skylight extends Application {
 	private void initJobManager() {
 		JobManager.create(this).addJobCreator(tag -> {
 			if (tag.equals(UPDATE_JOB_TAG)) {
-				return new UpdateJob();
+				return DaggerUpdateJobComponent.builder()
+						.applicationComponent(applicationComponent)
+						.build()
+						.getUpdateJob();
 			}
 			return null;
 		});
