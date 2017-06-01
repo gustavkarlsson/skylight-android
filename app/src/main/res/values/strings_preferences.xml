@@ -14,7 +14,7 @@
 		<item>@string/aurora_chance_high</item>
 	</string-array>
 	<string-array name="pref_trigger_level_values">
-		<!-- These values relate directly to se.gustavkarlsson.skylight.android.evaluation.PresentableChance -->
+		<!-- These values relate directly to se.gustavkarlsson.skylight.android.evaluation.ChanceLevel -->
 		<item>2</item>
 		<item>3</item>
 		<item>4</item>

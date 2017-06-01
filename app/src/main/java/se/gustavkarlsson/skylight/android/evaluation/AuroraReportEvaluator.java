@@ -52,6 +52,6 @@ public class AuroraReportEvaluator implements ChanceEvaluator<AuroraReport> {
 
 		return RefStreams.of(visibilityChance, darknessChance, geomagActivityAndLocationChance)
 				.min(Chance::compareTo)
-				.orElseThrow(() -> new IllegalStateException("No PresentableChance supplied"));
+				.orElseThrow(() -> new IllegalStateException("No ChanceLevel supplied"));
 	}
 }

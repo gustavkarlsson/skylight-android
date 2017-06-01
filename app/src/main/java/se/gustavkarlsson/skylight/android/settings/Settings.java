@@ -8,7 +8,7 @@ import javax.inject.Inject;
 
 import dagger.Reusable;
 import se.gustavkarlsson.skylight.android.R;
-import se.gustavkarlsson.skylight.android.evaluation.PresentableChance;
+import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel;
 
 @Reusable
 public class Settings {
@@ -31,10 +31,10 @@ public class Settings {
 		return defaultPreferences.getBoolean(notificationsKey, notificationsDefaultValue);
 	}
 
-	public PresentableChance getTriggerLevel() {
+	public ChanceLevel getTriggerLevel() {
 		String triggerLevelRaw = defaultPreferences.getString(triggerLevelKey, triggerLevelDefaultValue);
 		int triggerLevel = Integer.parseInt(triggerLevelRaw);
-		return PresentableChance.values()[triggerLevel];
+		return ChanceLevel.values()[triggerLevel];
 	}
 
 }

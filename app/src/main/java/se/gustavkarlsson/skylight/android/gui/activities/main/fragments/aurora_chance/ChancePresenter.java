@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_
 
 import android.widget.TextView;
 
-import se.gustavkarlsson.skylight.android.evaluation.PresentableChance;
+import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel;
 
 class ChancePresenter {
 	private final TextView chanceTextView;
@@ -11,7 +11,7 @@ class ChancePresenter {
 		this.chanceTextView = chanceTextView;
 	}
 
-	void onUpdate(PresentableChance chance) {
-		chanceTextView.setText(chance.getResourceId());
+	void onUpdate(ChanceLevel chanceLevel) {
+		chanceTextView.setText(chanceLevel.getResourceId());
 	}
 }

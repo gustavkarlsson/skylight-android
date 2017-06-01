@@ -4,7 +4,7 @@ import javax.inject.Inject;
 
 import se.gustavkarlsson.skylight.android.cache.ReportNotificationCache;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
-import se.gustavkarlsson.skylight.android.evaluation.PresentableChance;
+import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 import se.gustavkarlsson.skylight.android.settings.Settings;
 
@@ -27,20 +27,20 @@ public class NotificationDecider {
 			return false;
 		}
 		AuroraReport lastReport = reportNotificationCache.getLastNotified();
-		PresentableChance newReportChance = PresentableChance.fromChance(chanceEvaluator.evaluate(newReport));
+		ChanceLevel newReportLevel = ChanceLevel.fromChance(chanceEvaluator.evaluate(newReport));
 		if (lastReport == null) {
-			return isHighEnoughChance(newReportChance);
+			return isHighEnoughChance(newReportLevel);
 		}
-		PresentableChance lastReportChance = PresentableChance.fromChance(chanceEvaluator.evaluate(lastReport));
-		return isHighEnoughChance(newReportChance) && (outdatedEvaluator.isOutdated(lastReport) || isHigherThan(newReportChance, lastReportChance));
+		ChanceLevel lastReportLevel = ChanceLevel.fromChance(chanceEvaluator.evaluate(lastReport));
+		return isHighEnoughChance(newReportLevel) && (outdatedEvaluator.isOutdated(lastReport) || isHigherThan(newReportLevel, lastReportLevel));
 	}
 
-	private boolean isHighEnoughChance(PresentableChance chance) {
-		PresentableChance triggerLevel = settings.getTriggerLevel();
-		return chance.ordinal() >= triggerLevel.ordinal();
+	private boolean isHighEnoughChance(ChanceLevel chanceLevel) {
+		ChanceLevel triggerLevel = settings.getTriggerLevel();
+		return chanceLevel.ordinal() >= triggerLevel.ordinal();
 	}
 
-	private static boolean isHigherThan(PresentableChance first, PresentableChance second) {
+	private static boolean isHigherThan(ChanceLevel first, ChanceLevel second) {
 		return first.ordinal() > second.ordinal();
 	}
 }

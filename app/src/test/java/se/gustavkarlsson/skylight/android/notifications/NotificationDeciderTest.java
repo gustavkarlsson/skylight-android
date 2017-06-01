@@ -10,7 +10,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import se.gustavkarlsson.skylight.android.cache.ReportNotificationCache;
 import se.gustavkarlsson.skylight.android.evaluation.Chance;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
-import se.gustavkarlsson.skylight.android.evaluation.PresentableChance;
+import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 import se.gustavkarlsson.skylight.android.settings.Settings;
 
@@ -44,7 +44,7 @@ public class NotificationDeciderTest {
 		report = createDummyReport();
 		lastReport = createDummyReport();
 		when(settings.isEnableNotifications()).thenReturn(true);
-		when(settings.getTriggerLevel()).thenReturn(PresentableChance.HIGH);
+		when(settings.getTriggerLevel()).thenReturn(ChanceLevel.HIGH);
 		when(chanceEvaluator.evaluate(any())).thenReturn(Chance.of(1));
 		when(outdatedEvaluator.isOutdated(any())).thenReturn(true);
 	}
@@ -55,7 +55,7 @@ public class NotificationDeciderTest {
 
 	@Test
 	public void maxChanceShouldNotify() throws Exception {
-		when(settings.getTriggerLevel()).thenReturn(PresentableChance.HIGH);
+		when(settings.getTriggerLevel()).thenReturn(ChanceLevel.HIGH);
 
 		boolean shouldNotify = decider.shouldNotify(report);
 
@@ -64,7 +64,7 @@ public class NotificationDeciderTest {
 
 	@Test
 	public void mediumChanceShouldNotifyIfTriggerLevelIsLow() throws Exception {
-		when(settings.getTriggerLevel()).thenReturn(PresentableChance.LOW);
+		when(settings.getTriggerLevel()).thenReturn(ChanceLevel.LOW);
 		when(chanceEvaluator.evaluate(report)).thenReturn(Chance.of(0.5));
 
 		boolean shouldNotify = decider.shouldNotify(report);
@@ -74,7 +74,7 @@ public class NotificationDeciderTest {
 
 	@Test
 	public void mediumChanceShouldNotNotifyIfTriggerLevelIsHigh() throws Exception {
-		when(settings.getTriggerLevel()).thenReturn(PresentableChance.HIGH);
+		when(settings.getTriggerLevel()).thenReturn(ChanceLevel.HIGH);
 		when(chanceEvaluator.evaluate(report)).thenReturn(Chance.of(0.5));
 
 		boolean shouldNotify = decider.shouldNotify(report);

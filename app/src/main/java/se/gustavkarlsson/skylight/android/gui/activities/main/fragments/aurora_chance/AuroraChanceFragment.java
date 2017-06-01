@@ -15,7 +15,7 @@ import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.dagger.components.DaggerEvaluationComponent;
 import se.gustavkarlsson.skylight.android.evaluation.Chance;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
-import se.gustavkarlsson.skylight.android.evaluation.PresentableChance;
+import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel;
 import se.gustavkarlsson.skylight.android.gui.AuroraReportUpdateListener;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 
@@ -54,7 +54,7 @@ public class AuroraChanceFragment extends Fragment implements AuroraReportUpdate
 		locationPresenter.onUpdate(report.getAddress());
 		timeSinceUpdatePresenter.onUpdate(report.getTimestampMillis());
 		Chance chance = evaluator.evaluate(report);
-		chancePresenter.onUpdate(PresentableChance.fromChance(chance));
+		chancePresenter.onUpdate(ChanceLevel.fromChance(chance));
 		rootView.invalidate();
 	}
 

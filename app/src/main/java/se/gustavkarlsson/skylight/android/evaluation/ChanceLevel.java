@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.evaluation;
 
 import se.gustavkarlsson.skylight.android.R;
 
-public enum PresentableChance {
+public enum ChanceLevel {
 	// Warning. These ordinals relate directly to pref_trigger_level_values
 	UNKNOWN(R.string.aurora_chance_unknown),
 	NONE(R.string.aurora_chance_none),
@@ -12,7 +12,7 @@ public enum PresentableChance {
 
 	final int resourceId;
 
-	PresentableChance(int resourceId) {
+	ChanceLevel(int resourceId) {
 		this.resourceId = resourceId;
 	}
 
@@ -20,7 +20,7 @@ public enum PresentableChance {
 		return resourceId;
 	}
 
-	public static PresentableChance fromChance(Chance chance) {
+	public static ChanceLevel fromChance(Chance chance) {
 		if (!chance.isKnown()) {
 			return UNKNOWN;
 		}
