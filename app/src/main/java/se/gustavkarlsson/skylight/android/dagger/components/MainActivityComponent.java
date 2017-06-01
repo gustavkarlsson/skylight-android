@@ -7,6 +7,7 @@ import se.gustavkarlsson.skylight.android.dagger.modules.EvaluationModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.GeomagActivityModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.GeomagLocationModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.GoogleLocationModule;
+import se.gustavkarlsson.skylight.android.dagger.modules.NotificationOutdatedModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.SystemServiceModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.VisibilityModule;
 import se.gustavkarlsson.skylight.android.dagger.scopes.ActivityScope;
@@ -20,7 +21,8 @@ import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity;
 		GeomagActivityModule.class,
 		DarknessModule.class,
 		VisibilityModule.class,
-		EvaluationModule.class
+		EvaluationModule.class,
+		NotificationOutdatedModule.class
 }, dependencies = {
 		ApplicationComponent.class
 })
