@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.notifications;
 
 import org.threeten.bp.Clock;
+import org.threeten.bp.Duration;
 import org.threeten.bp.Instant;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
@@ -9,29 +10,34 @@ import org.threeten.bp.ZoneOffset;
 
 import javax.inject.Inject;
 
+import dagger.Reusable;
+import java8.util.function.Supplier;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 
+@Reusable
 public class ReportOutdatedEvaluator {
 
 	private final Clock clock;
-	private final LocalTime delimiterTime;
+	private final Supplier<ZoneId> zoneIdSupplier;
 
 	@Inject
-	public ReportOutdatedEvaluator(LocalTime delimiterTime) {
-		this(Clock.systemUTC(), delimiterTime);
+	ReportOutdatedEvaluator() {
+		this(Clock.systemUTC(), ZoneOffset::systemDefault);
 	}
 
-	ReportOutdatedEvaluator(Clock clock, LocalTime delimiterTime) {
+	ReportOutdatedEvaluator(Clock clock, Supplier<ZoneId> zoneIdSupplier) {
 		this.clock = clock;
-		this.delimiterTime = delimiterTime;
+		this.zoneIdSupplier = zoneIdSupplier;
 	}
 
 
 	boolean isOutdated(AuroraReport report) {
-		ZoneId currentZoneId = ZoneOffset.systemDefault();
+		ZoneId currentZoneId = zoneIdSupplier.get();
+		Instant now = Instant.now(clock);
 		LocalDate today = LocalDate.now(clock);
-		Instant noonToday = delimiterTime.atDate(today).atZone(currentZoneId).toInstant();
+		Instant noonToday = LocalTime.NOON.atDate(today).atZone(currentZoneId).toInstant();
 		Instant reportTime = Instant.ofEpochMilli(report.getTimestampMillis());
-		return reportTime.isBefore(noonToday);
+		Duration duration = Duration.between(reportTime, now);
+		return duration.toHours() > 12 || (now.isAfter(noonToday) && reportTime.isBefore(noonToday));
 	}
 }

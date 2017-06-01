@@ -6,14 +6,12 @@ import dagger.Component;
 import se.gustavkarlsson.skylight.android.background.UpdateScheduler;
 import se.gustavkarlsson.skylight.android.background.Updater;
 import se.gustavkarlsson.skylight.android.dagger.modules.EvaluationModule;
-import se.gustavkarlsson.skylight.android.dagger.modules.NotificationOutdatedModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.SystemServiceModule;
 import se.gustavkarlsson.skylight.android.dagger.scopes.BackgroundScope;
 
 @Component(modules = {
 		SystemServiceModule.class,
-		EvaluationModule.class,
-		NotificationOutdatedModule.class
+		EvaluationModule.class
 }, dependencies = {
 		ApplicationComponent.class
 })
