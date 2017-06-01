@@ -10,7 +10,7 @@ import com.jakewharton.threetenabp.AndroidThreeTen;
 import se.gustavkarlsson.skylight.android.background.UpdateJob;
 import se.gustavkarlsson.skylight.android.dagger.components.ApplicationComponent;
 import se.gustavkarlsson.skylight.android.dagger.components.DaggerApplicationComponent;
-import se.gustavkarlsson.skylight.android.dagger.modules.ApplicationModule;
+import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ApplicationModule;
 
 import static se.gustavkarlsson.skylight.android.background.UpdateJob.UPDATE_JOB_TAG;
 

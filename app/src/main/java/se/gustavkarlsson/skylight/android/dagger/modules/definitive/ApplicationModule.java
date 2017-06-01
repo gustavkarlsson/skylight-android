@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.dagger.modules;
+package se.gustavkarlsson.skylight.android.dagger.modules.definitive;
 
 import android.app.Application;
 import android.content.Context;

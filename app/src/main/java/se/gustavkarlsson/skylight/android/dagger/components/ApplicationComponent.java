@@ -11,15 +11,17 @@ import dagger.Component;
 import se.gustavkarlsson.skylight.android.background.UpdateScheduler;
 import se.gustavkarlsson.skylight.android.cache.AuroraReportCache;
 import se.gustavkarlsson.skylight.android.cache.ReportNotificationCache;
-import se.gustavkarlsson.skylight.android.dagger.modules.ApplicationModule;
-import se.gustavkarlsson.skylight.android.dagger.modules.CacheModule;
-import se.gustavkarlsson.skylight.android.dagger.modules.ExecutorModule;
+import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ApplicationModule;
+import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ExecutorModule;
+import se.gustavkarlsson.skylight.android.dagger.modules.prod.AuroraReportCacheModule;
+import se.gustavkarlsson.skylight.android.dagger.modules.prod.ReportNotificationCacheModule;
 
-import static se.gustavkarlsson.skylight.android.dagger.modules.ExecutorModule.CACHED_THREAD_POOL;
+import static se.gustavkarlsson.skylight.android.dagger.modules.definitive.ExecutorModule.CACHED_THREAD_POOL_NAME;
 
 @Component(modules = {
 		ApplicationModule.class,
-		CacheModule.class,
+		ReportNotificationCacheModule.class,
+		AuroraReportCacheModule.class,
 		ExecutorModule.class
 })
 @Singleton
@@ -29,5 +31,6 @@ public interface ApplicationComponent {
 	AuroraReportCache getAuroraReportCache();
 	ReportNotificationCache getReportNotificationCache();
 	UpdateScheduler getUpdateScheduler();
-	@Named(CACHED_THREAD_POOL) ExecutorService getExecutorService();
+	@Named(CACHED_THREAD_POOL_NAME)
+	ExecutorService getCachedThreadPool();
 }

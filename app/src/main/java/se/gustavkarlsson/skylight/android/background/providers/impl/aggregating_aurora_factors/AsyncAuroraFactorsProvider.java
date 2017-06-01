@@ -18,9 +18,9 @@ import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity;
 import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation;
 import se.gustavkarlsson.skylight.android.models.factors.Visibility;
 
-import static se.gustavkarlsson.skylight.android.dagger.modules.ExecutorModule.CACHED_THREAD_POOL;
+import static se.gustavkarlsson.skylight.android.dagger.modules.definitive.ExecutorModule.CACHED_THREAD_POOL_NAME;
 
-public class AggregatingAuroraFactorsProvider implements AuroraFactorsProvider {
+public class AsyncAuroraFactorsProvider implements AuroraFactorsProvider {
 	private final GeomagActivityProvider geomagActivityProvider;
 	private final VisibilityProvider visibilityProvider;
 	private final DarknessProvider darknessProvider;
@@ -28,7 +28,7 @@ public class AggregatingAuroraFactorsProvider implements AuroraFactorsProvider {
 	private final ErrorHandlingExecutorService cachedThreadPool;
 
 	@Inject
-	AggregatingAuroraFactorsProvider(GeomagActivityProvider geomagActivityProvider, VisibilityProvider visibilityProvider, DarknessProvider darknessProvider, GeomagLocationProvider geomagLocationProvider, @Named(CACHED_THREAD_POOL) ExecutorService cachedThreadPool) {
+	AsyncAuroraFactorsProvider(GeomagActivityProvider geomagActivityProvider, VisibilityProvider visibilityProvider, DarknessProvider darknessProvider, GeomagLocationProvider geomagLocationProvider, @Named(CACHED_THREAD_POOL_NAME) ExecutorService cachedThreadPool) {
 		this.geomagActivityProvider = geomagActivityProvider;
 		this.visibilityProvider = visibilityProvider;
 		this.darknessProvider = darknessProvider;

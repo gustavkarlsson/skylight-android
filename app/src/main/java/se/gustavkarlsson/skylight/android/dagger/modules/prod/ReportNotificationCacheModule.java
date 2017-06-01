@@ -1,21 +1,16 @@
-package se.gustavkarlsson.skylight.android.dagger.modules;
+package se.gustavkarlsson.skylight.android.dagger.modules.prod;
 
 import javax.inject.Singleton;
 
 import dagger.Binds;
 import dagger.Module;
-import se.gustavkarlsson.skylight.android.cache.AuroraReportCache;
-import se.gustavkarlsson.skylight.android.cache.DualLruAuroraReportCache;
 import se.gustavkarlsson.skylight.android.cache.DualLruReportNotificationCache;
 import se.gustavkarlsson.skylight.android.cache.ReportNotificationCache;
 
 @Module
-public abstract class CacheModule {
+public abstract class ReportNotificationCacheModule {
 
-	@Binds
-	@Singleton
-	abstract AuroraReportCache bindAuroraReportCache(DualLruAuroraReportCache dualLruAuroraReportCache);
-
+	// Published
 	@Binds
 	@Singleton
 	abstract ReportNotificationCache bindReportNotificationCache(DualLruReportNotificationCache dualLruReportNotificationCache);

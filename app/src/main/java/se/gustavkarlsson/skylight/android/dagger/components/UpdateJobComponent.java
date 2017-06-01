@@ -5,8 +5,8 @@ import android.app.NotificationManager;
 import dagger.Component;
 import se.gustavkarlsson.skylight.android.background.UpdateScheduler;
 import se.gustavkarlsson.skylight.android.background.Updater;
-import se.gustavkarlsson.skylight.android.dagger.modules.EvaluationModule;
-import se.gustavkarlsson.skylight.android.dagger.modules.SystemServiceModule;
+import se.gustavkarlsson.skylight.android.dagger.modules.definitive.EvaluationModule;
+import se.gustavkarlsson.skylight.android.dagger.modules.definitive.SystemServiceModule;
 import se.gustavkarlsson.skylight.android.dagger.scopes.BackgroundScope;
 
 @Component(modules = {

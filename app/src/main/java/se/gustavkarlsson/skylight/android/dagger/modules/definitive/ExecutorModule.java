@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.dagger.modules;
+package se.gustavkarlsson.skylight.android.dagger.modules.definitive;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -11,11 +11,11 @@ import dagger.Provides;
 
 @Module
 public abstract class ExecutorModule {
-	public static final String CACHED_THREAD_POOL = "CachedThreadPool";
+	public static final String CACHED_THREAD_POOL_NAME = "CachedThreadPool";
 
 	@Provides
 	@Singleton
-	@Named(CACHED_THREAD_POOL)
+	@Named(CACHED_THREAD_POOL_NAME)
 	static ExecutorService provideExecutorService() {
 		return Executors.newCachedThreadPool();
 	}
