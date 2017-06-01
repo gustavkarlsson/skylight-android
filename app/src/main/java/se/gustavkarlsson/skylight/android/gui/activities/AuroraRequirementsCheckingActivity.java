@@ -31,7 +31,7 @@ public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivi
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		updateScheduler = getApplicationComponent(this).getUpdateScheduler();
+		updateScheduler = getApplicationComponent().getUpdateScheduler();
 	}
 
 	protected final void ensureRequirementsMet() {

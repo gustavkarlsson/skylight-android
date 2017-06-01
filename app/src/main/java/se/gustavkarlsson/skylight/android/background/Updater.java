@@ -11,7 +11,6 @@ import org.parceler.Parcels;
 import javax.inject.Inject;
 
 import se.gustavkarlsson.skylight.android.R;
-import se.gustavkarlsson.skylight.android.Skylight;
 import se.gustavkarlsson.skylight.android.background.providers.AuroraReportProvider;
 import se.gustavkarlsson.skylight.android.cache.AuroraReportCache;
 import se.gustavkarlsson.skylight.android.dagger.components.DaggerUpdaterComponent;
@@ -19,6 +18,8 @@ import se.gustavkarlsson.skylight.android.dagger.components.UpdaterComponent;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 import se.gustavkarlsson.skylight.android.notifications.NotificationHandler;
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException;
+
+import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 
 public class Updater {
 	private static final String TAG = Updater.class.getSimpleName();
@@ -44,7 +45,7 @@ public class Updater {
 	public boolean update(int timeoutMillis) {
 		Log.v(TAG, "onUpdate");
 		UpdaterComponent component = DaggerUpdaterComponent.builder()
-				.applicationComponent(Skylight.getApplicationComponent(context))
+				.applicationComponent(getApplicationComponent())
 				.build();
 		AuroraReportProvider provider = component.getAuroraReportProvider();
 		try {

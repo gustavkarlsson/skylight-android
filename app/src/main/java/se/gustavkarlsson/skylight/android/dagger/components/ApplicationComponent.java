@@ -11,7 +11,7 @@ import dagger.Component;
 import se.gustavkarlsson.skylight.android.background.UpdateScheduler;
 import se.gustavkarlsson.skylight.android.cache.AuroraReportCache;
 import se.gustavkarlsson.skylight.android.cache.ReportNotificationCache;
-import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ApplicationModule;
+import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ContextModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ExecutorModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.prod.AuroraReportCacheModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.prod.ReportNotificationCacheModule;
@@ -19,7 +19,7 @@ import se.gustavkarlsson.skylight.android.dagger.modules.prod.ReportNotification
 import static se.gustavkarlsson.skylight.android.dagger.modules.definitive.ExecutorModule.CACHED_THREAD_POOL_NAME;
 
 @Component(modules = {
-		ApplicationModule.class,
+		ContextModule.class,
 		ReportNotificationCacheModule.class,
 		AuroraReportCacheModule.class,
 		ExecutorModule.class
