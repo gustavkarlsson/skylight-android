@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors;
 
-import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.filters.LargeTest;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -27,11 +26,23 @@ public class AuroraFactorFragmentTest {
 	public ActivityTestRule<MainActivity> testRule = new ActivityTestRule<>(MainActivity.class);
 
 	@Test
-	public void factorViewsShown() throws Exception {
-		onView(ViewMatchers.withId(R.id.aurora_factor_geomag_activity)).check(matches(isDisplayed()));
-		onView(ViewMatchers.withId(R.id.aurora_factor_geomag_location)).check(matches(isDisplayed()));
-		onView(ViewMatchers.withId(R.id.aurora_factor_visibility)).check(matches(isDisplayed()));
-		onView(ViewMatchers.withId(R.id.aurora_factor_darkness)).check(matches(isDisplayed()));
+	public void geomagActivityFactorViewShown() throws Exception {
+		onView(withId(R.id.aurora_factor_geomag_activity)).check(matches(isDisplayed()));
+	}
+
+	@Test
+	public void geomagLocationFactorViewShown() throws Exception {
+		onView(withId(R.id.aurora_factor_geomag_location)).check(matches(isDisplayed()));
+	}
+
+	@Test
+	public void visibilityFactorViewShown() throws Exception {
+		onView(withId(R.id.aurora_factor_visibility)).check(matches(isDisplayed()));
+	}
+
+	@Test
+	public void darknessFactorViewShown() throws Exception {
+		onView(withId(R.id.aurora_factor_darkness)).check(matches(isDisplayed()));
 	}
 
 	@Test
