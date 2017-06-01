@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.Skylight;
 import se.gustavkarlsson.skylight.android.background.Updater;
+import se.gustavkarlsson.skylight.android.cache.AuroraReportCache;
 import se.gustavkarlsson.skylight.android.dagger.components.DaggerMainActivityComponent;
 import se.gustavkarlsson.skylight.android.gui.AuroraReportUpdateListener;
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity;
@@ -43,7 +44,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	Updater updater;
 
 	@Inject
-	se.gustavkarlsson.skylight.android.cache.AuroraReportCache AuroraReportCache;
+	AuroraReportCache auroraReportCache;
 
 	@Inject
 	LocalBroadcastManager broadcastManager;
@@ -126,8 +127,8 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	public void onStart() {
 		Log.v(TAG, "onStart");
 		super.onStart();
-		broadcastManager.registerReceiver((broadcastReceiver), new IntentFilter(RESPONSE_UPDATE_ERROR));
-		broadcastManager.registerReceiver((broadcastReceiver), new IntentFilter(RESPONSE_UPDATE_FINISHED));
+		broadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(RESPONSE_UPDATE_ERROR));
+		broadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(RESPONSE_UPDATE_FINISHED));
 		AuroraReport report = getBestReport();
 		swipeToRefreshPresenter.disable();
 		ensureRequirementsMet();
@@ -145,7 +146,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	}
 
 	private AuroraReport getBestReport() {
-		AuroraReport report = AuroraReportCache.get();
+		AuroraReport report = auroraReportCache.get();
 		if (report != null) {
 			return report;
 		}
@@ -166,6 +167,12 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	@Override
 	protected void onDestroy() {
 		Log.v(TAG, "onDestroy");
+		updater = null;
+		auroraReportCache = null;
+		broadcastManager = null;
+		swipeToRefreshPresenter = null;
+		updateReceivers = null;
+		broadcastReceiver = null;
 		super.onDestroy();
 	}
 }

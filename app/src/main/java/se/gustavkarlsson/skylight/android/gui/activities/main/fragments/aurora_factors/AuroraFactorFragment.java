@@ -22,12 +22,6 @@ public class AuroraFactorFragment extends Fragment implements AuroraReportUpdate
 	private DarknessPresenter darknessPresenter;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		Log.v(TAG, "onCreate");
-		super.onCreate(savedInstanceState);
-	}
-
-	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.v(TAG, "onCreateView");
 		rootView = inflater.inflate(R.layout.fragment_aurora_factors, container, false);
@@ -36,6 +30,17 @@ public class AuroraFactorFragment extends Fragment implements AuroraReportUpdate
 		visibilityPresenter = new VisibilityPresenter((AuroraFactorView) rootView.findViewById(R.id.aurora_factor_visibility));
 		darknessPresenter = new DarknessPresenter((AuroraFactorView) rootView.findViewById(R.id.aurora_factor_darkness));
 		return rootView;
+	}
+
+	@Override
+	public void onDestroyView() {
+		Log.v(TAG, "onDestroyView");
+		rootView = null;
+		geomagActivityPresenter = null;
+		geomagLocationPresenter = null;
+		visibilityPresenter = null;
+		darknessPresenter = null;
+		super.onDestroyView();
 	}
 
 	@Override

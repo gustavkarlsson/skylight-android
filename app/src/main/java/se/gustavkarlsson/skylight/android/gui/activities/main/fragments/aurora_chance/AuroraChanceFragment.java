@@ -62,6 +62,11 @@ public class AuroraChanceFragment extends Fragment implements AuroraReportUpdate
 	public void onDestroyView() {
 		Log.v(TAG, "onDestroyView");
 		timeSinceUpdatePresenter.destroy();
+		evaluator = null;
+		rootView = null;
+		locationPresenter = null;
+		timeSinceUpdatePresenter = null;
+		chancePresenter = null;
 		super.onDestroyView();
 	}
 }

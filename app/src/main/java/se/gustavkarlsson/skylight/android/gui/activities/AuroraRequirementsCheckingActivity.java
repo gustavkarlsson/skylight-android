@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -30,7 +29,7 @@ public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivi
 	private UpdateScheduler updateScheduler;
 
 	@Override
-	protected void onCreate(@Nullable Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		updateScheduler = getApplicationComponent(this).getUpdateScheduler();
 	}
@@ -41,37 +40,6 @@ public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivi
 		} else {
 			showGooglePlayServicesNotAvailable();
 		}
-	}
-
-	private void showGooglePlayServicesNotAvailable() {
-		new AlertDialog.Builder(this)
-				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setTitle(R.string.error_google_play_services_is_not_available_title)
-				.setMessage(R.string.error_google_play_services_is_not_available_desc)
-				.setPositiveButton(R.string.exit, (dialog, which) -> System.exit(1))
-				.setCancelable(false)
-				.show();
-	}
-
-	private void showLocationPermissionRequiredDialog() {
-		new AlertDialog.Builder(this)
-				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setTitle(getString(R.string.location_permission_required_title))
-				.setMessage(R.string.location_permission_required_desc)
-				.setPositiveButton(android.R.string.yes, (dialog, which) -> showLocationPermissionRequest())
-				.setNegativeButton(R.string.exit, (dialog, which) -> System.exit(2))
-				.setCancelable(false)
-				.show();
-	}
-
-	private void showLocationPermissionDeniedDialog() {
-		new AlertDialog.Builder(this)
-				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setTitle(getString(R.string.error_location_permission_denied_title))
-				.setMessage(R.string.error_location_permission_denied_desc)
-				.setPositiveButton(R.string.exit, (dialog, which) -> System.exit(3))
-				.setCancelable(false)
-				.show();
 	}
 
 	private void ensureLocationPermission() {
@@ -85,6 +53,16 @@ public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivi
 
 	private void showLocationPermissionRequest() {
 		ActivityCompat.requestPermissions(this, new String[]{LOCATION_PERMISSION}, REQUEST_CODE_LOCATION_PERMISSION);
+	}
+
+	private void showGooglePlayServicesNotAvailable() {
+		new AlertDialog.Builder(this)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setTitle(R.string.error_google_play_services_is_not_available_title)
+				.setMessage(R.string.error_google_play_services_is_not_available_desc)
+				.setPositiveButton(R.string.exit, (dialog, which) -> System.exit(1))
+				.setCancelable(false)
+				.show();
 	}
 
 	@Override
@@ -116,6 +94,33 @@ public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivi
 			Log.i(TAG, "Showing permission denied dialog and exiting");
 			showLocationPermissionDeniedDialog();
 		}
+	}
+
+	private void showLocationPermissionRequiredDialog() {
+		new AlertDialog.Builder(this)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setTitle(getString(R.string.location_permission_required_title))
+				.setMessage(R.string.location_permission_required_desc)
+				.setPositiveButton(android.R.string.yes, (dialog, which) -> showLocationPermissionRequest())
+				.setNegativeButton(R.string.exit, (dialog, which) -> System.exit(2))
+				.setCancelable(false)
+				.show();
+	}
+
+	private void showLocationPermissionDeniedDialog() {
+		new AlertDialog.Builder(this)
+				.setIcon(android.R.drawable.ic_dialog_alert)
+				.setTitle(getString(R.string.error_location_permission_denied_title))
+				.setMessage(R.string.error_location_permission_denied_desc)
+				.setPositiveButton(R.string.exit, (dialog, which) -> System.exit(3))
+				.setCancelable(false)
+				.show();
+	}
+
+	@Override
+	protected void onDestroy() {
+		updateScheduler = null;
+		super.onDestroy();
 	}
 
 	protected void onRequirementsMet() {

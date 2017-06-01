@@ -29,6 +29,7 @@ public class SettingsFragment extends PreferenceFragment {
 	public void onDestroy() {
 		Log.v(TAG, "onDestroy");
 		getPreferenceManager().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(notificationsChangedListener);
+		notificationsChangedListener = null;
 		super.onDestroy();
 	}
 
