@@ -21,7 +21,9 @@ import se.gustavkarlsson.skylight.android.dagger.modules.definitive.EvaluationMo
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.AuroraReportCacheModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.AuroraReportModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.ClockModule;
+import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.DebugSettingsModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.ReportNotificationCacheModule;
+import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.SettingsModule;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity;
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceFragment;
@@ -41,6 +43,8 @@ import static se.gustavkarlsson.skylight.android.dagger.modules.definitive.Cache
 		EvaluationModule.class,
 		AuroraReportModule.class,
 		ClockModule.class,
+		SettingsModule.class,
+		DebugSettingsModule.class
 })
 @Singleton
 @SuppressWarnings("WeakerAccess")
