@@ -72,6 +72,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		backgroundUpdateTimeoutMillis = getResources().getInteger(R.integer.setting_background_update_timeout_millis);
 		updateReceivers = getUpdateReceivers();
 		broadcastReceiver = createBroadcastReceiver();
+		// TODO Keep daggerifying
 	}
 
 	private List<AuroraReportUpdateListener> getUpdateReceivers() {

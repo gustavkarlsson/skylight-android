@@ -12,11 +12,11 @@ import se.gustavkarlsson.skylight.android.dagger.scopes.ActivityScope;
 import se.gustavkarlsson.skylight.android.gui.activities.main.SwipeToRefreshPresenter;
 
 @Module(includes = ActivityModule.class)
-public class SwipeToRefreshModule {
+public abstract class SwipeToRefreshModule {
 
 	@Provides
 	@ActivityScope
-	SwipeToRefreshPresenter provideSwipeToRefreshPresenter(Activity activity, Updater updater) {
+	static SwipeToRefreshPresenter provideSwipeToRefreshPresenter(Activity activity, Updater updater) {
 		SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) activity.findViewById(R.id.swipe_refresh_layout);
 		return new SwipeToRefreshPresenter(swipeRefreshLayout, activity, updater);
 	}
