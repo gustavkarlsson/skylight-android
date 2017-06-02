@@ -25,6 +25,7 @@ import javax.inject.Inject;
 import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.background.Updater;
 import se.gustavkarlsson.skylight.android.cache.LastReportCache;
+import se.gustavkarlsson.skylight.android.dagger.components.MainActivityComponent;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ActivityModule;
 import se.gustavkarlsson.skylight.android.gui.AuroraReportUpdateListener;
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity;
@@ -55,6 +56,8 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	@Inject
 	SwipeToRefreshPresenter swipeToRefreshPresenter;
 
+	private MainActivityComponent component;
+
 	private int reportLifetimeMillis;
 	private int backgroundUpdateTimeoutMillis;
 	private List<AuroraReportUpdateListener> updateReceivers;
@@ -64,9 +67,9 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
+		component = getApplicationComponent().getMainActivityComponent(new ActivityModule(this));
 		setContentView(R.layout.activity_main);
-		getApplicationComponent().getMainActivityComponent(new ActivityModule(this))
-				.inject(this);
+		component.inject(this);
 
 		reportLifetimeMillis = getResources().getInteger(R.integer.setting_foreground_report_lifetime_millis);
 		backgroundUpdateTimeoutMillis = getResources().getInteger(R.integer.setting_background_update_timeout_millis);
@@ -176,6 +179,11 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		swipeToRefreshPresenter = null;
 		updateReceivers = null;
 		broadcastReceiver = null;
+		component = null;
 		super.onDestroy();
+	}
+
+	public MainActivityComponent getComponent() {
+		return component;
 	}
 }

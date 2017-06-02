@@ -14,6 +14,7 @@ import se.gustavkarlsson.skylight.android.gui.activities.main.SwipeToRefreshPres
 @Module(includes = ActivityModule.class)
 public abstract class SwipeToRefreshModule {
 
+	// Published
 	@Provides
 	@ActivityScope
 	static SwipeToRefreshPresenter provideSwipeToRefreshPresenter(Activity activity, Updater updater) {

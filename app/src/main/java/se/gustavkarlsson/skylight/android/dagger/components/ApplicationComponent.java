@@ -14,7 +14,6 @@ import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.AuroraRepor
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.AuroraReportModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.ClockModule;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceFragment;
 import se.gustavkarlsson.skylight.android.models.factors.Darkness;
 import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity;
 import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation;
@@ -38,8 +37,6 @@ public interface ApplicationComponent {
 	ChanceEvaluator<GeomagLocation> getGeomagLocationEvaluator();
 	ChanceEvaluator<Visibility> getVisibilityEvaluator();
 	ChanceEvaluator<Darkness> getDarknessEvaluator();
-
-	void inject(AuroraChanceFragment auroraChanceFragment);
 
 	MainActivityComponent getMainActivityComponent(ActivityModule activityModule);
 }
