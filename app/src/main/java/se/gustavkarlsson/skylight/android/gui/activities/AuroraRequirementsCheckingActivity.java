@@ -13,11 +13,12 @@ import android.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import javax.inject.Inject;
+
 import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.background.UpdateScheduler;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 
 
 public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivity {
@@ -26,12 +27,12 @@ public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivi
 	public static final String LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION;
 	private static final int REQUEST_CODE_LOCATION_PERMISSION = 1973;
 
-	private UpdateScheduler updateScheduler;
+	@Inject
+	UpdateScheduler updateScheduler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		updateScheduler = getApplicationComponent().getUpdateScheduler();
 	}
 
 	protected final void ensureRequirementsMet() {

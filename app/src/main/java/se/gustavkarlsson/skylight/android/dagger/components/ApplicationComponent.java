@@ -8,7 +8,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import se.gustavkarlsson.skylight.android.background.UpdateScheduler;
 import se.gustavkarlsson.skylight.android.cache.AuroraReportCache;
 import se.gustavkarlsson.skylight.android.cache.ReportNotificationCache;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ContextModule;
@@ -30,7 +29,6 @@ public interface ApplicationComponent {
 	Context getContext();
 	AuroraReportCache getAuroraReportCache();
 	ReportNotificationCache getReportNotificationCache();
-	UpdateScheduler getUpdateScheduler();
 	@Named(CACHED_THREAD_POOL_NAME)
 	ExecutorService getCachedThreadPool();
 }

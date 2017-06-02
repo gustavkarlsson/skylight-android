@@ -6,22 +6,21 @@ import android.util.Log;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 
+import java.util.Set;
+
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.settings.Settings;
 
 import static se.gustavkarlsson.skylight.android.background.UpdateJob.UPDATE_JOB_TAG;
 
-@Singleton
 public class UpdateScheduler {
 	private static final String TAG = UpdateScheduler.class.getSimpleName();
 
 	private final Settings settings;
 	private final int intervalMillis;
 	private final int flexMillis;
-	private boolean jobScheduled = false;
 
 	@Inject
 	UpdateScheduler(Context context, Settings settings) {
@@ -32,11 +31,17 @@ public class UpdateScheduler {
 
 	public void setupBackgroundUpdates() {
 		boolean enabled = settings.isEnableNotifications();
+		boolean jobScheduled = isScheduled();
 		if (enabled && !jobScheduled) {
 			scheduleJob(intervalMillis, flexMillis);
 		} else if (!enabled && jobScheduled) {
 			cancelBackgroundUpdates();
 		}
+	}
+
+	private static boolean isScheduled() {
+		Set<JobRequest> jobRequests = JobManager.instance().getAllJobRequestsForTag(UPDATE_JOB_TAG);
+		return !jobRequests.isEmpty();
 	}
 
 	private void scheduleJob(int intervalMillis, int flexMillis) {
@@ -48,13 +53,11 @@ public class UpdateScheduler {
 				.setRequirementsEnforced(true)
 				.build()
 				.schedule();
-		jobScheduled = true;
 		Log.d(TAG, "Scheduling update to run periodically");
 	}
 
 	void cancelBackgroundUpdates() {
 		JobManager.instance().cancelAllForTag(UPDATE_JOB_TAG);
-		jobScheduled = false;
 	}
 
 }
