@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +25,7 @@ import javax.inject.Inject;
 import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.background.Updater;
 import se.gustavkarlsson.skylight.android.cache.LastReportCache;
+import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ActivityModule;
 import se.gustavkarlsson.skylight.android.gui.AuroraReportUpdateListener;
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity;
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity;
@@ -52,9 +52,11 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	@Inject
 	Clock clock;
 
+	@Inject
+	SwipeToRefreshPresenter swipeToRefreshPresenter;
+
 	private int reportLifetimeMillis;
 	private int backgroundUpdateTimeoutMillis;
-	private SwipeToRefreshPresenter swipeToRefreshPresenter;
 	private List<AuroraReportUpdateListener> updateReceivers;
 	private BroadcastReceiver broadcastReceiver;
 
@@ -63,11 +65,11 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		getApplicationComponent().inject(this);
+		getApplicationComponent().getMainActivityComponent(new ActivityModule(this))
+				.inject(this);
 
 		reportLifetimeMillis = getResources().getInteger(R.integer.setting_foreground_report_lifetime_millis);
 		backgroundUpdateTimeoutMillis = getResources().getInteger(R.integer.setting_background_update_timeout_millis);
-		swipeToRefreshPresenter = new SwipeToRefreshPresenter((SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout), this, updater);
 		updateReceivers = getUpdateReceivers();
 		broadcastReceiver = createBroadcastReceiver();
 	}

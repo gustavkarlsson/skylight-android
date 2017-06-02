@@ -7,13 +7,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.background.Updater;
 
-class SwipeToRefreshPresenter {
+public class SwipeToRefreshPresenter {
 	private final SwipeRefreshLayout swipeRefreshLayout;
 	private final Activity activity;
 	private final Updater updater;
 	private final int timeoutMillis;
 
-	SwipeToRefreshPresenter(SwipeRefreshLayout swipeRefreshLayout, Activity activity, Updater updater) {
+	public SwipeToRefreshPresenter(SwipeRefreshLayout swipeRefreshLayout, Activity activity, Updater updater) {
 		this.swipeRefreshLayout = swipeRefreshLayout;
 		this.activity = activity;
 		this.updater = updater;

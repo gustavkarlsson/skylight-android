@@ -8,12 +8,12 @@ import dagger.Component;
 import se.gustavkarlsson.skylight.android.background.UpdateJob;
 import se.gustavkarlsson.skylight.android.background.UpdateScheduler;
 import se.gustavkarlsson.skylight.android.background.providers.AuroraReportProvider;
+import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ActivityModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.EvaluationModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.AuroraReportCacheModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.AuroraReportModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.ClockModule;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
-import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity;
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceFragment;
 import se.gustavkarlsson.skylight.android.models.factors.Darkness;
 import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity;
@@ -40,6 +40,6 @@ public interface ApplicationComponent {
 	ChanceEvaluator<Darkness> getDarknessEvaluator();
 
 	void inject(AuroraChanceFragment auroraChanceFragment);
-	void inject(MainActivity mainActivity);
 
+	MainActivityComponent getMainActivityComponent(ActivityModule activityModule);
 }
