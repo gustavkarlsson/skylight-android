@@ -17,7 +17,7 @@ public class NotificationDecider {
 	private final ReportOutdatedEvaluator outdatedEvaluator;
 
 	@Inject
-	public NotificationDecider(ReportNotificationCache reportNotificationCache, ChanceEvaluator<AuroraReport> chanceEvaluator, Settings settings, ReportOutdatedEvaluator outdatedEvaluator) {
+	NotificationDecider(ReportNotificationCache reportNotificationCache, ChanceEvaluator<AuroraReport> chanceEvaluator, Settings settings, ReportOutdatedEvaluator outdatedEvaluator) {
 		this.reportNotificationCache = reportNotificationCache;
 		this.chanceEvaluator = chanceEvaluator;
 		this.settings = settings;

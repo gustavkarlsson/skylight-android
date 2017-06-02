@@ -26,7 +26,7 @@ public class NotificationHandler {
 	private final NotificationDecider decider;
 
 	@Inject
-	public NotificationHandler(Context context, NotificationManager notificationManager, ReportNotificationCache reportNotificationCache, ChanceEvaluator<AuroraReport> evaluator, NotificationDecider decider) {
+	NotificationHandler(Context context, NotificationManager notificationManager, ReportNotificationCache reportNotificationCache, ChanceEvaluator<AuroraReport> evaluator, NotificationDecider decider) {
 		this.evaluator = evaluator;
 		this.context = context;
 		this.notificationManager = notificationManager;
