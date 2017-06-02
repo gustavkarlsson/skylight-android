@@ -2,6 +2,8 @@ package se.gustavkarlsson.skylight.android.dagger.components;
 
 import android.content.Context;
 
+import org.threeten.bp.Clock;
+
 import java.util.concurrent.ExecutorService;
 
 import javax.inject.Named;
@@ -18,6 +20,7 @@ import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ContextModul
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.EvaluationModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.prod.AuroraReportCacheModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.prod.AuroraReportModule;
+import se.gustavkarlsson.skylight.android.dagger.modules.prod.ClockModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.prod.ReportNotificationCacheModule;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity;
@@ -37,6 +40,7 @@ import static se.gustavkarlsson.skylight.android.dagger.modules.definitive.Cache
 		CachedThreadPoolModule.class,
 		EvaluationModule.class,
 		AuroraReportModule.class,
+		ClockModule.class,
 })
 @Singleton
 @SuppressWarnings("WeakerAccess")
@@ -62,4 +66,6 @@ public interface ApplicationComponent {
 	UpdateScheduler getUpdateScheduler();
 
 	void inject(MainActivity mainActivity);
+
+	Clock getClock();
 }

@@ -2,6 +2,8 @@ package se.gustavkarlsson.skylight.android.background.providers.impl.aggregating
 
 import android.location.Location;
 
+import org.threeten.bp.Clock;
+
 import javax.inject.Inject;
 
 import dagger.Reusable;
@@ -23,21 +25,23 @@ public class AsyncAuroraFactorsProvider implements AuroraFactorsProvider {
 	private final DarknessProvider darknessProvider;
 	private final GeomagLocationProvider geomagLocationProvider;
 	private final ErrorHandlingExecutorService executorService;
+	private final Clock clock;
 
 	@Inject
-	AsyncAuroraFactorsProvider(GeomagActivityProvider geomagActivityProvider, VisibilityProvider visibilityProvider, DarknessProvider darknessProvider, GeomagLocationProvider geomagLocationProvider,  ErrorHandlingExecutorService executorService) {
+	AsyncAuroraFactorsProvider(GeomagActivityProvider geomagActivityProvider, VisibilityProvider visibilityProvider, DarknessProvider darknessProvider, GeomagLocationProvider geomagLocationProvider, ErrorHandlingExecutorService executorService, Clock clock) {
 		this.geomagActivityProvider = geomagActivityProvider;
 		this.visibilityProvider = visibilityProvider;
 		this.darknessProvider = darknessProvider;
 		this.geomagLocationProvider = geomagLocationProvider;
 		this.executorService = executorService;
+		this.clock = clock;
 	}
 
 	@Override
 	public AuroraFactors getAuroraFactors(Location location, long timeoutMillis) {
 		GetGeomagActivity getGeomagActivity = new GetGeomagActivity(geomagActivityProvider);
 		GetGeomagLocation getGeomagLocation = new GetGeomagLocation(geomagLocationProvider, location);
-		GetDarkness getDarkness = new GetDarkness(darknessProvider, location, System.currentTimeMillis());
+		GetDarkness getDarkness = new GetDarkness(darknessProvider, location, clock.millis());
 		GetVisibility getVisibility = new GetVisibility(visibilityProvider, location);
 
 		ErrorHandlingFuture<GeomagActivity> geomagActivityErrorHandlingFuture = executorService.execute(getGeomagActivity, timeoutMillis);

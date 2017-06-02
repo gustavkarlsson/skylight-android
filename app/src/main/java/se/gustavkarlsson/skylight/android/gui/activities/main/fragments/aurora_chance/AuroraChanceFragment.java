@@ -36,7 +36,7 @@ public class AuroraChanceFragment extends Fragment implements AuroraReportUpdate
 		Log.v(TAG, "onCreateView");
 		rootView = inflater.inflate(R.layout.fragment_aurora_chance, container, false);
 		locationPresenter = new LocationPresenter((TextView) rootView.findViewById(R.id.location));
-		timeSinceUpdatePresenter = new TimeSinceUpdatePresenter((TextView) rootView.findViewById(R.id.time_since_update), DateUtils.MINUTE_IN_MILLIS);
+		timeSinceUpdatePresenter = new TimeSinceUpdatePresenter((TextView) rootView.findViewById(R.id.time_since_update), DateUtils.MINUTE_IN_MILLIS, getApplicationComponent().getClock());
 		chancePresenter = new ChancePresenter((TextView) rootView.findViewById(R.id.chance));
 		getApplicationComponent().inject(this);
 		return rootView;

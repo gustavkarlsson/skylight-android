@@ -11,11 +11,7 @@ public class CountdownTimer {
 		this.clock = clock;
 	}
 
-	public static CountdownTimer start(long durationMillis) {
-		return start(durationMillis, Clock.systemUTC());
-	}
-
-	static CountdownTimer start(long durationMillis, Clock clock) {
+	public static CountdownTimer start(long durationMillis, Clock clock) {
 		return new CountdownTimer(durationMillis, clock);
 	}
 

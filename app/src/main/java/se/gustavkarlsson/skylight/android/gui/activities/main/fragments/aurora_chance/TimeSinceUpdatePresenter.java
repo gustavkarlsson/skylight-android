@@ -3,6 +3,8 @@ package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_
 import android.text.format.DateUtils;
 import android.widget.TextView;
 
+import org.threeten.bp.Clock;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -11,12 +13,14 @@ import se.gustavkarlsson.skylight.android.R;
 class TimeSinceUpdatePresenter {
 	private final TextView timeSinceUpdateTextView;
 	private final long updateTimeResolutionMillis;
+	private final Clock clock;
 	private Timer timeUpdateTimer;
 	private long lastUpdateMillis;
 
-	TimeSinceUpdatePresenter(TextView timeSinceUpdateTextView, long updateTimeResolutionMillis) {
+	TimeSinceUpdatePresenter(TextView timeSinceUpdateTextView, long updateTimeResolutionMillis, Clock clock) {
 		this.timeSinceUpdateTextView = timeSinceUpdateTextView;
 		this.updateTimeResolutionMillis = updateTimeResolutionMillis;
+		this.clock = clock;
 	}
 
 	synchronized void onStart() {
@@ -57,12 +61,12 @@ class TimeSinceUpdatePresenter {
 	}
 
 	private boolean isJustNow(long timeMillis) {
-		long ageMillis = System.currentTimeMillis() - timeMillis;
+		long ageMillis = clock.millis() - timeMillis;
 		return ageMillis <= updateTimeResolutionMillis;
 	}
 
 	private CharSequence formatRelativeTime(long startTimeMillis) {
-		return DateUtils.getRelativeTimeSpanString(startTimeMillis, System.currentTimeMillis(), updateTimeResolutionMillis);
+		return DateUtils.getRelativeTimeSpanString(startTimeMillis, clock.millis(), updateTimeResolutionMillis);
 	}
 
 	synchronized void destroy() {

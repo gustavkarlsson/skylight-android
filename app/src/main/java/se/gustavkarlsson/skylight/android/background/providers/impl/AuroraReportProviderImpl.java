@@ -7,6 +7,8 @@ import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import org.threeten.bp.Clock;
+
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -31,12 +33,14 @@ public class AuroraReportProviderImpl implements AuroraReportProvider {
 	private final LocationProvider locationProvider;
 	private final AuroraFactorsProvider auroraFactorsProvider;
 	private final AsyncAddressProvider asyncAddressProvider;
+	private final Clock clock;
 
-	public AuroraReportProviderImpl(ConnectivityManager connectivityManager, LocationProvider locationProvider, AuroraFactorsProvider auroraFactorsProvider, AsyncAddressProvider asyncAddressProvider) {
+	public AuroraReportProviderImpl(ConnectivityManager connectivityManager, LocationProvider locationProvider, AuroraFactorsProvider auroraFactorsProvider, AsyncAddressProvider asyncAddressProvider, Clock clock) {
 		this.connectivityManager = connectivityManager;
 		this.locationProvider = locationProvider;
 		this.auroraFactorsProvider = auroraFactorsProvider;
 		this.asyncAddressProvider = asyncAddressProvider;
+		this.clock = clock;
 	}
 
 	@Override
@@ -46,12 +50,12 @@ public class AuroraReportProviderImpl implements AuroraReportProvider {
 			throw new UserFriendlyException(R.string.error_no_internet);
 		}
 
-		CountdownTimer timeoutTimer = CountdownTimer.start(timeoutMillis);
+		CountdownTimer timeoutTimer = CountdownTimer.start(timeoutMillis, clock);
 		Location location = locationProvider.getLocation(timeoutTimer.getRemainingTimeMillis());
 		Future<Address> addressFuture = asyncAddressProvider.execute(location.getLatitude(), location.getLongitude());
 		AuroraFactors auroraFactors = auroraFactorsProvider.getAuroraFactors(location, timeoutTimer.getRemainingTimeMillis());
 		Address address = getAddressOrNull(addressFuture, timeoutTimer.getRemainingTimeMillis());
-		return new AuroraReport(System.currentTimeMillis(), address, auroraFactors);
+		return new AuroraReport(clock.millis(), address, auroraFactors);
 	}
 
 	@Nullable

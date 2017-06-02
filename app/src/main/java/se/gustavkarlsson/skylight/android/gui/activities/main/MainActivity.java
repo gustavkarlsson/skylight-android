@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import org.parceler.Parcels;
+import org.threeten.bp.Clock;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -47,6 +48,9 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 
 	@Inject
 	LocalBroadcastManager broadcastManager;
+
+	@Inject
+	Clock clock;
 
 	private int reportLifetimeMillis;
 	private int backgroundUpdateTimeoutMillis;
@@ -135,7 +139,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	protected void onRequirementsMet() {
 		swipeToRefreshPresenter.enable();
 		AuroraReport report = getBestReport();
-		long ageMillis = System.currentTimeMillis() - report.getTimestampMillis();
+		long ageMillis = clock.millis() - report.getTimestampMillis();
 		if (ageMillis > reportLifetimeMillis) {
 			updateInBackground();
 		}

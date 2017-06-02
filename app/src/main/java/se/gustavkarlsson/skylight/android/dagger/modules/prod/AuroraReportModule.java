@@ -7,6 +7,8 @@ import android.net.ConnectivityManager;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import org.threeten.bp.Clock;
+
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
@@ -39,7 +41,6 @@ import se.gustavkarlsson.skylight.android.settings.DebugSettings;
 		GeomagLocationModule.class,
 		DarknessModule.class,
 		SystemServiceModule.class,
-		ClockModule.class,
 		ZoneIdModule.class
 })
 public abstract class AuroraReportModule {
@@ -48,11 +49,11 @@ public abstract class AuroraReportModule {
 
 	// Published
 	@Provides
-	static AuroraReportProvider provideAuroraReportProvider(DebugSettings debugSettings, ConnectivityManager connectivityManager, LocationProvider locationProvider, AuroraFactorsProvider auroraFactorsProvider, AsyncAddressProvider asyncAddressProvider) {
+	static AuroraReportProvider provideAuroraReportProvider(DebugSettings debugSettings, ConnectivityManager connectivityManager, LocationProvider locationProvider, AuroraFactorsProvider auroraFactorsProvider, AsyncAddressProvider asyncAddressProvider, Clock clock) {
 		if (BuildConfig.DEBUG && debugSettings.isOverrideValues()) {
-			return new DebugAuroraReportProvider(debugSettings);
+			return new DebugAuroraReportProvider(debugSettings, clock);
 		} else {
-			return new AuroraReportProviderImpl(connectivityManager, locationProvider, auroraFactorsProvider, asyncAddressProvider);
+			return new AuroraReportProviderImpl(connectivityManager, locationProvider, auroraFactorsProvider, asyncAddressProvider, clock);
 		}
 	}
 
