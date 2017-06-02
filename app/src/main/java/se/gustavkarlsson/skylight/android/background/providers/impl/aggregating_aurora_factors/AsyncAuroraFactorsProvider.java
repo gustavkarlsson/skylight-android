@@ -18,7 +18,7 @@ import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity;
 import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation;
 import se.gustavkarlsson.skylight.android.models.factors.Visibility;
 
-import static se.gustavkarlsson.skylight.android.dagger.modules.definitive.ExecutorModule.CACHED_THREAD_POOL_NAME;
+import static se.gustavkarlsson.skylight.android.dagger.modules.definitive.CachedThreadPoolModule.CACHED_THREAD_POOL_NAME;
 
 public class AsyncAuroraFactorsProvider implements AuroraFactorsProvider {
 	private final GeomagActivityProvider geomagActivityProvider;

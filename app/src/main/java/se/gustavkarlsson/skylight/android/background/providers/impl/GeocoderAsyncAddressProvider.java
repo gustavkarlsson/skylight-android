@@ -15,7 +15,7 @@ import javax.inject.Named;
 
 import se.gustavkarlsson.skylight.android.background.providers.AsyncAddressProvider;
 
-import static se.gustavkarlsson.skylight.android.dagger.modules.definitive.ExecutorModule.CACHED_THREAD_POOL_NAME;
+import static se.gustavkarlsson.skylight.android.dagger.modules.definitive.CachedThreadPoolModule.CACHED_THREAD_POOL_NAME;
 
 public class GeocoderAsyncAddressProvider implements AsyncAddressProvider {
 	private static final String TAG = GeocoderAsyncAddressProvider.class.getSimpleName();

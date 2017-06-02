@@ -10,13 +10,13 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public abstract class ExecutorModule {
+public abstract class CachedThreadPoolModule {
 	public static final String CACHED_THREAD_POOL_NAME = "CachedThreadPool";
 
 	@Provides
 	@Singleton
 	@Named(CACHED_THREAD_POOL_NAME)
-	static ExecutorService provideExecutorService() {
+	static ExecutorService provideCachedThreadPool() {
 		return Executors.newCachedThreadPool();
 	}
 }
