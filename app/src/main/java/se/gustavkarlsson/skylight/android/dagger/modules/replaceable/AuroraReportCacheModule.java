@@ -4,8 +4,8 @@ import javax.inject.Singleton;
 
 import dagger.Binds;
 import dagger.Module;
-import se.gustavkarlsson.skylight.android.cache.AuroraReportCache;
-import se.gustavkarlsson.skylight.android.cache.DualLruAuroraReportCache;
+import se.gustavkarlsson.skylight.android.cache.DualLastReportCache;
+import se.gustavkarlsson.skylight.android.cache.LastReportCache;
 
 @Module
 public abstract class AuroraReportCacheModule {
@@ -13,6 +13,6 @@ public abstract class AuroraReportCacheModule {
 	// Published
 	@Binds
 	@Singleton
-	abstract AuroraReportCache bindAuroraReportCache(DualLruAuroraReportCache impl);
+	abstract LastReportCache bindLastReportCache(DualLastReportCache impl);
 
 }

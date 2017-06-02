@@ -25,7 +25,7 @@ import javax.inject.Inject;
 
 import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.background.Updater;
-import se.gustavkarlsson.skylight.android.cache.AuroraReportCache;
+import se.gustavkarlsson.skylight.android.cache.LastReportCache;
 import se.gustavkarlsson.skylight.android.gui.AuroraReportUpdateListener;
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity;
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity;
@@ -44,7 +44,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	Updater updater;
 
 	@Inject
-	AuroraReportCache auroraReportCache;
+	LastReportCache lastReportCache;
 
 	@Inject
 	LocalBroadcastManager broadcastManager;
@@ -146,9 +146,9 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	}
 
 	private AuroraReport getBestReport() {
-		AuroraReport report = auroraReportCache.get();
-		if (report != null) {
-			return report;
+		AuroraReport lastReport = lastReportCache.get();
+		if (lastReport != null) {
+			return lastReport;
 		}
 		return AuroraReport.createFallback();
 	}
@@ -168,7 +168,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	protected void onDestroy() {
 		Log.v(TAG, "onDestroy");
 		updater = null;
-		auroraReportCache = null;
+		lastReportCache = null;
 		broadcastManager = null;
 		swipeToRefreshPresenter = null;
 		updateReceivers = null;

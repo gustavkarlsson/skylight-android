@@ -12,7 +12,7 @@ import javax.inject.Inject;
 
 import dagger.Reusable;
 import se.gustavkarlsson.skylight.android.R;
-import se.gustavkarlsson.skylight.android.cache.ReportNotificationCache;
+import se.gustavkarlsson.skylight.android.cache.LastNotifiedReportCache;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
@@ -22,15 +22,15 @@ public class NotificationHandler {
 	private final ChanceEvaluator<AuroraReport> evaluator;
 	private final Context context;
 	private final NotificationManager notificationManager;
-	private final ReportNotificationCache reportNotificationCache;
+	private final LastNotifiedReportCache lastNotifiedReportCache;
 	private final NotificationDecider decider;
 
 	@Inject
-	NotificationHandler(Context context, NotificationManager notificationManager, ReportNotificationCache reportNotificationCache, ChanceEvaluator<AuroraReport> evaluator, NotificationDecider decider) {
+	NotificationHandler(Context context, NotificationManager notificationManager, LastNotifiedReportCache lastNotifiedReportCache, ChanceEvaluator<AuroraReport> evaluator, NotificationDecider decider) {
 		this.evaluator = evaluator;
 		this.context = context;
 		this.notificationManager = notificationManager;
-		this.reportNotificationCache = reportNotificationCache;
+		this.lastNotifiedReportCache = lastNotifiedReportCache;
 		this.decider = decider;
 	}
 
@@ -53,7 +53,7 @@ public class NotificationHandler {
 
 			notificationManager.notify(135551, notification);
 		}
-		reportNotificationCache.setLastNotified(report);
+		lastNotifiedReportCache.set(report);
 	}
 
 	private PendingIntent createActivityPendingIntent() {

@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import se.gustavkarlsson.skylight.android.cache.ReportNotificationCache;
+import se.gustavkarlsson.skylight.android.cache.LastNotifiedReportCache;
 import se.gustavkarlsson.skylight.android.evaluation.Chance;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel;
@@ -22,31 +22,31 @@ import static org.mockito.Mockito.when;
 public class NotificationDeciderTest {
 
 	@Mock
-	ReportNotificationCache cache;
+	LastNotifiedReportCache lastNotifiedCache;
 
 	@Mock
-	ChanceEvaluator<AuroraReport> chanceEvaluator;
+	ChanceEvaluator<AuroraReport> auroraChanceEvaluator;
 
 	@Mock
 	Settings settings;
 
 	@Mock
-	ReportOutdatedEvaluator outdatedEvaluator;
+	ReportOutdatedEvaluator reportOutdatedEvaluator;
 
-	private NotificationDecider decider;
+	private NotificationDecider notificationDecider;
 	private AuroraReport report;
 	private AuroraReport lastReport;
 
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		decider = new NotificationDecider(cache, chanceEvaluator, settings, outdatedEvaluator);
+		notificationDecider = new NotificationDecider(lastNotifiedCache, auroraChanceEvaluator, settings, reportOutdatedEvaluator);
 		report = createDummyReport();
 		lastReport = createDummyReport();
 		when(settings.isEnableNotifications()).thenReturn(true);
 		when(settings.getTriggerLevel()).thenReturn(ChanceLevel.HIGH);
-		when(chanceEvaluator.evaluate(any())).thenReturn(Chance.of(1));
-		when(outdatedEvaluator.isOutdated(any())).thenReturn(true);
+		when(auroraChanceEvaluator.evaluate(any())).thenReturn(Chance.of(1));
+		when(reportOutdatedEvaluator.isOutdated(any())).thenReturn(true);
 	}
 
 	private static AuroraReport createDummyReport() {
@@ -57,7 +57,7 @@ public class NotificationDeciderTest {
 	public void maxChanceShouldNotify() throws Exception {
 		when(settings.getTriggerLevel()).thenReturn(ChanceLevel.HIGH);
 
-		boolean shouldNotify = decider.shouldNotify(report);
+		boolean shouldNotify = notificationDecider.shouldNotify(report);
 
 		assertThat(shouldNotify).isTrue();
 	}
@@ -65,9 +65,9 @@ public class NotificationDeciderTest {
 	@Test
 	public void mediumChanceShouldNotifyIfTriggerLevelIsLow() throws Exception {
 		when(settings.getTriggerLevel()).thenReturn(ChanceLevel.LOW);
-		when(chanceEvaluator.evaluate(report)).thenReturn(Chance.of(0.5));
+		when(auroraChanceEvaluator.evaluate(report)).thenReturn(Chance.of(0.5));
 
-		boolean shouldNotify = decider.shouldNotify(report);
+		boolean shouldNotify = notificationDecider.shouldNotify(report);
 
 		assertThat(shouldNotify).isTrue();
 	}
@@ -75,18 +75,18 @@ public class NotificationDeciderTest {
 	@Test
 	public void mediumChanceShouldNotNotifyIfTriggerLevelIsHigh() throws Exception {
 		when(settings.getTriggerLevel()).thenReturn(ChanceLevel.HIGH);
-		when(chanceEvaluator.evaluate(report)).thenReturn(Chance.of(0.5));
+		when(auroraChanceEvaluator.evaluate(report)).thenReturn(Chance.of(0.5));
 
-		boolean shouldNotify = decider.shouldNotify(report);
+		boolean shouldNotify = notificationDecider.shouldNotify(report);
 
 		assertThat(shouldNotify).isFalse();
 	}
 
 	@Test
 	public void noChanceShouldNotNotify() throws Exception {
-		when(chanceEvaluator.evaluate(report)).thenReturn(Chance.of(0));
+		when(auroraChanceEvaluator.evaluate(report)).thenReturn(Chance.of(0));
 
-		boolean shouldNotify = decider.shouldNotify(report);
+		boolean shouldNotify = notificationDecider.shouldNotify(report);
 
 		assertThat(shouldNotify).isFalse();
 	}
@@ -95,28 +95,28 @@ public class NotificationDeciderTest {
 	public void notificationsTurnedOffChanceShouldNotNotify() throws Exception {
 		when(settings.isEnableNotifications()).thenReturn(false);
 
-		boolean shouldNotify = decider.shouldNotify(report);
+		boolean shouldNotify = notificationDecider.shouldNotify(report);
 
 		assertThat(shouldNotify).isFalse();
 	}
 
 	@Test
 	public void alreadyNotifiedAtSameLevelShouldNotNotify() throws Exception {
-		when(cache.getLastNotified()).thenReturn(lastReport);
-		when(outdatedEvaluator.isOutdated(lastReport)).thenReturn(false);
+		when(lastNotifiedCache.get()).thenReturn(lastReport);
+		when(reportOutdatedEvaluator.isOutdated(lastReport)).thenReturn(false);
 
-		boolean shouldNotify = decider.shouldNotify(report);
+		boolean shouldNotify = notificationDecider.shouldNotify(report);
 
 		assertThat(shouldNotify).isFalse();
 	}
 
 	@Test
 	public void alreadyNotifiedAtLowerLevelShouldNotify() throws Exception {
-		when(cache.getLastNotified()).thenReturn(lastReport);
-		when(outdatedEvaluator.isOutdated(lastReport)).thenReturn(false);
-		when(chanceEvaluator.evaluate(lastReport)).thenReturn(Chance.of(0.5));
+		when(lastNotifiedCache.get()).thenReturn(lastReport);
+		when(reportOutdatedEvaluator.isOutdated(lastReport)).thenReturn(false);
+		when(auroraChanceEvaluator.evaluate(lastReport)).thenReturn(Chance.of(0.5));
 
-		boolean shouldNotify = decider.shouldNotify(report);
+		boolean shouldNotify = notificationDecider.shouldNotify(report);
 
 		assertThat(shouldNotify).isTrue();
 	}

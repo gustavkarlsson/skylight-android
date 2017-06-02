@@ -40,8 +40,8 @@ import se.gustavkarlsson.skylight.android.background.providers.impl.RetrofittedG
 import se.gustavkarlsson.skylight.android.background.providers.impl.aggregating_aurora_factors.AsyncAuroraFactorsProvider;
 import se.gustavkarlsson.skylight.android.background.providers.impl.openweathermap.OpenWeatherMapService;
 import se.gustavkarlsson.skylight.android.background.providers.impl.openweathermap.RetrofittedOpenWeatherMapVisibilityProvider;
-import se.gustavkarlsson.skylight.android.cache.DualLruReportNotificationCache;
-import se.gustavkarlsson.skylight.android.cache.ReportNotificationCache;
+import se.gustavkarlsson.skylight.android.cache.DualLastNotifiedReportCache;
+import se.gustavkarlsson.skylight.android.cache.LastNotifiedReportCache;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ContextModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.DarknessModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.GeomagLocationModule;
@@ -134,7 +134,7 @@ public abstract class AuroraReportModule {
 
 	@Binds
 	@Singleton
-	abstract ReportNotificationCache bindReportNotificationCache(DualLruReportNotificationCache impl);
+	abstract LastNotifiedReportCache bindLastNotifiedReportCache(DualLastNotifiedReportCache impl);
 
 	@Provides
 	@Singleton

@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import dagger.Reusable;
 import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.background.providers.AuroraReportProvider;
-import se.gustavkarlsson.skylight.android.cache.AuroraReportCache;
+import se.gustavkarlsson.skylight.android.cache.LastReportCache;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 import se.gustavkarlsson.skylight.android.notifications.NotificationHandler;
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException;
@@ -30,12 +30,12 @@ public class Updater {
 	public static final String RESPONSE_UPDATE_FINISHED_EXTRA_REPORT = TAG + ".RESPONSE_UPDATE_FINISHED_EXTRA_REPORT";
 
 	private final Context context;
-	private final AuroraReportCache cache;
+	private final LastReportCache cache;
 	private final LocalBroadcastManager broadcastManager;
 	private final NotificationHandler notificationHandler;
 
 	@Inject
-	Updater(Context context, AuroraReportCache cache, LocalBroadcastManager broadcastManager, NotificationHandler notificationHandler) {
+	Updater(Context context, LastReportCache cache, LocalBroadcastManager broadcastManager, NotificationHandler notificationHandler) {
 		this.context = context;
 		this.cache = cache;
 		this.broadcastManager = broadcastManager;

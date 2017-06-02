@@ -12,8 +12,8 @@ import se.gustavkarlsson.skylight.android.BuildConfig;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 
 @Singleton
-public class DualLruAuroraReportCache implements AuroraReportCache {
-	private static final String TAG = DualLruAuroraReportCache.class.getSimpleName();
+public class DualLastReportCache implements LastReportCache {
+	private static final String TAG = DualLastReportCache.class.getSimpleName();
 
 	private static final String CACHE_NAME = TAG;
 	private static final String CURRENT_LOCATION_KEY = "current_location"; // Must match [a-z0-9_-]{1,64}
@@ -21,7 +21,7 @@ public class DualLruAuroraReportCache implements AuroraReportCache {
 	private final DualCache<AuroraReport> cache;
 
 	@Inject
-	DualLruAuroraReportCache(Context context) {
+	DualLastReportCache(Context context) {
 		Builder<AuroraReport> builder = new Builder<AuroraReport>(CACHE_NAME, BuildConfig.VERSION_CODE)
 				.useReferenceInRam(Integer.MAX_VALUE, object -> 1)
 				.useSerializerInDisk(Integer.MAX_VALUE, false, new GsonCacheSerializer<>(AuroraReport.class), context);
