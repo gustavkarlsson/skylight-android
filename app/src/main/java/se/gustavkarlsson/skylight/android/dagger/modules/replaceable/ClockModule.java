@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.dagger.modules.prod;
+package se.gustavkarlsson.skylight.android.dagger.modules.replaceable;
 
 import org.threeten.bp.Clock;
 

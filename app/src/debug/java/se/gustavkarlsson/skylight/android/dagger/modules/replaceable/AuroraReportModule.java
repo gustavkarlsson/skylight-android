@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.dagger.modules.prod;
+package se.gustavkarlsson.skylight.android.dagger.modules.replaceable;
 
 import android.content.Context;
 import android.location.Geocoder;
@@ -16,7 +16,6 @@ import dagger.Reusable;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;
-import se.gustavkarlsson.skylight.android.BuildConfig;
 import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.background.providers.AsyncAddressProvider;
 import se.gustavkarlsson.skylight.android.background.providers.AuroraFactorsProvider;
@@ -50,7 +49,7 @@ public abstract class AuroraReportModule {
 	// Published
 	@Provides
 	static AuroraReportProvider provideAuroraReportProvider(DebugSettings debugSettings, ConnectivityManager connectivityManager, LocationProvider locationProvider, AuroraFactorsProvider auroraFactorsProvider, AsyncAddressProvider asyncAddressProvider, Clock clock) {
-		if (BuildConfig.DEBUG && debugSettings.isOverrideValues()) {
+		if (debugSettings.isOverrideValues()) {
 			return new DebugAuroraReportProvider(debugSettings, clock);
 		} else {
 			return new AuroraReportProviderImpl(connectivityManager, locationProvider, auroraFactorsProvider, asyncAddressProvider, clock);
