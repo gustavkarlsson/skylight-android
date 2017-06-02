@@ -13,6 +13,6 @@ public abstract class AuroraReportCacheModule {
 	// Published
 	@Binds
 	@Singleton
-	abstract AuroraReportCache bindAuroraReportCache(DualLruAuroraReportCache dualLruAuroraReportCache);
+	abstract AuroraReportCache bindAuroraReportCache(DualLruAuroraReportCache impl);
 
 }

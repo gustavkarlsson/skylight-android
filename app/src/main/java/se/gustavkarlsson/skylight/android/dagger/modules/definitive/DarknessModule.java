@@ -11,6 +11,6 @@ public abstract class DarknessModule {
 
 	@Binds
 	@Reusable
-	abstract DarknessProvider bindDarknessProvider(KlausBrunnerDarknessProvider provider);
+	abstract DarknessProvider bindDarknessProvider(KlausBrunnerDarknessProvider impl);
 
 }

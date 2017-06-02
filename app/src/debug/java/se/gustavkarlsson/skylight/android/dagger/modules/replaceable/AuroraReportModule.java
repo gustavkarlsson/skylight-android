@@ -8,11 +8,20 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
 import org.threeten.bp.Clock;
+import org.threeten.bp.ZoneId;
+import org.threeten.bp.ZoneOffset;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
+import java8.util.function.Supplier;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;
@@ -31,18 +40,25 @@ import se.gustavkarlsson.skylight.android.background.providers.impl.RetrofittedG
 import se.gustavkarlsson.skylight.android.background.providers.impl.aggregating_aurora_factors.AsyncAuroraFactorsProvider;
 import se.gustavkarlsson.skylight.android.background.providers.impl.openweathermap.OpenWeatherMapService;
 import se.gustavkarlsson.skylight.android.background.providers.impl.openweathermap.RetrofittedOpenWeatherMapVisibilityProvider;
+import se.gustavkarlsson.skylight.android.cache.DualLruReportNotificationCache;
+import se.gustavkarlsson.skylight.android.cache.ReportNotificationCache;
+import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ContextModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.DarknessModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.GeomagLocationModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.SystemServiceModule;
 import se.gustavkarlsson.skylight.android.settings.DebugSettings;
+import se.gustavkarlsson.skylight.android.settings.Settings;
+import se.gustavkarlsson.skylight.android.settings.SharedPreferencesDebugSettings;
+import se.gustavkarlsson.skylight.android.settings.SharedPreferencesSettings;
 
 @Module(includes = {
+		ContextModule.class,
 		GeomagLocationModule.class,
 		DarknessModule.class,
-		SystemServiceModule.class,
-		ZoneIdModule.class
+		SystemServiceModule.class
 })
 public abstract class AuroraReportModule {
+	public static final String CACHED_THREAD_POOL_NAME = "CachedThreadPool";
 	private static final String OPENWEATHERMAP_API_URL = "http://api.openweathermap.org/data/2.5/";
 	private static final String GEOMAG_ACTIVITY_API_URL = "http://skylight-app.net/rest/";
 
@@ -58,11 +74,11 @@ public abstract class AuroraReportModule {
 
 	@Binds
 	@Reusable
-	abstract LocationProvider bindLocationProvider(GoogleLocationProvider googleLocationProvider);
+	abstract LocationProvider bindLocationProvider(GoogleLocationProvider impl);
 
 	@Binds
 	@Reusable
-	abstract AuroraFactorsProvider bindAuroraFactorsProvider(AsyncAuroraFactorsProvider provider);
+	abstract AuroraFactorsProvider bindAuroraFactorsProvider(AsyncAuroraFactorsProvider impl);
 
 	@Provides
 	@Reusable
@@ -96,7 +112,7 @@ public abstract class AuroraReportModule {
 
 	@Binds
 	@Reusable
-	abstract AsyncAddressProvider bindAsyncAddressProvider(GeocoderAsyncAddressProvider provider);
+	abstract AsyncAddressProvider bindAsyncAddressProvider(GeocoderAsyncAddressProvider impl);
 
 	@Provides
 	@Reusable
@@ -109,6 +125,30 @@ public abstract class AuroraReportModule {
 
 	@Binds
 	@Reusable
-	abstract GeomagActivityProvider bindGeomagActivityProvider(RetrofittedGeomagActivityProvider provider);
+	abstract GeomagActivityProvider bindGeomagActivityProvider(RetrofittedGeomagActivityProvider impl);
+
+	@Provides
+	static Supplier<ZoneId> provideZoneIdSupplier() {
+		return ZoneOffset::systemDefault;
+	}
+
+	@Binds
+	@Singleton
+	abstract ReportNotificationCache bindReportNotificationCache(DualLruReportNotificationCache impl);
+
+	@Provides
+	@Singleton
+	@Named(CACHED_THREAD_POOL_NAME)
+	static ExecutorService provideCachedThreadPool() {
+		return Executors.newCachedThreadPool();
+	}
+
+	@Binds
+	@Reusable
+	abstract Settings bindSettings(SharedPreferencesSettings impl);
+
+	@Binds
+	@Reusable
+	abstract DebugSettings bindDebugSettings(SharedPreferencesDebugSettings impl);
 
 }

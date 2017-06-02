@@ -20,22 +20,22 @@ public abstract class EvaluationModule {
 
 	@Binds
 	@Reusable
-	abstract ChanceEvaluator<GeomagActivity> bindGeomagActivityEvaluator(GeomagActivityEvaluator evaluator);
+	abstract ChanceEvaluator<GeomagActivity> bindGeomagActivityEvaluator(GeomagActivityEvaluator impl);
 
 	@Binds
 	@Reusable
-	abstract ChanceEvaluator<GeomagLocation> bindGeomagLocationEvaluator(GeomagLocationEvaluator evaluator);
+	abstract ChanceEvaluator<GeomagLocation> bindGeomagLocationEvaluator(GeomagLocationEvaluator impl);
 
 	@Binds
 	@Reusable
-	abstract ChanceEvaluator<Visibility> bindVisibilityEvaluator(VisibilityEvaluator evaluator);
+	abstract ChanceEvaluator<Visibility> bindVisibilityEvaluator(VisibilityEvaluator impl);
 
 	@Binds
 	@Reusable
-	abstract ChanceEvaluator<Darkness> bindDarknessEvaluator(DarknessEvaluator evaluator);
+	abstract ChanceEvaluator<Darkness> bindDarknessEvaluator(DarknessEvaluator impl);
 
 	@Binds
 	@Reusable
-	abstract ChanceEvaluator<AuroraReport> bindAuroraReportEvaluator(AuroraReportEvaluator evaluator);
+	abstract ChanceEvaluator<AuroraReport> bindAuroraReportEvaluator(AuroraReportEvaluator impl);
 
 }

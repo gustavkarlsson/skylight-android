@@ -11,6 +11,6 @@ public abstract class GeomagLocationModule {
 
 	@Binds
 	@Reusable
-	abstract GeomagLocationProvider bindGeomagLocationProvider(GeomagLocationProviderImpl provider);
+	abstract GeomagLocationProvider bindGeomagLocationProvider(GeomagLocationProviderImpl impl);
 
 }
