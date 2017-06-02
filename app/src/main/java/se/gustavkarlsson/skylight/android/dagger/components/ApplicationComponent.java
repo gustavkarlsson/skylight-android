@@ -8,6 +8,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import se.gustavkarlsson.skylight.android.background.UpdateJob;
 import se.gustavkarlsson.skylight.android.background.providers.AuroraReportProvider;
 import se.gustavkarlsson.skylight.android.cache.AuroraReportCache;
 import se.gustavkarlsson.skylight.android.cache.ReportNotificationCache;
@@ -53,4 +54,6 @@ public interface ApplicationComponent {
 	ChanceEvaluator<Darkness> getDarknessEvaluator();
 
 	AuroraReportProvider getAuroraReportProvider();
+
+	UpdateJob getUpdateJob();
 }
