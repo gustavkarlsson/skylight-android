@@ -10,12 +10,14 @@ import android.support.v4.app.TaskStackBuilder;
 
 import javax.inject.Inject;
 
+import dagger.Reusable;
 import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.cache.ReportNotificationCache;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 
+@Reusable
 public class NotificationHandler {
 	private final ChanceEvaluator<AuroraReport> evaluator;
 	private final Context context;

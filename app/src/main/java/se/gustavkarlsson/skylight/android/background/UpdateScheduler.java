@@ -10,11 +10,13 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import dagger.Reusable;
 import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.settings.Settings;
 
 import static se.gustavkarlsson.skylight.android.background.UpdateJob.UPDATE_JOB_TAG;
 
+@Reusable
 public class UpdateScheduler {
 	private static final String TAG = UpdateScheduler.class.getSimpleName();
 

@@ -9,12 +9,14 @@ import com.google.android.gms.location.LocationServices;
 
 import javax.inject.Inject;
 
+import dagger.Reusable;
 import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.background.providers.LocationProvider;
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
+@Reusable
 public class GoogleLocationProvider implements LocationProvider {
 	private static final String TAG = GoogleLocationProvider.class.getSimpleName();
 

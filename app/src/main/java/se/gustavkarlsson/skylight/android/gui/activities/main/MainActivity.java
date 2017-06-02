@@ -23,16 +23,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import se.gustavkarlsson.skylight.android.R;
-import se.gustavkarlsson.skylight.android.Skylight;
 import se.gustavkarlsson.skylight.android.background.Updater;
 import se.gustavkarlsson.skylight.android.cache.AuroraReportCache;
-import se.gustavkarlsson.skylight.android.dagger.components.DaggerMainActivityComponent;
-import se.gustavkarlsson.skylight.android.dagger.components.MainActivityComponent;
 import se.gustavkarlsson.skylight.android.gui.AuroraReportUpdateListener;
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity;
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 
+import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_ERROR;
 import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE;
 import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_FINISHED;
@@ -40,9 +38,6 @@ import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPD
 
 public class MainActivity extends AuroraRequirementsCheckingActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
-
-	// TODO find a nicer way to do this
-	static MainActivityComponent componentOverride;
 
 	@Inject
 	Updater updater;
@@ -64,14 +59,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		if (componentOverride != null) {
-			componentOverride.inject(this);
-		} else {
-			DaggerMainActivityComponent.builder()
-					.applicationComponent(Skylight.getApplicationComponent())
-					.build()
-					.inject(this);
-		}
+		getApplicationComponent().inject(this);
 
 		reportLifetimeMillis = getResources().getInteger(R.integer.setting_foreground_report_lifetime_millis);
 		backgroundUpdateTimeoutMillis = getResources().getInteger(R.integer.setting_background_update_timeout_millis);
@@ -178,7 +166,6 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		updater = null;
 		auroraReportCache = null;
 		broadcastManager = null;
-		componentOverride = null;
 		swipeToRefreshPresenter = null;
 		updateReceivers = null;
 		broadcastReceiver = null;

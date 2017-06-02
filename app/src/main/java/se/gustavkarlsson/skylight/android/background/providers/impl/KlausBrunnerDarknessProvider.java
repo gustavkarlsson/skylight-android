@@ -7,9 +7,11 @@ import java.util.GregorianCalendar;
 
 import javax.inject.Inject;
 
+import dagger.Reusable;
 import se.gustavkarlsson.skylight.android.background.providers.DarknessProvider;
 import se.gustavkarlsson.skylight.android.models.factors.Darkness;
 
+@Reusable
 public class KlausBrunnerDarknessProvider implements DarknessProvider {
 
 	@Inject

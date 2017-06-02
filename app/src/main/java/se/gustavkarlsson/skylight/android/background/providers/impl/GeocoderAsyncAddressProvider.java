@@ -13,10 +13,12 @@ import java.util.concurrent.FutureTask;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import dagger.Reusable;
 import se.gustavkarlsson.skylight.android.background.providers.AsyncAddressProvider;
 
 import static se.gustavkarlsson.skylight.android.dagger.modules.definitive.CachedThreadPoolModule.CACHED_THREAD_POOL_NAME;
 
+@Reusable
 public class GeocoderAsyncAddressProvider implements AsyncAddressProvider {
 	private static final String TAG = GeocoderAsyncAddressProvider.class.getSimpleName();
 

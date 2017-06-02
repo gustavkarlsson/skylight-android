@@ -2,12 +2,14 @@ package se.gustavkarlsson.skylight.android.notifications;
 
 import javax.inject.Inject;
 
+import dagger.Reusable;
 import se.gustavkarlsson.skylight.android.cache.ReportNotificationCache;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 import se.gustavkarlsson.skylight.android.settings.Settings;
 
+@Reusable
 public class NotificationDecider {
 	private final ReportNotificationCache reportNotificationCache;
 	private final ChanceEvaluator<AuroraReport> chanceEvaluator;

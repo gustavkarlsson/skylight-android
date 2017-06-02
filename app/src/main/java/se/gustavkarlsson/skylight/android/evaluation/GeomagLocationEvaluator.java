@@ -2,8 +2,10 @@ package se.gustavkarlsson.skylight.android.evaluation;
 
 import javax.inject.Inject;
 
+import dagger.Reusable;
 import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation;
 
+@Reusable
 public class GeomagLocationEvaluator implements ChanceEvaluator<GeomagLocation> {
 
 	@Inject

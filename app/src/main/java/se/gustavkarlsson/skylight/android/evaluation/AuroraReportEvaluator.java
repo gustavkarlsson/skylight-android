@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import dagger.Reusable;
 import java8.util.stream.RefStreams;
 import se.gustavkarlsson.skylight.android.models.AuroraFactors;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
@@ -15,8 +16,8 @@ import se.gustavkarlsson.skylight.android.models.factors.Visibility;
 
 import static java8.util.stream.StreamSupport.stream;
 
+@Reusable
 public class AuroraReportEvaluator implements ChanceEvaluator<AuroraReport> {
-
 	private final ChanceEvaluator<GeomagActivity> geomagActivityEvaluator;
 	private final ChanceEvaluator<GeomagLocation> geomagLocationEvaluator;
 	private final ChanceEvaluator<Visibility> visibilityEvaluator;

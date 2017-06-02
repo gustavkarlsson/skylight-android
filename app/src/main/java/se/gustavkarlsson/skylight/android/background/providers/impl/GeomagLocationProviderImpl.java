@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.background.providers.impl;
 
 import javax.inject.Inject;
 
+import dagger.Reusable;
 import se.gustavkarlsson.skylight.android.background.providers.GeomagLocationProvider;
 import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation;
 
@@ -14,6 +15,7 @@ import static java.lang.Math.sqrt;
 import static java.lang.Math.toDegrees;
 import static java.lang.Math.toRadians;
 
+@Reusable
 public class GeomagLocationProviderImpl implements GeomagLocationProvider {
 
 	// 2015 data

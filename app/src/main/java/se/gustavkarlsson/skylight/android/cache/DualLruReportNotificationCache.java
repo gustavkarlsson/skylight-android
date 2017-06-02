@@ -6,10 +6,12 @@ import com.vincentbrison.openlibraries.android.dualcache.Builder;
 import com.vincentbrison.openlibraries.android.dualcache.DualCache;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import se.gustavkarlsson.skylight.android.BuildConfig;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 
+@Singleton
 public class DualLruReportNotificationCache implements ReportNotificationCache {
 	private static final String TAG = DualLruReportNotificationCache.class.getSimpleName();
 

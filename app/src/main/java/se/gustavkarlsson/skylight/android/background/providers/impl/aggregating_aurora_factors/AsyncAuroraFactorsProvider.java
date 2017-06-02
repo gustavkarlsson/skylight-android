@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutorService;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import dagger.Reusable;
 import se.gustavkarlsson.skylight.android.background.providers.AuroraFactorsProvider;
 import se.gustavkarlsson.skylight.android.background.providers.DarknessProvider;
 import se.gustavkarlsson.skylight.android.background.providers.GeomagActivityProvider;
@@ -20,6 +21,7 @@ import se.gustavkarlsson.skylight.android.models.factors.Visibility;
 
 import static se.gustavkarlsson.skylight.android.dagger.modules.definitive.CachedThreadPoolModule.CACHED_THREAD_POOL_NAME;
 
+@Reusable
 public class AsyncAuroraFactorsProvider implements AuroraFactorsProvider {
 	private final GeomagActivityProvider geomagActivityProvider;
 	private final VisibilityProvider visibilityProvider;

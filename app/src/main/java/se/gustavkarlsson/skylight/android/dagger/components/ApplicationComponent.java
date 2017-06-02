@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import se.gustavkarlsson.skylight.android.background.UpdateJob;
+import se.gustavkarlsson.skylight.android.background.UpdateScheduler;
 import se.gustavkarlsson.skylight.android.background.providers.AuroraReportProvider;
 import se.gustavkarlsson.skylight.android.cache.AuroraReportCache;
 import se.gustavkarlsson.skylight.android.cache.ReportNotificationCache;
@@ -19,6 +20,7 @@ import se.gustavkarlsson.skylight.android.dagger.modules.prod.AuroraReportCacheM
 import se.gustavkarlsson.skylight.android.dagger.modules.prod.AuroraReportModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.prod.ReportNotificationCacheModule;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
+import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity;
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceFragment;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 import se.gustavkarlsson.skylight.android.models.factors.Darkness;
@@ -56,4 +58,8 @@ public interface ApplicationComponent {
 	AuroraReportProvider getAuroraReportProvider();
 
 	UpdateJob getUpdateJob();
+
+	UpdateScheduler getUpdateScheduler();
+
+	void inject(MainActivity mainActivity);
 }

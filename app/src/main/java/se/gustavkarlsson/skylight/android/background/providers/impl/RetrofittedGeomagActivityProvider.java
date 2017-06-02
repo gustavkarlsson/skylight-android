@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
+import dagger.Reusable;
 import retrofit2.Response;
 import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped;
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;
@@ -14,6 +15,7 @@ import se.gustavkarlsson.skylight.android.background.providers.GeomagActivityPro
 import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity;
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException;
 
+@Reusable
 public class RetrofittedGeomagActivityProvider implements GeomagActivityProvider {
 	private static final String TAG = RetrofittedGeomagActivityProvider.class.getSimpleName();
 

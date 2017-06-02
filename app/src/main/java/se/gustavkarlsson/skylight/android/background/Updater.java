@@ -10,6 +10,7 @@ import org.parceler.Parcels;
 
 import javax.inject.Inject;
 
+import dagger.Reusable;
 import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.background.providers.AuroraReportProvider;
 import se.gustavkarlsson.skylight.android.cache.AuroraReportCache;
@@ -19,6 +20,7 @@ import se.gustavkarlsson.skylight.android.util.UserFriendlyException;
 
 import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 
+@Reusable
 public class Updater {
 	private static final String TAG = Updater.class.getSimpleName();
 
