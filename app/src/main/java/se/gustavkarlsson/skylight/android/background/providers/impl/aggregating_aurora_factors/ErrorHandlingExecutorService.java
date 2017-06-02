@@ -3,10 +3,19 @@ package se.gustavkarlsson.skylight.android.background.providers.impl.aggregating
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import dagger.Reusable;
+
+import static se.gustavkarlsson.skylight.android.dagger.modules.definitive.CachedThreadPoolModule.CACHED_THREAD_POOL_NAME;
+
+@Reusable
 class ErrorHandlingExecutorService {
 	private final ExecutorService executorService;
 
-	ErrorHandlingExecutorService(ExecutorService executorService) {
+	@Inject
+	ErrorHandlingExecutorService(@Named(CACHED_THREAD_POOL_NAME) ExecutorService executorService) {
 		this.executorService = executorService;
 	}
 
