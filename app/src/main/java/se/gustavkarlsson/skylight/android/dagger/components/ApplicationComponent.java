@@ -36,7 +36,7 @@ import static se.gustavkarlsson.skylight.android.dagger.modules.definitive.Cache
 		AuroraReportCacheModule.class,
 		CachedThreadPoolModule.class,
 		EvaluationModule.class,
-		AuroraReportModule.class
+		AuroraReportModule.class,
 })
 @Singleton
 @SuppressWarnings("WeakerAccess")

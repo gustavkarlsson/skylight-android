@@ -38,7 +38,9 @@ import se.gustavkarlsson.skylight.android.settings.DebugSettings;
 @Module(includes = {
 		GeomagLocationModule.class,
 		DarknessModule.class,
-		SystemServiceModule.class
+		SystemServiceModule.class,
+		ClockModule.class,
+		ZoneIdModule.class
 })
 public abstract class AuroraReportModule {
 	private static final String OPENWEATHERMAP_API_URL = "http://api.openweathermap.org/data/2.5/";

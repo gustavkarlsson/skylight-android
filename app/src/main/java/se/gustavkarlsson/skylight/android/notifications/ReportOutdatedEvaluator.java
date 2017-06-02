@@ -6,7 +6,6 @@ import org.threeten.bp.Instant;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.ZoneId;
-import org.threeten.bp.ZoneOffset;
 
 import javax.inject.Inject;
 
@@ -21,10 +20,6 @@ public class ReportOutdatedEvaluator {
 	private final Supplier<ZoneId> zoneIdSupplier;
 
 	@Inject
-	ReportOutdatedEvaluator() {
-		this(Clock.systemUTC(), ZoneOffset::systemDefault);
-	}
-
 	ReportOutdatedEvaluator(Clock clock, Supplier<ZoneId> zoneIdSupplier) {
 		this.clock = clock;
 		this.zoneIdSupplier = zoneIdSupplier;

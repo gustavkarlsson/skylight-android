@@ -15,7 +15,7 @@ public class CountdownTimer {
 		return start(durationMillis, Clock.systemUTC());
 	}
 
-	public static CountdownTimer start(long durationMillis, Clock clock) {
+	static CountdownTimer start(long durationMillis, Clock clock) {
 		return new CountdownTimer(durationMillis, clock);
 	}
 
