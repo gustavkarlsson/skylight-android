@@ -1,13 +1,14 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors;
 
 import se.gustavkarlsson.skylight.android.R;
-import se.gustavkarlsson.skylight.android.dagger.components.DaggerEvaluationComponent;
 import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity;
+
+import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 
 class GeomagActivityPresenter extends AbstractAuroraFactorPresenter<GeomagActivity> {
 
 	GeomagActivityPresenter(AuroraFactorView factorView) {
-		super(factorView, DaggerEvaluationComponent.create().getGeomagActivityEvaluator());
+		super(factorView, getApplicationComponent().getGeomagActivityEvaluator());
 	}
 
 	@Override

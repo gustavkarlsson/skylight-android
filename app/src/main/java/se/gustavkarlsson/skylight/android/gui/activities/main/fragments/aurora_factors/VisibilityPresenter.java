@@ -1,13 +1,14 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors;
 
 import se.gustavkarlsson.skylight.android.R;
-import se.gustavkarlsson.skylight.android.dagger.components.DaggerEvaluationComponent;
 import se.gustavkarlsson.skylight.android.models.factors.Visibility;
+
+import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 
 class VisibilityPresenter extends AbstractAuroraFactorPresenter<Visibility> {
 
 	VisibilityPresenter(AuroraFactorView factorView) {
-		super(factorView, DaggerEvaluationComponent.create().getVisibilityEvaluator());
+		super(factorView, getApplicationComponent().getVisibilityEvaluator());
 	}
 
 	@Override

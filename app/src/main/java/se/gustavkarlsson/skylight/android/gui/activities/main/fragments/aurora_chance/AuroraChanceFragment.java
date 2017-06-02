@@ -12,12 +12,13 @@ import android.widget.TextView;
 import javax.inject.Inject;
 
 import se.gustavkarlsson.skylight.android.R;
-import se.gustavkarlsson.skylight.android.dagger.components.DaggerEvaluationComponent;
 import se.gustavkarlsson.skylight.android.evaluation.Chance;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel;
 import se.gustavkarlsson.skylight.android.gui.AuroraReportUpdateListener;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
+
+import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 
 public class AuroraChanceFragment extends Fragment implements AuroraReportUpdateListener {
 	private static final String TAG = AuroraChanceFragment.class.getSimpleName();
@@ -37,7 +38,7 @@ public class AuroraChanceFragment extends Fragment implements AuroraReportUpdate
 		locationPresenter = new LocationPresenter((TextView) rootView.findViewById(R.id.location));
 		timeSinceUpdatePresenter = new TimeSinceUpdatePresenter((TextView) rootView.findViewById(R.id.time_since_update), DateUtils.MINUTE_IN_MILLIS);
 		chancePresenter = new ChancePresenter((TextView) rootView.findViewById(R.id.chance));
-		DaggerEvaluationComponent.create().inject(this);
+		getApplicationComponent().inject(this);
 		return rootView;
 	}
 
