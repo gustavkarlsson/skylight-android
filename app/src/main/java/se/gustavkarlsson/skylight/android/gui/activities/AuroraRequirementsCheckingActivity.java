@@ -48,6 +48,7 @@ public abstract class AuroraRequirementsCheckingActivity extends AppCompatActivi
 		if (!hasPermission) {
 			showLocationPermissionRequest();
 		} else {
+			updateScheduler.setupBackgroundUpdates();
 			onRequirementsMet();
 		}
 	}
