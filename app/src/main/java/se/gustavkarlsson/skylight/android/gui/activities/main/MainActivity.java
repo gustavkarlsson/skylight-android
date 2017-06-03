@@ -32,7 +32,7 @@ import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponen
 import static se.gustavkarlsson.skylight.android.background.UpdateJob.BACKGROUND_UPDATE_TIMEOUT;
 import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_ERROR;
 import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE;
-import static se.gustavkarlsson.skylight.android.dagger.modules.replaceable.LatestAuroraReportCacheModule.LATEST_NAME;
+import static se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME;
 
 public class MainActivity extends AuroraRequirementsCheckingActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();

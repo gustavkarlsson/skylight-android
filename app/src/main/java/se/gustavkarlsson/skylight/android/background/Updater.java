@@ -18,7 +18,7 @@ import se.gustavkarlsson.skylight.android.observers.ObservableData;
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException;
 
 import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
-import static se.gustavkarlsson.skylight.android.dagger.modules.replaceable.LatestAuroraReportCacheModule.LATEST_NAME;
+import static se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME;
 
 @Reusable
 public class Updater {

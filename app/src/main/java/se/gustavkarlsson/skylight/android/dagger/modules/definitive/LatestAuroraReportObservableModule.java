@@ -16,7 +16,7 @@ import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation;
 import se.gustavkarlsson.skylight.android.models.factors.Visibility;
 import se.gustavkarlsson.skylight.android.observers.ObservableData;
 
-import static se.gustavkarlsson.skylight.android.dagger.modules.replaceable.LatestAuroraReportCacheModule.LATEST_NAME;
+import static se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME;
 
 @Module
 public abstract class LatestAuroraReportObservableModule {

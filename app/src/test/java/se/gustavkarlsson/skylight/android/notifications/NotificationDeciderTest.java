@@ -19,7 +19,7 @@ import se.gustavkarlsson.skylight.android.settings.Settings;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
-import static se.gustavkarlsson.skylight.android.dagger.modules.replaceable.AuroraReportModule.LAST_NOTIFIED_NAME;
+import static se.gustavkarlsson.skylight.android.dagger.Names.LAST_NOTIFIED_NAME;
 
 @RunWith(MockitoJUnitRunner.class)
 public class NotificationDeciderTest {

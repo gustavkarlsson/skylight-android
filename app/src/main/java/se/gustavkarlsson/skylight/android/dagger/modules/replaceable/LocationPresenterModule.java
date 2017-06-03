@@ -11,7 +11,7 @@ import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.dagger.scopes.FragmentScope;
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.LocationPresenter;
 
-import static se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRootViewModule.FRAGMENT_ROOT_NAME;
+import static se.gustavkarlsson.skylight.android.dagger.Names.FRAGMENT_ROOT_NAME;
 
 @Module
 public class LocationPresenterModule {

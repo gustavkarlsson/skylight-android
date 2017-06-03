@@ -10,9 +10,10 @@ import dagger.Module;
 import dagger.Provides;
 import se.gustavkarlsson.skylight.android.dagger.scopes.FragmentScope;
 
+import static se.gustavkarlsson.skylight.android.dagger.Names.FRAGMENT_ROOT_NAME;
+
 @Module
 public class FragmentRootViewModule {
-	public static final String FRAGMENT_ROOT_NAME = "FragmentRoot";
 
 	private final LayoutInflater inflater;
 	private final ViewGroup container;

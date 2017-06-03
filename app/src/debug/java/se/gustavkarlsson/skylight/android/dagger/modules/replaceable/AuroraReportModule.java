@@ -52,6 +52,9 @@ import se.gustavkarlsson.skylight.android.settings.Settings;
 import se.gustavkarlsson.skylight.android.settings.SharedPreferencesDebugSettings;
 import se.gustavkarlsson.skylight.android.settings.SharedPreferencesSettings;
 
+import static se.gustavkarlsson.skylight.android.dagger.Names.CACHED_THREAD_POOL_NAME;
+import static se.gustavkarlsson.skylight.android.dagger.Names.LAST_NOTIFIED_NAME;
+
 @Module(includes = {
 		ContextModule.class,
 		GeomagLocationModule.class,
@@ -59,11 +62,9 @@ import se.gustavkarlsson.skylight.android.settings.SharedPreferencesSettings;
 		SystemServiceModule.class
 })
 public abstract class AuroraReportModule {
-	public static final String CACHED_THREAD_POOL_NAME = "CachedThreadPool";
-	public static final String LAST_NOTIFIED_NAME = "LastNotified";
+	private static final String LAST_NOTIFIED_CACHE_NAME = "last-notified-aurora-report";
 	private static final String OPENWEATHERMAP_API_URL = "http://api.openweathermap.org/data/2.5/";
 	private static final String GEOMAG_ACTIVITY_API_URL = "http://skylight-app.net/rest/";
-	private static final String LAST_NOTIFIED_CACHE_NAME = "last-notified-aurora-report";
 
 	// Published
 	@Provides

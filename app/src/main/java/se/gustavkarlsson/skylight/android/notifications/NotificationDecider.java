@@ -10,7 +10,7 @@ import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 import se.gustavkarlsson.skylight.android.settings.Settings;
 
-import static se.gustavkarlsson.skylight.android.dagger.modules.replaceable.AuroraReportModule.LAST_NOTIFIED_NAME;
+import static se.gustavkarlsson.skylight.android.dagger.Names.LAST_NOTIFIED_NAME;
 
 @Reusable
 public class NotificationDecider {

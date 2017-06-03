@@ -17,8 +17,8 @@ import se.gustavkarlsson.skylight.android.models.AuroraReport;
 import se.gustavkarlsson.skylight.android.observers.DataObserver;
 import se.gustavkarlsson.skylight.android.observers.ObservableData;
 
-import static se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRootViewModule.FRAGMENT_ROOT_NAME;
-import static se.gustavkarlsson.skylight.android.dagger.modules.replaceable.LatestAuroraReportCacheModule.LATEST_NAME;
+import static se.gustavkarlsson.skylight.android.dagger.Names.FRAGMENT_ROOT_NAME;
+import static se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME;
 
 public class AuroraChanceFragment extends Fragment implements DataObserver<AuroraReport> {
 	private static final String TAG = AuroraChanceFragment.class.getSimpleName();

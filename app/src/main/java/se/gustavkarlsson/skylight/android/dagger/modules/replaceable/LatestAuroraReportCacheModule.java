@@ -11,17 +11,18 @@ import se.gustavkarlsson.skylight.android.cache.DualAuroraReportSingletonCache;
 import se.gustavkarlsson.skylight.android.cache.SingletonCache;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 
+import static se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME;
+
 @Module
 public abstract class LatestAuroraReportCacheModule {
-	public static final String LATEST_NAME = "Latest";
-	private static final String CACHE_NAME = "latest-aurora-report";
+	private static final String LATEST_CACHE_NAME = "latest-aurora-report";
 
 	// Published
 	@Provides
 	@Singleton
 	@Named(LATEST_NAME)
 	static SingletonCache<AuroraReport> provideLatestAuroraReportCache(Context context) {
-		return new DualAuroraReportSingletonCache(context, CACHE_NAME);
+		return new DualAuroraReportSingletonCache(context, LATEST_CACHE_NAME);
 	}
 
 }

@@ -8,7 +8,7 @@ import javax.inject.Named;
 
 import dagger.Reusable;
 
-import static se.gustavkarlsson.skylight.android.dagger.modules.replaceable.AuroraReportModule.CACHED_THREAD_POOL_NAME;
+import static se.gustavkarlsson.skylight.android.dagger.Names.CACHED_THREAD_POOL_NAME;
 
 @Reusable
 class ErrorHandlingExecutorService {
