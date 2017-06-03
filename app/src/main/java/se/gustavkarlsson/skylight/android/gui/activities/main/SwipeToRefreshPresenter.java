@@ -1,10 +1,11 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main;
 
 import android.app.Activity;
-import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 
 import org.threeten.bp.Duration;
+
+import java.util.concurrent.ExecutorService;
 
 import se.gustavkarlsson.skylight.android.background.Updater;
 
@@ -14,16 +15,18 @@ public class SwipeToRefreshPresenter {
 	private final SwipeRefreshLayout swipeRefreshLayout;
 	private final Activity activity;
 	private final Updater updater;
+	private final ExecutorService cachedThreadPool;
 
-	public SwipeToRefreshPresenter(SwipeRefreshLayout swipeRefreshLayout, Activity activity, Updater updater) {
+	public SwipeToRefreshPresenter(SwipeRefreshLayout swipeRefreshLayout, Activity activity, Updater updater, ExecutorService cachedThreadPool) {
 		this.swipeRefreshLayout = swipeRefreshLayout;
 		this.activity = activity;
 		this.updater = updater;
+		this.cachedThreadPool = cachedThreadPool;
 	}
 
-	private void update(SwipeRefreshLayout swipeRefreshLayout, Activity activity) {
+	private void update() {
 		swipeRefreshLayout.setRefreshing(true);
-		AsyncTask.execute(() -> {
+		cachedThreadPool.execute(() -> {
 			updater.update(TIMEOUT.toMillis());
 			activity.runOnUiThread(() -> setRefreshing(false));
         });
@@ -32,7 +35,7 @@ public class SwipeToRefreshPresenter {
 	void enable() {
 		swipeRefreshLayout.setEnabled(true);
 		setRefreshing(false);
-		swipeRefreshLayout.setOnRefreshListener(() -> update(swipeRefreshLayout, activity));
+		swipeRefreshLayout.setOnRefreshListener(this::update);
 	}
 
 	void disable() {

@@ -5,6 +5,7 @@ public final class Names {
 	public static final String LATEST_NAME = "Latest";
 	public static final String CACHED_THREAD_POOL_NAME = "CachedThreadPool";
 	public static final String LAST_NOTIFIED_NAME = "LastNotified";
+	public static final String UPDATE_ERROR_NAME = "UpdateError";
 
 	private Names() {
 	}

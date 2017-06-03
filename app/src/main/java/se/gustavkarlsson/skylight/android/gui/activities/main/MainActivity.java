@@ -1,19 +1,18 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main;
 
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import org.threeten.bp.Clock;
 import org.threeten.bp.Duration;
+
+import java.util.concurrent.ExecutorService;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -31,8 +30,9 @@ import se.gustavkarlsson.skylight.android.observers.ObservableData;
 import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 import static se.gustavkarlsson.skylight.android.background.UpdateJob.BACKGROUND_UPDATE_TIMEOUT;
 import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_ERROR;
-import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE;
+import static se.gustavkarlsson.skylight.android.dagger.Names.CACHED_THREAD_POOL_NAME;
 import static se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME;
+import static se.gustavkarlsson.skylight.android.dagger.Names.UPDATE_ERROR_NAME;
 
 public class MainActivity extends AuroraRequirementsCheckingActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
@@ -58,9 +58,15 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	@Inject
 	ChanceEvaluator<AuroraReport> auroraChanceEvaluator;
 
-	private MainActivityComponent component;
+	@Inject
+	@Named(UPDATE_ERROR_NAME)
+	BroadcastReceiver broadcastReceiver;
 
-	private BroadcastReceiver broadcastReceiver;
+	@Inject
+	@Named(CACHED_THREAD_POOL_NAME)
+	ExecutorService cachedTreadPool;
+
+	private MainActivityComponent component;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,22 +75,6 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		component = getApplicationComponent().getMainActivityComponent(new ActivityModule(this));
 		setContentView(R.layout.activity_main);
 		component.inject(this);
-
-		broadcastReceiver = createBroadcastReceiver();
-		// TODO Keep daggerifying
-	}
-
-	private BroadcastReceiver createBroadcastReceiver() {
-		return new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-				String action = intent.getAction();
-				if (RESPONSE_UPDATE_ERROR.equals(action)) {
-					String message = intent.getStringExtra(RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE);
-					Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
-				}
-			}
-		};
 	}
 
 	@Override
@@ -132,7 +122,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	}
 
 	private void updateInBackground() {
-		AsyncTask.execute(() -> updater.update(BACKGROUND_UPDATE_TIMEOUT.toMillis()));
+		cachedTreadPool.execute(() -> updater.update(BACKGROUND_UPDATE_TIMEOUT.toMillis()));
 	}
 
 	@Override
@@ -151,6 +141,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		broadcastReceiver = null;
 		component = null;
 		latestAuroraReport = null;
+		clock = null;
 		super.onDestroy();
 	}
 
