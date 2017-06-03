@@ -1,17 +1,17 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors;
 
 import se.gustavkarlsson.skylight.android.R;
+import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.skylight.android.models.factors.Darkness;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.Math.round;
-import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 
 public class DarknessPresenter extends AbstractAuroraFactorPresenter<Darkness> {
 
-	public DarknessPresenter(AuroraFactorView factorView) {
-		super(factorView, getApplicationComponent().getDarknessEvaluator());
+	public DarknessPresenter(AuroraFactorView factorView, ChanceEvaluator<Darkness> chanceEvaluator, ChanceToColorConverter colorConverter) {
+		super(factorView, chanceEvaluator, colorConverter);
 	}
 
 	@Override

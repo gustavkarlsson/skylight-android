@@ -1,14 +1,13 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors;
 
 import se.gustavkarlsson.skylight.android.R;
+import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.skylight.android.models.factors.Visibility;
-
-import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 
 public class VisibilityPresenter extends AbstractAuroraFactorPresenter<Visibility> {
 
-	public VisibilityPresenter(AuroraFactorView factorView) {
-		super(factorView, getApplicationComponent().getVisibilityEvaluator());
+	public VisibilityPresenter(AuroraFactorView factorView, ChanceEvaluator<Visibility> chanceEvaluator, ChanceToColorConverter colorConverter) {
+		super(factorView, chanceEvaluator, colorConverter);
 	}
 
 	@Override

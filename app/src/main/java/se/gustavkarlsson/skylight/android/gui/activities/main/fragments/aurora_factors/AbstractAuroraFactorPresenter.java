@@ -18,14 +18,14 @@ abstract class AbstractAuroraFactorPresenter<T> {
 	private final ChanceToColorConverter colorConverter;
 	private final ChanceEvaluator<T> chanceEvaluator;
 
-	AbstractAuroraFactorPresenter(AuroraFactorView factorView, ChanceEvaluator<T> chanceEvaluator) {
+	AbstractAuroraFactorPresenter(AuroraFactorView factorView, ChanceEvaluator<T> chanceEvaluator, ChanceToColorConverter colorConverter) {
 		this.factorView = factorView;
-		this.colorConverter = new ChanceToColorConverter(factorView.getContext());
+		this.chanceEvaluator = chanceEvaluator;
+		this.colorConverter = colorConverter;
 		Context context = factorView.getContext();
 		String fullTitle = context.getString(getFullTitleResourceId());
 		String description = context.getString(getDescriptionResourceId());
 		this.factorView.setOnClickListener(new PopupDescriptionClickListener(context, fullTitle, description));
-		this.chanceEvaluator = chanceEvaluator;
 	}
 
 	void onUpdate(T factor) {

@@ -13,11 +13,6 @@ import se.gustavkarlsson.skylight.android.dagger.modules.definitive.EvaluationMo
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.AuroraReportCacheModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.AuroraReportModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.ClockModule;
-import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
-import se.gustavkarlsson.skylight.android.models.factors.Darkness;
-import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity;
-import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation;
-import se.gustavkarlsson.skylight.android.models.factors.Visibility;
 
 @Component(modules = {
 		AuroraReportCacheModule.class,
@@ -32,11 +27,6 @@ public interface ApplicationComponent {
 	UpdateJob getUpdateJob();
 	UpdateScheduler getUpdateScheduler();
 	Clock getClock();
-
-	ChanceEvaluator<GeomagActivity> getGeomagActivityEvaluator();
-	ChanceEvaluator<GeomagLocation> getGeomagLocationEvaluator();
-	ChanceEvaluator<Visibility> getVisibilityEvaluator();
-	ChanceEvaluator<Darkness> getDarknessEvaluator();
 
 	MainActivityComponent getMainActivityComponent(ActivityModule activityModule);
 }

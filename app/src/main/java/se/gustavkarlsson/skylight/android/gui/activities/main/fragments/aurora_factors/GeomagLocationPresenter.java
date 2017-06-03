@@ -3,14 +3,13 @@ package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_
 import java.util.Locale;
 
 import se.gustavkarlsson.skylight.android.R;
+import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation;
-
-import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 
 public class GeomagLocationPresenter extends AbstractAuroraFactorPresenter<GeomagLocation> {
 
-	public GeomagLocationPresenter(AuroraFactorView factorView) {
-		super(factorView, getApplicationComponent().getGeomagLocationEvaluator());
+	public GeomagLocationPresenter(AuroraFactorView factorView, ChanceEvaluator<GeomagLocation> chanceEvaluator, ChanceToColorConverter colorConverter) {
+		super(factorView, chanceEvaluator, colorConverter);
 	}
 
 	@Override

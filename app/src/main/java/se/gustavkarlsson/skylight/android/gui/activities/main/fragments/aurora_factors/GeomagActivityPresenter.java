@@ -1,14 +1,13 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors;
 
 import se.gustavkarlsson.skylight.android.R;
+import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity;
-
-import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 
 public class GeomagActivityPresenter extends AbstractAuroraFactorPresenter<GeomagActivity> {
 
-	public GeomagActivityPresenter(AuroraFactorView factorView) {
-		super(factorView, getApplicationComponent().getGeomagActivityEvaluator());
+	public GeomagActivityPresenter(AuroraFactorView factorView, ChanceEvaluator<GeomagActivity> chanceEvaluator, ChanceToColorConverter colorConverter) {
+		super(factorView, chanceEvaluator, colorConverter);
 	}
 
 	@Override
