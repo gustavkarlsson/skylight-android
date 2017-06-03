@@ -28,23 +28,19 @@ public class SwipeToRefreshPresenter {
 		swipeRefreshLayout.setRefreshing(true);
 		cachedThreadPool.execute(() -> {
 			updater.update(TIMEOUT.toMillis());
-			activity.runOnUiThread(() -> setRefreshing(false));
+			activity.runOnUiThread(() -> swipeRefreshLayout.setRefreshing(false));
         });
 	}
 
 	void enable() {
 		swipeRefreshLayout.setEnabled(true);
-		setRefreshing(false);
+		swipeRefreshLayout.setRefreshing(false);
 		swipeRefreshLayout.setOnRefreshListener(this::update);
 	}
 
 	void disable() {
-		setRefreshing(false);
+		swipeRefreshLayout.setRefreshing(false);
 		swipeRefreshLayout.setOnRefreshListener(null);
 		swipeRefreshLayout.setEnabled(false);
-	}
-
-	private void setRefreshing(boolean refreshing) {
-		swipeRefreshLayout.setRefreshing(refreshing);
 	}
 }
