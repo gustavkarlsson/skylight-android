@@ -6,10 +6,10 @@ import android.widget.TextView;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
-class LocationPresenter {
+public class LocationPresenter {
 	private final TextView locationTextView;
 
-	LocationPresenter(TextView locationTextView) {
+	public LocationPresenter(TextView locationTextView) {
 		this.locationTextView = locationTextView;
 	}
 

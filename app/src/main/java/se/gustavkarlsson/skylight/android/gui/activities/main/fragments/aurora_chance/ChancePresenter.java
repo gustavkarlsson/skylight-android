@@ -4,10 +4,10 @@ import android.widget.TextView;
 
 import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel;
 
-class ChancePresenter {
+public class ChancePresenter {
 	private final TextView chanceTextView;
 
-	ChancePresenter(TextView chanceTextView) {
+	public ChancePresenter(TextView chanceTextView) {
 		this.chanceTextView = chanceTextView;
 	}
 

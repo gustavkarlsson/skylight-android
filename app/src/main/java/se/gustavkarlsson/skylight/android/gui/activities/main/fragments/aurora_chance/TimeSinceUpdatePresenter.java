@@ -10,14 +10,14 @@ import java.util.TimerTask;
 
 import se.gustavkarlsson.skylight.android.R;
 
-class TimeSinceUpdatePresenter {
+public class TimeSinceUpdatePresenter {
 	private final TextView timeSinceUpdateTextView;
 	private final long updateTimeResolutionMillis;
 	private final Clock clock;
 	private Timer timeUpdateTimer;
 	private long lastUpdateMillis;
 
-	TimeSinceUpdatePresenter(TextView timeSinceUpdateTextView, long updateTimeResolutionMillis, Clock clock) {
+	public TimeSinceUpdatePresenter(TextView timeSinceUpdateTextView, long updateTimeResolutionMillis, Clock clock) {
 		this.timeSinceUpdateTextView = timeSinceUpdateTextView;
 		this.updateTimeResolutionMillis = updateTimeResolutionMillis;
 		this.clock = clock;

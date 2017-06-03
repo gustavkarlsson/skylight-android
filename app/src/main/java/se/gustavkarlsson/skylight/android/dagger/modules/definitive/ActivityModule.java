@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import dagger.Module;
 import dagger.Provides;
+import se.gustavkarlsson.skylight.android.dagger.scopes.ActivityScope;
 
 @Module
 public class ActivityModule {
@@ -14,6 +15,7 @@ public class ActivityModule {
 	}
 
 	@Provides
+	@ActivityScope
 	Activity provideActivity() {
 		return activity;
 	}

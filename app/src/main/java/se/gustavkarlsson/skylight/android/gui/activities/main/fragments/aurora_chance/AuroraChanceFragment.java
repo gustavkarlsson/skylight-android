@@ -2,12 +2,10 @@ package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -21,7 +19,6 @@ import se.gustavkarlsson.skylight.android.gui.AuroraReportUpdateListener;
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 
-import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 import static se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRootViewModule.FRAGMENT_ROOT_NAME;
 
 public class AuroraChanceFragment extends Fragment implements AuroraReportUpdateListener {
@@ -34,9 +31,14 @@ public class AuroraChanceFragment extends Fragment implements AuroraReportUpdate
 	@Named(FRAGMENT_ROOT_NAME)
 	View rootView;
 
-	private LocationPresenter locationPresenter;
-	private TimeSinceUpdatePresenter timeSinceUpdatePresenter;
-	private ChancePresenter chancePresenter;
+	@Inject
+	LocationPresenter locationPresenter;
+
+	@Inject
+	TimeSinceUpdatePresenter timeSinceUpdatePresenter;
+
+	@Inject
+	ChancePresenter chancePresenter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,10 +46,6 @@ public class AuroraChanceFragment extends Fragment implements AuroraReportUpdate
 		((MainActivity) getActivity()).getComponent()
 				.getAuroraChanceFragmentComponent(new FragmentRootViewModule(inflater, container, R.layout.fragment_aurora_chance))
 				.inject(this);
-		// TODO Keep daggerifying
-		locationPresenter = new LocationPresenter((TextView) rootView.findViewById(R.id.location));
-		timeSinceUpdatePresenter = new TimeSinceUpdatePresenter((TextView) rootView.findViewById(R.id.time_since_update), DateUtils.MINUTE_IN_MILLIS, getApplicationComponent().getClock());
-		chancePresenter = new ChancePresenter((TextView) rootView.findViewById(R.id.chance));
 		return rootView;
 	}
 
