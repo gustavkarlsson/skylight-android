@@ -9,24 +9,27 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import dagger.Reusable;
 import se.gustavkarlsson.skylight.android.R;
-import se.gustavkarlsson.skylight.android.cache.LastNotifiedReportCache;
+import se.gustavkarlsson.skylight.android.cache.SingletonCache;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
+
+import static se.gustavkarlsson.skylight.android.dagger.modules.replaceable.AuroraReportModule.LAST_NOTIFIED_NAME;
 
 @Reusable
 public class NotificationHandler {
 	private final ChanceEvaluator<AuroraReport> evaluator;
 	private final Context context;
 	private final NotificationManager notificationManager;
-	private final LastNotifiedReportCache lastNotifiedReportCache;
+	private final SingletonCache<AuroraReport> lastNotifiedReportCache;
 	private final NotificationDecider decider;
 
 	@Inject
-	NotificationHandler(Context context, NotificationManager notificationManager, LastNotifiedReportCache lastNotifiedReportCache, ChanceEvaluator<AuroraReport> evaluator, NotificationDecider decider) {
+	NotificationHandler(Context context, NotificationManager notificationManager, @Named(LAST_NOTIFIED_NAME) SingletonCache<AuroraReport> lastNotifiedReportCache, ChanceEvaluator<AuroraReport> evaluator, NotificationDecider decider) {
 		this.evaluator = evaluator;
 		this.context = context;
 		this.notificationManager = notificationManager;

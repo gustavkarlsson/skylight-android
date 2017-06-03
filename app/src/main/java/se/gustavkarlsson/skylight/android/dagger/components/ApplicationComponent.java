@@ -11,12 +11,12 @@ import se.gustavkarlsson.skylight.android.background.providers.AuroraReportProvi
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ActivityModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.EvaluationModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.LatestAuroraReportObservableModule;
-import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.AuroraReportCacheModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.AuroraReportModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.ClockModule;
+import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.LatestAuroraReportCacheModule;
 
 @Component(modules = {
-		AuroraReportCacheModule.class,
+		LatestAuroraReportCacheModule.class,
 		EvaluationModule.class,
 		AuroraReportModule.class,
 		ClockModule.class,

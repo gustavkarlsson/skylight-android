@@ -1,23 +1,26 @@
 package se.gustavkarlsson.skylight.android.notifications;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import dagger.Reusable;
-import se.gustavkarlsson.skylight.android.cache.LastNotifiedReportCache;
+import se.gustavkarlsson.skylight.android.cache.SingletonCache;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 import se.gustavkarlsson.skylight.android.settings.Settings;
 
+import static se.gustavkarlsson.skylight.android.dagger.modules.replaceable.AuroraReportModule.LAST_NOTIFIED_NAME;
+
 @Reusable
 public class NotificationDecider {
-	private final LastNotifiedReportCache lastNotifiedReportCache;
+	private final SingletonCache<AuroraReport> lastNotifiedReportCache;
 	private final ChanceEvaluator<AuroraReport> chanceEvaluator;
 	private final Settings settings;
 	private final ReportOutdatedEvaluator outdatedEvaluator;
 
 	@Inject
-	NotificationDecider(LastNotifiedReportCache lastNotifiedReportCache, ChanceEvaluator<AuroraReport> chanceEvaluator, Settings settings, ReportOutdatedEvaluator outdatedEvaluator) {
+	NotificationDecider(@Named(LAST_NOTIFIED_NAME) SingletonCache<AuroraReport> lastNotifiedReportCache, ChanceEvaluator<AuroraReport> chanceEvaluator, Settings settings, ReportOutdatedEvaluator outdatedEvaluator) {
 		this.lastNotifiedReportCache = lastNotifiedReportCache;
 		this.chanceEvaluator = chanceEvaluator;
 		this.settings = settings;

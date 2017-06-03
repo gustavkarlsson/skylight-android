@@ -22,6 +22,7 @@ import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.background.Updater;
 import se.gustavkarlsson.skylight.android.dagger.components.MainActivityComponent;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ActivityModule;
+import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity;
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
@@ -31,7 +32,7 @@ import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponen
 import static se.gustavkarlsson.skylight.android.background.UpdateJob.BACKGROUND_UPDATE_TIMEOUT;
 import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_ERROR;
 import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE;
-import static se.gustavkarlsson.skylight.android.dagger.modules.definitive.LatestAuroraReportObservableModule.LATEST_NAME;
+import static se.gustavkarlsson.skylight.android.dagger.modules.replaceable.LatestAuroraReportCacheModule.LATEST_NAME;
 
 public class MainActivity extends AuroraRequirementsCheckingActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
@@ -53,6 +54,9 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	@Inject
 	@Named(LATEST_NAME)
 	ObservableData<AuroraReport> latestAuroraReport;
+
+	@Inject
+	ChanceEvaluator<AuroraReport> auroraChanceEvaluator;
 
 	private MainActivityComponent component;
 
@@ -116,14 +120,15 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	protected void onRequirementsMet() {
 		swipeToRefreshPresenter.enable();
 		AuroraReport latestReport = latestAuroraReport.getData();
-		if (hasExpired(latestReport)) {
+		if (needsUpdate(latestReport)) {
 			updateInBackground();
 		}
 	}
 
-	private boolean hasExpired(AuroraReport report) {
-		long ageMillis = clock.millis() - report.getTimestampMillis();
-		return ageMillis > REPORT_LIFETIME.toMillis();
+	private boolean needsUpdate(AuroraReport report) {
+		boolean hasExpired = clock.millis() - report.getTimestampMillis() > REPORT_LIFETIME.toMillis();
+		boolean isUnknown = !auroraChanceEvaluator.evaluate(report).isKnown();
+		return hasExpired || isUnknown;
 	}
 
 	private void updateInBackground() {

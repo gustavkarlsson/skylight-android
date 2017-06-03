@@ -40,12 +40,13 @@ import se.gustavkarlsson.skylight.android.background.providers.impl.RetrofittedG
 import se.gustavkarlsson.skylight.android.background.providers.impl.aggregating_aurora_factors.AsyncAuroraFactorsProvider;
 import se.gustavkarlsson.skylight.android.background.providers.impl.openweathermap.OpenWeatherMapService;
 import se.gustavkarlsson.skylight.android.background.providers.impl.openweathermap.RetrofittedOpenWeatherMapVisibilityProvider;
-import se.gustavkarlsson.skylight.android.cache.DualLastNotifiedReportCache;
-import se.gustavkarlsson.skylight.android.cache.LastNotifiedReportCache;
+import se.gustavkarlsson.skylight.android.cache.DualAuroraReportSingletonCache;
+import se.gustavkarlsson.skylight.android.cache.SingletonCache;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ContextModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.DarknessModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.GeomagLocationModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.SystemServiceModule;
+import se.gustavkarlsson.skylight.android.models.AuroraReport;
 import se.gustavkarlsson.skylight.android.settings.DebugSettings;
 import se.gustavkarlsson.skylight.android.settings.Settings;
 import se.gustavkarlsson.skylight.android.settings.SharedPreferencesDebugSettings;
@@ -59,8 +60,10 @@ import se.gustavkarlsson.skylight.android.settings.SharedPreferencesSettings;
 })
 public abstract class AuroraReportModule {
 	public static final String CACHED_THREAD_POOL_NAME = "CachedThreadPool";
+	public static final String LAST_NOTIFIED_NAME = "LastNotified";
 	private static final String OPENWEATHERMAP_API_URL = "http://api.openweathermap.org/data/2.5/";
 	private static final String GEOMAG_ACTIVITY_API_URL = "http://skylight-app.net/rest/";
+	private static final String LAST_NOTIFIED_CACHE_NAME = "last-notified-aurora-report";
 
 	// Published
 	@Provides
@@ -132,9 +135,12 @@ public abstract class AuroraReportModule {
 		return ZoneOffset::systemDefault;
 	}
 
-	@Binds
+	@Provides
 	@Singleton
-	abstract LastNotifiedReportCache bindLastNotifiedReportCache(DualLastNotifiedReportCache impl);
+	@Named(LAST_NOTIFIED_NAME)
+	static SingletonCache<AuroraReport> provideLastNotifiedAuroraReportCache(Context context) {
+		return new DualAuroraReportSingletonCache(context, LAST_NOTIFIED_CACHE_NAME);
+	}
 
 	@Provides
 	@Singleton
