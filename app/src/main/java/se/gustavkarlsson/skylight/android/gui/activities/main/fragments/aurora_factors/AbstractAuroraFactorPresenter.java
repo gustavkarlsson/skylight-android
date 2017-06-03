@@ -16,28 +16,28 @@ import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
 abstract class AbstractAuroraFactorPresenter<T> {
 	private final AuroraFactorView factorView;
 	private final ChanceToColorConverter colorConverter;
-	private final ChanceEvaluator<T> evaluator;
+	private final ChanceEvaluator<T> chanceEvaluator;
 
-	AbstractAuroraFactorPresenter(AuroraFactorView factorView, ChanceEvaluator<T> evaluator) {
+	AbstractAuroraFactorPresenter(AuroraFactorView factorView, ChanceEvaluator<T> chanceEvaluator) {
 		this.factorView = factorView;
 		this.colorConverter = new ChanceToColorConverter(factorView.getContext());
 		Context context = factorView.getContext();
 		String fullTitle = context.getString(getFullTitleResourceId());
 		String description = context.getString(getDescriptionResourceId());
 		this.factorView.setOnClickListener(new PopupDescriptionClickListener(context, fullTitle, description));
-		this.evaluator = evaluator;
+		this.chanceEvaluator = chanceEvaluator;
 	}
 
 	void onUpdate(T factor) {
 		setFactorValue(evaluateText(factor));
-		setColor(evaluator.evaluate(factor));
+		setFactorChance(chanceEvaluator.evaluate(factor));
 	}
 
 	private void setFactorValue(String value) {
 		factorView.setValue(value);
 	}
 
-	private void setColor(Chance chance) {
+	private void setFactorChance(Chance chance) {
 		int color = colorConverter.convert(chance);
 		View badge = factorView.findViewById(R.id.badge);
 		Drawable background = badge.getBackground();

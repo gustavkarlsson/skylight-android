@@ -59,7 +59,7 @@ public class AuroraFactorView extends LinearLayout {
 		badge.setImageDrawable(icon);
 	}
 
-	public void setValue(String value) {
+	void setValue(String value) {
 		factorValueView.setText(value);
 	}
 }
