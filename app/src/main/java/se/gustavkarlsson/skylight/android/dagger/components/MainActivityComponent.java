@@ -13,4 +13,5 @@ public interface MainActivityComponent {
 	void inject(MainActivity mainActivity);
 
 	AuroraChanceFragmentComponent getAuroraChanceFragmentComponent(FragmentRootViewModule fragmentRootViewModule);
+	AuroraFactorsFragmentComponent getAuroraFactorsFragmentComponent(FragmentRootViewModule fragmentRootViewModule);
 }

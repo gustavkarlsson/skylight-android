@@ -7,28 +7,43 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import se.gustavkarlsson.skylight.android.R;
+import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRootViewModule;
 import se.gustavkarlsson.skylight.android.gui.AuroraReportUpdateListener;
+import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity;
 import se.gustavkarlsson.skylight.android.models.AuroraFactors;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
+
+import static se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRootViewModule.FRAGMENT_ROOT_NAME;
 
 public class AuroraFactorFragment extends Fragment implements AuroraReportUpdateListener {
 	private static final String TAG = AuroraFactorFragment.class.getSimpleName();
 
-	private View rootView;
-	private GeomagActivityPresenter geomagActivityPresenter;
-	private GeomagLocationPresenter geomagLocationPresenter;
-	private VisibilityPresenter visibilityPresenter;
-	private DarknessPresenter darknessPresenter;
+	@Inject
+	@Named(FRAGMENT_ROOT_NAME)
+	View rootView;
+
+	@Inject
+	GeomagActivityPresenter geomagActivityPresenter;
+
+	@Inject
+	GeomagLocationPresenter geomagLocationPresenter;
+
+	@Inject
+	VisibilityPresenter visibilityPresenter;
+
+	@Inject
+	DarknessPresenter darknessPresenter;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.v(TAG, "onCreateView");
-		rootView = inflater.inflate(R.layout.fragment_aurora_factors, container, false);
-		geomagActivityPresenter = new GeomagActivityPresenter((AuroraFactorView) rootView.findViewById(R.id.aurora_factor_geomag_activity));
-		geomagLocationPresenter = new GeomagLocationPresenter((AuroraFactorView) rootView.findViewById(R.id.aurora_factor_geomag_location));
-		visibilityPresenter = new VisibilityPresenter((AuroraFactorView) rootView.findViewById(R.id.aurora_factor_visibility));
-		darknessPresenter = new DarknessPresenter((AuroraFactorView) rootView.findViewById(R.id.aurora_factor_darkness));
+		((MainActivity) getActivity()).getComponent()
+				.getAuroraFactorsFragmentComponent(new FragmentRootViewModule(inflater, container, R.layout.fragment_aurora_factors))
+				.inject(this);
 		return rootView;
 	}
 

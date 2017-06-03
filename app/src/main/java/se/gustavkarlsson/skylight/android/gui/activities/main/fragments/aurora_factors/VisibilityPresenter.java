@@ -5,9 +5,9 @@ import se.gustavkarlsson.skylight.android.models.factors.Visibility;
 
 import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 
-class VisibilityPresenter extends AbstractAuroraFactorPresenter<Visibility> {
+public class VisibilityPresenter extends AbstractAuroraFactorPresenter<Visibility> {
 
-	VisibilityPresenter(AuroraFactorView factorView) {
+	public VisibilityPresenter(AuroraFactorView factorView) {
 		super(factorView, getApplicationComponent().getVisibilityEvaluator());
 	}
 

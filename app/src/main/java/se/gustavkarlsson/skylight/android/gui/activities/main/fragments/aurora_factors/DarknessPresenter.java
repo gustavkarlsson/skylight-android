@@ -8,9 +8,9 @@ import static java.lang.Math.min;
 import static java.lang.Math.round;
 import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 
-class DarknessPresenter extends AbstractAuroraFactorPresenter<Darkness> {
+public class DarknessPresenter extends AbstractAuroraFactorPresenter<Darkness> {
 
-	DarknessPresenter(AuroraFactorView factorView) {
+	public DarknessPresenter(AuroraFactorView factorView) {
 		super(factorView, getApplicationComponent().getDarknessEvaluator());
 	}
 

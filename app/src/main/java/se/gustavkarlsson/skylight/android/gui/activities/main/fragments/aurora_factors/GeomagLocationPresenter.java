@@ -7,9 +7,9 @@ import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation;
 
 import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 
-class GeomagLocationPresenter extends AbstractAuroraFactorPresenter<GeomagLocation> {
+public class GeomagLocationPresenter extends AbstractAuroraFactorPresenter<GeomagLocation> {
 
-	GeomagLocationPresenter(AuroraFactorView factorView) {
+	public GeomagLocationPresenter(AuroraFactorView factorView) {
 		super(factorView, getApplicationComponent().getGeomagLocationEvaluator());
 	}
 

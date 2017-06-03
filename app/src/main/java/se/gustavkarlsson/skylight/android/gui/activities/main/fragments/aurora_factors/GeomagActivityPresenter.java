@@ -5,9 +5,9 @@ import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity;
 
 import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 
-class GeomagActivityPresenter extends AbstractAuroraFactorPresenter<GeomagActivity> {
+public class GeomagActivityPresenter extends AbstractAuroraFactorPresenter<GeomagActivity> {
 
-	GeomagActivityPresenter(AuroraFactorView factorView) {
+	public GeomagActivityPresenter(AuroraFactorView factorView) {
 		super(factorView, getApplicationComponent().getGeomagActivityEvaluator());
 	}
 
