@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import org.parceler.Parcels;
 import org.threeten.bp.Clock;
 import org.threeten.bp.Duration;
 
@@ -22,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.background.Updater;
@@ -32,15 +31,15 @@ import se.gustavkarlsson.skylight.android.gui.AuroraReportUpdateListener;
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity;
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
+import se.gustavkarlsson.skylight.android.observers.DataObserver;
+import se.gustavkarlsson.skylight.android.observers.ObservableData;
 
 import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 import static se.gustavkarlsson.skylight.android.background.UpdateJob.BACKGROUND_UPDATE_TIMEOUT;
 import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_ERROR;
 import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE;
-import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_FINISHED;
-import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_FINISHED_EXTRA_REPORT;
 
-public class MainActivity extends AuroraRequirementsCheckingActivity {
+public class MainActivity extends AuroraRequirementsCheckingActivity implements DataObserver<AuroraReport> {
 	private static final String TAG = MainActivity.class.getSimpleName();
 
 	private static final Duration REPORT_LIFETIME = Duration.ofMinutes(15);
@@ -59,6 +58,10 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 
 	@Inject
 	SwipeToRefreshPresenter swipeToRefreshPresenter;
+
+	@Inject
+	@Named("Latest")
+	ObservableData<AuroraReport> lastAuroraReport;
 
 	private MainActivityComponent component;
 
@@ -91,11 +94,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				String action = intent.getAction();
-				if (RESPONSE_UPDATE_FINISHED.equals(action)) {
-					Parcelable reportParcel = intent.getParcelableExtra(RESPONSE_UPDATE_FINISHED_EXTRA_REPORT);
-					AuroraReport report = Parcels.unwrap(reportParcel);
-					updateGui(report);
-				} else if (RESPONSE_UPDATE_ERROR.equals(action)) {
+				if (RESPONSE_UPDATE_ERROR.equals(action)) {
 					String message = intent.getStringExtra(RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE);
 					Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
 				}
@@ -104,9 +103,11 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	}
 
 	private void updateGui(AuroraReport report) {
-		for (AuroraReportUpdateListener receiver : updateReceivers) {
-			receiver.onUpdate(report);
-		}
+		runOnUiThread(() -> {
+			for (AuroraReportUpdateListener receiver : updateReceivers) {
+				receiver.onUpdate(report);
+			}
+		});
 	}
 
 	@Override
@@ -134,11 +135,16 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		Log.v(TAG, "onStart");
 		super.onStart();
 		broadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(RESPONSE_UPDATE_ERROR));
-		broadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(RESPONSE_UPDATE_FINISHED));
+		lastAuroraReport.addListener(this);
 		AuroraReport report = getBestReport();
 		swipeToRefreshPresenter.disable();
 		ensureRequirementsMet();
 		updateGui(report);
+	}
+
+	@Override
+	public void dataChanged(AuroraReport newReport) {
+		updateGui(newReport);
 	}
 
 	@Override
@@ -167,6 +173,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	protected void onStop() {
 		Log.v(TAG, "onStop");
 		super.onStop();
+		lastAuroraReport.removeListener(this);
 		broadcastManager.unregisterReceiver(broadcastReceiver);
 	}
 
@@ -180,6 +187,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		updateReceivers = null;
 		broadcastReceiver = null;
 		component = null;
+		lastAuroraReport = null;
 		super.onDestroy();
 	}
 
