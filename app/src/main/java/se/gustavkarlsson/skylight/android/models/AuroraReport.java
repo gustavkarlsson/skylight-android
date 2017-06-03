@@ -4,11 +4,6 @@ import android.location.Address;
 
 import org.parceler.Parcel;
 
-import se.gustavkarlsson.skylight.android.models.factors.Darkness;
-import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity;
-import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation;
-import se.gustavkarlsson.skylight.android.models.factors.Visibility;
-
 @Parcel
 public class AuroraReport {
 	long timestampMillis;
@@ -22,16 +17,6 @@ public class AuroraReport {
 		this.timestampMillis = timestampMillis;
 		this.address = address;
 		this.factors = factors;
-	}
-
-	public static AuroraReport createFallback() {
-		AuroraFactors factors = new AuroraFactors(
-				new GeomagActivity(null),
-				new GeomagLocation(null),
-				new Darkness(null),
-				new Visibility(null)
-		);
-		return new AuroraReport(0, null, factors);
 	}
 
 	public long getTimestampMillis() {

@@ -28,7 +28,7 @@ abstract class AbstractAuroraFactorPresenter<T> {
 		this.factorView.setOnClickListener(new PopupDescriptionClickListener(context, fullTitle, description));
 	}
 
-	void onUpdate(T factor) {
+	void update(T factor) {
 		setFactorValue(evaluateText(factor));
 		setFactorChance(chanceEvaluator.evaluate(factor));
 	}

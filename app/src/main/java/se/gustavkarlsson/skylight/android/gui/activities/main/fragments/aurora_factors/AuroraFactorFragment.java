@@ -58,21 +58,21 @@ public class AuroraFactorFragment extends Fragment implements DataObserver<Auror
 		Log.v(TAG, "onStart");
 		super.onStart();
 		latestAuroraReport.addListener(this);
-		update(latestAuroraReport.getData());
+		updatePresenters(latestAuroraReport.getData());
 	}
 
 	@Override
 	public void dataChanged(AuroraReport report) {
 		Log.v(TAG, "dataChanged");
-		getActivity().runOnUiThread(() -> update(report));
+		getActivity().runOnUiThread(() -> updatePresenters(report));
 	}
 
-	private void update(AuroraReport report) {
+	private void updatePresenters(AuroraReport report) {
 		AuroraFactors factors = report.getFactors();
-		geomagActivityPresenter.onUpdate(factors.getGeomagActivity());
-		geomagLocationPresenter.onUpdate(factors.getGeomagLocation());
-		visibilityPresenter.onUpdate(factors.getVisibility());
-		darknessPresenter.onUpdate(factors.getDarkness());
+		geomagActivityPresenter.update(factors.getGeomagActivity());
+		geomagLocationPresenter.update(factors.getGeomagLocation());
+		visibilityPresenter.update(factors.getVisibility());
+		darknessPresenter.update(factors.getDarkness());
 	}
 
 	@Override

@@ -13,7 +13,7 @@ public class LocationPresenter {
 		this.locationTextView = locationTextView;
 	}
 
-	void onUpdate(Address address) {
+	void update(Address address) {
 		if (address == null) {
 			locationTextView.setVisibility(INVISIBLE);
 		} else {

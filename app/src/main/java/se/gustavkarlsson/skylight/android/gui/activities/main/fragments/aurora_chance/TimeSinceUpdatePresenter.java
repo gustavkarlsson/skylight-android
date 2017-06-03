@@ -23,18 +23,18 @@ public class TimeSinceUpdatePresenter {
 		this.clock = clock;
 	}
 
-	synchronized void onStart() {
-		scheduleTimeSinceUpdateRefresh();
+	synchronized void start() {
+		rescheduleRefresh();
 		updateTimeSinceUpdate();
 	}
 
-	synchronized void onUpdate(long lastUpdateMillis) {
+	synchronized void update(long lastUpdateMillis) {
 		this.lastUpdateMillis = lastUpdateMillis;
-		scheduleTimeSinceUpdateRefresh();
+		rescheduleRefresh();
 		updateTimeSinceUpdate();
 	}
 
-	private void scheduleTimeSinceUpdateRefresh() {
+	private void rescheduleRefresh() {
 		if (timeUpdateTimer != null) {
 			timeUpdateTimer.cancel();
 		}
@@ -45,22 +45,19 @@ public class TimeSinceUpdatePresenter {
 				timeSinceUpdateTextView.post(() -> updateTimeSinceUpdate());
 			}
 		}, 1000L, updateTimeResolutionMillis);
+		// The 1000 ms makes sure that we're past the minute line
 	}
 
 	private void updateTimeSinceUpdate() {
-		if (lastUpdateMillis == 0) {
-			return;
-		}
-		if (isJustNow(lastUpdateMillis)) {
+		if (isRightNow(lastUpdateMillis)) {
 			timeSinceUpdateTextView.setText(R.string.right_now);
 			return;
 		}
 		CharSequence text = formatRelativeTime(lastUpdateMillis);
 		timeSinceUpdateTextView.setText(text);
-		timeSinceUpdateTextView.invalidate();
 	}
 
-	private boolean isJustNow(long timeMillis) {
+	private boolean isRightNow(long timeMillis) {
 		long ageMillis = clock.millis() - timeMillis;
 		return ageMillis <= updateTimeResolutionMillis;
 	}
@@ -69,7 +66,7 @@ public class TimeSinceUpdatePresenter {
 		return DateUtils.getRelativeTimeSpanString(startTimeMillis, clock.millis(), updateTimeResolutionMillis);
 	}
 
-	synchronized void destroy() {
+	synchronized void stop() {
 		if (timeUpdateTimer != null) {
 			timeUpdateTimer.cancel();
 		}
