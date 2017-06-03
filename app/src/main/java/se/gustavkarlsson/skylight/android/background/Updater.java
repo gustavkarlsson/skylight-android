@@ -18,6 +18,7 @@ import se.gustavkarlsson.skylight.android.observers.ObservableData;
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException;
 
 import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
+import static se.gustavkarlsson.skylight.android.dagger.modules.definitive.LatestAuroraReportObservableModule.LATEST_NAME;
 
 @Reusable
 public class Updater {
@@ -33,7 +34,7 @@ public class Updater {
 	private final ObservableData<AuroraReport> latestAuroraReport;
 
 	@Inject
-	Updater(Context context, LastReportCache cache, LocalBroadcastManager broadcastManager, NotificationHandler notificationHandler, @Named("Latest") ObservableData<AuroraReport> latestAuroraReport) {
+	Updater(Context context, LastReportCache cache, LocalBroadcastManager broadcastManager, NotificationHandler notificationHandler, @Named(LATEST_NAME) ObservableData<AuroraReport> latestAuroraReport) {
 		this.context = context;
 		this.cache = cache;
 		this.broadcastManager = broadcastManager;
@@ -44,12 +45,9 @@ public class Updater {
 	public boolean update(long timeoutMillis) {
 		Log.v(TAG, "onUpdate");
 		AuroraReportProvider provider = getApplicationComponent().getAuroraReportProvider();
+		AuroraReport report;
 		try {
-			AuroraReport report = provider.getReport(timeoutMillis);
-			cache.set(report);
-			latestAuroraReport.setData(report);
-			notificationHandler.handle(report);
-			return true;
+			report = provider.getReport(timeoutMillis);
 		} catch (UserFriendlyException e) {
 			String errorMessage = context.getString(e.getStringResourceId());
 			Log.e(TAG, "A user friendly exception occurred: " + errorMessage, e);
@@ -61,6 +59,10 @@ public class Updater {
 			broadcastError(errorMessage);
 			return false;
 		}
+		cache.set(report);
+		latestAuroraReport.setData(report);
+		notificationHandler.handle(report);
+		return true;
 	}
 
 	private void broadcastError(String message) {

@@ -15,13 +15,15 @@ import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRoo
 import se.gustavkarlsson.skylight.android.evaluation.Chance;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel;
-import se.gustavkarlsson.skylight.android.gui.AuroraReportUpdateListener;
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
+import se.gustavkarlsson.skylight.android.observers.DataObserver;
+import se.gustavkarlsson.skylight.android.observers.ObservableData;
 
+import static se.gustavkarlsson.skylight.android.dagger.modules.definitive.LatestAuroraReportObservableModule.LATEST_NAME;
 import static se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRootViewModule.FRAGMENT_ROOT_NAME;
 
-public class AuroraChanceFragment extends Fragment implements AuroraReportUpdateListener {
+public class AuroraChanceFragment extends Fragment implements DataObserver<AuroraReport> {
 	private static final String TAG = AuroraChanceFragment.class.getSimpleName();
 
 	@Inject
@@ -40,6 +42,10 @@ public class AuroraChanceFragment extends Fragment implements AuroraReportUpdate
 	@Inject
 	ChancePresenter chancePresenter;
 
+	@Inject
+	@Named(LATEST_NAME)
+	ObservableData<AuroraReport> latestAuroraReport;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.v(TAG, "onCreateView");
@@ -53,17 +59,29 @@ public class AuroraChanceFragment extends Fragment implements AuroraReportUpdate
 	public void onStart() {
 		Log.v(TAG, "onStart");
 		super.onStart();
+		latestAuroraReport.addListener(this);
+		update(latestAuroraReport.getData());
 		timeSinceUpdatePresenter.onStart();
 	}
 
 	@Override
-	public void onUpdate(AuroraReport report) {
-		Log.v(TAG, "onUpdate");
+	public void dataChanged(AuroraReport report) {
+		Log.v(TAG, "dataChanged");
+		getActivity().runOnUiThread(() -> update(report));
+	}
+
+	private void update(AuroraReport report) {
 		locationPresenter.onUpdate(report.getAddress());
 		timeSinceUpdatePresenter.onUpdate(report.getTimestampMillis());
 		Chance chance = evaluator.evaluate(report);
 		chancePresenter.onUpdate(ChanceLevel.fromChance(chance));
-		rootView.invalidate();
+	}
+
+	@Override
+	public void onStop() {
+		Log.v(TAG, "onStop");
+		latestAuroraReport.removeListener(this);
+		super.onStop();
 	}
 
 	@Override
@@ -75,6 +93,7 @@ public class AuroraChanceFragment extends Fragment implements AuroraReportUpdate
 		locationPresenter = null;
 		timeSinceUpdatePresenter = null;
 		chancePresenter = null;
+		latestAuroraReport = null;
 		super.onDestroyView();
 	}
 }

@@ -12,14 +12,16 @@ import javax.inject.Named;
 
 import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRootViewModule;
-import se.gustavkarlsson.skylight.android.gui.AuroraReportUpdateListener;
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity;
 import se.gustavkarlsson.skylight.android.models.AuroraFactors;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
+import se.gustavkarlsson.skylight.android.observers.DataObserver;
+import se.gustavkarlsson.skylight.android.observers.ObservableData;
 
+import static se.gustavkarlsson.skylight.android.dagger.modules.definitive.LatestAuroraReportObservableModule.LATEST_NAME;
 import static se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRootViewModule.FRAGMENT_ROOT_NAME;
 
-public class AuroraFactorFragment extends Fragment implements AuroraReportUpdateListener {
+public class AuroraFactorFragment extends Fragment implements DataObserver<AuroraReport> {
 	private static final String TAG = AuroraFactorFragment.class.getSimpleName();
 
 	@Inject
@@ -38,6 +40,10 @@ public class AuroraFactorFragment extends Fragment implements AuroraReportUpdate
 	@Inject
 	DarknessPresenter darknessPresenter;
 
+	@Inject
+	@Named(LATEST_NAME)
+	ObservableData<AuroraReport> latestAuroraReport;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		Log.v(TAG, "onCreateView");
@@ -48,6 +54,35 @@ public class AuroraFactorFragment extends Fragment implements AuroraReportUpdate
 	}
 
 	@Override
+	public void onStart() {
+		Log.v(TAG, "onStart");
+		super.onStart();
+		latestAuroraReport.addListener(this);
+		update(latestAuroraReport.getData());
+	}
+
+	@Override
+	public void dataChanged(AuroraReport report) {
+		Log.v(TAG, "dataChanged");
+		getActivity().runOnUiThread(() -> update(report));
+	}
+
+	private void update(AuroraReport report) {
+		AuroraFactors factors = report.getFactors();
+		geomagActivityPresenter.onUpdate(factors.getGeomagActivity());
+		geomagLocationPresenter.onUpdate(factors.getGeomagLocation());
+		visibilityPresenter.onUpdate(factors.getVisibility());
+		darknessPresenter.onUpdate(factors.getDarkness());
+	}
+
+	@Override
+	public void onStop() {
+		Log.v(TAG, "onStop");
+		latestAuroraReport.removeListener(this);
+		super.onStop();
+	}
+
+	@Override
 	public void onDestroyView() {
 		Log.v(TAG, "onDestroyView");
 		rootView = null;
@@ -55,16 +90,7 @@ public class AuroraFactorFragment extends Fragment implements AuroraReportUpdate
 		geomagLocationPresenter = null;
 		visibilityPresenter = null;
 		darknessPresenter = null;
+		latestAuroraReport = null;
 		super.onDestroyView();
-	}
-
-	@Override
-	public void onUpdate(AuroraReport report) {
-		AuroraFactors factors = report.getFactors();
-		geomagActivityPresenter.onUpdate(factors.getGeomagActivity());
-		geomagLocationPresenter.onUpdate(factors.getGeomagLocation());
-		visibilityPresenter.onUpdate(factors.getVisibility());
-		darknessPresenter.onUpdate(factors.getDarkness());
-		rootView.invalidate();
 	}
 }
