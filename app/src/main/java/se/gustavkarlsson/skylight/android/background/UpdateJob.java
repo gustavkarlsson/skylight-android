@@ -10,6 +10,8 @@ import android.support.v4.content.ContextCompat;
 
 import com.evernote.android.job.Job;
 
+import org.threeten.bp.Duration;
+
 import javax.inject.Inject;
 
 import se.gustavkarlsson.skylight.android.R;
@@ -22,6 +24,7 @@ public class UpdateJob extends Job {
 	private static final String TAG = UpdateJob.class.getSimpleName();
 
 	public static final String UPDATE_JOB_TAG = TAG + ".UPDATE_JOB";
+	public static final Duration BACKGROUND_UPDATE_TIMEOUT = Duration.ofSeconds(30);
 
 	private final NotificationManager notificationManager;
 	private final UpdateScheduler updateScheduler;
@@ -37,13 +40,12 @@ public class UpdateJob extends Job {
 	@NonNull
 	@Override
 	protected Result onRunJob(Params params) {
-		int updateTimeoutMillis = getContext().getResources().getInteger(R.integer.setting_background_update_timeout_millis);
 		if (!hasLocationPermission()) {
 			updateScheduler.cancelBackgroundUpdates();
 			sendLocationPermissionMissingNotification(notificationManager);
 			return FAILURE;
 		}
-		boolean successful = updater.update(updateTimeoutMillis);
+		boolean successful = updater.update(BACKGROUND_UPDATE_TIMEOUT.toMillis());
 		return successful ? SUCCESS : FAILURE;
 	}
 

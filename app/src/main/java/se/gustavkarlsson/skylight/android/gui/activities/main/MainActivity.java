@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import org.parceler.Parcels;
 import org.threeten.bp.Clock;
+import org.threeten.bp.Duration;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -33,6 +34,7 @@ import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivi
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 
 import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
+import static se.gustavkarlsson.skylight.android.background.UpdateJob.BACKGROUND_UPDATE_TIMEOUT;
 import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_ERROR;
 import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE;
 import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_FINISHED;
@@ -40,6 +42,8 @@ import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPD
 
 public class MainActivity extends AuroraRequirementsCheckingActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
+
+	private static final Duration REPORT_LIFETIME = Duration.ofMinutes(15);
 
 	@Inject
 	Updater updater;
@@ -58,8 +62,6 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 
 	private MainActivityComponent component;
 
-	private int reportLifetimeMillis;
-	private int backgroundUpdateTimeoutMillis;
 	private List<AuroraReportUpdateListener> updateReceivers;
 	private BroadcastReceiver broadcastReceiver;
 
@@ -71,8 +73,6 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		setContentView(R.layout.activity_main);
 		component.inject(this);
 
-		reportLifetimeMillis = getResources().getInteger(R.integer.setting_foreground_report_lifetime_millis);
-		backgroundUpdateTimeoutMillis = getResources().getInteger(R.integer.setting_background_update_timeout_millis);
 		updateReceivers = getUpdateReceivers();
 		broadcastReceiver = createBroadcastReceiver();
 		// TODO Keep daggerifying
@@ -146,7 +146,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 		swipeToRefreshPresenter.enable();
 		AuroraReport report = getBestReport();
 		long ageMillis = clock.millis() - report.getTimestampMillis();
-		if (ageMillis > reportLifetimeMillis) {
+		if (ageMillis > REPORT_LIFETIME.toMillis()) {
 			updateInBackground();
 		}
 	}
@@ -160,7 +160,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	}
 
 	private void updateInBackground() {
-		AsyncTask.execute(() -> updater.update(backgroundUpdateTimeoutMillis));
+		AsyncTask.execute(() -> updater.update(BACKGROUND_UPDATE_TIMEOUT.toMillis()));
 	}
 
 	@Override

@@ -4,26 +4,27 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 
-import se.gustavkarlsson.skylight.android.R;
+import org.threeten.bp.Duration;
+
 import se.gustavkarlsson.skylight.android.background.Updater;
 
 public class SwipeToRefreshPresenter {
+	private static final Duration TIMEOUT = Duration.ofSeconds(10);
+
 	private final SwipeRefreshLayout swipeRefreshLayout;
 	private final Activity activity;
 	private final Updater updater;
-	private final int timeoutMillis;
 
 	public SwipeToRefreshPresenter(SwipeRefreshLayout swipeRefreshLayout, Activity activity, Updater updater) {
 		this.swipeRefreshLayout = swipeRefreshLayout;
 		this.activity = activity;
 		this.updater = updater;
-		this.timeoutMillis = activity.getResources().getInteger(R.integer.setting_foreground_update_timeout_millis);
 	}
 
 	private void update(SwipeRefreshLayout swipeRefreshLayout, Activity activity) {
 		swipeRefreshLayout.setRefreshing(true);
 		AsyncTask.execute(() -> {
-			updater.update(timeoutMillis);
+			updater.update(TIMEOUT.toMillis());
 			activity.runOnUiThread(() -> setRefreshing(false));
         });
 	}

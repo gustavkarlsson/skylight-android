@@ -42,7 +42,7 @@ public class Updater {
 		this.notificationHandler = notificationHandler;
 	}
 
-	public boolean update(int timeoutMillis) {
+	public boolean update(long timeoutMillis) {
 		Log.v(TAG, "onUpdate");
 		AuroraReportProvider provider = getApplicationComponent().getAuroraReportProvider();
 		try {
