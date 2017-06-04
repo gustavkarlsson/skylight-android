@@ -23,6 +23,7 @@ public class SettingsFragment extends PreferenceFragment {
 		notificationsChangedListener = new NotificationsChangedListener(updateScheduler, getResources().getString(R.string.pref_notifications_key));
 		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(notificationsChangedListener);
 		addPreferencesFromResource(R.xml.preferences);
+		// TODO Daggerify
 	}
 
 	@Override
