@@ -14,7 +14,9 @@ import javax.inject.Named;
 import dagger.Reusable;
 import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.cache.SingletonCache;
+import se.gustavkarlsson.skylight.android.evaluation.Chance;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
+import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel;
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 
@@ -39,31 +41,35 @@ public class NotificationHandler {
 
 	public void handle(AuroraReport report) {
 		if (decider.shouldNotify(report)) {
-			String text = evaluator.evaluate(report).toString();
-			PendingIntent pendingIntent = createActivityPendingIntent();
-
-			// FIXME improve notification
-			Notification notification = new NotificationCompat.Builder(context)
-					.setSmallIcon(R.drawable.common_google_signin_btn_text_light)
-					.setContentTitle("Aurora!")
-					.setContentText(text)
-					.setCategory(NotificationCompat.CATEGORY_RECOMMENDATION)
-					.setAutoCancel(true)
-					.setPriority(NotificationCompat.PRIORITY_HIGH)
-					.setDefaults(NotificationCompat.DEFAULT_ALL)
-					.setContentIntent(pendingIntent)
-					.build();
-
-			notificationManager.notify(135551, notification);
+			notify(report);
+			lastNotifiedReportCache.set(report);
 		}
-		lastNotifiedReportCache.set(report);
+	}
+
+	private void notify(AuroraReport report) {
+		Chance chance = evaluator.evaluate(report);
+		String text = ChanceLevel.fromChance(chance).toString();
+		PendingIntent pendingIntent = createActivityPendingIntent();
+
+		Notification notification = new NotificationCompat.Builder(context)
+                .setSmallIcon(R.drawable.app_logo_small)
+                .setContentTitle(context.getString(R.string.possible_aurora))
+                .setContentText(text)
+                .setCategory(NotificationCompat.CATEGORY_RECOMMENDATION)
+                .setAutoCancel(true)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .setContentIntent(pendingIntent)
+                .build();
+
+		notificationManager.notify(135551, notification);
 	}
 
 	private PendingIntent createActivityPendingIntent() {
-		Intent resultIntent = new Intent(context, MainActivity.class);
+		Intent mainActivityIntent = new Intent(context, MainActivity.class);
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
 		stackBuilder.addParentStack(MainActivity.class);
-		stackBuilder.addNextIntent(resultIntent);
+		stackBuilder.addNextIntent(mainActivityIntent);
 		return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 }

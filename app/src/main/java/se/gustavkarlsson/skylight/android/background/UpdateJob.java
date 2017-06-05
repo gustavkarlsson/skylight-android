@@ -53,12 +53,12 @@ public class UpdateJob extends Job {
 		return ContextCompat.checkSelfPermission(getContext(), AuroraRequirementsCheckingActivity.LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED;
 	}
 
-	// FIXME Improve notification
+	// TODO Add better handling
 	private void sendLocationPermissionMissingNotification(NotificationManager notificationManager) {
 		Context context = getContext();
 
 		Notification notification = new NotificationCompat.Builder(context)
-				.setSmallIcon(R.drawable.common_google_signin_btn_text_light)
+				.setSmallIcon(R.drawable.app_logo_small)
 				.setContentTitle(context.getString(R.string.error_aurora_notifications_disabled_title))
 				.setContentText(context.getString(R.string.error_aurora_notifications_disabled_content))
 				.setCategory(NotificationCompat.CATEGORY_ERROR)
