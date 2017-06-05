@@ -62,7 +62,7 @@ import static se.gustavkarlsson.skylight.android.dagger.Names.LAST_NOTIFIED_NAME
 		SystemServiceModule.class
 })
 public abstract class AuroraReportModule {
-	private static final String LAST_NOTIFIED_CACHE_NAME = "last-notified-aurora-report";
+	private static final String LAST_NOTIFIED_CACHE_ID = "last-notified-aurora-report";
 	private static final String OPENWEATHERMAP_API_URL = "http://api.openweathermap.org/data/2.5/";
 	private static final String GEOMAG_ACTIVITY_API_URL = "http://skylight-app.net/rest/";
 
@@ -140,7 +140,7 @@ public abstract class AuroraReportModule {
 	@Singleton
 	@Named(LAST_NOTIFIED_NAME)
 	static SingletonCache<AuroraReport> provideLastNotifiedAuroraReportCache(Context context) {
-		return new DualAuroraReportSingletonCache(context, LAST_NOTIFIED_CACHE_NAME);
+		return new DualAuroraReportSingletonCache(context, LAST_NOTIFIED_CACHE_ID);
 	}
 
 	@Provides
