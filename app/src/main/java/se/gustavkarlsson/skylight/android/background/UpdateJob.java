@@ -12,11 +12,15 @@ import com.evernote.android.job.Job;
 
 import org.threeten.bp.Duration;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity;
 
 import static com.evernote.android.job.Job.Result.FAILURE;
 import static com.evernote.android.job.Job.Result.SUCCESS;
+import static se.gustavkarlsson.skylight.android.dagger.Names.BACKGROUND_UPDATE_TIMEOUT_NAME;
 
 public class UpdateJob extends Job {
 	private static final String TAG = UpdateJob.class.getSimpleName();
@@ -28,7 +32,8 @@ public class UpdateJob extends Job {
 	private final Updater updater;
 	private final Duration timeout;
 
-	public UpdateJob(NotificationManager notificationManager, UpdateScheduler updateScheduler, Updater updater, Duration timeout) {
+	@Inject
+	public UpdateJob(NotificationManager notificationManager, UpdateScheduler updateScheduler, Updater updater, @Named(BACKGROUND_UPDATE_TIMEOUT_NAME) Duration timeout) {
 		this.notificationManager = notificationManager;
 		this.updateScheduler = updateScheduler;
 		this.updater = updater;
