@@ -10,31 +10,35 @@ import org.threeten.bp.Duration;
 import java.util.Set;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import dagger.Reusable;
 import se.gustavkarlsson.skylight.android.settings.Settings;
 
 import static se.gustavkarlsson.skylight.android.background.UpdateJob.UPDATE_JOB_TAG;
+import static se.gustavkarlsson.skylight.android.dagger.Names.UPDATE_SCHEDULER_FLEX_NAME;
+import static se.gustavkarlsson.skylight.android.dagger.Names.UPDATE_SCHEDULER_INTERVAL_NAME;
 
 @Reusable
 public class UpdateScheduler {
 	private static final String TAG = UpdateScheduler.class.getSimpleName();
 
-	private static final Duration INTERVAL = Duration.ofMinutes(20);
-	private static final Duration FLEX = Duration.ofMinutes(10);
-
 	private final Settings settings;
+	private final Duration scheduleInterval;
+	private final Duration scheduleFlex;
 
 	@Inject
-	UpdateScheduler(Settings settings) {
+	UpdateScheduler(Settings settings, @Named(UPDATE_SCHEDULER_INTERVAL_NAME) Duration scheduleInterval, @Named(UPDATE_SCHEDULER_FLEX_NAME) Duration scheduleFlex) {
 		this.settings = settings;
+		this.scheduleInterval = scheduleInterval;
+		this.scheduleFlex = scheduleFlex;
 	}
 
 	public void setupBackgroundUpdates() {
 		boolean enabled = settings.isEnableNotifications();
 		boolean jobScheduled = isScheduled();
 		if (enabled && !jobScheduled) {
-			scheduleJob(INTERVAL, FLEX);
+			scheduleJob();
 		} else if (!enabled && jobScheduled) {
 			cancelBackgroundUpdates();
 		}
@@ -45,9 +49,9 @@ public class UpdateScheduler {
 		return !jobRequests.isEmpty();
 	}
 
-	private void scheduleJob(Duration interval, Duration flex) {
+	private void scheduleJob() {
 		new JobRequest.Builder(UPDATE_JOB_TAG)
-				.setPeriodic(interval.toMillis(), flex.toMillis())
+				.setPeriodic(scheduleInterval.toMillis(), scheduleFlex.toMillis())
 				.setPersisted(true)
 				.setUpdateCurrent(true)
 				.setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)

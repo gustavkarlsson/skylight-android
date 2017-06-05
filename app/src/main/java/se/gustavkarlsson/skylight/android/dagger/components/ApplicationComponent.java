@@ -16,6 +16,7 @@ import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.BackgroundU
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.ClockModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.ForegroundUpdateTimeoutModule;
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.LatestAuroraReportCacheModule;
+import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.UpdateSchedulerModule;
 
 @Component(modules = {
 		LatestAuroraReportCacheModule.class,
@@ -24,7 +25,8 @@ import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.LatestAuror
 		ClockModule.class,
 		LatestAuroraReportObservableModule.class,
 		BackgroundUpdateTimeoutModule.class,
-		ForegroundUpdateTimeoutModule.class
+		ForegroundUpdateTimeoutModule.class,
+		UpdateSchedulerModule.class
 })
 @Singleton
 @SuppressWarnings("WeakerAccess")
