@@ -6,6 +6,8 @@ import com.vincentbrison.openlibraries.android.dualcache.DualCache
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.models.AuroraReport
 
+private const val KEY = "singleton" // Must match [a-z0-9_-]{1,64}
+
 class DualAuroraReportSingletonCache(context: Context, cacheId: String) : SingletonCache<AuroraReport> {
     private val dualCache: DualCache<AuroraReport>
 
@@ -22,9 +24,5 @@ class DualAuroraReportSingletonCache(context: Context, cacheId: String) : Single
     override var value: AuroraReport
         get() = dualCache.get(KEY)
         set(report) = dualCache.put(KEY, report)
-
-    companion object {
-        const val KEY = "singleton" // Must match [a-z0-9_-]{1,64}
-    }
 
 }
