@@ -28,8 +28,8 @@ import se.gustavkarlsson.skylight.android.models.AuroraReport;
 import se.gustavkarlsson.skylight.android.observers.ObservableData;
 
 import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
-import static se.gustavkarlsson.skylight.android.background.UpdateJob.BACKGROUND_UPDATE_TIMEOUT;
 import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_ERROR;
+import static se.gustavkarlsson.skylight.android.dagger.Names.BACKGROUND_UPDATE_TIMEOUT_NAME;
 import static se.gustavkarlsson.skylight.android.dagger.Names.CACHED_THREAD_POOL_NAME;
 import static se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME;
 import static se.gustavkarlsson.skylight.android.dagger.Names.UPDATE_ERROR_NAME;
@@ -65,6 +65,10 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	@Inject
 	@Named(CACHED_THREAD_POOL_NAME)
 	ExecutorService cachedTreadPool;
+
+	@Inject
+	@Named(BACKGROUND_UPDATE_TIMEOUT_NAME)
+	Duration backgoundUpdateTimeout;
 
 	private MainActivityComponent component;
 
@@ -122,7 +126,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	}
 
 	private void updateInBackground() {
-		cachedTreadPool.execute(() -> updater.update(BACKGROUND_UPDATE_TIMEOUT.toMillis()));
+		cachedTreadPool.execute(() -> updater.update(backgoundUpdateTimeout.toMillis()));
 	}
 
 	@Override

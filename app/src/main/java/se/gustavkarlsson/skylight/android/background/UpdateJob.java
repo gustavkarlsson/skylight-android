@@ -12,8 +12,6 @@ import com.evernote.android.job.Job;
 
 import org.threeten.bp.Duration;
 
-import javax.inject.Inject;
-
 import se.gustavkarlsson.skylight.android.R;
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity;
 
@@ -24,17 +22,17 @@ public class UpdateJob extends Job {
 	private static final String TAG = UpdateJob.class.getSimpleName();
 
 	public static final String UPDATE_JOB_TAG = TAG + ".UPDATE_JOB";
-	public static final Duration BACKGROUND_UPDATE_TIMEOUT = Duration.ofSeconds(30);
 
 	private final NotificationManager notificationManager;
 	private final UpdateScheduler updateScheduler;
 	private final Updater updater;
+	private final Duration timeout;
 
-	@Inject
-	UpdateJob(NotificationManager notificationManager, UpdateScheduler updateScheduler, Updater updater) {
+	public UpdateJob(NotificationManager notificationManager, UpdateScheduler updateScheduler, Updater updater, Duration timeout) {
 		this.notificationManager = notificationManager;
 		this.updateScheduler = updateScheduler;
 		this.updater = updater;
+		this.timeout = timeout;
 	}
 
 	@NonNull
@@ -45,7 +43,7 @@ public class UpdateJob extends Job {
 			sendLocationPermissionMissingNotification(notificationManager);
 			return FAILURE;
 		}
-		boolean successful = updater.update(BACKGROUND_UPDATE_TIMEOUT.toMillis());
+		boolean successful = updater.update(timeout.toMillis());
 		return successful ? SUCCESS : FAILURE;
 	}
 

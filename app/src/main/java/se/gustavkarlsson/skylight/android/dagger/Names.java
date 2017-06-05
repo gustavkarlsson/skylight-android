@@ -6,6 +6,8 @@ public final class Names {
 	public static final String CACHED_THREAD_POOL_NAME = "CachedThreadPool";
 	public static final String LAST_NOTIFIED_NAME = "LastNotified";
 	public static final String UPDATE_ERROR_NAME = "UpdateError";
+	public static final String BACKGROUND_UPDATE_TIMEOUT_NAME = "BackgroundUpdateTimeout";
+	public static final String FOREGROUND_UPDATE_TIMEOUT_NAME = "ForegroundUpdateTimeout";
 
 	private Names() {
 	}

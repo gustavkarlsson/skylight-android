@@ -10,24 +10,24 @@ import java.util.concurrent.ExecutorService;
 import se.gustavkarlsson.skylight.android.background.Updater;
 
 public class SwipeToRefreshPresenter {
-	private static final Duration TIMEOUT = Duration.ofSeconds(10);
-
 	private final SwipeRefreshLayout swipeRefreshLayout;
 	private final Activity activity;
 	private final Updater updater;
 	private final ExecutorService cachedThreadPool;
+	private final Duration timeout;
 
-	public SwipeToRefreshPresenter(SwipeRefreshLayout swipeRefreshLayout, Activity activity, Updater updater, ExecutorService cachedThreadPool) {
+	public SwipeToRefreshPresenter(SwipeRefreshLayout swipeRefreshLayout, Activity activity, Updater updater, ExecutorService cachedThreadPool, Duration timeout) {
 		this.swipeRefreshLayout = swipeRefreshLayout;
 		this.activity = activity;
 		this.updater = updater;
 		this.cachedThreadPool = cachedThreadPool;
+		this.timeout = timeout;
 	}
 
 	private void update() {
 		swipeRefreshLayout.setRefreshing(true);
 		cachedThreadPool.execute(() -> {
-			updater.update(TIMEOUT.toMillis());
+			updater.update(timeout.toMillis());
 			activity.runOnUiThread(() -> swipeRefreshLayout.setRefreshing(false));
         });
 	}
