@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 public final class Chance implements Comparable<Chance> {
 	private final Double value;
 
+	// TODO convert these to singletons
 	public static Chance unknown() {
 		return new Chance(null);
 	}

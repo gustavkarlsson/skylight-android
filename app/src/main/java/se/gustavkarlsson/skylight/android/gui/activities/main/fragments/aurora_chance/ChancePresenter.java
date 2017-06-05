@@ -18,7 +18,7 @@ public class ChancePresenter {
 
 	void update(AuroraReport report) {
 		Chance chance = evaluator.evaluate(report);
-		ChanceLevel chanceLevel = ChanceLevel.fromChance(chance);
+		ChanceLevel chanceLevel = ChanceLevel.Companion.fromChance(chance);
 		chanceTextView.setText(chanceLevel.getResourceId());
 	}
 }
