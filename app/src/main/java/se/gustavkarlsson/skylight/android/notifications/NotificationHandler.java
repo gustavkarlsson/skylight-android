@@ -48,7 +48,8 @@ public class NotificationHandler {
 
 	private void notify(AuroraReport report) {
 		Chance chance = evaluator.evaluate(report);
-		String text = ChanceLevel.fromChance(chance).toString();
+		ChanceLevel chanceLevel = ChanceLevel.fromChance(chance);
+		String text = context.getString(chanceLevel.getResourceId());
 		PendingIntent pendingIntent = createActivityPendingIntent();
 
 		Notification notification = new NotificationCompat.Builder(context)
