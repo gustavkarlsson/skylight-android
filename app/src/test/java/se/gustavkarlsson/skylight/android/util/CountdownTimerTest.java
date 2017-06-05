@@ -7,6 +7,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.threeten.bp.Clock;
+import org.threeten.bp.Duration;
+import org.threeten.bp.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -20,30 +22,30 @@ public class CountdownTimerTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		when(clock.millis()).thenReturn(1000L);
+		when(clock.instant()).thenReturn(Instant.ofEpochMilli(1000));
 	}
 
 	@Test
 	public void remainingIsSameAsInputValue() throws Exception {
-		CountdownTimer timer = CountdownTimer.start(0, clock);
+		CountdownTimer timer = new CountdownTimer(Duration.ZERO, clock);
 
-		long remainingMillis = timer.getRemainingTimeMillis();
+		Duration remainingTime = timer.getRemainingTime();
 
-		assertThat(remainingMillis).isEqualTo(0);
+		assertThat(remainingTime).isEqualTo(Duration.ZERO);
 	}
 
 	@Test
 	public void remainingChangesWhenTimePasses() throws Exception {
-		CountdownTimer timer = CountdownTimer.start(200, clock);
+		CountdownTimer timer = new CountdownTimer(Duration.ofMillis(200), clock);
 
-		when(clock.millis()).thenReturn(1100L);
-		long remainingMillis = timer.getRemainingTimeMillis();
+		when(clock.instant()).thenReturn(Instant.ofEpochMilli(1100));
+		Duration remainingTime = timer.getRemainingTime();
 
-		assertThat(remainingMillis).isEqualTo(100);
+		assertThat(remainingTime).isEqualTo(Duration.ofMillis(100));
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void nullClockThrowsNpe() throws Exception {
-		CountdownTimer.start(200, null);
+		new CountdownTimer(Duration.ofMillis(200), null);
 	}
 }

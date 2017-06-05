@@ -48,7 +48,7 @@ public class UpdateJob extends Job {
 			sendLocationPermissionMissingNotification(notificationManager);
 			return FAILURE;
 		}
-		boolean successful = updater.update(timeout.toMillis());
+		boolean successful = updater.update(timeout);
 		return successful ? SUCCESS : FAILURE;
 	}
 

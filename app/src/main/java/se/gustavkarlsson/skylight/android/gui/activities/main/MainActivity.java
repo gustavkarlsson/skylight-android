@@ -126,7 +126,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	}
 
 	private void updateInBackground() {
-		cachedTreadPool.execute(() -> updater.update(backgoundUpdateTimeout.toMillis()));
+		cachedTreadPool.execute(() -> updater.update(backgoundUpdateTimeout));
 	}
 
 	@Override

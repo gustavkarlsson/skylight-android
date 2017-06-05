@@ -1,10 +1,10 @@
 package se.gustavkarlsson.skylight.android.dagger.modules.replaceable;
 
-import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.TextView;
 
 import org.threeten.bp.Clock;
+import org.threeten.bp.Duration;
 
 import javax.inject.Named;
 
@@ -24,6 +24,6 @@ public class TimeSinceUpdatePresenterModule {
 	@FragmentScope
 	TimeSinceUpdatePresenter provideTimeSinceUpdatePresenter(@Named(FRAGMENT_ROOT_NAME) View rootView, Clock clock) {
 		TextView timeSinceUpdateView = (TextView) rootView.findViewById(R.id.time_since_update);
-		return new TimeSinceUpdatePresenter(timeSinceUpdateView, DateUtils.MINUTE_IN_MILLIS, clock);
+		return new TimeSinceUpdatePresenter(timeSinceUpdateView, Duration.ofMinutes(1), clock);
 	}
 }

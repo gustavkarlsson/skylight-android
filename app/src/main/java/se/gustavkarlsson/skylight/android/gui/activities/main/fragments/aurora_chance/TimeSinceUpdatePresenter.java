@@ -4,6 +4,8 @@ import android.text.format.DateUtils;
 import android.widget.TextView;
 
 import org.threeten.bp.Clock;
+import org.threeten.bp.Duration;
+import org.threeten.bp.Instant;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -12,14 +14,14 @@ import se.gustavkarlsson.skylight.android.R;
 
 public class TimeSinceUpdatePresenter {
 	private final TextView timeSinceUpdateTextView;
-	private final long updateTimeResolutionMillis;
+	private final Duration updateTimeResolution;
 	private final Clock clock;
 	private Timer timeUpdateTimer;
-	private long lastUpdateMillis;
+	private Instant lastUpdate;
 
-	public TimeSinceUpdatePresenter(TextView timeSinceUpdateTextView, long updateTimeResolutionMillis, Clock clock) {
+	public TimeSinceUpdatePresenter(TextView timeSinceUpdateTextView, Duration updateTimeResolution, Clock clock) {
 		this.timeSinceUpdateTextView = timeSinceUpdateTextView;
-		this.updateTimeResolutionMillis = updateTimeResolutionMillis;
+		this.updateTimeResolution = updateTimeResolution;
 		this.clock = clock;
 	}
 
@@ -28,8 +30,8 @@ public class TimeSinceUpdatePresenter {
 		updateTimeSinceUpdate();
 	}
 
-	synchronized void update(long lastUpdateMillis) {
-		this.lastUpdateMillis = lastUpdateMillis;
+	synchronized void update(Instant lastUpdate) {
+		this.lastUpdate = lastUpdate;
 		rescheduleRefresh();
 		updateTimeSinceUpdate();
 	}
@@ -44,26 +46,27 @@ public class TimeSinceUpdatePresenter {
 			public void run() {
 				timeSinceUpdateTextView.post(() -> updateTimeSinceUpdate());
 			}
-		}, 1000L, updateTimeResolutionMillis);
-		// The 1000 ms makes sure that we're past the minute line
+		}, Duration.ofSeconds(1).toMillis(), updateTimeResolution.toMillis());
+		// The 1 second delay makes sure that we're past the minute line
 	}
 
 	private void updateTimeSinceUpdate() {
-		if (isRightNow(lastUpdateMillis)) {
+		if (isRightNow(lastUpdate)) {
 			timeSinceUpdateTextView.setText(R.string.right_now);
 			return;
 		}
-		CharSequence text = formatRelativeTime(lastUpdateMillis);
+		CharSequence text = formatRelativeTime(lastUpdate);
 		timeSinceUpdateTextView.setText(text);
 	}
 
-	private boolean isRightNow(long timeMillis) {
-		long ageMillis = clock.millis() - timeMillis;
-		return ageMillis <= updateTimeResolutionMillis;
+	private boolean isRightNow(Instant time) {
+		Instant now = clock.instant();
+		Duration age = Duration.between(time, now);
+		return !updateTimeResolution.minus(age).isNegative();
 	}
 
-	private CharSequence formatRelativeTime(long startTimeMillis) {
-		return DateUtils.getRelativeTimeSpanString(startTimeMillis, clock.millis(), updateTimeResolutionMillis);
+	private CharSequence formatRelativeTime(Instant time) {
+		return DateUtils.getRelativeTimeSpanString(time.toEpochMilli(), clock.millis(), updateTimeResolution.toMillis());
 	}
 
 	synchronized void stop() {

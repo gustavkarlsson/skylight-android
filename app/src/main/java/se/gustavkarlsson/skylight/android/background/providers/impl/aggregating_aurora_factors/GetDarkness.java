@@ -3,6 +3,8 @@ package se.gustavkarlsson.skylight.android.background.providers.impl.aggregating
 import android.location.Location;
 import android.util.Log;
 
+import org.threeten.bp.Instant;
+
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeoutException;
 
@@ -14,12 +16,12 @@ class GetDarkness implements ErrorHandlingTask<Darkness> {
 
 	private final DarknessProvider provider;
 	private final Location location;
-	private final long timeMillis;
+	private final Instant time;
 
-	GetDarkness(DarknessProvider provider, Location location, long timeMillis) {
+	GetDarkness(DarknessProvider provider, Location location, Instant time) {
 		this.provider = provider;
 		this.location = location;
-		this.timeMillis = timeMillis;
+		this.time = time;
 	}
 
 	@Override
@@ -29,7 +31,7 @@ class GetDarkness implements ErrorHandlingTask<Darkness> {
 
 	private Darkness call() {
 		Log.i(TAG, "Getting darkness...");
-		Darkness darkness = provider.getDarkness(timeMillis, location.getLatitude(), location.getLongitude());
+		Darkness darkness = provider.getDarkness(time, location.getLatitude(), location.getLongitude());
 		Log.d(TAG, "Darkness is: " + darkness);
 		return darkness;
 	}

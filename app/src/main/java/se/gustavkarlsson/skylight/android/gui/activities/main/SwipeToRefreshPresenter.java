@@ -27,7 +27,7 @@ public class SwipeToRefreshPresenter {
 	private void update() {
 		swipeRefreshLayout.setRefreshing(true);
 		cachedThreadPool.execute(() -> {
-			updater.update(timeout.toMillis());
+			updater.update(timeout);
 			activity.runOnUiThread(() -> swipeRefreshLayout.setRefreshing(false));
         });
 	}

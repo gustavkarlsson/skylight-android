@@ -1,23 +1,21 @@
 package se.gustavkarlsson.skylight.android.util;
 
 import org.threeten.bp.Clock;
+import org.threeten.bp.Duration;
+import org.threeten.bp.Instant;
 
 public class CountdownTimer {
-	private final long expiryTimeMillis;
+	private final Instant expiryTime;
 	private final Clock clock;
 
-	private CountdownTimer(long expiryTimeMillis, Clock clock) {
-		this.expiryTimeMillis = clock.millis() + expiryTimeMillis;
+	public CountdownTimer(Duration duration, Clock clock) {
+		this.expiryTime = clock.instant().plus(duration);
 		this.clock = clock;
 	}
 
-	public static CountdownTimer start(long durationMillis, Clock clock) {
-		return new CountdownTimer(durationMillis, clock);
-	}
-
-	public long getRemainingTimeMillis() {
-		long remainingTIme = expiryTimeMillis - clock.millis();
-		return Math.max(remainingTIme, 0);
+	public Duration getRemainingTime() {
+		Instant now = clock.instant();
+		return Duration.between(now, expiryTime);
 	}
 
 }

@@ -7,6 +7,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import org.threeten.bp.Duration;
+
 import javax.inject.Inject;
 
 import dagger.Reusable;
@@ -28,13 +30,13 @@ public class GoogleLocationProvider implements LocationProvider {
 	}
 
 	@Override
-	public Location getLocation(long timeoutMillis) {
+	public Location getLocation(Duration timeout) {
 		Log.i(TAG, "Connecting to Google Play Services...");
 		try {
-			ConnectionResult connectionResult = googleApiClient.blockingConnect(timeoutMillis, MILLISECONDS);
+			ConnectionResult connectionResult = googleApiClient.blockingConnect(timeout.toMillis(), MILLISECONDS);
 			if (!connectionResult.isSuccess()) {
 				if (connectionResult.getErrorCode() == ConnectionResult.TIMEOUT) {
-					throw new UserFriendlyException(R.string.error_updating_took_too_long, "Connecting to Google API timed out after " + timeoutMillis + "ms");
+					throw new UserFriendlyException(R.string.error_updating_took_too_long, "Connecting to Google API timed out after " + timeout.toMillis() + "ms");
 				}
 				throw new UserFriendlyException(R.string.error_could_not_connect_to_google_play_services, createErrorMessage(connectionResult));
 			}

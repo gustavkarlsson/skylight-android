@@ -3,6 +3,8 @@ package se.gustavkarlsson.skylight.android.background.providers.impl;
 import net.e175.klaus.solarpositioning.AzimuthZenithAngle;
 import net.e175.klaus.solarpositioning.Grena3;
 
+import org.threeten.bp.Instant;
+
 import java.util.GregorianCalendar;
 
 import javax.inject.Inject;
@@ -19,9 +21,9 @@ public class KlausBrunnerDarknessProvider implements DarknessProvider {
 	}
 
 	@Override
-	public Darkness getDarkness(long timeMillis, double latitude, double longitude) {
+	public Darkness getDarkness(Instant time, double latitude, double longitude) {
 		GregorianCalendar date = new GregorianCalendar();
-		date.setTimeInMillis(timeMillis);
+		date.setTimeInMillis(time.toEpochMilli());
 		AzimuthZenithAngle azimuthZenithAngle = Grena3.calculateSolarPosition(date, latitude, longitude, 0);
 		return new Darkness((float) azimuthZenithAngle.getZenithAngle());
 	}

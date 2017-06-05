@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import org.threeten.bp.Duration;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -42,12 +44,12 @@ public class Updater {
 		this.latestAuroraReport = latestAuroraReport;
 	}
 
-	public boolean update(long timeoutMillis) {
+	public boolean update(Duration timeout) {
 		Log.v(TAG, "onUpdate");
 		AuroraReportProvider provider = getApplicationComponent().getAuroraReportProvider();
 		AuroraReport report;
 		try {
-			report = provider.getReport(timeoutMillis);
+			report = provider.getReport(timeout);
 		} catch (UserFriendlyException e) {
 			String errorMessage = context.getString(e.getStringResourceId());
 			Log.e(TAG, "A user friendly exception occurred: " + errorMessage, e);

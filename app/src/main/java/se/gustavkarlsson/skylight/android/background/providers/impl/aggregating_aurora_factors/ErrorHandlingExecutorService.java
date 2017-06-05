@@ -1,5 +1,7 @@
 package se.gustavkarlsson.skylight.android.background.providers.impl.aggregating_aurora_factors;
 
+import org.threeten.bp.Duration;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
@@ -19,8 +21,8 @@ class ErrorHandlingExecutorService {
 		this.executorService = executorService;
 	}
 
-	<V> ErrorHandlingFuture<V> execute(ErrorHandlingTask<V> task, long timeoutMillis) {
+	<V> ErrorHandlingFuture<V> execute(ErrorHandlingTask<V> task, Duration timeout) {
 		Future<V> future = executorService.submit(task.getCallable());
-		return new ErrorHandlingFuture<>(future, timeoutMillis, task::handleInterruptedException, task::handleThrowable, task::handleTimeoutException);
+		return new ErrorHandlingFuture<>(future, timeout, task::handleInterruptedException, task::handleThrowable, task::handleTimeoutException);
 	}
 }

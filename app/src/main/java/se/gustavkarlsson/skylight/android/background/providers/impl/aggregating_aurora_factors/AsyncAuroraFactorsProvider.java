@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.background.providers.impl.aggregating
 import android.location.Location;
 
 import org.threeten.bp.Clock;
+import org.threeten.bp.Duration;
 
 import javax.inject.Inject;
 
@@ -38,16 +39,16 @@ public class AsyncAuroraFactorsProvider implements AuroraFactorsProvider {
 	}
 
 	@Override
-	public AuroraFactors getAuroraFactors(Location location, long timeoutMillis) {
+	public AuroraFactors getAuroraFactors(Location location, Duration timeout) {
 		GetGeomagActivity getGeomagActivity = new GetGeomagActivity(geomagActivityProvider);
 		GetGeomagLocation getGeomagLocation = new GetGeomagLocation(geomagLocationProvider, location);
-		GetDarkness getDarkness = new GetDarkness(darknessProvider, location, clock.millis());
+		GetDarkness getDarkness = new GetDarkness(darknessProvider, location, clock.instant());
 		GetVisibility getVisibility = new GetVisibility(visibilityProvider, location);
 
-		ErrorHandlingFuture<GeomagActivity> geomagActivityErrorHandlingFuture = executorService.execute(getGeomagActivity, timeoutMillis);
-		ErrorHandlingFuture<GeomagLocation> geomagLocationErrorHandlingFuture = executorService.execute(getGeomagLocation, timeoutMillis);
-		ErrorHandlingFuture<Darkness> darknessErrorHandlingFuture = executorService.execute(getDarkness, timeoutMillis);
-		ErrorHandlingFuture<Visibility> visibilityErrorHandlingFuture = executorService.execute(getVisibility, timeoutMillis);
+		ErrorHandlingFuture<GeomagActivity> geomagActivityErrorHandlingFuture = executorService.execute(getGeomagActivity, timeout);
+		ErrorHandlingFuture<GeomagLocation> geomagLocationErrorHandlingFuture = executorService.execute(getGeomagLocation, timeout);
+		ErrorHandlingFuture<Darkness> darknessErrorHandlingFuture = executorService.execute(getDarkness, timeout);
+		ErrorHandlingFuture<Visibility> visibilityErrorHandlingFuture = executorService.execute(getVisibility, timeout);
 
 		GeomagActivity geomagActivity = geomagActivityErrorHandlingFuture.get();
 		GeomagLocation geomagLocation = geomagLocationErrorHandlingFuture.get();

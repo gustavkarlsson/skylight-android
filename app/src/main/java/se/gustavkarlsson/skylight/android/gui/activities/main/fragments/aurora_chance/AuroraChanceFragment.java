@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.threeten.bp.Instant;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -66,7 +68,7 @@ public class AuroraChanceFragment extends Fragment implements DataObserver<Auror
 
 	private void updatePresenters(AuroraReport report) {
 		locationPresenter.update(report.getAddress());
-		timeSinceUpdatePresenter.update(report.getTimestampMillis());
+		timeSinceUpdatePresenter.update(Instant.ofEpochMilli(report.getTimestampMillis()));
 		chancePresenter.update(report);
 	}
 

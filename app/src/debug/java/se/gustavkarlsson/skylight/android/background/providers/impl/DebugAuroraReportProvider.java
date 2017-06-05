@@ -4,6 +4,7 @@ import android.location.Address;
 import android.support.annotation.NonNull;
 
 import org.threeten.bp.Clock;
+import org.threeten.bp.Duration;
 
 import java.util.Locale;
 
@@ -27,7 +28,7 @@ public class DebugAuroraReportProvider implements AuroraReportProvider {
 	}
 
 	@Override
-	public AuroraReport getReport(long timeoutMillis) {
+	public AuroraReport getReport(Duration timeout) {
 		Address location = new Address(Locale.ENGLISH);
 		AuroraFactors auroraFactors = createAuroraFactors();
 		return new AuroraReport(clock.millis(), location, auroraFactors);

@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.threeten.bp.Clock;
+import org.threeten.bp.Duration;
 
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
@@ -44,26 +45,26 @@ public class AuroraReportProviderImpl implements AuroraReportProvider {
 	}
 
 	@Override
-	public AuroraReport getReport(long timeoutMillis) {
+	public AuroraReport getReport(Duration timeout) {
 		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 		if (networkInfo == null || !networkInfo.isConnected()) {
 			throw new UserFriendlyException(R.string.error_no_internet);
 		}
 
-		CountdownTimer timeoutTimer = CountdownTimer.start(timeoutMillis, clock);
-		Location location = locationProvider.getLocation(timeoutTimer.getRemainingTimeMillis());
+		CountdownTimer timeoutTimer = new CountdownTimer(timeout, clock);
+		Location location = locationProvider.getLocation(timeoutTimer.getRemainingTime());
 		Future<Address> addressFuture = asyncAddressProvider.execute(location.getLatitude(), location.getLongitude());
-		AuroraFactors auroraFactors = auroraFactorsProvider.getAuroraFactors(location, timeoutTimer.getRemainingTimeMillis());
-		Address address = getAddressOrNull(addressFuture, timeoutTimer.getRemainingTimeMillis());
+		AuroraFactors auroraFactors = auroraFactorsProvider.getAuroraFactors(location, timeoutTimer.getRemainingTime());
+		Address address = getAddressOrNull(addressFuture, timeoutTimer.getRemainingTime());
 		return new AuroraReport(clock.millis(), address, auroraFactors);
 	}
 
 	@Nullable
-	private static Address getAddressOrNull(Future<Address> addressFuture, long timeoutMillis) {
+	private static Address getAddressOrNull(Future<Address> addressFuture, Duration timeout) {
 		try {
-			return addressFuture.get(timeoutMillis, MILLISECONDS);
+			return addressFuture.get(timeout.toMillis(), MILLISECONDS);
 		} catch (TimeoutException e) {
-			Log.w(TAG, "Getting address timed out after " + timeoutMillis + "ms", e);
+			Log.w(TAG, "Getting address timed out after " + timeout.toMillis() + "ms", e);
 		} catch (ExecutionException e) {
 			Throwable cause = e.getCause();
 			Log.w(TAG, "An unexpected exception occurred while", cause);
