@@ -10,7 +10,7 @@ class VisibilityEvaluator
 internal constructor() : ChanceEvaluator<Visibility> {
 
     override fun evaluate(value: Visibility): Chance {
-        val clouds = value.cloudPercentage ?: return Chance.unknown()
+        val clouds = value.cloudPercentage ?: return Chance.UNKNOWN
 		val chance = -1.0 / 50.0 * clouds.toDouble() + 1.0
 		return Chance.of(chance)
     }

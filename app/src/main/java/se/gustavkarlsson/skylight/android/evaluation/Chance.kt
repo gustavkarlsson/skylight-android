@@ -1,5 +1,8 @@
 package se.gustavkarlsson.skylight.android.evaluation
 
+private const val HIGHEST = 1.0
+private const val LOWEST = 0.0
+
 class Chance private constructor(value: Double?) : Comparable<Chance> {
     val value: Double?
 
@@ -7,7 +10,7 @@ class Chance private constructor(value: Double?) : Comparable<Chance> {
         if (value == null) {
             this.value = null
         } else {
-			val limitedValue = Math.max(0.0, Math.min(1.0, value))
+			val limitedValue = Math.max(LOWEST, Math.min(HIGHEST, value))
 			this.value = limitedValue
 		}
     }
@@ -16,7 +19,7 @@ class Chance private constructor(value: Double?) : Comparable<Chance> {
         get() = value != null
 
     val isPossible: Boolean
-        get() = value != null && value > 0.0
+        get() = value != null && value > LOWEST
 
     override fun compareTo(other: Chance): Int {
 		if (value != null && other.value != null) {
@@ -51,15 +54,8 @@ class Chance private constructor(value: Double?) : Comparable<Chance> {
 	}
 
 	companion object {
-
-        // TODO convert these to singletons
-        fun unknown(): Chance {
-            return Chance(null)
-        }
-
-        fun impossible(): Chance {
-            return Chance(0.0)
-        }
+		val UNKNOWN: Chance = Chance(null)
+		val IMPOSSIBLE: Chance = Chance(LOWEST)
 
         fun of(value: Double): Chance {
             return Chance(value)

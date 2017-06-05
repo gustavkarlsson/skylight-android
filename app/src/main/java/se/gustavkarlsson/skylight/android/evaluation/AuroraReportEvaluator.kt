@@ -28,11 +28,11 @@ internal constructor(
 		val chances = listOf(activityChance, locationChance, visibilityChance, darknessChance)
 
 		if (chances.any { !it.isKnown }) {
-			return Chance.unknown()
+			return Chance.UNKNOWN
 		}
 
 		if (chances.any { !it.isPossible }) {
-			return Chance.impossible()
+			return Chance.IMPOSSIBLE
 		}
 
 		val geomagActivityAndLocationChance = Chance.of(activityChance.value!! * locationChance.value!!)

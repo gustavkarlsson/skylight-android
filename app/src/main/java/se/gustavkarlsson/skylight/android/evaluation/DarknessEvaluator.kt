@@ -10,7 +10,7 @@ class DarknessEvaluator
 internal constructor() : ChanceEvaluator<Darkness> {
 
     override fun evaluate(value: Darkness): Chance {
-        val zenithAngle = value.sunZenithAngle ?: return Chance.unknown()
+        val zenithAngle = value.sunZenithAngle ?: return Chance.UNKNOWN
         return Chance.of(1.0 / 12.0 * zenithAngle - 8.0) // 96-108
     }
 }
