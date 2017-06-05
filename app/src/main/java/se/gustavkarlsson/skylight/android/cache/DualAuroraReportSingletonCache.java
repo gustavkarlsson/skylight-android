@@ -24,12 +24,12 @@ public class DualAuroraReportSingletonCache implements SingletonCache<AuroraRepo
 	}
 
 	@Override
-	public AuroraReport get() {
+	public AuroraReport getValue() {
 		return dualCache.get(KEY);
 	}
 
 	@Override
-	public void set(AuroraReport report) {
+	public void setValue(AuroraReport report) {
 		dualCache.put(KEY, report);
 	}
 

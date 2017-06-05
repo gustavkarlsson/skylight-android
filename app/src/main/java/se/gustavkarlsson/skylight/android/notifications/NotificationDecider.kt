@@ -24,11 +24,8 @@ internal constructor(
         if (!settings.isEnableNotifications) {
             return false
         }
-        val lastReport = lastNotifiedReportCache.get()
+        val lastReport = lastNotifiedReportCache.value
         val newReportLevel = ChanceLevel.fromChance(chanceEvaluator.evaluate(newReport))
-        if (lastReport == null) {
-            return isHighEnoughChance(newReportLevel)
-        }
         val lastReportLevel = ChanceLevel.fromChance(chanceEvaluator.evaluate(lastReport))
         return isHighEnoughChance(newReportLevel) && (outdatedEvaluator.isOutdated(lastReport) || isHigherThan(newReportLevel, lastReportLevel))
     }

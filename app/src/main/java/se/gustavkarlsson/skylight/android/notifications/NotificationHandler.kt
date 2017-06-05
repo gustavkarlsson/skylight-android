@@ -30,7 +30,7 @@ internal constructor(
     fun handle(report: AuroraReport) {
         if (decider.shouldNotify(report)) {
             notify(report)
-            lastNotifiedReportCache.set(report)
+            lastNotifiedReportCache.value = report
         }
     }
 

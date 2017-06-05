@@ -25,7 +25,7 @@ public abstract class LatestAuroraReportObservableModule {
 	@Singleton
 	@Named(LATEST_NAME)
 	static ObservableData<AuroraReport> provideLatestAuroraReportObservable(@Named(LATEST_NAME) SingletonCache<AuroraReport> cache, Clock clock) {
-		AuroraReport report = cache.get();
+		AuroraReport report = cache.getValue();
 		if (report == null) {
 			AuroraFactors factors = new AuroraFactors(
 					new GeomagActivity(null),

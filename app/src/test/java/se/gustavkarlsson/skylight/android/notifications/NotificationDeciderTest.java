@@ -106,7 +106,7 @@ public class NotificationDeciderTest {
 
 	@Test
 	public void alreadyNotifiedAtSameLevelShouldNotNotify() throws Exception {
-		when(lastNotifiedCache.get()).thenReturn(lastReport);
+		when(lastNotifiedCache.getValue()).thenReturn(lastReport);
 		when(reportOutdatedEvaluator.isOutdated(lastReport)).thenReturn(false);
 
 		boolean shouldNotify = notificationDecider.shouldNotify(report);
@@ -116,7 +116,7 @@ public class NotificationDeciderTest {
 
 	@Test
 	public void alreadyNotifiedAtLowerLevelShouldNotify() throws Exception {
-		when(lastNotifiedCache.get()).thenReturn(lastReport);
+		when(lastNotifiedCache.getValue()).thenReturn(lastReport);
 		when(reportOutdatedEvaluator.isOutdated(lastReport)).thenReturn(false);
 		when(auroraChanceEvaluator.evaluate(lastReport)).thenReturn(Chance.of(0.5));
 

@@ -61,7 +61,7 @@ public class Updater {
 			broadcastError(errorMessage);
 			return false;
 		}
-		latestReportCache.set(report);
+		latestReportCache.setValue(report);
 		latestAuroraReport.setData(report);
 		notificationHandler.handle(report);
 		return true;
