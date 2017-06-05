@@ -59,7 +59,6 @@ gradle.projectsEvaluated {
 dependencies {
 	ext {
 		retrofitVersion = "2.2.0"
-		parcelerVersion = "1.1.6"
 		streamsupportVersion = "1.5.4"
 		daggerVersion = "2.10"
 		powermockVersion = "1.6.6"
@@ -82,10 +81,6 @@ dependencies {
 	// Retrofit
 	compile "com.squareup.retrofit2:retrofit:" + retrofitVersion
 	compile "com.squareup.retrofit2:converter-gson:" + retrofitVersion
-
-	// Parceler
-	compile "org.parceler:parceler-api:" + parcelerVersion
-	apt "org.parceler:parceler:" + parcelerVersion
 
 	// Stream support
 	compile "net.sourceforge.streamsupport:streamsupport:" + streamsupportVersion
