@@ -43,9 +43,4 @@ public class CountdownTimerTest {
 
 		assertThat(remainingTime).isEqualTo(Duration.ofMillis(100));
 	}
-
-	@Test(expected = NullPointerException.class)
-	public void nullClockThrowsNpe() throws Exception {
-		new CountdownTimer(Duration.ofMillis(200), null);
-	}
 }
