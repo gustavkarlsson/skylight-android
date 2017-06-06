@@ -14,7 +14,7 @@ import se.gustavkarlsson.skylight.android.models.factors.Darkness;
 import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity;
 import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation;
 import se.gustavkarlsson.skylight.android.models.factors.Visibility;
-import se.gustavkarlsson.skylight.android.observers.ObservableData;
+import se.gustavkarlsson.skylight.android.observers.ObservableValue;
 
 import static se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME;
 
@@ -24,7 +24,7 @@ public abstract class LatestAuroraReportObservableModule {
 	@Provides
 	@Singleton
 	@Named(LATEST_NAME)
-	static ObservableData<AuroraReport> provideLatestAuroraReportObservable(@Named(LATEST_NAME) SingletonCache<AuroraReport> cache, Clock clock) {
+	static ObservableValue<AuroraReport> provideLatestAuroraReportObservable(@Named(LATEST_NAME) SingletonCache<AuroraReport> cache, Clock clock) {
 		AuroraReport report = cache.getValue();
 		if (report == null) {
 			AuroraFactors factors = new AuroraFactors(
@@ -35,6 +35,6 @@ public abstract class LatestAuroraReportObservableModule {
 			);
 			report = new AuroraReport(clock.millis(), null, factors);
 		}
-		return new ObservableData<>(report);
+		return new ObservableValue<>(report);
 	}
 }

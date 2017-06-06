@@ -25,7 +25,7 @@ import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity;
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
-import se.gustavkarlsson.skylight.android.observers.ObservableData;
+import se.gustavkarlsson.skylight.android.observers.ObservableValue;
 
 import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_ERROR;
@@ -53,7 +53,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 
 	@Inject
 	@Named(LATEST_NAME)
-	ObservableData<AuroraReport> latestAuroraReport;
+	ObservableValue<AuroraReport> latestAuroraReport;
 
 	@Inject
 	ChanceEvaluator<AuroraReport> auroraChanceEvaluator;
@@ -113,7 +113,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	@Override
 	protected void onRequirementsMet() {
 		swipeToRefreshPresenter.enable();
-		AuroraReport latestReport = latestAuroraReport.getData();
+		AuroraReport latestReport = latestAuroraReport.getValue();
 		if (needsUpdate(latestReport)) {
 			updateInBackground();
 		}

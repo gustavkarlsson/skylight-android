@@ -61,6 +61,7 @@ public class TimeSinceUpdatePresenter {
 
 	private boolean isRightNow(Instant time) {
 		Instant now = clock.instant();
+		// TODO change to until
 		Duration age = Duration.between(time, now);
 		return !updateTimeResolution.minus(age).isNegative();
 	}

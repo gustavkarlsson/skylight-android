@@ -15,13 +15,13 @@ import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRoo
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity;
 import se.gustavkarlsson.skylight.android.models.AuroraFactors;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
-import se.gustavkarlsson.skylight.android.observers.DataObserver;
-import se.gustavkarlsson.skylight.android.observers.ObservableData;
+import se.gustavkarlsson.skylight.android.observers.ObservableValue;
+import se.gustavkarlsson.skylight.android.observers.ValueObserver;
 
 import static se.gustavkarlsson.skylight.android.dagger.Names.FRAGMENT_ROOT_NAME;
 import static se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME;
 
-public class AuroraFactorFragment extends Fragment implements DataObserver<AuroraReport> {
+public class AuroraFactorFragment extends Fragment implements ValueObserver<AuroraReport> {
 	private static final String TAG = AuroraFactorFragment.class.getSimpleName();
 
 	@Inject
@@ -42,7 +42,7 @@ public class AuroraFactorFragment extends Fragment implements DataObserver<Auror
 
 	@Inject
 	@Named(LATEST_NAME)
-	ObservableData<AuroraReport> latestAuroraReport;
+	ObservableValue<AuroraReport> latestAuroraReport;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,12 +58,12 @@ public class AuroraFactorFragment extends Fragment implements DataObserver<Auror
 		Log.v(TAG, "onStart");
 		super.onStart();
 		latestAuroraReport.addListener(this);
-		updatePresenters(latestAuroraReport.getData());
+		updatePresenters(latestAuroraReport.getValue());
 	}
 
 	@Override
-	public void dataChanged(AuroraReport report) {
-		Log.v(TAG, "dataChanged");
+	public void valueChanged(AuroraReport report) {
+		Log.v(TAG, "valueChanged");
 		getActivity().runOnUiThread(() -> updatePresenters(report));
 	}
 

@@ -16,7 +16,7 @@ import se.gustavkarlsson.skylight.android.background.providers.AuroraReportProvi
 import se.gustavkarlsson.skylight.android.cache.SingletonCache;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 import se.gustavkarlsson.skylight.android.notifications.NotificationHandler;
-import se.gustavkarlsson.skylight.android.observers.ObservableData;
+import se.gustavkarlsson.skylight.android.observers.ObservableValue;
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException;
 
 import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
@@ -33,10 +33,10 @@ public class Updater {
 	private final SingletonCache<AuroraReport> latestReportCache;
 	private final LocalBroadcastManager broadcastManager;
 	private final NotificationHandler notificationHandler;
-	private final ObservableData<AuroraReport> latestAuroraReport;
+	private final ObservableValue<AuroraReport> latestAuroraReport;
 
 	@Inject
-	Updater(Context context, @Named(LATEST_NAME) SingletonCache<AuroraReport> latestReportCache, LocalBroadcastManager broadcastManager, NotificationHandler notificationHandler, @Named(LATEST_NAME) ObservableData<AuroraReport> latestAuroraReport) {
+	Updater(Context context, @Named(LATEST_NAME) SingletonCache<AuroraReport> latestReportCache, LocalBroadcastManager broadcastManager, NotificationHandler notificationHandler, @Named(LATEST_NAME) ObservableValue<AuroraReport> latestAuroraReport) {
 		this.context = context;
 		this.latestReportCache = latestReportCache;
 		this.broadcastManager = broadcastManager;
@@ -62,7 +62,7 @@ public class Updater {
 			return false;
 		}
 		latestReportCache.setValue(report);
-		latestAuroraReport.setData(report);
+		latestAuroraReport.setValue(report);
 		notificationHandler.handle(report);
 		return true;
 	}

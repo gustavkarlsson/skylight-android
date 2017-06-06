@@ -2,18 +2,18 @@ package se.gustavkarlsson.skylight.android.util
 
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
-import org.threeten.bp.Instant
+import se.gustavkarlsson.skylight.android.extensions.until
 
 class CountdownTimer(
 		duration: Duration,
 		private val clock: Clock
 ) {
-	private val expiryTime: Instant = clock.instant().plus(duration)
+	private val expiryTime = clock.instant().plus(duration)
 
 	val remainingTime: Duration
 		get() {
 			val now = clock.instant()
-			return Duration.between(now, expiryTime)
+			return now.until(expiryTime)
 		}
 
 }

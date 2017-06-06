@@ -13,21 +13,15 @@ enum class ChanceLevel(val resourceId: Int) {
 	// TODO get rid of companion
     companion object {
         fun fromChance(chance: Chance): ChanceLevel {
-            if (!chance.isKnown) {
-                return UNKNOWN
-            }
-            if (!chance.isPossible) {
-                return NONE
-            }
-
-            val value = chance.value!!
-            if (value < 0.33) {
-                return LOW
-            } else if (value < 0.66) {
-                return MEDIUM
-            } else {
-                return HIGH
-            }
+			return when (chance) {
+				Chance.UNKNOWN -> UNKNOWN
+				Chance.IMPOSSIBLE -> NONE
+				else -> when (chance.value!!) {
+					in 0.0..0.33 -> LOW
+					in 0.33..0.66 -> MEDIUM
+					else -> HIGH
+				}
+			}
         }
     }
 }
