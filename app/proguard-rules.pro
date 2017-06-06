@@ -15,23 +15,12 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
--keep class io.realm.annotations.RealmModule
--keep @io.realm.annotations.RealmModule class *
--keep class io.realm.internal.Keep
--keep @io.realm.internal.Keep class *
--dontwarn javax.**
--dontwarn io.realm.**
 
--dontwarn retrofit.**
--keep class retrofit.** { *; }
+# Retrofit2
+-dontnote retrofit2.Platform
+-dontwarn retrofit2.Platform$Java8
 -keepattributes Signature
 -keepattributes Exceptions
 
--keep class * implements android.os.Parcelable {
-  public static final android.os.Parcelable$Creator *;
-}
--keep class org.parceler.Parceler$$Parcels
--dontwarn java.lang.invoke.*
+# okio
 -dontwarn okio.**
--dontwarn java8.**
--dontwarn retrofit2.Platform$Java8
