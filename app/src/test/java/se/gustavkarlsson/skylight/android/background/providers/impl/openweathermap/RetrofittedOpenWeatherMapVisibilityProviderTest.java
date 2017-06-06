@@ -94,7 +94,7 @@ public class RetrofittedOpenWeatherMapVisibilityProviderTest {
 		Gson gson = new Gson();
 		OpenWeatherMapWeather weather = gson.fromJson(xml, OpenWeatherMapWeather.class);
 
-		int cloudiness = weather.getClouds().getAll();
+		int cloudiness = weather.getClouds().getPercentage();
 		assertThat(cloudiness).isEqualTo(68);
 	}
 }
