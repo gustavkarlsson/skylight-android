@@ -35,12 +35,6 @@ internal constructor(
 			return Chance.IMPOSSIBLE
 		}
 
-		val geomagActivityAndLocationChance = Chance(activityChance.value!! * locationChance.value!!)
-
-		listOf(visibilityChance, darknessChance, geomagActivityAndLocationChance)
-				.min()
-				.let {
-					return it!!
-				}
+		return listOf(visibilityChance, darknessChance, activityChance * locationChance).min()!!
 	}
 }

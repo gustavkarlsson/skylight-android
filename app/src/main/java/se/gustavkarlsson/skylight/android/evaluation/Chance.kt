@@ -57,4 +57,11 @@ class Chance(value: Double?) : Comparable<Chance> {
 		val UNKNOWN: Chance = Chance(null)
 		val IMPOSSIBLE: Chance = Chance(LOWEST)
     }
+
+	operator fun times(other: Chance): Chance {
+		if (value == null || other.value == null) {
+			return UNKNOWN
+		}
+		return Chance(value * other.value)
+	}
 }
