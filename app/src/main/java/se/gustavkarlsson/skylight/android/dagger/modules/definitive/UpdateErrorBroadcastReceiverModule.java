@@ -9,10 +9,9 @@ import javax.inject.Named;
 
 import dagger.Module;
 import dagger.Provides;
+import se.gustavkarlsson.skylight.android.background.Updater;
 import se.gustavkarlsson.skylight.android.dagger.scopes.ActivityScope;
 
-import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_ERROR;
-import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE;
 import static se.gustavkarlsson.skylight.android.dagger.Names.UPDATE_ERROR_NAME;
 
 @Module
@@ -26,8 +25,8 @@ public abstract class UpdateErrorBroadcastReceiverModule {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 				String action = intent.getAction();
-				if (RESPONSE_UPDATE_ERROR.equals(action)) {
-					String message = intent.getStringExtra(RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE);
+				if (Updater.Companion.getRESPONSE_UPDATE_ERROR().equals(action)) {
+					String message = intent.getStringExtra(Updater.Companion.getRESPONSE_UPDATE_ERROR_EXTRA_MESSAGE());
 					Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 				}
 			}

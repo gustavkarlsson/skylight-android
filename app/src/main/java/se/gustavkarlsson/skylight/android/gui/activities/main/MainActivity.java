@@ -28,7 +28,6 @@ import se.gustavkarlsson.skylight.android.models.AuroraReport;
 import se.gustavkarlsson.skylight.android.observers.ObservableValue;
 
 import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
-import static se.gustavkarlsson.skylight.android.background.Updater.RESPONSE_UPDATE_ERROR;
 import static se.gustavkarlsson.skylight.android.dagger.Names.BACKGROUND_UPDATE_TIMEOUT_NAME;
 import static se.gustavkarlsson.skylight.android.dagger.Names.CACHED_THREAD_POOL_NAME;
 import static se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME;
@@ -105,7 +104,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	public void onStart() {
 		Log.v(TAG, "onStart");
 		super.onStart();
-		broadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(RESPONSE_UPDATE_ERROR));
+		broadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(Updater.Companion.getRESPONSE_UPDATE_ERROR()));
 		swipeToRefreshPresenter.disable();
 		ensureRequirementsMet();
 	}
