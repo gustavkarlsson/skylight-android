@@ -21,7 +21,7 @@ import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import dagger.Reusable;
-import java8.util.function.Supplier;
+import kotlin.jvm.functions.Function0;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService;
@@ -131,8 +131,9 @@ public abstract class AuroraReportModule {
 	@Reusable
 	abstract GeomagActivityProvider bindGeomagActivityProvider(RetrofittedGeomagActivityProvider impl);
 
+	// TODO change Function0 to kotlin syntax
 	@Provides
-	static Supplier<ZoneId> provideZoneIdSupplier() {
+	static Function0<? extends ZoneId> provideZoneIdSupplier() {
 		return ZoneOffset::systemDefault;
 	}
 

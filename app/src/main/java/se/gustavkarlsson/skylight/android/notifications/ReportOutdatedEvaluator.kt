@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.notifications
 
 import dagger.Reusable
-import java8.util.function.Supplier
 import org.threeten.bp.Clock
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
@@ -16,11 +15,11 @@ class ReportOutdatedEvaluator
 @Inject
 internal constructor(
 		private val clock: Clock,
-		private val zoneIdSupplier: Supplier<ZoneId>
+		private val zoneIdSupplier: () -> ZoneId
 ) {
 
 	fun isOutdated(report: AuroraReport): Boolean {
-		val currentZoneId = zoneIdSupplier.get()
+		val currentZoneId = zoneIdSupplier()
 		val now = Instant.now(clock)
 		val today = LocalDate.now(clock)
 		val noonToday = NOON.atDate(today).atZone(currentZoneId).toInstant()
