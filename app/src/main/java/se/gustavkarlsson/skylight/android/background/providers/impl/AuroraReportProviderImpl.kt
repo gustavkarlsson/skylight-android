@@ -41,7 +41,7 @@ class AuroraReportProviderImpl(
         return AuroraReport(clock.millis(), address, auroraFactors)
     }
 
-	private fun getAddress(addressFuture: Future<Address>, timeout: Duration): Address? {
+	private fun getAddress(addressFuture: Future<Address?>, timeout: Duration): Address? {
 		try {
 			return addressFuture.get(timeout.toMillis(), MILLISECONDS)
 		} catch (e: TimeoutException) {

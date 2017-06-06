@@ -15,7 +15,7 @@ internal class GetGeomagActivity(
 
     private fun call(): GeomagActivity {
         Log.i(TAG, "Getting geomagnetic activity...")
-        val geomagActivity = provider.geomagActivity
+        val geomagActivity = provider.getGeomagActivity()
         Log.d(TAG, "Geomagnetic activity is: " + geomagActivity)
         return geomagActivity
     }
