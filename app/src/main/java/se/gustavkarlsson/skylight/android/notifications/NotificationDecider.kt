@@ -27,17 +27,6 @@ internal constructor(
         val lastReport = lastNotifiedReportCache.value
         val newReportLevel = ChanceLevel.fromChance(chanceEvaluator.evaluate(newReport))
         val lastReportLevel = ChanceLevel.fromChance(chanceEvaluator.evaluate(lastReport))
-        return isHighEnoughChance(newReportLevel) && (outdatedEvaluator.isOutdated(lastReport) || isHigherThan(newReportLevel, lastReportLevel))
-    }
-
-	// TODO Combine with isHigherThan
-    private fun isHighEnoughChance(chanceLevel: ChanceLevel): Boolean {
-        val triggerLevel = settings.triggerLevel
-        return chanceLevel.ordinal >= triggerLevel.ordinal
-    }
-
-	// TODO Move to ChanceLevel
-    private fun isHigherThan(first: ChanceLevel, second: ChanceLevel): Boolean {
-        return first.ordinal > second.ordinal
+        return newReportLevel >= settings.triggerLevel && (outdatedEvaluator.isOutdated(lastReport) || newReportLevel > lastReportLevel)
     }
 }
