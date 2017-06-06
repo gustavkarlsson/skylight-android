@@ -16,6 +16,6 @@ internal constructor() : ChanceEvaluator<GeomagLocation> {
         if (chance > 1.0) {
             chance = 2.0 - chance
         }
-        return Chance.of(chance)
+        return Chance(chance)
     }
 }

@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.evaluation
 private const val HIGHEST = 1.0
 private const val LOWEST = 0.0
 
-class Chance private constructor(value: Double?) : Comparable<Chance> {
+class Chance(value: Double?) : Comparable<Chance> {
     val value: Double?
 
     init {
@@ -56,9 +56,5 @@ class Chance private constructor(value: Double?) : Comparable<Chance> {
 	companion object {
 		val UNKNOWN: Chance = Chance(null)
 		val IMPOSSIBLE: Chance = Chance(LOWEST)
-
-        fun of(value: Double): Chance {
-            return Chance(value)
-        }
     }
 }

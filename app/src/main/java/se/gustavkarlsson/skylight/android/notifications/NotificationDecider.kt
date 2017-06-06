@@ -21,9 +21,7 @@ internal constructor(
 ) {
 
     fun shouldNotify(newReport: AuroraReport): Boolean {
-        if (!settings.isEnableNotifications) {
-            return false
-        }
+        if (!settings.isEnableNotifications) return false
         val lastReport = lastNotifiedReportCache.value
         val newReportLevel = ChanceLevel.fromChance(chanceEvaluator.evaluate(newReport))
         val lastReportLevel = ChanceLevel.fromChance(chanceEvaluator.evaluate(lastReport))

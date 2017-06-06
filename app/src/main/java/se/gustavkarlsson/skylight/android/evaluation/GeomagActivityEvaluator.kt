@@ -11,6 +11,6 @@ internal constructor() : ChanceEvaluator<GeomagActivity> {
     override fun evaluate(value: GeomagActivity): Chance {
         val kpIndex = value.kpIndex ?: return Chance.UNKNOWN
 		val chance = 1.0 / 9.0 * kpIndex + 0.0 // 0-9
-		return Chance.of(chance)
+		return Chance(chance)
     }
 }

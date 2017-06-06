@@ -49,7 +49,7 @@ public class NotificationDeciderTest {
 		lastReport = createDummyReport();
 		when(settings.isEnableNotifications()).thenReturn(true);
 		when(settings.getTriggerLevel()).thenReturn(ChanceLevel.HIGH);
-		when(auroraChanceEvaluator.evaluate(any())).thenReturn(Chance.Companion.of(1));
+		when(auroraChanceEvaluator.evaluate(any())).thenReturn(new Chance(1.0));
 		when(reportOutdatedEvaluator.isOutdated(any())).thenReturn(true);
 	}
 
@@ -69,7 +69,7 @@ public class NotificationDeciderTest {
 	@Test
 	public void mediumChanceShouldNotifyIfTriggerLevelIsLow() throws Exception {
 		when(settings.getTriggerLevel()).thenReturn(ChanceLevel.LOW);
-		when(auroraChanceEvaluator.evaluate(report)).thenReturn(Chance.Companion.of(0.5));
+		when(auroraChanceEvaluator.evaluate(report)).thenReturn(new Chance(0.5));
 
 		boolean shouldNotify = notificationDecider.shouldNotify(report);
 
@@ -79,7 +79,7 @@ public class NotificationDeciderTest {
 	@Test
 	public void mediumChanceShouldNotNotifyIfTriggerLevelIsHigh() throws Exception {
 		when(settings.getTriggerLevel()).thenReturn(ChanceLevel.HIGH);
-		when(auroraChanceEvaluator.evaluate(report)).thenReturn(Chance.Companion.of(0.5));
+		when(auroraChanceEvaluator.evaluate(report)).thenReturn(new Chance(0.5));
 
 		boolean shouldNotify = notificationDecider.shouldNotify(report);
 
@@ -88,7 +88,7 @@ public class NotificationDeciderTest {
 
 	@Test
 	public void noChanceShouldNotNotify() throws Exception {
-		when(auroraChanceEvaluator.evaluate(report)).thenReturn(Chance.Companion.of(0));
+		when(auroraChanceEvaluator.evaluate(report)).thenReturn(new Chance(0.0));
 
 		boolean shouldNotify = notificationDecider.shouldNotify(report);
 
@@ -118,7 +118,7 @@ public class NotificationDeciderTest {
 	public void alreadyNotifiedAtLowerLevelShouldNotify() throws Exception {
 		when(lastNotifiedCache.getValue()).thenReturn(lastReport);
 		when(reportOutdatedEvaluator.isOutdated(lastReport)).thenReturn(false);
-		when(auroraChanceEvaluator.evaluate(lastReport)).thenReturn(Chance.Companion.of(0.5));
+		when(auroraChanceEvaluator.evaluate(lastReport)).thenReturn(new Chance(0.5));
 
 		boolean shouldNotify = notificationDecider.shouldNotify(report);
 
