@@ -24,3 +24,4 @@
 
 # okio
 -dontwarn okio.**
+-dontwarn javax.annotation.**
