@@ -22,9 +22,13 @@ constructor(
 
     fun shouldNotify(newReport: AuroraReport): Boolean {
         if (!settings.isEnableNotifications) return false
-        val lastReport = lastNotifiedReportCache.value
-        val newReportLevel = ChanceLevel.fromChance(chanceEvaluator.evaluate(newReport))
-        val lastReportLevel = ChanceLevel.fromChance(chanceEvaluator.evaluate(lastReport))
-        return newReportLevel >= settings.triggerLevel && (outdatedEvaluator.isOutdated(lastReport) || newReportLevel > lastReportLevel)
+		val newReportLevel = ChanceLevel.fromChance(chanceEvaluator.evaluate(newReport))
+		if (newReportLevel < settings.triggerLevel) return false
+		val lastReport = lastNotifiedReportCache.value ?: return true
+		val lastReportLevel = ChanceLevel.fromChance(chanceEvaluator.evaluate(lastReport))
+        return lastReport.outdated || newReportLevel > lastReportLevel
     }
+
+	private val AuroraReport.outdated: Boolean
+		get() = outdatedEvaluator.isOutdated(this)
 }

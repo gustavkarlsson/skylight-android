@@ -21,7 +21,7 @@ class DualAuroraReportSingletonCache(context: Context, cacheId: String) : Single
         this.dualCache = builder.build()
     }
 
-    override var value: AuroraReport
+    override var value: AuroraReport?
         get() = dualCache.get(KEY)
         set(report) = dualCache.put(KEY, report)
 
