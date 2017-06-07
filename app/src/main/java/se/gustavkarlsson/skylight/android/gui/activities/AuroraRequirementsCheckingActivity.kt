@@ -14,10 +14,10 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.background.UpdateScheduler
 import javax.inject.Inject
 
-abstract class AuroraRequirementsCheckingActivity : AppCompatActivity() {
+internal abstract class AuroraRequirementsCheckingActivity : AppCompatActivity() {
 
     @Inject
-    internal lateinit var updateScheduler: UpdateScheduler
+    lateinit var updateScheduler: UpdateScheduler
 
     protected fun ensureRequirementsMet() {
         if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
