@@ -6,8 +6,8 @@ import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity
 import javax.inject.Inject
 
 @Reusable
-class GeomagActivityEvaluator @Inject
-internal constructor() : ChanceEvaluator<GeomagActivity> {
+internal class GeomagActivityEvaluator @Inject
+constructor() : ChanceEvaluator<GeomagActivity> {
 
     override fun evaluate(value: GeomagActivity): Chance {
         val kpIndex = value.kpIndex ?: return UNKNOWN

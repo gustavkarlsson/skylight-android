@@ -8,7 +8,7 @@ import se.gustavkarlsson.skylight.android.models.AuroraReport
 
 private const val KEY = "singleton" // Must match [a-z0-9_-]{1,64}
 
-class DualAuroraReportSingletonCache(context: Context, cacheId: String) : SingletonCache<AuroraReport> {
+internal class DualAuroraReportSingletonCache(context: Context, cacheId: String) : SingletonCache<AuroraReport> {
     private val dualCache: DualCache<AuroraReport>
 
     init {

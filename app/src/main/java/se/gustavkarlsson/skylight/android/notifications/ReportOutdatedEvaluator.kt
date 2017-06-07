@@ -11,9 +11,9 @@ import se.gustavkarlsson.skylight.android.models.AuroraReport
 import javax.inject.Inject
 
 @Reusable
-class ReportOutdatedEvaluator
+internal class ReportOutdatedEvaluator
 @Inject
-internal constructor(
+constructor(
 		private val clock: Clock,
 		private val zoneIdSupplier: () -> ZoneId
 ) {

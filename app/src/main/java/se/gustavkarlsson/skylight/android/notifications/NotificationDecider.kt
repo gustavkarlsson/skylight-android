@@ -11,9 +11,9 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @Reusable
-class NotificationDecider
+internal class NotificationDecider
 @Inject
-internal constructor(
+constructor(
 		@param:Named(LAST_NOTIFIED_NAME) private val lastNotifiedReportCache: SingletonCache<AuroraReport>,
 		private val chanceEvaluator: ChanceEvaluator<AuroraReport>,
 		private val settings: Settings,

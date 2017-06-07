@@ -9,9 +9,9 @@ import java.util.*
 import javax.inject.Inject
 
 @Reusable
-class KlausBrunnerDarknessProvider
+internal class KlausBrunnerDarknessProvider
 @Inject
-internal constructor() : DarknessProvider {
+constructor() : DarknessProvider {
 
     override fun getDarkness(time: Instant, latitude: Double, longitude: Double): Darkness {
         val date = GregorianCalendar().apply { timeInMillis = time.toEpochMilli() }

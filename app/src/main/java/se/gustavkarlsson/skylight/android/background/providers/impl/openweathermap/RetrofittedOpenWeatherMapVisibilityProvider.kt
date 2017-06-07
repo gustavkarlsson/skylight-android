@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.models.factors.Visibility
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import java.io.IOException
 
-class RetrofittedOpenWeatherMapVisibilityProvider internal constructor(
+internal class RetrofittedOpenWeatherMapVisibilityProvider constructor(
 		private val service: OpenWeatherMapService,
 		private val appId: String
 ) : VisibilityProvider {

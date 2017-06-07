@@ -1,5 +1,5 @@
 package se.gustavkarlsson.skylight.android.cache
 
-interface SingletonCache<T> {
+internal interface SingletonCache<T> {
     var value: T
 }

@@ -6,9 +6,9 @@ import se.gustavkarlsson.skylight.android.models.factors.Darkness
 import javax.inject.Inject
 
 @Reusable
-class DarknessEvaluator
+internal class DarknessEvaluator
 @Inject
-internal constructor() : ChanceEvaluator<Darkness> {
+constructor() : ChanceEvaluator<Darkness> {
 
     override fun evaluate(value: Darkness): Chance {
         val zenithAngle = value.sunZenithAngle ?: return UNKNOWN

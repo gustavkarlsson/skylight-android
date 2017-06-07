@@ -9,9 +9,9 @@ import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel
 import javax.inject.Inject
 
 @Reusable
-class SharedPreferencesSettings
+internal class SharedPreferencesSettings
 @Inject
-internal constructor(context: Context) : Settings {
+constructor(context: Context) : Settings {
 	private val defaultPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 	private val notificationsKey: String = context.getString(R.string.pref_notifications_key)
 	private val notificationsDefaultValue: Boolean = context.resources.getBoolean(R.bool.pref_notifications_default)

@@ -6,6 +6,6 @@ import org.threeten.bp.Duration
 
 import se.gustavkarlsson.skylight.android.models.AuroraFactors
 
-interface AuroraFactorsProvider {
+internal interface AuroraFactorsProvider {
     fun getAuroraFactors(location: Location, timeout: Duration): AuroraFactors
 }

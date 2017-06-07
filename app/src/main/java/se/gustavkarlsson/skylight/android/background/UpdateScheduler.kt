@@ -13,9 +13,9 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @Reusable
-class UpdateScheduler
+internal class UpdateScheduler
 @Inject
-internal constructor(
+constructor(
 		private val settings: Settings,
 		@param:Named(UPDATE_SCHEDULER_INTERVAL_NAME) private val scheduleInterval: Duration,
 		@param:Named(UPDATE_SCHEDULER_FLEX_NAME) private val scheduleFlex: Duration

@@ -6,9 +6,9 @@ import se.gustavkarlsson.skylight.android.models.factors.Visibility
 import javax.inject.Inject
 
 @Reusable
-class VisibilityEvaluator
+internal class VisibilityEvaluator
 @Inject
-internal constructor() : ChanceEvaluator<Visibility> {
+constructor() : ChanceEvaluator<Visibility> {
 
     override fun evaluate(value: Visibility): Chance {
         val clouds = value.cloudPercentage ?: return UNKNOWN

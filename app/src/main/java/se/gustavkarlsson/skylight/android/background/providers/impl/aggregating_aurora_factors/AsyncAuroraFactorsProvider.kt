@@ -9,9 +9,9 @@ import se.gustavkarlsson.skylight.android.models.AuroraFactors
 import javax.inject.Inject
 
 @Reusable
-class AsyncAuroraFactorsProvider
+internal class AsyncAuroraFactorsProvider
 @Inject
-internal constructor(
+constructor(
 		private val geomagActivityProvider: GeomagActivityProvider,
 		private val visibilityProvider: VisibilityProvider,
 		private val darknessProvider: DarknessProvider,

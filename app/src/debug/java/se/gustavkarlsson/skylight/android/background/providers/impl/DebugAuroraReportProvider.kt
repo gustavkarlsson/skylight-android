@@ -13,7 +13,7 @@ import se.gustavkarlsson.skylight.android.models.factors.Visibility
 import se.gustavkarlsson.skylight.android.settings.DebugSettings
 import java.util.*
 
-class DebugAuroraReportProvider(
+internal class DebugAuroraReportProvider(
 		private val debugSettings: DebugSettings,
 		private val clock: Clock
 ) : AuroraReportProvider {

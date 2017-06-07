@@ -18,9 +18,9 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @Reusable
-class Updater
+internal class Updater
 @Inject
-internal constructor(
+constructor(
 		private val context: Context,
 		@param:Named(LATEST_NAME) private val latestReportCache: SingletonCache<AuroraReport>,
 		private val broadcastManager: LocalBroadcastManager,

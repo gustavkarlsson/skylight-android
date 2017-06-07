@@ -10,9 +10,9 @@ import java.lang.Integer.parseInt
 import javax.inject.Inject
 
 @Reusable
-class SharedPreferencesDebugSettings
+internal class SharedPreferencesDebugSettings
 @Inject
-internal constructor(context: Context) : DebugSettings {
+constructor(context: Context) : DebugSettings {
     private val defaultPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 	private val overrideValuesKey: String = context.getString(R.string.pref_override_values_key)
 	private val kpIndexKey: String = context.getString(R.string.pref_kp_index_key)

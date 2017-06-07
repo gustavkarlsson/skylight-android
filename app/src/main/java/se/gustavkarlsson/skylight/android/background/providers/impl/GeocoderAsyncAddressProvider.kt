@@ -14,9 +14,9 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @Reusable
-class GeocoderAsyncAddressProvider
+internal class GeocoderAsyncAddressProvider
 @Inject
-internal constructor(
+constructor(
 		private val geocoder: Geocoder,
 		@param:Named(CACHED_THREAD_POOL_NAME) private val cachedThreadPool: ExecutorService
 ) : AsyncAddressProvider {

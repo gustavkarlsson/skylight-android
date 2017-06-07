@@ -6,9 +6,9 @@ import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation
 import javax.inject.Inject
 
 @Reusable
-class GeomagLocationEvaluator
+internal class GeomagLocationEvaluator
 @Inject
-internal constructor() : ChanceEvaluator<GeomagLocation> {
+constructor() : ChanceEvaluator<GeomagLocation> {
 
     override fun evaluate(value: GeomagLocation): Chance {
         val latitude = value.latitude ?: return UNKNOWN

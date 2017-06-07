@@ -18,8 +18,8 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @Reusable
-class NotificationHandler @Inject
-internal constructor(
+internal class NotificationHandler @Inject
+constructor(
 		private val context: Context,
 		private val notificationManager: NotificationManager,
 		@param:Named(LAST_NOTIFIED_NAME) private val lastNotifiedReportCache: SingletonCache<AuroraReport>,

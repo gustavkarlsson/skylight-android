@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.util
 
-class UserFriendlyException : RuntimeException {
+internal class UserFriendlyException : RuntimeException {
     val stringResourceId: Int
 
     constructor(stringResourceId: Int, cause: Throwable) : super(cause) {

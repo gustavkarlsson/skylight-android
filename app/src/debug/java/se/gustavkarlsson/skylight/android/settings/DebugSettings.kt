@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.settings
 
-interface DebugSettings {
+internal interface DebugSettings {
     val isOverrideValues: Boolean
     val kpIndex: Float
     val geomagLatitude: Float

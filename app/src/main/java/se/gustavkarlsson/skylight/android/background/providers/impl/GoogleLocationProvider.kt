@@ -14,9 +14,9 @@ import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 @Reusable
-class GoogleLocationProvider
+internal class GoogleLocationProvider
 @Inject
-internal constructor(
+constructor(
 		private val googleApiClient: GoogleApiClient
 ) : LocationProvider {
 

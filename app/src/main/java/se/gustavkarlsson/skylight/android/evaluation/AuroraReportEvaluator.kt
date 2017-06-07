@@ -9,9 +9,9 @@ import se.gustavkarlsson.skylight.android.models.factors.Visibility
 import javax.inject.Inject
 
 @Reusable
-class AuroraReportEvaluator
+internal class AuroraReportEvaluator
 @Inject
-internal constructor(
+constructor(
 		private val geomagActivityEvaluator: ChanceEvaluator<GeomagActivity>,
 		private val geomagLocationEvaluator: ChanceEvaluator<GeomagLocation>,
 		private val visibilityEvaluator: ChanceEvaluator<Visibility>,

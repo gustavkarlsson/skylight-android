@@ -14,7 +14,7 @@ import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheck
 import javax.inject.Inject
 import javax.inject.Named
 
-class UpdateJob
+internal class UpdateJob
 @Inject
 constructor(
 		private val notificationManager: NotificationManager,
