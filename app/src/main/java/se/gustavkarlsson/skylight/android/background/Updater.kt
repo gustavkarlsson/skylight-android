@@ -30,7 +30,7 @@ constructor(
 
     fun update(timeout: Duration): Boolean {
         Log.v(TAG, "onUpdate")
-        val provider = applicationComponent.auroraReportProvider
+        val provider = applicationComponent.getAuroraReportProvider()
         val report: AuroraReport
         try {
             report = provider.getReport(timeout)

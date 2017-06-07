@@ -25,7 +25,7 @@ internal class Skylight : Application() {
 		val jobManager = JobManager.create(this)
 		jobManager.addJobCreator { tag ->
 			when (tag) {
-				UpdateJob.UPDATE_JOB_TAG -> applicationComponent.updateJob
+				UpdateJob.UPDATE_JOB_TAG -> applicationComponent.getUpdateJob()
 				else -> null
 			}
 		}
