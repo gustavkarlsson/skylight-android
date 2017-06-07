@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import se.gustavkarlsson.skylight.android.R;
+import se.gustavkarlsson.skylight.android.Skylight;
 import se.gustavkarlsson.skylight.android.background.Updater;
 import se.gustavkarlsson.skylight.android.dagger.components.MainActivityComponent;
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ActivityModule;
@@ -27,7 +28,6 @@ import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivi
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
 import se.gustavkarlsson.skylight.android.observers.ObservableValue;
 
-import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 import static se.gustavkarlsson.skylight.android.dagger.Names.BACKGROUND_UPDATE_TIMEOUT_NAME;
 import static se.gustavkarlsson.skylight.android.dagger.Names.CACHED_THREAD_POOL_NAME;
 import static se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME;
@@ -75,7 +75,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
-		component = getApplicationComponent().getMainActivityComponent(new ActivityModule(this));
+		component = Skylight.Companion.getApplicationComponent().getMainActivityComponent(new ActivityModule(this));
 		setContentView(R.layout.activity_main);
 		component.inject(this);
 	}

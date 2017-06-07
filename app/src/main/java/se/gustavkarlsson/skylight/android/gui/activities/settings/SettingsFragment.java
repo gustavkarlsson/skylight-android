@@ -6,9 +6,8 @@ import android.preference.PreferenceFragment;
 import android.util.Log;
 
 import se.gustavkarlsson.skylight.android.R;
+import se.gustavkarlsson.skylight.android.Skylight;
 import se.gustavkarlsson.skylight.android.background.UpdateScheduler;
-
-import static se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent;
 
 public class SettingsFragment extends PreferenceFragment {
 	private static final String TAG = SettingsFragment.class.getSimpleName();
@@ -19,7 +18,7 @@ public class SettingsFragment extends PreferenceFragment {
 	public void onCreate(Bundle savedInstanceState) {
 		Log.v(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
-		UpdateScheduler updateScheduler = getApplicationComponent().getUpdateScheduler();
+		UpdateScheduler updateScheduler = Skylight.Companion.getApplicationComponent().getUpdateScheduler();
 		notificationsChangedListener = new NotificationsChangedListener(updateScheduler, getResources().getString(R.string.pref_notifications_key));
 		getPreferenceManager().getSharedPreferences().registerOnSharedPreferenceChangeListener(notificationsChangedListener);
 		addPreferencesFromResource(R.xml.preferences);

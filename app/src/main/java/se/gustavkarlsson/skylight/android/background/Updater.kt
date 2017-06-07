@@ -7,7 +7,7 @@ import android.util.Log
 import dagger.Reusable
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.Skylight.getApplicationComponent
+import se.gustavkarlsson.skylight.android.Skylight.Companion.applicationComponent
 import se.gustavkarlsson.skylight.android.cache.SingletonCache
 import se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME
 import se.gustavkarlsson.skylight.android.models.AuroraReport
@@ -30,7 +30,7 @@ constructor(
 
     fun update(timeout: Duration): Boolean {
         Log.v(TAG, "onUpdate")
-        val provider = getApplicationComponent().auroraReportProvider
+        val provider = applicationComponent.auroraReportProvider
         val report: AuroraReport
         try {
             report = provider.getReport(timeout)
