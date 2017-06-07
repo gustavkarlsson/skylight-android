@@ -4,6 +4,6 @@ import android.location.Location
 
 import org.threeten.bp.Duration
 
-internal interface LocationProvider {
+interface LocationProvider {
     fun getLocation(timeout: Duration): Location
 }

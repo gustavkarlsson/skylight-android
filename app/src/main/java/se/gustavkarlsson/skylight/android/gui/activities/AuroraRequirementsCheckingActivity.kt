@@ -14,7 +14,7 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.background.UpdateScheduler
 import javax.inject.Inject
 
-internal abstract class AuroraRequirementsCheckingActivity : AppCompatActivity() {
+abstract class AuroraRequirementsCheckingActivity : AppCompatActivity() {
 
     @Inject
     lateinit var updateScheduler: UpdateScheduler

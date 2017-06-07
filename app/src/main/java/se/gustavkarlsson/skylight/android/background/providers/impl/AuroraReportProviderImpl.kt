@@ -19,7 +19,7 @@ import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit.MILLISECONDS
 import java.util.concurrent.TimeoutException
 
-internal class AuroraReportProviderImpl(
+class AuroraReportProviderImpl(
 		private val connectivityManager: ConnectivityManager,
 		private val locationProvider: LocationProvider,
 		private val auroraFactorsProvider: AuroraFactorsProvider,

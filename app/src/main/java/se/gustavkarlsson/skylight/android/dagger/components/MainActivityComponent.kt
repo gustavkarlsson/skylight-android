@@ -14,7 +14,7 @@ import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 		ForegroundReportLifetimeModule::class
 ))
 @ActivityScope
-internal interface MainActivityComponent {
+interface MainActivityComponent {
     fun inject(mainActivity: MainActivity)
 
     fun getAuroraChanceFragmentComponent(fragmentRootViewModule: FragmentRootViewModule): AuroraChanceFragmentComponent

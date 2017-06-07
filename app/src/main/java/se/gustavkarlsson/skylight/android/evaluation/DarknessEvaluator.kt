@@ -6,7 +6,7 @@ import se.gustavkarlsson.skylight.android.models.factors.Darkness
 import javax.inject.Inject
 
 @Reusable
-internal class DarknessEvaluator
+class DarknessEvaluator
 @Inject
 constructor() : ChanceEvaluator<Darkness> {
 

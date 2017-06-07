@@ -22,7 +22,7 @@ import javax.inject.Singleton
 		UpdateSchedulerModule::class
 ))
 @Singleton
-internal interface ApplicationComponent {
+interface ApplicationComponent {
 	fun getAuroraReportProvider(): AuroraReportProvider
 	fun getUpdateJob(): UpdateJob
 	fun getUpdateScheduler(): UpdateScheduler

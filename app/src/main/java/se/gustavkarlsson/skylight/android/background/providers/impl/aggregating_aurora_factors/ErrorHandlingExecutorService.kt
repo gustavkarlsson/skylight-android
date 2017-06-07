@@ -8,7 +8,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @Reusable
-internal class ErrorHandlingExecutorService
+class ErrorHandlingExecutorService
 @Inject
 constructor(
 		@param:Named(CACHED_THREAD_POOL_NAME) private val executorService: ExecutorService

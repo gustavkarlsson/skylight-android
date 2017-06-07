@@ -11,7 +11,7 @@ import se.gustavkarlsson.skylight.android.models.AuroraReport
 import javax.inject.Inject
 
 @Reusable
-internal class ReportOutdatedEvaluator
+class ReportOutdatedEvaluator
 @Inject
 constructor(
 		private val clock: Clock,

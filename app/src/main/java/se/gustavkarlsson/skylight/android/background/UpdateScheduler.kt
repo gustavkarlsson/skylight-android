@@ -13,7 +13,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @Reusable
-internal class UpdateScheduler
+class UpdateScheduler
 @Inject
 constructor(
 		private val settings: Settings,

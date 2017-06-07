@@ -4,6 +4,6 @@ import org.threeten.bp.Duration
 
 import se.gustavkarlsson.skylight.android.models.AuroraReport
 
-internal interface AuroraReportProvider {
+interface AuroraReportProvider {
     fun getReport(timeout: Duration): AuroraReport
 }

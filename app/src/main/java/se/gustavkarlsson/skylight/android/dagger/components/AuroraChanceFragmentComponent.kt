@@ -15,6 +15,6 @@ import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_c
 		ChancePresenterModule::class
 ))
 @FragmentScope
-internal interface AuroraChanceFragmentComponent {
+interface AuroraChanceFragmentComponent {
     fun inject(auroraChanceFragment: AuroraChanceFragment)
 }

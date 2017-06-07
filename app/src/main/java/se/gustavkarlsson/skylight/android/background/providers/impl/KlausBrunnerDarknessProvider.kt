@@ -9,7 +9,7 @@ import java.util.*
 import javax.inject.Inject
 
 @Reusable
-internal class KlausBrunnerDarknessProvider
+class KlausBrunnerDarknessProvider
 @Inject
 constructor() : DarknessProvider {
 

@@ -13,6 +13,6 @@ import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_f
 		VisibilityPresenterModule::class
 ))
 @FragmentScope
-internal interface AuroraFactorsFragmentComponent {
+interface AuroraFactorsFragmentComponent {
     fun inject(auroraFactorFragment: AuroraFactorFragment)
 }

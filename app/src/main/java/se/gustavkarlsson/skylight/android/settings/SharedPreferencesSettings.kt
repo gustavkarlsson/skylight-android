@@ -9,7 +9,7 @@ import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel
 import javax.inject.Inject
 
 @Reusable
-internal class SharedPreferencesSettings
+class SharedPreferencesSettings
 @Inject
 constructor(context: Context) : Settings {
 	private val defaultPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)

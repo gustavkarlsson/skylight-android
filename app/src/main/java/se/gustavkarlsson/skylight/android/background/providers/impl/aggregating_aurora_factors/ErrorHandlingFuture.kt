@@ -6,7 +6,7 @@ import java.util.concurrent.Future
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
-internal class ErrorHandlingFuture<out V>(
+class ErrorHandlingFuture<out V>(
 		private val future: Future<V>,
 		private val timeout: Duration,
 		private val interruptedExceptionHandler: (InterruptedException) -> V,

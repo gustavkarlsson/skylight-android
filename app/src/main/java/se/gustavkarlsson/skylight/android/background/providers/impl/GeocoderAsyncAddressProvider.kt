@@ -14,7 +14,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @Reusable
-internal class GeocoderAsyncAddressProvider
+class GeocoderAsyncAddressProvider
 @Inject
 constructor(
 		private val geocoder: Geocoder,

@@ -11,7 +11,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 @Reusable
-internal class RetrofittedGeomagActivityProvider
+class RetrofittedGeomagActivityProvider
 @Inject
 constructor(
 		private val service: KpIndexService

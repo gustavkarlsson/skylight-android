@@ -18,7 +18,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @Reusable
-internal class Updater
+class Updater
 @Inject
 constructor(
 		private val context: Context,

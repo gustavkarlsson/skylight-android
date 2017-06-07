@@ -4,7 +4,7 @@ import java.util.*
 import java.util.Collections.newSetFromMap
 import kotlin.properties.Delegates
 
-internal class ObservableValue<T>(initialValue: T) {
+class ObservableValue<T>(initialValue: T) {
 	var value: T by Delegates.observable(initialValue) {
 		_, _, new -> listeners.forEach { it.valueChanged(new) }
 	}

@@ -10,7 +10,7 @@ import java.lang.Integer.parseInt
 import javax.inject.Inject
 
 @Reusable
-internal class SharedPreferencesDebugSettings
+class SharedPreferencesDebugSettings
 @Inject
 constructor(context: Context) : DebugSettings {
     private val defaultPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)

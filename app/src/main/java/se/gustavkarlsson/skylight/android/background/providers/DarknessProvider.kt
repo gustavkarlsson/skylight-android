@@ -4,6 +4,6 @@ import org.threeten.bp.Instant
 
 import se.gustavkarlsson.skylight.android.models.factors.Darkness
 
-internal interface DarknessProvider {
+interface DarknessProvider {
     fun getDarkness(time: Instant, latitude: Double, longitude: Double): Darkness
 }

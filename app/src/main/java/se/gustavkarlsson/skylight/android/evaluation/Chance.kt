@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.evaluation
 private const val HIGHEST = 1.0
 private const val LOWEST = 0.0
 
-internal class Chance(value: Double?) : Comparable<Chance> {
+class Chance(value: Double?) : Comparable<Chance> {
     val value: Double?
 
     init {

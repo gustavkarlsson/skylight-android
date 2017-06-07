@@ -8,7 +8,7 @@ import se.gustavkarlsson.skylight.android.models.factors.Darkness
 import java.util.concurrent.Callable
 import java.util.concurrent.TimeoutException
 
-internal class GetDarkness(
+class GetDarkness(
 		private val provider: DarknessProvider,
 		private val location: Location,
 		private val time: Instant) : ErrorHandlingTask<Darkness>

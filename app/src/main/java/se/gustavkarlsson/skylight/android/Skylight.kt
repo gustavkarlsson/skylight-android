@@ -9,7 +9,7 @@ import se.gustavkarlsson.skylight.android.dagger.components.ApplicationComponent
 import se.gustavkarlsson.skylight.android.dagger.components.DaggerApplicationComponent
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ContextModule
 
-internal class Skylight : Application() {
+class Skylight : Application() {
 
 	override fun onCreate() {
 		Log.v(TAG, "onCreate")

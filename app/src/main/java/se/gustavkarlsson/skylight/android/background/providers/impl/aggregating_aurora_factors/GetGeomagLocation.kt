@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation
 import java.util.concurrent.Callable
 import java.util.concurrent.TimeoutException
 
-internal class GetGeomagLocation(
+class GetGeomagLocation(
 		private val provider: GeomagLocationProvider,
 		private val location: Location) : ErrorHandlingTask<GeomagLocation>
 {

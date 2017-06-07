@@ -6,7 +6,7 @@ import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity
 import java.util.concurrent.Callable
 import java.util.concurrent.TimeoutException
 
-internal class GetGeomagActivity(
+class GetGeomagActivity(
 		private val provider: GeomagActivityProvider) : ErrorHandlingTask<GeomagActivity>
 {
 

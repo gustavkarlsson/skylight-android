@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.models.factors.Visibility
 import java.util.concurrent.Callable
 import java.util.concurrent.TimeoutException
 
-internal class GetVisibility(
+class GetVisibility(
 		private val provider: VisibilityProvider,
 		private val location: Location) : ErrorHandlingTask<Visibility>
 {

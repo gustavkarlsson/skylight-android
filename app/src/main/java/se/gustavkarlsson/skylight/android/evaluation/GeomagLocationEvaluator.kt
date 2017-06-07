@@ -6,7 +6,7 @@ import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation
 import javax.inject.Inject
 
 @Reusable
-internal class GeomagLocationEvaluator
+class GeomagLocationEvaluator
 @Inject
 constructor() : ChanceEvaluator<GeomagLocation> {
 

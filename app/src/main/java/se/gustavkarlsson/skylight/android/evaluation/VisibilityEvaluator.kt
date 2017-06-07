@@ -6,7 +6,7 @@ import se.gustavkarlsson.skylight.android.models.factors.Visibility
 import javax.inject.Inject
 
 @Reusable
-internal class VisibilityEvaluator
+class VisibilityEvaluator
 @Inject
 constructor() : ChanceEvaluator<Visibility> {
 
