@@ -6,7 +6,8 @@ import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity
 import javax.inject.Inject
 
 @Reusable
-class GeomagActivityEvaluator @Inject
+class GeomagActivityEvaluator
+@Inject
 constructor() : ChanceEvaluator<GeomagActivity> {
 
     override fun evaluate(value: GeomagActivity): Chance {

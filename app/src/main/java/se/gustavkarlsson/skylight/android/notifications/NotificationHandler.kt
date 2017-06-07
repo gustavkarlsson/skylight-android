@@ -18,7 +18,8 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @Reusable
-class NotificationHandler @Inject
+class NotificationHandler
+@Inject
 constructor(
 		private val context: Context,
 		private val notificationManager: NotificationManager,
