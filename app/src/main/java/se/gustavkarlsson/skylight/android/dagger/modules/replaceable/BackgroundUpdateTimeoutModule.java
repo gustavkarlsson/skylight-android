@@ -17,7 +17,7 @@ public abstract class BackgroundUpdateTimeoutModule {
 	@Provides
 	@Reusable
 	@Named(BACKGROUND_UPDATE_TIMEOUT_NAME)
-	static Duration provideUpdateJob() {
+	static Duration provideBackgroundUpdateTimeout() {
 		return Duration.ofSeconds(30);
 	}
 

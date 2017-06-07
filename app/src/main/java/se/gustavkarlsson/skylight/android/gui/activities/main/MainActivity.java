@@ -30,13 +30,12 @@ import se.gustavkarlsson.skylight.android.observers.ObservableValue;
 
 import static se.gustavkarlsson.skylight.android.dagger.Names.BACKGROUND_UPDATE_TIMEOUT_NAME;
 import static se.gustavkarlsson.skylight.android.dagger.Names.CACHED_THREAD_POOL_NAME;
+import static se.gustavkarlsson.skylight.android.dagger.Names.FOREGROUND_REPORT_LIFETIME_NAME;
 import static se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME;
 import static se.gustavkarlsson.skylight.android.dagger.Names.UPDATE_ERROR_NAME;
 
 public class MainActivity extends AuroraRequirementsCheckingActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
-
-	private static final Duration REPORT_LIFETIME = Duration.ofMinutes(15);
 
 	@Inject
 	Updater updater;
@@ -68,6 +67,10 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	@Inject
 	@Named(BACKGROUND_UPDATE_TIMEOUT_NAME)
 	Duration backgoundUpdateTimeout;
+
+	@Inject
+	@Named(FOREGROUND_REPORT_LIFETIME_NAME)
+	Duration foregroundReportLifetime;
 
 	private MainActivityComponent component;
 
@@ -119,7 +122,7 @@ public class MainActivity extends AuroraRequirementsCheckingActivity {
 	}
 
 	private boolean needsUpdate(AuroraReport report) {
-		boolean hasExpired = clock.millis() - report.getTimestampMillis() > REPORT_LIFETIME.toMillis();
+		boolean hasExpired = clock.millis() - report.getTimestampMillis() > foregroundReportLifetime.toMillis();
 		boolean isUnknown = !auroraChanceEvaluator.evaluate(report).isKnown();
 		return hasExpired || isUnknown;
 	}

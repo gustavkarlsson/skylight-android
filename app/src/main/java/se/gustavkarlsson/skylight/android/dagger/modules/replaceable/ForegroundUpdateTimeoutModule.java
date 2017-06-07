@@ -17,7 +17,7 @@ public abstract class ForegroundUpdateTimeoutModule {
 	@Provides
 	@Reusable
 	@Named(FOREGROUND_UPDATE_TIMEOUT_NAME)
-	static Duration provideUpdateJob() {
+	static Duration provideForegroundUpdateTimeout() {
 		return Duration.ofSeconds(10);
 	}
 
