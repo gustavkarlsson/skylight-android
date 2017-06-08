@@ -11,8 +11,8 @@ import java.util.concurrent.TimeoutException
 class GetDarkness(
 		private val provider: DarknessProvider,
 		private val location: Location,
-		private val time: Instant) : ErrorHandlingTask<Darkness>
-{
+		private val time: Instant
+) : ErrorHandlingTask<Darkness> {
 
     override val callable: Callable<Darkness>
         get() = Callable { this.call() }

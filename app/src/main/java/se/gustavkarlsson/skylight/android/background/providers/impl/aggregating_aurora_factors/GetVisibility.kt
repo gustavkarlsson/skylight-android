@@ -9,8 +9,8 @@ import java.util.concurrent.TimeoutException
 
 class GetVisibility(
 		private val provider: VisibilityProvider,
-		private val location: Location) : ErrorHandlingTask<Visibility>
-{
+		private val location: Location
+) : ErrorHandlingTask<Visibility> {
 
     override val callable: Callable<Visibility>
         get() = Callable { this.call() }

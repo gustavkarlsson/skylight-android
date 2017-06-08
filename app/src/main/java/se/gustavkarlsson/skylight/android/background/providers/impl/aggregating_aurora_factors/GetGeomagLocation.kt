@@ -9,8 +9,8 @@ import java.util.concurrent.TimeoutException
 
 class GetGeomagLocation(
 		private val provider: GeomagLocationProvider,
-		private val location: Location) : ErrorHandlingTask<GeomagLocation>
-{
+		private val location: Location
+) : ErrorHandlingTask<GeomagLocation> {
 
     override val callable: Callable<GeomagLocation>
         get() = Callable { this.call() }

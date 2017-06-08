@@ -10,11 +10,10 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.threeten.bp.Clock;
 import org.threeten.bp.Instant;
-import org.threeten.bp.ZoneId;
 import org.threeten.bp.ZoneOffset;
 
-import kotlin.jvm.functions.Function0;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
+import se.gustavkarlsson.skylight.android.util.ZoneIdProvider;
 
 import static org.mockito.Mockito.when;
 import static org.threeten.bp.temporal.ChronoUnit.DAYS;
@@ -34,7 +33,7 @@ public class ReportOutdatedEvaluatorTest {
 	Clock clock;
 
 	@Mock
-	Function0<ZoneId> zoneIdSupplier;
+	ZoneIdProvider zoneIdProvider;
 
 	@Mock
 	AuroraReport report;
@@ -44,9 +43,9 @@ public class ReportOutdatedEvaluatorTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		when(zoneIdSupplier.invoke()).thenReturn(ZONE_OFFSET);
+		when(zoneIdProvider.getZoneId()).thenReturn(ZONE_OFFSET);
 		when(clock.getZone()).thenReturn(ZONE_OFFSET);
-		evaluator = new ReportOutdatedEvaluator(clock, zoneIdSupplier);
+		evaluator = new ReportOutdatedEvaluator(clock, zoneIdProvider);
 	}
 
 	@Test

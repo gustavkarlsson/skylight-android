@@ -7,8 +7,8 @@ import java.util.concurrent.Callable
 import java.util.concurrent.TimeoutException
 
 class GetGeomagActivity(
-		private val provider: GeomagActivityProvider) : ErrorHandlingTask<GeomagActivity>
-{
+		private val provider: GeomagActivityProvider
+) : ErrorHandlingTask<GeomagActivity> {
 
     override val callable: Callable<GeomagActivity>
         get() = Callable { this.call() }
