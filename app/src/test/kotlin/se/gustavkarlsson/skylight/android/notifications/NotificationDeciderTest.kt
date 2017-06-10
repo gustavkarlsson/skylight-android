@@ -5,7 +5,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnit
@@ -13,12 +12,8 @@ import se.gustavkarlsson.skylight.android.cache.SingletonCache
 import se.gustavkarlsson.skylight.android.evaluation.Chance
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel
-import se.gustavkarlsson.skylight.android.models.AuroraFactors
+import se.gustavkarlsson.skylight.android.mockito.any
 import se.gustavkarlsson.skylight.android.models.AuroraReport
-import se.gustavkarlsson.skylight.android.models.factors.Darkness
-import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity
-import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation
-import se.gustavkarlsson.skylight.android.models.factors.Visibility
 import se.gustavkarlsson.skylight.android.settings.Settings
 
 class NotificationDeciderTest {
@@ -39,24 +34,22 @@ class NotificationDeciderTest {
     @Mock
 	lateinit var reportOutdatedEvaluator: ReportOutdatedEvaluator
 
-	lateinit var notificationDecider: NotificationDecider
+	@Mock
 	lateinit var report: AuroraReport
+
+	@Mock
 	lateinit var lastReport: AuroraReport
+
+	lateinit var notificationDecider: NotificationDecider
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
         notificationDecider = NotificationDecider(lastNotifiedCache, auroraChanceEvaluator, settings, reportOutdatedEvaluator)
-        report = createDummyReport()
-        lastReport = createDummyReport()
         `when`(settings.isEnableNotifications).thenReturn(true)
         `when`(settings.triggerLevel).thenReturn(ChanceLevel.HIGH)
         `when`(auroraChanceEvaluator.evaluate(any())).thenReturn(Chance(1.0))
         `when`(reportOutdatedEvaluator.isOutdated(any())).thenReturn(true)
-    }
-
-    private fun createDummyReport(): AuroraReport {
-        return AuroraReport(0, null, AuroraFactors(GeomagActivity(), GeomagLocation(), Darkness(), Visibility()))
     }
 
     @Test
@@ -108,7 +101,7 @@ class NotificationDeciderTest {
 
     @Test
     fun alreadyNotifiedAtSameLevelShouldNotNotify() {
-        `when`<AuroraReport>(lastNotifiedCache.value).thenReturn(lastReport)
+        `when`(lastNotifiedCache.value).thenReturn(lastReport)
         `when`(reportOutdatedEvaluator.isOutdated(lastReport)).thenReturn(false)
 
         val shouldNotify = notificationDecider.shouldNotify(report)
@@ -118,7 +111,7 @@ class NotificationDeciderTest {
 
     @Test
     fun alreadyNotifiedAtLowerLevelShouldNotify() {
-        `when`<AuroraReport>(lastNotifiedCache.value).thenReturn(lastReport)
+        `when`(lastNotifiedCache.value).thenReturn(lastReport)
         `when`(reportOutdatedEvaluator.isOutdated(lastReport)).thenReturn(false)
         `when`(auroraChanceEvaluator.evaluate(lastReport)).thenReturn(Chance(0.5))
 
@@ -126,11 +119,5 @@ class NotificationDeciderTest {
 
         assertThat(shouldNotify).isTrue()
     }
-
-	// Replacement for mockito's any() not working with kotlin
-	private fun <T> any(): T {
-		Mockito.any<T>()
-		return null as T
-	}
 
 }
