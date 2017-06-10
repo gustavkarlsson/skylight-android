@@ -58,7 +58,7 @@ class TimeSinceUpdatePresenter(
     }
 
     private fun isRightNow(time: Instant): Boolean {
-        val age = time.until(clock.instant())
+        val age = time until clock.instant()
 		return age < updateTimeResolution
     }
 

@@ -13,7 +13,7 @@ class CountdownTimer(
 	val remainingTime: Duration
 		get() {
 			val now = clock.instant()
-			return now.until(expiryTime)
+			return now until expiryTime
 		}
 
 }

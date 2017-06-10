@@ -24,7 +24,8 @@ constructor(
 		val today = LocalDate.now(clock)
 		val noonToday = NOON.atDate(today).atZone(currentZoneId).toInstant()
 		val reportTime = Instant.ofEpochMilli(report.timestampMillis)
-		val duration = reportTime.until(now)
+		val duration = reportTime until now
+		// TODO replace with arithmetic
 		return duration.toHours() > 12 || now.isAfter(noonToday) && reportTime.isBefore(noonToday)
 	}
 }
