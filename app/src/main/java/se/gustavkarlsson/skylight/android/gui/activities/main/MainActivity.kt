@@ -128,11 +128,6 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
         broadcastManager.unregisterReceiver(broadcastReceiver)
     }
 
-    override fun onDestroy() {
-        Log.v(TAG, "onDestroy")
-        super.onDestroy()
-    }
-
     companion object {
         private val TAG = MainActivity::class.java.simpleName
     }
