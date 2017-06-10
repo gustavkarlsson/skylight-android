@@ -39,9 +39,10 @@ class AuroraFactorView : LinearLayout {
                 auroraFactorViewAttributes.recycle()
             }
         }
+		factorValueView = aurora_factor_value
         // Used by IDE to display something
         if (isInEditMode) {
-            aurora_factor_value.text = "value"
+			factorValueView.text = "value"
         }
     }
 

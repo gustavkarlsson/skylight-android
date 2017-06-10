@@ -8,7 +8,7 @@ import se.gustavkarlsson.skylight.android.models.factors.Visibility
 // TODO val or var?
 data class AuroraFactors(
     val geomagActivity: GeomagActivity,
-    var geomagLocation: GeomagLocation,
-    var darkness: Darkness,
-    var visibility: Visibility
+	val geomagLocation: GeomagLocation,
+	val darkness: Darkness,
+	val visibility: Visibility
 )
