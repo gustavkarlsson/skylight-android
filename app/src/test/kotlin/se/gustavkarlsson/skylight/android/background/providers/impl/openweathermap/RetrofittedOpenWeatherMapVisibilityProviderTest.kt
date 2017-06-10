@@ -11,14 +11,14 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
-import org.mockito.junit.MockitoJUnitRunner
+import org.robolectric.RobolectricTestRunner
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.nio.charset.Charset
 
-@RunWith(MockitoJUnitRunner::class)
+@RunWith(RobolectricTestRunner::class)
 class RetrofittedOpenWeatherMapVisibilityProviderTest {
-    private var mockedClient: OkHttpClient? = null
+    lateinit var mockedClient: OkHttpClient
 
     @Before
     fun setUp() {
@@ -58,7 +58,7 @@ class RetrofittedOpenWeatherMapVisibilityProviderTest {
     @Test
     fun parsesCloudinessCorrectly() {
         val service = RetrofittedOpenWeatherMapVisibilityProvider(Retrofit.Builder()
-                .client(mockedClient!!)
+                .client(mockedClient)
                 .baseUrl("http://mocked.com")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()

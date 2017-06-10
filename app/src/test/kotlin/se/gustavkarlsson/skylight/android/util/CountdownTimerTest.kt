@@ -2,18 +2,21 @@ package se.gustavkarlsson.skylight.android.util
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.junit.MockitoJUnit
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 
-@RunWith(MockitoJUnitRunner::class)
 class CountdownTimerTest {
+
+	@Rule
+	@JvmField
+	val rule = MockitoJUnit.rule()!!
 
 	@Mock
 	lateinit var clock: Clock

@@ -2,13 +2,13 @@ package se.gustavkarlsson.skylight.android.notifications
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.junit.MockitoJUnit
 import se.gustavkarlsson.skylight.android.cache.SingletonCache
 import se.gustavkarlsson.skylight.android.evaluation.Chance
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
@@ -21,8 +21,11 @@ import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation
 import se.gustavkarlsson.skylight.android.models.factors.Visibility
 import se.gustavkarlsson.skylight.android.settings.Settings
 
-@RunWith(MockitoJUnitRunner::class)
 class NotificationDeciderTest {
+
+	@Rule
+	@JvmField
+	val rule = MockitoJUnit.rule()!!
 
     @Mock
     lateinit var lastNotifiedCache: SingletonCache<AuroraReport>

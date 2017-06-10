@@ -2,12 +2,12 @@ package se.gustavkarlsson.skylight.android.notifications
 
 import org.assertj.core.api.SoftAssertions
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.junit.MockitoJUnit
 import org.threeten.bp.Clock
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
@@ -25,8 +25,11 @@ private val NOON = MIDNIGHT.plus(12, HOURS)
 private val AFTER_NOON = NOON.plusSeconds(1)
 private val BEFORE_NOON = NOON.minusSeconds(1)
 
-@RunWith(MockitoJUnitRunner::class)
 class ReportOutdatedEvaluatorTest {
+
+	@Rule
+	@JvmField
+	val rule = MockitoJUnit.rule()!!
 
     @Mock
 	lateinit var clock: Clock

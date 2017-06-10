@@ -92,6 +92,7 @@ dependencies {
 	provided "javax.annotation:jsr250-api:1.0"
 
 	// Testing
+	testCompile "org.robolectric:robolectric:3.3.2"
 	testCompile "junit:junit:4.12"
 	testCompile "org.mockito:mockito-core:2.8.9"
 	testCompile "commons-io:commons-io:2.4"
