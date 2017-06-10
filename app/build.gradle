@@ -25,6 +25,11 @@ android {
 		disable "InvalidPackage"
 	}
 
+	testOptions {
+		// Solves android Log not mocked
+		unitTests.returnDefaultValues = true
+	}
+
 	defaultConfig {
 		applicationId "se.gustavkarlsson.skylight.android"
 		minSdkVersion 19

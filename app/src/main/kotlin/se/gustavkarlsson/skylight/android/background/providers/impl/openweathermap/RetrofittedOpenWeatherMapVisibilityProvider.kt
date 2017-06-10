@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.background.providers.impl.openweathermap
 
+import android.util.Log
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.background.providers.VisibilityProvider
 import se.gustavkarlsson.skylight.android.models.factors.Visibility
@@ -14,7 +15,7 @@ class RetrofittedOpenWeatherMapVisibilityProvider constructor(
     override fun getVisibility(latitude: Double, longitude: Double): Visibility {
         try {
             val response = service.get(latitude, longitude, "json", appId).execute()
-            // TODO Log.d(TAG, "Got response: " + response.code() + ", message: " + response.raw().toString())
+            Log.d("VisibilityProvider", "Got response: " + response.code() + ", message: " + response.raw().toString())
             if (!response.isSuccessful) {
                 throw UserFriendlyException(R.string.error_could_not_determine_visibility, response.errorBody().string())
             }

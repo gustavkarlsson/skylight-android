@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.background.providers.impl
 
+import android.util.Log
 import dagger.Reusable
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService
 import se.gustavkarlsson.skylight.android.R
@@ -19,7 +20,7 @@ constructor(
     override fun getGeomagActivity(): GeomagActivity {
         try {
             val response = service.get().execute()
-            // TODO Log.d(TAG, "Got response: " + response.code() + ", message: " + response.raw().toString())
+            Log.d("GeomagActivityProvider", "Got response: " + response.code() + ", message: " + response.raw().toString())
             if (!response.isSuccessful) {
                 throw UserFriendlyException(R.string.error_could_not_determine_geomag_activity, response.errorBody().string())
             }
