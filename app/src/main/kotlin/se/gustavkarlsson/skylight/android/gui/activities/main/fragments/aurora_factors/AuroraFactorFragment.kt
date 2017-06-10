@@ -38,9 +38,9 @@ class AuroraFactorFragment : Fragment(), ValueObserver<AuroraReport> {
     @field:Named(LATEST_NAME)
 	lateinit var latestAuroraReport: ObservableValue<AuroraReport>
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         (activity as MainActivity).component
-                .getAuroraFactorsFragmentComponent(FragmentRootViewModule(inflater!!, container, R.layout.fragment_aurora_factors))
+                .getAuroraFactorsFragmentComponent(FragmentRootViewModule(inflater, container, R.layout.fragment_aurora_factors))
                 .inject(this)
         return rootView
     }

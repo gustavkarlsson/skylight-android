@@ -5,9 +5,9 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import kotlinx.android.synthetic.main.view_aurora_factor.view.*
 import se.gustavkarlsson.skylight.android.R
 
 
@@ -39,20 +39,17 @@ class AuroraFactorView : LinearLayout {
                 auroraFactorViewAttributes.recycle()
             }
         }
-        factorValueView = findViewById(R.id.aurora_factor_value) as TextView
         // Used by IDE to display something
         if (isInEditMode) {
-            factorValueView.text = "value"
+            aurora_factor_value.text = "value"
         }
     }
 
     private fun setCompactTitle(text: CharSequence) {
-        val compactTitleView = findViewById(R.id.aurora_factor_title_compact) as TextView
-        compactTitleView.text = text
+		aurora_factor_title_compact.text = text
     }
 
     private fun setBadgeIcon(icon: Drawable) {
-        val badge = findViewById(R.id.badge) as ImageView
         badge.setImageDrawable(icon)
     }
 
