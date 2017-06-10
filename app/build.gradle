@@ -65,6 +65,7 @@ dependencies {
 		dagger_version = "2.10"
 		google_play_services_version = "10.2.4"
 		android_support_version = "25.3.1"
+		anko_version = "0.10.1"
 	}
 	compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 	compile "com.android.support:appcompat-v7:$android_support_version"
@@ -78,6 +79,7 @@ dependencies {
 	compile "net.e175.klaus:solarpositioning:0.0.9"
 	compile "com.vincentbrison.openlibraries.android:dualcache:3.1.1"
 	compile "com.jakewharton.threetenabp:threetenabp:1.0.5"
+	compile "org.jetbrains.anko:anko-commons:$anko_version"
 
 	// Retrofit
 	compile "com.squareup.retrofit2:retrofit:$retrofit_version"

@@ -13,6 +13,7 @@ import se.gustavkarlsson.skylight.android.R
 
 class AuroraFactorView : LinearLayout {
     private lateinit var factorValueView: TextView
+		private set
 
     constructor(context: Context) : super(context) {
         init(context, null)

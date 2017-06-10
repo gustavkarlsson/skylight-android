@@ -7,14 +7,18 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.background.UpdateScheduler
 import javax.inject.Inject
 
-abstract class AuroraRequirementsCheckingActivity : AppCompatActivity() {
+val LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION
+private val REQUEST_CODE_LOCATION_PERMISSION = 1973
+
+abstract class AuroraRequirementsCheckingActivity : AppCompatActivity(), AnkoLogger {
 
     @Inject
     lateinit var updateScheduler: UpdateScheduler
@@ -52,7 +56,6 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        Log.v(TAG, "onRequestPermissionsResult")
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (REQUEST_CODE_LOCATION_PERMISSION == requestCode) {
             for (i in permissions.indices) {
@@ -71,12 +74,12 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity() {
     }
 
     private fun handlePermissionDenied() {
-        Log.i(TAG, LOCATION_PERMISSION + " permission denied")
+        info("Permission denied: $LOCATION_PERMISSION")
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, LOCATION_PERMISSION)) {
-            Log.i(TAG, "Showing rationale to user for another chance")
+            info("Showing rationale to user for another chance")
             showLocationPermissionRequiredDialog()
         } else {
-            Log.i(TAG, "Showing permission denied dialog and exiting")
+            info("Showing permission denied dialog and exiting")
             showLocationPermissionDeniedDialog()
         }
     }
@@ -103,11 +106,4 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity() {
     }
 
     protected open fun onRequirementsMet() {}
-
-    companion object {
-        private val TAG = AuroraRequirementsCheckingActivity::class.java.simpleName
-
-        val LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION
-        private val REQUEST_CODE_LOCATION_PERMISSION = 1973
-    }
 }

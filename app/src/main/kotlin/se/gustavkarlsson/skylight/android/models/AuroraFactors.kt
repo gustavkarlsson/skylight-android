@@ -5,6 +5,7 @@ import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity
 import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation
 import se.gustavkarlsson.skylight.android.models.factors.Visibility
 
+// TODO val or var?
 data class AuroraFactors(
     val geomagActivity: GeomagActivity,
     var geomagLocation: GeomagLocation,

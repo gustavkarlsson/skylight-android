@@ -1,7 +1,8 @@
 package se.gustavkarlsson.skylight.android.background.providers.impl
 
-import android.util.Log
 import dagger.Reusable
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.background.providers.GeomagActivityProvider
@@ -15,12 +16,12 @@ class RetrofittedGeomagActivityProvider
 @Inject
 constructor(
 		private val service: KpIndexService
-) : GeomagActivityProvider {
+) : GeomagActivityProvider, AnkoLogger {
 
     override fun getGeomagActivity(): GeomagActivity {
         try {
             val response = service.get().execute()
-            Log.d("GeomagActivityProvider", "Got response: " + response.code() + ", message: " + response.raw().toString())
+			debug("Got response: ${response.code()}, message: ${response.raw()}")
             if (!response.isSuccessful) {
                 throw UserFriendlyException(R.string.error_could_not_determine_geomag_activity, response.errorBody().string())
             }

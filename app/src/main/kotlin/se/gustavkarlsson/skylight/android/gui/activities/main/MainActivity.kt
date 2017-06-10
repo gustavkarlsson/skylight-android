@@ -5,13 +5,13 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
+import se.gustavkarlsson.skylight.android.background.RESPONSE_UPDATE_ERROR
 import se.gustavkarlsson.skylight.android.background.Updater
 import se.gustavkarlsson.skylight.android.dagger.Names.BACKGROUND_UPDATE_TIMEOUT_NAME
 import se.gustavkarlsson.skylight.android.dagger.Names.CACHED_THREAD_POOL_NAME
@@ -70,7 +70,6 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
         private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.v(TAG, "onCreate")
         super.onCreate(savedInstanceState)
         component = Skylight.applicationComponent.getMainActivityComponent(ActivityModule(this))
         setContentView(R.layout.activity_main)
@@ -78,13 +77,11 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        Log.v(TAG, "onCreateOptionsMenu")
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.v(TAG, "onOptionsItemSelected")
         when (item.itemId) {
             R.id.action_settings -> {
                 val intent = Intent(this, SettingsActivity::class.java)
@@ -96,9 +93,8 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
     }
 
     public override fun onStart() {
-        Log.v(TAG, "onStart")
         super.onStart()
-        broadcastManager.registerReceiver(broadcastReceiver, IntentFilter(Updater.RESPONSE_UPDATE_ERROR))
+        broadcastManager.registerReceiver(broadcastReceiver, IntentFilter(RESPONSE_UPDATE_ERROR))
         swipeToRefreshPresenter.disable()
         ensureRequirementsMet()
     }
@@ -123,12 +119,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
     }
 
     override fun onStop() {
-        Log.v(TAG, "onStop")
         super.onStop()
         broadcastManager.unregisterReceiver(broadcastReceiver)
-    }
-
-    companion object {
-        private val TAG = MainActivity::class.java.simpleName
     }
 }

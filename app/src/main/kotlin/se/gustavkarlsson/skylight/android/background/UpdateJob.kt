@@ -10,9 +10,11 @@ import com.evernote.android.job.Job.Result.SUCCESS
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.dagger.Names.BACKGROUND_UPDATE_TIMEOUT_NAME
-import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
+import se.gustavkarlsson.skylight.android.gui.activities.LOCATION_PERMISSION
 import javax.inject.Inject
 import javax.inject.Named
+
+val UPDATE_JOB_TAG = "UPDATE_JOB"
 
 class UpdateJob
 @Inject
@@ -34,7 +36,7 @@ constructor(
     }
 
     private fun hasLocationPermission(): Boolean {
-        return ContextCompat.checkSelfPermission(context, AuroraRequirementsCheckingActivity.LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(context, LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED
     }
 
     // TODO Add better handling
@@ -52,10 +54,5 @@ constructor(
                 .build()
 
         notificationManager.notify(24656, notification)
-    }
-
-    companion object {
-        private val TAG = UpdateJob::class.java.simpleName
-        val UPDATE_JOB_TAG = TAG + ".UPDATE_JOB"
     }
 }

@@ -1,6 +1,8 @@
 package se.gustavkarlsson.skylight.android.background.providers.impl.aggregating_aurora_factors
 
-import android.util.Log
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
+import org.jetbrains.anko.info
 import se.gustavkarlsson.skylight.android.background.providers.GeomagActivityProvider
 import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity
 import java.util.concurrent.Callable
@@ -8,15 +10,15 @@ import java.util.concurrent.TimeoutException
 
 class GetGeomagActivity(
 		private val provider: GeomagActivityProvider
-) : ErrorHandlingTask<GeomagActivity> {
+) : ErrorHandlingTask<GeomagActivity>, AnkoLogger {
 
     override val callable: Callable<GeomagActivity>
         get() = Callable { this.call() }
 
     private fun call(): GeomagActivity {
-        Log.i(TAG, "Getting geomagnetic activity...")
+        info("Getting geomagnetic activity...")
         val geomagActivity = provider.getGeomagActivity()
-        Log.d(TAG, "Geomagnetic activity is: " + geomagActivity)
+        debug("Geomagnetic activity is: $geomagActivity")
         return geomagActivity
     }
 
@@ -30,9 +32,5 @@ class GetGeomagActivity(
 
     override fun handleTimeoutException(e: TimeoutException): GeomagActivity {
         return GeomagActivity()
-    }
-
-    companion object {
-        private val TAG = GetGeomagActivity::class.java.simpleName
     }
 }

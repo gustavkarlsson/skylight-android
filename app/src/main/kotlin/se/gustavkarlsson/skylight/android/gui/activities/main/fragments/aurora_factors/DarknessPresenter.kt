@@ -26,6 +26,6 @@ class DarknessPresenter(
         var darknessPercentage = round(darknessFactor * 100.0)
         darknessPercentage = max(0, darknessPercentage)
         darknessPercentage = min(100, darknessPercentage)
-        return "" + darknessPercentage + "%"
+        return "$darknessPercentage%"
     }
 }

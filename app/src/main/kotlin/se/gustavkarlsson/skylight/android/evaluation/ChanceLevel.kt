@@ -10,7 +10,6 @@ enum class ChanceLevel(val resourceId: Int) {
     MEDIUM(R.string.aurora_chance_medium),
     HIGH(R.string.aurora_chance_high);
 
-	// TODO get rid of companion
     companion object {
         fun fromChance(chance: Chance): ChanceLevel {
 			return when (chance) {

@@ -2,7 +2,8 @@ package se.gustavkarlsson.skylight.android.background.providers.impl
 
 import android.location.Address
 import android.net.ConnectivityManager
-import android.util.Log
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.warn
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
@@ -25,7 +26,7 @@ class AuroraReportProviderImpl(
 		private val auroraFactorsProvider: AuroraFactorsProvider,
 		private val asyncAddressProvider: AsyncAddressProvider,
 		private val clock: Clock
-) : AuroraReportProvider {
+) : AuroraReportProvider, AnkoLogger {
 
     override fun getReport(timeout: Duration): AuroraReport {
         val networkInfo = connectivityManager.activeNetworkInfo
@@ -45,20 +46,16 @@ class AuroraReportProviderImpl(
 		try {
 			return addressFuture.get(timeout.toMillis(), MILLISECONDS)
 		} catch (e: TimeoutException) {
-			Log.w(TAG, "Getting address timed out after " + timeout.toMillis() + "ms", e)
+			warn("Getting address timed out after ${timeout.toMillis()}ms", e)
 		} catch (e: ExecutionException) {
 			val cause = e.cause
-			Log.w(TAG, "An unexpected exception occurred while", cause)
+			warn("An unexpected exception occurred while", cause)
 		} catch (e: InterruptedException) {
-			Log.w(TAG, "An unexpected exception occurred", e)
+			warn("An unexpected exception occurred", e)
 		} catch (e: CancellationException) {
-			Log.w(TAG, "An unexpected exception occurred", e)
+			warn("An unexpected exception occurred", e)
 		}
 
 		return null
 	}
-
-    companion object {
-        private val TAG = AuroraReportProviderImpl::class.java.simpleName
-    }
 }

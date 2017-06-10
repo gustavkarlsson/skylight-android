@@ -6,6 +6,9 @@ import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation
 import java.lang.Math.*
 import javax.inject.Inject
 
+private val MAGNETIC_NORTH_POLE_LATITUDE = 80.4
+private val MAGNETIC_NORTH_POLE_LONGITUDE = -72.6
+
 @Reusable
 class GeomagLocationProviderImpl
 @Inject
@@ -77,10 +80,4 @@ constructor() : GeomagLocationProvider {
 		}
 		return c
 	}
-
-    companion object {
-        // 2015 data
-        private val MAGNETIC_NORTH_POLE_LATITUDE = 80.4
-        private val MAGNETIC_NORTH_POLE_LONGITUDE = -72.6
-    }
 }

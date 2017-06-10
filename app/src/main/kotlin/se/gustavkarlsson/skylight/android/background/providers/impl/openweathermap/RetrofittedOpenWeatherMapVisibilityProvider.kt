@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.background.providers.impl.openweathermap
 
-import android.util.Log
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.background.providers.VisibilityProvider
 import se.gustavkarlsson.skylight.android.models.factors.Visibility
@@ -10,12 +11,12 @@ import java.io.IOException
 class RetrofittedOpenWeatherMapVisibilityProvider constructor(
 		private val service: OpenWeatherMapService,
 		private val appId: String
-) : VisibilityProvider {
+) : VisibilityProvider, AnkoLogger {
 
     override fun getVisibility(latitude: Double, longitude: Double): Visibility {
         try {
             val response = service.get(latitude, longitude, "json", appId).execute()
-            Log.d("VisibilityProvider", "Got response: " + response.code() + ", message: " + response.raw().toString())
+            debug("Got response: ${response.code()}, message: ${response.raw()}")
             if (!response.isSuccessful) {
                 throw UserFriendlyException(R.string.error_could_not_determine_visibility, response.errorBody().string())
             }

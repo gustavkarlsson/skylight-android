@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +37,6 @@ class AuroraChanceFragment : Fragment(), ValueObserver<AuroraReport> {
 	lateinit var latestAuroraReport: ObservableValue<AuroraReport>
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.v(TAG, "onCreateView")
         (activity as MainActivity).component
                 .getAuroraChanceFragmentComponent(FragmentRootViewModule(inflater, container, R.layout.fragment_aurora_chance))
                 .inject(this)
@@ -46,7 +44,6 @@ class AuroraChanceFragment : Fragment(), ValueObserver<AuroraReport> {
     }
 
     override fun onStart() {
-        Log.v(TAG, "onStart")
         super.onStart()
         latestAuroraReport.addListener(this)
         updatePresenters(latestAuroraReport.value)
@@ -54,7 +51,6 @@ class AuroraChanceFragment : Fragment(), ValueObserver<AuroraReport> {
     }
 
     override fun valueChanged(newData: AuroraReport) {
-        Log.v(TAG, "valueChanged")
         activity.runOnUiThread { updatePresenters(newData) }
     }
 
@@ -65,13 +61,8 @@ class AuroraChanceFragment : Fragment(), ValueObserver<AuroraReport> {
     }
 
     override fun onStop() {
-        Log.v(TAG, "onStop")
         latestAuroraReport.removeListener(this)
         timeSinceUpdatePresenter.stop()
         super.onStop()
-    }
-
-    companion object {
-        private val TAG = AuroraChanceFragment::class.java.simpleName
     }
 }

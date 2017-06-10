@@ -40,6 +40,10 @@ import java.util.concurrent.Executors
 import javax.inject.Named
 import javax.inject.Singleton
 
+private val LAST_NOTIFIED_CACHE_ID = "last-notified-aurora-report"
+private val OPENWEATHERMAP_API_URL = "http://api.openweathermap.org/data/2.5/"
+private val GEOMAG_ACTIVITY_API_URL = "http://skylight-app.net/rest/"
+
 @Module(includes = arrayOf(
 		ContextModule::class,
 		GeomagLocationModule::class,
@@ -167,12 +171,6 @@ class AuroraReportModule {
 	@Named(CACHED_THREAD_POOL_NAME)
 	fun provideCachedThreadPool(): ExecutorService {
 		return Executors.newCachedThreadPool()
-	}
-
-	companion object {
-		private val LAST_NOTIFIED_CACHE_ID = "last-notified-aurora-report"
-		private val OPENWEATHERMAP_API_URL = "http://api.openweathermap.org/data/2.5/"
-		private val GEOMAG_ACTIVITY_API_URL = "http://skylight-app.net/rest/"
 	}
 
 }

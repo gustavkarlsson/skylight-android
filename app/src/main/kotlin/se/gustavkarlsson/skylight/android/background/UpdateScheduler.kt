@@ -1,11 +1,11 @@
 package se.gustavkarlsson.skylight.android.background
 
-import android.util.Log
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
 import dagger.Reusable
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.debug
 import org.threeten.bp.Duration
-import se.gustavkarlsson.skylight.android.background.UpdateJob.Companion.UPDATE_JOB_TAG
 import se.gustavkarlsson.skylight.android.dagger.Names.UPDATE_SCHEDULER_FLEX_NAME
 import se.gustavkarlsson.skylight.android.dagger.Names.UPDATE_SCHEDULER_INTERVAL_NAME
 import se.gustavkarlsson.skylight.android.settings.Settings
@@ -19,7 +19,7 @@ constructor(
 		private val settings: Settings,
 		@param:Named(UPDATE_SCHEDULER_INTERVAL_NAME) private val scheduleInterval: Duration,
 		@param:Named(UPDATE_SCHEDULER_FLEX_NAME) private val scheduleFlex: Duration
-) {
+) : AnkoLogger {
 
     fun setupBackgroundUpdates() {
         val enabled = settings.isEnableNotifications
@@ -40,7 +40,7 @@ constructor(
                 .setRequirementsEnforced(true)
                 .build()
                 .schedule()
-        Log.d(TAG, "Scheduling update to run periodically")
+        debug("Scheduling update to run periodically")
     }
 	private fun isScheduled(): Boolean  {
 			val jobRequests = JobManager.instance().getAllJobRequestsForTag(UPDATE_JOB_TAG)
@@ -49,10 +49,6 @@ constructor(
 
     fun cancelBackgroundUpdates() {
         JobManager.instance().cancelAllForTag(UPDATE_JOB_TAG)
-    }
-
-    companion object {
-        private val TAG = UpdateScheduler::class.java.simpleName
     }
 
 }

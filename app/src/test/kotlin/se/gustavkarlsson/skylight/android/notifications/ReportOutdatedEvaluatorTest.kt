@@ -17,6 +17,14 @@ import org.threeten.bp.temporal.ChronoUnit.HOURS
 import se.gustavkarlsson.skylight.android.models.AuroraReport
 import se.gustavkarlsson.skylight.android.util.ZoneIdProvider
 
+private val ZONE_OFFSET = ZoneOffset.UTC
+private val MIDNIGHT = Instant.EPOCH
+private val BEFORE_MIDNIGHT = MIDNIGHT.minusSeconds(1)
+private val AFTER_MIDNIGHT = MIDNIGHT.plusSeconds(1)
+private val NOON = MIDNIGHT.plus(12, HOURS)
+private val AFTER_NOON = NOON.plusSeconds(1)
+private val BEFORE_NOON = NOON.minusSeconds(1)
+
 @RunWith(MockitoJUnitRunner::class)
 class ReportOutdatedEvaluatorTest {
 
@@ -77,16 +85,6 @@ class ReportOutdatedEvaluatorTest {
         } else {
             assertion.isFalse
         }
-    }
-
-    companion object {
-        private val ZONE_OFFSET = ZoneOffset.UTC
-        private val MIDNIGHT = Instant.EPOCH
-        private val BEFORE_MIDNIGHT = MIDNIGHT.minusSeconds(1)
-        private val AFTER_MIDNIGHT = MIDNIGHT.plusSeconds(1)
-        private val NOON = MIDNIGHT.plus(12, HOURS)
-        private val AFTER_NOON = NOON.plusSeconds(1)
-        private val BEFORE_NOON = NOON.minusSeconds(1)
     }
 
 }

@@ -6,7 +6,8 @@ import android.content.Intent
 import android.widget.Toast
 import dagger.Module
 import dagger.Provides
-import se.gustavkarlsson.skylight.android.background.Updater
+import se.gustavkarlsson.skylight.android.background.RESPONSE_UPDATE_ERROR
+import se.gustavkarlsson.skylight.android.background.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE
 import se.gustavkarlsson.skylight.android.dagger.Names.UPDATE_ERROR_NAME
 import se.gustavkarlsson.skylight.android.dagger.scopes.ActivityScope
 import javax.inject.Named
@@ -21,8 +22,8 @@ class UpdateErrorBroadcastReceiverModule {
         return object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 val action = intent.action
-                if (Updater.RESPONSE_UPDATE_ERROR == action) {
-                    val message = intent.getStringExtra(Updater.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE)
+                if (RESPONSE_UPDATE_ERROR == action) {
+                    val message = intent.getStringExtra(RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE)
                     Toast.makeText(context, message, Toast.LENGTH_LONG).show()
                 }
             }
