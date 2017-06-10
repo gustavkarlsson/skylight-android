@@ -60,7 +60,6 @@ dependencies {
 	ext {
 		retrofit_version = "2.2.0"
 		dagger_version = "2.10"
-		powermock_version = "1.6.6"
 		google_play_services_version = "10.2.4"
 		android_support_version = "25.3.1"
 	}
@@ -88,13 +87,9 @@ dependencies {
 
 	// Testing
 	testCompile "junit:junit:4.12"
-	testCompile "org.mockito:mockito-core:1.10.19"
+	testCompile "org.mockito:mockito-core:2.8.9"
 	testCompile "commons-io:commons-io:2.4"
 	testCompile "org.assertj:assertj-core:2.5.0"
-	testCompile "org.powermock:powermock-api-mockito:$powermock_version"
-	testCompile "org.powermock:powermock-module-junit4-rule-agent:$powermock_version"
-	testCompile "org.powermock:powermock-module-junit4-rule:$powermock_version"
-	testCompile "org.powermock:powermock-module-junit4:$powermock_version"
 
 	androidTestCompile "com.android.support:support-annotations:$android_support_version"
 	androidTestCompile "com.android.support.test:runner:0.5"

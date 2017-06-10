@@ -7,7 +7,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
-import org.mockito.runners.MockitoJUnitRunner
+import org.mockito.junit.MockitoJUnitRunner
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
@@ -15,31 +15,31 @@ import org.threeten.bp.Instant
 @RunWith(MockitoJUnitRunner::class)
 class CountdownTimerTest {
 
-    @Mock
-    lateinit var clock: Clock
+	@Mock
+	lateinit var clock: Clock
 
-    @Before
-    fun setUp() {
-        MockitoAnnotations.initMocks(this)
-        `when`(clock.instant()).thenReturn(Instant.ofEpochMilli(1000))
-    }
+	@Before
+	fun setUp() {
+		MockitoAnnotations.initMocks(this)
+		`when`(clock.instant()).thenReturn(Instant.ofEpochMilli(1000))
+	}
 
-    @Test
-    fun remainingIsSameAsInputValue() {
-        val timer = CountdownTimer(Duration.ZERO, clock)
+	@Test
+	fun remainingIsSameAsInputValue() {
+		val timer = CountdownTimer(Duration.ZERO, clock)
 
-        val remainingTime = timer.remainingTime
+		val remainingTime = timer.remainingTime
 
 		assertThat(remainingTime).isEqualTo(Duration.ZERO)
-    }
+	}
 
-    @Test
-    fun remainingChangesWhenTimePasses() {
-        val timer = CountdownTimer(Duration.ofMillis(200), clock)
-        `when`(clock.instant()).thenReturn(Instant.ofEpochMilli(1100))
+	@Test
+	fun remainingChangesWhenTimePasses() {
+		val timer = CountdownTimer(Duration.ofMillis(200), clock)
+		`when`(clock.instant()).thenReturn(Instant.ofEpochMilli(1100))
 
-        val remainingTime = timer.remainingTime
+		val remainingTime = timer.remainingTime
 
-        assertThat(remainingTime).isEqualTo(Duration.ofMillis(100))
-    }
+		assertThat(remainingTime).isEqualTo(Duration.ofMillis(100))
+	}
 }

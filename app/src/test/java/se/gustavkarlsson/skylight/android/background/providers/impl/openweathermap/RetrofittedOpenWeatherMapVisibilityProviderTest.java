@@ -1,16 +1,13 @@
 package se.gustavkarlsson.skylight.android.background.providers.impl.openweathermap;
 
 
-import android.util.Log;
-
 import com.google.gson.Gson;
 
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -29,16 +26,13 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({Log.class})
+@RunWith(MockitoJUnitRunner.class)
 public class RetrofittedOpenWeatherMapVisibilityProviderTest {
 	private OkHttpClient mockedClient;
 
 	@Before
 	public void setUp() throws Exception {
-		mockStatic(Log.class);
 		mockedClient = mockClient(200, "fixtures/open_weather_map_report.json", "application/json");
 	}
 

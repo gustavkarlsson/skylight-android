@@ -1,14 +1,11 @@
 package se.gustavkarlsson.skylight.android.background.providers.impl;
 
 
-import android.util.Log;
-
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import java.io.IOException;
 
@@ -28,16 +25,14 @@ import static org.assertj.core.api.Java6Assertions.within;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({Log.class})
+
+@RunWith(MockitoJUnitRunner.class)
 public class RetrofittedGeomagActivityProviderTest {
 	private OkHttpClient mockedClient;
 
 	@Before
 	public void setUp() throws Exception {
-		mockStatic(Log.class);
 		mockedClient = mockClient(200, "fixtures/kp_index_report.json", "application/json");
 	}
 

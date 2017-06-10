@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import javax.inject.Named;
 
@@ -13,7 +13,12 @@ import se.gustavkarlsson.skylight.android.cache.SingletonCache;
 import se.gustavkarlsson.skylight.android.evaluation.Chance;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator;
 import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel;
+import se.gustavkarlsson.skylight.android.models.AuroraFactors;
 import se.gustavkarlsson.skylight.android.models.AuroraReport;
+import se.gustavkarlsson.skylight.android.models.factors.Darkness;
+import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity;
+import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation;
+import se.gustavkarlsson.skylight.android.models.factors.Visibility;
 import se.gustavkarlsson.skylight.android.settings.Settings;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,7 +59,7 @@ public class NotificationDeciderTest {
 	}
 
 	private static AuroraReport createDummyReport() {
-		return new AuroraReport(0, null, null);
+		return new AuroraReport(0, null, new AuroraFactors(new GeomagActivity(), new GeomagLocation(), new Darkness(), new Visibility()));
 	}
 
 	@Test
