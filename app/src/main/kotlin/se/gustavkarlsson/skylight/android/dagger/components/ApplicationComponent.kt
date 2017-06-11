@@ -29,4 +29,5 @@ interface ApplicationComponent {
 	fun getClock(): Clock
 
     fun getMainActivityComponent(activityModule: ActivityModule): MainActivityComponent
+	fun getSettingsActivityComponent(): SettingsActivityComponent
 }
