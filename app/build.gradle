@@ -53,6 +53,12 @@ android {
 	}
 }
 
+kotlin {
+	experimental {
+		coroutines "enable"
+	}
+}
+
 // Stops dagger compiler errors from truncating
 gradle.projectsEvaluated {
 	tasks.withType(JavaCompile) {
@@ -80,7 +86,10 @@ dependencies {
 	compile "net.e175.klaus:solarpositioning:0.0.9"
 	compile "com.vincentbrison.openlibraries.android:dualcache:3.1.1"
 	compile "com.jakewharton.threetenabp:threetenabp:1.0.5"
+
+	// Anko
 	compile "org.jetbrains.anko:anko-commons:$anko_version"
+	compile "org.jetbrains.anko:anko-coroutines:$anko_version"
 
 	// Retrofit
 	compile "com.squareup.retrofit2:retrofit:$retrofit_version"

@@ -2,6 +2,8 @@ package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_
 
 import android.text.format.DateUtils
 import android.widget.TextView
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
@@ -25,7 +27,7 @@ class TimeSinceUpdatePresenter(
     }
 
     @Synchronized
-	fun update(lastUpdate: Instant) {
+	fun present(lastUpdate: Instant) {
         this.lastUpdate = lastUpdate
         rescheduleRefresh()
         updateTimeSinceUpdate(lastUpdate)
@@ -40,21 +42,19 @@ class TimeSinceUpdatePresenter(
 		timeUpdateTimer?.cancel()
         timeUpdateTimer = Timer()
         timeUpdateTimer?.schedule(object : TimerTask() {
-            override fun run() {
-                timeSinceUpdateTextView.post {
-					updateTimeSinceUpdate(lastUpdate)
-				}
-            }
+            override fun run() = updateTimeSinceUpdate(lastUpdate)
         }, Duration.ofSeconds(1).toMillis(), updateTimeResolution.toMillis())
         // The 1 second delay makes sure that we're past the minute line
     }
 
     private fun updateTimeSinceUpdate(update: Instant?) {
 		update?: return
-		if (isRightNow(update)) {
-            timeSinceUpdateTextView.setText(R.string.right_now)
-        } else {
-			timeSinceUpdateTextView.text = formatRelativeTime(update)
+		async(UI) {
+			if (isRightNow(update)) {
+				timeSinceUpdateTextView.setText(R.string.right_now)
+			} else {
+				timeSinceUpdateTextView.text = formatRelativeTime(update)
+			}
 		}
     }
 

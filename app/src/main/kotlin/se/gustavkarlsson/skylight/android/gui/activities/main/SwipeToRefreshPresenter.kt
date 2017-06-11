@@ -1,31 +1,33 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main
 
-import android.app.Activity
 import android.support.v4.widget.SwipeRefreshLayout
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import org.jetbrains.anko.coroutines.experimental.bg
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.background.Updater
-import java.util.concurrent.ExecutorService
 
 class SwipeToRefreshPresenter(
 		private val swipeRefreshLayout: SwipeRefreshLayout,
-		private val activity: Activity,
 		private val updater: Updater,
-		private val cachedThreadPool: ExecutorService,
 		private val timeout: Duration
 ) {
 
-    private fun update() {
-        swipeRefreshLayout.isRefreshing = true
-        cachedThreadPool.execute {
-            updater.update(timeout)
-            activity.runOnUiThread { swipeRefreshLayout.isRefreshing = false }
-        }
+    private fun triggerUpdate() {
+		async(UI) {
+			swipeRefreshLayout.isRefreshing = true
+			val update = bg {
+				updater.update(timeout)
+			}
+			update.await()
+			swipeRefreshLayout.isRefreshing = false
+		}
     }
 
     fun enable() {
         swipeRefreshLayout.isEnabled = true
         swipeRefreshLayout.isRefreshing = false
-        swipeRefreshLayout.setOnRefreshListener(this::update)
+        swipeRefreshLayout.setOnRefreshListener(this::triggerUpdate)
     }
 
     fun disable() {

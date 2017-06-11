@@ -4,15 +4,17 @@ package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.ShapeDrawable
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.okButton
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.evaluation.Chance
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
 
-abstract class AbstractAuroraFactorPresenter<in T>(
+abstract class AbstractAuroraFactorPresenter<in F>(
 		private val factorView: AuroraFactorView,
-		private val chanceEvaluator: ChanceEvaluator<T>,
+		private val chanceEvaluator: ChanceEvaluator<F>,
 		private val colorConverter: ChanceToColorConverter
 ) {
 
@@ -27,13 +29,15 @@ abstract class AbstractAuroraFactorPresenter<in T>(
 		}
     }
 
-    fun update(factor: T) {
-        setFactorValue(evaluateText(factor))
-        setFactorChance(chanceEvaluator.evaluate(factor))
+    fun present(factor: F) {
+		async(UI) {
+			setFactorValue(evaluateText(factor))
+			setFactorChance(chanceEvaluator.evaluate(factor))
+		}
     }
 
     private fun setFactorValue(value: String) {
-        factorView.setValue(value)
+		factorView.setValue(value)
     }
 
     private fun setFactorChance(chance: Chance) {
@@ -52,5 +56,5 @@ abstract class AbstractAuroraFactorPresenter<in T>(
 
     internal abstract val descriptionResourceId: Int
 
-    internal abstract fun evaluateText(factor: T): String
+    internal abstract fun evaluateText(factor: F): String
 }

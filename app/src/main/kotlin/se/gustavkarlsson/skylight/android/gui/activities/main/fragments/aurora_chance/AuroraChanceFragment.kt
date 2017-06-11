@@ -16,6 +16,7 @@ import se.gustavkarlsson.skylight.android.observers.ValueObserver
 import javax.inject.Inject
 import javax.inject.Named
 
+// TODO separate presentation and timer
 class AuroraChanceFragment : Fragment(), ValueObserver<AuroraReport> {
 
     @Inject
@@ -45,18 +46,16 @@ class AuroraChanceFragment : Fragment(), ValueObserver<AuroraReport> {
     override fun onStart() {
         super.onStart()
         latestAuroraReport.addListener(this)
-        updatePresenters(latestAuroraReport.value)
+        present(latestAuroraReport.value)
         timeSinceUpdatePresenter.start()
     }
 
-    override fun valueChanged(newData: AuroraReport) {
-        activity.runOnUiThread { updatePresenters(newData) }
-    }
+    override fun valueChanged(newData: AuroraReport) = present(newData)
 
-    private fun updatePresenters(report: AuroraReport) {
-        locationPresenter.update(report.address)
-        timeSinceUpdatePresenter.update(report.timestamp)
-        chancePresenter.update(report)
+    private fun present(report: AuroraReport) {
+        locationPresenter.present(report.address)
+        timeSinceUpdatePresenter.present(report.timestamp)
+        chancePresenter.present(report)
     }
 
     override fun onStop() {

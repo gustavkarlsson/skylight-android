@@ -4,16 +4,20 @@ import android.location.Address
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.TextView
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 
 class LocationPresenter(private val locationTextView: TextView) {
 
-    fun update(address: Address?) {
-        if (address == null) {
-            locationTextView.visibility = INVISIBLE
-        } else {
-            locationTextView.visibility = VISIBLE
-            val locationString = address.locality
-            locationTextView.text = locationString
-        }
+    fun present(address: Address?) {
+		async(UI) {
+			if (address == null) {
+				locationTextView.visibility = INVISIBLE
+			} else {
+				locationTextView.visibility = VISIBLE
+				val locationString = address.locality
+				locationTextView.text = locationString
+			}
+		}
     }
 }
