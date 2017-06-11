@@ -5,6 +5,7 @@ import dagger.Reusable
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.background.providers.*
+import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.models.AuroraFactors
 import javax.inject.Inject
 
@@ -24,7 +25,7 @@ constructor(
     override fun getAuroraFactors(location: Location, timeout: Duration): AuroraFactors {
         val getGeomagActivity = GetGeomagActivity(geomagActivityProvider)
         val getGeomagLocation = GetGeomagLocation(geomagLocationProvider, location)
-        val getDarkness = GetDarkness(darknessProvider, location, clock.instant())
+        val getDarkness = GetDarkness(darknessProvider, location, clock.now)
         val getVisibility = GetVisibility(visibilityProvider, location)
 
         val geomagActivityErrorHandlingFuture = executorService.execute(getGeomagActivity, timeout)

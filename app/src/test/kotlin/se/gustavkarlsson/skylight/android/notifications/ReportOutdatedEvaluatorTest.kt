@@ -14,6 +14,7 @@ import org.threeten.bp.ZoneId
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.temporal.ChronoUnit.DAYS
 import org.threeten.bp.temporal.ChronoUnit.HOURS
+import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.models.AuroraReport
 import se.gustavkarlsson.skylight.android.util.ZoneIdProvider
 
@@ -76,8 +77,8 @@ class ReportOutdatedEvaluatorTest {
     }
 
     private fun assertOutdated(lastReportTime: Instant, currentTime: Instant, expected: Boolean, softly: SoftAssertions) {
-        `when`(report.timestampMillis).thenReturn(lastReportTime.toEpochMilli())
-        `when`(clock.instant()).thenReturn(currentTime)
+        `when`(report.timestamp).thenReturn(lastReportTime)
+        `when`(clock.now).thenReturn(currentTime)
         `when`(clock.millis()).thenReturn(currentTime.toEpochMilli())
 
         val outdated = evaluator.isOutdated(report)

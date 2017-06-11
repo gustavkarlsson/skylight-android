@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.dagger.Names.FRAGMENT_ROOT_NAME
 import se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME
@@ -56,7 +55,7 @@ class AuroraChanceFragment : Fragment(), ValueObserver<AuroraReport> {
 
     private fun updatePresenters(report: AuroraReport) {
         locationPresenter.update(report.address)
-        timeSinceUpdatePresenter.update(Instant.ofEpochMilli(report.timestampMillis))
+        timeSinceUpdatePresenter.update(report.timestamp)
         chancePresenter.update(report)
     }
 

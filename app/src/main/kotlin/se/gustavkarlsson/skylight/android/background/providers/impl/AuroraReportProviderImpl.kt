@@ -11,6 +11,7 @@ import se.gustavkarlsson.skylight.android.background.providers.AsyncAddressProvi
 import se.gustavkarlsson.skylight.android.background.providers.AuroraFactorsProvider
 import se.gustavkarlsson.skylight.android.background.providers.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.background.providers.LocationProvider
+import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.models.AuroraReport
 import se.gustavkarlsson.skylight.android.util.CountdownTimer
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
@@ -39,7 +40,7 @@ class AuroraReportProviderImpl(
         val addressFuture = asyncAddressProvider.execute(location.latitude, location.longitude)
         val auroraFactors = auroraFactorsProvider.getAuroraFactors(location, timeoutTimer.remainingTime)
         val address = getAddress(addressFuture, timeoutTimer.remainingTime)
-        return AuroraReport(clock.millis(), address, auroraFactors)
+        return AuroraReport(clock.now, address, auroraFactors)
     }
 
 	private fun getAddress(addressFuture: Future<Address?>, timeout: Duration): Address? {

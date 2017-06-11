@@ -1,10 +1,10 @@
 package se.gustavkarlsson.skylight.android.models
 
 import android.location.Address
+import org.threeten.bp.Instant
 
 data class AuroraReport(
-		// TODO change to instant
-		val timestampMillis: Long,
+		val timestamp: Instant,
 		val address: Address?,
 		val factors: AuroraFactors
 )

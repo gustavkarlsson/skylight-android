@@ -5,6 +5,7 @@ import dagger.Provides
 import org.threeten.bp.Clock
 import se.gustavkarlsson.skylight.android.cache.SingletonCache
 import se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME
+import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.models.AuroraFactors
 import se.gustavkarlsson.skylight.android.models.AuroraReport
 import se.gustavkarlsson.skylight.android.models.factors.Darkness
@@ -30,7 +31,7 @@ class LatestAuroraReportObservableModule {
                     Darkness(null),
                     Visibility(null)
             )
-            report = AuroraReport(clock.millis(), null, factors)
+            report = AuroraReport(clock.now, null, factors)
         }
         return ObservableValue<AuroraReport>(report)
     }

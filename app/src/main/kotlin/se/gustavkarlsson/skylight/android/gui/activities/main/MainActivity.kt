@@ -21,6 +21,8 @@ import se.gustavkarlsson.skylight.android.dagger.Names.UPDATE_ERROR_NAME
 import se.gustavkarlsson.skylight.android.dagger.components.MainActivityComponent
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ActivityModule
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.extensions.now
+import se.gustavkarlsson.skylight.android.extensions.until
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
 import se.gustavkarlsson.skylight.android.models.AuroraReport
@@ -109,7 +111,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 
 	// TODO use operator extension function arithmetic
     private fun needsUpdate(report: AuroraReport): Boolean {
-        val hasExpired = clock.millis() - report.timestampMillis > foregroundReportLifetime.toMillis()
+        val hasExpired = report.timestamp until clock.now > foregroundReportLifetime
         val isUnknown = !auroraChanceEvaluator.evaluate(report).isKnown
         return hasExpired || isUnknown
     }

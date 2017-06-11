@@ -4,6 +4,7 @@ import android.location.Address
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.background.providers.AuroraReportProvider
+import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.models.AuroraFactors
 import se.gustavkarlsson.skylight.android.models.AuroraReport
 import se.gustavkarlsson.skylight.android.models.factors.Darkness
@@ -21,7 +22,7 @@ class DebugAuroraReportProvider(
     override fun getReport(timeout: Duration): AuroraReport {
         val location = Address(Locale.ENGLISH)
         val auroraFactors = createAuroraFactors()
-        return AuroraReport(clock.millis(), location, auroraFactors)
+        return AuroraReport(clock.now, location, auroraFactors)
     }
 
     private fun createAuroraFactors(): AuroraFactors {

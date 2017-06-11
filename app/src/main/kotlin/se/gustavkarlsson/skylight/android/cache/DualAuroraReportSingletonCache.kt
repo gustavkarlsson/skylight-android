@@ -12,9 +12,9 @@ class DualAuroraReportSingletonCache(context: Context, cacheId: String) : Single
     private val dualCache: DualCache<AuroraReport>
 
     init {
-        val builder = Builder<AuroraReport>(cacheId, BuildConfig.VERSION_CODE)
+		val builder = Builder<AuroraReport>(cacheId, BuildConfig.VERSION_CODE)
                 .useReferenceInRam(Integer.MAX_VALUE) { 1 }
-                .useSerializerInDisk(Integer.MAX_VALUE, false, GsonCacheSerializer(AuroraReport::class.java), context)
+                .useSerializerInDisk(Integer.MAX_VALUE, false, auroraReportCacheSerializer, context)
         if (BuildConfig.DEBUG) {
             builder.enableLog()
         }

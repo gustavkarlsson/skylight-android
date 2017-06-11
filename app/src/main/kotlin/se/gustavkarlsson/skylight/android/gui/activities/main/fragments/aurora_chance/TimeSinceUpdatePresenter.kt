@@ -6,6 +6,7 @@ import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.extensions.until
 import java.util.*
 
@@ -58,7 +59,7 @@ class TimeSinceUpdatePresenter(
     }
 
     private fun isRightNow(time: Instant): Boolean {
-        val age = time until clock.instant()
+        val age = time until clock.now
 		return age < updateTimeResolution
     }
 
