@@ -46,9 +46,9 @@ abstract class AbstractAuroraFactorPresenter<in F>(
         val background = badge.background
         background.mutate()
 		when (background) {
-			is ShapeDrawable -> background.paint.color = color
+			is ShapeDrawable    -> background.paint.color = color
 			is GradientDrawable -> background.setColor(color)
-			is ColorDrawable -> background.color = color
+			is ColorDrawable    -> background.color = color
 		}
     }
 

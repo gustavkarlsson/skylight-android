@@ -29,6 +29,7 @@ import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ContextModul
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.DarknessModule
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.GeomagLocationModule
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.SystemServiceModule
+import se.gustavkarlsson.skylight.android.extensions.create
 import se.gustavkarlsson.skylight.android.models.AuroraReport
 import se.gustavkarlsson.skylight.android.settings.DebugSettings
 import se.gustavkarlsson.skylight.android.settings.Settings
@@ -118,7 +119,7 @@ class AuroraReportModule {
 		return Retrofit.Builder()
 				.baseUrl(OPENWEATHERMAP_API_URL)
 				.addConverterFactory(GsonConverterFactory.create())
-				.build().create(OpenWeatherMapService::class.java)
+				.build().create()
 	}
 
 	@Provides
@@ -148,7 +149,7 @@ class AuroraReportModule {
 		return Retrofit.Builder()
 				.baseUrl(GEOMAG_ACTIVITY_API_URL)
 				.addConverterFactory(GsonConverterFactory.create())
-				.build().create(KpIndexService::class.java)
+				.build().create()
 	}
 
 	@Provides

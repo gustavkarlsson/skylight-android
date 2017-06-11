@@ -13,12 +13,12 @@ enum class ChanceLevel(val resourceId: Int) {
     companion object {
         fun fromChance(chance: Chance): ChanceLevel {
 			return when (chance) {
-				Chance.UNKNOWN -> UNKNOWN
+				Chance.UNKNOWN    -> UNKNOWN
 				Chance.IMPOSSIBLE -> NONE
 				else -> when (chance.value!!) {
-					in 0.0..0.33 -> LOW
+					in 0.0..0.33  -> LOW
 					in 0.33..0.66 -> MEDIUM
-					else -> HIGH
+					else          -> HIGH
 				}
 			}
         }

@@ -6,6 +6,7 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import com.vincentbrison.openlibraries.android.dualcache.CacheSerializer
 import org.threeten.bp.Instant
+import se.gustavkarlsson.skylight.android.extensions.fromJson
 import se.gustavkarlsson.skylight.android.models.AuroraReport
 
 
@@ -28,7 +29,7 @@ val auroraReportCacheSerializer = object : CacheSerializer<AuroraReport> {
 	private val gson = auroraReportGson
 
 	override fun fromString(json: String): AuroraReport {
-		return gson.fromJson(json, AuroraReport::class.java)
+		return gson.fromJson(json)
 	}
 
 	override fun toString(report: AuroraReport): String {

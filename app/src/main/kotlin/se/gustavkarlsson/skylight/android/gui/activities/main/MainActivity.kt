@@ -80,12 +80,9 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_settings -> {
-				startActivity<SettingsActivity>()
-                return true
-            }
-			else -> return super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            R.id.action_settings -> run { startActivity<SettingsActivity>(); true }
+			else                 -> super.onOptionsItemSelected(item)
         }
     }
 

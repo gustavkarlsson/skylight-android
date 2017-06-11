@@ -24,7 +24,7 @@ class Skylight : Application() {
 		jobManager.addJobCreator { tag ->
 			when (tag) {
 				UPDATE_JOB_TAG -> applicationComponent.getUpdateJob()
-				else -> null
+				else           -> null
 			}
 		}
 	}
