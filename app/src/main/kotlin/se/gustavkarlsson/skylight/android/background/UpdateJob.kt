@@ -9,7 +9,7 @@ import com.evernote.android.job.Job.Result.FAILURE
 import com.evernote.android.job.Job.Result.SUCCESS
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.dagger.Names.BACKGROUND_UPDATE_TIMEOUT_NAME
+import se.gustavkarlsson.skylight.android.dagger.BACKGROUND_UPDATE_TIMEOUT_NAME
 import se.gustavkarlsson.skylight.android.gui.activities.LOCATION_PERMISSION
 import javax.inject.Inject
 import javax.inject.Named

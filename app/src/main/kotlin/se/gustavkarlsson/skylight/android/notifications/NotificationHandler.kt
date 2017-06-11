@@ -9,7 +9,7 @@ import android.support.v4.app.TaskStackBuilder
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.cache.SingletonCache
-import se.gustavkarlsson.skylight.android.dagger.Names.LAST_NOTIFIED_NAME
+import se.gustavkarlsson.skylight.android.dagger.LAST_NOTIFIED_NAME
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity

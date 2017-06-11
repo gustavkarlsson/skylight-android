@@ -6,7 +6,7 @@ import dagger.Reusable
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.warn
 import se.gustavkarlsson.skylight.android.background.providers.AsyncAddressProvider
-import se.gustavkarlsson.skylight.android.dagger.Names.CACHED_THREAD_POOL_NAME
+import se.gustavkarlsson.skylight.android.dagger.CACHED_THREAD_POOL_NAME
 import java.io.IOException
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Future

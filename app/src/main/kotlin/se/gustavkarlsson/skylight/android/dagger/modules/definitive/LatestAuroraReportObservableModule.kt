@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import org.threeten.bp.Clock
 import se.gustavkarlsson.skylight.android.cache.SingletonCache
-import se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME
+import se.gustavkarlsson.skylight.android.dagger.LATEST_NAME
 import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.models.*
 import se.gustavkarlsson.skylight.android.observers.ObservableValue

@@ -5,7 +5,7 @@ import android.widget.TextView
 import dagger.Module
 import dagger.Provides
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.dagger.Names.FRAGMENT_ROOT_NAME
+import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
 import se.gustavkarlsson.skylight.android.dagger.scopes.FragmentScope
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.ChancePresenter

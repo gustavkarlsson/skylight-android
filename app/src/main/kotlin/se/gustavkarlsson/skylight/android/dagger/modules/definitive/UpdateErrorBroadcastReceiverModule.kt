@@ -8,7 +8,7 @@ import dagger.Module
 import dagger.Provides
 import se.gustavkarlsson.skylight.android.background.RESPONSE_UPDATE_ERROR
 import se.gustavkarlsson.skylight.android.background.RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE
-import se.gustavkarlsson.skylight.android.dagger.Names.UPDATE_ERROR_NAME
+import se.gustavkarlsson.skylight.android.dagger.UPDATE_ERROR_NAME
 import se.gustavkarlsson.skylight.android.dagger.scopes.ActivityScope
 import javax.inject.Named
 

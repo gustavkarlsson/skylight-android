@@ -10,7 +10,7 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight.Companion.applicationComponent
 import se.gustavkarlsson.skylight.android.cache.SingletonCache
-import se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME
+import se.gustavkarlsson.skylight.android.dagger.LATEST_NAME
 import se.gustavkarlsson.skylight.android.models.AuroraReport
 import se.gustavkarlsson.skylight.android.notifications.NotificationHandler
 import se.gustavkarlsson.skylight.android.observers.ObservableValue

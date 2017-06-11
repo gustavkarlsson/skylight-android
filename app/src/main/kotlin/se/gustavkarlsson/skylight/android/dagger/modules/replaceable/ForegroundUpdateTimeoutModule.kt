@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import org.threeten.bp.Duration
-import se.gustavkarlsson.skylight.android.dagger.Names.FOREGROUND_UPDATE_TIMEOUT_NAME
+import se.gustavkarlsson.skylight.android.dagger.FOREGROUND_UPDATE_TIMEOUT_NAME
 import javax.inject.Named
 
 @Module

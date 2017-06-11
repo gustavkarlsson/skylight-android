@@ -13,11 +13,7 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
 import se.gustavkarlsson.skylight.android.background.RESPONSE_UPDATE_ERROR
 import se.gustavkarlsson.skylight.android.background.Updater
-import se.gustavkarlsson.skylight.android.dagger.Names.BACKGROUND_UPDATE_TIMEOUT_NAME
-import se.gustavkarlsson.skylight.android.dagger.Names.CACHED_THREAD_POOL_NAME
-import se.gustavkarlsson.skylight.android.dagger.Names.FOREGROUND_REPORT_LIFETIME_NAME
-import se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME
-import se.gustavkarlsson.skylight.android.dagger.Names.UPDATE_ERROR_NAME
+import se.gustavkarlsson.skylight.android.dagger.*
 import se.gustavkarlsson.skylight.android.dagger.components.MainActivityComponent
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ActivityModule
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator

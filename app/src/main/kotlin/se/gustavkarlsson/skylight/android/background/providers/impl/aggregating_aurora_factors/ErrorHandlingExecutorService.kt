@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.background.providers.impl.aggregating
 
 import dagger.Reusable
 import org.threeten.bp.Duration
-import se.gustavkarlsson.skylight.android.dagger.Names.CACHED_THREAD_POOL_NAME
+import se.gustavkarlsson.skylight.android.dagger.CACHED_THREAD_POOL_NAME
 import java.util.concurrent.ExecutorService
 import javax.inject.Inject
 import javax.inject.Named

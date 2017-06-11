@@ -23,8 +23,8 @@ import se.gustavkarlsson.skylight.android.background.providers.impl.openweatherm
 import se.gustavkarlsson.skylight.android.background.providers.impl.openweathermap.RetrofittedOpenWeatherMapVisibilityProvider
 import se.gustavkarlsson.skylight.android.cache.DualAuroraReportSingletonCache
 import se.gustavkarlsson.skylight.android.cache.SingletonCache
-import se.gustavkarlsson.skylight.android.dagger.Names.CACHED_THREAD_POOL_NAME
-import se.gustavkarlsson.skylight.android.dagger.Names.LAST_NOTIFIED_NAME
+import se.gustavkarlsson.skylight.android.dagger.CACHED_THREAD_POOL_NAME
+import se.gustavkarlsson.skylight.android.dagger.LAST_NOTIFIED_NAME
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ContextModule
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.DarknessModule
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.GeomagLocationModule

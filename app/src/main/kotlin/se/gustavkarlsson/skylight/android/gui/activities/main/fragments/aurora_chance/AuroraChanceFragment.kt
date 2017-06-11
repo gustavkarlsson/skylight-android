@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.dagger.Names.FRAGMENT_ROOT_NAME
-import se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME
+import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
+import se.gustavkarlsson.skylight.android.dagger.LATEST_NAME
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRootViewModule
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import se.gustavkarlsson.skylight.android.models.AuroraReport

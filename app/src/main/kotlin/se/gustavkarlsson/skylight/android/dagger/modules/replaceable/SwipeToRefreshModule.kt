@@ -7,8 +7,8 @@ import dagger.Provides
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.background.Updater
-import se.gustavkarlsson.skylight.android.dagger.Names.CACHED_THREAD_POOL_NAME
-import se.gustavkarlsson.skylight.android.dagger.Names.FOREGROUND_UPDATE_TIMEOUT_NAME
+import se.gustavkarlsson.skylight.android.dagger.CACHED_THREAD_POOL_NAME
+import se.gustavkarlsson.skylight.android.dagger.FOREGROUND_UPDATE_TIMEOUT_NAME
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ActivityModule
 import se.gustavkarlsson.skylight.android.dagger.scopes.ActivityScope
 import se.gustavkarlsson.skylight.android.gui.activities.main.SwipeToRefreshPresenter

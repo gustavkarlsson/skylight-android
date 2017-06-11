@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import dagger.Module
 import dagger.Provides
-import se.gustavkarlsson.skylight.android.dagger.Names.FRAGMENT_ROOT_NAME
+import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
 import se.gustavkarlsson.skylight.android.dagger.scopes.FragmentScope
 import javax.inject.Named
 

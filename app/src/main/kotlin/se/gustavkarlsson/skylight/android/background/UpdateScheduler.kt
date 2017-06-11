@@ -6,8 +6,8 @@ import dagger.Reusable
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import org.threeten.bp.Duration
-import se.gustavkarlsson.skylight.android.dagger.Names.UPDATE_SCHEDULER_FLEX_NAME
-import se.gustavkarlsson.skylight.android.dagger.Names.UPDATE_SCHEDULER_INTERVAL_NAME
+import se.gustavkarlsson.skylight.android.dagger.UPDATE_SCHEDULER_FLEX_NAME
+import se.gustavkarlsson.skylight.android.dagger.UPDATE_SCHEDULER_INTERVAL_NAME
 import se.gustavkarlsson.skylight.android.settings.Settings
 import javax.inject.Inject
 import javax.inject.Named

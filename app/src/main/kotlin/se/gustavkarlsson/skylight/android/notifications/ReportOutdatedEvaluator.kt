@@ -2,9 +2,9 @@ package se.gustavkarlsson.skylight.android.notifications
 
 import dagger.Reusable
 import org.threeten.bp.Clock
-import org.threeten.bp.Instant
-import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalTime.NOON
+import se.gustavkarlsson.skylight.android.extensions.now
+import se.gustavkarlsson.skylight.android.extensions.today
 import se.gustavkarlsson.skylight.android.extensions.until
 import se.gustavkarlsson.skylight.android.models.AuroraReport
 import se.gustavkarlsson.skylight.android.util.ZoneIdProvider
@@ -20,12 +20,11 @@ constructor(
 
 	fun isOutdated(report: AuroraReport): Boolean {
 		val currentZoneId = zoneIdProvider.zoneId
-		val now = Instant.now(clock)
-		val today = LocalDate.now(clock)
+		val now = clock.now
+		val today = clock.today
 		val noonToday = NOON.atDate(today).atZone(currentZoneId).toInstant()
 		val reportTime = report.timestamp
 		val duration = reportTime until now
-		// TODO replace with arithmetic
-		return duration.toHours() > 12 || now.isAfter(noonToday) && reportTime.isBefore(noonToday)
+		return duration.toHours() > 12 || now > noonToday && reportTime < noonToday
 	}
 }
