@@ -12,6 +12,7 @@ import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.extensions.until
 import java.util.*
 
+// TODO separate presentation and timer
 class TimeSinceUpdatePresenter(
 		private val timeSinceUpdateTextView: TextView,
 		private val updateTimeResolution: Duration,

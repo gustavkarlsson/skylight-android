@@ -16,7 +16,6 @@ import se.gustavkarlsson.skylight.android.observers.ValueObserver
 import javax.inject.Inject
 import javax.inject.Named
 
-// TODO separate presentation and timer
 class AuroraChanceFragment : Fragment(), ValueObserver<AuroraReport> {
 
     @Inject
