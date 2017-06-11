@@ -4,7 +4,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import org.jetbrains.anko.info
 import se.gustavkarlsson.skylight.android.background.providers.GeomagActivityProvider
-import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity
+import se.gustavkarlsson.skylight.android.models.GeomagActivity
 import java.util.concurrent.Callable
 import java.util.concurrent.TimeoutException
 

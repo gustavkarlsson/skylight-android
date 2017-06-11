@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.background.providers.impl
 
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.background.providers.GeomagLocationProvider
-import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation
+import se.gustavkarlsson.skylight.android.models.GeomagLocation
 import java.lang.Math.*
 import javax.inject.Inject
 

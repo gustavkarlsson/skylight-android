@@ -10,7 +10,7 @@ import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.ChanceToColorConverter
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.VisibilityPresenter
-import se.gustavkarlsson.skylight.android.models.factors.Visibility
+import se.gustavkarlsson.skylight.android.models.Visibility
 import javax.inject.Named
 
 @Module

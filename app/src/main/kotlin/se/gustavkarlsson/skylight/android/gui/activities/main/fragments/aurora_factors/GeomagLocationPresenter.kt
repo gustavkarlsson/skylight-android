@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_
 
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation
+import se.gustavkarlsson.skylight.android.models.GeomagLocation
 import java.util.*
 
 class GeomagLocationPresenter(factorView: AuroraFactorView, chanceEvaluator: ChanceEvaluator<GeomagLocation>, colorConverter: ChanceToColorConverter) : AbstractAuroraFactorPresenter<GeomagLocation>(factorView, chanceEvaluator, colorConverter) {

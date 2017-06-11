@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_
 
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity
+import se.gustavkarlsson.skylight.android.models.GeomagActivity
 
 class GeomagActivityPresenter(
 		factorView: AuroraFactorView,

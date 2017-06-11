@@ -1,11 +1,7 @@
 package se.gustavkarlsson.skylight.android.evaluation
 
 import dagger.Reusable
-import se.gustavkarlsson.skylight.android.models.AuroraReport
-import se.gustavkarlsson.skylight.android.models.factors.Darkness
-import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity
-import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation
-import se.gustavkarlsson.skylight.android.models.factors.Visibility
+import se.gustavkarlsson.skylight.android.models.*
 import javax.inject.Inject
 
 @Reusable

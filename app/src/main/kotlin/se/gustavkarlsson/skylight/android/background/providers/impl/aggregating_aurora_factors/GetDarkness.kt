@@ -6,7 +6,7 @@ import org.jetbrains.anko.debug
 import org.jetbrains.anko.info
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.background.providers.DarknessProvider
-import se.gustavkarlsson.skylight.android.models.factors.Darkness
+import se.gustavkarlsson.skylight.android.models.Darkness
 import java.util.concurrent.Callable
 import java.util.concurrent.TimeoutException
 

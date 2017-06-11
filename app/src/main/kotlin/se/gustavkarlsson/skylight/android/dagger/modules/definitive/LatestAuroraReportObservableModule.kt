@@ -6,12 +6,7 @@ import org.threeten.bp.Clock
 import se.gustavkarlsson.skylight.android.cache.SingletonCache
 import se.gustavkarlsson.skylight.android.dagger.Names.LATEST_NAME
 import se.gustavkarlsson.skylight.android.extensions.now
-import se.gustavkarlsson.skylight.android.models.AuroraFactors
-import se.gustavkarlsson.skylight.android.models.AuroraReport
-import se.gustavkarlsson.skylight.android.models.factors.Darkness
-import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity
-import se.gustavkarlsson.skylight.android.models.factors.GeomagLocation
-import se.gustavkarlsson.skylight.android.models.factors.Visibility
+import se.gustavkarlsson.skylight.android.models.*
 import se.gustavkarlsson.skylight.android.observers.ObservableValue
 import javax.inject.Named
 import javax.inject.Singleton
@@ -26,11 +21,11 @@ class LatestAuroraReportObservableModule {
         var report = cache.value
         if (report == null) {
             val factors = AuroraFactors(
-                    GeomagActivity(null),
-                    GeomagLocation(null),
-                    Darkness(null),
-                    Visibility(null)
-            )
+					GeomagActivity(null),
+					GeomagLocation(null),
+					Darkness(null),
+					Visibility(null)
+			)
             report = AuroraReport(clock.now, null, factors)
         }
         return ObservableValue<AuroraReport>(report)

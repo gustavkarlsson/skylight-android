@@ -10,7 +10,7 @@ import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.ChanceToColorConverter
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.GeomagActivityPresenter
-import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity
+import se.gustavkarlsson.skylight.android.models.GeomagActivity
 import javax.inject.Named
 
 @Module

@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.background.providers
 
-import se.gustavkarlsson.skylight.android.models.factors.GeomagActivity
+import se.gustavkarlsson.skylight.android.models.GeomagActivity
 
 interface GeomagActivityProvider {
     fun getGeomagActivity(): GeomagActivity

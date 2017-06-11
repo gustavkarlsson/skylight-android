@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.evaluation
 
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.evaluation.Chance.Companion.UNKNOWN
-import se.gustavkarlsson.skylight.android.models.factors.Visibility
+import se.gustavkarlsson.skylight.android.models.Visibility
 import javax.inject.Inject
 
 @Reusable
