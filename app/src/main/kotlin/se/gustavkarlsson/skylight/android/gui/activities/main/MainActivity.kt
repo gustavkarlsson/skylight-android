@@ -1,12 +1,12 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main
 
 import android.content.BroadcastReceiver
-import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.view.Menu
 import android.view.MenuItem
+import org.jetbrains.anko.startActivity
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
@@ -82,12 +82,11 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_settings -> {
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
+				startActivity<SettingsActivity>()
                 return true
             }
+			else -> return super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     public override fun onStart() {
@@ -105,11 +104,10 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
         }
     }
 
-	// TODO use operator extension function arithmetic
     private fun needsUpdate(report: AuroraReport): Boolean {
         val hasExpired = report.timestamp until clock.now > foregroundReportLifetime
-        val isUnknown = !auroraChanceEvaluator.evaluate(report).isKnown
-        return hasExpired || isUnknown
+		val chance = auroraChanceEvaluator.evaluate(report)
+        return hasExpired || !chance.isKnown
     }
 
     private fun updateInBackground() {

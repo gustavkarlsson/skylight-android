@@ -43,15 +43,17 @@ constructor(
     private fun sendLocationPermissionMissingNotification(notificationManager: NotificationManager) {
         val context = context
 
-        val notification = NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.app_logo_small)
-                .setContentTitle(context.getString(R.string.error_aurora_notifications_disabled_title))
-                .setContentText(context.getString(R.string.error_aurora_notifications_disabled_content))
-                .setCategory(NotificationCompat.CATEGORY_ERROR)
-                .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setDefaults(NotificationCompat.DEFAULT_ALL)
-                .build()
+		@Suppress("UsePropertyAccessSyntax")
+		val notification = NotificationCompat.Builder(context).run {
+			setSmallIcon(R.drawable.app_logo_small)
+			setContentTitle(context.getString(R.string.error_aurora_notifications_disabled_title))
+			setContentText(context.getString(R.string.error_aurora_notifications_disabled_content))
+			setCategory(NotificationCompat.CATEGORY_ERROR)
+			setAutoCancel(true)
+			setPriority(NotificationCompat.PRIORITY_HIGH)
+			setDefaults(NotificationCompat.DEFAULT_ALL)
+			build()
+		}
 
         notificationManager.notify(24656, notification)
     }

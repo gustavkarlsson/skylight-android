@@ -1,12 +1,11 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors
 
 
-import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.ShapeDrawable
-import android.support.v7.app.AlertDialog
-import android.view.View
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.okButton
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.evaluation.Chance
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
@@ -17,12 +16,15 @@ abstract class AbstractAuroraFactorPresenter<in T>(
 		private val colorConverter: ChanceToColorConverter
 ) {
 
-	// TODO fix unsafe use of abstract methods
     init {
-        val context = factorView.context
-        val fullTitle = context.getString(fullTitleResourceId)
-        val description = context.getString(descriptionResourceId)
-        this.factorView.setOnClickListener(PopupDescriptionClickListener(context, fullTitle, description))
+        this.factorView.setOnClickListener {
+			factorView.context.alert {
+				iconResource = android.R.drawable.ic_dialog_info
+				title = ctx.getString(fullTitleResourceId)
+				message = ctx.getString(descriptionResourceId)
+				okButton { it.dismiss() }
+			}.show()
+		}
     }
 
     fun update(factor: T) {
@@ -51,29 +53,4 @@ abstract class AbstractAuroraFactorPresenter<in T>(
     internal abstract val descriptionResourceId: Int
 
     internal abstract fun evaluateText(factor: T): String
-}
-
-private class PopupDescriptionClickListener(
-		context: Context,
-		title: String,
-		description: String
-) : View.OnClickListener {
-
-	private val dialog: AlertDialog
-
-	init {
-		dialog = buildDialog(context, title, description)
-	}
-
-	private fun buildDialog(context: Context, title: String, description: String): AlertDialog {
-		return AlertDialog.Builder(context)
-				.setIcon(android.R.drawable.ic_dialog_info)
-				.setTitle(title)
-				.setMessage(description)
-				.setPositiveButton(android.R.string.yes) { dialog, _ -> dialog.dismiss() }
-				.setCancelable(true)
-				.create()
-	}
-
-	override fun onClick(v: View) = dialog.show()
 }
