@@ -26,15 +26,9 @@ class GetDarkness(
         return darkness
     }
 
-    override fun handleInterruptedException(e: InterruptedException): Darkness {
-        return Darkness()
-    }
+    override fun handleInterruptedException(e: InterruptedException) = Darkness()
 
-    override fun handleThrowable(e: Throwable): Darkness {
-        return Darkness()
-    }
+    override fun handleThrowable(e: Throwable) = Darkness()
 
-    override fun handleTimeoutException(e: TimeoutException): Darkness {
-        return Darkness()
-    }
+    override fun handleTimeoutException(e: TimeoutException) = Darkness()
 }

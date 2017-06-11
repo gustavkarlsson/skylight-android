@@ -49,8 +49,7 @@ class AuroraReportProviderImpl(
 		} catch (e: TimeoutException) {
 			warn("Getting address timed out after ${timeout.toMillis()}ms", e)
 		} catch (e: ExecutionException) {
-			val cause = e.cause
-			warn("An unexpected exception occurred while", cause)
+			warn("An unexpected exception occurred while", e.cause)
 		} catch (e: InterruptedException) {
 			warn("An unexpected exception occurred", e)
 		} catch (e: CancellationException) {

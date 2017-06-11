@@ -24,15 +24,9 @@ class GetVisibility(
         return visibility
     }
 
-    override fun handleInterruptedException(e: InterruptedException): Visibility {
-        return Visibility()
-    }
+    override fun handleInterruptedException(e: InterruptedException) = Visibility()
 
-    override fun handleThrowable(e: Throwable): Visibility {
-        return Visibility()
-    }
+    override fun handleThrowable(e: Throwable) = Visibility()
 
-    override fun handleTimeoutException(e: TimeoutException): Visibility {
-        return Visibility()
-    }
+    override fun handleTimeoutException(e: TimeoutException) = Visibility()
 }

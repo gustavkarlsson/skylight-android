@@ -24,15 +24,9 @@ class GetGeomagLocation(
         return geomagLocation
     }
 
-    override fun handleInterruptedException(e: InterruptedException): GeomagLocation {
-        return GeomagLocation()
-    }
+    override fun handleInterruptedException(e: InterruptedException) = GeomagLocation()
 
-    override fun handleThrowable(e: Throwable): GeomagLocation {
-        return GeomagLocation()
-    }
+    override fun handleThrowable(e: Throwable) = GeomagLocation()
 
-    override fun handleTimeoutException(e: TimeoutException): GeomagLocation {
-        return GeomagLocation()
-    }
+    override fun handleTimeoutException(e: TimeoutException) = GeomagLocation()
 }

@@ -22,15 +22,9 @@ class GetGeomagActivity(
         return geomagActivity
     }
 
-    override fun handleInterruptedException(e: InterruptedException): GeomagActivity {
-        return GeomagActivity()
-    }
+    override fun handleInterruptedException(e: InterruptedException) = GeomagActivity()
 
-    override fun handleThrowable(e: Throwable): GeomagActivity {
-        return GeomagActivity()
-    }
+    override fun handleThrowable(e: Throwable) = GeomagActivity()
 
-    override fun handleTimeoutException(e: TimeoutException): GeomagActivity {
-        return GeomagActivity()
-    }
+    override fun handleTimeoutException(e: TimeoutException) = GeomagActivity()
 }
