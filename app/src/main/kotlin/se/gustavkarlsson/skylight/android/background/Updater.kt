@@ -35,9 +35,12 @@ constructor(
 
 	fun update(timeout: Duration): Boolean {
 		val provider = applicationComponent.getAuroraReportProvider()
-		val report: AuroraReport
 		try {
-			report = provider.getReport(timeout)
+			val report = provider.getReport(timeout)
+			latestReportCache.value = report
+			latestAuroraReport.value = report
+			notificationHandler.handle(report)
+			return true
 		} catch (e: UserFriendlyException) {
 			val errorMessage = context.getString(e.stringResourceId)
 			error("A user friendly exception occurred: $errorMessage", e)
@@ -49,11 +52,6 @@ constructor(
 			broadcastError(errorMessage)
 			return false
 		}
-
-		latestReportCache.value = report
-		latestAuroraReport.value = report
-		notificationHandler.handle(report)
-		return true
 	}
 
 	private fun broadcastError(message: String) {
