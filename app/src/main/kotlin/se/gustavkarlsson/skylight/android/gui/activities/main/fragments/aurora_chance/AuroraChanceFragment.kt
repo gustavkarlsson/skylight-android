@@ -26,10 +26,10 @@ class AuroraChanceFragment : Fragment(), ValueObserver<AuroraReport> {
 	lateinit var locationPresenter: LocationPresenter
 
     @Inject
-	lateinit var timeSinceUpdatePresenter: TimeSinceUpdatePresenter
-
-    @Inject
 	lateinit var chancePresenter: ChancePresenter
+
+	@Inject
+	lateinit var timeSinceUpdateController: TimeSinceUpdateController
 
     @Inject
     @field:Named(LATEST_NAME)
@@ -45,21 +45,21 @@ class AuroraChanceFragment : Fragment(), ValueObserver<AuroraReport> {
     override fun onStart() {
         super.onStart()
         latestAuroraReport.addListener(this)
-        present(latestAuroraReport.value)
-        timeSinceUpdatePresenter.start()
+        update(latestAuroraReport.value)
+        timeSinceUpdateController.start()
     }
 
-    override fun valueChanged(newData: AuroraReport) = present(newData)
+    override fun valueChanged(newData: AuroraReport) = update(newData)
 
-    private fun present(report: AuroraReport) {
+    private fun update(report: AuroraReport) {
         locationPresenter.present(report.address)
-        timeSinceUpdatePresenter.present(report.timestamp)
         chancePresenter.present(report)
+		timeSinceUpdateController.update(report.timestamp)
     }
 
     override fun onStop() {
         latestAuroraReport.removeListener(this)
-        timeSinceUpdatePresenter.stop()
+        timeSinceUpdateController.stop()
         super.onStop()
     }
 }

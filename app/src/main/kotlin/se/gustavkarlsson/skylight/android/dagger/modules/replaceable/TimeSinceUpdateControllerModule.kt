@@ -9,20 +9,20 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
 import se.gustavkarlsson.skylight.android.dagger.scopes.FragmentScope
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.TimeSinceUpdatePresenter
+import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.TimeSinceUpdateController
 import javax.inject.Named
 
 @Module
-class TimeSinceUpdatePresenterModule {
+class TimeSinceUpdateControllerModule {
 
     // Published
     @Provides
     @FragmentScope
-    fun provideTimeSinceUpdatePresenter(
+    fun provideTimeSinceUpdateController(
 			@Named(FRAGMENT_ROOT_NAME) rootView: View,
 			clock: Clock
-	): TimeSinceUpdatePresenter {
+	): TimeSinceUpdateController {
         val timeSinceUpdateView = rootView.findViewById(R.id.time_since_update) as TextView
-        return TimeSinceUpdatePresenter(timeSinceUpdateView, Duration.ofMinutes(1), clock)
+        return TimeSinceUpdateController(Duration.ofMinutes(1), timeSinceUpdateView, clock)
     }
 }

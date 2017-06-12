@@ -48,12 +48,12 @@ class AuroraFactorFragment : Fragment(), ValueObserver<AuroraReport> {
     override fun onStart() {
         super.onStart()
         latestAuroraReport.addListener(this)
-        present(latestAuroraReport.value)
+        update(latestAuroraReport.value)
     }
 
-    override fun valueChanged(newData: AuroraReport) = present(newData)
+    override fun valueChanged(newData: AuroraReport) = update(newData)
 
-    private fun present(report: AuroraReport) {
+    private fun update(report: AuroraReport) {
         val factors = report.factors
         geomagActivityPresenter.present(factors.geomagActivity)
         geomagLocationPresenter.present(factors.geomagLocation)
