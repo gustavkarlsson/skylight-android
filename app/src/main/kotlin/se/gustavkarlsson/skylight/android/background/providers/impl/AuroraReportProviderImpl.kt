@@ -30,12 +30,11 @@ class AuroraReportProviderImpl(
 ) : AuroraReportProvider, AnkoLogger {
 
     override fun getReport(timeout: Duration): AuroraReport {
+		val timeoutTimer = CountdownTimer(timeout, clock)
         val networkInfo = connectivityManager.activeNetworkInfo
         if (networkInfo == null || !networkInfo.isConnected) {
             throw UserFriendlyException(R.string.error_no_internet)
         }
-
-        val timeoutTimer = CountdownTimer(timeout, clock)
         val location = locationProvider.getLocation(timeoutTimer.remainingTime)
         val addressFuture = asyncAddressProvider.execute(location.latitude, location.longitude)
         val auroraFactors = auroraFactorsProvider.getAuroraFactors(location, timeoutTimer.remainingTime)
