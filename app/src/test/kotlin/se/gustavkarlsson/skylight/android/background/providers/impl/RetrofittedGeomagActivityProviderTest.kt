@@ -42,6 +42,7 @@ class RetrofittedGeomagActivityProviderTest {
 						.code(statusCode)
 						.protocol(Protocol.HTTP_1_0)
 						.body(body)
+						.message("ok")
 						.build())
 		return call
 	}

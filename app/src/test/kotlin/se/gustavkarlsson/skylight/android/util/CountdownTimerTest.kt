@@ -11,7 +11,6 @@ import org.mockito.junit.MockitoJUnit
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.extensions.now
 
 class CountdownTimerTest {
 
@@ -25,7 +24,7 @@ class CountdownTimerTest {
 	@Before
 	fun setUp() {
 		MockitoAnnotations.initMocks(this)
-		`when`(clock.now).thenReturn(Instant.ofEpochMilli(1000))
+		`when`(clock.instant()).thenReturn(Instant.ofEpochMilli(1000))
 	}
 
 	@Test
@@ -40,7 +39,7 @@ class CountdownTimerTest {
 	@Test
 	fun remainingChangesWhenTimePasses() {
 		val timer = CountdownTimer(Duration.ofMillis(200), clock)
-		`when`(clock.now).thenReturn(Instant.ofEpochMilli(1100))
+		`when`(clock.instant()).thenReturn(Instant.ofEpochMilli(1100))
 
 		val remainingTime = timer.remainingTime
 

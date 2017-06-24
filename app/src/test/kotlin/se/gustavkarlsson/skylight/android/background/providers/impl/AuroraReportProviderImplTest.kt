@@ -66,9 +66,9 @@ class AuroraReportProviderImplTest {
 		auroraReportProvider = AuroraReportProviderImpl(connectivityManager, locationProvider, auroraFactorsProvider, asyncAddressProvider, clock)
 	}
 
-	@Test(timeout = 100)
+	@Test(timeout = 200)
 	fun completesWithinTimeout() {
-		val report = auroraReportProvider.getReport(Duration.ofMillis(80))
+		val report = auroraReportProvider.getReport(Duration.ofMillis(100))
 		assertThat(report).isNotNull()
 	}
 
