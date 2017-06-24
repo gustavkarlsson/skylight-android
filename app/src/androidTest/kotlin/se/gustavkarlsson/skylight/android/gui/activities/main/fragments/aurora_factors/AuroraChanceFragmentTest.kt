@@ -33,6 +33,6 @@ class AuroraChanceFragmentTest {
 
     @Test
     fun timeSinceUpdateTextShown() {
-        onView(withId(R.id.time_since_update)).check(matches(isDisplayed()))
+        onView(withId(R.id.timeSinceUpdate)).check(matches(isDisplayed()))
     }
 }

@@ -7,7 +7,7 @@
 	tools:context=".gui.activities.main.MainActivity">
 
 	<android.support.v4.widget.SwipeRefreshLayout
-		android:id="@+id/swipe_refresh_layout"
+		android:id="@+id/swipeRefreshLayout"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
 
@@ -16,10 +16,10 @@
 			android:layout_height="match_parent">
 
 			<fragment
-				android:id="@+id/fragment_aurora_chance"
+				android:id="@+id/auroraChanceFragment"
 				android:name="se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceFragment"
 				custom:layout_constraintTop_toTopOf="parent"
-				custom:layout_constraintBottom_toTopOf="@+id/fragment_aurora_factors"
+				custom:layout_constraintBottom_toTopOf="@+id/auroraFactorsFragment"
 				custom:layout_constraintLeft_toLeftOf="parent"
 				custom:layout_constraintRight_toRightOf="parent"
 				custom:layout_constraintVertical_weight="2"
@@ -28,9 +28,9 @@
 				tools:layout="@layout/fragment_aurora_chance" />
 
 			<fragment
-				android:id="@+id/fragment_aurora_factors"
+				android:id="@+id/auroraFactorsFragment"
 				android:name="se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorFragment"
-				custom:layout_constraintTop_toBottomOf="@+id/fragment_aurora_chance"
+				custom:layout_constraintTop_toBottomOf="@+id/auroraChanceFragment"
 				custom:layout_constraintBottom_toBottomOf="parent"
 				custom:layout_constraintLeft_toLeftOf="parent"
 				custom:layout_constraintRight_toRightOf="parent"

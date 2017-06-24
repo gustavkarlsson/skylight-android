@@ -23,42 +23,42 @@ class AuroraFactorFragmentTest {
 
     @Test
     fun geomagActivityFactorViewShown() {
-        onView(withId(R.id.aurora_factor_geomag_activity)).check(matches(isDisplayed()))
+        onView(withId(R.id.geomagActivity)).check(matches(isDisplayed()))
     }
 
     @Test
     fun geomagLocationFactorViewShown() {
-        onView(withId(R.id.aurora_factor_geomag_location)).check(matches(isDisplayed()))
+        onView(withId(R.id.gGeomagLocation)).check(matches(isDisplayed()))
     }
 
     @Test
     fun visibilityFactorViewShown() {
-        onView(withId(R.id.aurora_factor_visibility)).check(matches(isDisplayed()))
+        onView(withId(R.id.visibility)).check(matches(isDisplayed()))
     }
 
     @Test
     fun darknessFactorViewShown() {
-        onView(withId(R.id.aurora_factor_darkness)).check(matches(isDisplayed()))
+        onView(withId(R.id.darkness)).check(matches(isDisplayed()))
     }
 
     @Test
     fun clickGeomagActivity_detailViewShown() {
-        whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_geomag_activity, R.string.factor_geomag_activity_title_full, R.string.factor_geomag_activity_desc)
+        whenFactorViewClickedDetailViewOpens(R.id.geomagActivity, R.string.factor_geomag_activity_title_full, R.string.factor_geomag_activity_desc)
     }
 
     @Test
     fun clickGeomagLocation_detailViewShown() {
-        whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_geomag_location, R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc)
+        whenFactorViewClickedDetailViewOpens(R.id.gGeomagLocation, R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc)
     }
 
     @Test
     fun clickVisibility_detailViewShown() {
-        whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_visibility, R.string.factor_visibility_title_full, R.string.factor_visibility_desc)
+        whenFactorViewClickedDetailViewOpens(R.id.visibility, R.string.factor_visibility_title_full, R.string.factor_visibility_desc)
     }
 
     @Test
     fun clickDarkness_detailViewShown() {
-        whenFactorViewClickedDetailViewOpens(R.id.aurora_factor_darkness, R.string.factor_darkness_title_full, R.string.factor_darkness_desc)
+        whenFactorViewClickedDetailViewOpens(R.id.darkness, R.string.factor_darkness_title_full, R.string.factor_darkness_desc)
     }
 
     private fun whenFactorViewClickedDetailViewOpens(viewId: Int, titleString: Int, descriptionString: Int) {

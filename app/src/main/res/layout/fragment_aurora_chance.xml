@@ -28,7 +28,7 @@
 		tools:text="Medium Chance" />
 
 	<TextView
-		android:id="@+id/time_since_update"
+		android:id="@+id/timeSinceUpdate"
 		custom:layout_constraintTop_toBottomOf="@+id/chance"
 		custom:layout_constraintRight_toRightOf="@+id/chance"
 		android:layout_width="wrap_content"

@@ -24,7 +24,7 @@ class DarknessPresenterModule {
 			chanceEvaluator: ChanceEvaluator<Darkness>,
 			chanceToColorConverter: ChanceToColorConverter
 	): DarknessPresenter {
-        val darknessView = rootView.findViewById(R.id.aurora_factor_darkness) as AuroraFactorView
+        val darknessView = rootView.findViewById(R.id.darkness) as AuroraFactorView
         return DarknessPresenter(darknessView, chanceEvaluator, chanceToColorConverter)
     }
 }

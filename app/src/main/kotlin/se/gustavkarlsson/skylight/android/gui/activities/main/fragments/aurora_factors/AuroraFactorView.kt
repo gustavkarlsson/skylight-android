@@ -39,7 +39,7 @@ class AuroraFactorView : LinearLayout {
                 auroraFactorViewAttributes.recycle()
             }
         }
-		factorValueView = aurora_factor_value
+		factorValueView = auroraFactorValue
         // Used by IDE to display something
         if (isInEditMode) {
 			factorValueView.text = "value"
@@ -47,7 +47,7 @@ class AuroraFactorView : LinearLayout {
     }
 
     private fun setCompactTitle(text: CharSequence) {
-		aurora_factor_title_compact.text = text
+		auroraFactorTitleCompact.text = text
     }
 
     private fun setBadgeIcon(icon: Drawable) {

@@ -24,7 +24,7 @@ class SwipeToRefreshModule {
 			updater: Updater,
 			@Named(FOREGROUND_UPDATE_TIMEOUT_NAME) timeout: Duration
 	): SwipeToRefreshPresenter {
-        val swipeRefreshLayout = activity.findViewById(R.id.swipe_refresh_layout) as SwipeRefreshLayout
+        val swipeRefreshLayout = activity.findViewById(R.id.swipeRefreshLayout) as SwipeRefreshLayout
         return SwipeToRefreshPresenter(swipeRefreshLayout, updater, timeout)
     }
 }

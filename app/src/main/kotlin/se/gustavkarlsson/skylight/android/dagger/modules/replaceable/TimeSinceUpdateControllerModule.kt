@@ -22,7 +22,7 @@ class TimeSinceUpdateControllerModule {
 			@Named(FRAGMENT_ROOT_NAME) rootView: View,
 			clock: Clock
 	): TimeSinceUpdateController {
-        val timeSinceUpdateView = rootView.findViewById(R.id.time_since_update) as TextView
+        val timeSinceUpdateView = rootView.findViewById(R.id.timeSinceUpdate) as TextView
         return TimeSinceUpdateController(Duration.ofMinutes(1), timeSinceUpdateView, clock)
     }
 }

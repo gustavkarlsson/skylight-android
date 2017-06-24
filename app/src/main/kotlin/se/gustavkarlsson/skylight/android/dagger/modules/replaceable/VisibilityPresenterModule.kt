@@ -24,7 +24,7 @@ class VisibilityPresenterModule {
 			chanceEvaluator: ChanceEvaluator<Visibility>,
 			chanceToColorConverter: ChanceToColorConverter
 	): VisibilityPresenter {
-        val geomagActivityView = rootView.findViewById(R.id.aurora_factor_visibility) as AuroraFactorView
+        val geomagActivityView = rootView.findViewById(R.id.visibility) as AuroraFactorView
         return VisibilityPresenter(geomagActivityView, chanceEvaluator, chanceToColorConverter)
     }
 }
