@@ -23,9 +23,9 @@ constructor(
             val response = service.get().execute()
 			debug("Got response: ${response.code()}, message: ${response.raw()}")
             if (!response.isSuccessful) {
-                throw UserFriendlyException(R.string.error_could_not_determine_geomag_activity, response.errorBody().string())
+                throw UserFriendlyException(R.string.error_could_not_determine_geomag_activity, response.errorBody()!!.string())
             }
-            val kpIndex = response.body()
+            val kpIndex = response.body()!!
             return GeomagActivity(kpIndex.value)
         } catch (e: IOException) {
             throw UserFriendlyException(R.string.error_could_not_determine_geomag_activity, e)

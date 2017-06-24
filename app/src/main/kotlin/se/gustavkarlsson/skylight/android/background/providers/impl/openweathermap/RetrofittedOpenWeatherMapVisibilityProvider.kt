@@ -18,9 +18,9 @@ class RetrofittedOpenWeatherMapVisibilityProvider constructor(
             val response = service.get(latitude, longitude, "json", appId).execute()
             debug("Got response: ${response.code()}, message: ${response.raw()}")
             if (!response.isSuccessful) {
-                throw UserFriendlyException(R.string.error_could_not_determine_visibility, response.errorBody().string())
+                throw UserFriendlyException(R.string.error_could_not_determine_visibility, response.errorBody()!!.string())
             }
-            val (clouds) = response.body()
+            val (clouds) = response.body()!!
             return Visibility(clouds.percentage)
         } catch (e: IOException) {
             throw UserFriendlyException(R.string.error_could_not_determine_visibility, e)

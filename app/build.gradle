@@ -68,9 +68,9 @@ gradle.projectsEvaluated {
 
 dependencies {
 	ext {
-		retrofit_version = "2.2.0"
-		dagger_version = "2.10"
-		google_play_services_version = "10.2.4"
+		retrofit_version = "2.3.0"
+		dagger_version = "2.11"
+		google_play_services_version = "11.0.1"
 		android_support_version = "25.3.1"
 		anko_version = "0.10.1"
 	}
@@ -81,7 +81,7 @@ dependencies {
 	compile "com.google.android.gms:play-services-location:$google_play_services_version"
 	compile "com.google.android.gms:play-services-gcm:$google_play_services_version"
 
-	compile "com.evernote:android-job:1.1.10"
+	compile "com.evernote:android-job:1.1.11"
 	compile "com.github.gustavkarlsson:aurora-notifier-common:aurora-notifier-common-1.5.0"
 	compile "net.e175.klaus:solarpositioning:0.0.9"
 	compile "com.vincentbrison.openlibraries.android:dualcache:3.1.1"
@@ -103,9 +103,9 @@ dependencies {
 	// Testing
 	testCompile "org.robolectric:robolectric:3.3.2"
 	testCompile "junit:junit:4.12"
-	testCompile "org.mockito:mockito-core:2.8.9"
+	testCompile "org.mockito:mockito-core:2.8.47"
 	testCompile "commons-io:commons-io:2.4"
-	testCompile "org.assertj:assertj-core:2.5.0"
+	testCompile "org.assertj:assertj-core:3.8.0"
 
 	androidTestCompile "com.android.support:support-annotations:$android_support_version"
 	androidTestCompile "com.android.support.test:runner:0.5"
