@@ -54,7 +54,7 @@ constructor(
 		}
 	}
 
-	// TODO replace with http://square.github.io/otto/
+	// TODO replace with RxJava/RxAndroid
 	private fun broadcastError(message: String) {
 		val intent = Intent(RESPONSE_UPDATE_ERROR)
 		intent.putExtra(RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE, message)
