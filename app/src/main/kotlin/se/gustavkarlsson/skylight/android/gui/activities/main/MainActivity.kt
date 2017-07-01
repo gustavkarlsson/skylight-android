@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.view.Menu
 import android.view.MenuItem
+import io.reactivex.Observable
 import org.jetbrains.anko.startActivity
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
@@ -22,7 +23,6 @@ import se.gustavkarlsson.skylight.android.extensions.until
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
 import se.gustavkarlsson.skylight.android.models.AuroraReport
-import se.gustavkarlsson.skylight.android.observers.ObservableValue
 import java.util.concurrent.ExecutorService
 import javax.inject.Inject
 import javax.inject.Named
@@ -43,7 +43,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 
     @Inject
     @field:Named(LATEST_NAME)
-	lateinit var latestAuroraReport: ObservableValue<AuroraReport>
+	lateinit var latestAuroraReport: Observable<AuroraReport>
 
     @Inject
 	lateinit var auroraChanceEvaluator: ChanceEvaluator<AuroraReport>
@@ -95,7 +95,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 
     override fun onRequirementsMet() {
         swipeToRefreshPresenter.enable()
-        val latestReport = latestAuroraReport.value
+        val latestReport = latestAuroraReport.blockingNext().first()
         if (needsUpdate(latestReport)) {
             updateInBackground()
         }

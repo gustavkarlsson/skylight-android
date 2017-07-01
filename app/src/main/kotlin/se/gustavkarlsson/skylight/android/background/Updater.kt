@@ -4,16 +4,15 @@ import android.content.Context
 import android.content.Intent
 import android.support.v4.content.LocalBroadcastManager
 import dagger.Reusable
+import io.reactivex.subjects.Subject
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.error
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight.Companion.applicationComponent
-import se.gustavkarlsson.skylight.android.cache.SingletonCache
 import se.gustavkarlsson.skylight.android.dagger.LATEST_NAME
 import se.gustavkarlsson.skylight.android.models.AuroraReport
 import se.gustavkarlsson.skylight.android.notifications.NotificationHandler
-import se.gustavkarlsson.skylight.android.observers.ObservableValue
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import javax.inject.Inject
 import javax.inject.Named
@@ -27,18 +26,16 @@ class Updater
 @Inject
 constructor(
 		private val context: Context,
-		@param:Named(LATEST_NAME) private val latestReportCache: SingletonCache<AuroraReport>,
 		private val broadcastManager: LocalBroadcastManager,
 		private val notificationHandler: NotificationHandler,
-		@param:Named(LATEST_NAME) private val latestAuroraReport: ObservableValue<AuroraReport>
+		@param:Named(LATEST_NAME) private val latestAuroraReportSubject: Subject<AuroraReport>
 ) : AnkoLogger {
 
 	fun update(timeout: Duration): Boolean {
 		val provider = applicationComponent.getAuroraReportProvider()
 		try {
 			val report = provider.getReport(timeout)
-			latestReportCache.value = report
-			latestAuroraReport.value = report
+			latestAuroraReportSubject.onNext(report)
 			notificationHandler.handle(report)
 			return true
 		} catch (e: UserFriendlyException) {

@@ -5,18 +5,18 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
 import se.gustavkarlsson.skylight.android.dagger.LATEST_NAME
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRootViewModule
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import se.gustavkarlsson.skylight.android.models.AuroraReport
-import se.gustavkarlsson.skylight.android.observers.ObservableValue
-import se.gustavkarlsson.skylight.android.observers.ValueObserver
 import javax.inject.Inject
 import javax.inject.Named
 
-class AuroraChanceFragment : Fragment(), ValueObserver<AuroraReport> {
+class AuroraChanceFragment : Fragment() {
 
     @Inject
     @field:Named(FRAGMENT_ROOT_NAME)
@@ -33,7 +33,9 @@ class AuroraChanceFragment : Fragment(), ValueObserver<AuroraReport> {
 
     @Inject
     @field:Named(LATEST_NAME)
-	lateinit var latestAuroraReport: ObservableValue<AuroraReport>
+	lateinit var latestAuroraReport: Observable<AuroraReport>
+
+	private var auroraSubscription: Disposable? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         (activity as MainActivity).component
@@ -44,12 +46,9 @@ class AuroraChanceFragment : Fragment(), ValueObserver<AuroraReport> {
 
     override fun onStart() {
         super.onStart()
-        latestAuroraReport.addListener(this)
-        update(latestAuroraReport.value)
+		auroraSubscription = latestAuroraReport.subscribe { update(it) }
         timeSinceUpdateController.start()
     }
-
-    override fun valueChanged(newData: AuroraReport) = update(newData)
 
     private fun update(report: AuroraReport) {
         locationPresenter.present(report.address)
@@ -58,7 +57,7 @@ class AuroraChanceFragment : Fragment(), ValueObserver<AuroraReport> {
     }
 
     override fun onStop() {
-        latestAuroraReport.removeListener(this)
+		auroraSubscription?.dispose()
         timeSinceUpdateController.stop()
         super.onStop()
     }
