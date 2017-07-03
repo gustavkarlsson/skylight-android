@@ -8,6 +8,7 @@ import se.gustavkarlsson.skylight.android.background.providers.AuroraReportProvi
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ActivityModule
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.EvaluationModule
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.LatestAuroraReportObservableModule
+import se.gustavkarlsson.skylight.android.dagger.modules.definitive.UserFriendlyExceptionObservableModule
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.*
 import javax.inject.Singleton
 
@@ -17,6 +18,7 @@ import javax.inject.Singleton
 		AuroraReportModule::class,
 		ClockModule::class,
 		LatestAuroraReportObservableModule::class,
+		UserFriendlyExceptionObservableModule::class,
 		BackgroundUpdateTimeoutModule::class,
 		ForegroundUpdateTimeoutModule::class,
 		UpdateSchedulerModule::class

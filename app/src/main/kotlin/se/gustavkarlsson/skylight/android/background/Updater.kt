@@ -1,8 +1,6 @@
 package se.gustavkarlsson.skylight.android.background
 
 import android.content.Context
-import android.content.Intent
-import android.support.v4.content.LocalBroadcastManager
 import dagger.Reusable
 import io.reactivex.subjects.Subject
 import org.jetbrains.anko.AnkoLogger
@@ -17,18 +15,14 @@ import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import javax.inject.Inject
 import javax.inject.Named
 
-
-val RESPONSE_UPDATE_ERROR = "RESPONSE_UPDATE_ERROR"
-val RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE = "RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE"
-
 @Reusable
 class Updater
 @Inject
 constructor(
 		private val context: Context,
-		private val broadcastManager: LocalBroadcastManager,
 		private val notificationHandler: NotificationHandler,
-		@param:Named(LATEST_NAME) private val latestAuroraReportSubject: Subject<AuroraReport>
+		@param:Named(LATEST_NAME) private val latestAuroraReportSubject: Subject<AuroraReport>,
+		private val userFriendlyExceptionSubject: Subject<UserFriendlyException>
 ) : AnkoLogger {
 
 	fun update(timeout: Duration): Boolean {
@@ -41,20 +35,12 @@ constructor(
 		} catch (e: UserFriendlyException) {
 			val errorMessage = context.getString(e.stringResourceId)
 			error("A user friendly exception occurred: $errorMessage", e)
-			broadcastError(errorMessage)
+			userFriendlyExceptionSubject.onNext(e)
 			return false
 		} catch (e: Exception) {
 			error("An unexpected error occurred", e)
-			val errorMessage = context.getString(R.string.error_unknown_update_error)
-			broadcastError(errorMessage)
+			userFriendlyExceptionSubject.onNext(UserFriendlyException(R.string.error_unknown_update_error, e))
 			return false
 		}
-	}
-
-	// TODO replace with RxJava/RxAndroid
-	private fun broadcastError(message: String) {
-		val intent = Intent(RESPONSE_UPDATE_ERROR)
-		intent.putExtra(RESPONSE_UPDATE_ERROR_EXTRA_MESSAGE, message)
-		broadcastManager.sendBroadcast(intent)
 	}
 }

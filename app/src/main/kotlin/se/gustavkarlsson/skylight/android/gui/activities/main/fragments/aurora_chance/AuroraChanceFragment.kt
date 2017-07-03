@@ -33,9 +33,9 @@ class AuroraChanceFragment : Fragment() {
 
     @Inject
     @field:Named(LATEST_NAME)
-	lateinit var latestAuroraReport: Observable<AuroraReport>
+	lateinit var latestAuroraReports: Observable<AuroraReport>
 
-	private var auroraSubscription: Disposable? = null
+	private var latestAuroraReportsSubscription: Disposable? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         (activity as MainActivity).component
@@ -46,7 +46,7 @@ class AuroraChanceFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-		auroraSubscription = latestAuroraReport.subscribe { update(it) }
+		latestAuroraReportsSubscription = latestAuroraReports.subscribe { update(it) }
         timeSinceUpdateController.start()
     }
 
@@ -57,7 +57,7 @@ class AuroraChanceFragment : Fragment() {
     }
 
     override fun onStop() {
-		auroraSubscription?.dispose()
+		latestAuroraReportsSubscription?.dispose()
         timeSinceUpdateController.stop()
         super.onStop()
     }

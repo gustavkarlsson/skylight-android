@@ -1,20 +1,21 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main
 
-import android.content.BroadcastReceiver
-import android.content.IntentFilter
 import android.os.Bundle
-import android.support.v4.content.LocalBroadcastManager
 import android.view.Menu
 import android.view.MenuItem
 import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
+import org.jetbrains.anko.longToast
 import org.jetbrains.anko.startActivity
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
-import se.gustavkarlsson.skylight.android.background.RESPONSE_UPDATE_ERROR
 import se.gustavkarlsson.skylight.android.background.Updater
-import se.gustavkarlsson.skylight.android.dagger.*
+import se.gustavkarlsson.skylight.android.dagger.BACKGROUND_UPDATE_TIMEOUT_NAME
+import se.gustavkarlsson.skylight.android.dagger.CACHED_THREAD_POOL_NAME
+import se.gustavkarlsson.skylight.android.dagger.FOREGROUND_REPORT_LIFETIME_NAME
+import se.gustavkarlsson.skylight.android.dagger.LATEST_NAME
 import se.gustavkarlsson.skylight.android.dagger.components.MainActivityComponent
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ActivityModule
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
@@ -23,6 +24,7 @@ import se.gustavkarlsson.skylight.android.extensions.until
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
 import se.gustavkarlsson.skylight.android.models.AuroraReport
+import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import java.util.concurrent.ExecutorService
 import javax.inject.Inject
 import javax.inject.Named
@@ -31,9 +33,6 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 
     @Inject
     lateinit var updater: Updater
-
-    @Inject
-	lateinit var broadcastManager: LocalBroadcastManager
 
     @Inject
 	lateinit var clock: Clock
@@ -45,12 +44,11 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
     @field:Named(LATEST_NAME)
 	lateinit var latestAuroraReport: Observable<AuroraReport>
 
-    @Inject
-	lateinit var auroraChanceEvaluator: ChanceEvaluator<AuroraReport>
+	@Inject
+	lateinit var userFriendlyExceptions: Observable<UserFriendlyException>
 
     @Inject
-    @field:Named(UPDATE_ERROR_NAME)
-	lateinit var broadcastReceiver: BroadcastReceiver
+	lateinit var auroraChanceEvaluator: ChanceEvaluator<AuroraReport>
 
     @Inject
     @field:Named(CACHED_THREAD_POOL_NAME)
@@ -66,6 +64,8 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 
 	lateinit var component: MainActivityComponent
         private set
+
+	var userFriendlyExceptionsSubscription: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +88,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 
     public override fun onStart() {
         super.onStart()
-        broadcastManager.registerReceiver(broadcastReceiver, IntentFilter(RESPONSE_UPDATE_ERROR))
+		userFriendlyExceptionsSubscription = userFriendlyExceptions.subscribe { longToast((it.stringResourceId)) }
         swipeToRefreshPresenter.disable()
         ensureRequirementsMet()
     }
@@ -113,6 +113,6 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 
     override fun onStop() {
         super.onStop()
-        broadcastManager.unregisterReceiver(broadcastReceiver)
+		userFriendlyExceptionsSubscription?.dispose()
     }
 }

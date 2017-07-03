@@ -36,9 +36,9 @@ class AuroraFactorFragment : Fragment() {
 
     @Inject
     @field:Named(LATEST_NAME)
-	lateinit var latestAuroraReport: Observable<AuroraReport>
+	lateinit var latestAuroraReports: Observable<AuroraReport>
 
-	private var auroraSubscription: Disposable? = null
+	private var latestAuroraReportsSubscription: Disposable? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         (activity as MainActivity).component
@@ -49,7 +49,7 @@ class AuroraFactorFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-		auroraSubscription = latestAuroraReport.subscribe { update(it) }
+		latestAuroraReportsSubscription = latestAuroraReports.subscribe { update(it) }
     }
 
     private fun update(report: AuroraReport) {
@@ -61,7 +61,7 @@ class AuroraFactorFragment : Fragment() {
     }
 
     override fun onStop() {
-		auroraSubscription?.dispose()
+		latestAuroraReportsSubscription?.dispose()
         super.onStop()
     }
 }
