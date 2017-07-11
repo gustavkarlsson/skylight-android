@@ -70,7 +70,7 @@ dependencies {
 	ext {
 		retrofit_version = "2.3.0"
 		dagger_version = "2.11"
-		google_play_services_version = "11.0.1"
+		google_play_services_version = "11.0.2"
 		android_support_version = "25.3.1"
 		anko_version = "0.10.1"
 	}

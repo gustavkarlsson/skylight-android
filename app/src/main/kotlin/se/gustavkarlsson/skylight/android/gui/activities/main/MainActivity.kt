@@ -5,6 +5,8 @@ import android.view.Menu
 import android.view.MenuItem
 import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.startActivity
 import org.threeten.bp.Clock
@@ -88,7 +90,11 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 
     public override fun onStart() {
         super.onStart()
-		userFriendlyExceptionsSubscription = userFriendlyExceptions.subscribe { longToast((it.stringResourceId)) }
+		userFriendlyExceptionsSubscription = userFriendlyExceptions.subscribe {
+			async(UI) {
+				longToast((it.stringResourceId))
+			}
+		}
         swipeToRefreshPresenter.disable()
         ensureRequirementsMet()
     }
