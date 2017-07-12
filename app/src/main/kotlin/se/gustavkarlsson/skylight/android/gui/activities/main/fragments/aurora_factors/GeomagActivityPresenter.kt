@@ -2,12 +2,12 @@ package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_
 
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.models.GeomagActivity
+import se.gustavkarlsson.skylight.android.entities.GeomagActivity
 
 class GeomagActivityPresenter(
-		factorView: AuroraFactorView,
-		chanceEvaluator: ChanceEvaluator<GeomagActivity>,
-		colorConverter: ChanceToColorConverter
+	factorView: AuroraFactorView,
+	chanceEvaluator: ChanceEvaluator<GeomagActivity>,
+	colorConverter: ChanceToColorConverter
 ) : AbstractAuroraFactorPresenter<GeomagActivity>(factorView, chanceEvaluator, colorConverter) {
 
 	override val fullTitleResourceId: Int

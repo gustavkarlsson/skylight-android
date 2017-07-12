@@ -12,7 +12,7 @@ import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
 import se.gustavkarlsson.skylight.android.dagger.LATEST_NAME
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRootViewModule
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
-import se.gustavkarlsson.skylight.android.models.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import javax.inject.Inject
 import javax.inject.Named
 

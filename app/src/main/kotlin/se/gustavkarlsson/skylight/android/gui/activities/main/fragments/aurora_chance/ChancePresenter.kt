@@ -5,7 +5,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel
-import se.gustavkarlsson.skylight.android.models.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
 
 class ChancePresenter(
 		private val chanceTextView: TextView,

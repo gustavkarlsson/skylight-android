@@ -4,7 +4,7 @@ import dagger.Reusable
 import net.e175.klaus.solarpositioning.Grena3
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.background.providers.DarknessProvider
-import se.gustavkarlsson.skylight.android.models.Darkness
+import se.gustavkarlsson.skylight.android.entities.Darkness
 import java.util.*
 import javax.inject.Inject
 

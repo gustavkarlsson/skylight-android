@@ -6,7 +6,7 @@ import org.jetbrains.anko.debug
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.background.providers.GeomagActivityProvider
-import se.gustavkarlsson.skylight.android.models.GeomagActivity
+import se.gustavkarlsson.skylight.android.entities.GeomagActivity
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import java.io.IOException
 import javax.inject.Inject

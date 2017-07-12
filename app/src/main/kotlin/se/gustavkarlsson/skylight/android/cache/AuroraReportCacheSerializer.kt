@@ -7,7 +7,7 @@ import com.google.gson.stream.JsonWriter
 import com.vincentbrison.openlibraries.android.dualcache.CacheSerializer
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.extensions.fromJson
-import se.gustavkarlsson.skylight.android.models.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
 
 
 private val instantTypeAdapter = object : TypeAdapter<Instant>() {

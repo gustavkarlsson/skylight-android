@@ -9,7 +9,7 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight.Companion.applicationComponent
 import se.gustavkarlsson.skylight.android.dagger.LATEST_NAME
-import se.gustavkarlsson.skylight.android.models.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.notifications.NotificationHandler
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import javax.inject.Inject
@@ -19,10 +19,10 @@ import javax.inject.Named
 class Updater
 @Inject
 constructor(
-		private val context: Context,
-		private val notificationHandler: NotificationHandler,
-		@param:Named(LATEST_NAME) private val latestAuroraReportSubject: Subject<AuroraReport>,
-		private val userFriendlyExceptionSubject: Subject<UserFriendlyException>
+	private val context: Context,
+	private val notificationHandler: NotificationHandler,
+	@param:Named(LATEST_NAME) private val latestAuroraReportSubject: Subject<AuroraReport>,
+	private val userFriendlyExceptionSubject: Subject<UserFriendlyException>
 ) : AnkoLogger {
 
 	fun update(timeout: Duration): Boolean {

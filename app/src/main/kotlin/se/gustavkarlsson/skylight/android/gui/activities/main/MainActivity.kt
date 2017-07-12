@@ -7,34 +7,31 @@ import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
+import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.startActivity
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
-import se.gustavkarlsson.skylight.android.background.Updater
-import se.gustavkarlsson.skylight.android.dagger.BACKGROUND_UPDATE_TIMEOUT_NAME
-import se.gustavkarlsson.skylight.android.dagger.CACHED_THREAD_POOL_NAME
+import se.gustavkarlsson.skylight.android.actions.ShowLastAuroraReport
+import se.gustavkarlsson.skylight.android.actions.ShowNewAuroraReport
+import se.gustavkarlsson.skylight.android.actions.ShowRecentAuroraReport
 import se.gustavkarlsson.skylight.android.dagger.FOREGROUND_REPORT_LIFETIME_NAME
 import se.gustavkarlsson.skylight.android.dagger.LATEST_NAME
 import se.gustavkarlsson.skylight.android.dagger.components.MainActivityComponent
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ActivityModule
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.extensions.until
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
-import se.gustavkarlsson.skylight.android.models.AuroraReport
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
-import java.util.concurrent.ExecutorService
 import javax.inject.Inject
 import javax.inject.Named
 
 class MainActivity : AuroraRequirementsCheckingActivity() {
-
-    @Inject
-    lateinit var updater: Updater
 
     @Inject
 	lateinit var clock: Clock
@@ -52,13 +49,14 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
     @Inject
 	lateinit var auroraChanceEvaluator: ChanceEvaluator<AuroraReport>
 
-    @Inject
-    @field:Named(CACHED_THREAD_POOL_NAME)
-	lateinit var cachedTreadPool: ExecutorService
+	@Inject
+	lateinit var showNewAuroraReport: ShowNewAuroraReport
 
-    @Inject
-    @field:Named(BACKGROUND_UPDATE_TIMEOUT_NAME)
-	lateinit var backgoundUpdateTimeout: Duration
+	@Inject
+	lateinit var showRecentAuroraReport: ShowRecentAuroraReport
+
+	@Inject
+	lateinit var showLastAuroraReport: ShowLastAuroraReport
 
     @Inject
     @field:Named(FOREGROUND_REPORT_LIFETIME_NAME)
@@ -114,7 +112,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
     }
 
     private fun updateInBackground() {
-        cachedTreadPool.execute { updater.update(backgoundUpdateTimeout) }
+        bg { showNewAuroraReport() }
     }
 
     override fun onStop() {

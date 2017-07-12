@@ -4,7 +4,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.background.providers.VisibilityProvider
-import se.gustavkarlsson.skylight.android.models.Visibility
+import se.gustavkarlsson.skylight.android.entities.Visibility
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import java.io.IOException
 

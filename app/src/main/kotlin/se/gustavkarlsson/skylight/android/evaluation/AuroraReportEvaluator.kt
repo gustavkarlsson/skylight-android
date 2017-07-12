@@ -1,17 +1,17 @@
 package se.gustavkarlsson.skylight.android.evaluation
 
 import dagger.Reusable
-import se.gustavkarlsson.skylight.android.models.*
+import se.gustavkarlsson.skylight.android.entities.*
 import javax.inject.Inject
 
 @Reusable
 class AuroraReportEvaluator
 @Inject
 constructor(
-		private val geomagActivityEvaluator: ChanceEvaluator<GeomagActivity>,
-		private val geomagLocationEvaluator: ChanceEvaluator<GeomagLocation>,
-		private val visibilityEvaluator: ChanceEvaluator<Visibility>,
-		private val darknessEvaluator: ChanceEvaluator<Darkness>
+	private val geomagActivityEvaluator: ChanceEvaluator<GeomagActivity>,
+	private val geomagLocationEvaluator: ChanceEvaluator<GeomagLocation>,
+	private val visibilityEvaluator: ChanceEvaluator<Visibility>,
+	private val darknessEvaluator: ChanceEvaluator<Darkness>
 ) : ChanceEvaluator<AuroraReport> {
 
 	override fun evaluate(value: AuroraReport): Chance {

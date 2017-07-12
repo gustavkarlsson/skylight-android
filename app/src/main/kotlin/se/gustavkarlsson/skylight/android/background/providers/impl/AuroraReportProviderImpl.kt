@@ -12,7 +12,7 @@ import se.gustavkarlsson.skylight.android.background.providers.AuroraFactorsProv
 import se.gustavkarlsson.skylight.android.background.providers.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.background.providers.LocationProvider
 import se.gustavkarlsson.skylight.android.extensions.now
-import se.gustavkarlsson.skylight.android.models.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.util.CountdownTimer
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import java.util.concurrent.CancellationException

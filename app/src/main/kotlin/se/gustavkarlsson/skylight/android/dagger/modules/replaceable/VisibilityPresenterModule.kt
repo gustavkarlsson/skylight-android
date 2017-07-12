@@ -10,7 +10,7 @@ import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.ChanceToColorConverter
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.VisibilityPresenter
-import se.gustavkarlsson.skylight.android.models.Visibility
+import se.gustavkarlsson.skylight.android.entities.Visibility
 import javax.inject.Named
 
 @Module
@@ -20,9 +20,9 @@ class VisibilityPresenterModule {
     @Provides
     @FragmentScope
     fun provideVisibilityPresenter(
-			@Named(FRAGMENT_ROOT_NAME) rootView: View,
-			chanceEvaluator: ChanceEvaluator<Visibility>,
-			chanceToColorConverter: ChanceToColorConverter
+		@Named(FRAGMENT_ROOT_NAME) rootView: View,
+		chanceEvaluator: ChanceEvaluator<Visibility>,
+		chanceToColorConverter: ChanceToColorConverter
 	): VisibilityPresenter {
         val geomagActivityView = rootView.findViewById(R.id.visibility) as AuroraFactorView
         return VisibilityPresenter(geomagActivityView, chanceEvaluator, chanceToColorConverter)

@@ -6,7 +6,7 @@ import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.background.providers.*
 import se.gustavkarlsson.skylight.android.extensions.now
-import se.gustavkarlsson.skylight.android.models.AuroraFactors
+import se.gustavkarlsson.skylight.android.entities.AuroraFactors
 import javax.inject.Inject
 
 @Reusable

@@ -4,7 +4,7 @@ import android.content.Context
 import com.vincentbrison.openlibraries.android.dualcache.Builder
 import com.vincentbrison.openlibraries.android.dualcache.DualCache
 import se.gustavkarlsson.skylight.android.BuildConfig
-import se.gustavkarlsson.skylight.android.models.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
 
 private val KEY = "singleton" // Must match [a-z0-9_-]{1,64}
 

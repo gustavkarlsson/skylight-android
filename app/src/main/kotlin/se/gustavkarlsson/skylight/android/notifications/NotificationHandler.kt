@@ -13,7 +13,7 @@ import se.gustavkarlsson.skylight.android.dagger.LAST_NOTIFIED_NAME
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
-import se.gustavkarlsson.skylight.android.models.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -21,11 +21,11 @@ import javax.inject.Named
 class NotificationHandler
 @Inject
 constructor(
-		private val context: Context,
-		private val notificationManager: NotificationManager,
-		@param:Named(LAST_NOTIFIED_NAME) private val lastNotifiedReportCache: SingletonCache<AuroraReport>,
-		private val evaluator: ChanceEvaluator<AuroraReport>,
-		private val decider: NotificationDecider
+	private val context: Context,
+	private val notificationManager: NotificationManager,
+	@param:Named(LAST_NOTIFIED_NAME) private val lastNotifiedReportCache: SingletonCache<AuroraReport>,
+	private val evaluator: ChanceEvaluator<AuroraReport>,
+	private val decider: NotificationDecider
 ) {
 
     fun handle(report: AuroraReport) {

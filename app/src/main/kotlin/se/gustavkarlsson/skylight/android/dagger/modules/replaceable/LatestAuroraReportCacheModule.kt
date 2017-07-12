@@ -6,7 +6,7 @@ import dagger.Provides
 import se.gustavkarlsson.skylight.android.cache.DualAuroraReportSingletonCache
 import se.gustavkarlsson.skylight.android.cache.SingletonCache
 import se.gustavkarlsson.skylight.android.dagger.LATEST_NAME
-import se.gustavkarlsson.skylight.android.models.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import javax.inject.Named
 import javax.inject.Singleton
 

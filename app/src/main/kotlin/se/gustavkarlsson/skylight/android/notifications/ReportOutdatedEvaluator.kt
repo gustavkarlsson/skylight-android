@@ -6,7 +6,7 @@ import org.threeten.bp.LocalTime.NOON
 import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.extensions.today
 import se.gustavkarlsson.skylight.android.extensions.until
-import se.gustavkarlsson.skylight.android.models.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.util.ZoneIdProvider
 import javax.inject.Inject
 

@@ -5,7 +5,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import org.jetbrains.anko.info
 import se.gustavkarlsson.skylight.android.background.providers.VisibilityProvider
-import se.gustavkarlsson.skylight.android.models.Visibility
+import se.gustavkarlsson.skylight.android.entities.Visibility
 import java.util.concurrent.Callable
 import java.util.concurrent.TimeoutException
 

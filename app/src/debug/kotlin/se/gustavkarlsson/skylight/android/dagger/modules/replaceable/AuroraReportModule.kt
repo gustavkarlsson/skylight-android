@@ -29,8 +29,8 @@ import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ContextModul
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.DarknessModule
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.GeomagLocationModule
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.SystemServiceModule
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.create
-import se.gustavkarlsson.skylight.android.models.AuroraReport
 import se.gustavkarlsson.skylight.android.settings.DebugSettings
 import se.gustavkarlsson.skylight.android.settings.Settings
 import se.gustavkarlsson.skylight.android.settings.SharedPreferencesDebugSettings

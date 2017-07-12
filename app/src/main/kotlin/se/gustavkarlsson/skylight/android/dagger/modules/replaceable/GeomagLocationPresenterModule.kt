@@ -10,7 +10,7 @@ import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.ChanceToColorConverter
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.GeomagLocationPresenter
-import se.gustavkarlsson.skylight.android.models.GeomagLocation
+import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import javax.inject.Named
 
 @Module
@@ -20,9 +20,9 @@ class GeomagLocationPresenterModule {
     @Provides
     @FragmentScope
     fun provideGeomagLocationPresenter(
-			@Named(FRAGMENT_ROOT_NAME) rootView: View,
-			chanceEvaluator: ChanceEvaluator<GeomagLocation>,
-			chanceToColorConverter: ChanceToColorConverter
+		@Named(FRAGMENT_ROOT_NAME) rootView: View,
+		chanceEvaluator: ChanceEvaluator<GeomagLocation>,
+		chanceToColorConverter: ChanceToColorConverter
 	): GeomagLocationPresenter {
         val geomagLocationView = rootView.findViewById(R.id.gGeomagLocation) as AuroraFactorView
         return GeomagLocationPresenter(geomagLocationView, chanceEvaluator, chanceToColorConverter)

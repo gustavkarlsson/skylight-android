@@ -5,7 +5,7 @@ import se.gustavkarlsson.skylight.android.cache.SingletonCache
 import se.gustavkarlsson.skylight.android.dagger.LAST_NOTIFIED_NAME
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel
-import se.gustavkarlsson.skylight.android.models.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.settings.Settings
 import javax.inject.Inject
 import javax.inject.Named
@@ -14,10 +14,10 @@ import javax.inject.Named
 class NotificationDecider
 @Inject
 constructor(
-		@param:Named(LAST_NOTIFIED_NAME) private val lastNotifiedReportCache: SingletonCache<AuroraReport>,
-		private val chanceEvaluator: ChanceEvaluator<AuroraReport>,
-		private val settings: Settings,
-		private val outdatedEvaluator: ReportOutdatedEvaluator
+	@param:Named(LAST_NOTIFIED_NAME) private val lastNotifiedReportCache: SingletonCache<AuroraReport>,
+	private val chanceEvaluator: ChanceEvaluator<AuroraReport>,
+	private val settings: Settings,
+	private val outdatedEvaluator: ReportOutdatedEvaluator
 ) {
 
     fun shouldNotify(newReport: AuroraReport): Boolean {

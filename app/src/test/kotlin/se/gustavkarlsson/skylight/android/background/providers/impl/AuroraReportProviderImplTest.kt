@@ -20,8 +20,8 @@ import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.background.providers.AsyncAddressProvider
 import se.gustavkarlsson.skylight.android.background.providers.AuroraFactorsProvider
 import se.gustavkarlsson.skylight.android.background.providers.LocationProvider
+import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.mockito.any
-import se.gustavkarlsson.skylight.android.models.*
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import java.util.concurrent.Future
 

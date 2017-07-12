@@ -4,8 +4,8 @@ import android.location.Address
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.background.providers.AuroraReportProvider
+import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.extensions.now
-import se.gustavkarlsson.skylight.android.models.*
 import se.gustavkarlsson.skylight.android.settings.DebugSettings
 import java.util.*
 

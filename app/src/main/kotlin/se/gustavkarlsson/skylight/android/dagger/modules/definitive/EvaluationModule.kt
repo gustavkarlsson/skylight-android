@@ -3,8 +3,8 @@ package se.gustavkarlsson.skylight.android.dagger.modules.definitive
 import dagger.Binds
 import dagger.Module
 import dagger.Reusable
+import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.evaluation.*
-import se.gustavkarlsson.skylight.android.models.*
 
 @Module
 abstract class EvaluationModule {

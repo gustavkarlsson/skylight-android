@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.models
+package se.gustavkarlsson.skylight.android.entities
 
 import android.location.Address
 import org.threeten.bp.Instant
@@ -10,10 +10,10 @@ data class AuroraReport(
 )
 
 data class AuroraFactors(
-		val geomagActivity: GeomagActivity,
-		val geomagLocation: GeomagLocation,
-		val darkness: Darkness,
-		val visibility: Visibility
+	val geomagActivity: GeomagActivity,
+	val geomagLocation: GeomagLocation,
+	val darkness: Darkness,
+	val visibility: Visibility
 )
 
 data class Darkness(

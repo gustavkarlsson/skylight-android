@@ -10,7 +10,7 @@ import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.ChanceToColorConverter
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.DarknessPresenter
-import se.gustavkarlsson.skylight.android.models.Darkness
+import se.gustavkarlsson.skylight.android.entities.Darkness
 import javax.inject.Named
 
 @Module
@@ -20,9 +20,9 @@ class DarknessPresenterModule {
     @Provides
     @FragmentScope
     fun provideDarknessPresenter(
-			@Named(FRAGMENT_ROOT_NAME) rootView: View,
-			chanceEvaluator: ChanceEvaluator<Darkness>,
-			chanceToColorConverter: ChanceToColorConverter
+		@Named(FRAGMENT_ROOT_NAME) rootView: View,
+		chanceEvaluator: ChanceEvaluator<Darkness>,
+		chanceToColorConverter: ChanceToColorConverter
 	): DarknessPresenter {
         val darknessView = rootView.findViewById(R.id.darkness) as AuroraFactorView
         return DarknessPresenter(darknessView, chanceEvaluator, chanceToColorConverter)
