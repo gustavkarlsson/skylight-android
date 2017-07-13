@@ -4,9 +4,7 @@ import android.text.format.DateUtils
 import android.widget.TextView
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
-import org.threeten.bp.Clock
-import org.threeten.bp.Duration
-import org.threeten.bp.Instant
+import org.threeten.bp.*
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.extensions.until
@@ -57,6 +55,7 @@ private class TimeSinceUpdatePresenter(
 		async(UI) {
 			when {
 				time == null     -> timeSinceUpdateTextView.text = ""
+				time < startTime -> timeSinceUpdateTextView.text = ""
 				isRightNow(time) -> timeSinceUpdateTextView.setText(R.string.right_now)
 				else             -> timeSinceUpdateTextView.text = formatRelativeTime(time)
 			}
@@ -70,5 +69,9 @@ private class TimeSinceUpdatePresenter(
 
 	private fun formatRelativeTime(time: Instant): CharSequence {
 		return DateUtils.getRelativeTimeSpanString(time.toEpochMilli(), clock.millis(), updateTimeResolution.toMillis())
+	}
+
+	companion object {
+	    val startTime = ZonedDateTime.of(2016, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC).toInstant()!!
 	}
 }

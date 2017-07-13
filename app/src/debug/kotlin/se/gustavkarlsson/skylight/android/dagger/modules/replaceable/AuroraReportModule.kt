@@ -21,8 +21,7 @@ import se.gustavkarlsson.skylight.android.background.providers.impl.aggregating_
 import se.gustavkarlsson.skylight.android.background.providers.impl.aggregating_aurora_factors.ErrorHandlingExecutorService
 import se.gustavkarlsson.skylight.android.background.providers.impl.openweathermap.OpenWeatherMapService
 import se.gustavkarlsson.skylight.android.background.providers.impl.openweathermap.RetrofittedOpenWeatherMapVisibilityProvider
-import se.gustavkarlsson.skylight.android.cache.DualAuroraReportSingletonCache
-import se.gustavkarlsson.skylight.android.cache.SingletonCache
+import se.gustavkarlsson.skylight.android.services.impl.auroraReportCacheSerializer
 import se.gustavkarlsson.skylight.android.dagger.CACHED_THREAD_POOL_NAME
 import se.gustavkarlsson.skylight.android.dagger.LAST_NOTIFIED_NAME
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ContextModule
@@ -31,6 +30,8 @@ import se.gustavkarlsson.skylight.android.dagger.modules.definitive.GeomagLocati
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.SystemServiceModule
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.create
+import se.gustavkarlsson.skylight.android.services.SingletonCache
+import se.gustavkarlsson.skylight.android.services.impl.DualSingletonCache
 import se.gustavkarlsson.skylight.android.settings.DebugSettings
 import se.gustavkarlsson.skylight.android.settings.Settings
 import se.gustavkarlsson.skylight.android.settings.SharedPreferencesDebugSettings
@@ -164,7 +165,7 @@ class AuroraReportModule {
 	@Singleton
 	@Named(LAST_NOTIFIED_NAME)
 	fun provideLastNotifiedAuroraReportCache(context: Context): SingletonCache<AuroraReport> {
-		return DualAuroraReportSingletonCache(context, LAST_NOTIFIED_CACHE_ID)
+		return DualSingletonCache(LAST_NOTIFIED_CACHE_ID, AuroraReport.default, auroraReportCacheSerializer, context)
 	}
 
 	@Provides

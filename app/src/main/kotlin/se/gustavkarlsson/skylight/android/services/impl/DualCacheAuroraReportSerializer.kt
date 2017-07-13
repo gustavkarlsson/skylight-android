@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.cache
+package se.gustavkarlsson.skylight.android.services.impl
 
 import com.google.gson.GsonBuilder
 import com.google.gson.TypeAdapter
@@ -6,8 +6,8 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonWriter
 import com.vincentbrison.openlibraries.android.dualcache.CacheSerializer
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.extensions.fromJson
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.extensions.fromJson
 
 
 private val instantTypeAdapter = object : TypeAdapter<Instant>() {

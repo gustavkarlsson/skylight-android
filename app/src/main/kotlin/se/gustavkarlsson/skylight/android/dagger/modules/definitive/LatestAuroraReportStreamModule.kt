@@ -5,11 +5,9 @@ import dagger.Provides
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
-import org.threeten.bp.Clock
-import se.gustavkarlsson.skylight.android.cache.SingletonCache
 import se.gustavkarlsson.skylight.android.dagger.LATEST_NAME
-import se.gustavkarlsson.skylight.android.entities.*
-import se.gustavkarlsson.skylight.android.extensions.now
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.services.Stream
 import se.gustavkarlsson.skylight.android.services.StreamPublisher
 import se.gustavkarlsson.skylight.android.services.impl.RxStream
@@ -45,18 +43,8 @@ class LatestAuroraReportStreamModule {
 	@Provides
 	@Singleton
 	@Named(LATEST_NAME)
-	fun provideLatestAuroraReportSubject(@Named(LATEST_NAME) cache: SingletonCache<AuroraReport>, clock: Clock): Subject<AuroraReport> {
-		var report = cache.value
-		if (report == null) {
-			val factors = AuroraFactors(
-				GeomagActivity(null),
-				GeomagLocation(null),
-				Darkness(null),
-				Visibility(null)
-			)
-			report = AuroraReport(clock.now, null, factors)
-		}
-		val subject = BehaviorSubject.createDefault(report)
+	fun provideLatestAuroraReportSubject(@Named(LATEST_NAME) cache: SingletonCache<AuroraReport>): Subject<AuroraReport> {
+		val subject = BehaviorSubject.createDefault(cache.value)
 		subject.doOnNext { cache.value = it }
 		return subject
 	}

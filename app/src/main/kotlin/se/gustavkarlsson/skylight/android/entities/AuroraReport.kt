@@ -7,7 +7,16 @@ data class AuroraReport(
 		val timestamp: Instant,
 		val address: Address?,
 		val factors: AuroraFactors
-)
+) {
+	companion object {
+	    val default = AuroraReport(Instant.EPOCH, null, AuroraFactors(
+			GeomagActivity(),
+			GeomagLocation(),
+			Darkness(),
+			Visibility()
+		))
+	}
+}
 
 data class AuroraFactors(
 	val geomagActivity: GeomagActivity,

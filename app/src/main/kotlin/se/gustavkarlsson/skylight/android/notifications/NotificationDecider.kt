@@ -1,11 +1,11 @@
 package se.gustavkarlsson.skylight.android.notifications
 
 import dagger.Reusable
-import se.gustavkarlsson.skylight.android.cache.SingletonCache
 import se.gustavkarlsson.skylight.android.dagger.LAST_NOTIFIED_NAME
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.settings.Settings
 import javax.inject.Inject
 import javax.inject.Named
@@ -24,7 +24,7 @@ constructor(
         if (!settings.isEnableNotifications) return false
 		val newReportLevel = ChanceLevel.fromChance(chanceEvaluator.evaluate(newReport))
 		if (newReportLevel < settings.triggerLevel) return false
-		val lastReport = lastNotifiedReportCache.value ?: return true
+		val lastReport = lastNotifiedReportCache.value
 		val lastReportLevel = ChanceLevel.fromChance(chanceEvaluator.evaluate(lastReport))
         return lastReport.outdated || newReportLevel > lastReportLevel
     }

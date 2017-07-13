@@ -1,5 +1,5 @@
 package se.gustavkarlsson.skylight.android.services
 
-interface Cache<T> {
-	val value: T
+interface SingletonCache<T> {
+	var value: T
 }
