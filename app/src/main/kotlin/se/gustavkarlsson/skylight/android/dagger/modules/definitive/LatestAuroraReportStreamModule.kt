@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.dagger.modules.definitive
 import dagger.Module
 import dagger.Provides
 import io.reactivex.Observable
-import io.reactivex.Observer
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import org.threeten.bp.Clock
@@ -11,12 +10,24 @@ import se.gustavkarlsson.skylight.android.cache.SingletonCache
 import se.gustavkarlsson.skylight.android.dagger.LATEST_NAME
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.extensions.now
+import se.gustavkarlsson.skylight.android.services.Stream
+import se.gustavkarlsson.skylight.android.services.StreamPublisher
+import se.gustavkarlsson.skylight.android.services.impl.RxStream
+import se.gustavkarlsson.skylight.android.services.impl.RxStreamPublisher
 import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-class LatestAuroraReportObservableModule {
+class LatestAuroraReportStreamModule {
 
+	@Provides
+	@Singleton
+	@Named(LATEST_NAME)
+	fun provideLatestAuroraReportStream(@Named(LATEST_NAME) subject: Subject<AuroraReport>): Stream<AuroraReport> {
+		return RxStream(subject)
+	}
+
+	// TODO Get rid of this
 	@Provides
 	@Singleton
 	@Named(LATEST_NAME)
@@ -27,8 +38,8 @@ class LatestAuroraReportObservableModule {
 	@Provides
 	@Singleton
 	@Named(LATEST_NAME)
-	fun provideLatestAuroraReportObserver(@Named(LATEST_NAME) subject: Subject<AuroraReport>): Observer<AuroraReport> {
-		return subject
+	fun provideLatestAuroraReportStreamPublisher(@Named(LATEST_NAME) subject: Subject<AuroraReport>): StreamPublisher<AuroraReport> {
+		return RxStreamPublisher(subject)
 	}
 
 	@Provides

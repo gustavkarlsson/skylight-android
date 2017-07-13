@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.coroutines.experimental.bg
@@ -27,6 +26,8 @@ import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.extensions.until
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
+import se.gustavkarlsson.skylight.android.services.Stream
+import se.gustavkarlsson.skylight.android.services.StreamSubscription
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import javax.inject.Inject
 import javax.inject.Named
@@ -44,7 +45,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 	lateinit var latestAuroraReport: Observable<AuroraReport>
 
 	@Inject
-	lateinit var userFriendlyExceptions: Observable<UserFriendlyException>
+	lateinit var userFriendlyExceptions: Stream<UserFriendlyException>
 
     @Inject
 	lateinit var auroraChanceEvaluator: ChanceEvaluator<AuroraReport>
@@ -65,7 +66,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 	lateinit var component: MainActivityComponent
         private set
 
-	var userFriendlyExceptionsSubscription: Disposable? = null
+	var userFriendlyExceptionsSubscription: StreamSubscription? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,6 +118,6 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 
     override fun onStop() {
         super.onStop()
-		userFriendlyExceptionsSubscription?.dispose()
+		userFriendlyExceptionsSubscription?.cancel()
     }
 }
