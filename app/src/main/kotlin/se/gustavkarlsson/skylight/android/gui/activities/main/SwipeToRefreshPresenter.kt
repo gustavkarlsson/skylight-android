@@ -4,20 +4,18 @@ import android.support.v4.widget.SwipeRefreshLayout
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.coroutines.experimental.bg
-import org.threeten.bp.Duration
-import se.gustavkarlsson.skylight.android.background.Updater
+import se.gustavkarlsson.skylight.android.actions.ShowNewAuroraReport
 
 class SwipeToRefreshPresenter(
-		private val swipeRefreshLayout: SwipeRefreshLayout,
-		private val updater: Updater,
-		private val timeout: Duration
+	private val swipeRefreshLayout: SwipeRefreshLayout,
+	private val showNewAuroraReport: ShowNewAuroraReport
 ) {
 
     private fun triggerUpdate() {
 		async(UI) {
 			swipeRefreshLayout.isRefreshing = true
 			val update = bg {
-				updater.update(timeout)
+				showNewAuroraReport()
 			}
 			update.await()
 			swipeRefreshLayout.isRefreshing = false

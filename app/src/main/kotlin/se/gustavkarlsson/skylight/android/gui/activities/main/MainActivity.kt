@@ -3,27 +3,17 @@ package se.gustavkarlsson.skylight.android.gui.activities.main
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import io.reactivex.Observable
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
-import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.longToast
 import org.jetbrains.anko.startActivity
-import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
-import se.gustavkarlsson.skylight.android.actions.ShowLastAuroraReport
-import se.gustavkarlsson.skylight.android.actions.ShowNewAuroraReport
 import se.gustavkarlsson.skylight.android.actions.ShowRecentAuroraReport
 import se.gustavkarlsson.skylight.android.dagger.FOREGROUND_REPORT_LIFETIME_NAME
-import se.gustavkarlsson.skylight.android.dagger.LATEST_NAME
 import se.gustavkarlsson.skylight.android.dagger.components.MainActivityComponent
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ActivityModule
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.extensions.now
-import se.gustavkarlsson.skylight.android.extensions.until
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
 import se.gustavkarlsson.skylight.android.services.Stream
@@ -35,29 +25,13 @@ import javax.inject.Named
 class MainActivity : AuroraRequirementsCheckingActivity() {
 
     @Inject
-	lateinit var clock: Clock
-
-    @Inject
 	lateinit var swipeToRefreshPresenter: SwipeToRefreshPresenter
-
-    @Inject
-    @field:Named(LATEST_NAME)
-	lateinit var latestAuroraReport: Observable<AuroraReport>
 
 	@Inject
 	lateinit var userFriendlyExceptions: Stream<UserFriendlyException>
 
-    @Inject
-	lateinit var auroraChanceEvaluator: ChanceEvaluator<AuroraReport>
-
-	@Inject
-	lateinit var showNewAuroraReport: ShowNewAuroraReport
-
 	@Inject
 	lateinit var showRecentAuroraReport: ShowRecentAuroraReport
-
-	@Inject
-	lateinit var showLastAuroraReport: ShowLastAuroraReport
 
     @Inject
     @field:Named(FOREGROUND_REPORT_LIFETIME_NAME)
@@ -100,20 +74,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 
     override fun onRequirementsMet() {
         swipeToRefreshPresenter.enable()
-        val latestReport = latestAuroraReport.blockingNext().first()
-        if (needsUpdate(latestReport)) {
-            updateInBackground()
-        }
-    }
-
-    private fun needsUpdate(report: AuroraReport): Boolean {
-        val hasExpired = report.timestamp until clock.now > foregroundReportLifetime
-		val chance = auroraChanceEvaluator.evaluate(report)
-        return hasExpired || !chance.isKnown
-    }
-
-    private fun updateInBackground() {
-        bg { showNewAuroraReport() }
+		showRecentAuroraReport()
     }
 
     override fun onStop() {
