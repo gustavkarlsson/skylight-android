@@ -9,10 +9,9 @@ import io.reactivex.Observable
 import io.reactivex.disposables.Disposable
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
-import se.gustavkarlsson.skylight.android.dagger.LATEST_NAME
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRootViewModule
-import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -35,7 +34,6 @@ class AuroraFactorFragment : Fragment() {
 	lateinit var darknessPresenter: DarknessPresenter
 
     @Inject
-    @field:Named(LATEST_NAME)
 	lateinit var latestAuroraReports: Observable<AuroraReport>
 
 	private var latestAuroraReportsSubscription: Disposable? = null

@@ -6,11 +6,10 @@ import dagger.Reusable
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.actions.ShowNewAuroraReport
 import se.gustavkarlsson.skylight.android.actions.impl.ShowNewAuroraReportOnPublisher
-import se.gustavkarlsson.skylight.android.background.providers.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.dagger.BACKGROUND_UPDATE_TIMEOUT_NAME
-import se.gustavkarlsson.skylight.android.dagger.LATEST_NAME
+import se.gustavkarlsson.skylight.android.dagger.NEW_NAME
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.services.NewAuroraReportProvider
+import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.StreamPublisher
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import javax.inject.Named
@@ -20,15 +19,16 @@ class ShowNewAuroraReportModule {
 
 	@Provides
 	@Reusable
-	fun provideShowNewAuroraReport(newAuroraReportProvider: NewAuroraReportProvider, @Named(LATEST_NAME) auroraReports: StreamPublisher<AuroraReport>, errors: StreamPublisher<UserFriendlyException>): ShowNewAuroraReport {
+	fun provideShowNewAuroraReport(@Named(NEW_NAME) newAuroraReportProvider: AuroraReportProvider, auroraReports: StreamPublisher<AuroraReport>, errors: StreamPublisher<UserFriendlyException>): ShowNewAuroraReport {
 		return ShowNewAuroraReportOnPublisher(newAuroraReportProvider, auroraReports, errors)
 	}
 
 	@Provides
 	@Reusable
-	fun provideNewAuroraReportProvider(provider: AuroraReportProvider, @Named(BACKGROUND_UPDATE_TIMEOUT_NAME) timeout: Duration): NewAuroraReportProvider {
+	@Named(NEW_NAME)
+	fun provideLastAuroraReportProvider(provider: se.gustavkarlsson.skylight.android.background.providers.AuroraReportProvider, @Named(BACKGROUND_UPDATE_TIMEOUT_NAME) timeout: Duration): AuroraReportProvider {
 		// TODO Replace with real implementation
-		return object : NewAuroraReportProvider {
+		return object : se.gustavkarlsson.skylight.android.services.AuroraReportProvider {
 			override fun get(): AuroraReport {
 				return provider.getReport(timeout)
 			}

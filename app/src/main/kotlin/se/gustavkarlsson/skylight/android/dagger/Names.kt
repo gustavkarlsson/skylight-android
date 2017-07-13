@@ -1,7 +1,8 @@
 package se.gustavkarlsson.skylight.android.dagger
 
 const val FRAGMENT_ROOT_NAME = "FragmentRoot"
-const val LATEST_NAME = "Latest"
+const val LAST_NAME = "Last"
+const val NEW_NAME = "New"
 const val CACHED_THREAD_POOL_NAME = "CachedThreadPool"
 const val LAST_NOTIFIED_NAME = "LastNotified"
 const val BACKGROUND_UPDATE_TIMEOUT_NAME = "BackgroundUpdateTimeout"
