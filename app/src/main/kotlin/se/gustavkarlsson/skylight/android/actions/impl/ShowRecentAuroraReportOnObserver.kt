@@ -6,13 +6,13 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.actions.ShowRecentAuroraReport
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.until
-import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
+import se.gustavkarlsson.skylight.android.services.Provider
 import se.gustavkarlsson.skylight.android.services.StreamPublisher
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
 class ShowRecentAuroraReportOnObserver(
-	private val lastAuroraReportProvider: AuroraReportProvider,
-	private val newAuroraReportProvider: AuroraReportProvider,
+	private val lastAuroraReportProvider: Provider<AuroraReport>,
+	private val newAuroraReportProvider: Provider<AuroraReport>,
 	private val currentTime: () -> Temporal,
 	private val maxAge: Duration,
 	private val auroraReports: StreamPublisher<AuroraReport>,

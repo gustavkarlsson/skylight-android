@@ -3,12 +3,12 @@ package se.gustavkarlsson.skylight.android.actions.impl
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.actions.ShowLastAuroraReport
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
+import se.gustavkarlsson.skylight.android.services.Provider
 import se.gustavkarlsson.skylight.android.services.StreamPublisher
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
 class ShowLastAuroraReportOnPublisher(
-	private val lastAuroraReportProvider: AuroraReportProvider,
+	private val lastAuroraReportProvider: Provider<AuroraReport>,
 	private val auroraReports: StreamPublisher<AuroraReport>,
 	private val errors: StreamPublisher<UserFriendlyException>
 ) : ShowLastAuroraReport {
