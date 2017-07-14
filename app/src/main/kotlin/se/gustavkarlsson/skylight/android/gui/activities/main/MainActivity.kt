@@ -65,7 +65,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
         super.onStart()
 		userFriendlyExceptionsSubscription = userFriendlyExceptions.subscribe {
 			async(UI) {
-				longToast((it.stringResourceId))
+				longToast(it.stringResourceId)
 			}
 		}
         swipeToRefreshPresenter.disable()
