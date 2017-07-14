@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.actions.ShowLastAuroraReport
-import se.gustavkarlsson.skylight.android.actions.impl.ShowLastAuroraReportOnPublisher
+import se.gustavkarlsson.skylight.android.actions.impl.ProvideToPublisher
 import se.gustavkarlsson.skylight.android.dagger.LAST_NAME
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.Provider
@@ -19,7 +19,12 @@ class ShowLastAuroraReportModule {
 	@Provides
 	@Reusable
 	fun provideShowLastAuroraReport(@Named(LAST_NAME) lastAuroraReportProvider: Provider<AuroraReport>, auroraReports: StreamPublisher<AuroraReport>, errors: StreamPublisher<UserFriendlyException>): ShowLastAuroraReport {
-		return ShowLastAuroraReportOnPublisher(lastAuroraReportProvider, auroraReports, errors)
+		return object : ShowLastAuroraReport {
+			private val provideToPublisher = ProvideToPublisher(lastAuroraReportProvider, auroraReports, errors)
+			override fun invoke() {
+				provideToPublisher()
+			}
+		}
 	}
 
 	@Provides
