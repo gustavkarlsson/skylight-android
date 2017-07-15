@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.dagger.modules.replaceable
+package se.gustavkarlsson.skylight.android.dagger.modules.clean
 
 import dagger.Module
 import dagger.Provides
@@ -17,12 +17,22 @@ import se.gustavkarlsson.skylight.android.services.StreamPublisher
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import javax.inject.Named
 
-@Module
+@Module(includes = arrayOf(
+	LastAuroraReportProviderModule::class,
+	NewAuroraReportProviderModule::class
+))
 class ShowRecentAuroraReportModule {
 
 	@Provides
 	@Reusable
-	fun provideShowRecentAuroraReport(@Named(LAST_NAME) lastAuroraReportProvider: Provider<AuroraReport>, @Named(NEW_NAME) newAuroraReportProvider: Provider<AuroraReport>, clock: Clock, @Named(BACKGROUND_UPDATE_TIMEOUT_NAME) timeout: Duration, auroraReports: StreamPublisher<AuroraReport>, errors: StreamPublisher<UserFriendlyException>): ShowRecentAuroraReport {
+	fun provideShowRecentAuroraReport(
+		@Named(LAST_NAME) lastAuroraReportProvider: Provider<AuroraReport>,
+		@Named(NEW_NAME) newAuroraReportProvider: Provider<AuroraReport>,
+		clock: Clock,
+		@Named(BACKGROUND_UPDATE_TIMEOUT_NAME) timeout: Duration,
+		auroraReports: StreamPublisher<AuroraReport>,
+		errors: StreamPublisher<UserFriendlyException>
+	): ShowRecentAuroraReport {
 		return ProvideRecentAuroraReportToPublisher(lastAuroraReportProvider, newAuroraReportProvider, clock::now, timeout, auroraReports, errors)
 	}
 }
