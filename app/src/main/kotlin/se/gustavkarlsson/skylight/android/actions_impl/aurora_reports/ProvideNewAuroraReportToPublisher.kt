@@ -1,9 +1,10 @@
-package se.gustavkarlsson.skylight.android.actions.impl
+package se.gustavkarlsson.skylight.android.actions_impl.aurora_reports
 
 import se.gustavkarlsson.skylight.android.actions.ShowNewAuroraReport
+import se.gustavkarlsson.skylight.android.actions_impl.ProvideToPublisher
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.Provider
-import se.gustavkarlsson.skylight.android.services.StreamPublisher
+import se.gustavkarlsson.skylight.android.services.streams.StreamPublisher
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
 class ProvideNewAuroraReportToPublisher(

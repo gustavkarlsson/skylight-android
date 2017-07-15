@@ -8,10 +8,10 @@ import io.reactivex.subjects.Subject
 import se.gustavkarlsson.skylight.android.dagger.LAST_NAME
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.SingletonCache
-import se.gustavkarlsson.skylight.android.services.Stream
-import se.gustavkarlsson.skylight.android.services.StreamPublisher
-import se.gustavkarlsson.skylight.android.services.impl.RxStream
-import se.gustavkarlsson.skylight.android.services.impl.RxStreamPublisher
+import se.gustavkarlsson.skylight.android.services.streams.Stream
+import se.gustavkarlsson.skylight.android.services.streams.StreamPublisher
+import se.gustavkarlsson.skylight.android.services_impl.streams.RxStream
+import se.gustavkarlsson.skylight.android.services_impl.streams.RxStreamPublisher
 import javax.inject.Named
 import javax.inject.Singleton
 

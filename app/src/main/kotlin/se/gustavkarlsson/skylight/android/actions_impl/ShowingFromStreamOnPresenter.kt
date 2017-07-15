@@ -1,8 +1,8 @@
-package se.gustavkarlsson.skylight.android.actions.impl
+package se.gustavkarlsson.skylight.android.actions_impl
 
 import se.gustavkarlsson.skylight.android.services.Presenter
-import se.gustavkarlsson.skylight.android.services.Stream
-import se.gustavkarlsson.skylight.android.services.StreamSubscription
+import se.gustavkarlsson.skylight.android.services.streams.Stream
+import se.gustavkarlsson.skylight.android.services.streams.StreamSubscription
 
 abstract class ShowingFromStreamOnPresenter<T>(
 	private val stream: Stream<T>,

@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services.impl
+package se.gustavkarlsson.skylight.android.services_impl.presenters
 
 import android.content.Context
 import kotlinx.coroutines.experimental.android.UI

@@ -6,8 +6,8 @@ import dagger.Provides
 import se.gustavkarlsson.skylight.android.dagger.LAST_NAME
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.SingletonCache
-import se.gustavkarlsson.skylight.android.services.impl.DualSingletonCache
-import se.gustavkarlsson.skylight.android.services.impl.auroraReportCacheSerializer
+import se.gustavkarlsson.skylight.android.services_impl.cache.DualSingletonCache
+import se.gustavkarlsson.skylight.android.services_impl.cache.auroraReportCacheSerializer
 import javax.inject.Named
 import javax.inject.Singleton
 

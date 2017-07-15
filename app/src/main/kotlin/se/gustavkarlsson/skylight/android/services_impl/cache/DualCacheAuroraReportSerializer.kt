@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services.impl
+package se.gustavkarlsson.skylight.android.services_impl.cache
 
 import com.google.gson.GsonBuilder
 import com.google.gson.TypeAdapter

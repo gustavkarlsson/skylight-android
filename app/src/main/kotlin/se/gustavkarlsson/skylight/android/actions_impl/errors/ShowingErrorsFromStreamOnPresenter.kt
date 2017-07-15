@@ -1,8 +1,9 @@
-package se.gustavkarlsson.skylight.android.actions.impl
+package se.gustavkarlsson.skylight.android.actions_impl.errors
 
 import se.gustavkarlsson.skylight.android.actions.ShowingErrors
+import se.gustavkarlsson.skylight.android.actions_impl.ShowingFromStreamOnPresenter
 import se.gustavkarlsson.skylight.android.services.Presenter
-import se.gustavkarlsson.skylight.android.services.Stream
+import se.gustavkarlsson.skylight.android.services.streams.Stream
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
 class ShowingErrorsFromStreamOnPresenter(

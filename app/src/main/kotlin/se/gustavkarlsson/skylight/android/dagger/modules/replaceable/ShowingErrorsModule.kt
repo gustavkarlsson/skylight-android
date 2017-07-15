@@ -5,10 +5,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.actions.ShowingErrors
-import se.gustavkarlsson.skylight.android.actions.impl.ShowingErrorsFromStreamOnPresenter
+import se.gustavkarlsson.skylight.android.actions_impl.errors.ShowingErrorsFromStreamOnPresenter
 import se.gustavkarlsson.skylight.android.services.Presenter
-import se.gustavkarlsson.skylight.android.services.Stream
-import se.gustavkarlsson.skylight.android.services.impl.ToastErrorPresenter
+import se.gustavkarlsson.skylight.android.services.streams.Stream
+import se.gustavkarlsson.skylight.android.services_impl.presenters.ToastErrorPresenter
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
 @Module

@@ -1,8 +1,8 @@
-package se.gustavkarlsson.skylight.android.actions.impl
+package se.gustavkarlsson.skylight.android.actions_impl
 
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.services.Provider
-import se.gustavkarlsson.skylight.android.services.StreamPublisher
+import se.gustavkarlsson.skylight.android.services.streams.StreamPublisher
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
 abstract class ProvideToPublisher<T>(

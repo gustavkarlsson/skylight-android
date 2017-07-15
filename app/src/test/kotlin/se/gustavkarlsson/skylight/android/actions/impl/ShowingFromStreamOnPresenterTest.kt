@@ -9,9 +9,10 @@ import org.mockito.Mock
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyZeroInteractions
 import org.mockito.junit.MockitoJUnitRunner
+import se.gustavkarlsson.skylight.android.actions_impl.ShowingFromStreamOnPresenter
 import se.gustavkarlsson.skylight.android.services.Presenter
-import se.gustavkarlsson.skylight.android.services.Stream
-import se.gustavkarlsson.skylight.android.services.impl.RxStream
+import se.gustavkarlsson.skylight.android.services.streams.Stream
+import se.gustavkarlsson.skylight.android.services_impl.streams.RxStream
 
 @RunWith(MockitoJUnitRunner::class)
 class ShowingFromStreamOnPresenterTest {

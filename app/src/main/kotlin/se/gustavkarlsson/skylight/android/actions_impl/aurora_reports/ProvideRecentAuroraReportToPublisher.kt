@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.actions.impl
+package se.gustavkarlsson.skylight.android.actions_impl.aurora_reports
 
 import org.threeten.bp.Duration
 import org.threeten.bp.temporal.Temporal
@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.actions.ShowRecentAuroraReport
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.until
 import se.gustavkarlsson.skylight.android.services.Provider
-import se.gustavkarlsson.skylight.android.services.StreamPublisher
+import se.gustavkarlsson.skylight.android.services.streams.StreamPublisher
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
 class ProvideRecentAuroraReportToPublisher(

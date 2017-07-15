@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services.impl
+package se.gustavkarlsson.skylight.android.services_impl.cache
 
 import android.content.Context
 import com.vincentbrison.openlibraries.android.dualcache.Builder
