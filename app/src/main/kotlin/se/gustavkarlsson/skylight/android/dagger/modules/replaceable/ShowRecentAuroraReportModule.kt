@@ -6,7 +6,7 @@ import dagger.Reusable
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.actions.ShowRecentAuroraReport
-import se.gustavkarlsson.skylight.android.actions.impl.ShowRecentAuroraReportOnObserver
+import se.gustavkarlsson.skylight.android.actions.impl.ProvideRecentAuroraReportToPublisher
 import se.gustavkarlsson.skylight.android.dagger.BACKGROUND_UPDATE_TIMEOUT_NAME
 import se.gustavkarlsson.skylight.android.dagger.LAST_NAME
 import se.gustavkarlsson.skylight.android.dagger.NEW_NAME
@@ -23,6 +23,6 @@ class ShowRecentAuroraReportModule {
 	@Provides
 	@Reusable
 	fun provideShowRecentAuroraReport(@Named(LAST_NAME) lastAuroraReportProvider: Provider<AuroraReport>, @Named(NEW_NAME) newAuroraReportProvider: Provider<AuroraReport>, clock: Clock, @Named(BACKGROUND_UPDATE_TIMEOUT_NAME) timeout: Duration, auroraReports: StreamPublisher<AuroraReport>, errors: StreamPublisher<UserFriendlyException>): ShowRecentAuroraReport {
-		return ShowRecentAuroraReportOnObserver(lastAuroraReportProvider, newAuroraReportProvider, clock::now, timeout, auroraReports, errors)
+		return ProvideRecentAuroraReportToPublisher(lastAuroraReportProvider, newAuroraReportProvider, clock::now, timeout, auroraReports, errors)
 	}
 }

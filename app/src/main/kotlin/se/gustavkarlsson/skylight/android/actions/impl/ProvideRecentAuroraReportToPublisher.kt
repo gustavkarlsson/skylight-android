@@ -10,7 +10,7 @@ import se.gustavkarlsson.skylight.android.services.Provider
 import se.gustavkarlsson.skylight.android.services.StreamPublisher
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
-class ShowRecentAuroraReportOnObserver(
+class ProvideRecentAuroraReportToPublisher(
 	private val lastAuroraReportProvider: Provider<AuroraReport>,
 	private val newAuroraReportProvider: Provider<AuroraReport>,
 	private val currentTime: () -> Temporal,

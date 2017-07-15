@@ -5,7 +5,7 @@ import dagger.Provides
 import dagger.Reusable
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.actions.ShowNewAuroraReport
-import se.gustavkarlsson.skylight.android.actions.impl.ProvideToPublisher
+import se.gustavkarlsson.skylight.android.actions.impl.ProvideNewAuroraReportToPublisher
 import se.gustavkarlsson.skylight.android.background.providers.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.dagger.BACKGROUND_UPDATE_TIMEOUT_NAME
 import se.gustavkarlsson.skylight.android.dagger.NEW_NAME
@@ -21,12 +21,7 @@ class ShowNewAuroraReportModule {
 	@Provides
 	@Reusable
 	fun provideShowNewAuroraReport(@Named(NEW_NAME) newAuroraReportProvider: Provider<AuroraReport>, auroraReports: StreamPublisher<AuroraReport>, errors: StreamPublisher<UserFriendlyException>): ShowNewAuroraReport {
-		return object : ShowNewAuroraReport {
-			private val provideToPublisher = ProvideToPublisher(newAuroraReportProvider, auroraReports, errors)
-			override fun invoke() {
-				provideToPublisher()
-			}
-		}
+		return ProvideNewAuroraReportToPublisher(newAuroraReportProvider, auroraReports, errors)
 	}
 
 	@Provides

@@ -10,7 +10,8 @@ import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 	ForegroundReportLifetimeModule::class,
 	ShowNewAuroraReportModule::class,
 	ShowRecentAuroraReportModule::class,
-	ShowLastAuroraReportModule::class
+	ShowLastAuroraReportModule::class,
+	ShowingErrorsModule::class
 ))
 @ActivityScope
 interface MainActivityComponent {

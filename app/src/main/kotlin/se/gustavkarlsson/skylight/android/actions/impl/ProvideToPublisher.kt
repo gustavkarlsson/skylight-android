@@ -5,7 +5,7 @@ import se.gustavkarlsson.skylight.android.services.Provider
 import se.gustavkarlsson.skylight.android.services.StreamPublisher
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
-class ProvideToPublisher<T>(
+abstract class ProvideToPublisher<T>(
 	private val provider: Provider<T>,
 	private val publisher: StreamPublisher<T>,
 	private val errorPublisher: StreamPublisher<UserFriendlyException>
