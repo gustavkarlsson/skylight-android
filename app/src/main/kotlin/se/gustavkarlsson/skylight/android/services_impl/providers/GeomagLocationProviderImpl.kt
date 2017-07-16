@@ -1,13 +1,10 @@
 package se.gustavkarlsson.skylight.android.services_impl.providers
 
 import dagger.Reusable
-import se.gustavkarlsson.skylight.android.services.providers.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
+import se.gustavkarlsson.skylight.android.services.providers.GeomagLocationProvider
 import java.lang.Math.*
 import javax.inject.Inject
-
-private val MAGNETIC_NORTH_POLE_LATITUDE = 80.4
-private val MAGNETIC_NORTH_POLE_LONGITUDE = -72.6
 
 @Reusable
 class GeomagLocationProviderImpl
@@ -79,5 +76,10 @@ constructor() : GeomagLocationProvider {
 			}
 		}
 		return c
+	}
+
+	companion object {
+		private val MAGNETIC_NORTH_POLE_LATITUDE = 80.4
+		private val MAGNETIC_NORTH_POLE_LONGITUDE = -72.6
 	}
 }
