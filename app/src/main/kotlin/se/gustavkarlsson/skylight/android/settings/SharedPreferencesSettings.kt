@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel
+import se.gustavkarlsson.skylight.android.services.evaluation.ChanceLevel
 import javax.inject.Inject
 
 @Reusable

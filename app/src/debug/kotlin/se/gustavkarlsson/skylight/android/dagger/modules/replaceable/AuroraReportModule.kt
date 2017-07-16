@@ -9,19 +9,18 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import org.threeten.bp.Clock
+import org.threeten.bp.Duration
 import org.threeten.bp.ZoneId
 import org.threeten.bp.ZoneOffset
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.background.providers.*
 import se.gustavkarlsson.skylight.android.background.providers.impl.*
-import se.gustavkarlsson.skylight.android.background.providers.impl.aggregating_aurora_factors.AsyncAuroraFactorsProvider
-import se.gustavkarlsson.skylight.android.background.providers.impl.aggregating_aurora_factors.ErrorHandlingExecutorService
-import se.gustavkarlsson.skylight.android.background.providers.impl.openweathermap.OpenWeatherMapService
-import se.gustavkarlsson.skylight.android.background.providers.impl.openweathermap.RetrofittedOpenWeatherMapVisibilityProvider
-import se.gustavkarlsson.skylight.android.services_impl.cache.auroraReportCacheSerializer
+import se.gustavkarlsson.skylight.android.services_impl.providers.aggregating_aurora_factors.AsyncAuroraFactorsProvider
+import se.gustavkarlsson.skylight.android.services_impl.providers.aggregating_aurora_factors.ErrorHandlingExecutorService
+import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapService
+import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.RetrofittedOpenWeatherMapVisibilityProvider
 import se.gustavkarlsson.skylight.android.dagger.CACHED_THREAD_POOL_NAME
 import se.gustavkarlsson.skylight.android.dagger.LAST_NOTIFIED_NAME
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ContextModule
@@ -31,7 +30,10 @@ import se.gustavkarlsson.skylight.android.dagger.modules.definitive.SystemServic
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.create
 import se.gustavkarlsson.skylight.android.services.SingletonCache
+import se.gustavkarlsson.skylight.android.services.providers.*
 import se.gustavkarlsson.skylight.android.services_impl.cache.DualSingletonCache
+import se.gustavkarlsson.skylight.android.services_impl.cache.auroraReportCacheSerializer
+import se.gustavkarlsson.skylight.android.services_impl.providers.*
 import se.gustavkarlsson.skylight.android.settings.DebugSettings
 import se.gustavkarlsson.skylight.android.settings.Settings
 import se.gustavkarlsson.skylight.android.settings.SharedPreferencesDebugSettings
@@ -63,12 +65,12 @@ class AuroraReportModule {
 	@Provides
 	@Reusable
 	fun provideAuroraFactorsProvider(
-			geomagActivityProvider: RetrofittedGeomagActivityProvider,
-			visibilityProvider: VisibilityProvider,
-			darknessProvider: KlausBrunnerDarknessProvider,
-			geomagLocProvider: GeomagLocationProviderImpl,
-			executorService: ErrorHandlingExecutorService,
-			clock: Clock
+		geomagActivityProvider: RetrofittedGeomagActivityProvider,
+		visibilityProvider: VisibilityProvider,
+		darknessProvider: KlausBrunnerDarknessProvider,
+		geomagLocProvider: GeomagLocationProviderImpl,
+		executorService: ErrorHandlingExecutorService,
+		clock: Clock
 	): AuroraFactorsProvider {
 		return AsyncAuroraFactorsProvider(geomagActivityProvider, visibilityProvider, darknessProvider, geomagLocProvider, executorService, clock)
 	}
@@ -100,17 +102,17 @@ class AuroraReportModule {
 	// Published
 	@Provides
 	fun provideAuroraReportProvider(
-			debugSettings: DebugSettings,
-			connectivityManager: ConnectivityManager,
-			locationProvider: LocationProvider,
-			auroraFactorsProvider: AuroraFactorsProvider,
-			asyncAddressProvider: AsyncAddressProvider,
-			clock: Clock
+		debugSettings: DebugSettings,
+		connectivityManager: ConnectivityManager,
+		locationProvider: LocationProvider,
+		auroraFactorsProvider: AuroraFactorsProvider,
+		asyncAddressProvider: AsyncAddressProvider,
+		clock: Clock
 	): AuroraReportProvider {
 		if (debugSettings.isOverrideValues) {
 			return DebugAuroraReportProvider(debugSettings, clock)
 		} else {
-			return AuroraReportProviderImpl(connectivityManager, locationProvider, auroraFactorsProvider, asyncAddressProvider, clock)
+			return AuroraReportProviderImpl(connectivityManager, locationProvider, auroraFactorsProvider, asyncAddressProvider, clock, Duration.ofSeconds(30)) // TODO Make configurable
 		}
 	}
 

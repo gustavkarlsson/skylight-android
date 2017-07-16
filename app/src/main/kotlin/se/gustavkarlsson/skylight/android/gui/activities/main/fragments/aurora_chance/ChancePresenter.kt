@@ -3,8 +3,8 @@ package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_
 import android.widget.TextView
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
-import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel
+import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.services.evaluation.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 
 class ChancePresenter(

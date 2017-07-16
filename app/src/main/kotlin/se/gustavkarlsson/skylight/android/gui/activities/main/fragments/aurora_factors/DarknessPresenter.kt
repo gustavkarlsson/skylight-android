@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors
 
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import java.lang.Math.*
 

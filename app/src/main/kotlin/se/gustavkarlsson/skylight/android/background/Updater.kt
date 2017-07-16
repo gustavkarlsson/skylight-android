@@ -5,7 +5,6 @@ import dagger.Reusable
 import io.reactivex.subjects.Subject
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.error
-import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight.Companion.applicationComponent
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
@@ -23,10 +22,10 @@ constructor(
 	private val userFriendlyExceptionSubject: Subject<UserFriendlyException>
 ) : AnkoLogger {
 
-	fun update(timeout: Duration): Boolean {
+	fun update(): Boolean {
 		val provider = applicationComponent.getAuroraReportProvider()
 		try {
-			val report = provider.getReport(timeout)
+			val report = provider.get()
 			latestAuroraReportSubject.onNext(report)
 			notificationHandler.handle(report)
 			return true

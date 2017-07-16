@@ -4,7 +4,7 @@ import dagger.Component
 import org.threeten.bp.Clock
 import se.gustavkarlsson.skylight.android.background.UpdateJob
 import se.gustavkarlsson.skylight.android.background.UpdateScheduler
-import se.gustavkarlsson.skylight.android.background.providers.AuroraReportProvider
+import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ActivityModule
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.EvaluationModule
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.LatestAuroraReportStreamModule

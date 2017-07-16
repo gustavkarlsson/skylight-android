@@ -7,12 +7,9 @@ import android.support.v4.content.ContextCompat
 import com.evernote.android.job.Job
 import com.evernote.android.job.Job.Result.FAILURE
 import com.evernote.android.job.Job.Result.SUCCESS
-import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.dagger.BACKGROUND_UPDATE_TIMEOUT_NAME
 import se.gustavkarlsson.skylight.android.gui.activities.LOCATION_PERMISSION
 import javax.inject.Inject
-import javax.inject.Named
 
 val UPDATE_JOB_TAG = "UPDATE_JOB"
 
@@ -21,8 +18,7 @@ class UpdateJob
 constructor(
 		private val notificationManager: NotificationManager,
 		private val updateScheduler: UpdateScheduler,
-		private val updater: Updater,
-		@param:Named(BACKGROUND_UPDATE_TIMEOUT_NAME) private val timeout: Duration
+		private val updater: Updater
 ) : Job() {
 
     override fun onRunJob(params: Job.Params): Job.Result {
@@ -31,7 +27,7 @@ constructor(
             sendLocationPermissionMissingNotification(notificationManager)
             return FAILURE
         }
-        val successful = updater.update(timeout)
+        val successful = updater.update()
         return if (successful) SUCCESS else FAILURE
     }
 

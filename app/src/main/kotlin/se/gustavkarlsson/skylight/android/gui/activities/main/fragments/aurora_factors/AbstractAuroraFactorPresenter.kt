@@ -9,13 +9,13 @@ import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.okButton
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.evaluation.Chance
-import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.services.evaluation.Chance
+import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 
 abstract class AbstractAuroraFactorPresenter<in F>(
-		private val factorView: AuroraFactorView,
-		private val chanceEvaluator: ChanceEvaluator<F>,
-		private val colorConverter: ChanceToColorConverter
+	private val factorView: AuroraFactorView,
+	private val chanceEvaluator: ChanceEvaluator<F>,
+	private val colorConverter: ChanceToColorConverter
 ) {
 
     init {

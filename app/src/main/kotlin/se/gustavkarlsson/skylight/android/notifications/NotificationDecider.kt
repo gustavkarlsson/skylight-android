@@ -3,8 +3,8 @@ package se.gustavkarlsson.skylight.android.notifications
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.dagger.LAST_NOTIFIED_NAME
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.evaluation.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.evaluation.ChanceLevel
+import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.services.evaluation.ChanceLevel
 import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.settings.Settings
 import javax.inject.Inject

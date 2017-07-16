@@ -14,6 +14,9 @@ import org.mockito.Mockito.mock
 import org.robolectric.RobolectricTestRunner
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapService
+import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapWeather
+import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.RetrofittedOpenWeatherMapVisibilityProvider
 import java.nio.charset.Charset
 
 @RunWith(RobolectricTestRunner::class)
@@ -59,11 +62,11 @@ class RetrofittedOpenWeatherMapVisibilityProviderTest {
     @Test
     fun parsesCloudinessCorrectly() {
         val service = RetrofittedOpenWeatherMapVisibilityProvider(Retrofit.Builder()
-                .client(mockedClient)
-                .baseUrl("http://mocked.com")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(OpenWeatherMapService::class.java), "fake-app-id")
+			.client(mockedClient)
+			.baseUrl("http://mocked.com")
+			.addConverterFactory(GsonConverterFactory.create())
+			.build()
+			.create(OpenWeatherMapService::class.java), "fake-app-id")
 
         val cloudiness = service.getVisibility(0.0, 0.0).cloudPercentage!!
 

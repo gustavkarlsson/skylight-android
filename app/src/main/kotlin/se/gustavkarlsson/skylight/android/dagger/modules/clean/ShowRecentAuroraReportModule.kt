@@ -7,12 +7,12 @@ import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.actions.ShowRecentAuroraReport
 import se.gustavkarlsson.skylight.android.actions_impl.aurora_reports.ProvideRecentAuroraReportToPublisher
+import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.dagger.BACKGROUND_UPDATE_TIMEOUT_NAME
 import se.gustavkarlsson.skylight.android.dagger.LAST_NAME
 import se.gustavkarlsson.skylight.android.dagger.NEW_NAME
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.now
-import se.gustavkarlsson.skylight.android.services.Provider
 import se.gustavkarlsson.skylight.android.services.streams.StreamPublisher
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import javax.inject.Named
@@ -26,8 +26,8 @@ class ShowRecentAuroraReportModule {
 	@Provides
 	@Reusable
 	fun provideShowRecentAuroraReport(
-		@Named(LAST_NAME) lastAuroraReportProvider: Provider<AuroraReport>,
-		@Named(NEW_NAME) newAuroraReportProvider: Provider<AuroraReport>,
+		@Named(LAST_NAME) lastAuroraReportProvider: AuroraReportProvider,
+		@Named(NEW_NAME) newAuroraReportProvider: AuroraReportProvider,
 		clock: Clock,
 		@Named(BACKGROUND_UPDATE_TIMEOUT_NAME) timeout: Duration,
 		auroraReports: StreamPublisher<AuroraReport>,

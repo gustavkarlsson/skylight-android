@@ -15,6 +15,7 @@ import org.robolectric.RobolectricTestRunner
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService
+import se.gustavkarlsson.skylight.android.services_impl.providers.RetrofittedGeomagActivityProvider
 
 
 @RunWith(RobolectricTestRunner::class)
@@ -60,11 +61,11 @@ class RetrofittedGeomagActivityProviderTest {
 	@Test
 	fun parsesKpIndexCorrectly() {
 		val service = RetrofittedGeomagActivityProvider(Retrofit.Builder()
-				.client(mockedClient)
-				.baseUrl("http://mocked.com")
-				.addConverterFactory(GsonConverterFactory.create())
-				.build()
-				.create(KpIndexService::class.java))
+			.client(mockedClient)
+			.baseUrl("http://mocked.com")
+			.addConverterFactory(GsonConverterFactory.create())
+			.build()
+			.create(KpIndexService::class.java))
 
 		val kpIndex = service.getGeomagActivity().kpIndex
 

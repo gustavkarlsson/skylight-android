@@ -3,8 +3,8 @@ package se.gustavkarlsson.skylight.android.dagger.modules.definitive
 import dagger.Binds
 import dagger.Module
 import dagger.Reusable
-import se.gustavkarlsson.skylight.android.background.providers.GeomagLocationProvider
-import se.gustavkarlsson.skylight.android.background.providers.impl.GeomagLocationProviderImpl
+import se.gustavkarlsson.skylight.android.services.providers.GeomagLocationProvider
+import se.gustavkarlsson.skylight.android.services_impl.providers.GeomagLocationProviderImpl
 
 @Module
 abstract class GeomagLocationModule {
