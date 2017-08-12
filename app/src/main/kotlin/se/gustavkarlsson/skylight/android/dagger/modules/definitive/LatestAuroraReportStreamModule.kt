@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.dagger.modules.definitive
 
 import dagger.Module
 import dagger.Provides
-import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import se.gustavkarlsson.skylight.android.dagger.LAST_NAME
@@ -24,13 +23,6 @@ class LatestAuroraReportStreamModule {
 		return RxStream(subject)
 	}
 
-	// TODO Get rid of this
-	@Provides
-	@Singleton
-	fun provideLatestAuroraReportObservable(subject: Subject<AuroraReport>): Observable<AuroraReport> {
-		return subject
-	}
-
 	@Provides
 	@Singleton
 	fun provideLatestAuroraReportStreamPublisher(subject: Subject<AuroraReport>): StreamPublisher<AuroraReport> {
@@ -40,8 +32,6 @@ class LatestAuroraReportStreamModule {
 	@Provides
 	@Singleton
 	fun provideLatestAuroraReportSubject(@Named(LAST_NAME) cache: SingletonCache<AuroraReport>): Subject<AuroraReport> {
-		val subject = BehaviorSubject.createDefault(cache.value)
-		subject.doOnNext { cache.value = it }
-		return subject
+		return BehaviorSubject.createDefault(cache.value)
 	}
 }

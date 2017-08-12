@@ -18,7 +18,9 @@ class DualSingletonCache<T>(cacheId: String, defaultValue: T, serializer: CacheS
 			builder.enableLog()
 		}
 		dualCache = builder.build()
-		dualCache.put(KEY, defaultValue)
+		if (!dualCache.contains(KEY)) {
+			dualCache.put(KEY, defaultValue)
+		}
 	}
 
 	override var value: T

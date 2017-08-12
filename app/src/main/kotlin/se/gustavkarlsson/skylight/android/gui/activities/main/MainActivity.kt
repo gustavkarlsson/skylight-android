@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.gui.activities.main
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.startActivity
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
@@ -56,7 +57,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 
     override fun onRequirementsMet() {
         swipeToRefreshController.enable()
-		presentRecentAuroraReport()
+		bg { presentRecentAuroraReport() }
     }
 
     override fun onStop() {
