@@ -9,7 +9,7 @@ import se.gustavkarlsson.skylight.android.actions.ShowNewAuroraReport
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ActivityModule
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.ShowNewAuroraReportModule
 import se.gustavkarlsson.skylight.android.dagger.scopes.ActivityScope
-import se.gustavkarlsson.skylight.android.gui.activities.main.SwipeToRefreshPresenter
+import se.gustavkarlsson.skylight.android.gui.activities.main.SwipeToRefreshController
 
 @Module(includes = arrayOf(
 	ActivityModule::class,
@@ -23,8 +23,8 @@ class SwipeToRefreshModule {
     fun provideSwipeToRefreshPresenter(
 			activity: Activity,
 			showNewAuroraReport: ShowNewAuroraReport
-	): SwipeToRefreshPresenter {
+	): SwipeToRefreshController {
         val swipeRefreshLayout = activity.findViewById(R.id.swipeRefreshLayout) as SwipeRefreshLayout
-        return SwipeToRefreshPresenter(swipeRefreshLayout, showNewAuroraReport)
+        return SwipeToRefreshController(swipeRefreshLayout, showNewAuroraReport)
     }
 }

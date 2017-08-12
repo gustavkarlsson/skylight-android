@@ -17,7 +17,7 @@ import javax.inject.Inject
 class MainActivity : AuroraRequirementsCheckingActivity() {
 
     @Inject
-	lateinit var swipeToRefreshPresenter: SwipeToRefreshPresenter
+	lateinit var swipeToRefreshController: SwipeToRefreshController
 
 	@Inject
 	lateinit var showingErrors: ShowingErrors
@@ -50,12 +50,12 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
     public override fun onStart() {
         super.onStart()
 		showingErrors.start()
-        swipeToRefreshPresenter.disable()
+        swipeToRefreshController.disable()
         ensureRequirementsMet()
     }
 
     override fun onRequirementsMet() {
-        swipeToRefreshPresenter.enable()
+        swipeToRefreshController.enable()
 		showRecentAuroraReport()
     }
 

@@ -6,7 +6,7 @@ import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.coroutines.experimental.bg
 import se.gustavkarlsson.skylight.android.actions.ShowNewAuroraReport
 
-class SwipeToRefreshPresenter(
+class SwipeToRefreshController(
 	private val swipeRefreshLayout: SwipeRefreshLayout,
 	private val showNewAuroraReport: ShowNewAuroraReport
 ) {
