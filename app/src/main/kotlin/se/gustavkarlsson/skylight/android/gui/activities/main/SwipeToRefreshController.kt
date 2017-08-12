@@ -14,9 +14,7 @@ class SwipeToRefreshController(
     private fun triggerUpdate() {
 		async(UI) {
 			swipeRefreshLayout.isRefreshing = true
-			val update = bg {
-				presentNewAuroraReport()
-			}
+			val update = bg { presentNewAuroraReport() }
 			update.await()
 			swipeRefreshLayout.isRefreshing = false
 		}

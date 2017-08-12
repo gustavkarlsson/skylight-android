@@ -49,11 +49,11 @@ class AuroraReportProviderImpl(
 		} catch (e: TimeoutException) {
 			warn("Getting address timed out after ${timeout.toMillis()}ms", e)
 		} catch (e: ExecutionException) {
-			warn("An unexpected exception occurred while", e.cause)
+			warn("An unexpected exception occurred while getting address", e.cause)
 		} catch (e: InterruptedException) {
-			warn("An unexpected exception occurred", e)
+			warn("An unexpected exception occurred while getting address", e)
 		} catch (e: CancellationException) {
-			warn("An unexpected exception occurred", e)
+			warn("An unexpected exception occurred while getting address", e)
 		}
 
 		return null
