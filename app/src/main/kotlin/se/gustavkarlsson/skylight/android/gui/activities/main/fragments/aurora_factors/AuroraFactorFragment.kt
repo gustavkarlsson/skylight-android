@@ -10,8 +10,9 @@ import io.reactivex.disposables.Disposable
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRootViewModule
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
+import se.gustavkarlsson.skylight.android.services.Presenter
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -22,16 +23,16 @@ class AuroraFactorFragment : Fragment() {
     lateinit var rootView: View
 
     @Inject
-	lateinit var geomagActivityPresenter: GeomagActivityPresenter
+	lateinit var geomagActivityPresenter: Presenter<GeomagActivity>
 
     @Inject
-	lateinit var geomagLocationPresenter: GeomagLocationPresenter
+	lateinit var geomagLocationPresenter: Presenter<GeomagLocation>
 
     @Inject
-	lateinit var visibilityPresenter: VisibilityPresenter
+	lateinit var visibilityPresenter: Presenter<Visibility>
 
     @Inject
-	lateinit var darknessPresenter: DarknessPresenter
+	lateinit var darknessPresenter: Presenter<Darkness>
 
     @Inject
 	lateinit var latestAuroraReports: Observable<AuroraReport>

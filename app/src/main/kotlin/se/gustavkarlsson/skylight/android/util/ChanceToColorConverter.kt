@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors
+package se.gustavkarlsson.skylight.android.util
 
 import android.content.Context
 import android.support.v4.app.ActivityCompat

@@ -6,11 +6,12 @@ import dagger.Provides
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
 import se.gustavkarlsson.skylight.android.dagger.scopes.FragmentScope
-import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.ChanceToColorConverter
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.GeomagLocationPresenter
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
+import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+import se.gustavkarlsson.skylight.android.util.ChanceToColorConverter
+import se.gustavkarlsson.skylight.android.services_impl.presenters.factors.GeomagLocationFactorViewPresenter
+import se.gustavkarlsson.skylight.android.services.Presenter
+import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 import javax.inject.Named
 
 @Module
@@ -23,8 +24,8 @@ class GeomagLocationPresenterModule {
 		@Named(FRAGMENT_ROOT_NAME) rootView: View,
 		chanceEvaluator: ChanceEvaluator<GeomagLocation>,
 		chanceToColorConverter: ChanceToColorConverter
-	): GeomagLocationPresenter {
+	): Presenter<GeomagLocation> {
         val geomagLocationView = rootView.findViewById(R.id.gGeomagLocation) as AuroraFactorView
-        return GeomagLocationPresenter(geomagLocationView, chanceEvaluator, chanceToColorConverter)
+        return GeomagLocationFactorViewPresenter(geomagLocationView, chanceEvaluator, chanceToColorConverter)
     }
 }

@@ -6,11 +6,12 @@ import dagger.Provides
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
 import se.gustavkarlsson.skylight.android.dagger.scopes.FragmentScope
-import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.ChanceToColorConverter
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.VisibilityPresenter
 import se.gustavkarlsson.skylight.android.entities.Visibility
+import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+import se.gustavkarlsson.skylight.android.util.ChanceToColorConverter
+import se.gustavkarlsson.skylight.android.services_impl.presenters.factors.VisibilityFactorViewPresenter
+import se.gustavkarlsson.skylight.android.services.Presenter
+import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 import javax.inject.Named
 
 @Module
@@ -23,8 +24,8 @@ class VisibilityPresenterModule {
 		@Named(FRAGMENT_ROOT_NAME) rootView: View,
 		chanceEvaluator: ChanceEvaluator<Visibility>,
 		chanceToColorConverter: ChanceToColorConverter
-	): VisibilityPresenter {
+	): Presenter<Visibility> {
         val geomagActivityView = rootView.findViewById(R.id.visibility) as AuroraFactorView
-        return VisibilityPresenter(geomagActivityView, chanceEvaluator, chanceToColorConverter)
+        return VisibilityFactorViewPresenter(geomagActivityView, chanceEvaluator, chanceToColorConverter)
     }
 }

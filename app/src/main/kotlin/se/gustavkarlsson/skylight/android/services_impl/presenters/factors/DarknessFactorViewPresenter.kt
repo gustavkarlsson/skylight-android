@@ -1,15 +1,17 @@
-package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors
+package se.gustavkarlsson.skylight.android.services_impl.presenters.factors
 
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.entities.Darkness
+import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+import se.gustavkarlsson.skylight.android.util.ChanceToColorConverter
+import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 import java.lang.Math.*
 
-class DarknessPresenter(
+class DarknessFactorViewPresenter(
 	factorView: AuroraFactorView,
 	chanceEvaluator: ChanceEvaluator<Darkness>,
 	colorConverter: ChanceToColorConverter
-) : AbstractAuroraFactorPresenter<Darkness>(factorView, chanceEvaluator, colorConverter) {
+) : AbstractAuroraFactorViewPresenter<Darkness>(factorView, chanceEvaluator, colorConverter) {
 
     override val fullTitleResourceId: Int
         get() = R.string.factor_darkness_title_full

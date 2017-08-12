@@ -1,14 +1,16 @@
-package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors
+package se.gustavkarlsson.skylight.android.services_impl.presenters.factors
 
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.entities.Visibility
+import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+import se.gustavkarlsson.skylight.android.util.ChanceToColorConverter
 
-class VisibilityPresenter(
+class VisibilityFactorViewPresenter(
 	factorView: AuroraFactorView,
 	chanceEvaluator: ChanceEvaluator<Visibility>,
 	colorConverter: ChanceToColorConverter
-) : AbstractAuroraFactorPresenter<Visibility>(factorView, chanceEvaluator, colorConverter) {
+) : AbstractAuroraFactorViewPresenter<Visibility>(factorView, chanceEvaluator, colorConverter) {
 
 	override val fullTitleResourceId: Int
         get() = R.string.factor_visibility_title_full
