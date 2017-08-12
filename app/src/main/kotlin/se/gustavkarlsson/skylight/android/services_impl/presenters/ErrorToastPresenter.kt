@@ -7,7 +7,9 @@ import org.jetbrains.anko.longToast
 import se.gustavkarlsson.skylight.android.services.Presenter
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
-class ToastErrorPresenter(private val theContext: Context) : Presenter<UserFriendlyException> {
+class ErrorToastPresenter(
+	private val theContext: Context
+) : Presenter<UserFriendlyException> {
 	override fun present(value: UserFriendlyException) {
 		async(UI) {
 			theContext.longToast(value.stringResourceId)

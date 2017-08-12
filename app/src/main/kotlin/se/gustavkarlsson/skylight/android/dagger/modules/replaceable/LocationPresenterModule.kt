@@ -7,7 +7,7 @@ import dagger.Provides
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
 import se.gustavkarlsson.skylight.android.dagger.scopes.FragmentScope
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.LocationPresenter
+import se.gustavkarlsson.skylight.android.services_impl.presenters.LocationTextPresenter
 import se.gustavkarlsson.skylight.android.services.Presenter
 import javax.inject.Named
 
@@ -21,6 +21,6 @@ class LocationPresenterModule {
 			@Named(FRAGMENT_ROOT_NAME) rootView: View
 	): Presenter<String?> {
         val locationView = rootView.findViewById(R.id.location) as TextView
-        return LocationPresenter(locationView)
+        return LocationTextPresenter(locationView)
     }
 }

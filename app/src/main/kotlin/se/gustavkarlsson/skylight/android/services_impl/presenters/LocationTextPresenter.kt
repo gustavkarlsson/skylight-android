@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance
+package se.gustavkarlsson.skylight.android.services_impl.presenters
 
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -7,7 +7,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import se.gustavkarlsson.skylight.android.services.Presenter
 
-class LocationPresenter(
+class LocationTextPresenter(
 	private val locationTextView: TextView
 ) : Presenter<String?> {
 

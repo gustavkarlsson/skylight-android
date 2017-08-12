@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance
+package se.gustavkarlsson.skylight.android.services_impl.presenters
 
 import android.widget.TextView
 import kotlinx.coroutines.experimental.android.UI
@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.services.Presenter
 import se.gustavkarlsson.skylight.android.services.evaluation.Chance
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceLevel
 
-class ChancePresenter(
+class ChanceTextPresenter(
 		private val chanceTextView: TextView
 ) : Presenter<Chance> {
 

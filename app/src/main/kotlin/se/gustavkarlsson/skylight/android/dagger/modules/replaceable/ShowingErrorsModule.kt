@@ -8,7 +8,7 @@ import se.gustavkarlsson.skylight.android.actions.ShowingErrors
 import se.gustavkarlsson.skylight.android.actions_impl.errors.ShowingErrorsFromStreamOnPresenter
 import se.gustavkarlsson.skylight.android.services.Presenter
 import se.gustavkarlsson.skylight.android.services.streams.Stream
-import se.gustavkarlsson.skylight.android.services_impl.presenters.ToastErrorPresenter
+import se.gustavkarlsson.skylight.android.services_impl.presenters.ErrorToastPresenter
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
 @Module
@@ -23,6 +23,6 @@ class ShowingErrorsModule {
 	@Provides
 	@Reusable
 	fun provideUserFriendlyExceptionsPresenter(context: Context): Presenter<UserFriendlyException> {
-		return ToastErrorPresenter(context)
+		return ErrorToastPresenter(context)
 	}
 }
