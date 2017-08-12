@@ -10,7 +10,9 @@ import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_f
 		GeomagActivityPresenterModule::class,
 		GeomagLocationPresenterModule::class,
 		DarknessPresenterModule::class,
-		VisibilityPresenterModule::class
+		VisibilityPresenterModule::class,
+		AuroraReportFactorsPresenterModule::class,
+		PresentingAuroraReportsModule::class
 ))
 @FragmentScope
 interface AuroraFactorsFragmentComponent {

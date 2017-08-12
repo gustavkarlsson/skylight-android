@@ -10,6 +10,7 @@ import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_c
 		LocationPresenterModule::class,
 		TimeSinceUpdateControllerModule::class,
 		ChancePresenterModule::class,
+		AuroraReportChancePresenterModule::class,
 		PresentingAuroraReportsModule::class
 ))
 @FragmentScope
