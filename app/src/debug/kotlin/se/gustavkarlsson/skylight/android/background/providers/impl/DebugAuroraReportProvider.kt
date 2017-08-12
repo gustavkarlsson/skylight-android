@@ -1,12 +1,10 @@
 package se.gustavkarlsson.skylight.android.background.providers.impl
 
-import android.location.Address
 import org.threeten.bp.Clock
-import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.extensions.now
+import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.settings.DebugSettings
-import java.util.*
 
 class DebugAuroraReportProvider(
 		private val debugSettings: DebugSettings,
@@ -14,9 +12,8 @@ class DebugAuroraReportProvider(
 ) : AuroraReportProvider {
 
     override fun get(): AuroraReport {
-        val location = Address(Locale.ENGLISH)
         val auroraFactors = createAuroraFactors()
-        return AuroraReport(clock.now, location, auroraFactors)
+        return AuroraReport(clock.now, "The moon?", auroraFactors)
     }
 
     private fun createAuroraFactors(): AuroraFactors {

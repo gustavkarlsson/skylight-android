@@ -7,9 +7,9 @@ import dagger.Provides
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
 import se.gustavkarlsson.skylight.android.dagger.scopes.FragmentScope
-import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.ChancePresenter
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.services.Presenter
+import se.gustavkarlsson.skylight.android.services.evaluation.Chance
 import javax.inject.Named
 
 @Module
@@ -18,8 +18,8 @@ class ChancePresenterModule {
     // Published
     @Provides
     @FragmentScope
-    fun provideChancePresenter(@Named(FRAGMENT_ROOT_NAME) rootView: View, reportChanceEvaluator: ChanceEvaluator<AuroraReport>): ChancePresenter {
+    fun provideChancePresenter(@Named(FRAGMENT_ROOT_NAME) rootView: View): Presenter<Chance> {
         val chanceView = rootView.findViewById(R.id.chance) as TextView
-        return ChancePresenter(chanceView, reportChanceEvaluator)
+        return ChancePresenter(chanceView)
     }
 }

@@ -7,12 +7,12 @@ import org.jetbrains.anko.warn
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.services.providers.AsyncAddressProvider
 import se.gustavkarlsson.skylight.android.services.providers.AuroraFactorsProvider
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.util.CountdownTimer
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import java.util.concurrent.CancellationException
@@ -40,7 +40,7 @@ class AuroraReportProviderImpl(
         val addressFuture = asyncAddressProvider.execute(location.latitude, location.longitude)
         val auroraFactors = auroraFactorsProvider.getAuroraFactors(location, timeoutTimer.remainingTime)
         val address = getAddress(addressFuture, timeoutTimer.remainingTime)
-        return AuroraReport(clock.now, address, auroraFactors)
+        return AuroraReport(clock.now, address?.locality, auroraFactors)
     }
 
 	private fun getAddress(addressFuture: Future<Address?>, timeout: Duration): Address? {

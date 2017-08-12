@@ -12,6 +12,9 @@ import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRootViewModule
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
+import se.gustavkarlsson.skylight.android.services.Presenter
+import se.gustavkarlsson.skylight.android.services.evaluation.Chance
+import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -21,11 +24,14 @@ class AuroraChanceFragment : Fragment() {
     @field:Named(FRAGMENT_ROOT_NAME)
     lateinit var rootView: View
 
-    @Inject
-	lateinit var locationPresenter: LocationPresenter
+	@Inject
+	lateinit var auroraChanceEvaluator: ChanceEvaluator<AuroraReport>
 
     @Inject
-	lateinit var chancePresenter: ChancePresenter
+	lateinit var locationPresenter: Presenter<String?>
+
+    @Inject
+	lateinit var chancePresenter: Presenter<Chance>
 
 	@Inject
 	lateinit var timeSinceUpdateController: TimeSinceUpdateController
@@ -49,8 +55,8 @@ class AuroraChanceFragment : Fragment() {
     }
 
     private fun update(report: AuroraReport) {
-        locationPresenter.present(report.address)
-        chancePresenter.present(report)
+        locationPresenter.present(report.location)
+        chancePresenter.present(auroraChanceEvaluator.evaluate(report))
 		timeSinceUpdateController.update(report.timestamp)
     }
 

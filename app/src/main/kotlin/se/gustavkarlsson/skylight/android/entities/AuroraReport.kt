@@ -1,12 +1,11 @@
 package se.gustavkarlsson.skylight.android.entities
 
-import android.location.Address
 import org.threeten.bp.Instant
 
 data class AuroraReport(
-		val timestamp: Instant,
-		val address: Address?,
-		val factors: AuroraFactors
+	val timestamp: Instant,
+	val location: String?,
+	val factors: AuroraFactors
 ) {
 	companion object {
 	    val default = AuroraReport(Instant.EPOCH, null, AuroraFactors(
