@@ -6,15 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.actions.PresentingAuroraReports
 import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRootViewModule
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
-import se.gustavkarlsson.skylight.android.services.Presenter
-import se.gustavkarlsson.skylight.android.services.evaluation.Chance
-import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.services.streams.Stream
-import se.gustavkarlsson.skylight.android.services.streams.StreamSubscription
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -25,21 +20,10 @@ class AuroraChanceFragment : Fragment() {
     lateinit var rootView: View
 
 	@Inject
-	lateinit var auroraChanceEvaluator: ChanceEvaluator<AuroraReport>
-
-    @Inject
-	lateinit var locationPresenter: Presenter<String?>
-
-    @Inject
-	lateinit var chancePresenter: Presenter<Chance>
-
-	@Inject
 	lateinit var timeSinceUpdateController: TimeSinceUpdateController
 
-    @Inject
-	lateinit var latestAuroraReports: Stream<AuroraReport>
-
-	private var latestAuroraReportsSubscription: StreamSubscription? = null
+	@Inject
+	lateinit var presentingAuroraReports: PresentingAuroraReports
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         (activity as MainActivity).component
@@ -50,19 +34,13 @@ class AuroraChanceFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-		latestAuroraReportsSubscription = latestAuroraReports.subscribe { update(it) }
         timeSinceUpdateController.start()
-    }
-
-    private fun update(report: AuroraReport) {
-        locationPresenter.present(report.location)
-        chancePresenter.present(auroraChanceEvaluator.evaluate(report))
-		timeSinceUpdateController.update(report.timestamp)
+		presentingAuroraReports.start()
     }
 
     override fun onStop() {
-		latestAuroraReportsSubscription?.cancel()
         timeSinceUpdateController.stop()
+		presentingAuroraReports.stop()
         super.onStop()
     }
 }
