@@ -5,8 +5,6 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import io.reactivex.Observable
-import io.reactivex.disposables.Disposable
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
 import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRootViewModule
@@ -15,6 +13,8 @@ import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import se.gustavkarlsson.skylight.android.services.Presenter
 import se.gustavkarlsson.skylight.android.services.evaluation.Chance
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.services.streams.Stream
+import se.gustavkarlsson.skylight.android.services.streams.StreamSubscription
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -37,9 +37,9 @@ class AuroraChanceFragment : Fragment() {
 	lateinit var timeSinceUpdateController: TimeSinceUpdateController
 
     @Inject
-	lateinit var latestAuroraReports: Observable<AuroraReport>
+	lateinit var latestAuroraReports: Stream<AuroraReport>
 
-	private var latestAuroraReportsSubscription: Disposable? = null
+	private var latestAuroraReportsSubscription: StreamSubscription? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         (activity as MainActivity).component
@@ -61,7 +61,7 @@ class AuroraChanceFragment : Fragment() {
     }
 
     override fun onStop() {
-		latestAuroraReportsSubscription?.dispose()
+		latestAuroraReportsSubscription?.cancel()
         timeSinceUpdateController.stop()
         super.onStop()
     }
