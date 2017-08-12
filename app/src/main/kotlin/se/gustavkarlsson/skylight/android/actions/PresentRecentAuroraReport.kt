@@ -1,3 +1,3 @@
 package se.gustavkarlsson.skylight.android.actions
 
-interface ShowRecentAuroraReport: () -> Unit
+interface PresentRecentAuroraReport : () -> Unit

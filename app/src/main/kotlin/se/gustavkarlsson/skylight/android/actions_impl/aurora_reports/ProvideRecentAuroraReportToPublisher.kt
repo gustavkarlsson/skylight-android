@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.actions_impl.aurora_reports
 import org.threeten.bp.Duration
 import org.threeten.bp.temporal.Temporal
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.actions.ShowRecentAuroraReport
+import se.gustavkarlsson.skylight.android.actions.PresentRecentAuroraReport
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.until
@@ -17,7 +17,7 @@ class ProvideRecentAuroraReportToPublisher(
 	private val maxAge: Duration,
 	private val auroraReports: StreamPublisher<AuroraReport>,
 	private val errors: StreamPublisher<UserFriendlyException>
-) : ShowRecentAuroraReport {
+) : PresentRecentAuroraReport {
 
 	override fun invoke() {
 		try {

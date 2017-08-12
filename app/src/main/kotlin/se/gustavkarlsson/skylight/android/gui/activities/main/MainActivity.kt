@@ -6,8 +6,8 @@ import android.view.MenuItem
 import org.jetbrains.anko.startActivity
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
-import se.gustavkarlsson.skylight.android.actions.ShowRecentAuroraReport
-import se.gustavkarlsson.skylight.android.actions.ShowingErrors
+import se.gustavkarlsson.skylight.android.actions.PresentRecentAuroraReport
+import se.gustavkarlsson.skylight.android.actions.PresentingErrors
 import se.gustavkarlsson.skylight.android.dagger.components.MainActivityComponent
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ActivityModule
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
@@ -20,10 +20,10 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 	lateinit var swipeToRefreshController: SwipeToRefreshController
 
 	@Inject
-	lateinit var showingErrors: ShowingErrors
+	lateinit var presentingErrors: PresentingErrors
 
 	@Inject
-	lateinit var showRecentAuroraReport: ShowRecentAuroraReport
+	lateinit var presentRecentAuroraReport: PresentRecentAuroraReport
 
 	lateinit var component: MainActivityComponent
         private set
@@ -49,18 +49,18 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 
     public override fun onStart() {
         super.onStart()
-		showingErrors.start()
+		presentingErrors.start()
         swipeToRefreshController.disable()
         ensureRequirementsMet()
     }
 
     override fun onRequirementsMet() {
         swipeToRefreshController.enable()
-		showRecentAuroraReport()
+		presentRecentAuroraReport()
     }
 
     override fun onStop() {
         super.onStop()
-		showingErrors.stop()
+		presentingErrors.stop()
     }
 }

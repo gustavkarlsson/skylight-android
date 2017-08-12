@@ -4,7 +4,7 @@ import se.gustavkarlsson.skylight.android.services.Presenter
 import se.gustavkarlsson.skylight.android.services.streams.Stream
 import se.gustavkarlsson.skylight.android.services.streams.StreamSubscription
 
-abstract class ShowingFromStreamOnPresenter<T>(
+abstract class PresentingFromStream<T>(
 	private val stream: Stream<T>,
 	private val presenter: Presenter<T>
 ) {

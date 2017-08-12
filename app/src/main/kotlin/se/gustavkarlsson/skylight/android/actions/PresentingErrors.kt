@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.actions
 
-interface ShowingErrors {
+interface PresentingErrors {
 	fun start()
 	fun stop()
 }
