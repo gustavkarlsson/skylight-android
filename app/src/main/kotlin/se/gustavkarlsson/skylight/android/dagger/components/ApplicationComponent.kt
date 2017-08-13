@@ -24,7 +24,8 @@ import javax.inject.Singleton
 	ForegroundUpdateTimeoutModule::class,
 	UpdateSchedulerModule::class,
 	NewAuroraReportProviderModule::class,
-	PresentNewAuroraReportModule::class
+	PresentNewAuroraReportModule::class,
+	SetUpdateScheduleModule::class
 ))
 @Singleton
 interface ApplicationComponent {

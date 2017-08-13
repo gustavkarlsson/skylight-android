@@ -4,17 +4,13 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.os.Bundle
 import android.preference.PreferenceFragment
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.services.Scheduler
-import se.gustavkarlsson.skylight.android.services.Settings
+import se.gustavkarlsson.skylight.android.actions.SetUpdateSchedule
 import javax.inject.Inject
 
 class SettingsFragment : PreferenceFragment() {
 
 	@Inject
-	lateinit var updateScheduler: Scheduler
-
-	@Inject
-	lateinit var settings: Settings
+	lateinit var setUpdateSchedule: SetUpdateSchedule
 
 	private lateinit var notificationsChangedListener: OnSharedPreferenceChangeListener
 
@@ -23,22 +19,22 @@ class SettingsFragment : PreferenceFragment() {
 		(activity as SettingsActivity).component
 			.getSettingsFragmentComponent()
 			.inject(this)
-		val notificationsKey = resources.getString(R.string.pref_notifications_key)
-		notificationsChangedListener = OnSharedPreferenceChangeListener { _, key ->
-			if (key == notificationsKey) {
-				if (settings.isEnableNotifications) {
-					updateScheduler.schedule()
-				} else {
-					updateScheduler.unschedule()
-				}
-			}
-		}
-		preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(notificationsChangedListener)
+		listenToChanges()
 		addPreferencesFromResource(R.xml.preferences)
 	}
 
 	override fun onDestroy() {
-		preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(notificationsChangedListener)
+		stopListeningToChanges()
 		super.onDestroy()
+	}
+
+	private fun listenToChanges() {
+		val notificationsKey = resources.getString(R.string.pref_notifications_key)
+		notificationsChangedListener = OnSharedPreferenceChangeListener { _, key -> if (key == notificationsKey) setUpdateSchedule() }
+		preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(notificationsChangedListener)
+	}
+
+	private fun stopListeningToChanges() {
+		preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(notificationsChangedListener)
 	}
 }
