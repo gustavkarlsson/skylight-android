@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.background
+package se.gustavkarlsson.skylight.android.services_impl.scheduling
 
 import android.app.NotificationManager
 import android.content.pm.PackageManager
@@ -8,7 +8,9 @@ import com.evernote.android.job.Job
 import com.evernote.android.job.Job.Result.FAILURE
 import com.evernote.android.job.Job.Result.SUCCESS
 import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.actions.PresentNewAuroraReport
 import se.gustavkarlsson.skylight.android.gui.activities.LOCATION_PERMISSION
+import se.gustavkarlsson.skylight.android.services.Scheduler
 import javax.inject.Inject
 
 val UPDATE_JOB_TAG = "UPDATE_JOB"
@@ -17,18 +19,18 @@ class UpdateJob
 @Inject
 constructor(
 		private val notificationManager: NotificationManager,
-		private val updateScheduler: UpdateScheduler,
-		private val updater: Updater
+		private val updateScheduler: Scheduler,
+		private val presentNewAuroraReport: PresentNewAuroraReport
 ) : Job() {
 
     override fun onRunJob(params: Job.Params): Job.Result {
         if (!hasLocationPermission()) {
-            updateScheduler.cancelBackgroundUpdates()
+			updateScheduler.unschedule()
             sendLocationPermissionMissingNotification(notificationManager)
             return FAILURE
         }
-        val successful = updater.update()
-        return if (successful) SUCCESS else FAILURE
+        presentNewAuroraReport()
+        return SUCCESS
     }
 
     private fun hasLocationPermission(): Boolean {

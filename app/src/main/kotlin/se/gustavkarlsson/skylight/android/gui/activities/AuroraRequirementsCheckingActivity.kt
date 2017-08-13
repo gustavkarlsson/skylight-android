@@ -12,7 +12,8 @@ import com.google.android.gms.common.GoogleApiAvailability
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.background.UpdateScheduler
+import se.gustavkarlsson.skylight.android.services.Scheduler
+import se.gustavkarlsson.skylight.android.services.Settings
 import javax.inject.Inject
 
 val LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION
@@ -21,7 +22,10 @@ private val REQUEST_CODE_LOCATION_PERMISSION = 1973
 abstract class AuroraRequirementsCheckingActivity : AppCompatActivity(), AnkoLogger {
 
     @Inject
-    lateinit var updateScheduler: UpdateScheduler
+    lateinit var updateScheduler: Scheduler
+
+	@Inject
+	lateinit var settings: Settings
 
     protected fun ensureRequirementsMet() {
         if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
@@ -36,12 +40,12 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity(), AnkoLog
         if (!hasPermission) {
             showLocationPermissionRequest()
         } else {
-            updateScheduler.setupBackgroundUpdates()
+            setupScheduler()
             onRequirementsMet()
         }
     }
 
-    private fun showLocationPermissionRequest() {
+	private fun showLocationPermissionRequest() {
         ActivityCompat.requestPermissions(this, arrayOf(LOCATION_PERMISSION), REQUEST_CODE_LOCATION_PERMISSION)
     }
 
@@ -65,13 +69,21 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity(), AnkoLog
                     if (PERMISSION_GRANTED != result) {
                         handlePermissionDenied()
                     } else {
-                        updateScheduler.setupBackgroundUpdates()
+                        setupScheduler()
                         onRequirementsMet()
                     }
                 }
             }
         }
     }
+
+	private fun setupScheduler() {
+		if (settings.isEnableNotifications) {
+			updateScheduler.schedule()
+		} else {
+			updateScheduler.unschedule()
+		}
+	}
 
     private fun handlePermissionDenied() {
         info("Permission denied: $LOCATION_PERMISSION")

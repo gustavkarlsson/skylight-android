@@ -35,9 +35,9 @@ import se.gustavkarlsson.skylight.android.services_impl.cache.DualSingletonCache
 import se.gustavkarlsson.skylight.android.services_impl.cache.auroraReportCacheSerializer
 import se.gustavkarlsson.skylight.android.services_impl.providers.*
 import se.gustavkarlsson.skylight.android.settings.DebugSettings
-import se.gustavkarlsson.skylight.android.settings.Settings
+import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.settings.SharedPreferencesDebugSettings
-import se.gustavkarlsson.skylight.android.settings.SharedPreferencesSettings
+import se.gustavkarlsson.skylight.android.services_impl.SharedPreferencesSettings
 import se.gustavkarlsson.skylight.android.util.ZoneIdProvider
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors

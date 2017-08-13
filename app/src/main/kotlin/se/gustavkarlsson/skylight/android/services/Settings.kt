@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.settings
+package se.gustavkarlsson.skylight.android.services
 
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceLevel
 

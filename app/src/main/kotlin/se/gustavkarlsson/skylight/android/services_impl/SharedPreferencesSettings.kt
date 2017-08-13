@@ -1,10 +1,11 @@
-package se.gustavkarlsson.skylight.android.settings
+package se.gustavkarlsson.skylight.android.services_impl
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceLevel
 import javax.inject.Inject
 

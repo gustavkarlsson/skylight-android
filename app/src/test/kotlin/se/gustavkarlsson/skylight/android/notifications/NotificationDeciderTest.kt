@@ -14,7 +14,7 @@ import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceLevel
 import se.gustavkarlsson.skylight.android.mockito.any
 import se.gustavkarlsson.skylight.android.services.SingletonCache
-import se.gustavkarlsson.skylight.android.settings.Settings
+import se.gustavkarlsson.skylight.android.services.Settings
 
 class NotificationDeciderTest {
 

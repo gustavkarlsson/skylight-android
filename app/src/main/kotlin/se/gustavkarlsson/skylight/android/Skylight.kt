@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android
 import android.app.Application
 import com.evernote.android.job.JobManager
 import com.jakewharton.threetenabp.AndroidThreeTen
-import se.gustavkarlsson.skylight.android.background.UPDATE_JOB_TAG
+import se.gustavkarlsson.skylight.android.services_impl.scheduling.UPDATE_JOB_TAG
 import se.gustavkarlsson.skylight.android.dagger.components.ApplicationComponent
 import se.gustavkarlsson.skylight.android.dagger.components.DaggerApplicationComponent
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ContextModule

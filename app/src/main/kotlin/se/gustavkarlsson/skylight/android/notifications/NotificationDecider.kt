@@ -6,7 +6,7 @@ import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceLevel
 import se.gustavkarlsson.skylight.android.services.SingletonCache
-import se.gustavkarlsson.skylight.android.settings.Settings
+import se.gustavkarlsson.skylight.android.services.Settings
 import javax.inject.Inject
 import javax.inject.Named
 
