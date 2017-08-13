@@ -4,14 +4,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.actions.PresentingAuroraReports
-import se.gustavkarlsson.skylight.android.actions_impl.errors.PresentingAuroraReportsFromStream
+import se.gustavkarlsson.skylight.android.actions_impl.aurora_reports.PresentingAuroraReportsFromStream
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.TimeSinceUpdateController
 import se.gustavkarlsson.skylight.android.services.Presenter
-import se.gustavkarlsson.skylight.android.services.evaluation.Chance
-import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.streams.Stream
-import se.gustavkarlsson.skylight.android.services_impl.presenters.AuroraReportChancePresenter
 
 @Module
 class PresentingAuroraReportsModule {

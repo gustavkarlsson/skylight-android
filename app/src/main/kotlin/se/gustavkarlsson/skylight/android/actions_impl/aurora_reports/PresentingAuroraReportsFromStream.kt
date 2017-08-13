@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.actions_impl.errors
+package se.gustavkarlsson.skylight.android.actions_impl.aurora_reports
 
 import se.gustavkarlsson.skylight.android.actions.PresentingAuroraReports
 import se.gustavkarlsson.skylight.android.actions_impl.PresentingFromStream

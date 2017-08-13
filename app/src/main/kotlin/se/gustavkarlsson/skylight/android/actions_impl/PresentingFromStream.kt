@@ -11,15 +11,18 @@ abstract class PresentingFromStream<T>(
 	private var subscription: StreamSubscription? = null
 
 	@Synchronized fun start() {
-		require(subscription == null, { "Already subscribed" })
+		require(!started, { "Already started" })
 		subscription = stream.subscribe {
 			presenter.present(it)
 		}
 	}
 
 	@Synchronized fun stop() {
-		require(subscription != null, { "Not subscribed" })
+		require(started, { "Not started" })
 		subscription!!.cancel()
 		subscription = null
 	}
+
+	val started: Boolean
+		get() = subscription != null
 }
