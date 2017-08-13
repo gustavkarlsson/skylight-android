@@ -28,9 +28,9 @@ class PresentingFromStreamTest {
 
 	@Before
 	fun setUp() {
-		presentingFromStream = object : PresentingFromStream<Int>(stream, presenter) {}
-		stream = RxStream(subject)
 		subject = PublishSubject.create()
+		stream = RxStream(subject)
+		presentingFromStream = object : PresentingFromStream<Int>(stream, presenter) {}
 	}
 
 	@Test
