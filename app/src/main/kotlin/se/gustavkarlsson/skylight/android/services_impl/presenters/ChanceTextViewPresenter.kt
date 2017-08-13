@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.services.Presenter
 import se.gustavkarlsson.skylight.android.services.evaluation.Chance
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceLevel
 
-class ChanceTextPresenter(
+class ChanceTextViewPresenter(
 		private val chanceTextView: TextView
 ) : Presenter<Chance> {
 

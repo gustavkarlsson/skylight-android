@@ -5,7 +5,7 @@ import dagger.Provides
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.services.Presenter
-import se.gustavkarlsson.skylight.android.services_impl.presenters.AuroraReportFactorsPresenter
+import se.gustavkarlsson.skylight.android.services_impl.presenters.AuroraReportFactorsFragmentPresenter
 
 @Module
 class AuroraReportFactorsPresenterModule {
@@ -14,6 +14,6 @@ class AuroraReportFactorsPresenterModule {
 	@Provides
 	@Reusable
 	fun provideAuroraReportsPresenter(geomagActivityPresenter: Presenter<GeomagActivity>, geomagLocationPresenter: Presenter<GeomagLocation>, visibilityPresenter: Presenter<Visibility>, darknessPresenter: Presenter<Darkness>): Presenter<AuroraReport> {
-		return AuroraReportFactorsPresenter(geomagActivityPresenter, geomagLocationPresenter, visibilityPresenter, darknessPresenter)
+		return AuroraReportFactorsFragmentPresenter(geomagActivityPresenter, geomagLocationPresenter, visibilityPresenter, darknessPresenter)
 	}
 }

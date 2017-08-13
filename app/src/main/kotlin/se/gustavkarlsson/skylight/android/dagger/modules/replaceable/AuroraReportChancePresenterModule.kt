@@ -8,7 +8,7 @@ import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_c
 import se.gustavkarlsson.skylight.android.services.Presenter
 import se.gustavkarlsson.skylight.android.services.evaluation.Chance
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.services_impl.presenters.AuroraReportChancePresenter
+import se.gustavkarlsson.skylight.android.services_impl.presenters.AuroraReportChanceFragmentPresenter
 
 @Module
 class AuroraReportChancePresenterModule {
@@ -17,6 +17,6 @@ class AuroraReportChancePresenterModule {
 	@Provides
 	@Reusable
 	fun provideAuroraReportsPresenter(auroraChanceEvaluator: ChanceEvaluator<AuroraReport>, locationPresenter: Presenter<String?>, chancePresenter: Presenter<Chance>, timeSinceUpdateController: TimeSinceUpdateController): Presenter<AuroraReport> {
-		return AuroraReportChancePresenter(auroraChanceEvaluator, locationPresenter, chancePresenter, timeSinceUpdateController)
+		return AuroraReportChanceFragmentPresenter(auroraChanceEvaluator, locationPresenter, chancePresenter, timeSinceUpdateController)
 	}
 }

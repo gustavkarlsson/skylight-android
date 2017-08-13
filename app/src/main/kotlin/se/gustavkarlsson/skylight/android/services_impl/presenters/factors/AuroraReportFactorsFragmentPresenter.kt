@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.services_impl.presenters
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.services.Presenter
 
-class AuroraReportFactorsPresenter(
+class AuroraReportFactorsFragmentPresenter(
 	val geomagActivityPresenter: Presenter<GeomagActivity>,
 	val geomagLocationPresenter: Presenter<GeomagLocation>,
 	val visibilityPresenter: Presenter<Visibility>,

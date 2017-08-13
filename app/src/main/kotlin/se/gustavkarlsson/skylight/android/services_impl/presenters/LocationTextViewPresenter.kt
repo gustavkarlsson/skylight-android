@@ -7,7 +7,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import se.gustavkarlsson.skylight.android.services.Presenter
 
-class LocationTextPresenter(
+class LocationTextViewPresenter(
 	private val locationTextView: TextView
 ) : Presenter<String?> {
 

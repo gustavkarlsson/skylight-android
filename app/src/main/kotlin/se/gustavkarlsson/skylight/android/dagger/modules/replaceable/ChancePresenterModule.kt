@@ -7,7 +7,7 @@ import dagger.Provides
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
 import se.gustavkarlsson.skylight.android.dagger.scopes.FragmentScope
-import se.gustavkarlsson.skylight.android.services_impl.presenters.ChanceTextPresenter
+import se.gustavkarlsson.skylight.android.services_impl.presenters.ChanceTextViewPresenter
 import se.gustavkarlsson.skylight.android.services.Presenter
 import se.gustavkarlsson.skylight.android.services.evaluation.Chance
 import javax.inject.Named
@@ -20,6 +20,6 @@ class ChancePresenterModule {
     @FragmentScope
     fun provideChancePresenter(@Named(FRAGMENT_ROOT_NAME) rootView: View): Presenter<Chance> {
         val chanceView = rootView.findViewById(R.id.chance) as TextView
-        return ChanceTextPresenter(chanceView)
+        return ChanceTextViewPresenter(chanceView)
     }
 }

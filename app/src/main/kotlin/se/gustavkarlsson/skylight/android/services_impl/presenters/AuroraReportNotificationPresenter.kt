@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.notifications
+package se.gustavkarlsson.skylight.android.services_impl.presenters
 
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -6,32 +6,27 @@ import android.content.Context
 import android.content.Intent
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.TaskStackBuilder
-import dagger.Reusable
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.dagger.LAST_NOTIFIED_NAME
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
+import se.gustavkarlsson.skylight.android.notifications.NotificationDecider
+import se.gustavkarlsson.skylight.android.services.Presenter
+import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceLevel
-import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
-import se.gustavkarlsson.skylight.android.services.SingletonCache
-import javax.inject.Inject
-import javax.inject.Named
 
-@Reusable
-class NotificationHandler
-@Inject
-constructor(
+class AuroraReportNotificationPresenter(
 	private val context: Context,
 	private val notificationManager: NotificationManager,
-	@param:Named(LAST_NOTIFIED_NAME) private val lastNotifiedReportCache: SingletonCache<AuroraReport>,
+	private val lastNotifiedReportCache: SingletonCache<AuroraReport>,
 	private val evaluator: ChanceEvaluator<AuroraReport>,
 	private val decider: NotificationDecider
-) {
+) : Presenter<AuroraReport> {
 
-    fun handle(report: AuroraReport) {
-        if (decider.shouldNotify(report)) {
-            notify(report)
-            lastNotifiedReportCache.value = report
+    override fun present(value: AuroraReport) {
+        if (decider.shouldNotify(value)) {
+            notify(value)
+            lastNotifiedReportCache.value = value
         }
     }
 

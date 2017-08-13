@@ -6,7 +6,7 @@ import se.gustavkarlsson.skylight.android.services.Presenter
 import se.gustavkarlsson.skylight.android.services.evaluation.Chance
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 
-class AuroraReportChancePresenter(
+class AuroraReportChanceFragmentPresenter(
 	val auroraChanceEvaluator: ChanceEvaluator<AuroraReport>,
 	val locationPresenter: Presenter<String?>,
 	val chancePresenter: Presenter<Chance>,
