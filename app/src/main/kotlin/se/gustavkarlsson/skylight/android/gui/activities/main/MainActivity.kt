@@ -9,6 +9,7 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
 import se.gustavkarlsson.skylight.android.actions.PresentRecentAuroraReport
 import se.gustavkarlsson.skylight.android.actions.PresentingErrors
+import se.gustavkarlsson.skylight.android.actions.SetUpdateSchedule
 import se.gustavkarlsson.skylight.android.dagger.components.MainActivityComponent
 import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ActivityModule
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
@@ -25,6 +26,9 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 
 	@Inject
 	lateinit var presentRecentAuroraReport: PresentRecentAuroraReport
+
+	@Inject
+	lateinit var setUpdateSchedule: SetUpdateSchedule
 
 	lateinit var component: MainActivityComponent
         private set
@@ -56,6 +60,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
     }
 
     override fun onRequirementsMet() {
+		setUpdateSchedule()
         swipeToRefreshController.enable()
 		bg { presentRecentAuroraReport() }
     }

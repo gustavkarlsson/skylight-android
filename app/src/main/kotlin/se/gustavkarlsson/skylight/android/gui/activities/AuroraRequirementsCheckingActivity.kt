@@ -12,16 +12,11 @@ import com.google.android.gms.common.GoogleApiAvailability
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.actions.SetUpdateSchedule
-import javax.inject.Inject
 
 val LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION
 private val REQUEST_CODE_LOCATION_PERMISSION = 1973
 
 abstract class AuroraRequirementsCheckingActivity : AppCompatActivity(), AnkoLogger {
-
-	@Inject
-	lateinit var setUpdateSchedule: SetUpdateSchedule
 
     protected fun ensureRequirementsMet() {
         if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
@@ -36,7 +31,6 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity(), AnkoLog
         if (!hasPermission) {
             showLocationPermissionRequest()
         } else {
-			setUpdateSchedule()
             onRequirementsMet()
         }
     }
@@ -65,7 +59,6 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity(), AnkoLog
                     if (PERMISSION_GRANTED != result) {
                         handlePermissionDenied()
                     } else {
-						setUpdateSchedule()
                         onRequirementsMet()
                     }
                 }
