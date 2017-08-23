@@ -13,22 +13,31 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import se.gustavkarlsson.skylight.android.R
 
-val LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION
-private val REQUEST_CODE_LOCATION_PERMISSION = 1973
+const val LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION
+private const val REQUEST_CODE_LOCATION_PERMISSION = 1973
 
 abstract class AuroraRequirementsCheckingActivity : AppCompatActivity(), AnkoLogger {
 
     protected fun ensureRequirementsMet() {
-        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS) {
-            ensureLocationPermission()
+        if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) != ConnectionResult.SUCCESS) {
+			showGooglePlayServicesNotAvailable()
         } else {
-            showGooglePlayServicesNotAvailable()
+			ensureLocationPermission()
         }
     }
 
+	private fun showGooglePlayServicesNotAvailable() {
+		AlertDialog.Builder(this)
+			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setTitle(R.string.error_google_play_services_is_not_available_title)
+			.setMessage(R.string.error_google_play_services_is_not_available_desc)
+			.setPositiveButton(R.string.exit) { _, _ -> System.exit(1) }
+			.setCancelable(false)
+			.show()
+	}
+
     private fun ensureLocationPermission() {
-        val hasPermission = ContextCompat.checkSelfPermission(this, LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED
-        if (!hasPermission) {
+        if (ContextCompat.checkSelfPermission(this, LOCATION_PERMISSION) != PackageManager.PERMISSION_GRANTED) {
             showLocationPermissionRequest()
         } else {
             onRequirementsMet()
@@ -37,16 +46,6 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity(), AnkoLog
 
 	private fun showLocationPermissionRequest() {
         ActivityCompat.requestPermissions(this, arrayOf(LOCATION_PERMISSION), REQUEST_CODE_LOCATION_PERMISSION)
-    }
-
-    private fun showGooglePlayServicesNotAvailable() {
-        AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle(R.string.error_google_play_services_is_not_available_title)
-                .setMessage(R.string.error_google_play_services_is_not_available_desc)
-                .setPositiveButton(R.string.exit) { _, _ -> System.exit(1) }
-                .setCancelable(false)
-                .show()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -98,5 +97,5 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity(), AnkoLog
                 .show()
     }
 
-    protected open fun onRequirementsMet() {}
+    abstract fun onRequirementsMet()
 }
