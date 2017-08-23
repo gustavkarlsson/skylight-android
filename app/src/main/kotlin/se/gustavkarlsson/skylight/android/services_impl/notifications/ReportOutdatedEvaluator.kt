@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.notifications
+package se.gustavkarlsson.skylight.android.services_impl.notifications
 
 import dagger.Reusable
 import org.threeten.bp.Clock

@@ -1,17 +1,17 @@
-package se.gustavkarlsson.skylight.android.notifications
+package se.gustavkarlsson.skylight.android.services_impl.notifications
 
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.dagger.LAST_NOTIFIED_NAME
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.services.Settings
+import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceLevel
-import se.gustavkarlsson.skylight.android.services.SingletonCache
-import se.gustavkarlsson.skylight.android.services.Settings
 import javax.inject.Inject
 import javax.inject.Named
 
 @Reusable
-class NotificationDecider
+class NotificationTracker
 @Inject
 constructor(
 	@param:Named(LAST_NOTIFIED_NAME) private val lastNotifiedReportCache: SingletonCache<AuroraReport>,
@@ -31,4 +31,8 @@ constructor(
 
 	private val AuroraReport.outdated: Boolean
 		get() = outdatedEvaluator.isOutdated(this)
+
+    fun onNotified(notifiedReport: AuroraReport) {
+        lastNotifiedReportCache.value = notifiedReport
+    }
 }

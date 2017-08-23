@@ -15,8 +15,10 @@ import se.gustavkarlsson.skylight.android.services.evaluation.ChanceLevel
 import se.gustavkarlsson.skylight.android.mockito.any
 import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.services.Settings
+import se.gustavkarlsson.skylight.android.services_impl.notifications.NotificationTracker
+import se.gustavkarlsson.skylight.android.services_impl.notifications.ReportOutdatedEvaluator
 
-class NotificationDeciderTest {
+class NotificationTrackerTest {
 
 	@Rule
 	@JvmField
@@ -40,12 +42,12 @@ class NotificationDeciderTest {
 	@Mock
 	lateinit var lastReport: AuroraReport
 
-	lateinit var notificationDecider: NotificationDecider
+	lateinit var notificationTracker: NotificationTracker
 
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        notificationDecider = NotificationDecider(lastNotifiedCache, auroraChanceEvaluator, settings, reportOutdatedEvaluator)
+        notificationTracker = NotificationTracker(lastNotifiedCache, auroraChanceEvaluator, settings, reportOutdatedEvaluator)
         `when`(settings.isEnableNotifications).thenReturn(true)
         `when`(settings.triggerLevel).thenReturn(ChanceLevel.HIGH)
         `when`(auroraChanceEvaluator.evaluate(any())).thenReturn(Chance(1.0))
@@ -56,7 +58,7 @@ class NotificationDeciderTest {
     fun maxChanceShouldNotify() {
         `when`(settings.triggerLevel).thenReturn(ChanceLevel.HIGH)
 
-        val shouldNotify = notificationDecider.shouldNotify(report)
+        val shouldNotify = notificationTracker.shouldNotify(report)
 
         assertThat(shouldNotify).isTrue()
     }
@@ -66,7 +68,7 @@ class NotificationDeciderTest {
         `when`(settings.triggerLevel).thenReturn(ChanceLevel.LOW)
         `when`(auroraChanceEvaluator.evaluate(report)).thenReturn(Chance(0.5))
 
-        val shouldNotify = notificationDecider.shouldNotify(report)
+        val shouldNotify = notificationTracker.shouldNotify(report)
 
         assertThat(shouldNotify).isTrue()
     }
@@ -76,7 +78,7 @@ class NotificationDeciderTest {
         `when`(settings.triggerLevel).thenReturn(ChanceLevel.HIGH)
         `when`(auroraChanceEvaluator.evaluate(report)).thenReturn(Chance(0.5))
 
-        val shouldNotify = notificationDecider.shouldNotify(report)
+        val shouldNotify = notificationTracker.shouldNotify(report)
 
         assertThat(shouldNotify).isFalse()
     }
@@ -85,7 +87,7 @@ class NotificationDeciderTest {
     fun noChanceShouldNotNotify() {
         `when`(auroraChanceEvaluator.evaluate(report)).thenReturn(Chance(0.0))
 
-        val shouldNotify = notificationDecider.shouldNotify(report)
+        val shouldNotify = notificationTracker.shouldNotify(report)
 
         assertThat(shouldNotify).isFalse()
     }
@@ -94,7 +96,7 @@ class NotificationDeciderTest {
     fun notificationsTurnedOffChanceShouldNotNotify() {
         `when`(settings.isEnableNotifications).thenReturn(false)
 
-        val shouldNotify = notificationDecider.shouldNotify(report)
+        val shouldNotify = notificationTracker.shouldNotify(report)
 
         assertThat(shouldNotify).isFalse()
     }
@@ -104,7 +106,7 @@ class NotificationDeciderTest {
         `when`(lastNotifiedCache.value).thenReturn(lastReport)
         `when`(reportOutdatedEvaluator.isOutdated(lastReport)).thenReturn(false)
 
-        val shouldNotify = notificationDecider.shouldNotify(report)
+        val shouldNotify = notificationTracker.shouldNotify(report)
 
         assertThat(shouldNotify).isFalse()
     }
@@ -115,7 +117,7 @@ class NotificationDeciderTest {
         `when`(reportOutdatedEvaluator.isOutdated(lastReport)).thenReturn(false)
         `when`(auroraChanceEvaluator.evaluate(lastReport)).thenReturn(Chance(0.5))
 
-        val shouldNotify = notificationDecider.shouldNotify(report)
+        val shouldNotify = notificationTracker.shouldNotify(report)
 
         assertThat(shouldNotify).isTrue()
     }
