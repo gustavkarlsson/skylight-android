@@ -16,7 +16,7 @@ constructor(context: Context) {
 	private val lowestColor = ActivityCompat.getColor(context, R.color.chance_lowest)
 	private val highestColor = ActivityCompat.getColor(context, R.color.chance_highest)
 
-	internal fun convert(chance: Chance): Int {
+	fun convert(chance: Chance): Int {
         if (!chance.isKnown) {
             return unknownColor
         }

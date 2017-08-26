@@ -55,9 +55,9 @@ abstract class AbstractAuroraFactorViewPresenter<F>(
 		}
     }
 
-    internal abstract val fullTitleResourceId: Int
+    abstract val fullTitleResourceId: Int
 
-    internal abstract val descriptionResourceId: Int
+    abstract val descriptionResourceId: Int
 
-    internal abstract fun evaluateText(factor: F): String
+    abstract fun evaluateText(factor: F): String
 }

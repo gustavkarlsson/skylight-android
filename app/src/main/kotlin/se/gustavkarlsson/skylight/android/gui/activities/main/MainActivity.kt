@@ -11,7 +11,7 @@ import se.gustavkarlsson.skylight.android.actions.PresentRecentAuroraReport
 import se.gustavkarlsson.skylight.android.actions.PresentingErrors
 import se.gustavkarlsson.skylight.android.actions.SetUpdateSchedule
 import se.gustavkarlsson.skylight.android.dagger.components.MainActivityComponent
-import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ActivityModule
+import se.gustavkarlsson.skylight.android.dagger.modules.ActivityModule
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
 import javax.inject.Inject

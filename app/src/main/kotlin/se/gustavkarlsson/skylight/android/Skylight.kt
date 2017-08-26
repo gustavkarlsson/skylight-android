@@ -6,7 +6,7 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import se.gustavkarlsson.skylight.android.services_impl.scheduling.UPDATE_JOB_TAG
 import se.gustavkarlsson.skylight.android.dagger.components.ApplicationComponent
 import se.gustavkarlsson.skylight.android.dagger.components.DaggerApplicationComponent
-import se.gustavkarlsson.skylight.android.dagger.modules.definitive.ContextModule
+import se.gustavkarlsson.skylight.android.dagger.modules.ContextModule
 
 class Skylight : Application() {
 

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.actions.PresentingAuroraReports
 import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
-import se.gustavkarlsson.skylight.android.dagger.modules.replaceable.FragmentRootViewModule
+import se.gustavkarlsson.skylight.android.dagger.modules.FragmentRootViewModule
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import javax.inject.Inject
 import javax.inject.Named
