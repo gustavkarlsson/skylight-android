@@ -7,12 +7,13 @@ import se.gustavkarlsson.skylight.android.services.Settings
 import javax.inject.Inject
 
 @Reusable
-class SetUpdateScheduleBasedOnSettings
+class SetUpdateScheduleFromSettings
 @Inject
 constructor(
         private val settings: Settings,
         private val scheduler: Scheduler
 ) : SetUpdateSchedule {
+
     override fun invoke() {
         if (settings.isEnableNotifications) {
             scheduler.schedule()

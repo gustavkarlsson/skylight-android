@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.actions.impl
+package se.gustavkarlsson.skylight.android.actions_impl
 
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
@@ -9,7 +9,6 @@ import org.mockito.Mock
 import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyZeroInteractions
 import org.mockito.junit.MockitoJUnitRunner
-import se.gustavkarlsson.skylight.android.actions_impl.PresentingFromStream
 import se.gustavkarlsson.skylight.android.services.Presenter
 import se.gustavkarlsson.skylight.android.services.streams.Stream
 import se.gustavkarlsson.skylight.android.services_impl.streams.RxStream
@@ -17,42 +16,42 @@ import se.gustavkarlsson.skylight.android.services_impl.streams.RxStream
 @RunWith(MockitoJUnitRunner::class)
 class PresentingFromStreamTest {
 
-	lateinit var presentingFromStream: PresentingFromStream<Int>
+    lateinit var subject: Subject<Int>
 
-	lateinit var stream: Stream<Int>
+    lateinit var stream: Stream<Int>
 
-	lateinit var subject: Subject<Int>
+    @Mock
+    lateinit var presenter: Presenter<Int>
 
-	@Mock
-	lateinit var presenter: Presenter<Int>
+    lateinit var impl: PresentingFromStream<Int>
 
 	@Before
 	fun setUp() {
 		subject = PublishSubject.create()
 		stream = RxStream(subject)
-		presentingFromStream = object : PresentingFromStream<Int>(stream, presenter) {}
+		impl = object : PresentingFromStream<Int>(stream, presenter) {}
 	}
 
 	@Test
 	fun canStartFromDefaultState() {
-		presentingFromStream.start()
+		impl.start()
 	}
 
 	@Test(expected = IllegalArgumentException::class)
 	fun canNotStopFromDefaultState() {
-		presentingFromStream.stop()
+		impl.stop()
 	}
 
 	@Test(expected = IllegalArgumentException::class)
 	fun canNotStartFromStartedState() {
-		presentingFromStream.start()
-		presentingFromStream.start()
+		impl.start()
+		impl.start()
 	}
 
 	@Test
 	fun canStopFromStartedState() {
-		presentingFromStream.start()
-		presentingFromStream.stop()
+		impl.start()
+		impl.stop()
 	}
 
 	@Test
@@ -63,7 +62,7 @@ class PresentingFromStreamTest {
 
 	@Test
 	fun startedStateDoesPresentElementsFromStream() {
-		presentingFromStream.start()
+		impl.start()
 		subject.onNext(5)
 		verify(presenter).present(5)
 	}

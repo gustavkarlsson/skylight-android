@@ -23,10 +23,10 @@ class ProvideRecentAuroraReportToPublisher
 constructor(
         @Named(LAST_NAME) private val lastAuroraReportProvider: AuroraReportProvider,
         @Named(NEW_NAME) private val newAuroraReportProvider: AuroraReportProvider,
-        private val clock: Clock,
-        @Named(BACKGROUND_UPDATE_TIMEOUT_NAME) private val timeout: Duration,
         private val auroraReports: StreamPublisher<AuroraReport>,
-        private val errors: StreamPublisher<UserFriendlyException>
+        private val errors: StreamPublisher<UserFriendlyException>,
+        @Named(BACKGROUND_UPDATE_TIMEOUT_NAME) private val timeout: Duration,
+        private val clock: Clock
 ) : PresentRecentAuroraReport {
 
 	override fun invoke() {

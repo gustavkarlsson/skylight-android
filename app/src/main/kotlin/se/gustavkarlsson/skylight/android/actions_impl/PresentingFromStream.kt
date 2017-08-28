@@ -8,6 +8,7 @@ abstract class PresentingFromStream<T>(
 	private val stream: Stream<T>,
 	private val presenter: Presenter<T>
 ) {
+
 	private var subscription: StreamSubscription? = null
 
 	@Synchronized fun start() {
@@ -23,6 +24,6 @@ abstract class PresentingFromStream<T>(
 		subscription = null
 	}
 
-	val started: Boolean
+	private val started: Boolean
 		get() = subscription != null
 }
