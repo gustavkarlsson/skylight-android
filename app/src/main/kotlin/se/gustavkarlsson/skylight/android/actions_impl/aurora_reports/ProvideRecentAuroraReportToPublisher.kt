@@ -25,14 +25,17 @@ constructor(
         @Named(NEW_NAME) private val newAuroraReportProvider: AuroraReportProvider,
         private val auroraReports: StreamPublisher<AuroraReport>,
         private val errors: StreamPublisher<UserFriendlyException>,
-        @Named(BACKGROUND_UPDATE_TIMEOUT_NAME) private val timeout: Duration,
+        @Named(BACKGROUND_UPDATE_TIMEOUT_NAME) private val maxAge: Duration,
         private val clock: Clock
 ) : PresentRecentAuroraReport {
+	init {
+	    require(!maxAge.isNegative) { "maxAge may not be negative. Was: $maxAge" }
+	}
 
 	override fun invoke() {
 		try {
 			val lastAuroraReport = lastAuroraReportProvider.get()
-			if (lastAuroraReport.age < timeout) {
+			if (lastAuroraReport.age < maxAge) {
 				auroraReports.publish(lastAuroraReport)
 			} else {
 				val newAuroraReport = newAuroraReportProvider.get()
@@ -41,7 +44,7 @@ constructor(
 		} catch(e: UserFriendlyException) {
 			errors.publish(e)
 		} catch(e: Exception) {
-			errors.publish(UserFriendlyException(R.string.error_unknown_update_error, e))
+			errors.publish(UserFriendlyException(R.string.error_unknown_update_error, e)) // TODO change error message
 		}
 	}
 

@@ -27,7 +27,7 @@ constructor(
         } catch (e: UserFriendlyException) {
             errorPublisher.publish(e)
         } catch (e: Exception) {
-            errorPublisher.publish(UserFriendlyException(R.string.error_unknown_update_error, e))
+            errorPublisher.publish(UserFriendlyException(R.string.error_unknown_update_error, e)) // TODO change error message
         }
     }
 }

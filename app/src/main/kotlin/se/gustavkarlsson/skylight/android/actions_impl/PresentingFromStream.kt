@@ -12,14 +12,14 @@ abstract class PresentingFromStream<T>(
 	private var subscription: StreamSubscription? = null
 
 	@Synchronized fun start() {
-		require(!started, { "Already started" })
+		require(!started) { "Already started" }
 		subscription = stream.subscribe {
 			presenter.present(it)
 		}
 	}
 
 	@Synchronized fun stop() {
-		require(started, { "Not started" })
+		require(started) { "Not started" }
 		subscription!!.cancel()
 		subscription = null
 	}

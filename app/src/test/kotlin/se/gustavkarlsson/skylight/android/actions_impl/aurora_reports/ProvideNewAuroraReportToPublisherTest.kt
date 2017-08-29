@@ -32,7 +32,7 @@ class ProvideNewAuroraReportToPublisherTest {
     }
 
     @Test
-    fun invokePublishesFrom() {
+    fun invokePublishes() {
         `when`(provider.get()).thenReturn(AuroraReport.default)
 
         impl()
