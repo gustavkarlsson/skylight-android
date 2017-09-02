@@ -1,10 +1,12 @@
 package se.gustavkarlsson.skylight.android.actions_impl.aurora_reports
 
+import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.verifyZeroInteractions
 import org.mockito.junit.MockitoJUnitRunner
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
@@ -42,8 +44,8 @@ class ProvideRecentAuroraReportToPublisherTest {
 
     @Before
     fun setUp() {
-        `when`(lastProvider.get()).thenReturn(lastAuroraReport)
-        `when`(newProvider.get()).thenReturn(newAuroraReport)
+        whenever(lastProvider.get()).thenReturn(lastAuroraReport)
+        whenever(newProvider.get()).thenReturn(newAuroraReport)
         impl = ProvideRecentAuroraReportToPublisher(lastProvider, newProvider, publisher, errorPublisher, fiveSeconds, clock)
     }
 
@@ -59,7 +61,7 @@ class ProvideRecentAuroraReportToPublisherTest {
 
     @Test
     fun lastIsStillNewPublishesLast() {
-		`when`(clock.instant()).thenReturn(Instant.EPOCH)
+		whenever(clock.instant()).thenReturn(Instant.EPOCH)
 
 		impl()
 
@@ -69,7 +71,7 @@ class ProvideRecentAuroraReportToPublisherTest {
 
     @Test
     fun lastIsOutdatedPublishesNew() {
-        `when`(clock.instant()).thenReturn(Instant.ofEpochSecond(10))
+        whenever(clock.instant()).thenReturn(Instant.ofEpochSecond(10))
 
         impl()
 

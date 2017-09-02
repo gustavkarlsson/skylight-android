@@ -1,11 +1,11 @@
 package se.gustavkarlsson.skylight.android.util
 
+import com.nhaarman.mockito_kotlin.whenever
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnit
 import org.threeten.bp.Clock
@@ -24,7 +24,7 @@ class CountdownTimerTest {
 	@Before
 	fun setUp() {
 		MockitoAnnotations.initMocks(this)
-		`when`(clock.instant()).thenReturn(Instant.ofEpochMilli(1000))
+		whenever(clock.instant()).thenReturn(Instant.ofEpochMilli(1000))
 	}
 
 	@Test
@@ -39,7 +39,7 @@ class CountdownTimerTest {
 	@Test
 	fun remainingChangesWhenTimePasses() {
 		val timer = CountdownTimer(Duration.ofMillis(200), clock)
-		`when`(clock.instant()).thenReturn(Instant.ofEpochMilli(1100))
+		whenever(clock.instant()).thenReturn(Instant.ofEpochMilli(1100))
 
 		val remainingTime = timer.remainingTime
 

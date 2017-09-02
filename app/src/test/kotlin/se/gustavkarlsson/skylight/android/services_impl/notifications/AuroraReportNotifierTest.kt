@@ -3,11 +3,11 @@ package se.gustavkarlsson.skylight.android.services_impl.notifications
 import android.app.NotificationManager
 import android.content.Context
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
@@ -35,7 +35,7 @@ class AuroraReportNotifierTest {
 		mockNotificationManager = mock()
 		mockChanceEvaluator = mock()
         mockAuroraReport = mock()
-        `when`(mockChanceEvaluator.evaluate(any())).thenReturn(Chance(0.5))
+        whenever(mockChanceEvaluator.evaluate(any())).thenReturn(Chance(0.5))
         impl = AuroraReportNotifier(context, mockNotificationManager, mockChanceEvaluator)
     }
 

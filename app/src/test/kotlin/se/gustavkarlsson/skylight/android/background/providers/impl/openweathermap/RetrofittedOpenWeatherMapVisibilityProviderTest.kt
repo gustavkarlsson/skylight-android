@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.background.providers.impl.openweather
 
 import com.google.gson.Gson
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
 import okhttp3.*
 import org.apache.commons.io.IOUtils
 import org.assertj.core.api.Java6Assertions.assertThat
@@ -10,7 +11,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
-import org.mockito.Mockito.`when`
 import org.robolectric.RobolectricTestRunner
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -31,14 +31,14 @@ class RetrofittedOpenWeatherMapVisibilityProviderTest {
     private fun mockClient(statusCode: Int, bodyResourcePath: String, mediaType: String): OkHttpClient {
         val mockedCall = mockCall(statusCode, bodyResourcePath, mediaType)
         val mockedClient = mock<OkHttpClient>()
-        `when`(mockedClient.newCall(ArgumentMatchers.any(Request::class.java))).thenReturn(mockedCall)
+        whenever(mockedClient.newCall(ArgumentMatchers.any(Request::class.java))).thenReturn(mockedCall)
         return mockedClient
     }
 
     private fun mockCall(statusCode: Int, bodyResourcePath: String, mediaType: String): Call {
         val body = createResponseBody(bodyResourcePath, mediaType)
         val call = mock<Call>()
-        `when`(call.execute()).thenReturn(
+        whenever(call.execute()).thenReturn(
                 Response.Builder()
                         .request(Request.Builder().url("http://mocked.com/").build())
                         .code(statusCode)

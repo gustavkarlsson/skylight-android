@@ -1,10 +1,10 @@
 package se.gustavkarlsson.skylight.android.actions_impl
 
+import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 import se.gustavkarlsson.skylight.android.services.Scheduler
@@ -28,7 +28,7 @@ class SetUpdateScheduleFromSettingsTest {
 
     @Test
     fun scheduleIfEnabled() {
-        `when`(mockSettings.isEnableNotifications).thenReturn(true)
+        whenever(mockSettings.isEnableNotifications).thenReturn(true)
 
 		impl()
 
@@ -37,7 +37,7 @@ class SetUpdateScheduleFromSettingsTest {
 
     @Test
     fun unscheduleIfDisabled() {
-        `when`(mockSettings.isEnableNotifications).thenReturn(false)
+        whenever(mockSettings.isEnableNotifications).thenReturn(false)
 
         impl()
 

@@ -1,10 +1,12 @@
 package se.gustavkarlsson.skylight.android.actions_impl.aurora_reports
 
+import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.*
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.verifyZeroInteractions
 import org.mockito.junit.MockitoJUnitRunner
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.mockito.any
@@ -33,7 +35,7 @@ class ProvideNewAuroraReportToPublisherTest {
 
     @Test
     fun invokePublishes() {
-        `when`(provider.get()).thenReturn(AuroraReport.default)
+        whenever(provider.get()).thenReturn(AuroraReport.default)
 
         impl()
 
@@ -43,7 +45,7 @@ class ProvideNewAuroraReportToPublisherTest {
 
     @Test
     fun invokeWithErrorPublishesError() {
-        `when`(provider.get()).thenThrow(RuntimeException())
+        whenever(provider.get()).thenThrow(RuntimeException())
 
         impl()
 

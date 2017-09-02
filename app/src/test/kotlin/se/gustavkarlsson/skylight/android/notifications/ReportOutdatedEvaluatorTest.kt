@@ -1,16 +1,15 @@
 package se.gustavkarlsson.skylight.android.notifications
 
+import com.nhaarman.mockito_kotlin.whenever
 import org.assertj.core.api.SoftAssertions
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.Mock
-import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnit
 import org.threeten.bp.Clock
 import org.threeten.bp.Instant
-import org.threeten.bp.ZoneId
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.temporal.ChronoUnit.DAYS
 import org.threeten.bp.temporal.ChronoUnit.HOURS
@@ -46,8 +45,8 @@ class ReportOutdatedEvaluatorTest {
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
-        `when`<ZoneId>(zoneIdProvider.zoneId).thenReturn(ZONE_OFFSET)
-        `when`<ZoneId>(clock.zone).thenReturn(ZONE_OFFSET)
+        whenever(zoneIdProvider.zoneId).thenReturn(ZONE_OFFSET)
+        whenever(clock.zone).thenReturn(ZONE_OFFSET)
         evaluator = ReportOutdatedEvaluator(clock, zoneIdProvider)
     }
 
@@ -77,8 +76,8 @@ class ReportOutdatedEvaluatorTest {
     }
 
     private fun assertOutdated(lastReportTime: Instant, currentTime: Instant, expected: Boolean, softly: SoftAssertions) {
-        `when`(report.timestamp).thenReturn(lastReportTime)
-        `when`(clock.instant()).thenReturn(currentTime)
+        whenever(report.timestamp).thenReturn(lastReportTime)
+        whenever(clock.instant()).thenReturn(currentTime)
 
         val outdated = evaluator.isOutdated(report)
 
