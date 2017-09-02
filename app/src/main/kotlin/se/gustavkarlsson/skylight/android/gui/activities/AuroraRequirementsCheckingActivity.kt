@@ -13,9 +13,6 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 import se.gustavkarlsson.skylight.android.R
 
-const val LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION
-private const val REQUEST_CODE_LOCATION_PERMISSION = 1973
-
 abstract class AuroraRequirementsCheckingActivity : AppCompatActivity(), AnkoLogger {
 
     protected fun ensureRequirementsMet() {
@@ -98,4 +95,9 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity(), AnkoLog
     }
 
     abstract fun onRequirementsMet()
+
+	companion object {
+        val LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION
+        private val REQUEST_CODE_LOCATION_PERMISSION = 1973
+	}
 }

@@ -6,6 +6,7 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.services.Scheduler
+import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob.Companion.UPDATE_JOB_TAG
 
 class GetLatestAuroraReportScheduler(
 	private val scheduleInterval: Duration,
