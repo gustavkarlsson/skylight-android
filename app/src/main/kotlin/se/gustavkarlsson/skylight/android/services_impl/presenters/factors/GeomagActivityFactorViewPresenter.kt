@@ -27,7 +27,7 @@ class GeomagActivityFactorViewPresenter(
         return wholeString + partString
     }
 
-    private fun parsePart(part: Float): String {
+    private fun parsePart(part: Double): String {
         if (part < 0.15) {
             return ""
         }

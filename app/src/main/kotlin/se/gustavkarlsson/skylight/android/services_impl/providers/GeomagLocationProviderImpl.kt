@@ -13,7 +13,7 @@ constructor() : GeomagLocationProvider {
 
     override fun getGeomagLocation(latitude: Double, longitude: Double): GeomagLocation {
         val geomagneticLatitude = calculateGeomagneticLatitude(latitude, longitude, MAGNETIC_NORTH_POLE_LATITUDE, MAGNETIC_NORTH_POLE_LONGITUDE)
-        return GeomagLocation(geomagneticLatitude.toFloat())
+        return GeomagLocation(geomagneticLatitude)
     }
 
 	// http://stackoverflow.com/a/7949249/940731

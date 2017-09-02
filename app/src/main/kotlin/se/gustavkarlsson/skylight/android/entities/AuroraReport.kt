@@ -25,15 +25,15 @@ data class AuroraFactors(
 )
 
 data class Darkness(
-    val sunZenithAngle: Float? = null
+    val sunZenithAngle: Double? = null
 )
 
 data class GeomagActivity(
-    val kpIndex: Float? = null
+    val kpIndex: Double? = null
 )
 
 data class GeomagLocation(
-    val latitude: Float? = null
+    val latitude: Double? = null
 )
 
 data class Visibility(

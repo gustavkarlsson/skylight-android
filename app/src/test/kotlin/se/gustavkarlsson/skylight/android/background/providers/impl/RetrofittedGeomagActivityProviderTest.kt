@@ -69,6 +69,6 @@ class RetrofittedGeomagActivityProviderTest {
 
 		val kpIndex = service.getGeomagActivity().kpIndex
 
-		assertThat(kpIndex).isCloseTo(1.33f, within(0.01f))
+		assertThat(kpIndex).isCloseTo(1.33, within(0.01))
 	}
 }

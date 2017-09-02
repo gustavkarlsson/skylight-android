@@ -49,8 +49,9 @@ class Chance(value: Double?) : Comparable<Chance> {
 	companion object {
 		private val HIGHEST = 1.0
 		private val LOWEST = 0.0
-		val UNKNOWN: Chance = Chance(null)
-		val IMPOSSIBLE: Chance = Chance(LOWEST)
+		val UNKNOWN = Chance(null)
+		val IMPOSSIBLE = Chance(LOWEST)
+        val MAX = Chance(HIGHEST)
     }
 
 	operator fun times(other: Chance): Chance {

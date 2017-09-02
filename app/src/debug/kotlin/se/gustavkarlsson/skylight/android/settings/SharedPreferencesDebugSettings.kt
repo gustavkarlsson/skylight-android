@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.R
-import java.lang.Float.parseFloat
+import java.lang.Double.parseDouble
 import java.lang.Integer.parseInt
 import javax.inject.Inject
 
@@ -23,14 +23,14 @@ constructor(context: Context) : DebugSettings {
 	override val isOverrideValues: Boolean
         get() = defaultPreferences.getBoolean(overrideValuesKey, false)
 
-    override val kpIndex: Float
-        get() = parseFloat(defaultPreferences.getString(kpIndexKey, "0"))
+    override val kpIndex: Double
+        get() = parseDouble(defaultPreferences.getString(kpIndexKey, "0"))
 
-    override val geomagLatitude: Float
-        get() = parseFloat(defaultPreferences.getString(geomagLatitudeKey, "0"))
+    override val geomagLatitude: Double
+        get() = parseDouble(defaultPreferences.getString(geomagLatitudeKey, "0"))
 
-    override val sunZenithAngle: Float
-        get() = parseFloat(defaultPreferences.getString(sunZenithAngleKey, "0"))
+    override val sunZenithAngle: Double
+        get() = parseDouble(defaultPreferences.getString(sunZenithAngleKey, "0"))
 
     override val cloudPercentage: Int
         get() = parseInt(defaultPreferences.getString(cloudPercentageKey, "0"))
