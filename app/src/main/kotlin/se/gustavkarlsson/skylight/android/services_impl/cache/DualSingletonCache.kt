@@ -7,12 +7,17 @@ import com.vincentbrison.openlibraries.android.dualcache.DualCache
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.services.SingletonCache
 
-class DualSingletonCache<T>(cacheId: String, defaultValue: T, serializer: CacheSerializer<T>, context: Context): SingletonCache<T> {
+class DualSingletonCache<T>(
+		cacheId: String,
+		defaultValue: T,
+		serializer: CacheSerializer<T>,
+		context: Context
+) : SingletonCache<T> {
 	private val dualCache: DualCache<T>
 
 	init {
 		val builder = Builder<T>(cacheId, BuildConfig.VERSION_CODE)
-			.useReferenceInRam(Integer.MAX_VALUE) { 1 }
+			.useReferenceInRam(Integer.MAX_VALUE, { 1 })
 			.useSerializerInDisk(Integer.MAX_VALUE, false, serializer, context)
 		if (BuildConfig.DEBUG) {
 			builder.enableLog()
