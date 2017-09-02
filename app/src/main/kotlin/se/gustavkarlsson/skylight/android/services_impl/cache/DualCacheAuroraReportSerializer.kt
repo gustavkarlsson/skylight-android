@@ -11,28 +11,19 @@ import se.gustavkarlsson.skylight.android.extensions.fromJson
 
 
 private val instantTypeAdapter = object : TypeAdapter<Instant>() {
-	override fun read(reader: JsonReader): Instant {
-		return Instant.ofEpochMilli(reader.nextLong())
-	}
+	override fun read(reader: JsonReader) = Instant.ofEpochMilli(reader.nextLong())
 
 	override fun write(writer: JsonWriter, instant: Instant) {
 		writer.value(instant.toEpochMilli())
 	}
 }
 
-
-private val auroraReportGson = GsonBuilder()
-		.registerTypeAdapter(Instant::class.java, instantTypeAdapter)
-		.create()!!
-
 val auroraReportCacheSerializer = object : CacheSerializer<AuroraReport> {
-	private val gson = auroraReportGson
+	private val gson = GsonBuilder()
+			.registerTypeAdapter(Instant::class.java, instantTypeAdapter)
+			.create()
 
-	override fun fromString(json: String): AuroraReport {
-		return gson.fromJson(json)
-	}
+	override fun fromString(json: String): AuroraReport = gson.fromJson(json)
 
-	override fun toString(report: AuroraReport): String {
-		return gson.toJson(report)
-	}
+	override fun toString(report: AuroraReport): String = gson.toJson(report)
 }
