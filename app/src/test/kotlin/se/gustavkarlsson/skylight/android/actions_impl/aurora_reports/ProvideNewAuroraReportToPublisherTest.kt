@@ -18,38 +18,38 @@ import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 class ProvideNewAuroraReportToPublisherTest {
 
     @Mock
-    lateinit var provider: AuroraReportProvider
+    lateinit var mockProvider: AuroraReportProvider
 
     @Mock
-    lateinit var publisher: StreamPublisher<AuroraReport>
+    lateinit var mockPublisher: StreamPublisher<AuroraReport>
 
     @Mock
-    lateinit var errorPublisher: StreamPublisher<UserFriendlyException>
+    lateinit var mockErrorPublisher: StreamPublisher<UserFriendlyException>
 
     lateinit var impl: ProvideNewAuroraReportToPublisher
 
     @Before
     fun setUp() {
-        impl = ProvideNewAuroraReportToPublisher(provider, publisher, errorPublisher)
+        impl = ProvideNewAuroraReportToPublisher(mockProvider, mockPublisher, mockErrorPublisher)
     }
 
     @Test
     fun invokePublishes() {
-        whenever(provider.get()).thenReturn(AuroraReport.default)
+        whenever(mockProvider.get()).thenReturn(AuroraReport.default)
 
         impl()
 
-        verify(publisher).publish(AuroraReport.default)
-        verifyZeroInteractions(errorPublisher)
+        verify(mockPublisher).publish(AuroraReport.default)
+        verifyZeroInteractions(mockErrorPublisher)
     }
 
     @Test
     fun invokeWithErrorPublishesError() {
-        whenever(provider.get()).thenThrow(RuntimeException())
+        whenever(mockProvider.get()).thenThrow(RuntimeException())
 
         impl()
 
-        verify(errorPublisher).publish(any())
-        verifyZeroInteractions(publisher)
+        verify(mockErrorPublisher).publish(any())
+        verifyZeroInteractions(mockPublisher)
     }
 }

@@ -3,33 +3,28 @@ package se.gustavkarlsson.skylight.android.util
 import com.nhaarman.mockito_kotlin.whenever
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.MockitoAnnotations
-import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoJUnitRunner
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 
+@RunWith(MockitoJUnitRunner::class)
 class CountdownTimerTest {
 
-	@Rule
-	@JvmField
-	val rule = MockitoJUnit.rule()!!
-
 	@Mock
-	lateinit var clock: Clock
+	lateinit var mockClock: Clock
 
 	@Before
 	fun setUp() {
-		MockitoAnnotations.initMocks(this)
-		whenever(clock.instant()).thenReturn(Instant.ofEpochMilli(1000))
+		whenever(mockClock.instant()).thenReturn(Instant.ofEpochMilli(1000))
 	}
 
 	@Test
 	fun remainingIsSameAsInputValue() {
-		val timer = CountdownTimer(Duration.ZERO, clock)
+		val timer = CountdownTimer(Duration.ZERO, mockClock)
 
 		val remainingTime = timer.remainingTime
 
@@ -38,8 +33,8 @@ class CountdownTimerTest {
 
 	@Test
 	fun remainingChangesWhenTimePasses() {
-		val timer = CountdownTimer(Duration.ofMillis(200), clock)
-		whenever(clock.instant()).thenReturn(Instant.ofEpochMilli(1100))
+		val timer = CountdownTimer(Duration.ofMillis(200), mockClock)
+		whenever(mockClock.instant()).thenReturn(Instant.ofEpochMilli(1100))
 
 		val remainingTime = timer.remainingTime
 

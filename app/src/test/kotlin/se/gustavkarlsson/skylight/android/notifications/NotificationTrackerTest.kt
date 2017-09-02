@@ -3,11 +3,10 @@ package se.gustavkarlsson.skylight.android.notifications
 import com.nhaarman.mockito_kotlin.whenever
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.MockitoAnnotations
-import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoJUnitRunner
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.mockito.any
 import se.gustavkarlsson.skylight.android.services.Settings
@@ -18,106 +17,102 @@ import se.gustavkarlsson.skylight.android.services.evaluation.ChanceLevel
 import se.gustavkarlsson.skylight.android.services_impl.notifications.NotificationTracker
 import se.gustavkarlsson.skylight.android.services_impl.notifications.ReportOutdatedEvaluator
 
+@RunWith(MockitoJUnitRunner::class)
 class NotificationTrackerTest {
 
-    @Rule
-    @JvmField
-    val rule = MockitoJUnit.rule()!!
+    @Mock
+    lateinit var mockLastNotifiedCache: SingletonCache<AuroraReport>
 
     @Mock
-    lateinit var lastNotifiedCache: SingletonCache<AuroraReport>
+    lateinit var mockAuroraChanceEvaluator: ChanceEvaluator<AuroraReport>
 
     @Mock
-    lateinit var auroraChanceEvaluator: ChanceEvaluator<AuroraReport>
+    lateinit var mockSettings: Settings
 
     @Mock
-    lateinit var settings: Settings
+    lateinit var mockReportOutdatedEvaluator: ReportOutdatedEvaluator
 
     @Mock
-    lateinit var reportOutdatedEvaluator: ReportOutdatedEvaluator
+    lateinit var mockReport: AuroraReport
 
     @Mock
-    lateinit var report: AuroraReport
+    lateinit var mockLastReport: AuroraReport
 
-    @Mock
-    lateinit var lastReport: AuroraReport
-
-    lateinit var notificationTracker: NotificationTracker
+    lateinit var impl: NotificationTracker
 
     @Before
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
-        notificationTracker = NotificationTracker(lastNotifiedCache, auroraChanceEvaluator, settings, reportOutdatedEvaluator)
-        whenever(settings.isEnableNotifications).thenReturn(true)
-        whenever(settings.triggerLevel).thenReturn(ChanceLevel.HIGH)
-        whenever(auroraChanceEvaluator.evaluate(any())).thenReturn(Chance(1.0))
-        whenever(reportOutdatedEvaluator.isOutdated(any())).thenReturn(true)
+        impl = NotificationTracker(mockLastNotifiedCache, mockAuroraChanceEvaluator, mockSettings, mockReportOutdatedEvaluator)
+        whenever(mockSettings.isEnableNotifications).thenReturn(true)
+        whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.HIGH)
+        whenever(mockAuroraChanceEvaluator.evaluate(any())).thenReturn(Chance(1.0))
+        whenever(mockReportOutdatedEvaluator.isOutdated(any())).thenReturn(true)
     }
 
     @Test
     fun maxChanceShouldNotify() {
-        whenever(settings.triggerLevel).thenReturn(ChanceLevel.HIGH)
+        whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.HIGH)
 
-        val shouldNotify = notificationTracker.shouldNotify(report)
+        val shouldNotify = impl.shouldNotify(mockReport)
 
         assertThat(shouldNotify).isTrue()
     }
 
     @Test
     fun mediumChanceShouldNotifyIfTriggerLevelIsLow() {
-        whenever(settings.triggerLevel).thenReturn(ChanceLevel.LOW)
-        whenever(auroraChanceEvaluator.evaluate(report)).thenReturn(Chance(0.5))
+        whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.LOW)
+        whenever(mockAuroraChanceEvaluator.evaluate(mockReport)).thenReturn(Chance(0.5))
 
-        val shouldNotify = notificationTracker.shouldNotify(report)
+        val shouldNotify = impl.shouldNotify(mockReport)
 
         assertThat(shouldNotify).isTrue()
     }
 
     @Test
     fun mediumChanceShouldNotNotifyIfTriggerLevelIsHigh() {
-        whenever(settings.triggerLevel).thenReturn(ChanceLevel.HIGH)
-        whenever(auroraChanceEvaluator.evaluate(report)).thenReturn(Chance(0.5))
+        whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.HIGH)
+        whenever(mockAuroraChanceEvaluator.evaluate(mockReport)).thenReturn(Chance(0.5))
 
-        val shouldNotify = notificationTracker.shouldNotify(report)
+        val shouldNotify = impl.shouldNotify(mockReport)
 
         assertThat(shouldNotify).isFalse()
     }
 
     @Test
     fun noChanceShouldNotNotify() {
-        whenever(auroraChanceEvaluator.evaluate(report)).thenReturn(Chance(0.0))
+        whenever(mockAuroraChanceEvaluator.evaluate(mockReport)).thenReturn(Chance(0.0))
 
-        val shouldNotify = notificationTracker.shouldNotify(report)
+        val shouldNotify = impl.shouldNotify(mockReport)
 
         assertThat(shouldNotify).isFalse()
     }
 
     @Test
     fun notificationsTurnedOffChanceShouldNotNotify() {
-        whenever(settings.isEnableNotifications).thenReturn(false)
+        whenever(mockSettings.isEnableNotifications).thenReturn(false)
 
-        val shouldNotify = notificationTracker.shouldNotify(report)
+        val shouldNotify = impl.shouldNotify(mockReport)
 
         assertThat(shouldNotify).isFalse()
     }
 
     @Test
     fun alreadyNotifiedAtSameLevelShouldNotNotify() {
-        whenever(lastNotifiedCache.value).thenReturn(lastReport)
-        whenever(reportOutdatedEvaluator.isOutdated(lastReport)).thenReturn(false)
+        whenever(mockLastNotifiedCache.value).thenReturn(mockLastReport)
+        whenever(mockReportOutdatedEvaluator.isOutdated(mockLastReport)).thenReturn(false)
 
-        val shouldNotify = notificationTracker.shouldNotify(report)
+        val shouldNotify = impl.shouldNotify(mockReport)
 
         assertThat(shouldNotify).isFalse()
     }
 
     @Test
     fun alreadyNotifiedAtLowerLevelShouldNotify() {
-        whenever(lastNotifiedCache.value).thenReturn(lastReport)
-        whenever(reportOutdatedEvaluator.isOutdated(lastReport)).thenReturn(false)
-        whenever(auroraChanceEvaluator.evaluate(lastReport)).thenReturn(Chance(0.5))
+        whenever(mockLastNotifiedCache.value).thenReturn(mockLastReport)
+        whenever(mockReportOutdatedEvaluator.isOutdated(mockLastReport)).thenReturn(false)
+        whenever(mockAuroraChanceEvaluator.evaluate(mockLastReport)).thenReturn(Chance(0.5))
 
-        val shouldNotify = notificationTracker.shouldNotify(report)
+        val shouldNotify = impl.shouldNotify(mockReport)
 
         assertThat(shouldNotify).isTrue()
     }

@@ -3,11 +3,10 @@ package se.gustavkarlsson.skylight.android.notifications
 import com.nhaarman.mockito_kotlin.whenever
 import org.assertj.core.api.SoftAssertions
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.MockitoAnnotations
-import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoJUnitRunner
 import org.threeten.bp.Clock
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneOffset
@@ -17,37 +16,25 @@ import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services_impl.notifications.ReportOutdatedEvaluator
 import se.gustavkarlsson.skylight.android.util.ZoneIdProvider
 
-private val ZONE_OFFSET = ZoneOffset.UTC
-private val MIDNIGHT = Instant.EPOCH
-private val BEFORE_MIDNIGHT = MIDNIGHT.minusSeconds(1)
-private val AFTER_MIDNIGHT = MIDNIGHT.plusSeconds(1)
-private val NOON = MIDNIGHT.plus(12, HOURS)
-private val AFTER_NOON = NOON.plusSeconds(1)
-private val BEFORE_NOON = NOON.minusSeconds(1)
-
+@RunWith(MockitoJUnitRunner::class)
 class ReportOutdatedEvaluatorTest {
 
-	@Rule
-	@JvmField
-	val rule = MockitoJUnit.rule()!!
+    @Mock
+	lateinit var mockClock: Clock
 
     @Mock
-	lateinit var clock: Clock
+	lateinit var mockZoneIdProvider: ZoneIdProvider
 
     @Mock
-	lateinit var zoneIdProvider: ZoneIdProvider
+    lateinit var mockReport: AuroraReport
 
-    @Mock
-    lateinit var report: AuroraReport
-
-    lateinit var evaluator: ReportOutdatedEvaluator
+    lateinit var impl: ReportOutdatedEvaluator
 
     @Before
     fun setUp() {
-        MockitoAnnotations.initMocks(this)
-        whenever(zoneIdProvider.zoneId).thenReturn(ZONE_OFFSET)
-        whenever(clock.zone).thenReturn(ZONE_OFFSET)
-        evaluator = ReportOutdatedEvaluator(clock, zoneIdProvider)
+        whenever(mockZoneIdProvider.zoneId).thenReturn(ZONE_OFFSET)
+        whenever(mockClock.zone).thenReturn(ZONE_OFFSET)
+        impl = ReportOutdatedEvaluator(mockClock, mockZoneIdProvider)
     }
 
     @Test
@@ -76,10 +63,10 @@ class ReportOutdatedEvaluatorTest {
     }
 
     private fun assertOutdated(lastReportTime: Instant, currentTime: Instant, expected: Boolean, softly: SoftAssertions) {
-        whenever(report.timestamp).thenReturn(lastReportTime)
-        whenever(clock.instant()).thenReturn(currentTime)
+        whenever(mockReport.timestamp).thenReturn(lastReportTime)
+        whenever(mockClock.instant()).thenReturn(currentTime)
 
-        val outdated = evaluator.isOutdated(report)
+        val outdated = impl.isOutdated(mockReport)
 
         val assertion = softly.assertThat(outdated).`as`("Last report time: %s, Current time: %s", lastReportTime, currentTime)
         if (expected) {
@@ -88,5 +75,15 @@ class ReportOutdatedEvaluatorTest {
             assertion.isFalse
         }
     }
+
+	companion object {
+        private val ZONE_OFFSET = ZoneOffset.UTC
+        private val MIDNIGHT = Instant.EPOCH
+        private val BEFORE_MIDNIGHT = MIDNIGHT.minusSeconds(1)
+        private val AFTER_MIDNIGHT = MIDNIGHT.plusSeconds(1)
+        private val NOON = MIDNIGHT.plus(12, HOURS)
+        private val AFTER_NOON = NOON.plusSeconds(1)
+        private val BEFORE_NOON = NOON.minusSeconds(1)
+	}
 
 }
