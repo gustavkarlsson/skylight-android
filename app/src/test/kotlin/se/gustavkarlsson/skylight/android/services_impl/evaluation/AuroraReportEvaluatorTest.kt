@@ -1,12 +1,12 @@
 package se.gustavkarlsson.skylight.android.services_impl.evaluation
 
+import com.nhaarman.mockito_kotlin.mock
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
-import org.mockito.Mockito.mock
 import org.mockito.junit.MockitoJUnitRunner
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.mockito.any
@@ -40,7 +40,7 @@ class AuroraReportEvaluatorTest {
         `when`(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(Chance(0.5))
         `when`(mockVisibilityEvaluator.evaluate(any())).thenReturn(Chance(0.5))
         `when`(mockDarknessEvaluator.evaluate(any())).thenReturn(Chance(0.5))
-		`when`(mockAuroraReport.factors).thenReturn(mock(AuroraFactors::class.java))
+		`when`(mockAuroraReport.factors).thenReturn(mock())
         impl = AuroraReportEvaluator(mockGeomagActivityEvaluator, mockGeomagLocationEvaluator, mockVisibilityEvaluator, mockDarknessEvaluator)
     }
 
