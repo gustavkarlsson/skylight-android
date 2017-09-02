@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.notifications
+package se.gustavkarlsson.skylight.android.services_impl.notifications
 
 import com.nhaarman.mockito_kotlin.whenever
 import org.assertj.core.api.SoftAssertions
@@ -13,7 +13,6 @@ import org.threeten.bp.ZoneOffset
 import org.threeten.bp.temporal.ChronoUnit.DAYS
 import org.threeten.bp.temporal.ChronoUnit.HOURS
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.services_impl.notifications.ReportOutdatedEvaluator
 import se.gustavkarlsson.skylight.android.util.ZoneIdProvider
 
 @RunWith(MockitoJUnitRunner::class)

@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.background.providers.impl.openweathermap
+package se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap
 
 
 import com.google.gson.Gson
@@ -14,9 +14,6 @@ import org.mockito.ArgumentMatchers
 import org.robolectric.RobolectricTestRunner
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapService
-import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapWeather
-import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.RetrofittedOpenWeatherMapVisibilityProvider
 import java.nio.charset.Charset
 
 @RunWith(RobolectricTestRunner::class)

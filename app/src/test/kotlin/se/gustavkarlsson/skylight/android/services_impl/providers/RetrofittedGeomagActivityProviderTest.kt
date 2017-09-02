@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.background.providers.impl
+package se.gustavkarlsson.skylight.android.services_impl.providers
 
 
 import com.nhaarman.mockito_kotlin.mock
@@ -15,7 +15,6 @@ import org.robolectric.RobolectricTestRunner
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService
-import se.gustavkarlsson.skylight.android.services_impl.providers.RetrofittedGeomagActivityProvider
 
 
 @RunWith(RobolectricTestRunner::class)
