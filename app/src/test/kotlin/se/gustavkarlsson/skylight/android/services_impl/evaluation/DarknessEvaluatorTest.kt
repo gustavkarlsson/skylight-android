@@ -4,6 +4,9 @@ import org.junit.Before
 import org.junit.Test
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.services.evaluation.Chance
+import se.gustavkarlsson.skylight.android.services.evaluation.Chance.Companion.IMPOSSIBLE
+import se.gustavkarlsson.skylight.android.services.evaluation.Chance.Companion.MAX
+import se.gustavkarlsson.skylight.android.services.evaluation.Chance.Companion.UNKNOWN
 
 class DarknessEvaluatorTest {
 
@@ -18,42 +21,42 @@ class DarknessEvaluatorTest {
     fun nullZenithAngleEvaluatesToUnknown() {
         val chance = impl.evaluate(Darkness(null))
 
-		assertThat(chance).isEqualTo(Chance.UNKNOWN)
+		assertThat(chance).isEqualTo(UNKNOWN)
     }
 
     @Test
     fun _0ZenithAngleEvaluatesToImpossible() {
         val chance = impl.evaluate(Darkness(0.0))
 
-        assertThat(chance).isEqualTo(Chance.IMPOSSIBLE)
+        assertThat(chance).isEqualTo(IMPOSSIBLE)
     }
 
     @Test
     fun _90ZenithAngleEvaluatesToImpossible() {
         val chance = impl.evaluate(Darkness(90.0))
 
-        assertThat(chance).isEqualTo(Chance.IMPOSSIBLE)
+        assertThat(chance).isEqualTo(IMPOSSIBLE)
     }
 
     @Test
     fun _180ZenithAngleEvaluatesToMax() {
         val chance = impl.evaluate(Darkness(180.0))
 
-        assertThat(chance).isEqualTo(Chance.MAX)
+        assertThat(chance).isEqualTo(MAX)
     }
 
     @Test
     fun minus180ZenithAngleEvaluatesToMax() {
         val chance = impl.evaluate(Darkness(-180.0))
 
-        assertThat(chance).isEqualTo(Chance.MAX)
+        assertThat(chance).isEqualTo(MAX)
     }
 
     @Test
     fun minus360ZenithAngleEvaluatesToMax() {
         val chance = impl.evaluate(Darkness(-360.0))
 
-        assertThat(chance).isEqualTo(Chance.MAX)
+        assertThat(chance).isEqualTo(MAX)
     }
 
     @Test

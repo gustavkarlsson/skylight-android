@@ -11,6 +11,8 @@ import org.mockito.junit.MockitoJUnitRunner
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.mockito.any
 import se.gustavkarlsson.skylight.android.services.evaluation.Chance
+import se.gustavkarlsson.skylight.android.services.evaluation.Chance.Companion.IMPOSSIBLE
+import se.gustavkarlsson.skylight.android.services.evaluation.Chance.Companion.UNKNOWN
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 
 @RunWith(MockitoJUnitRunner::class)
@@ -44,20 +46,20 @@ class AuroraReportEvaluatorTest {
 
     @Test
     fun oneImpossibleEvaluatesToImpossible() {
-        `when`(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(Chance.IMPOSSIBLE)
+        `when`(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(IMPOSSIBLE)
 
         val chance = impl.evaluate(mockAuroraReport)
 
-		assertThat(chance).isEqualTo(Chance.IMPOSSIBLE)
+		assertThat(chance).isEqualTo(IMPOSSIBLE)
     }
 
     @Test
     fun oneUnknownEvaluatesToUnknown() {
-        `when`(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(Chance.UNKNOWN)
+        `when`(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(UNKNOWN)
 
         val chance = impl.evaluate(mockAuroraReport)
 
-        assertThat(chance).isEqualTo(Chance.UNKNOWN)
+        assertThat(chance).isEqualTo(UNKNOWN)
     }
 
     @Test
@@ -79,6 +81,6 @@ class AuroraReportEvaluatorTest {
 
         val chance = impl.evaluate(mockAuroraReport)
 
-        assertThat(chance).isBetween(Chance.IMPOSSIBLE, lowestChance)
+        assertThat(chance).isBetween(IMPOSSIBLE, lowestChance)
     }
 }

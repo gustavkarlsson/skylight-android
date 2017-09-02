@@ -5,6 +5,9 @@ import org.junit.Before
 import org.junit.Test
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.services.evaluation.Chance
+import se.gustavkarlsson.skylight.android.services.evaluation.Chance.Companion.IMPOSSIBLE
+import se.gustavkarlsson.skylight.android.services.evaluation.Chance.Companion.MAX
+import se.gustavkarlsson.skylight.android.services.evaluation.Chance.Companion.UNKNOWN
 
 class GeomagLocationEvaluatorTest {
 
@@ -19,42 +22,42 @@ class GeomagLocationEvaluatorTest {
     fun nullLatitudeEvaluatesToUnknown() {
         val chance = impl.evaluate(GeomagLocation(null))
 
-        assertThat(chance).isEqualTo(Chance.UNKNOWN)
+        assertThat(chance).isEqualTo(UNKNOWN)
     }
 
     @Test
     fun _0LatitudeEvaluatesToImpossible() {
         val chance = impl.evaluate(GeomagLocation(0.0))
 
-        assertThat(chance).isEqualTo(Chance.IMPOSSIBLE)
+        assertThat(chance).isEqualTo(IMPOSSIBLE)
     }
 
     @Test
     fun _90LatitudeEvaluatesToImpossible() {
         val chance = impl.evaluate(GeomagLocation(90.0))
 
-        assertThat(chance).isEqualTo(Chance.IMPOSSIBLE)
+        assertThat(chance).isEqualTo(IMPOSSIBLE)
     }
 
     @Test
     fun minus90LatitudeEvaluatesToImpossible() {
         val chance = impl.evaluate(GeomagLocation(-90.0))
 
-        assertThat(chance).isEqualTo(Chance.IMPOSSIBLE)
+        assertThat(chance).isEqualTo(IMPOSSIBLE)
     }
 
     @Test
     fun _67LatitudeEvaluatesToMax() {
         val chance = impl.evaluate(GeomagLocation(67.0))
 
-        assertThat(chance).isEqualTo(Chance.MAX)
+        assertThat(chance).isEqualTo(MAX)
     }
 
     @Test
     fun minus67LatitudeEvaluatesToMax() {
         val chance = impl.evaluate(GeomagLocation(-67.0))
 
-        assertThat(chance).isEqualTo(Chance.MAX)
+        assertThat(chance).isEqualTo(MAX)
     }
 
     @Test
