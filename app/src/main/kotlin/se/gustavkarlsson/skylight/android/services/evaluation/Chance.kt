@@ -42,13 +42,9 @@ class Chance(value: Double?) : Comparable<Chance> {
 		return true
 	}
 
-	override fun hashCode(): Int {
-		return value?.hashCode() ?: 0
-	}
+	override fun hashCode() = value?.hashCode() ?: 0
 
-	override fun toString(): String {
-		return "Chance(value=$value)"
-	}
+	override fun toString() = "Chance(value=$value)"
 
 	companion object {
 		private val HIGHEST = 1.0
