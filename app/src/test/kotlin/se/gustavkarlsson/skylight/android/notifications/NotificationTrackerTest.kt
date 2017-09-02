@@ -9,40 +9,40 @@ import org.mockito.Mock
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.MockitoJUnit
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.mockito.any
+import se.gustavkarlsson.skylight.android.services.Settings
+import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.services.evaluation.Chance
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceLevel
-import se.gustavkarlsson.skylight.android.mockito.any
-import se.gustavkarlsson.skylight.android.services.SingletonCache
-import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.services_impl.notifications.NotificationTracker
 import se.gustavkarlsson.skylight.android.services_impl.notifications.ReportOutdatedEvaluator
 
 class NotificationTrackerTest {
 
-	@Rule
-	@JvmField
-	val rule = MockitoJUnit.rule()!!
+    @Rule
+    @JvmField
+    val rule = MockitoJUnit.rule()!!
 
     @Mock
     lateinit var lastNotifiedCache: SingletonCache<AuroraReport>
 
     @Mock
-	lateinit var auroraChanceEvaluator: ChanceEvaluator<AuroraReport>
+    lateinit var auroraChanceEvaluator: ChanceEvaluator<AuroraReport>
 
     @Mock
-	lateinit var settings: Settings
+    lateinit var settings: Settings
 
     @Mock
-	lateinit var reportOutdatedEvaluator: ReportOutdatedEvaluator
+    lateinit var reportOutdatedEvaluator: ReportOutdatedEvaluator
 
-	@Mock
-	lateinit var report: AuroraReport
+    @Mock
+    lateinit var report: AuroraReport
 
-	@Mock
-	lateinit var lastReport: AuroraReport
+    @Mock
+    lateinit var lastReport: AuroraReport
 
-	lateinit var notificationTracker: NotificationTracker
+    lateinit var notificationTracker: NotificationTracker
 
     @Before
     fun setUp() {
