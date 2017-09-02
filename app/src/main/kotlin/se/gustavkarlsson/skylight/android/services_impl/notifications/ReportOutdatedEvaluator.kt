@@ -3,10 +3,10 @@ package se.gustavkarlsson.skylight.android.services_impl.notifications
 import dagger.Reusable
 import org.threeten.bp.Clock
 import org.threeten.bp.LocalTime.NOON
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.extensions.today
 import se.gustavkarlsson.skylight.android.extensions.until
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.util.ZoneIdProvider
 import javax.inject.Inject
 
@@ -24,7 +24,7 @@ constructor(
 		val today = clock.today
 		val noonToday = NOON.atDate(today).atZone(currentZoneId).toInstant()
 		val reportTime = report.timestamp
-		val duration = reportTime until now
-		return duration.toHours() > 12 || now > noonToday && reportTime < noonToday
+		val reportAge = reportTime until now
+		return reportAge.toHours() > 12 || now > noonToday && reportTime < noonToday
 	}
 }
