@@ -15,7 +15,7 @@ class DarknessEvaluatorTest {
     }
 
     @Test
-    fun nullDarknessValueEvaluatesToUnknown() {
+    fun nullZenithAngleEvaluatesToUnknown() {
         val chance = impl.evaluate(Darkness(null))
 
 		assertThat(chance).isEqualTo(Chance.UNKNOWN)
@@ -54,5 +54,12 @@ class DarknessEvaluatorTest {
         val chance = impl.evaluate(Darkness(-360.0))
 
         assertThat(chance).isEqualTo(Chance.MAX)
+    }
+
+    @Test
+    fun _100ZenithAngleEvaluatesToMediumChance() {
+        val chance = impl.evaluate(Darkness(100.0))
+
+        assertThat(chance).isBetween(Chance(0.2), Chance(0.4))
     }
 }
