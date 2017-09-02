@@ -37,7 +37,7 @@ constructor(
         return ContextCompat.checkSelfPermission(context, LOCATION_PERMISSION) == PackageManager.PERMISSION_GRANTED
     }
 
-    // TODO Add better handling
+    // TODO Replace with AuroraReportNotifier
     private fun sendLocationPermissionMissingNotification(notificationManager: NotificationManager) {
         val context = context
 

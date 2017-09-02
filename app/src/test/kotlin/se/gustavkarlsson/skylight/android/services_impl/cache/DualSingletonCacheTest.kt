@@ -19,7 +19,7 @@ class DualSingletonCacheTest {
 
     @Before
     fun setUp() {
-        context = RuntimeEnvironment.application.applicationContext
+        context = RuntimeEnvironment.application
 		impl = DualSingletonCache("id", DEFAULT, StringCacheSerializer(), context)
     }
 

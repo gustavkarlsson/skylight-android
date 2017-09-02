@@ -79,7 +79,6 @@ class ReportOutdatedEvaluatorTest {
     private fun assertOutdated(lastReportTime: Instant, currentTime: Instant, expected: Boolean, softly: SoftAssertions) {
         `when`(report.timestamp).thenReturn(lastReportTime)
         `when`(clock.instant()).thenReturn(currentTime)
-        `when`(clock.millis()).thenReturn(currentTime.toEpochMilli())
 
         val outdated = evaluator.isOutdated(report)
 
