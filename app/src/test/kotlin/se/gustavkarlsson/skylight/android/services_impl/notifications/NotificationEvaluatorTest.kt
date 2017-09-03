@@ -17,9 +17,10 @@ import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.services.evaluation.Chance
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceLevel
+import se.gustavkarlsson.skylight.android.services_impl.AppVisibilityEvaluator
 
 @RunWith(MockitoJUnitRunner::class)
-class NotificationTrackerTest {
+class NotificationEvaluatorTest {
 
 	@Mock
 	lateinit var mockLastNotifiedReportCache: SingletonCache<AuroraReport>
@@ -33,21 +34,25 @@ class NotificationTrackerTest {
 	@Mock
 	lateinit var mockOutdatedEvaluator: ReportOutdatedEvaluator
 
+	@Mock
+	lateinit var mockAppVisibilityEvaluator: AppVisibilityEvaluator
+
     @Mock
     lateinit var mockNewAuroraReport: AuroraReport
 
     @Mock
     lateinit var mockLastAuroraReport: AuroraReport
 
-	lateinit var impl: NotificationTracker
+	lateinit var impl: NotificationEvaluator
 
     @Before
     fun setUp() {
         whenever(mockLastNotifiedReportCache.value).thenReturn(mockLastAuroraReport)
         whenever(mockSettings.isEnableNotifications).thenReturn(true)
         whenever(mockOutdatedEvaluator.isOutdated(mockLastAuroraReport)).thenReturn(false)
+		whenever(mockAppVisibilityEvaluator.isVisible()).thenReturn(false)
 
-        impl = NotificationTracker(mockLastNotifiedReportCache, mockChanceEvaluator, mockSettings, mockOutdatedEvaluator)
+        impl = NotificationEvaluator(mockLastNotifiedReportCache, mockChanceEvaluator, mockSettings, mockOutdatedEvaluator, mockAppVisibilityEvaluator)
     }
 
     @Test
@@ -113,6 +118,15 @@ class NotificationTrackerTest {
         whenever(mockChanceEvaluator.evaluate(mockLastAuroraReport)).thenReturn(Chance(0.5))
         whenever(mockChanceEvaluator.evaluate(mockNewAuroraReport)).thenReturn(Chance(0.5))
         whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.LOW)
+
+        val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
+
+        assertThat(shouldNotify).isEqualTo(false)
+    }
+
+    @Test
+    fun dontNotifyIfAppIsVisible() {
+		whenever(mockAppVisibilityEvaluator.isVisible()).thenReturn(true)
 
         val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
 
