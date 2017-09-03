@@ -7,25 +7,33 @@ import dagger.Provides
 import dagger.Reusable
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
+import se.gustavkarlsson.skylight.android.dagger.LAST_NAME
+import se.gustavkarlsson.skylight.android.dagger.NEW_NAME
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.DebugSettings
+import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.services.providers.AsyncAddressProvider
 import se.gustavkarlsson.skylight.android.services.providers.AuroraFactorsProvider
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 import se.gustavkarlsson.skylight.android.services_impl.SharedPreferencesDebugSettings
-import se.gustavkarlsson.skylight.android.services_impl.providers.AuroraReportProviderImpl
 import se.gustavkarlsson.skylight.android.services_impl.providers.DebugAuroraReportProvider
+import se.gustavkarlsson.skylight.android.services_impl.providers.RealAuroraReportProvider
+import javax.inject.Named
 
 @Module(includes = arrayOf(
         AuroraFactorsModule::class,
-		SystemServiceModule::class,
-		LocationProviderModule::class,
-		AsyncAddressProviderModule::class
+        SystemServiceModule::class,
+        LocationProviderModule::class,
+        AsyncAddressProviderModule::class
 ))
-class AuroraReportModule {
+class NewAuroraReportProviderModule {
 
     @Provides
-    fun provideAuroraReportProvider(
+	@Reusable
+	@Named(NEW_NAME)
+    fun provideNewAuroraReportProvider(
+    		@Named(LAST_NAME) cache: SingletonCache<AuroraReport>,
             debugSettings: DebugSettings,
             connectivityManager: ConnectivityManager,
             locationProvider: LocationProvider,
@@ -33,11 +41,8 @@ class AuroraReportModule {
             asyncAddressProvider: AsyncAddressProvider,
             clock: Clock
     ): AuroraReportProvider {
-        if (debugSettings.isOverrideValues) {
-            return DebugAuroraReportProvider(debugSettings, clock)
-        } else {
-            return AuroraReportProviderImpl(connectivityManager, locationProvider, auroraFactorsProvider, asyncAddressProvider, clock, Duration.ofSeconds(30)) // TODO Make configurable
-        }
+        val realProvider = RealAuroraReportProvider(cache, connectivityManager, locationProvider, auroraFactorsProvider, asyncAddressProvider, clock, Duration.ofSeconds(30)) // TODO Make configurable
+        return DebugAuroraReportProvider(cache, realProvider, debugSettings, clock)
     }
 
     @Provides

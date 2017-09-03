@@ -21,7 +21,7 @@ constructor(context: Context) : DebugSettings {
 	private val sunZenithAngleKey: String = context.getString(R.string.pref_sun_position_key)
 	private val cloudPercentageKey: String = context.getString(R.string.pref_cloud_percentage_key)
 
-	override val isOverrideValues: Boolean
+	override val overrideValues: Boolean
         get() = defaultPreferences.getBoolean(overrideValuesKey, false)
 
     override val kpIndex: Double
