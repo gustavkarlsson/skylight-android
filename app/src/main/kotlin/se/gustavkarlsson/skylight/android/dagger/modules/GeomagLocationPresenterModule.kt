@@ -24,7 +24,7 @@ class GeomagLocationPresenterModule {
 		chanceEvaluator: ChanceEvaluator<GeomagLocation>,
 		chanceToColorConverter: ChanceToColorConverter
 	): Presenter<GeomagLocation> {
-        val geomagLocationView = rootView.findViewById(R.id.gGeomagLocation) as AuroraFactorView
+        val geomagLocationView = rootView.findViewById(R.id.geomagLocation) as AuroraFactorView
         return GeomagLocationFactorViewPresenter(geomagLocationView, chanceEvaluator, chanceToColorConverter)
     }
 }
