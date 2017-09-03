@@ -21,7 +21,8 @@ import javax.inject.Singleton
         UpdateSchedulerModule::class,
         NewAuroraReportProviderModule::class,
         PresentNewAuroraReportModule::class,
-        SetUpdateScheduleModule::class
+        SetUpdateScheduleModule::class,
+		SettingsModule::class
 ))
 @Singleton
 interface ApplicationComponent {

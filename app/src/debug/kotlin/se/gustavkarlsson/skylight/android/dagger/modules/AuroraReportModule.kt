@@ -3,8 +3,6 @@ package se.gustavkarlsson.skylight.android.dagger.modules
 import android.content.Context
 import android.location.Geocoder
 import android.net.ConnectivityManager
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.android.gms.location.LocationServices
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -21,11 +19,9 @@ import se.gustavkarlsson.skylight.android.dagger.LAST_NOTIFIED_NAME
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.create
 import se.gustavkarlsson.skylight.android.services.DebugSettings
-import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.services.providers.*
 import se.gustavkarlsson.skylight.android.services_impl.SharedPreferencesDebugSettings
-import se.gustavkarlsson.skylight.android.services_impl.SharedPreferencesSettings
 import se.gustavkarlsson.skylight.android.services_impl.cache.DualSingletonCache
 import se.gustavkarlsson.skylight.android.services_impl.cache.auroraReportCacheSerializer
 import se.gustavkarlsson.skylight.android.services_impl.providers.*
@@ -43,15 +39,11 @@ import javax.inject.Singleton
         ContextModule::class,
         GeomagLocationModule::class,
         DarknessModule::class,
-        SystemServiceModule::class
+        SystemServiceModule::class,
+        LocationProviderModule::class,
+		AsyncAddressProviderModule::class
 ))
 class AuroraReportModule {
-
-    @Provides
-    @Reusable
-    fun provideLocationProvider(
-            googleApiClient: GoogleApiClient
-    ): LocationProvider = GoogleLocationProvider(googleApiClient)
 
     @Provides
     @Reusable
@@ -66,22 +58,9 @@ class AuroraReportModule {
 
     @Provides
     @Reusable
-    fun provideAsyncAddressProvider(
-            geocoder: Geocoder,
-            @Named(CACHED_THREAD_POOL_NAME) cachedThreadPool: ExecutorService
-    ): AsyncAddressProvider = GeocoderAsyncAddressProvider(geocoder, cachedThreadPool)
-
-    @Provides
-    @Reusable
     fun provideGeomagActivityProvider(
             kpIndexService: KpIndexService
     ): GeomagActivityProvider = RetrofittedGeomagActivityProvider(kpIndexService)
-
-    @Provides
-    @Reusable
-    fun provideSettings(
-            context: Context
-    ): Settings = SharedPreferencesSettings(context)
 
     @Provides
     @Reusable
@@ -122,16 +101,6 @@ class AuroraReportModule {
     ): VisibilityProvider {
         val apiKey = context.getString(R.string.api_key_openweathermap)
         return RetrofittedOpenWeatherMapVisibilityProvider(openWeatherMapService, apiKey)
-    }
-
-    @Provides
-    @Reusable
-    fun provideGoogleApiLocationClient(
-            context: Context
-    ): GoogleApiClient {
-        return GoogleApiClient.Builder(context)
-                .addApi(LocationServices.API)
-                .build()
     }
 
     @Provides
