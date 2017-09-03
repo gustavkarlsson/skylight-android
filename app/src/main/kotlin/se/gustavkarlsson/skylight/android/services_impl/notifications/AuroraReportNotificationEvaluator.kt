@@ -12,7 +12,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @Reusable
-class NotificationEvaluator
+class AuroraReportNotificationEvaluator
 @Inject
 constructor(
 	@param:Named(LAST_NOTIFIED_NAME) private val lastNotifiedReportCache: SingletonCache<AuroraReport>,

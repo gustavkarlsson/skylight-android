@@ -12,8 +12,13 @@ import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import se.gustavkarlsson.skylight.android.services.Notifier
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceLevel
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AuroraReportNotifier(
+@Singleton
+class AuroraReportNotifier
+@Inject
+constructor(
         private val context: Context,
         private val notificationManager: NotificationManager,
         private val chanceEvaluator: ChanceEvaluator<AuroraReport>

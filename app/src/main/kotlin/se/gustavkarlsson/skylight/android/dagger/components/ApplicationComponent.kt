@@ -2,8 +2,8 @@ package se.gustavkarlsson.skylight.android.dagger.components
 
 import dagger.Component
 import org.threeten.bp.Clock
+import se.gustavkarlsson.skylight.android.Skylight
 import se.gustavkarlsson.skylight.android.dagger.modules.*
-import se.gustavkarlsson.skylight.android.dagger.modules.AuroraReportModule
 import se.gustavkarlsson.skylight.android.services.Scheduler
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob
@@ -22,10 +22,14 @@ import javax.inject.Singleton
         NewAuroraReportProviderModule::class,
         PresentNewAuroraReportModule::class,
         SetUpdateScheduleModule::class,
-		SettingsModule::class
+		SettingsModule::class,
+		SetupNotificationsModule::class,
+        NotifierModule::class
 ))
 @Singleton
 interface ApplicationComponent {
+    fun inject(skylight: Skylight)
+
     fun getAuroraReportProvider(): AuroraReportProvider
     fun getUpdateJob(): UpdateJob
     fun getUpdateScheduler(): Scheduler

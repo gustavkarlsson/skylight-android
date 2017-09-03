@@ -20,7 +20,7 @@ import se.gustavkarlsson.skylight.android.services.evaluation.ChanceLevel
 import se.gustavkarlsson.skylight.android.services_impl.AppVisibilityEvaluator
 
 @RunWith(MockitoJUnitRunner::class)
-class NotificationEvaluatorTest {
+class AuroraReportNotificationEvaluatorTest {
 
 	@Mock
 	lateinit var mockLastNotifiedReportCache: SingletonCache<AuroraReport>
@@ -43,7 +43,7 @@ class NotificationEvaluatorTest {
     @Mock
     lateinit var mockLastAuroraReport: AuroraReport
 
-	lateinit var impl: NotificationEvaluator
+	lateinit var impl: AuroraReportNotificationEvaluator
 
     @Before
     fun setUp() {
@@ -52,7 +52,7 @@ class NotificationEvaluatorTest {
         whenever(mockOutdatedEvaluator.isOutdated(mockLastAuroraReport)).thenReturn(false)
 		whenever(mockAppVisibilityEvaluator.isVisible()).thenReturn(false)
 
-        impl = NotificationEvaluator(mockLastNotifiedReportCache, mockChanceEvaluator, mockSettings, mockOutdatedEvaluator, mockAppVisibilityEvaluator)
+        impl = AuroraReportNotificationEvaluator(mockLastNotifiedReportCache, mockChanceEvaluator, mockSettings, mockOutdatedEvaluator, mockAppVisibilityEvaluator)
     }
 
     @Test

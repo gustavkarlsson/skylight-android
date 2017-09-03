@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.dagger.modules
 
+import android.app.KeyguardManager
 import android.app.NotificationManager
 import android.content.Context
 import android.net.ConnectivityManager
@@ -13,10 +14,14 @@ class SystemServiceModule {
 
     @Provides
     @Reusable
-    fun provideNotificationManager(context: Context): NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    fun provideNotificationManager(context: Context) = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
     @Provides
     @Reusable
-    fun provideConnectivityManager(context: Context): ConnectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    fun provideConnectivityManager(context: Context) = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+    @Provides
+    @Reusable
+    fun provideKeyguardManager(context: Context) = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
 
 }
