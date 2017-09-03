@@ -97,7 +97,7 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity(), AnkoLog
     abstract fun onRequirementsMet()
 
 	companion object {
-        val LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION
+        private val LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION
         private val REQUEST_CODE_LOCATION_PERMISSION = 1973
 	}
 }

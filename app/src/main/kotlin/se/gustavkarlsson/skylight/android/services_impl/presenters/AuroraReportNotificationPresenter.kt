@@ -13,7 +13,7 @@ class AuroraReportNotificationPresenter
 constructor(
         private val tracker: NotificationTracker,
         private val notifier: Notifier<AuroraReport>
-) : Presenter<AuroraReport> {
+) : Presenter<AuroraReport> { // TODO Use this in UpdateJob
 
     override fun present(value: AuroraReport) {
         if (tracker.shouldNotify(value)) {
