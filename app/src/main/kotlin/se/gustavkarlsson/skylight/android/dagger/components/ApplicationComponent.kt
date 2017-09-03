@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.dagger.components
 import dagger.Component
 import org.threeten.bp.Clock
 import se.gustavkarlsson.skylight.android.dagger.modules.*
-import se.gustavkarlsson.skylight.android.dagger.modules_old.replaceable.AuroraReportModule
+import se.gustavkarlsson.skylight.android.dagger.modules.AuroraReportModule
 import se.gustavkarlsson.skylight.android.services.Scheduler
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob

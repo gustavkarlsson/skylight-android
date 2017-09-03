@@ -1,14 +1,14 @@
-package se.gustavkarlsson.skylight.android.background.providers.impl
+package se.gustavkarlsson.skylight.android.services_impl.providers
 
 import org.threeten.bp.Clock
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
-import se.gustavkarlsson.skylight.android.settings.DebugSettings
+import se.gustavkarlsson.skylight.android.services.DebugSettings
 
 class DebugAuroraReportProvider(
-		private val debugSettings: DebugSettings,
-		private val clock: Clock
+        private val debugSettings: DebugSettings,
+        private val clock: Clock
 ) : AuroraReportProvider {
 
     override fun get(): AuroraReport {

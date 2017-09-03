@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.settings
+package se.gustavkarlsson.skylight.android.services
 
 interface DebugSettings {
     val isOverrideValues: Boolean

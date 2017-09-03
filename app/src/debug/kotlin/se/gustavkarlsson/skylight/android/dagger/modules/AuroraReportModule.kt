@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.dagger.modules_old.replaceable
+package se.gustavkarlsson.skylight.android.dagger.modules
 
 import android.content.Context
 import android.location.Geocoder
@@ -16,13 +16,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.background.providers.impl.DebugAuroraReportProvider
+import se.gustavkarlsson.skylight.android.services_impl.providers.DebugAuroraReportProvider
 import se.gustavkarlsson.skylight.android.dagger.CACHED_THREAD_POOL_NAME
 import se.gustavkarlsson.skylight.android.dagger.LAST_NOTIFIED_NAME
-import se.gustavkarlsson.skylight.android.dagger.modules.ContextModule
-import se.gustavkarlsson.skylight.android.dagger.modules.DarknessModule
-import se.gustavkarlsson.skylight.android.dagger.modules.GeomagLocationModule
-import se.gustavkarlsson.skylight.android.dagger.modules.SystemServiceModule
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.create
 import se.gustavkarlsson.skylight.android.services.Settings
@@ -36,8 +32,8 @@ import se.gustavkarlsson.skylight.android.services_impl.providers.aggregating_au
 import se.gustavkarlsson.skylight.android.services_impl.providers.aggregating_aurora_factors.ErrorHandlingExecutorService
 import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapService
 import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.RetrofittedOpenWeatherMapVisibilityProvider
-import se.gustavkarlsson.skylight.android.settings.DebugSettings
-import se.gustavkarlsson.skylight.android.settings.SharedPreferencesDebugSettings
+import se.gustavkarlsson.skylight.android.services.DebugSettings
+import se.gustavkarlsson.skylight.android.services_impl.SharedPreferencesDebugSettings
 import se.gustavkarlsson.skylight.android.util.ZoneIdProvider
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -97,12 +93,12 @@ class AuroraReportModule {
 
 	@Provides
 	fun provideAuroraReportProvider(
-		debugSettings: DebugSettings,
-		connectivityManager: ConnectivityManager,
-		locationProvider: LocationProvider,
-		auroraFactorsProvider: AuroraFactorsProvider,
-		asyncAddressProvider: AsyncAddressProvider,
-		clock: Clock
+            debugSettings: DebugSettings,
+            connectivityManager: ConnectivityManager,
+            locationProvider: LocationProvider,
+            auroraFactorsProvider: AuroraFactorsProvider,
+            asyncAddressProvider: AsyncAddressProvider,
+            clock: Clock
 	): AuroraReportProvider {
 		if (debugSettings.isOverrideValues) {
 			return DebugAuroraReportProvider(debugSettings, clock)
