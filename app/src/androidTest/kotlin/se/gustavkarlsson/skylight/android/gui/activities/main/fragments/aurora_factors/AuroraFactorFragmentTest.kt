@@ -10,12 +10,13 @@ import android.support.test.runner.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import se.gustavkarlsson.skylight.android.DaggerTest
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class AuroraFactorFragmentTest {
+class AuroraFactorFragmentTest : DaggerTest() {
 
     @Rule
 	@JvmField
@@ -28,7 +29,7 @@ class AuroraFactorFragmentTest {
 
     @Test
     fun geomagLocationFactorViewShown() {
-        onView(withId(R.id.gGeomagLocation)).check(matches(isDisplayed()))
+        onView(withId(R.id.geomagLocation)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -48,7 +49,7 @@ class AuroraFactorFragmentTest {
 
     @Test
     fun clickGeomagLocation_detailViewShown() {
-        whenFactorViewClickedDetailViewOpens(R.id.gGeomagLocation, R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc)
+        whenFactorViewClickedDetailViewOpens(R.id.geomagLocation, R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc)
     }
 
     @Test

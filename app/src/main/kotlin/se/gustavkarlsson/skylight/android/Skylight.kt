@@ -31,7 +31,6 @@ class Skylight : Application() {
 
     companion object {
         lateinit var applicationComponent: ApplicationComponent
-            private set
     }
 
 }
