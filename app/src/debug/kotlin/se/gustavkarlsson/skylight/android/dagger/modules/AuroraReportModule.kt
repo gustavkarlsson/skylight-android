@@ -1,72 +1,28 @@
 package se.gustavkarlsson.skylight.android.dagger.modules
 
 import android.content.Context
-import android.location.Geocoder
 import android.net.ConnectivityManager
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
-import org.threeten.bp.ZoneId
-import org.threeten.bp.ZoneOffset
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService
-import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.dagger.CACHED_THREAD_POOL_NAME
-import se.gustavkarlsson.skylight.android.dagger.LAST_NOTIFIED_NAME
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.extensions.create
 import se.gustavkarlsson.skylight.android.services.DebugSettings
-import se.gustavkarlsson.skylight.android.services.SingletonCache
-import se.gustavkarlsson.skylight.android.services.providers.*
+import se.gustavkarlsson.skylight.android.services.providers.AsyncAddressProvider
+import se.gustavkarlsson.skylight.android.services.providers.AuroraFactorsProvider
+import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
+import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 import se.gustavkarlsson.skylight.android.services_impl.SharedPreferencesDebugSettings
-import se.gustavkarlsson.skylight.android.services_impl.cache.DualSingletonCache
-import se.gustavkarlsson.skylight.android.services_impl.cache.auroraReportCacheSerializer
-import se.gustavkarlsson.skylight.android.services_impl.providers.*
-import se.gustavkarlsson.skylight.android.services_impl.providers.aggregating_aurora_factors.AsyncAuroraFactorsProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.aggregating_aurora_factors.ErrorHandlingExecutorService
-import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapService
-import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.RetrofittedOpenWeatherMapVisibilityProvider
-import se.gustavkarlsson.skylight.android.util.ZoneIdProvider
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import javax.inject.Named
-import javax.inject.Singleton
+import se.gustavkarlsson.skylight.android.services_impl.providers.AuroraReportProviderImpl
+import se.gustavkarlsson.skylight.android.services_impl.providers.DebugAuroraReportProvider
 
 @Module(includes = arrayOf(
-        ContextModule::class,
-        GeomagLocationModule::class,
-        DarknessModule::class,
-        SystemServiceModule::class,
-        LocationProviderModule::class,
+        AuroraFactorsModule::class,
+		SystemServiceModule::class,
+		LocationProviderModule::class,
 		AsyncAddressProviderModule::class
 ))
 class AuroraReportModule {
-
-    @Provides
-    @Reusable
-    fun provideAuroraFactorsProvider(
-            geomagActivityProvider: RetrofittedGeomagActivityProvider,
-            visibilityProvider: VisibilityProvider,
-            darknessProvider: KlausBrunnerDarknessProvider,
-            geomagLocProvider: GeomagLocationProviderImpl,
-            executorService: ErrorHandlingExecutorService,
-            clock: Clock
-    ): AuroraFactorsProvider = AsyncAuroraFactorsProvider(geomagActivityProvider, visibilityProvider, darknessProvider, geomagLocProvider, executorService, clock)
-
-    @Provides
-    @Reusable
-    fun provideGeomagActivityProvider(
-            kpIndexService: KpIndexService
-    ): GeomagActivityProvider = RetrofittedGeomagActivityProvider(kpIndexService)
-
-    @Provides
-    @Reusable
-    fun provideDebugSettings(
-            context: Context
-    ): DebugSettings = SharedPreferencesDebugSettings(context)
 
     @Provides
     fun provideAuroraReportProvider(
@@ -86,62 +42,8 @@ class AuroraReportModule {
 
     @Provides
     @Reusable
-    fun provideOpenWeatherMapService(): OpenWeatherMapService {
-        return Retrofit.Builder()
-                .baseUrl(OPENWEATHERMAP_API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build().create()
-    }
-
-    @Provides
-    @Reusable
-    fun provideVisibilityProvider(
-            context: Context,
-            openWeatherMapService: OpenWeatherMapService
-    ): VisibilityProvider {
-        val apiKey = context.getString(R.string.api_key_openweathermap)
-        return RetrofittedOpenWeatherMapVisibilityProvider(openWeatherMapService, apiKey)
-    }
-
-    @Provides
-    @Reusable
-    fun provideGeocoder(
+    fun provideDebugSettings(
             context: Context
-    ): Geocoder = Geocoder(context)
-
-    @Provides
-    @Reusable
-    fun provideKpIndexService(): KpIndexService {
-        return Retrofit.Builder()
-                .baseUrl(GEOMAG_ACTIVITY_API_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build().create()
-    }
-
-    @Provides
-    fun provideZoneIdSupplier(): ZoneIdProvider {
-        return object : ZoneIdProvider {
-            override val zoneId: ZoneId
-                get() = ZoneOffset.systemDefault()
-        }
-    }
-
-    @Provides
-    @Singleton
-    @Named(LAST_NOTIFIED_NAME)
-    fun provideLastNotifiedAuroraReportCache(
-            context: Context
-    ): SingletonCache<AuroraReport> = DualSingletonCache(LAST_NOTIFIED_CACHE_ID, AuroraReport.default, auroraReportCacheSerializer, context)
-
-    @Provides
-    @Singleton
-    @Named(CACHED_THREAD_POOL_NAME)
-    fun provideCachedThreadPool(): ExecutorService = Executors.newCachedThreadPool()
-
-    companion object {
-        private val LAST_NOTIFIED_CACHE_ID = "last-notified-aurora-report"
-        private val OPENWEATHERMAP_API_URL = "http://api.openweathermap.org/data/2.5/"
-        private val GEOMAG_ACTIVITY_API_URL = "http://skylight-app.net/rest/"
-    }
+    ): DebugSettings = SharedPreferencesDebugSettings(context)
 
 }
