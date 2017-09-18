@@ -6,8 +6,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import org.threeten.bp.Clock
-import org.threeten.bp.ZoneId
-import org.threeten.bp.ZoneOffset
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService
@@ -29,7 +27,6 @@ import se.gustavkarlsson.skylight.android.services_impl.providers.aggregating_au
 import se.gustavkarlsson.skylight.android.services_impl.providers.aggregating_aurora_factors.ErrorHandlingExecutorService
 import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapService
 import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.RetrofittedOpenWeatherMapVisibilityProvider
-import se.gustavkarlsson.skylight.android.util.ZoneIdProvider
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import javax.inject.Named
@@ -89,14 +86,6 @@ class AuroraFactorsModule {
                 .baseUrl(GEOMAG_ACTIVITY_API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create()
-    }
-
-    @Provides
-    fun provideZoneIdSupplier(): ZoneIdProvider {
-        return object : ZoneIdProvider {
-            override val zoneId: ZoneId
-                get() = ZoneOffset.systemDefault()
-        }
     }
 
     @Provides

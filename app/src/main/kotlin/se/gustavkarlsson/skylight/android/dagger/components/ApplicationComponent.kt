@@ -2,14 +2,16 @@ package se.gustavkarlsson.skylight.android.dagger.components
 
 import dagger.Component
 import se.gustavkarlsson.skylight.android.actions.SetupNotifications
-import se.gustavkarlsson.skylight.android.dagger.modules.*
+import se.gustavkarlsson.skylight.android.dagger.modules.ActivityModule
+import se.gustavkarlsson.skylight.android.dagger.modules.SetupNotificationsModule
+import se.gustavkarlsson.skylight.android.dagger.modules.UpdateJobModule
+import se.gustavkarlsson.skylight.android.dagger.modules.UpdateSchedulerModule
 import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob
 import javax.inject.Singleton
 
 @Component(modules = arrayOf(
         SetupNotificationsModule::class,
         UpdateJobModule::class,
-        LatestAuroraReportCacheModule::class,
         UpdateSchedulerModule::class
 ))
 @Singleton

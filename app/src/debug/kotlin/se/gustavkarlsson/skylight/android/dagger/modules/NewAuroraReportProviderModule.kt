@@ -26,7 +26,7 @@ import javax.inject.Named
         LocationProviderModule::class,
         AuroraFactorsModule::class,
         AsyncAddressProviderModule::class,
-		ClockModule::class
+		TimeModule::class
 ))
 class NewAuroraReportProviderModule {
 

@@ -6,7 +6,9 @@ import dagger.Reusable
 import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.services_impl.SharedPreferencesSettings
 
-@Module
+@Module(includes = arrayOf(
+        ContextModule::class
+))
 abstract class SettingsModule {
 
     @Binds

@@ -14,7 +14,9 @@ import se.gustavkarlsson.skylight.android.services_impl.streams.RxStreamPublishe
 import javax.inject.Named
 import javax.inject.Singleton
 
-@Module
+@Module(includes = arrayOf(
+		LatestAuroraReportCacheModule::class
+))
 class LatestAuroraReportStreamModule {
 
 	@Provides

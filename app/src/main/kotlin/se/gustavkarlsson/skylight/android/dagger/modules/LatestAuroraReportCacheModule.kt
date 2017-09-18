@@ -11,7 +11,9 @@ import se.gustavkarlsson.skylight.android.services_impl.cache.auroraReportCacheS
 import javax.inject.Named
 import javax.inject.Singleton
 
-@Module
+@Module(includes = arrayOf(
+		ContextModule::class
+))
 class LatestAuroraReportCacheModule {
 
     @Provides
