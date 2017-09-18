@@ -31,6 +31,6 @@ class NewAuroraReportProviderModule {
             auroraFactorsProvider: AuroraFactorsProvider,
             asyncAddressProvider: AsyncAddressProvider,
             clock: Clock
-    ): AuroraReportProvider = RealAuroraReportProvider(cache, connectivityManager, locationProvider, auroraFactorsProvider, asyncAddressProvider, clock, Duration.ofSeconds(30)) // TODO Make configurable
+    ): AuroraReportProvider = RealAuroraReportProvider(cache, connectivityManager, locationProvider, auroraFactorsProvider, asyncAddressProvider, clock, Duration.ofSeconds(30))
 
 }

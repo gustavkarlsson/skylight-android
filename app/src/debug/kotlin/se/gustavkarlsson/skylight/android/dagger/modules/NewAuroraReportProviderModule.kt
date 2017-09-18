@@ -41,7 +41,7 @@ class NewAuroraReportProviderModule {
             asyncAddressProvider: AsyncAddressProvider,
             clock: Clock
     ): AuroraReportProvider {
-        val realProvider = RealAuroraReportProvider(cache, connectivityManager, locationProvider, auroraFactorsProvider, asyncAddressProvider, clock, Duration.ofSeconds(30)) // TODO Make configurable
+        val realProvider = RealAuroraReportProvider(cache, connectivityManager, locationProvider, auroraFactorsProvider, asyncAddressProvider, clock, Duration.ofSeconds(30))
         return DebugAuroraReportProvider(cache, realProvider, debugSettings, clock)
     }
 

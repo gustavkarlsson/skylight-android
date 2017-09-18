@@ -12,8 +12,6 @@ import javax.inject.Singleton
         ClockModule::class,
         LatestAuroraReportStreamModule::class,
         UserFriendlyExceptionStreamModule::class,
-        BackgroundUpdateTimeoutModule::class,
-        ForegroundUpdateTimeoutModule::class,
 		ForegroundReportLifetimeModule::class,
         UpdateSchedulerModule::class,
         NewAuroraReportProviderModule::class,
