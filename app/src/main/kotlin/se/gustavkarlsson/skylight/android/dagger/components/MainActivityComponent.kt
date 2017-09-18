@@ -1,22 +1,20 @@
 package se.gustavkarlsson.skylight.android.dagger.components
 
 import dagger.Subcomponent
-import se.gustavkarlsson.skylight.android.dagger.modules.PresentRecentAuroraReportModule
-import se.gustavkarlsson.skylight.android.dagger.modules.FragmentRootViewModule
-import se.gustavkarlsson.skylight.android.dagger.modules.PresentingErrorsModule
-import se.gustavkarlsson.skylight.android.dagger.modules.SwipeToRefreshModule
+import se.gustavkarlsson.skylight.android.dagger.modules.*
 import se.gustavkarlsson.skylight.android.dagger.scopes.ActivityScope
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 
 @Subcomponent(modules = arrayOf(
-	SwipeToRefreshModule::class,
-	PresentRecentAuroraReportModule::class,
-	PresentingErrorsModule::class
+        SwipeToRefreshModule::class,
+        PresentRecentAuroraReportModule::class,
+        PresentingErrorsModule::class,
+        SetUpdateScheduleModule::class
 ))
 @ActivityScope
 interface MainActivityComponent {
-	fun inject(mainActivity: MainActivity)
+    fun inject(mainActivity: MainActivity)
 
-	fun getAuroraChanceFragmentComponent(fragmentRootViewModule: FragmentRootViewModule): AuroraChanceFragmentComponent
-	fun getAuroraFactorsFragmentComponent(fragmentRootViewModule: FragmentRootViewModule): AuroraFactorsFragmentComponent
+    fun getAuroraChanceFragmentComponent(fragmentRootViewModule: FragmentRootViewModule): AuroraChanceFragmentComponent
+    fun getAuroraFactorsFragmentComponent(fragmentRootViewModule: FragmentRootViewModule): AuroraFactorsFragmentComponent
 }
