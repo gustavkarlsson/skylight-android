@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.Presenter
-import se.gustavkarlsson.skylight.android.services_impl.presenters.AuroraReportFactorsFragmentPresenter
+import se.gustavkarlsson.skylight.android.services_impl.presenters.factors.AuroraReportFactorsFragmentPresenter
 
 @Module
 abstract class AuroraReportFactorsPresenterModule {

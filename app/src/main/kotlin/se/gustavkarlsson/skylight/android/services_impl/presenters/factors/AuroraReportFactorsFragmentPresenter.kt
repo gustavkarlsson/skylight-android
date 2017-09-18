@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services_impl.presenters
+package se.gustavkarlsson.skylight.android.services_impl.presenters.factors
 
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.entities.*
