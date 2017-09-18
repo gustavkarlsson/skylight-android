@@ -9,7 +9,8 @@ import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
         SwipeToRefreshModule::class,
         PresentRecentAuroraReportModule::class,
         PresentingErrorsModule::class,
-        SetUpdateScheduleModule::class
+        SetUpdateScheduleModule::class,
+        ForegroundReportLifetimeModule::class
 ))
 @ActivityScope
 interface MainActivityComponent {

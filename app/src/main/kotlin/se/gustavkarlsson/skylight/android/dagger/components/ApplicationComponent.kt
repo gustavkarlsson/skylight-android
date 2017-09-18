@@ -7,16 +7,10 @@ import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob
 import javax.inject.Singleton
 
 @Component(modules = arrayOf(
+        SetupNotificationsModule::class,
+        UpdateJobModule::class,
         LatestAuroraReportCacheModule::class,
-        EvaluationModule::class,
-        ClockModule::class,
-        UserFriendlyExceptionStreamModule::class,
-		ForegroundReportLifetimeModule::class,
-        UpdateSchedulerModule::class,
-        NewAuroraReportProviderModule::class,
-        PresentNewAuroraReportModule::class,
-		SettingsModule::class,
-		SetupNotificationsModule::class
+        UpdateSchedulerModule::class
 ))
 @Singleton
 interface ApplicationComponent {

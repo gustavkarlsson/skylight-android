@@ -22,10 +22,11 @@ import se.gustavkarlsson.skylight.android.services_impl.providers.RealAuroraRepo
 import javax.inject.Named
 
 @Module(includes = arrayOf(
-        AuroraFactorsModule::class,
         SystemServiceModule::class,
         LocationProviderModule::class,
-        AsyncAddressProviderModule::class
+        AuroraFactorsModule::class,
+        AsyncAddressProviderModule::class,
+		ClockModule::class
 ))
 class NewAuroraReportProviderModule {
 

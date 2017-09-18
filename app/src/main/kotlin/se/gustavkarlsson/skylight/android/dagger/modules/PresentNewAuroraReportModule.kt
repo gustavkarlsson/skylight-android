@@ -6,7 +6,11 @@ import dagger.Reusable
 import se.gustavkarlsson.skylight.android.actions.PresentNewAuroraReport
 import se.gustavkarlsson.skylight.android.actions_impl.aurora_reports.ProvideNewAuroraReportToPublisher
 
-@Module
+@Module(includes = arrayOf(
+		NewAuroraReportProviderModule::class,
+		LatestAuroraReportStreamModule::class,
+		UserFriendlyExceptionStreamModule::class
+))
 abstract class PresentNewAuroraReportModule {
 
 	@Binds

@@ -8,6 +8,7 @@ import se.gustavkarlsson.skylight.android.actions_impl.SetupNotificationsFromStr
 
 @Module(includes = arrayOf(
         LatestAuroraReportStreamModule::class,
+        AuroraReportNotificationEvaluatorModule::class,
         NotifierModule::class
 ))
 abstract class SetupNotificationsModule {
