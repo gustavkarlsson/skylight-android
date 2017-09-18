@@ -10,15 +10,13 @@ import javax.inject.Singleton
         LatestAuroraReportCacheModule::class,
         EvaluationModule::class,
         ClockModule::class,
-        LatestAuroraReportStreamModule::class,
         UserFriendlyExceptionStreamModule::class,
 		ForegroundReportLifetimeModule::class,
         UpdateSchedulerModule::class,
         NewAuroraReportProviderModule::class,
         PresentNewAuroraReportModule::class,
 		SettingsModule::class,
-		SetupNotificationsModule::class,
-        NotifierModule::class
+		SetupNotificationsModule::class
 ))
 @Singleton
 interface ApplicationComponent {

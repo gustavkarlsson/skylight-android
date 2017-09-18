@@ -6,7 +6,10 @@ import dagger.Reusable
 import se.gustavkarlsson.skylight.android.actions.SetupNotifications
 import se.gustavkarlsson.skylight.android.actions_impl.SetupNotificationsFromStream
 
-@Module
+@Module(includes = arrayOf(
+        LatestAuroraReportStreamModule::class,
+        NotifierModule::class
+))
 abstract class SetupNotificationsModule {
 
     @Binds
