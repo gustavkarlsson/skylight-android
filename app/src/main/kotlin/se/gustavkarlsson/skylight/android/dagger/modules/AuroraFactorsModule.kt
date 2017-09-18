@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.dagger.modules
 
 import android.content.Context
-import android.location.Geocoder
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -10,7 +9,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.dagger.CACHED_THREAD_POOL_NAME
 import se.gustavkarlsson.skylight.android.dagger.LAST_NOTIFIED_NAME
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.create
@@ -27,13 +25,13 @@ import se.gustavkarlsson.skylight.android.services_impl.providers.aggregating_au
 import se.gustavkarlsson.skylight.android.services_impl.providers.aggregating_aurora_factors.ErrorHandlingExecutorService
 import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapService
 import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.RetrofittedOpenWeatherMapVisibilityProvider
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 import javax.inject.Named
 import javax.inject.Singleton
 
+// TODO Clean up and factor out dependencies
 @Module(includes = arrayOf(
-        ContextModule::class
+        ContextModule::class,
+		ThreadPoolModule::class
 ))
 class AuroraFactorsModule {
 
@@ -75,12 +73,6 @@ class AuroraFactorsModule {
 
     @Provides
     @Reusable
-    fun provideGeocoder(
-            context: Context
-    ): Geocoder = Geocoder(context)
-
-    @Provides
-    @Reusable
     fun provideKpIndexService(): KpIndexService {
         return Retrofit.Builder()
                 .baseUrl(GEOMAG_ACTIVITY_API_URL)
@@ -94,11 +86,6 @@ class AuroraFactorsModule {
     fun provideLastNotifiedAuroraReportCache(
             context: Context
     ): SingletonCache<AuroraReport> = DualSingletonCache(LAST_NOTIFIED_CACHE_ID, AuroraReport.default, auroraReportCacheSerializer, context)
-
-    @Provides
-    @Singleton
-    @Named(CACHED_THREAD_POOL_NAME)
-    fun provideCachedThreadPool(): ExecutorService = Executors.newCachedThreadPool()
 
     companion object {
         private val LAST_NOTIFIED_CACHE_ID = "last-notified-aurora-report"

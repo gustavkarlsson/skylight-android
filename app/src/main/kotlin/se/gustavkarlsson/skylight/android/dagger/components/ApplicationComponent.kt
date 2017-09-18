@@ -9,6 +9,7 @@ import se.gustavkarlsson.skylight.android.dagger.modules.UpdateSchedulerModule
 import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob
 import javax.inject.Singleton
 
+// TODO Get rid of all includes, and put all dependencies in component instead
 @Component(modules = arrayOf(
         SetupNotificationsModule::class,
         UpdateJobModule::class,

@@ -9,7 +9,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 
-@Module
+@Module(includes = arrayOf(
+		ContextModule::class
+))
 class SystemServiceModule {
 
     @Provides
