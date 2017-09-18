@@ -6,9 +6,7 @@ import dagger.Reusable
 import se.gustavkarlsson.skylight.android.actions.SetUpdateSchedule
 import se.gustavkarlsson.skylight.android.actions_impl.SetUpdateScheduleFromSettings
 
-@Module(includes = arrayOf(
-		SettingsModule::class
-))
+@Module
 abstract class SetUpdateScheduleModule {
 
 	@Binds

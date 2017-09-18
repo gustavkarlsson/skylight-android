@@ -6,10 +6,7 @@ import dagger.Reusable
 import se.gustavkarlsson.skylight.android.services.providers.AsyncAddressProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.GeocoderAsyncAddressProvider
 
-@Module(includes = arrayOf(
-		GeocoderModule::class,
-        ThreadPoolModule::class
-))
+@Module
 abstract class AsyncAddressProviderModule {
 
     @Binds

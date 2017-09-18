@@ -9,9 +9,7 @@ import dagger.Reusable
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.GoogleLocationProvider
 
-@Module(includes = arrayOf(
-		ContextModule::class
-))
+@Module
 class LocationProviderModule {
 
     @Provides

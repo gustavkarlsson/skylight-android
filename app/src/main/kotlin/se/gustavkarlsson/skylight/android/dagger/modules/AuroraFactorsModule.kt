@@ -29,10 +29,7 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 // TODO Clean up and factor out dependencies
-@Module(includes = arrayOf(
-        ContextModule::class,
-		ThreadPoolModule::class
-))
+@Module
 class AuroraFactorsModule {
 
     @Provides

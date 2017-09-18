@@ -9,9 +9,7 @@ import se.gustavkarlsson.skylight.android.actions.PresentNewAuroraReport
 import se.gustavkarlsson.skylight.android.dagger.scopes.ActivityScope
 import se.gustavkarlsson.skylight.android.gui.activities.main.SwipeToRefreshController
 
-@Module(includes = arrayOf(
-	ActivityModule::class
-))
+@Module
 class SwipeToRefreshModule {
 
     @Provides

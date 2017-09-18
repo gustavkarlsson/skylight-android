@@ -7,11 +7,7 @@ import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.Notifier
 import se.gustavkarlsson.skylight.android.services_impl.notifications.AuroraReportNotifier
 
-@Module(includes = arrayOf(
-		ContextModule::class,
-		SystemServiceModule::class,
-		EvaluationModule::class
-))
+@Module
 abstract class NotifierModule {
 
     @Binds

@@ -6,9 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 
-@Module(includes = arrayOf(
-		ContextModule::class
-))
+@Module
 class GeocoderModule {
 
     @Provides
