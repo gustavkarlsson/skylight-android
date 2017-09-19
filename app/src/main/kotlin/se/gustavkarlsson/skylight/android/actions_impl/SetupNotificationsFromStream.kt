@@ -16,12 +16,16 @@ constructor(
         private val evaluator: AuroraReportNotificationEvaluator,
         private val notifier: Notifier<AuroraReport>
 ) : SetupNotifications {
+    private var hasRun = false
+
     override fun invoke() {
+        check(!hasRun) { "Already ran" }
         stream.subscribe {
             if (evaluator.shouldNotify(it)) {
                 notifier.notify(it)
                 evaluator.onNotified(it)
             }
 		}
+        hasRun = true
     }
 }
