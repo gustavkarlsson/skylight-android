@@ -41,7 +41,7 @@ constructor(
                 .setContentIntent(pendingIntent)
                 .build()
 
-        notificationManager.notify(135551, notification) // TODO Manage notification ID?
+        notificationManager.notify(1, notification)
     }
 
     private fun createActivityPendingIntent(): PendingIntent {

@@ -4,6 +4,7 @@ package se.gustavkarlsson.skylight.android.services_impl.providers.openweatherma
 import com.google.gson.Gson
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
+import kotlinx.coroutines.experimental.runBlocking
 import okhttp3.*
 import org.apache.commons.io.IOUtils
 import org.assertj.core.api.Java6Assertions.assertThat
@@ -65,7 +66,7 @@ class RetrofittedOpenWeatherMapVisibilityProviderTest {
 			.build()
 			.create(OpenWeatherMapService::class.java), "fake-app-id")
 
-        val cloudiness = service.getVisibility(0.0, 0.0).cloudPercentage!!
+        val cloudiness = runBlocking { service.getVisibility(0.0, 0.0).cloudPercentage!! }
 
         assertThat(cloudiness).isEqualTo(68)
     }

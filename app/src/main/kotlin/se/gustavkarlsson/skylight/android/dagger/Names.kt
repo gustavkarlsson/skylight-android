@@ -5,8 +5,6 @@ const val FRAGMENT_ROOT_NAME = "FragmentRoot"
 const val LAST_NAME = "Last"
 const val NEW_NAME = "New"
 
-const val CACHED_THREAD_POOL_NAME = "CachedThreadPool"
-
 const val LAST_NOTIFIED_NAME = "LastNotified"
 
 const val REPORT_LIFETIME_NAME = "ForegroundReportLifetime"

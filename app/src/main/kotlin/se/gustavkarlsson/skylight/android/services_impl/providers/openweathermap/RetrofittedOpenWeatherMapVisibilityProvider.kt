@@ -3,8 +3,8 @@ package se.gustavkarlsson.skylight.android.services_impl.providers.openweatherma
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.services.providers.VisibilityProvider
 import se.gustavkarlsson.skylight.android.entities.Visibility
+import se.gustavkarlsson.skylight.android.services.providers.VisibilityProvider
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import java.io.IOException
 
@@ -13,7 +13,7 @@ class RetrofittedOpenWeatherMapVisibilityProvider constructor(
 	private val appId: String
 ) : VisibilityProvider, AnkoLogger {
 
-    override fun getVisibility(latitude: Double, longitude: Double): Visibility {
+    suspend override fun getVisibility(latitude: Double, longitude: Double): Visibility {
         try {
             val response = service.get(latitude, longitude, "json", appId).execute()
             debug("Got response: ${response.code()}, message: ${response.raw()}")

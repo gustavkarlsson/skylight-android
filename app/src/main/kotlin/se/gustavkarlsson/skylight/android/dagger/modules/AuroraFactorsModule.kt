@@ -21,8 +21,7 @@ import se.gustavkarlsson.skylight.android.services_impl.cache.auroraReportCacheS
 import se.gustavkarlsson.skylight.android.services_impl.providers.GeomagLocationProviderImpl
 import se.gustavkarlsson.skylight.android.services_impl.providers.KlausBrunnerDarknessProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.RetrofittedGeomagActivityProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.aggregating_aurora_factors.AsyncAuroraFactorsProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.aggregating_aurora_factors.ErrorHandlingExecutorService
+import se.gustavkarlsson.skylight.android.services_impl.providers.AggregatingAuroraFactorsProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapService
 import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.RetrofittedOpenWeatherMapVisibilityProvider
 import javax.inject.Named
@@ -39,9 +38,8 @@ class AuroraFactorsModule {
             visibilityProvider: VisibilityProvider,
             darknessProvider: KlausBrunnerDarknessProvider,
             geomagLocProvider: GeomagLocationProviderImpl,
-            executorService: ErrorHandlingExecutorService,
             clock: Clock
-    ): AuroraFactorsProvider = AsyncAuroraFactorsProvider(geomagActivityProvider, visibilityProvider, darknessProvider, geomagLocProvider, executorService, clock)
+    ): AuroraFactorsProvider = AggregatingAuroraFactorsProvider(geomagActivityProvider, visibilityProvider, darknessProvider, geomagLocProvider, clock)
 
     @Provides
     @Reusable

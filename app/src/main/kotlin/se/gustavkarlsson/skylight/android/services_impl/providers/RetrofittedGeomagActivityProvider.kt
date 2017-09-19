@@ -18,7 +18,7 @@ constructor(
 		private val service: KpIndexService
 ) : GeomagActivityProvider, AnkoLogger {
 
-    override fun getGeomagActivity(): GeomagActivity {
+    suspend override fun getGeomagActivity(): GeomagActivity {
         try {
             val response = service.get().execute()
 			debug("Got response: ${response.code()}, message: ${response.raw()}")

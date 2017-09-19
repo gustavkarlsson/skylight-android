@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.services_impl.providers
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
+import kotlinx.coroutines.experimental.runBlocking
 import okhttp3.*
 import org.apache.commons.io.IOUtils
 import org.assertj.core.api.Java6Assertions.assertThat
@@ -66,7 +67,7 @@ class RetrofittedGeomagActivityProviderTest {
 			.build()
 			.create(KpIndexService::class.java))
 
-		val kpIndex = service.getGeomagActivity().kpIndex
+		val kpIndex = runBlocking { service.getGeomagActivity().kpIndex }
 
 		assertThat(kpIndex).isCloseTo(1.33, within(0.01))
 	}

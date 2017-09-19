@@ -9,11 +9,9 @@ import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import org.jetbrains.anko.info
 import org.jetbrains.anko.warn
-import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
-import java.util.concurrent.TimeUnit.MILLISECONDS
 import javax.inject.Inject
 
 @Reusable
@@ -23,11 +21,11 @@ constructor(
 		private val googleApiClient: GoogleApiClient
 ) : LocationProvider, AnkoLogger {
 
-    override fun getLocation(timeout: Duration): Location {
+    suspend override fun getLocation(): Location {
         info("Connecting to Google Play Services...")
         try {
-            val connectionResult = googleApiClient.blockingConnect(timeout.toMillis(), MILLISECONDS)
-			handleFailure(connectionResult, timeout)
+            val connectionResult = googleApiClient.blockingConnect()
+			handleFailure(connectionResult)
             debug("Successfully connected to Google Play Services")
             debug("Getting location...")
             val location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient)
@@ -47,10 +45,10 @@ constructor(
         }
     }
 
-	private fun handleFailure(connectionResult: ConnectionResult, timeout: Duration) {
+	private fun handleFailure(connectionResult: ConnectionResult) {
 		if (!connectionResult.isSuccess) {
 			if (connectionResult.errorCode == ConnectionResult.TIMEOUT) {
-				throw UserFriendlyException(R.string.error_updating_took_too_long, "Connecting to Google API timed out after ${timeout.toMillis()}ms")
+				throw UserFriendlyException(R.string.error_updating_took_too_long, "Connecting to Google API timed out")
 			}
 			throw UserFriendlyException(R.string.error_could_not_connect_to_google_play_services, createErrorMessage(connectionResult))
 		}
