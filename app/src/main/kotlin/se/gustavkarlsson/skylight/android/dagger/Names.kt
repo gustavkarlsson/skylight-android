@@ -9,7 +9,7 @@ const val CACHED_THREAD_POOL_NAME = "CachedThreadPool"
 
 const val LAST_NOTIFIED_NAME = "LastNotified"
 
-const val FOREGROUND_REPORT_LIFETIME_NAME = "ForegroundReportLifetime"
+const val REPORT_LIFETIME_NAME = "ForegroundReportLifetime"
 
 const val UPDATE_SCHEDULER_INTERVAL_NAME = "UpdateSchedulerInterval"
 const val UPDATE_SCHEDULER_FLEX_NAME = "UpdateSchedulerFlex"

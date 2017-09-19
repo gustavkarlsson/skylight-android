@@ -5,9 +5,9 @@ import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.actions.PresentRecentAuroraReport
-import se.gustavkarlsson.skylight.android.dagger.FOREGROUND_REPORT_LIFETIME_NAME
 import se.gustavkarlsson.skylight.android.dagger.LAST_NAME
 import se.gustavkarlsson.skylight.android.dagger.NEW_NAME
+import se.gustavkarlsson.skylight.android.dagger.REPORT_LIFETIME_NAME
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.extensions.until
@@ -25,7 +25,7 @@ constructor(
         @Named(NEW_NAME) private val newAuroraReportProvider: AuroraReportProvider,
         private val auroraReports: StreamPublisher<AuroraReport>,
         private val errors: StreamPublisher<UserFriendlyException>,
-        @Named(FOREGROUND_REPORT_LIFETIME_NAME) private val maxAge: Duration,
+        @Named(REPORT_LIFETIME_NAME) private val maxAge: Duration,
         private val clock: Clock
 ) : PresentRecentAuroraReport {
 	init {
@@ -44,7 +44,7 @@ constructor(
 		} catch(e: UserFriendlyException) {
 			errors.publish(e)
 		} catch(e: Exception) {
-			errors.publish(UserFriendlyException(R.string.error_unknown_update_error, e)) // TODO change error message
+			errors.publish(UserFriendlyException(R.string.error_unknown_update_error, e))
 		}
 	}
 
