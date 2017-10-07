@@ -17,7 +17,6 @@ class GetLatestAuroraReportScheduler(
 		if(!isScheduled()) {
 			JobRequest.Builder(UPDATE_JOB_TAG)
 				.setPeriodic(scheduleInterval.toMillis(), scheduleFlex.toMillis())
-				.setPersisted(true)
 				.setUpdateCurrent(true)
 				.setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
 				.setRequirementsEnforced(true)
