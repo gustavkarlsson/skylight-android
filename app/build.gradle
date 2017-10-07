@@ -74,47 +74,47 @@ dependencies {
 		android_support_version = "26.1.0"
 		anko_version = "0.10.1"
 	}
-	compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-	compile "com.android.support:appcompat-v7:$android_support_version"
-	compile "com.android.support:design:$android_support_version"
-	compile "com.android.support.constraint:constraint-layout:1.0.2"
-	compile "com.google.android.gms:play-services-location:$google_play_services_version"
-	compile "com.google.android.gms:play-services-gcm:$google_play_services_version"
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+	implementation "com.android.support:appcompat-v7:$android_support_version"
+	implementation "com.android.support:design:$android_support_version"
+	implementation "com.android.support.constraint:constraint-layout:1.0.2"
+	implementation "com.google.android.gms:play-services-location:$google_play_services_version"
+	implementation "com.google.android.gms:play-services-gcm:$google_play_services_version"
 
-	compile "com.evernote:android-job:1.2.0"
-	compile "com.github.gustavkarlsson:aurora-notifier-common:aurora-notifier-common-1.5.0"
-	compile "net.e175.klaus:solarpositioning:0.0.9"
-	compile "com.vincentbrison.openlibraries.android:dualcache:3.1.1"
-	compile "com.jakewharton.threetenabp:threetenabp:1.0.5"
+	implementation "com.evernote:android-job:1.2.0"
+	implementation "com.github.gustavkarlsson:aurora-notifier-common:aurora-notifier-common-1.5.0"
+	implementation "net.e175.klaus:solarpositioning:0.0.9"
+	implementation "com.vincentbrison.openlibraries.android:dualcache:3.1.1"
+	implementation "com.jakewharton.threetenabp:threetenabp:1.0.5"
 
 	// Anko
-	compile "org.jetbrains.anko:anko-commons:$anko_version"
-	compile "org.jetbrains.anko:anko-coroutines:$anko_version"
+	implementation "org.jetbrains.anko:anko-commons:$anko_version"
+	implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
 
 	// Retrofit
-	compile "com.squareup.retrofit2:retrofit:$retrofit_version"
-	compile "com.squareup.retrofit2:converter-gson:$retrofit_version"
+	implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+	implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 
 	// Dagger
-	compile "com.google.dagger:dagger:$dagger_version"
+	implementation "com.google.dagger:dagger:$dagger_version"
 	kapt "com.google.dagger:dagger-compiler:$dagger_version"
-	provided "javax.annotation:jsr250-api:1.0"
+	compileOnly "javax.annotation:jsr250-api:1.0"
 
 	// Reactive
-	compile "io.reactivex.rxjava2:rxandroid:2.0.1"
-	compile "io.reactivex.rxjava2:rxkotlin:2.1.0"
+	implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
+	implementation "io.reactivex.rxjava2:rxkotlin:2.1.0"
 
 	// Testing
-	testCompile "org.robolectric:robolectric:3.4.2"
-	testCompile "junit:junit:4.12"
-	testCompile "org.mockito:mockito-core:2.10.0"
-	testCompile "com.nhaarman:mockito-kotlin-kt1.1:1.5.0", { exclude group: "org.jetbrains.kotlin" }
-	testCompile "commons-io:commons-io:2.4"
-	testCompile "org.assertj:assertj-core:3.8.0"
+	testImplementation "org.robolectric:robolectric:3.4.2"
+	testImplementation "junit:junit:4.12"
+	testImplementation "org.mockito:mockito-core:2.10.0"
+	testImplementation "com.nhaarman:mockito-kotlin-kt1.1:1.5.0", { exclude group: "org.jetbrains.kotlin" }
+	testImplementation "commons-io:commons-io:2.4"
+	testImplementation "org.assertj:assertj-core:3.8.0"
 
-	androidTestCompile "com.android.support:support-annotations:$android_support_version"
-	androidTestCompile "com.android.support.test:runner:1.0.1"
-	androidTestCompile "com.android.support.test:rules:1.0.1"
-	androidTestCompile "com.android.support.test.espresso:espresso-core:3.0.1"
+	androidTestImplementation "com.android.support:support-annotations:$android_support_version"
+	androidTestImplementation "com.android.support.test:runner:1.0.1"
+	androidTestImplementation "com.android.support.test:rules:1.0.1"
+	androidTestImplementation "com.android.support.test.espresso:espresso-core:3.0.1"
 	kaptAndroidTest "com.google.dagger:dagger-compiler:$dagger_version"
 }
