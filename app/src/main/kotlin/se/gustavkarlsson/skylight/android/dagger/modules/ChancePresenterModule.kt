@@ -18,7 +18,7 @@ class ChancePresenterModule {
     @Provides
     @FragmentScope
     fun provideChancePresenter(@Named(FRAGMENT_ROOT_NAME) rootView: View): Presenter<Chance> {
-        val chanceView = rootView.findViewById(R.id.chance) as TextView
+        val chanceView = rootView.findViewById<TextView>(R.id.chance)
         return ChanceTextViewPresenter(chanceView)
     }
 }

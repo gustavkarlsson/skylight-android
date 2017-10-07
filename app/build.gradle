@@ -4,8 +4,8 @@ apply plugin: "kotlin-kapt"
 apply plugin: "kotlin-android-extensions"
 
 android {
-	compileSdkVersion 25
-	buildToolsVersion "25.0.2"
+	compileSdkVersion 26
+	buildToolsVersion "26.0.2"
 
 	sourceSets {
 		main.java.srcDirs += "src/main/kotlin"
@@ -34,7 +34,7 @@ android {
 	defaultConfig {
 		applicationId "se.gustavkarlsson.skylight.android"
 		minSdkVersion 19
-		targetSdkVersion 25
+		targetSdkVersion 26
 		versionCode 1
 		versionName "1.0"
 		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -70,8 +70,8 @@ dependencies {
 	ext {
 		retrofit_version = "2.3.0"
 		dagger_version = "2.11"
-		google_play_services_version = "11.0.4"
-		android_support_version = "25.3.1"
+		google_play_services_version = "11.4.2"
+		android_support_version = "26.1.0"
 		anko_version = "0.10.1"
 	}
 	compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
@@ -108,14 +108,14 @@ dependencies {
 	// Testing
 	testCompile "org.robolectric:robolectric:3.4.2"
 	testCompile "junit:junit:4.12"
-	testCompile "org.mockito:mockito-core:2.8.47"
+	testCompile "org.mockito:mockito-core:2.10.0"
 	testCompile "com.nhaarman:mockito-kotlin-kt1.1:1.5.0", { exclude group: "org.jetbrains.kotlin" }
 	testCompile "commons-io:commons-io:2.4"
 	testCompile "org.assertj:assertj-core:3.8.0"
 
 	androidTestCompile "com.android.support:support-annotations:$android_support_version"
-	androidTestCompile "com.android.support.test:runner:0.5"
-	androidTestCompile "com.android.support.test:rules:0.5"
-	androidTestCompile "com.android.support.test.espresso:espresso-core:2.2.2"
+	androidTestCompile "com.android.support.test:runner:1.0.1"
+	androidTestCompile "com.android.support.test:rules:1.0.1"
+	androidTestCompile "com.android.support.test.espresso:espresso-core:3.0.1"
 	kaptAndroidTest "com.google.dagger:dagger-compiler:$dagger_version"
 }

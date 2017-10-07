@@ -18,7 +18,7 @@ class SwipeToRefreshModule {
 		activity: Activity,
 		presentNewAuroraReport: PresentNewAuroraReport
 	): SwipeToRefreshController {
-        val swipeRefreshLayout = activity.findViewById(R.id.swipeRefreshLayout) as SwipeRefreshLayout
+        val swipeRefreshLayout = activity.findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
         return SwipeToRefreshController(swipeRefreshLayout, presentNewAuroraReport)
     }
 }

@@ -19,7 +19,7 @@ class LocationPresenterModule {
     fun provideLocationPresenter(
 			@Named(FRAGMENT_ROOT_NAME) rootView: View
 	): Presenter<String?> {
-        val locationView = rootView.findViewById(R.id.location) as TextView
+        val locationView = rootView.findViewById<TextView>(R.id.location)
         return LocationTextViewPresenter(locationView)
     }
 }
