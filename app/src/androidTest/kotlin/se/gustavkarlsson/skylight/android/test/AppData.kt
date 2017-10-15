@@ -1,14 +1,18 @@
 package se.gustavkarlsson.skylight.android.test
 
 import android.content.Context
+import android.support.test.InstrumentationRegistry
 import org.apache.commons.io.FileUtils
 
-fun getSharedPreferencesName(context: Context) = context.packageName + "_preferences_test"
+fun getSharedPreferencesName() = getContext().packageName + "_preferences_test"
 
-fun clearSharedPreferences(context: Context) {
-	context.getSharedPreferences(getSharedPreferencesName(context), Context.MODE_PRIVATE).edit().clear().commit()
+fun clearSharedPreferences() {
+	val context = getContext()
+	context.getSharedPreferences(getSharedPreferencesName(), Context.MODE_PRIVATE).edit().clear().commit()
 }
 
-fun clearCache(context: Context) {
-	FileUtils.deleteDirectory(context.cacheDir)
+fun clearCache() {
+	FileUtils.deleteDirectory(getContext().cacheDir)
 }
+
+private fun getContext(): Context = InstrumentationRegistry.getTargetContext()

@@ -14,5 +14,5 @@ class TestSharedPreferencesModule {
 	@Reusable
 	fun provideSharedPreferences(
 		context: Context
-	): SharedPreferences = context.getSharedPreferences(getSharedPreferencesName(context), Context.MODE_PRIVATE)
+	): SharedPreferences = context.getSharedPreferences(getSharedPreferencesName(), Context.MODE_PRIVATE)
 }

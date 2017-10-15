@@ -10,30 +10,19 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mock
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
 import se.gustavkarlsson.skylight.android.dagger.components.DaggerTestApplicationComponent
 import se.gustavkarlsson.skylight.android.dagger.modules.ContextModule
 import se.gustavkarlsson.skylight.android.dagger.modules.TestSharedPreferencesModule
-import se.gustavkarlsson.skylight.android.services.Settings
-import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
-import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 import se.gustavkarlsson.skylight.android.test.ApplicationComponentActivityTestRule
+import se.gustavkarlsson.skylight.android.test.clearCache
+import se.gustavkarlsson.skylight.android.test.clearSharedPreferences
 import se.gustavkarlsson.skylight.android.test.initMocks
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class MainActivityTest {
-
-	@Mock
-	lateinit var mockSettings: Settings
-
-	@Mock
-	lateinit var mockLocationProvider: LocationProvider
-
-	@Mock
-	lateinit var mockLocationNameProvider: LocationNameProvider
 
     @Rule
 	@JvmField
@@ -47,6 +36,8 @@ class MainActivityTest {
 	@Before
 	fun setUp() {
 		initMocks()
+		clearCache()
+		clearSharedPreferences()
 		testRule.launchActivity()
 	}
 
