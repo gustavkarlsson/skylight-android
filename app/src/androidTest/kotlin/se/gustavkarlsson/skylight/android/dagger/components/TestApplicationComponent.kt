@@ -8,9 +8,10 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = arrayOf(
 	ContextModule::class,
-	CustomLatestAuroraReportCacheModule::class,
+	LatestAuroraReportCacheModule::class,
 	LatestAuroraReportStreamModule::class,
-	CustomSettingsModule::class,
+	TestSharedPreferencesModule::class,
+	SettingsModule::class,
 	TimeModule::class,
 	NotifierModule::class,
 	EvaluationModule::class,
@@ -18,9 +19,9 @@ import javax.inject.Singleton
 	PresentNewAuroraReportModule::class,
 	NewAuroraReportProviderModule::class,
 	SystemServiceModule::class,
-	CustomLocationProviderModule::class,
+	LocationProviderModule::class,
 	AuroraFactorsModule::class,
-	CustomLocationNameProviderModule::class,
+	LocationNameProviderModule::class,
 	GeocoderModule::class,
 	UserFriendlyExceptionStreamModule::class,
 	UpdateSchedulerModule::class

@@ -28,6 +28,7 @@ constructor(
 			handleFailure(connectionResult)
             debug("Successfully connected to Google Play Services")
             debug("Getting locationName...")
+			// TODO Replace with LocationServices.getFusedLocationProviderClient
             val location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient)
             debug("Location is: $location")
             if (location == null) {

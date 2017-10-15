@@ -14,14 +14,13 @@ import org.mockito.Mock
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
 import se.gustavkarlsson.skylight.android.dagger.components.DaggerTestApplicationComponent
-import se.gustavkarlsson.skylight.android.dagger.modules.*
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.dagger.modules.ContextModule
+import se.gustavkarlsson.skylight.android.dagger.modules.TestSharedPreferencesModule
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 import se.gustavkarlsson.skylight.android.test.ApplicationComponentActivityTestRule
-import se.gustavkarlsson.skylight.android.test.InMemorySingletonCache
 import se.gustavkarlsson.skylight.android.test.initMocks
 
 @RunWith(AndroidJUnit4::class)
@@ -42,10 +41,7 @@ class AuroraFactorFragmentTest {
 	var testRule = ApplicationComponentActivityTestRule(MainActivity::class, false, false) {
 		DaggerTestApplicationComponent.builder()
 			.contextModule(ContextModule(Skylight.instance))
-			.customLatestAuroraReportCacheModule(CustomLatestAuroraReportCacheModule(InMemorySingletonCache(AuroraReport.default)))
-			.customSettingsModule(CustomSettingsModule(mockSettings))
-			.customLocationProviderModule(CustomLocationProviderModule(mockLocationProvider))
-			.customLocationNameProviderModule(CustomLocationNameProviderModule(mockLocationNameProvider))
+			.testSharedPreferencesModule(TestSharedPreferencesModule())
 			.build()
 	}
 
