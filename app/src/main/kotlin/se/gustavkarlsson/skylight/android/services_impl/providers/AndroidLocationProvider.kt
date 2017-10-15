@@ -1,7 +1,6 @@
-package se.gustavkarlsson.skylight.android.services_impl.providers.location
+package se.gustavkarlsson.skylight.android.services_impl.providers
 
-import android.content.Context
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.Reusable
 import kotlinx.coroutines.experimental.delay
 import org.jetbrains.anko.AnkoLogger
@@ -17,13 +16,13 @@ import javax.inject.Inject
 class AndroidLocationProvider
 @Inject
 constructor(
-	private val context: Context
+	private val fusedLocationProviderClient: FusedLocationProviderClient
 ) : LocationProvider, AnkoLogger {
 
     suspend override fun getLocation(): Location {
         try {
             debug("Getting location...")
-            val getLocationTask = LocationServices.getFusedLocationProviderClient(context).lastLocation
+			val getLocationTask = fusedLocationProviderClient.lastLocation
 			while (!getLocationTask.isComplete) {
 				delay(50)
 			}

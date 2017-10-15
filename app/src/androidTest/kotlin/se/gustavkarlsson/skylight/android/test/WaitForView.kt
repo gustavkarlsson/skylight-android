@@ -24,7 +24,7 @@ private class WaitForView(
 	}
 
 	override fun getDescription(): String {
-		return "Wait for a child view to match [$viewMatchers] for up to $timeoutMillis millis."
+		return "Wait for a child view to match $viewMatchers for up to $timeoutMillis millis."
 	}
 
 	override fun perform(uiController: UiController, root: View) {

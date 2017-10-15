@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance
 
 import android.support.test.espresso.Espresso.onView
+import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.matcher.ViewMatchers.withId
@@ -14,13 +15,20 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
 import se.gustavkarlsson.skylight.android.dagger.components.DaggerTestApplicationComponent
 import se.gustavkarlsson.skylight.android.dagger.modules.ContextModule
+import se.gustavkarlsson.skylight.android.dagger.modules.TestLocationNameProviderModule
+import se.gustavkarlsson.skylight.android.dagger.modules.TestLocationProviderModule
 import se.gustavkarlsson.skylight.android.dagger.modules.TestSharedPreferencesModule
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import se.gustavkarlsson.skylight.android.test.*
+import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class AuroraChanceFragmentTest {
+
+	@Inject lateinit var testLocationProvider: TestLocationProvider
+
+	@Inject lateinit var testLocationNameProvider: TestLocationNameProvider
 
 	@Rule
 	@JvmField
@@ -28,6 +36,8 @@ class AuroraChanceFragmentTest {
 		DaggerTestApplicationComponent.builder()
 			.contextModule(ContextModule(Skylight.instance))
 			.testSharedPreferencesModule(TestSharedPreferencesModule())
+			.testLocationProviderModule(TestLocationProviderModule())
+			.testLocationNameProviderModule(TestLocationNameProviderModule())
 			.build()
 	}
 
@@ -37,10 +47,12 @@ class AuroraChanceFragmentTest {
 		clearCache()
 		clearSharedPreferences()
 		testRule.launchActivity()
+		testRule.component.inject(this)
 	}
 
     @Test
     fun locationTextShown() {
+		onView(withId(R.id.swipeRefreshLayout)).perform(ViewActions.swipeDown())
 		waitForView(2000L, withId(R.id.location), isDisplayed())
         onView(withId(R.id.location)).check(matches(isDisplayed()))
     }

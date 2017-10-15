@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.dagger.components
 
 import dagger.Component
 import se.gustavkarlsson.skylight.android.dagger.modules.*
+import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceFragmentTest
 import javax.inject.Singleton
 
 @Singleton
@@ -19,11 +20,13 @@ import javax.inject.Singleton
 	PresentNewAuroraReportModule::class,
 	NewAuroraReportProviderModule::class,
 	SystemServiceModule::class,
-	LocationProviderModule::class,
+	TestLocationProviderModule::class,
 	AuroraFactorsModule::class,
-	LocationNameProviderModule::class,
+	TestLocationNameProviderModule::class,
 	GeocoderModule::class,
 	UserFriendlyExceptionStreamModule::class,
 	UpdateSchedulerModule::class
 ))
-interface TestApplicationComponent : ApplicationComponent
+interface TestApplicationComponent : ApplicationComponent {
+	fun inject(auroraChanceFragmentTest: AuroraChanceFragmentTest)
+}
