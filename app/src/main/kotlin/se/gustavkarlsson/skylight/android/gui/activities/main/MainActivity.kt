@@ -35,7 +35,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        component = Skylight.applicationComponent.getMainActivityComponent(ActivityModule(this))
+        component = Skylight.instance.component.getMainActivityComponent(ActivityModule(this))
         setContentView(R.layout.activity_main)
         component.inject(this)
     }

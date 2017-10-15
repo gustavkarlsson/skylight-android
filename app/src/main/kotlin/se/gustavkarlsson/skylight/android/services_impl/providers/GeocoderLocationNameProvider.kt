@@ -1,26 +1,24 @@
 package se.gustavkarlsson.skylight.android.services_impl.providers
 
-import android.location.Address
 import android.location.Geocoder
 import dagger.Reusable
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.warn
-import se.gustavkarlsson.skylight.android.services.providers.AddressProvider
+import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
 import java.io.IOException
 import javax.inject.Inject
 
 @Reusable
-class GeocoderAddressProvider
+class GeocoderLocationNameProvider
 @Inject
 constructor(
 		private val geocoder: Geocoder
-) : AddressProvider, AnkoLogger {
+) : LocationNameProvider, AnkoLogger {
 
-	// TODO Use coroutines
-    suspend override fun getAddress(latitude: Double, longitude: Double): Address? {
+    suspend override fun getLocationName(latitude: Double, longitude: Double): String? {
         return try {
             val addresses = geocoder.getFromLocation(latitude, longitude, 1)
-            addresses.firstOrNull()
+            addresses.firstOrNull()?.locality
         } catch (e: IOException) {
             warn("Failed to perform reverse geocoding", e)
             null

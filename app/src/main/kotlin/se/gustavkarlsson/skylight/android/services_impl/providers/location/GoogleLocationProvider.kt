@@ -1,6 +1,5 @@
-package se.gustavkarlsson.skylight.android.services_impl.providers
+package se.gustavkarlsson.skylight.android.services_impl.providers.location
 
-import android.location.Location
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationServices
@@ -10,6 +9,7 @@ import org.jetbrains.anko.debug
 import org.jetbrains.anko.info
 import org.jetbrains.anko.warn
 import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.services.Location
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import javax.inject.Inject
@@ -27,13 +27,13 @@ constructor(
             val connectionResult = googleApiClient.blockingConnect()
 			handleFailure(connectionResult)
             debug("Successfully connected to Google Play Services")
-            debug("Getting location...")
+            debug("Getting locationName...")
             val location = LocationServices.FusedLocationApi.getLastLocation(googleApiClient)
             debug("Location is: $location")
             if (location == null) {
                 throw UserFriendlyException(R.string.error_could_not_determine_location, "Location API returned null")
             }
-            return location
+            return Location(location.latitude, location.longitude)
         } catch (e: SecurityException) {
             warn("Location permission missing", e)
             throw UserFriendlyException(R.string.error_location_permission_missing, e)

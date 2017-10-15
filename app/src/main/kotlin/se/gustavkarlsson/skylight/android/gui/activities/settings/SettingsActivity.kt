@@ -12,7 +12,7 @@ class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-		component = Skylight.applicationComponent.getSettingsActivityComponent()
+		component = Skylight.instance.component.getSettingsActivityComponent()
         fragmentManager.beginTransaction()
                 .replace(android.R.id.content, SettingsFragment())
                 .commit()

@@ -1,10 +1,10 @@
 package se.gustavkarlsson.skylight.android.services_impl.providers
 
-import android.location.Location
 import dagger.Reusable
 import org.threeten.bp.Clock
 import se.gustavkarlsson.skylight.android.entities.AuroraFactors
 import se.gustavkarlsson.skylight.android.extensions.now
+import se.gustavkarlsson.skylight.android.services.Location
 import se.gustavkarlsson.skylight.android.services.providers.*
 import javax.inject.Inject
 
@@ -20,6 +20,7 @@ constructor(
 ) : AuroraFactorsProvider {
 
     suspend override fun getAuroraFactors(location: Location): AuroraFactors {
+		// TODO change arguments to accept Location instead of coordinates
         val geomagActivity = geomagActivityProvider.getGeomagActivity()
         val geomagLocation = geomagLocationProvider.getGeomagLocation(location.latitude, location.longitude)
         val darkness = darknessProvider.getDarkness(clock.now, location.latitude, location.longitude)

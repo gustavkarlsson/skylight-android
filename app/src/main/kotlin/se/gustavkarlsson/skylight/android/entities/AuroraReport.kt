@@ -4,7 +4,7 @@ import org.threeten.bp.Instant
 
 data class AuroraReport(
 	val timestamp: Instant,
-	val location: String?,
+	val locationName: String?,
 	val factors: AuroraFactors
 ) {
 	companion object {

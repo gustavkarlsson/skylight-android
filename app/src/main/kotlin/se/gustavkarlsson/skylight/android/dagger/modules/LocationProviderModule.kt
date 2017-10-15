@@ -7,7 +7,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.GoogleLocationProvider
+import se.gustavkarlsson.skylight.android.services_impl.providers.location.GoogleLocationProvider
 
 @Module
 class LocationProviderModule {

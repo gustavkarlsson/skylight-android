@@ -19,7 +19,7 @@ constructor(
 ) : Presenter<AuroraReport> {
 
     override fun present(value: AuroraReport) {
-        locationPresenter.present(value.location)
+        locationPresenter.present(value.locationName)
         chancePresenter.present(auroraChanceEvaluator.evaluate(value))
         timeSinceUpdateController.update(value.timestamp)
     }

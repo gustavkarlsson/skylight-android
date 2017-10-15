@@ -5,22 +5,55 @@ import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.filters.LargeTest
-import android.support.test.rule.ActivityTestRule
 import android.support.test.runner.AndroidJUnit4
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import se.gustavkarlsson.skylight.android.DaggerTest
+import org.mockito.Mock
 import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.Skylight
+import se.gustavkarlsson.skylight.android.dagger.components.DaggerTestApplicationComponent
+import se.gustavkarlsson.skylight.android.dagger.modules.*
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
+import se.gustavkarlsson.skylight.android.services.Settings
+import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
+import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
+import se.gustavkarlsson.skylight.android.test.ApplicationComponentActivityTestRule
+import se.gustavkarlsson.skylight.android.test.InMemorySingletonCache
+import se.gustavkarlsson.skylight.android.test.initMocks
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class AuroraFactorFragmentTest : DaggerTest() {
+class AuroraFactorFragmentTest {
 
-    @Rule
+	@Mock
+	lateinit var mockSettings: Settings
+
+	@Mock
+	lateinit var mockLocationProvider: LocationProvider
+
+	@Mock
+	lateinit var mockLocationNameProvider: LocationNameProvider
+
+	@Rule
 	@JvmField
-    var testRule = ActivityTestRule(MainActivity::class.java)
+	var testRule = ApplicationComponentActivityTestRule(MainActivity::class, false, false) {
+		DaggerTestApplicationComponent.builder()
+			.contextModule(ContextModule(Skylight.instance))
+			.customLatestAuroraReportCacheModule(CustomLatestAuroraReportCacheModule(InMemorySingletonCache(AuroraReport.default)))
+			.customSettingsModule(CustomSettingsModule(mockSettings))
+			.customLocationProviderModule(CustomLocationProviderModule(mockLocationProvider))
+			.customLocationNameProviderModule(CustomLocationNameProviderModule(mockLocationNameProvider))
+			.build()
+	}
+
+	@Before
+	fun setUp() {
+		initMocks()
+		testRule.launchActivity()
+	}
 
     @Test
     fun geomagActivityFactorViewShown() {

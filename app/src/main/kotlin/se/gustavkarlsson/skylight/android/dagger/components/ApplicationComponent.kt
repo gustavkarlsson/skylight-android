@@ -20,7 +20,7 @@ import javax.inject.Singleton
         SystemServiceModule::class,
         LocationProviderModule::class,
         AuroraFactorsModule::class,
-        AsyncAddressProviderModule::class,
+        LocationNameProviderModule::class,
         GeocoderModule::class,
         UserFriendlyExceptionStreamModule::class,
         UpdateSchedulerModule::class

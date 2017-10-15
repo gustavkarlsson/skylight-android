@@ -10,13 +10,16 @@ import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob.Com
 
 class Skylight : Application() {
 
+	lateinit var component: ApplicationComponent
+
     override fun onCreate() {
         super.onCreate()
-        AndroidThreeTen.init(this)
-        applicationComponent = DaggerApplicationComponent.builder()
+		instance = this
+        component = DaggerApplicationComponent.builder()
                 .contextModule(ContextModule(this))
                 .build()
-        val setupNotifications = applicationComponent.getSetupNotifications()
+		AndroidThreeTen.init(this)
+        val setupNotifications = component.getSetupNotifications()
 		setupNotifications()
         initJobManager()
     }
@@ -25,14 +28,14 @@ class Skylight : Application() {
         val jobManager = JobManager.create(this)
         jobManager.addJobCreator { tag ->
             when (tag) {
-                UPDATE_JOB_TAG -> applicationComponent.getUpdateJob()
+                UPDATE_JOB_TAG -> component.getUpdateJob()
                 else -> null
             }
         }
     }
 
-    companion object {
-        lateinit var applicationComponent: ApplicationComponent
-    }
+	companion object {
+		lateinit var instance: Skylight
+	}
 
 }
