@@ -7,29 +7,30 @@ import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob
 import javax.inject.Singleton
 
 @Component(modules = arrayOf(
-        ContextModule::class,
-        LatestAuroraReportCacheModule::class,
-        LatestAuroraReportStreamModule::class,
-        SettingsModule::class,
-		TimeModule::class,
-        NotifierModule::class,
-        EvaluationModule::class,
-        SetupNotificationsModule::class,
-        PresentNewAuroraReportModule::class,
-        NewAuroraReportProviderModule::class,
-        SystemServiceModule::class,
-        LocationProviderModule::class,
-        AuroraFactorsModule::class,
-        LocationNameProviderModule::class,
-        GeocoderModule::class,
-        UserFriendlyExceptionStreamModule::class,
-        UpdateSchedulerModule::class
+	ContextModule::class,
+	LatestAuroraReportCacheModule::class,
+	LatestAuroraReportStreamModule::class,
+	SharedPreferencesModule::class,
+	SettingsModule::class,
+	TimeModule::class,
+	NotifierModule::class,
+	EvaluationModule::class,
+	SetupNotificationsModule::class,
+	PresentNewAuroraReportModule::class,
+	NewAuroraReportProviderModule::class,
+	SystemServiceModule::class,
+	LocationProviderModule::class,
+	AuroraFactorsModule::class,
+	LocationNameProviderModule::class,
+	GeocoderModule::class,
+	UserFriendlyExceptionStreamModule::class,
+	UpdateSchedulerModule::class
 ))
 @Singleton
 interface ApplicationComponent {
-    fun getSetupNotifications(): SetupNotifications
-    fun getUpdateJob(): UpdateJob
+	fun getSetupNotifications(): SetupNotifications
+	fun getUpdateJob(): UpdateJob
 
-    fun getMainActivityComponent(activityModule: ActivityModule): MainActivityComponent
-    fun getSettingsActivityComponent(): SettingsActivityComponent
+	fun getMainActivityComponent(activityModule: ActivityModule): MainActivityComponent
+	fun getSettingsActivityComponent(): SettingsActivityComponent
 }
