@@ -7,15 +7,6 @@
 	tools:context=".gui.activities.main.fragments.aurora_chance.AuroraChanceFragment">
 
 	<TextView
-		android:id="@+id/location"
-		custom:layout_constraintBottom_toTopOf="@+id/chance"
-		custom:layout_constraintLeft_toLeftOf="@+id/chance"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textSize="@dimen/chance_location_size"
-		tools:text="Frankfurt" />
-
-	<TextView
 		android:id="@+id/chance"
 		custom:layout_constraintTop_toTopOf="parent"
 		custom:layout_constraintBottom_toBottomOf="parent"

@@ -6,6 +6,7 @@ import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.filters.LargeTest
 import android.support.test.runner.AndroidJUnit4
+import org.hamcrest.Matchers.allOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -51,14 +52,13 @@ class AuroraChanceFragmentTest {
 
     @Test
     fun locationTextShownImmediately() {
-        onView(withId(R.id.location)).check(matches(withText(R.string.your_location)))
+		onView(allOf(isDescendantOfA(withId(R.id.action_bar)), withText(R.string.your_location))).check(matches(isDisplayed()))
     }
 
 	@Test
 	fun locationTextUpdatesToActualLocation() {
 		onView(withId(R.id.swipeRefreshLayout)).perform(ViewActions.swipeDown())
-		waitForView(2000L, withId(R.id.location), isDisplayed())
-		onView(withId(R.id.location)).check(matches(withText(testLocationNameProvider.delegate())))
+		waitForView(2000L, allOf(isDescendantOfA(withId(R.id.action_bar)), withText(testLocationNameProvider.delegate())), isDisplayed())
 	}
 
     @Test
