@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.dagger.modules
 
+import android.content.Context
 import android.view.View
 import android.widget.TextView
 import dagger.Module
@@ -17,9 +18,11 @@ class LocationPresenterModule {
     @Provides
     @FragmentScope
     fun provideLocationPresenter(
-			@Named(FRAGMENT_ROOT_NAME) rootView: View
+			@Named(FRAGMENT_ROOT_NAME) rootView: View,
+			context: Context
 	): Presenter<String?> {
         val locationView = rootView.findViewById<TextView>(R.id.location)
-        return LocationTextViewPresenter(locationView)
+		val defaultName = context.getString(R.string.your_location)
+        return LocationTextViewPresenter(locationView, defaultName)
     }
 }

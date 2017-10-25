@@ -3,8 +3,7 @@ package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.assertion.ViewAssertions.matches
-import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
-import android.support.test.espresso.matcher.ViewMatchers.withId
+import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.filters.LargeTest
 import android.support.test.runner.AndroidJUnit4
 import org.junit.Before
@@ -51,11 +50,16 @@ class AuroraChanceFragmentTest {
 	}
 
     @Test
-    fun locationTextShown() {
+    fun locationTextShownImmediately() {
+        onView(withId(R.id.location)).check(matches(withText(R.string.your_location)))
+    }
+
+	@Test
+	fun locationTextUpdatesToActualLocation() {
 		onView(withId(R.id.swipeRefreshLayout)).perform(ViewActions.swipeDown())
 		waitForView(2000L, withId(R.id.location), isDisplayed())
-        onView(withId(R.id.location)).check(matches(isDisplayed()))
-    }
+		onView(withId(R.id.location)).check(matches(withText(testLocationNameProvider.delegate())))
+	}
 
     @Test
     fun chanceTextShown() {
