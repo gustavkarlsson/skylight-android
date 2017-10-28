@@ -30,6 +30,7 @@ constructor(
         val text = context.getString(chanceLevel.resourceId)
         val pendingIntent = createActivityPendingIntent()
 
+		// TODO Implement notification channels: https://developer.android.com/guide/topics/ui/notifiers/notifications.html#ManageChannels
         val notification = NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.app_logo_small)
                 .setContentTitle(context.getString(R.string.possible_aurora))
