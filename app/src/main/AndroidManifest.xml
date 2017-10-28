@@ -11,19 +11,16 @@
 
 	<!--
 	TODO App is not indexable by Google Search; consider adding at least one Activity with an ACTION-VIEW intent filter.
-		See issue explanation for more details.
-	TODO On SDK version 23 and up, your app data will be automatically backed up and restored on app install.
-		Consider adding the attribute `android:fullBackupContent` to specify an `@xml` resource which configures which
-		files to backup. More info: https://developer.android.com/training/backup/autosyncapi.html
-	TODO Consider adding android:fullBackupContent=""
-	Also read https://github.com/evernote/android-job about backign up its db
+	Adds URLs to get your app into the Google index, to get installs and traffic to your app from Google Search.
+	More info: https://g.co/AppIndexing/AndroidStudio
 	-->
 	<application
 		android:name=".Skylight"
-		android:allowBackup="true"
 		android:icon="@mipmap/ic_launcher"
 		android:label="@string/app_name"
-		android:theme="@style/AppTheme">
+		android:theme="@style/AppTheme"
+		android:allowBackup="true"
+		android:fullBackupContent="@xml/backup_config">
 
 		<activity
 			android:name=".gui.activities.main.MainActivity"
