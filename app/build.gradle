@@ -40,10 +40,20 @@ android {
 		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 	}
 
+	signingConfigs {
+		release {
+			storeFile file(project.android_store_file)
+			storePassword project.android_store_password
+			keyAlias project.android_key_alias
+			keyPassword project.android_key_password
+		}
+	}
+
 	buildTypes {
 		release {
 			minifyEnabled true
 			proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+			signingConfig signingConfigs.release
 		}
 
 		debug {
