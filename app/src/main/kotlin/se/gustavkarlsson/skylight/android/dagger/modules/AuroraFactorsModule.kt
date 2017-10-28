@@ -85,6 +85,6 @@ class AuroraFactorsModule {
     companion object {
         private val LAST_NOTIFIED_CACHE_ID = "last-notified-aurora-report"
         private val OPENWEATHERMAP_API_URL = "http://api.openweathermap.org/data/2.5/"
-        private val GEOMAG_ACTIVITY_API_URL = "http://skylight-app.net/rest/"
+        private val GEOMAG_ACTIVITY_API_URL = "https://skylight-web-service-1.herokuapp.com"
     }
 }
