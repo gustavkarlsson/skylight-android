@@ -20,7 +20,6 @@ constructor(
 ) : AuroraFactorsProvider {
 
     suspend override fun getAuroraFactors(location: Location): AuroraFactors {
-		// TODO change arguments to accept Location instead of coordinates
         val geomagActivity = geomagActivityProvider.getGeomagActivity()
         val geomagLocation = geomagLocationProvider.getGeomagLocation(location.latitude, location.longitude)
         val darkness = darknessProvider.getDarkness(clock.now, location.latitude, location.longitude)
