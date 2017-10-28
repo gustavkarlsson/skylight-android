@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-  <rect x="267.276" y="84.199" width="30" height="80" style="fill: rgb(0, 150, 136);" transform="matrix(1, 0.000002, 0, 1, -202.276001, -34.199779)"/>
-  <rect x="356.941" y="91.318" width="30" height="80" style="fill: rgb(0, 150, 136);" transform="matrix(1, 0, -0.000001, 1, -201.940846, -41.318405)"/>
-  <rect x="110" y="65" width="30" height="80" style="fill: rgb(178, 223, 219);"/>
-  <rect x="411.871" y="100.743" width="30" height="80" transform="matrix(1, -0.000003, 0, 1, -211.871002, -35.741604)" style="fill: rgb(178, 223, 219);"/>
-  <path d="M 211.576 178.595 L 158.103 225.426 L 84.539 161 L 17.43 219.774 C 42.471 267.318 92.369 299.733 149.838 299.733 C 201.64 299.733 247.292 273.395 274.131 233.379 Z" style="fill: rgb(48, 48, 48);"/>
-</svg>
