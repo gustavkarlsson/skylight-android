@@ -47,8 +47,8 @@ class AuroraFactorFragmentTest {
 	}
 
     @Test
-    fun geomagActivityFactorViewShown() {
-        onView(withId(R.id.geomagActivity)).check(matches(isDisplayed()))
+    fun kpIndexFactorViewShown() {
+        onView(withId(R.id.kpIndex)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -67,8 +67,8 @@ class AuroraFactorFragmentTest {
     }
 
     @Test
-    fun clickGeomagActivity_detailViewShown() {
-        whenFactorViewClickedDetailViewOpens(R.id.geomagActivity, R.string.factor_geomag_activity_title_full, R.string.factor_geomag_activity_desc)
+    fun clickKpIndex_detailViewShown() {
+        whenFactorViewClickedDetailViewOpens(R.id.kpIndex, R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc)
     }
 
     @Test

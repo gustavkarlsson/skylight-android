@@ -36,9 +36,9 @@ class ProvideRecentAuroraReportToPublisherTest {
 
     private val fiveSeconds = Duration.ofSeconds(5)
 
-    private val lastAuroraReport = AuroraReport(Instant.EPOCH, null, AuroraFactors(GeomagActivity(), GeomagLocation(), Darkness(), Visibility()))
+    private val lastAuroraReport = AuroraReport(Instant.EPOCH, null, AuroraFactors(KpIndex(), GeomagLocation(), Darkness(), Visibility()))
 
-    private val newAuroraReport = AuroraReport(Instant.ofEpochSecond(10), null, AuroraFactors(GeomagActivity(), GeomagLocation(), Darkness(), Visibility()))
+    private val newAuroraReport = AuroraReport(Instant.ofEpochSecond(10), null, AuroraFactors(KpIndex(), GeomagLocation(), Darkness(), Visibility()))
 
 	lateinit var impl: ProvideRecentAuroraReportToPublisher
 

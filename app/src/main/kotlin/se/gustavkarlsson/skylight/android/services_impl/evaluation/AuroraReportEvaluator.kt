@@ -10,7 +10,7 @@ import javax.inject.Inject
 class AuroraReportEvaluator
 @Inject
 constructor(
-	private val geomagActivityEvaluator: ChanceEvaluator<GeomagActivity>,
+	private val kpIndexEvaluator: ChanceEvaluator<KpIndex>,
 	private val geomagLocationEvaluator: ChanceEvaluator<GeomagLocation>,
 	private val visibilityEvaluator: ChanceEvaluator<Visibility>,
 	private val darknessEvaluator: ChanceEvaluator<Darkness>
@@ -18,7 +18,7 @@ constructor(
 
 	override fun evaluate(value: AuroraReport): Chance {
 		val factors = value.factors
-		val activityChance = geomagActivityEvaluator.evaluate(factors.geomagActivity)
+		val activityChance = kpIndexEvaluator.evaluate(factors.kpIndex)
 		val locationChance = geomagLocationEvaluator.evaluate(factors.geomagLocation)
 		val visibilityChance = visibilityEvaluator.evaluate(factors.visibility)
 		val darknessChance = darknessEvaluator.evaluate(factors.darkness)

@@ -18,7 +18,7 @@ import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 @RunWith(MockitoJUnitRunner::class)
 class AuroraReportEvaluatorTest {
 	@Mock
-    lateinit var mockGeomagActivityEvaluator: ChanceEvaluator<GeomagActivity>
+    lateinit var mockKpIndexEvaluator: ChanceEvaluator<KpIndex>
 
     @Mock
     lateinit var mockGeomagLocationEvaluator: ChanceEvaluator<GeomagLocation>
@@ -36,12 +36,12 @@ class AuroraReportEvaluatorTest {
 
     @Before
     fun setUp() {
-		whenever(mockGeomagActivityEvaluator.evaluate(any())).thenReturn(Chance(0.5))
+		whenever(mockKpIndexEvaluator.evaluate(any())).thenReturn(Chance(0.5))
         whenever(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(Chance(0.5))
         whenever(mockVisibilityEvaluator.evaluate(any())).thenReturn(Chance(0.5))
         whenever(mockDarknessEvaluator.evaluate(any())).thenReturn(Chance(0.5))
 		whenever(mockAuroraReport.factors).thenReturn(mock())
-        impl = AuroraReportEvaluator(mockGeomagActivityEvaluator, mockGeomagLocationEvaluator, mockVisibilityEvaluator, mockDarknessEvaluator)
+        impl = AuroraReportEvaluator(mockKpIndexEvaluator, mockGeomagLocationEvaluator, mockVisibilityEvaluator, mockDarknessEvaluator)
     }
 
     @Test
@@ -76,7 +76,7 @@ class AuroraReportEvaluatorTest {
     fun lowActivityAndLocationEvaluatesToSomethingLower() {
         val lowestChance = Chance(0.2)
         val lowChance = Chance(0.4)
-        whenever(mockGeomagActivityEvaluator.evaluate(any())).thenReturn(lowestChance)
+        whenever(mockKpIndexEvaluator.evaluate(any())).thenReturn(lowestChance)
         whenever(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(lowChance)
 
         val chance = impl.evaluate(mockAuroraReport)

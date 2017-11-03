@@ -9,15 +9,15 @@ import javax.inject.Inject
 class AuroraReportFactorsFragmentPresenter
 @Inject
 constructor(
-        private val geomagActivityPresenter: Presenter<GeomagActivity>,
-        private val geomagLocationPresenter: Presenter<GeomagLocation>,
-        private val visibilityPresenter: Presenter<Visibility>,
-        private val darknessPresenter: Presenter<Darkness>
+	private val kpIndexPresenter: Presenter<KpIndex>,
+	private val geomagLocationPresenter: Presenter<GeomagLocation>,
+	private val visibilityPresenter: Presenter<Visibility>,
+	private val darknessPresenter: Presenter<Darkness>
 ) : Presenter<AuroraReport> {
 
     override fun present(value: AuroraReport) {
         val factors = value.factors
-        geomagActivityPresenter.present(factors.geomagActivity)
+        kpIndexPresenter.present(factors.kpIndex)
         geomagLocationPresenter.present(factors.geomagLocation)
         visibilityPresenter.present(factors.visibility)
         darknessPresenter.present(factors.darkness)

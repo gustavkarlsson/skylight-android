@@ -29,10 +29,10 @@ class DebugAuroraReportProvider(
     }
 
     private fun createAuroraFactors(): AuroraFactors {
-        val geomagActivity = GeomagActivity(debugSettings.kpIndex)
+        val kpIndex = KpIndex(debugSettings.kpIndex)
         val geomagLocation = GeomagLocation(debugSettings.geomagLatitude)
         val darkness = Darkness(debugSettings.sunZenithAngle)
         val visibility = Visibility(debugSettings.cloudPercentage)
-        return AuroraFactors(geomagActivity, geomagLocation, darkness, visibility)
+        return AuroraFactors(kpIndex, geomagLocation, darkness, visibility)
     }
 }

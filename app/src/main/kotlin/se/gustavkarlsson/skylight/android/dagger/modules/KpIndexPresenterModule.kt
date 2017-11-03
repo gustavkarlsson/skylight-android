@@ -6,25 +6,25 @@ import dagger.Provides
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
 import se.gustavkarlsson.skylight.android.dagger.scopes.FragmentScope
-import se.gustavkarlsson.skylight.android.entities.GeomagActivity
+import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
-import se.gustavkarlsson.skylight.android.util.ChanceToColorConverter
-import se.gustavkarlsson.skylight.android.services_impl.presenters.factors.GeomagActivityFactorViewPresenter
 import se.gustavkarlsson.skylight.android.services.Presenter
 import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.services_impl.presenters.factors.KpIndexFactorViewPresenter
+import se.gustavkarlsson.skylight.android.util.ChanceToColorConverter
 import javax.inject.Named
 
 @Module
-class GeomagActivityPresenterModule {
+class KpIndexPresenterModule {
 
     @Provides
     @FragmentScope
-    fun provideGeomagActivityPresenter(
+    fun provideKpIndexPresenter(
 		@Named(FRAGMENT_ROOT_NAME) rootView: View,
-		chanceEvaluator: ChanceEvaluator<GeomagActivity>,
+		chanceEvaluator: ChanceEvaluator<KpIndex>,
 		chanceToColorConverter: ChanceToColorConverter
-	): Presenter<GeomagActivity> {
-        val geomagActivityView = rootView.findViewById<AuroraFactorView>(R.id.geomagActivity)
-        return GeomagActivityFactorViewPresenter(geomagActivityView, chanceEvaluator, chanceToColorConverter)
+	): Presenter<KpIndex> {
+        val kpIndexView = rootView.findViewById<AuroraFactorView>(R.id.kpIndex)
+        return KpIndexFactorViewPresenter(kpIndexView, chanceEvaluator, chanceToColorConverter)
     }
 }

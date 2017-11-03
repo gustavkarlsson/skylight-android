@@ -14,14 +14,14 @@ import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.create
 import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.services.providers.AuroraFactorsProvider
-import se.gustavkarlsson.skylight.android.services.providers.GeomagActivityProvider
+import se.gustavkarlsson.skylight.android.services.providers.KpIndexProvider
 import se.gustavkarlsson.skylight.android.services.providers.VisibilityProvider
 import se.gustavkarlsson.skylight.android.services_impl.cache.DualSingletonCache
 import se.gustavkarlsson.skylight.android.services_impl.cache.auroraReportCacheSerializer
+import se.gustavkarlsson.skylight.android.services_impl.providers.AggregatingAuroraFactorsProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.GeomagLocationProviderImpl
 import se.gustavkarlsson.skylight.android.services_impl.providers.KlausBrunnerDarknessProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.RetrofittedGeomagActivityProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.AggregatingAuroraFactorsProvider
+import se.gustavkarlsson.skylight.android.services_impl.providers.RetrofittedKpIndexProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapService
 import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.RetrofittedOpenWeatherMapVisibilityProvider
 import javax.inject.Named
@@ -34,18 +34,18 @@ class AuroraFactorsModule {
     @Provides
     @Reusable
     fun provideAuroraFactorsProvider(
-            geomagActivityProvider: RetrofittedGeomagActivityProvider,
-            visibilityProvider: VisibilityProvider,
-            darknessProvider: KlausBrunnerDarknessProvider,
-            geomagLocProvider: GeomagLocationProviderImpl,
-            clock: Clock
-    ): AuroraFactorsProvider = AggregatingAuroraFactorsProvider(geomagActivityProvider, visibilityProvider, darknessProvider, geomagLocProvider, clock)
+		kpIndexProvider: RetrofittedKpIndexProvider,
+		visibilityProvider: VisibilityProvider,
+		darknessProvider: KlausBrunnerDarknessProvider,
+		geomagLocProvider: GeomagLocationProviderImpl,
+		clock: Clock
+    ): AuroraFactorsProvider = AggregatingAuroraFactorsProvider(kpIndexProvider, visibilityProvider, darknessProvider, geomagLocProvider, clock)
 
     @Provides
     @Reusable
-    fun provideGeomagActivityProvider(
+    fun provideKpIndexProvider(
             kpIndexService: KpIndexService
-    ): GeomagActivityProvider = RetrofittedGeomagActivityProvider(kpIndexService)
+    ): KpIndexProvider = RetrofittedKpIndexProvider(kpIndexService)
 
     @Provides
     @Reusable

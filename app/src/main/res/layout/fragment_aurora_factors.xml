@@ -8,7 +8,7 @@
 
 	<RelativeLayout
 		android:id="@+id/factorsHeader"
-		custom:layout_constraintBottom_toTopOf="@+id/geomagActivity"
+		custom:layout_constraintBottom_toTopOf="@+id/kpIndex"
 		custom:layout_constraintLeft_toLeftOf="parent"
 		custom:layout_constraintRight_toRightOf="parent"
 		android:layout_marginBottom="20dp"
@@ -44,7 +44,7 @@
 	</RelativeLayout>
 
 	<se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
-		android:id="@+id/geomagActivity"
+		android:id="@+id/kpIndex"
 		custom:layout_constraintTop_toTopOf="parent"
 		custom:layout_constraintBottom_toTopOf="@+id/visibility"
 		custom:layout_constraintLeft_toLeftOf="parent"
@@ -52,13 +52,13 @@
 		android:layout_width="@dimen/factor_box_width"
 		android:layout_height="wrap_content"
 		custom:icon="@drawable/factor_magact_white_20dp"
-		custom:title_compact="@string/factor_geomag_activity_title_compact" />
+		custom:title_compact="@string/factor_kp_index_title_compact" />
 
 	<se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 		android:id="@+id/geomagLocation"
 		custom:layout_constraintTop_toTopOf="parent"
 		custom:layout_constraintBottom_toTopOf="@+id/darkness"
-		custom:layout_constraintLeft_toRightOf="@+id/geomagActivity"
+		custom:layout_constraintLeft_toRightOf="@+id/kpIndex"
 		custom:layout_constraintRight_toRightOf="parent"
 		android:layout_width="@dimen/factor_box_width"
 		android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
 
 	<se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
 		android:id="@+id/visibility"
-		custom:layout_constraintTop_toBottomOf="@+id/geomagActivity"
+		custom:layout_constraintTop_toBottomOf="@+id/kpIndex"
 		custom:layout_constraintBottom_toBottomOf="parent"
 		custom:layout_constraintLeft_toLeftOf="parent"
 		custom:layout_constraintRight_toLeftOf="@+id/darkness"

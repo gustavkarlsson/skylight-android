@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_f
 
 @Subcomponent(modules = arrayOf(
 		FragmentRootViewModule::class,
-		GeomagActivityPresenterModule::class,
+		KpIndexPresenterModule::class,
 		GeomagLocationPresenterModule::class,
 		DarknessPresenterModule::class,
 		VisibilityPresenterModule::class,

@@ -12,7 +12,7 @@ import javax.inject.Inject
 class AggregatingAuroraFactorsProvider
 @Inject
 constructor(
-	private val geomagActivityProvider: GeomagActivityProvider,
+	private val kpIndexProvider: KpIndexProvider,
 	private val visibilityProvider: VisibilityProvider,
 	private val darknessProvider: DarknessProvider,
 	private val geomagLocationProvider: GeomagLocationProvider,
@@ -20,10 +20,10 @@ constructor(
 ) : AuroraFactorsProvider {
 
     suspend override fun getAuroraFactors(location: Location): AuroraFactors {
-        val geomagActivity = geomagActivityProvider.getGeomagActivity()
+        val kpIndex = kpIndexProvider.getKpIndex()
         val geomagLocation = geomagLocationProvider.getGeomagLocation(location.latitude, location.longitude)
         val darkness = darknessProvider.getDarkness(clock.now, location.latitude, location.longitude)
         val visibility = visibilityProvider.getVisibility(location.latitude, location.longitude)
-        return AuroraFactors(geomagActivity, geomagLocation, darkness, visibility)
+        return AuroraFactors(kpIndex, geomagLocation, darkness, visibility)
     }
 }

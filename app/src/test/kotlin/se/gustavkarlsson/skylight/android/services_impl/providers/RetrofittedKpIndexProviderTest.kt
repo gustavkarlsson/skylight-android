@@ -19,7 +19,7 @@ import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService
 
 
 @RunWith(RobolectricTestRunner::class)
-class RetrofittedGeomagActivityProviderTest {
+class RetrofittedKpIndexProviderTest {
 	lateinit var mockedClient: OkHttpClient
 
 	@Before
@@ -60,14 +60,14 @@ class RetrofittedGeomagActivityProviderTest {
 
 	@Test
 	fun parsesKpIndexCorrectly() {
-		val service = RetrofittedGeomagActivityProvider(Retrofit.Builder()
+		val service = RetrofittedKpIndexProvider(Retrofit.Builder()
 			.client(mockedClient)
 			.baseUrl("http://mocked.com")
 			.addConverterFactory(GsonConverterFactory.create())
 			.build()
 			.create(KpIndexService::class.java))
 
-		val kpIndex = runBlocking { service.getGeomagActivity().kpIndex }
+		val kpIndex = runBlocking { service.getKpIndex().value }
 
 		assertThat(kpIndex).isCloseTo(1.33, within(0.01))
 	}

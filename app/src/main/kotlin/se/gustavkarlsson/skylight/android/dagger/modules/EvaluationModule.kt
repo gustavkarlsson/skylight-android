@@ -12,7 +12,7 @@ abstract class EvaluationModule {
 
     @Binds
     @Reusable
-    abstract fun bindGeomagActivityEvaluator(impl: GeomagActivityEvaluator): ChanceEvaluator<GeomagActivity>
+    abstract fun bindKpIndexEvaluator(impl: KpIndexEvaluator): ChanceEvaluator<KpIndex>
 
     @Binds
     @Reusable

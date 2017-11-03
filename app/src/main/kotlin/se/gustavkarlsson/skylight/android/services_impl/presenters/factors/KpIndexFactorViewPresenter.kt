@@ -1,25 +1,25 @@
 package se.gustavkarlsson.skylight.android.services_impl.presenters.factors
 
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.entities.GeomagActivity
+import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.util.ChanceToColorConverter
 
-class GeomagActivityFactorViewPresenter(
+class KpIndexFactorViewPresenter(
 	factorView: AuroraFactorView,
-	chanceEvaluator: ChanceEvaluator<GeomagActivity>,
+	chanceEvaluator: ChanceEvaluator<KpIndex>,
 	colorConverter: ChanceToColorConverter
-) : AbstractAuroraFactorViewPresenter<GeomagActivity>(factorView, chanceEvaluator, colorConverter) {
+) : AbstractAuroraFactorViewPresenter<KpIndex>(factorView, chanceEvaluator, colorConverter) {
 
 	override val fullTitleResourceId: Int
-        get() = R.string.factor_geomag_activity_title_full
+        get() = R.string.factor_kp_index_title_full
 
     override val descriptionResourceId: Int
-        get() = R.string.factor_geomag_activity_desc
+        get() = R.string.factor_kp_index_desc
 
-    override fun evaluateText(factor: GeomagActivity): String {
-        val kpIndex = factor.kpIndex ?: return "?"
+    override fun evaluateText(factor: KpIndex): String {
+        val kpIndex = factor.value ?: return "?"
         val whole = kpIndex.toInt()
         val part = kpIndex - whole
         val partString = parsePart(part)

@@ -9,7 +9,7 @@ data class AuroraReport(
 ) {
 	companion object {
 	    val default = AuroraReport(Instant.EPOCH, null, AuroraFactors(
-			GeomagActivity(),
+			KpIndex(),
 			GeomagLocation(),
 			Darkness(),
 			Visibility()
@@ -18,7 +18,7 @@ data class AuroraReport(
 }
 
 data class AuroraFactors(
-	val geomagActivity: GeomagActivity,
+	val kpIndex: KpIndex,
 	val geomagLocation: GeomagLocation,
 	val darkness: Darkness,
 	val visibility: Visibility
@@ -28,8 +28,8 @@ data class Darkness(
     val sunZenithAngle: Double? = null
 )
 
-data class GeomagActivity(
-    val kpIndex: Double? = null
+data class KpIndex(
+    val value: Double? = null
 )
 
 data class GeomagLocation(
