@@ -11,6 +11,7 @@ android {
 		main.java.srcDirs += "src/main/kotlin"
 		debug.java.srcDirs += "src/debug/kotlin"
 		release.java.srcDirs += "src/release/kotlin"
+		beta.java.srcDirs += "src/release/kotlin" // Use release sources for now
 		test.java.srcDirs += "src/test/kotlin"
 		androidTest.java.srcDirs += "src/androidTest/kotlin"
 	}
@@ -54,6 +55,12 @@ android {
 			minifyEnabled true
 			proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
 			signingConfig signingConfigs.release
+		}
+
+		beta {
+			initWith buildTypes.release
+			versionNameSuffix "-beta"
+			applicationIdSuffix ".beta"
 		}
 
 		debug {
