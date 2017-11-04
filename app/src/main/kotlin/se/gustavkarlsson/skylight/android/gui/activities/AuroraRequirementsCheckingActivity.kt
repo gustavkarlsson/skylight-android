@@ -25,7 +25,7 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity(), AnkoLog
 
 	private fun showGooglePlayServicesNotAvailable() {
 		AlertDialog.Builder(this)
-			.setIcon(android.R.drawable.ic_dialog_alert)
+			.setIcon(R.drawable.warning_white_24dp)
 			.setTitle(R.string.error_google_play_services_is_not_available_title)
 			.setMessage(R.string.error_google_play_services_is_not_available_desc)
 			.setPositiveButton(R.string.exit) { _, _ -> System.exit(1) }
@@ -75,7 +75,7 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity(), AnkoLog
 
     private fun showLocationPermissionRequiredDialog() {
         AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setIcon(R.drawable.warning_white_24dp)
                 .setTitle(getString(R.string.location_permission_required_title))
                 .setMessage(R.string.location_permission_required_desc)
                 .setPositiveButton(android.R.string.yes) { _, _ -> showLocationPermissionRequest() }
@@ -86,7 +86,7 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity(), AnkoLog
 
     private fun showLocationPermissionDeniedDialog() {
         AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setIcon(R.drawable.warning_white_24dp)
                 .setTitle(getString(R.string.error_location_permission_denied_title))
                 .setMessage(R.string.error_location_permission_denied_desc)
                 .setPositiveButton(R.string.exit) { _, _ -> System.exit(3) }

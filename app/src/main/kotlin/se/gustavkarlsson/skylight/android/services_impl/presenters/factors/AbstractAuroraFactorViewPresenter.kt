@@ -25,7 +25,7 @@ abstract class AbstractAuroraFactorViewPresenter<F>(
     init {
         this.factorView.setOnClickListener {
 			factorView.context.alert {
-				iconResource = android.R.drawable.ic_dialog_info
+				iconResource = R.drawable.info_white_24dp
 				title = ctx.getString(fullTitleResourceId)
 				message = ctx.getString(descriptionResourceId)
 				okButton { it.dismiss() }
