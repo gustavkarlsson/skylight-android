@@ -35,11 +35,11 @@ class ProvideNewAuroraReportToPublisherTest {
 
     @Test
     fun invokePublishes() {
-        whenever(mockProvider.get()).thenReturn(AuroraReport.default)
+        whenever(mockProvider.get()).thenReturn(AuroraReport.empty)
 
         impl()
 
-        verify(mockPublisher).publish(AuroraReport.default)
+        verify(mockPublisher).publish(AuroraReport.empty)
         verifyZeroInteractions(mockErrorPublisher)
     }
 

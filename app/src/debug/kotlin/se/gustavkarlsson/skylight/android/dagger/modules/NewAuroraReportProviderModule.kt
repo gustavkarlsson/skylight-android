@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.dagger.modules
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import dagger.Module
 import dagger.Provides
@@ -24,10 +25,10 @@ import javax.inject.Named
 @Module
 class NewAuroraReportProviderModule {
 
-    @Provides
+	@Provides
 	@Reusable
 	@Named(NEW_NAME)
-    fun provideNewAuroraReportProvider(
+	fun provideNewAuroraReportProvider(
 		@Named(LAST_NAME) cache: SingletonCache<AuroraReport>,
 		debugSettings: DebugSettings,
 		connectivityManager: ConnectivityManager,
@@ -35,15 +36,16 @@ class NewAuroraReportProviderModule {
 		auroraFactorsProvider: AuroraFactorsProvider,
 		locationNameProvider: LocationNameProvider,
 		clock: Clock
-    ): AuroraReportProvider {
-        val realProvider = RealAuroraReportProvider(cache, connectivityManager, locationProvider, auroraFactorsProvider, locationNameProvider, clock, Duration.ofSeconds(30))
-        return DebugAuroraReportProvider(cache, realProvider, debugSettings, clock)
-    }
+	): AuroraReportProvider {
+		val realProvider = RealAuroraReportProvider(cache, connectivityManager, locationProvider, auroraFactorsProvider, locationNameProvider, clock, Duration.ofSeconds(30))
+		return DebugAuroraReportProvider(cache, realProvider, debugSettings, clock)
+	}
 
-    @Provides
-    @Reusable
-    fun provideDebugSettings(
-            context: Context
-    ): DebugSettings = SharedPreferencesDebugSettings(context)
+	@Provides
+	@Reusable
+	fun provideDebugSettings(
+		sharedPreferences: SharedPreferences,
+		context: Context
+	): DebugSettings = SharedPreferencesDebugSettings(sharedPreferences, context)
 
 }

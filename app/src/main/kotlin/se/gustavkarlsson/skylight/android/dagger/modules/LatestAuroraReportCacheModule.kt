@@ -17,6 +17,12 @@ class LatestAuroraReportCacheModule {
     @Provides
     @Singleton
     @Named(LAST_NAME)
-    fun provideLatestAuroraReportCache(context: Context): SingletonCache<AuroraReport> = DualSingletonCache("latest-aurora-report", AuroraReport.default, auroraReportCacheSerializer, context)
+    fun provideLatestAuroraReportCache(context: Context): SingletonCache<AuroraReport> {
+		return DualSingletonCache(CACHE_ID, AuroraReport.empty, auroraReportCacheSerializer, context)
+	}
+
+	companion object {
+		const val CACHE_ID = "latest-aurora-report"
+	}
 
 }

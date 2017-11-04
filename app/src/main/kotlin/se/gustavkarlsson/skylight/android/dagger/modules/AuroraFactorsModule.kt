@@ -80,7 +80,7 @@ class AuroraFactorsModule {
     @Named(LAST_NOTIFIED_NAME)
     fun provideLastNotifiedAuroraReportCache(
             context: Context
-    ): SingletonCache<AuroraReport> = DualSingletonCache(LAST_NOTIFIED_CACHE_ID, AuroraReport.default, auroraReportCacheSerializer, context)
+    ): SingletonCache<AuroraReport> = DualSingletonCache(LAST_NOTIFIED_CACHE_ID, AuroraReport.empty, auroraReportCacheSerializer, context)
 
     companion object {
         private val LAST_NOTIFIED_CACHE_ID = "last-notified-aurora-report"
