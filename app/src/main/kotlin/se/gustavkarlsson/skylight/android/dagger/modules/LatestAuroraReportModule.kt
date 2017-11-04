@@ -3,17 +3,15 @@ package se.gustavkarlsson.skylight.android.dagger.modules
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import io.reactivex.Observable
+import io.reactivex.Observer
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.Subject
 import se.gustavkarlsson.skylight.android.dagger.LAST_NAME
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.SingletonCache
-import se.gustavkarlsson.skylight.android.services.streams.Stream
-import se.gustavkarlsson.skylight.android.services.streams.StreamPublisher
 import se.gustavkarlsson.skylight.android.services_impl.cache.DualSingletonCache
 import se.gustavkarlsson.skylight.android.services_impl.cache.auroraReportCacheSerializer
-import se.gustavkarlsson.skylight.android.services_impl.streams.RxStream
-import se.gustavkarlsson.skylight.android.services_impl.streams.RxStreamPublisher
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -22,11 +20,11 @@ class LatestAuroraReportModule {
 
 	@Provides
 	@Singleton
-	fun provideLatestAuroraReportStream(subject: Subject<AuroraReport>): Stream<AuroraReport> = RxStream(subject)
+	fun provideLatestAuroraReportObservable(subject: Subject<AuroraReport>): Observable<AuroraReport> = subject
 
 	@Provides
 	@Singleton
-	fun provideLatestAuroraReportStreamPublisher(subject: Subject<AuroraReport>): StreamPublisher<AuroraReport> = RxStreamPublisher(subject)
+	fun provideLatestAuroraReportObserver(subject: Subject<AuroraReport>): Observer<AuroraReport> = subject
 
 	@Provides
 	@Singleton

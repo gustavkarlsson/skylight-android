@@ -4,12 +4,12 @@ import dagger.Binds
 import dagger.Module
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.actions.PresentingAuroraReports
-import se.gustavkarlsson.skylight.android.actions_impl.aurora_reports.PresentingAuroraReportsFromStream
+import se.gustavkarlsson.skylight.android.actions_impl.aurora_reports.PresentingAuroraReportsFromObservable
 
 @Module
 abstract class PresentingAuroraReportsModule {
 
 	@Reusable
 	@Binds
-	abstract fun bindPresentingAuroraReportsFromStream(impl: PresentingAuroraReportsFromStream): PresentingAuroraReports
+	abstract fun bindPresentingAuroraReportsFromObservable(impl: PresentingAuroraReportsFromObservable): PresentingAuroraReports
 }

@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.actions_impl.aurora_reports
 
 import dagger.Reusable
+import io.reactivex.Observer
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
@@ -12,21 +13,20 @@ import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.extensions.until
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
-import se.gustavkarlsson.skylight.android.services.streams.StreamPublisher
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import javax.inject.Inject
 import javax.inject.Named
 
 @Reusable
-class ProvideRecentAuroraReportToPublisher
+class ProvideRecentAuroraReportToObserver
 @Inject
 constructor(
-        @Named(LAST_NAME) private val lastAuroraReportProvider: AuroraReportProvider,
-        @Named(NEW_NAME) private val newAuroraReportProvider: AuroraReportProvider,
-        private val auroraReports: StreamPublisher<AuroraReport>,
-        private val errors: StreamPublisher<UserFriendlyException>,
-        @Named(REPORT_LIFETIME_NAME) private val maxAge: Duration,
-        private val clock: Clock
+	@Named(LAST_NAME) private val lastAuroraReportProvider: AuroraReportProvider,
+	@Named(NEW_NAME) private val newAuroraReportProvider: AuroraReportProvider,
+	private val auroraReports: Observer<AuroraReport>,
+	private val errors: Observer<UserFriendlyException>,
+	@Named(REPORT_LIFETIME_NAME) private val maxAge: Duration,
+	private val clock: Clock
 ) : PresentRecentAuroraReport {
 	init {
 	    require(!maxAge.isNegative) { "maxAge may not be negative. Was: $maxAge" }
@@ -36,15 +36,15 @@ constructor(
 		try {
 			val lastAuroraReport = lastAuroraReportProvider.get()
 			if (lastAuroraReport.age < maxAge) {
-				auroraReports.publish(lastAuroraReport)
+				auroraReports.onNext(lastAuroraReport)
 			} else {
 				val newAuroraReport = newAuroraReportProvider.get()
-				auroraReports.publish(newAuroraReport)
+				auroraReports.onNext(newAuroraReport)
 			}
 		} catch(e: UserFriendlyException) {
-			errors.publish(e)
+			errors.onNext(e)
 		} catch(e: Exception) {
-			errors.publish(UserFriendlyException(R.string.error_unknown_update_error, e))
+			errors.onNext(UserFriendlyException(R.string.error_unknown_update_error, e))
 		}
 	}
 

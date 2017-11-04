@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.actions_impl
 
+import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import org.junit.Before
@@ -10,26 +11,24 @@ import org.mockito.Mockito.verify
 import org.mockito.Mockito.verifyZeroInteractions
 import org.mockito.junit.MockitoJUnitRunner
 import se.gustavkarlsson.skylight.android.services.Presenter
-import se.gustavkarlsson.skylight.android.services.streams.Stream
-import se.gustavkarlsson.skylight.android.services_impl.streams.RxStream
 
 @RunWith(MockitoJUnitRunner::class)
-class PresentingFromStreamTest {
+class PresentingFromObservableTest {
 
     lateinit var subject: Subject<Int>
 
-    lateinit var stream: Stream<Int>
+    lateinit var observable: Observable<Int>
 
     @Mock
     lateinit var presenter: Presenter<Int>
 
-    lateinit var impl: PresentingFromStream<Int>
+    lateinit var impl: PresentingFromObservable<Int>
 
 	@Before
 	fun setUp() {
 		subject = PublishSubject.create()
-		stream = RxStream(subject)
-		impl = object : PresentingFromStream<Int>(stream, presenter) {}
+		observable = subject
+		impl = object : PresentingFromObservable<Int>(observable, presenter) {}
 	}
 
 	@Test
@@ -55,13 +54,13 @@ class PresentingFromStreamTest {
 	}
 
 	@Test
-	fun stoppedStateDoesNotPresentElementsFromStream() {
+	fun stoppedStateDoesNotPresentElementsFromObservable() {
 		subject.onNext(5)
 		verifyZeroInteractions(presenter)
 	}
 
 	@Test
-	fun startedStateDoesPresentElementsFromStream() {
+	fun startedStateDoesPresentElementsFromObservable() {
 		impl.start()
 		subject.onNext(5)
 		verify(presenter).present(5)

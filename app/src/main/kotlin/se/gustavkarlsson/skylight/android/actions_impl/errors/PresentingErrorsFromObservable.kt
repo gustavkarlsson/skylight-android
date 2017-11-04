@@ -1,17 +1,17 @@
 package se.gustavkarlsson.skylight.android.actions_impl.errors
 
 import dagger.Reusable
+import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.actions.PresentingErrors
-import se.gustavkarlsson.skylight.android.actions_impl.PresentingFromStream
+import se.gustavkarlsson.skylight.android.actions_impl.PresentingFromObservable
 import se.gustavkarlsson.skylight.android.services.Presenter
-import se.gustavkarlsson.skylight.android.services.streams.Stream
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import javax.inject.Inject
 
 @Reusable
-class PresentingErrorsFromStream
+class PresentingErrorsFromObservable
 @Inject
 constructor(
-	stream: Stream<UserFriendlyException>,
+	observable: Observable<UserFriendlyException>,
 	presenter: Presenter<UserFriendlyException>
-) : PresentingFromStream<UserFriendlyException>(stream, presenter), PresentingErrors
+) : PresentingFromObservable<UserFriendlyException>(observable, presenter), PresentingErrors

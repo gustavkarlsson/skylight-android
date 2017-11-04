@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.actions_impl.aurora_reports
 
 import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Observer
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -13,11 +14,10 @@ import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
-import se.gustavkarlsson.skylight.android.services.streams.StreamPublisher
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
 @RunWith(MockitoJUnitRunner::class)
-class ProvideRecentAuroraReportToPublisherTest {
+class ProvideRecentAuroraReportToObserverTest {
 
     @Mock
     lateinit var mockLastProvider: AuroraReportProvider
@@ -26,10 +26,10 @@ class ProvideRecentAuroraReportToPublisherTest {
     lateinit var mockNewProvider: AuroraReportProvider
 
     @Mock
-    lateinit var mockPublisher: StreamPublisher<AuroraReport>
+    lateinit var mockObserver: Observer<AuroraReport>
 
     @Mock
-    lateinit var mockErrorPublisher: StreamPublisher<UserFriendlyException>
+    lateinit var mockErrorObserver: Observer<UserFriendlyException>
 
     @Mock
     lateinit var mockClock: Clock
@@ -40,23 +40,23 @@ class ProvideRecentAuroraReportToPublisherTest {
 
     private val newAuroraReport = AuroraReport(Instant.ofEpochSecond(10), null, AuroraFactors(KpIndex(), GeomagLocation(), Darkness(), Visibility()))
 
-	lateinit var impl: ProvideRecentAuroraReportToPublisher
+	lateinit var impl: ProvideRecentAuroraReportToObserver
 
     @Before
     fun setUp() {
         whenever(mockLastProvider.get()).thenReturn(lastAuroraReport)
         whenever(mockNewProvider.get()).thenReturn(newAuroraReport)
-        impl = ProvideRecentAuroraReportToPublisher(mockLastProvider, mockNewProvider, mockPublisher, mockErrorPublisher, fiveSeconds, mockClock)
+        impl = ProvideRecentAuroraReportToObserver(mockLastProvider, mockNewProvider, mockObserver, mockErrorObserver, fiveSeconds, mockClock)
     }
 
     @Test(expected = IllegalArgumentException::class)
     fun createWithNegativeMaxAgeThrowsException() {
-        ProvideRecentAuroraReportToPublisher(mockLastProvider, mockNewProvider, mockPublisher, mockErrorPublisher, Duration.ofSeconds(-1), mockClock)
+        ProvideRecentAuroraReportToObserver(mockLastProvider, mockNewProvider, mockObserver, mockErrorObserver, Duration.ofSeconds(-1), mockClock)
     }
 
     @Test
     fun createWithZeroMaxAgeIsOk() {
-        ProvideRecentAuroraReportToPublisher(mockLastProvider, mockNewProvider, mockPublisher, mockErrorPublisher, Duration.ZERO, mockClock)
+        ProvideRecentAuroraReportToObserver(mockLastProvider, mockNewProvider, mockObserver, mockErrorObserver, Duration.ZERO, mockClock)
     }
 
     @Test
@@ -65,8 +65,8 @@ class ProvideRecentAuroraReportToPublisherTest {
 
 		impl()
 
-		verify(mockPublisher).publish(lastAuroraReport)
-		verifyZeroInteractions(mockErrorPublisher)
+		verify(mockObserver).onNext(lastAuroraReport)
+		verifyZeroInteractions(mockErrorObserver)
     }
 
     @Test
@@ -75,7 +75,7 @@ class ProvideRecentAuroraReportToPublisherTest {
 
         impl()
 
-        verify(mockPublisher).publish(newAuroraReport)
-        verifyZeroInteractions(mockErrorPublisher)
+        verify(mockObserver).onNext(newAuroraReport)
+        verifyZeroInteractions(mockErrorObserver)
     }
 }

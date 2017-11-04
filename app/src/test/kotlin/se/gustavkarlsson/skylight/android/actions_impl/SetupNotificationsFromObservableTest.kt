@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.actions_impl
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import org.junit.Before
@@ -13,16 +14,14 @@ import org.mockito.junit.MockitoJUnitRunner
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.mockito.any
 import se.gustavkarlsson.skylight.android.services.Notifier
-import se.gustavkarlsson.skylight.android.services.streams.Stream
 import se.gustavkarlsson.skylight.android.services_impl.notifications.AuroraReportNotificationEvaluator
-import se.gustavkarlsson.skylight.android.services_impl.streams.RxStream
 
 @RunWith(MockitoJUnitRunner::class)
-class SetupNotificationsFromStreamTest {
+class SetupNotificationsFromObservableTest {
 
 	private lateinit var subject: Subject<AuroraReport>
 
-	private lateinit var stream: Stream<AuroraReport>
+	private lateinit var observable: Observable<AuroraReport>
 
 	@Mock
 	private lateinit var mockEvaluator: AuroraReportNotificationEvaluator
@@ -33,13 +32,13 @@ class SetupNotificationsFromStreamTest {
     @Mock
     private lateinit var mockReport: AuroraReport
 
-	private lateinit var impl: SetupNotificationsFromStream
+	private lateinit var impl: SetupNotificationsFromObservable
 
     @Before
     fun setUp() {
         subject = PublishSubject.create<AuroraReport>()
-        stream = RxStream(subject)
-        impl = SetupNotificationsFromStream(stream, mockEvaluator, mockNotifier)
+        observable = subject
+        impl = SetupNotificationsFromObservable(observable, mockEvaluator, mockNotifier)
     }
 
     @Test(expected = IllegalStateException::class)

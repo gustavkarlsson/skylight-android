@@ -18,7 +18,7 @@ import javax.inject.Singleton
 	SetupNotificationsModule::class,
 	EvaluationModule::class,
 	LatestAuroraReportModule::class,
-	UserFriendlyExceptionStreamModule::class,
+	UserFriendlyExceptionObservableModule::class,
 	LocationProviderModule::class,
 	AuroraFactorsModule::class,
 	NewAuroraReportProviderModule::class,

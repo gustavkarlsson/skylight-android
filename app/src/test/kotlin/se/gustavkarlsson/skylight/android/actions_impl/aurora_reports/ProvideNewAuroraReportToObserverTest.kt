@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.actions_impl.aurora_reports
 
 import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Observer
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -11,26 +12,25 @@ import org.mockito.junit.MockitoJUnitRunner
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.mockito.any
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
-import se.gustavkarlsson.skylight.android.services.streams.StreamPublisher
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
 @RunWith(MockitoJUnitRunner::class)
-class ProvideNewAuroraReportToPublisherTest {
+class ProvideNewAuroraReportToObserverTest {
 
     @Mock
     lateinit var mockProvider: AuroraReportProvider
 
     @Mock
-    lateinit var mockPublisher: StreamPublisher<AuroraReport>
+    lateinit var mockObserver: Observer<AuroraReport>
 
     @Mock
-    lateinit var mockErrorPublisher: StreamPublisher<UserFriendlyException>
+    lateinit var mockErrorObserver: Observer<UserFriendlyException>
 
-    lateinit var impl: ProvideNewAuroraReportToPublisher
+    lateinit var impl: ProvideNewAuroraReportToObserver
 
     @Before
     fun setUp() {
-        impl = ProvideNewAuroraReportToPublisher(mockProvider, mockPublisher, mockErrorPublisher)
+        impl = ProvideNewAuroraReportToObserver(mockProvider, mockObserver, mockErrorObserver)
     }
 
     @Test
@@ -39,8 +39,8 @@ class ProvideNewAuroraReportToPublisherTest {
 
         impl()
 
-        verify(mockPublisher).publish(AuroraReport.empty)
-        verifyZeroInteractions(mockErrorPublisher)
+        verify(mockObserver).onNext(AuroraReport.empty)
+        verifyZeroInteractions(mockErrorObserver)
     }
 
     @Test
@@ -49,7 +49,7 @@ class ProvideNewAuroraReportToPublisherTest {
 
         impl()
 
-        verify(mockErrorPublisher).publish(any())
-        verifyZeroInteractions(mockPublisher)
+        verify(mockErrorObserver).onNext(any())
+        verifyZeroInteractions(mockObserver)
     }
 }
