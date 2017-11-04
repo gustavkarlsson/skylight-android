@@ -21,7 +21,7 @@ class DebugAuroraReportProvider(
 		if (debugSettings.overrideValues) {
 			runBlocking { delay(5, TimeUnit.SECONDS) }
             val auroraFactors = createAuroraFactors()
-            val auroraReport = AuroraReport(clock.now, "The moon?", auroraFactors)
+            val auroraReport = AuroraReport(clock.now, "Umeå", auroraFactors)
 			cache.value = auroraReport
             return auroraReport
         }
