@@ -1,11 +1,13 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main
 
 import android.support.test.espresso.Espresso.onView
+import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.assertion.ViewAssertions.matches
-import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
-import android.support.test.espresso.matcher.ViewMatchers.withId
+import android.support.test.espresso.matcher.RootMatchers.withDecorView
+import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.filters.LargeTest
 import android.support.test.runner.AndroidJUnit4
+import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -17,14 +19,14 @@ import se.gustavkarlsson.skylight.android.dagger.modules.ContextModule
 import se.gustavkarlsson.skylight.android.dagger.modules.TestLocationNameProviderModule
 import se.gustavkarlsson.skylight.android.dagger.modules.TestLocationProviderModule
 import se.gustavkarlsson.skylight.android.dagger.modules.TestSharedPreferencesModule
-import se.gustavkarlsson.skylight.android.test.ApplicationComponentActivityTestRule
-import se.gustavkarlsson.skylight.android.test.clearCache
-import se.gustavkarlsson.skylight.android.test.clearSharedPreferences
-import se.gustavkarlsson.skylight.android.test.initMocks
+import se.gustavkarlsson.skylight.android.test.*
+import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class MainActivityTest {
+
+	@Inject lateinit var testLocationProvider: TestLocationProvider
 
     @Rule
 	@JvmField
@@ -43,6 +45,7 @@ class MainActivityTest {
 		clearCache()
 		clearSharedPreferences()
 		testRule.launchActivity()
+		testRule.component.inject(this)
 	}
 
 	@Test
@@ -54,4 +57,11 @@ class MainActivityTest {
     fun auroraChanceFragmentShown() {
         onView(withId(R.id.auroraChanceFragment)).check(matches(isDisplayed()))
     }
+
+	@Test
+	fun errorWhenRefreshingShowsErrorToast() {
+		testLocationProvider.delegate = { throw RuntimeException("ERROR!") }
+		onView(withId(R.id.swipeRefreshLayout)).perform(ViewActions.swipeDown())
+		onView(withText(R.string.error_unknown_update_error)).inRoot(withDecorView(not(testRule.activity.window.decorView))).check(matches(isDisplayed()))
+	}
 }

@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.dagger.components
 
 import dagger.Component
 import se.gustavkarlsson.skylight.android.dagger.modules.*
+import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivityTest
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceFragmentTest
 import javax.inject.Singleton
 
@@ -27,4 +28,5 @@ import javax.inject.Singleton
 @Singleton
 interface TestApplicationComponent : ApplicationComponent {
 	fun inject(auroraChanceFragmentTest: AuroraChanceFragmentTest)
+	fun inject(mainActivityTest: MainActivityTest)
 }
