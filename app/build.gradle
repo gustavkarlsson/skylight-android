@@ -60,7 +60,6 @@ android {
 		beta {
 			initWith buildTypes.release
 			versionNameSuffix "-beta"
-			applicationIdSuffix ".beta"
 		}
 
 		debug {
