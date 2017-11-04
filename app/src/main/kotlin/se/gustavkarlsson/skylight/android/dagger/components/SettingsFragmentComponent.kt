@@ -7,5 +7,5 @@ import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsFragme
 @Subcomponent
 @FragmentScope
 interface SettingsFragmentComponent {
-    fun inject(settingsFragment: SettingsFragment)
+	fun inject(settingsFragment: SettingsFragment)
 }

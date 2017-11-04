@@ -8,23 +8,22 @@ import javax.inject.Singleton
 
 @Component(modules = arrayOf(
 	ContextModule::class,
-	LatestAuroraReportCacheModule::class,
-	LatestAuroraReportStreamModule::class,
+	TimeModule::class,
+	SystemServiceModule::class,
+	GeocoderModule::class,
 	SharedPreferencesModule::class,
 	SettingsModule::class,
-	TimeModule::class,
 	NotifierModule::class,
-	EvaluationModule::class,
+	UpdateSchedulerModule::class,
 	SetupNotificationsModule::class,
-	PresentNewAuroraReportModule::class,
-	NewAuroraReportProviderModule::class,
-	SystemServiceModule::class,
+	EvaluationModule::class,
+	LatestAuroraReportModule::class,
+	UserFriendlyExceptionStreamModule::class,
 	LocationProviderModule::class,
 	AuroraFactorsModule::class,
+	NewAuroraReportProviderModule::class,
 	LocationNameProviderModule::class,
-	GeocoderModule::class,
-	UserFriendlyExceptionStreamModule::class,
-	UpdateSchedulerModule::class
+	PresentNewAuroraReportModule::class
 ))
 @Singleton
 interface ApplicationComponent {
