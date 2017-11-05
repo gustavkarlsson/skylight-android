@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -14,6 +15,7 @@ import se.gustavkarlsson.skylight.android.dagger.components.MainActivityComponen
 import se.gustavkarlsson.skylight.android.dagger.modules.ActivityModule
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
+import se.gustavkarlsson.skylight.android.gui.viewmodels.AuroraReportViewModel
 import javax.inject.Inject
 
 class MainActivity : AuroraRequirementsCheckingActivity() {
@@ -30,6 +32,9 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 	@Inject
 	lateinit var setUpdateSchedule: SetUpdateSchedule
 
+	@Inject
+	lateinit var auroraReportViewModel: AuroraReportViewModel
+
 	lateinit var component: MainActivityComponent
         private set
 
@@ -38,9 +43,19 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
         component = Skylight.instance.component.getMainActivityComponent(ActivityModule(this))
         setContentView(R.layout.activity_main)
         component.inject(this)
+		bindData()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+	private fun bindData() {
+		val defaultLocationName = getString(R.string.your_location)
+		auroraReportViewModel.auroraReports.observe(this, Observer {
+			it?.locationName.let {
+				supportActionBar!!.title = it ?: defaultLocationName
+			}
+		})
+	}
+
+	override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }

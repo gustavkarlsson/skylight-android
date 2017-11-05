@@ -12,7 +12,8 @@ import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 	LastAuroraReportProviderModule::class,
 	PresentingErrorsModule::class,
 	SetUpdateScheduleModule::class,
-	ForegroundReportLifetimeModule::class
+	ForegroundReportLifetimeModule::class,
+	AuroraReportViewModelModule::class
 ))
 @ActivityScope
 interface MainActivityComponent {

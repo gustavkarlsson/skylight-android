@@ -1,8 +1,12 @@
 package se.gustavkarlsson.skylight.android.dagger.modules
 
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.LiveDataReactiveStreams
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.subjects.BehaviorSubject
@@ -20,15 +24,33 @@ class LatestAuroraReportModule {
 
 	@Provides
 	@Singleton
-	fun provideLatestAuroraReportObservable(subject: Subject<AuroraReport>): Observable<AuroraReport> = subject
+	fun provideLatestAuroraReportLiveData(flowable: Flowable<AuroraReport>): LiveData<AuroraReport> {
+		return LiveDataReactiveStreams.fromPublisher(flowable)
+	}
 
 	@Provides
 	@Singleton
-	fun provideLatestAuroraReportObserver(subject: Subject<AuroraReport>): Observer<AuroraReport> = subject
+	fun provideLatestAuroraReportFlowable(observable: Observable<AuroraReport>): Flowable<AuroraReport> {
+		return observable.toFlowable(BackpressureStrategy.LATEST)
+	}
 
 	@Provides
 	@Singleton
-	fun provideLatestAuroraReportSubject(@Named(LAST_NAME) cache: SingletonCache<AuroraReport>): Subject<AuroraReport> = BehaviorSubject.createDefault(cache.value)
+	fun provideLatestAuroraReportObservable(subject: Subject<AuroraReport>): Observable<AuroraReport> {
+		return subject
+	}
+
+	@Provides
+	@Singleton
+	fun provideLatestAuroraReportObserver(subject: Subject<AuroraReport>): Observer<AuroraReport> {
+		return subject
+	}
+
+	@Provides
+	@Singleton
+	fun provideLatestAuroraReportSubject(@Named(LAST_NAME) cache: SingletonCache<AuroraReport>): Subject<AuroraReport> {
+		return BehaviorSubject.createDefault(cache.value)
+	}
 
 	@Provides
 	@Singleton
