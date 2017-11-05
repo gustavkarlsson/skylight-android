@@ -28,7 +28,7 @@
 			tools:text="3+" />
 
 		<TextView
-			android:id="@+id/auroraFactorTitleCompact"
+			android:id="@+id/auroraFactorName"
 			custom:layout_constraintTop_toBottomOf="@+id/auroraFactorValue"
 			custom:layout_constraintLeft_toLeftOf="parent"
 			custom:layout_constraintRight_toRightOf="parent"
@@ -39,7 +39,7 @@
 	</android.support.constraint.ConstraintLayout>
 
 	<ImageView
-		android:id="@+id/badge"
+		android:id="@+id/auroraFactorBadge"
 		custom:layout_constraintTop_toTopOf="parent"
 		custom:layout_constraintLeft_toLeftOf="parent"
 		custom:layout_constraintRight_toRightOf="parent"

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<declare-styleable name="AuroraFactorView">
-		<attr name="title_compact" format="string" />
-		<attr name="icon" format="reference" />
+		<attr name="name" format="string" />
+		<attr name="badgeIcon" format="reference" />
+		<attr name="badgeColor" format="color" />
+		<attr name="value" format="string" />
 	</declare-styleable>
 </resources>

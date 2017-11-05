@@ -1,10 +1,6 @@
 package se.gustavkarlsson.skylight.android.services_impl.presenters.factors
 
 
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.ShapeDrawable
-import android.view.View
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.alert
@@ -41,19 +37,12 @@ abstract class AbstractAuroraFactorViewPresenter<F>(
     }
 
     private fun setFactorValue(value: String) {
-		factorView.setValue(value)
+		factorView.value = value
     }
 
     private fun setFactorChance(chance: Chance) {
         val color = colorConverter.convert(chance)
-        val badge = factorView.findViewById<View>(R.id.badge)
-        val background = badge.background
-        background.mutate()
-		when (background) {
-			is ShapeDrawable    -> background.paint.color = color
-			is GradientDrawable -> background.setColor(color)
-			is ColorDrawable    -> background.color = color
-		}
+		factorView.badgeColor = color
     }
 
     abstract val fullTitleResourceId: Int
