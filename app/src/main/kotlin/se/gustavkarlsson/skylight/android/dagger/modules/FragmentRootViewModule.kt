@@ -19,5 +19,5 @@ class FragmentRootViewModule(
     @Provides
     @FragmentScope
     @Named(FRAGMENT_ROOT_NAME)
-    fun provideRootView(): View = inflater.inflate(fragmentId, container, false)
+    fun provideRootView(): View = inflater.inflate(fragmentId, container)
 }

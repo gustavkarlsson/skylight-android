@@ -14,7 +14,7 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.extensions.until
 
-class TimeSinceUpdateController(
+class TimeSinceUpdateController( // TODO Replace with custom view
 		private val updateTimeResolution: Duration,
 		timeSinceUpdateTextView: TextView,
 		clock: Clock

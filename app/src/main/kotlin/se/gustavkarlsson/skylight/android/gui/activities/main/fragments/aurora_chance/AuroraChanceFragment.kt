@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -10,11 +9,9 @@ import kotlinx.android.synthetic.main.fragment_aurora_chance.*
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
 import se.gustavkarlsson.skylight.android.dagger.modules.FragmentRootViewModule
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.extensions.observe
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import se.gustavkarlsson.skylight.android.gui.viewmodels.AuroraReportViewModel
-import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.services.evaluation.ChanceLevel
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -29,28 +26,27 @@ class AuroraChanceFragment : Fragment() {
 	lateinit var timeSinceUpdateController: TimeSinceUpdateController
 
 	@Inject
-	lateinit var auroraReportViewModel: AuroraReportViewModel
-
-	@Inject
-	lateinit var auroraReportChanceEvaluator: ChanceEvaluator<AuroraReport>
+	lateinit var auroraReports: AuroraReportViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         (activity as MainActivity).component
                 .getAuroraChanceFragmentComponent(FragmentRootViewModule(inflater, container, R.layout.fragment_aurora_chance))
                 .inject(this)
-		bindData()
         return rootView
     }
 
+	override fun onActivityCreated(savedInstanceState: Bundle?) {
+		super.onActivityCreated(savedInstanceState)
+		bindData()
+	}
+
 	private fun bindData() {
-		auroraReportViewModel.auroraReports.observe(this, Observer {
-			it?.let {
-				val chanceValue = auroraReportChanceEvaluator.evaluate(it) // Do we know this is not null?
-				val chanceLevel = ChanceLevel.fromChance(chanceValue)
-				chance.setText(chanceLevel.resourceId)
-				timeSinceUpdateController.update(it.timestamp)
-			}
-		})
+		auroraReports.chanceLevel.observe(this) {
+			chance.text = it
+		}
+		auroraReports.timestamp.observe(this) {
+			timeSinceUpdateController.update(it!!)
+		}
 	}
 
 	override fun onStart() {

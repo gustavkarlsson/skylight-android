@@ -13,7 +13,7 @@ import javax.inject.Inject
 @Reusable
 class ErrorToastPresenter
 @Inject
-constructor(
+constructor( // TODO rework (remove Presenter interface?)
         private val theContext: Context,
 		private val visibilityEvaluator: AppVisibilityEvaluator
 ) : Presenter<UserFriendlyException> {

@@ -5,26 +5,32 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.ShapeDrawable
-import android.support.v4.app.ActivityCompat
 import android.util.AttributeSet
 import android.view.View
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.view_aurora_factor.view.*
 import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.services.evaluation.Chance
+import se.gustavkarlsson.skylight.android.util.ChanceToColorConverter
 
 
 class AuroraFactorView : LinearLayout {
 
+	private val chanceToColorConverter: ChanceToColorConverter
+
     constructor(context: Context) : super(context) {
-        init(context, null)
-    }
+		chanceToColorConverter = ChanceToColorConverter(context)
+		init(context, null)
+	}
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init(context, attrs)
+		chanceToColorConverter = ChanceToColorConverter(context)
+		init(context, attrs)
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init(context, attrs)
+		chanceToColorConverter = ChanceToColorConverter(context)
+		init(context, attrs)
     }
 
 	private fun init(context: Context, attrs: AttributeSet?) {
@@ -35,8 +41,8 @@ class AuroraFactorView : LinearLayout {
             try {
                 name = auroraFactorViewAttributes.getText(R.styleable.AuroraFactorView_name)
                 badgeIcon = auroraFactorViewAttributes.getDrawable(R.styleable.AuroraFactorView_badgeIcon)
-				val defaultBadgeColor = ActivityCompat.getColor(context, R.color.chance_unknown)
-				badgeColor = auroraFactorViewAttributes.getColor(R.styleable.AuroraFactorView_badgeColor, defaultBadgeColor)
+				val chanceFloat = auroraFactorViewAttributes.getFloat(R.styleable.AuroraFactorView_chance, Float.NaN)
+				chance = if (chanceFloat.isNaN()) Chance.UNKNOWN else Chance(chanceFloat.toDouble())
 				value = auroraFactorViewAttributes.getText(R.styleable.AuroraFactorView_value)
             } finally {
                 auroraFactorViewAttributes.recycle()
@@ -60,17 +66,18 @@ class AuroraFactorView : LinearLayout {
 			auroraFactorBadge.setImageDrawable(value)
 		}
 
-	private var _badgeColor: Int = 0
-	var badgeColor: Int
-		get() = _badgeColor
+	private var _chance = Chance.UNKNOWN
+	var chance: Chance
+		get() = _chance
 		set(value) {
-			_badgeColor = value
 			val background = auroraFactorBadge.background
+			val color = chanceToColorConverter.convert(value)
 			when (background) {
-				is ShapeDrawable -> background.paint.color = _badgeColor
-				is GradientDrawable -> background.setColor(_badgeColor)
-				is ColorDrawable -> background.color = _badgeColor
+				is ShapeDrawable -> background.paint.color = color
+				is GradientDrawable -> background.setColor(color)
+				is ColorDrawable -> background.color = color
 			}
+			_chance = value
 		}
 
 	var value: CharSequence?

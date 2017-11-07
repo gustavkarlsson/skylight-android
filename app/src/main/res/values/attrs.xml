@@ -3,7 +3,7 @@
 	<declare-styleable name="AuroraFactorView">
 		<attr name="name" format="string" />
 		<attr name="badgeIcon" format="reference" />
-		<attr name="badgeColor" format="color" />
+		<attr name="chance" format="float" />
 		<attr name="value" format="string" />
 	</declare-styleable>
 </resources>

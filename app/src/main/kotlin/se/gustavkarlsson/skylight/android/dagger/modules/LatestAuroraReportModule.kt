@@ -1,12 +1,8 @@
 package se.gustavkarlsson.skylight.android.dagger.modules
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.LiveDataReactiveStreams
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.subjects.BehaviorSubject
@@ -21,18 +17,6 @@ import javax.inject.Singleton
 
 @Module
 class LatestAuroraReportModule {
-
-	@Provides
-	@Singleton
-	fun provideLatestAuroraReportLiveData(flowable: Flowable<AuroraReport>): LiveData<AuroraReport> {
-		return LiveDataReactiveStreams.fromPublisher(flowable)
-	}
-
-	@Provides
-	@Singleton
-	fun provideLatestAuroraReportFlowable(observable: Observable<AuroraReport>): Flowable<AuroraReport> {
-		return observable.toFlowable(BackpressureStrategy.LATEST)
-	}
 
 	@Provides
 	@Singleton

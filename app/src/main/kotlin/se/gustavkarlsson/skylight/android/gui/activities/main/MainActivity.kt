@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main
 
-import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -13,6 +12,7 @@ import se.gustavkarlsson.skylight.android.actions.PresentingErrors
 import se.gustavkarlsson.skylight.android.actions.SetUpdateSchedule
 import se.gustavkarlsson.skylight.android.dagger.components.MainActivityComponent
 import se.gustavkarlsson.skylight.android.dagger.modules.ActivityModule
+import se.gustavkarlsson.skylight.android.extensions.observe
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
 import se.gustavkarlsson.skylight.android.gui.viewmodels.AuroraReportViewModel
@@ -47,12 +47,11 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
     }
 
 	private fun bindData() {
-		val defaultLocationName = getString(R.string.your_location)
-		auroraReportViewModel.auroraReports.observe(this, Observer {
-			it?.locationName.let {
-				supportActionBar!!.title = it ?: defaultLocationName
+		auroraReportViewModel.locationName.observe(this) {
+			it?.let {
+				supportActionBar!!.title = it
 			}
-		})
+		}
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu): Boolean {
