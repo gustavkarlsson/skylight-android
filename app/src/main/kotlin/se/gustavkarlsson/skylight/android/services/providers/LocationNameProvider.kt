@@ -1,5 +1,7 @@
 package se.gustavkarlsson.skylight.android.services.providers
 
+import se.gustavkarlsson.skylight.android.services.Location
+
 interface LocationNameProvider {
-    suspend fun getLocationName(latitude: Double, longitude: Double): String?
+    fun getLocationName(location: Location): String?
 }

@@ -5,5 +5,5 @@ import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.Darkness
 
 interface DarknessProvider {
-    suspend fun getDarkness(time: Instant, latitude: Double, longitude: Double): Darkness
+    fun getDarkness(time: Instant, latitude: Double, longitude: Double): Darkness
 }

@@ -13,7 +13,7 @@ class KlausBrunnerDarknessProvider
 @Inject
 constructor() : DarknessProvider {
 
-    suspend override fun getDarkness(time: Instant, latitude: Double, longitude: Double): Darkness {
+    override fun getDarkness(time: Instant, latitude: Double, longitude: Double): Darkness {
         val date = GregorianCalendar().apply { timeInMillis = time.toEpochMilli() }
         val azimuthZenithAngle = Grena3.calculateSolarPosition(date, latitude, longitude, 0.0)
         return Darkness(azimuthZenithAngle.zenithAngle)

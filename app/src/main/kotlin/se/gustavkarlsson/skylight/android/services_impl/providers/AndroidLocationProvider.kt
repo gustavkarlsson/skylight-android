@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.services_impl.providers
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.tasks.Task
 import dagger.Reusable
-import kotlinx.coroutines.experimental.delay
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import org.jetbrains.anko.warn
@@ -20,7 +19,7 @@ constructor(
 	private val fusedLocationProviderClient: FusedLocationProviderClient
 ) : LocationProvider, AnkoLogger {
 
-    suspend override fun getLocation(): Location {
+    override fun getLocation(): Location {
         try {
             debug("Getting location...")
 			val getLocationTask = fusedLocationProviderClient.lastLocation
@@ -34,11 +33,11 @@ constructor(
             throw UserFriendlyException(R.string.error_location_permission_missing, e)
         }
     }
-
-	private suspend fun waitForLocation(getLocationTask: Task<android.location.Location>) {
+	// TODO clean up this ugly sleep
+	private fun waitForLocation(getLocationTask: Task<android.location.Location>) {
 		var timeRemaining = timeoutMillis
 		while (!getLocationTask.isComplete && timeRemaining > 0) {
-			delay(pauseMillis)
+			Thread.sleep(pauseMillis)
 			timeRemaining -= pauseMillis
 		}
 	}

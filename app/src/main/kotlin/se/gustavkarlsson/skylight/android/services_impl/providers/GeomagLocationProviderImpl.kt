@@ -11,7 +11,7 @@ class GeomagLocationProviderImpl
 @Inject
 constructor() : GeomagLocationProvider {
 
-    suspend override fun getGeomagLocation(latitude: Double, longitude: Double): GeomagLocation {
+    override fun getGeomagLocation(latitude: Double, longitude: Double): GeomagLocation {
         val geomagneticLatitude = calculateGeomagneticLatitude(latitude, longitude, MAGNETIC_NORTH_POLE_LATITUDE, MAGNETIC_NORTH_POLE_LONGITUDE)
         return GeomagLocation(geomagneticLatitude)
     }

@@ -7,7 +7,7 @@ class TestLocationProvider(
 	var delegate: () -> Location
 ) : LocationProvider {
 
-    suspend override fun getLocation(): Location {
+    override fun getLocation(): Location {
         return delegate()
     }
 }

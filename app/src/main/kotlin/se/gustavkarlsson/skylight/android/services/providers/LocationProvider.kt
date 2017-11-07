@@ -4,5 +4,5 @@ import se.gustavkarlsson.skylight.android.services.Location
 
 
 interface LocationProvider {
-    suspend fun getLocation(): Location
+    fun getLocation(): Location
 }

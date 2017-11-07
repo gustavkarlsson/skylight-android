@@ -1,6 +1,8 @@
 package se.gustavkarlsson.skylight.android.services_impl.providers
 
 import android.net.ConnectivityManager
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.runBlocking
 import kotlinx.coroutines.experimental.withTimeoutOrNull
 import org.jetbrains.anko.AnkoLogger
@@ -34,10 +36,10 @@ class RealAuroraReportProvider(
         }
         val auroraReport = runBlocking {
             withTimeoutOrNull(timeout.toMillis(), TimeUnit.MILLISECONDS) {
-                val location = locationProvider.getLocation()
-                val address = locationNameProvider.getLocationName(location.latitude, location.longitude)
-                val auroraFactors = auroraFactorsProvider.getAuroraFactors(location)
-                AuroraReport(clock.now, address, auroraFactors)
+                val location = async(CommonPool) { locationProvider.getLocation() }
+                val address = async(CommonPool) { locationNameProvider.getLocationName(location.await()) }
+                val auroraFactors = async(CommonPool) { auroraFactorsProvider.getAuroraFactors(location.await()) }
+                AuroraReport(clock.now, address.await(), auroraFactors.await())
             }
         } ?: throw UserFriendlyException(R.string.error_updating_took_too_long)
         cache.value = auroraReport

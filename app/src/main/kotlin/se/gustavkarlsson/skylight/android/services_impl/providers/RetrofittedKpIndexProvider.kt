@@ -18,7 +18,7 @@ constructor(
 		private val service: KpIndexService
 ) : KpIndexProvider, AnkoLogger {
 
-    suspend override fun getKpIndex(): KpIndex {
+    override fun getKpIndex(): KpIndex {
         try {
             val response = service.get().execute()
 			debug("Got response: ${response.code()}, message: ${response.raw()}")

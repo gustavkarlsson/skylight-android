@@ -13,7 +13,7 @@ class RetrofittedOpenWeatherMapVisibilityProvider constructor(
 	private val appId: String
 ) : VisibilityProvider, AnkoLogger {
 
-    suspend override fun getVisibility(latitude: Double, longitude: Double): Visibility {
+    override fun getVisibility(latitude: Double, longitude: Double): Visibility {
         try {
             val response = service.get(latitude, longitude, "json", appId).execute()
             debug("Got response: ${response.code()}, message: ${response.raw()}")
