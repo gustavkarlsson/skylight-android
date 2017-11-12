@@ -8,11 +8,8 @@ import dagger.Provides
 import dagger.Reusable
 import org.threeten.bp.Clock
 import org.threeten.bp.Duration
-import se.gustavkarlsson.skylight.android.dagger.LAST_NAME
 import se.gustavkarlsson.skylight.android.dagger.NEW_NAME
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.DebugSettings
-import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.services.providers.AuroraFactorsProvider
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
@@ -29,7 +26,6 @@ class NewAuroraReportProviderModule {
 	@Reusable
 	@Named(NEW_NAME)
 	fun provideNewAuroraReportProvider(
-		@Named(LAST_NAME) cache: SingletonCache<AuroraReport>,
 		debugSettings: DebugSettings,
 		connectivityManager: ConnectivityManager,
 		locationProvider: LocationProvider,
@@ -37,8 +33,8 @@ class NewAuroraReportProviderModule {
 		locationNameProvider: LocationNameProvider,
 		clock: Clock
 	): AuroraReportProvider {
-		val realProvider = RealAuroraReportProvider(cache, connectivityManager, locationProvider, auroraFactorsProvider, locationNameProvider, clock, Duration.ofSeconds(30))
-		return DebugAuroraReportProvider(cache, realProvider, debugSettings, clock)
+		val realProvider = RealAuroraReportProvider(connectivityManager, locationProvider, auroraFactorsProvider, locationNameProvider, clock, Duration.ofSeconds(30))
+		return DebugAuroraReportProvider(realProvider, debugSettings, clock)
 	}
 
 	@Provides

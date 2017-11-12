@@ -4,8 +4,8 @@ import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 
-inline fun <T> LiveData<T>.observe(owner: LifecycleOwner, crossinline observer: (T?) -> Unit) {
+inline fun <T> LiveData<T>.observe(owner: LifecycleOwner, crossinline observe: (T?) -> Unit) {
 	observe(owner, Observer {
-		observer(it)
+		observe(it)
 	})
 }

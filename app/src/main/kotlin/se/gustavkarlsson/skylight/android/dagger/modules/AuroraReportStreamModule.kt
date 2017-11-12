@@ -1,12 +1,12 @@
 package se.gustavkarlsson.skylight.android.dagger.modules
 
 import android.content.Context
+import com.jakewharton.rxrelay2.BehaviorRelay
+import com.jakewharton.rxrelay2.Relay
 import dagger.Module
 import dagger.Provides
 import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.Subject
+import io.reactivex.functions.Consumer
 import se.gustavkarlsson.skylight.android.dagger.LAST_NAME
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.SingletonCache
@@ -16,24 +16,28 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
-class LatestAuroraReportModule {
+class AuroraReportStreamModule {
 
 	@Provides
 	@Singleton
-	fun provideLatestAuroraReportObservable(subject: Subject<AuroraReport>): Observable<AuroraReport> {
-		return subject
+	fun provideLatestAuroraReportObservable(relay: Relay<AuroraReport>): Observable<AuroraReport> {
+		return relay
 	}
 
 	@Provides
 	@Singleton
-	fun provideLatestAuroraReportObserver(subject: Subject<AuroraReport>): Observer<AuroraReport> {
-		return subject
+	fun provideLatestAuroraReportConsumer(relay: Relay<AuroraReport>): Consumer<AuroraReport> {
+		return relay
 	}
 
 	@Provides
 	@Singleton
-	fun provideLatestAuroraReportSubject(@Named(LAST_NAME) cache: SingletonCache<AuroraReport>): Subject<AuroraReport> {
-		return BehaviorSubject.createDefault(cache.value)
+	fun provideLatestAuroraReportRelay(@Named(LAST_NAME) cache: SingletonCache<AuroraReport>): Relay<AuroraReport> {
+		val relay = BehaviorRelay.createDefault(cache.value)
+		relay.subscribe {
+			cache.value = it
+		}
+		return relay
 	}
 
 	@Provides

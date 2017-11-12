@@ -1,9 +1,8 @@
 package se.gustavkarlsson.skylight.android.services_impl.providers
 
 import dagger.Reusable
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.runBlocking
+import io.reactivex.Single
+import io.reactivex.functions.Function4
 import org.threeten.bp.Clock
 import se.gustavkarlsson.skylight.android.entities.AuroraFactors
 import se.gustavkarlsson.skylight.android.extensions.now
@@ -19,16 +18,19 @@ constructor(
 	private val visibilityProvider: VisibilityProvider,
 	private val darknessProvider: DarknessProvider,
 	private val geomagLocationProvider: GeomagLocationProvider,
-	private val clock: Clock
-) : AuroraFactorsProvider { // TODO Make sure retrofit calls use coroutines, or replace everything with RX
+	private val clock: Clock // TODO Create CurrentTimeProvider that returns Single<Instant>
+) : AuroraFactorsProvider {
 
-    override fun getAuroraFactors(location: Location): AuroraFactors {
-		return runBlocking {
-			val kpIndex = async(CommonPool) { kpIndexProvider.getKpIndex() }
-			val geomagLocation = async(CommonPool) { geomagLocationProvider.getGeomagLocation(location.latitude, location.longitude) }
-			val darkness = async(CommonPool) { darknessProvider.getDarkness(clock.now, location.latitude, location.longitude) }
-			val visibility = async(CommonPool) { visibilityProvider.getVisibility(location.latitude, location.longitude) }
-			AuroraFactors(kpIndex.await(), geomagLocation.await(), darkness.await(), visibility.await())
-		}
-    }
+	override fun getAuroraFactors(location: Single<Location>): Single<AuroraFactors> {
+		val currentTime = Single.fromCallable { clock.now }
+		val kpIndexSingle = kpIndexProvider.getKpIndex()
+		val geomagLocationSingle = geomagLocationProvider.getGeomagLocation(location)
+		val darknessSingle = darknessProvider.getDarkness(currentTime, location)
+		val visibilitySingle = visibilityProvider.getVisibility(location)
+
+		return Single.zip(kpIndexSingle, geomagLocationSingle, darknessSingle, visibilitySingle,
+			Function4 { kpIndex, geomagLocation, darkness, visibility ->
+				AuroraFactors(kpIndex, geomagLocation, darkness, visibility)
+			})
+	}
 }

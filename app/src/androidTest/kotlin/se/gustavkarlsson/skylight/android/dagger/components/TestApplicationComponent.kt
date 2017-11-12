@@ -17,13 +17,13 @@ import javax.inject.Singleton
 	UpdateSchedulerModule::class,
 	SetupNotificationsModule::class,
 	EvaluationModule::class,
-	LatestAuroraReportModule::class,
-	UserFriendlyExceptionObservableModule::class,
+	AuroraReportStreamModule::class,
+	UserFriendlyExceptionStreamModule::class,
 	TestLocationProviderModule::class,
 	AuroraFactorsModule::class,
 	NewAuroraReportProviderModule::class,
 	TestLocationNameProviderModule::class,
-	PresentNewAuroraReportModule::class
+	GetNewAuroraReportModule::class
 ))
 @Singleton
 interface TestApplicationComponent : ApplicationComponent {

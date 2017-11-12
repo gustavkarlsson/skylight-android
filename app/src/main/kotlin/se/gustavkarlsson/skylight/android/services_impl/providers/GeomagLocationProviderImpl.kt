@@ -1,7 +1,9 @@
 package se.gustavkarlsson.skylight.android.services_impl.providers
 
 import dagger.Reusable
+import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
+import se.gustavkarlsson.skylight.android.services.Location
 import se.gustavkarlsson.skylight.android.services.providers.GeomagLocationProvider
 import java.lang.Math.*
 import javax.inject.Inject
@@ -11,10 +13,12 @@ class GeomagLocationProviderImpl
 @Inject
 constructor() : GeomagLocationProvider {
 
-    override fun getGeomagLocation(latitude: Double, longitude: Double): GeomagLocation {
-        val geomagneticLatitude = calculateGeomagneticLatitude(latitude, longitude, MAGNETIC_NORTH_POLE_LATITUDE, MAGNETIC_NORTH_POLE_LONGITUDE)
-        return GeomagLocation(geomagneticLatitude)
-    }
+	override fun getGeomagLocation(location: Single<Location>): Single<GeomagLocation> {
+		return Single.fromCallable {
+			val geomagneticLatitude = calculateGeomagneticLatitude(location.blockingGet().latitude, location.blockingGet().longitude, MAGNETIC_NORTH_POLE_LATITUDE, MAGNETIC_NORTH_POLE_LONGITUDE)
+			GeomagLocation(geomagneticLatitude)
+		}
+	}
 
 	// http://stackoverflow.com/a/7949249/940731
 	private fun calculateGeomagneticLatitude(latitude1: Double, longitude1: Double, latitude2: Double, longitude2: Double): Double {

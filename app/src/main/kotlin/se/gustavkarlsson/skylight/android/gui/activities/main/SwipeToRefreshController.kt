@@ -4,30 +4,30 @@ import android.support.v4.widget.SwipeRefreshLayout
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.coroutines.experimental.bg
-import se.gustavkarlsson.skylight.android.actions.PresentNewAuroraReport
+import se.gustavkarlsson.skylight.android.actions.GetNewAuroraReport
 
 class SwipeToRefreshController(
 	private val swipeRefreshLayout: SwipeRefreshLayout,
-	private val presentNewAuroraReport: PresentNewAuroraReport
+	private val getNewAuroraReport: GetNewAuroraReport
 ) {
 
-    private fun refresh() {
+	private fun refresh() {
 		async(UI) {
 			swipeRefreshLayout.isRefreshing = true
-			bg { presentNewAuroraReport() }.await()
+			bg { getNewAuroraReport() }.await()
 			swipeRefreshLayout.isRefreshing = false
 		}
-    }
+	}
 
-    fun enable() {
-        swipeRefreshLayout.isEnabled = true
-        swipeRefreshLayout.isRefreshing = false
-        swipeRefreshLayout.setOnRefreshListener(this::refresh)
-    }
+	fun enable() {
+		swipeRefreshLayout.isEnabled = true
+		swipeRefreshLayout.isRefreshing = false
+		swipeRefreshLayout.setOnRefreshListener(this::refresh)
+	}
 
-    fun disable() {
-        swipeRefreshLayout.isRefreshing = false
-        swipeRefreshLayout.setOnRefreshListener(null)
-        swipeRefreshLayout.isEnabled = false
-    }
+	fun disable() {
+		swipeRefreshLayout.isRefreshing = false
+		swipeRefreshLayout.setOnRefreshListener(null)
+		swipeRefreshLayout.isEnabled = false
+	}
 }

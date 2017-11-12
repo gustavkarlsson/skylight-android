@@ -3,6 +3,8 @@ package se.gustavkarlsson.skylight.android.services_impl.providers
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.tasks.Task
 import dagger.Reusable
+import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.debug
 import org.jetbrains.anko.warn
@@ -19,20 +21,24 @@ constructor(
 	private val fusedLocationProviderClient: FusedLocationProviderClient
 ) : LocationProvider, AnkoLogger {
 
-    override fun getLocation(): Location {
-        try {
-            debug("Getting location...")
-			val getLocationTask = fusedLocationProviderClient.lastLocation
-			waitForLocation(getLocationTask)
-			checkForErrorsError(getLocationTask)
-			val location = getLocationTask.result
-            debug("Location is: $location")
-            return Location(location.latitude, location.longitude)
-        } catch (e: SecurityException) {
-            warn("Location permission missing", e)
-            throw UserFriendlyException(R.string.error_location_permission_missing, e)
-        }
-    }
+	// TODO rework
+	override fun getLocation(): Single<Location> {
+		return Single.fromCallable {
+			try {
+				debug("Getting location...")
+				val getLocationTask = fusedLocationProviderClient.lastLocation
+				waitForLocation(getLocationTask)
+				checkForErrorsError(getLocationTask)
+				val location = getLocationTask.result
+				debug("Location is: $location")
+				Location(location.latitude, location.longitude)
+			} catch (e: SecurityException) {
+				warn("Location permission missing", e)
+				throw UserFriendlyException(R.string.error_location_permission_missing, e)
+			}
+		}.subscribeOn(Schedulers.io())
+	}
+
 	// TODO clean up this ugly sleep
 	private fun waitForLocation(getLocationTask: Task<android.location.Location>) {
 		var timeRemaining = timeoutMillis
@@ -55,7 +61,7 @@ constructor(
 	}
 
 	companion object {
-	    private val pauseMillis = 50L
+		private val pauseMillis = 50L
 		private val timeoutMillis = 5000L
 	}
 }

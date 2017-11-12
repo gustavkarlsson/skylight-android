@@ -1,30 +1,26 @@
 package se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap
 
+import io.reactivex.Single
+import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.Visibility
+import se.gustavkarlsson.skylight.android.services.Location
 import se.gustavkarlsson.skylight.android.services.providers.VisibilityProvider
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
-import java.io.IOException
 
 class RetrofittedOpenWeatherMapVisibilityProvider constructor(
 	private val service: OpenWeatherMapService,
 	private val appId: String
 ) : VisibilityProvider, AnkoLogger {
 
-    override fun getVisibility(latitude: Double, longitude: Double): Visibility {
-        try {
-            val response = service.get(latitude, longitude, "json", appId).execute()
-            debug("Got response: ${response.code()}, message: ${response.raw()}")
-            if (!response.isSuccessful) {
-                throw UserFriendlyException(R.string.error_could_not_determine_visibility, response.errorBody()!!.string())
-            }
-            val (clouds) = response.body()!!
-            return Visibility(clouds.percentage)
-        } catch (e: IOException) {
-            throw UserFriendlyException(R.string.error_could_not_determine_visibility, e)
-        }
-
-    }
+	override fun getVisibility(location: Single<Location>): Single<Visibility> {
+		return service.get(location.blockingGet().latitude, location.blockingGet().longitude, "json", appId)
+			.subscribeOn(Schedulers.io())
+			.onErrorResumeNext {
+				Single.error(UserFriendlyException(R.string.error_could_not_determine_visibility, it))
+			}.map {
+			Visibility(it.clouds.percentage)
+		}
+	}
 }

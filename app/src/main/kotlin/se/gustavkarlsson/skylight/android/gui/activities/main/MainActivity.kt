@@ -7,7 +7,7 @@ import org.jetbrains.anko.coroutines.experimental.bg
 import org.jetbrains.anko.startActivity
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
-import se.gustavkarlsson.skylight.android.actions.PresentRecentAuroraReport
+import se.gustavkarlsson.skylight.android.actions.GetNewAuroraReport
 import se.gustavkarlsson.skylight.android.actions.PresentingErrors
 import se.gustavkarlsson.skylight.android.actions.SetUpdateSchedule
 import se.gustavkarlsson.skylight.android.dagger.components.MainActivityComponent
@@ -20,14 +20,11 @@ import javax.inject.Inject
 
 class MainActivity : AuroraRequirementsCheckingActivity() {
 
-    @Inject
+	@Inject
 	lateinit var swipeToRefreshController: SwipeToRefreshController
 
 	@Inject
 	lateinit var presentingErrors: PresentingErrors
-
-	@Inject
-	lateinit var presentRecentAuroraReport: PresentRecentAuroraReport
 
 	@Inject
 	lateinit var setUpdateSchedule: SetUpdateSchedule
@@ -35,16 +32,19 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 	@Inject
 	lateinit var auroraReportViewModel: AuroraReportViewModel
 
-	lateinit var component: MainActivityComponent
-        private set
+	@Inject
+	lateinit var getNewAuroraReport: GetNewAuroraReport
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        component = Skylight.instance.component.getMainActivityComponent(ActivityModule(this))
-        setContentView(R.layout.activity_main)
-        component.inject(this)
+	lateinit var component: MainActivityComponent
+		private set
+
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		component = Skylight.instance.component.getMainActivityComponent(ActivityModule(this))
+		setContentView(R.layout.activity_main)
+		component.inject(this)
 		bindData()
-    }
+	}
 
 	private fun bindData() {
 		auroraReportViewModel.locationName.observe(this) {
@@ -55,32 +55,36 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
+		menuInflater.inflate(R.menu.menu_main, menu)
+		return true
+	}
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> run { startActivity<SettingsActivity>(); true }
-			else                 -> super.onOptionsItemSelected(item)
-        }
-    }
+	override fun onOptionsItemSelected(item: MenuItem): Boolean {
+		return when (item.itemId) {
+			R.id.action_settings -> {
+				startActivity<SettingsActivity>(); true
+			}
+			else -> super.onOptionsItemSelected(item)
+		}
+	}
 
-    public override fun onStart() {
-        super.onStart()
+	public override fun onStart() {
+		super.onStart()
 		presentingErrors.start()
-        swipeToRefreshController.disable()
-        ensureRequirementsMet()
-    }
+		swipeToRefreshController.disable()
+		ensureRequirementsMet()
+	}
 
-    override fun onRequirementsMet() {
+	override fun onRequirementsMet() {
 		setUpdateSchedule()
-        swipeToRefreshController.enable()
-		bg { presentRecentAuroraReport() }
-    }
+		swipeToRefreshController.enable()
+		bg {
+			getNewAuroraReport() // TODO Call only when necessary
+		}
+	}
 
-    override fun onStop() {
-        super.onStop()
+	override fun onStop() {
+		super.onStop()
 		presentingErrors.stop()
-    }
+	}
 }

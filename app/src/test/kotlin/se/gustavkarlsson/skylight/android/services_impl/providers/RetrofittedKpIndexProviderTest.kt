@@ -14,8 +14,9 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.robolectric.RobolectricTestRunner
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import se.gustavkarlsson.aurora_notifier.common.service.KpIndexService
+import se.gustavkarlsson.skylight.android.services_impl.providers.kpindex.KpIndexService
 
 
 @RunWith(RobolectricTestRunner::class)
@@ -38,13 +39,13 @@ class RetrofittedKpIndexProviderTest {
 		val body = createResponseBody(bodyResourcePath, mediaType)
 		val call = mock<Call>()
 		whenever(call.execute()).thenReturn(
-				Response.Builder()
-						.request(Request.Builder().url("http://mocked.com/").build())
-						.code(statusCode)
-						.protocol(Protocol.HTTP_1_0)
-						.body(body)
-						.message("ok")
-						.build())
+			Response.Builder()
+				.request(Request.Builder().url("http://mocked.com/").build())
+				.code(statusCode)
+				.protocol(Protocol.HTTP_1_0)
+				.body(body)
+				.message("ok")
+				.build())
 		return call
 	}
 
@@ -64,10 +65,11 @@ class RetrofittedKpIndexProviderTest {
 			.client(mockedClient)
 			.baseUrl("http://mocked.com")
 			.addConverterFactory(GsonConverterFactory.create())
+			.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 			.build()
 			.create(KpIndexService::class.java))
 
-		val kpIndex = runBlocking { service.getKpIndex().value }
+		val kpIndex = runBlocking { service.getKpIndex().blockingGet().value }
 
 		assertThat(kpIndex).isCloseTo(1.33, within(0.01))
 	}

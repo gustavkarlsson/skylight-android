@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.actions_impl
 
+import com.jakewharton.rxrelay2.PublishRelay
+import com.jakewharton.rxrelay2.Relay
 import io.reactivex.Observable
-import io.reactivex.subjects.PublishSubject
-import io.reactivex.subjects.Subject
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -15,19 +15,19 @@ import se.gustavkarlsson.skylight.android.services.Presenter
 @RunWith(MockitoJUnitRunner::class)
 class PresentingFromObservableTest {
 
-    lateinit var subject: Subject<Int>
+	lateinit var relay: Relay<Int>
 
-    lateinit var observable: Observable<Int>
+	lateinit var observable: Observable<Int>
 
-    @Mock
-    lateinit var presenter: Presenter<Int>
+	@Mock
+	lateinit var presenter: Presenter<Int>
 
-    lateinit var impl: PresentingFromObservable<Int>
+	lateinit var impl: PresentingFromObservable<Int>
 
 	@Before
 	fun setUp() {
-		subject = PublishSubject.create()
-		observable = subject
+		relay = PublishRelay.create()
+		observable = relay
 		impl = object : PresentingFromObservable<Int>(observable, presenter) {}
 	}
 
@@ -55,14 +55,14 @@ class PresentingFromObservableTest {
 
 	@Test
 	fun stoppedStateDoesNotPresentElementsFromObservable() {
-		subject.onNext(5)
+		relay.accept(5)
 		verifyZeroInteractions(presenter)
 	}
 
 	@Test
 	fun startedStateDoesPresentElementsFromObservable() {
 		impl.start()
-		subject.onNext(5)
+		relay.accept(5)
 		verify(presenter).present(5)
 	}
 }
