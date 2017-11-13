@@ -35,20 +35,54 @@ class GetNewAuroraReportUsingRxTest {
 	}
 
 	@Test
-	fun invokePublishes() {
+	fun invokeWithoutSubscribingDoesNotPublishAnything() {
 		whenever(mockProvider.get()).thenReturn(Single.just(AuroraReport.empty))
 
 		impl()
+
+		verifyZeroInteractions(mockConsumer)
+		verifyZeroInteractions(mockErrorConsumer)
+	}
+
+	@Test
+	fun invokeWithTwoSubscribersPublishesOnce() {
+		whenever(mockProvider.get()).thenReturn(Single.just(AuroraReport.empty))
+
+		val completable = impl()
+		completable.blockingGet()
+		completable.blockingGet()
 
 		verify(mockConsumer).accept(AuroraReport.empty)
 		verifyZeroInteractions(mockErrorConsumer)
 	}
 
 	@Test
-	fun invokeWithErrorPublishesError() {
-		whenever(mockProvider.get()).thenThrow(RuntimeException())
+	fun invokeWithErrorAndTwoSubscribersPublishesErrorOnce() {
+		whenever(mockProvider.get()).thenReturn(Single.error(RuntimeException()))
 
-		impl()
+		val completable = impl()
+		completable.blockingGet()
+		completable.blockingGet()
+
+		verify(mockErrorConsumer).accept(any())
+		verifyZeroInteractions(mockConsumer)
+	}
+
+	@Test
+	fun invokeWithSingleSubscriberPublishes() {
+		whenever(mockProvider.get()).thenReturn(Single.just(AuroraReport.empty))
+
+		impl().blockingGet()
+
+		verify(mockConsumer).accept(AuroraReport.empty)
+		verifyZeroInteractions(mockErrorConsumer)
+	}
+
+	@Test
+	fun invokeWithSingleErrorPublishesError() {
+		whenever(mockProvider.get()).thenReturn(Single.error(RuntimeException()))
+
+		impl().blockingGet()
 
 		verify(mockErrorConsumer).accept(any())
 		verifyZeroInteractions(mockConsumer)

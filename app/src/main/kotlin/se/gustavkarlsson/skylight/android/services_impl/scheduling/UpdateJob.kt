@@ -12,7 +12,7 @@ constructor(
 ) : Job() {
 
 	override fun onRunJob(params: Job.Params): Job.Result {
-		getNewAuroraReport()
+		getNewAuroraReport().blockingGet()
 		return SUCCESS
 	}
 

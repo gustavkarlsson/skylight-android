@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.gui.activities.main
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import org.jetbrains.anko.coroutines.experimental.bg
+import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.startActivity
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
@@ -78,9 +78,10 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 	override fun onRequirementsMet() {
 		setUpdateSchedule()
 		swipeToRefreshController.enable()
-		bg {
-			getNewAuroraReport() // TODO Call only when necessary
-		}
+		getNewAuroraReport() // TODO Call only when necessary
+			.subscribeOn(Schedulers.io())
+			.onErrorComplete()
+			.subscribe()
 	}
 
 	override fun onStop() {

@@ -1,9 +1,8 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main
 
 import android.support.v4.widget.SwipeRefreshLayout
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import org.jetbrains.anko.coroutines.experimental.bg
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import se.gustavkarlsson.skylight.android.actions.GetNewAuroraReport
 
 class SwipeToRefreshController(
@@ -12,11 +11,14 @@ class SwipeToRefreshController(
 ) {
 
 	private fun refresh() {
-		async(UI) {
-			swipeRefreshLayout.isRefreshing = true
-			bg { getNewAuroraReport() }.await()
-			swipeRefreshLayout.isRefreshing = false
-		}
+		swipeRefreshLayout.isRefreshing = true
+		getNewAuroraReport()
+			.subscribeOn(Schedulers.io())
+			.onErrorComplete()
+			.observeOn(AndroidSchedulers.mainThread())
+			.subscribe {
+				swipeRefreshLayout.isRefreshing = false
+			}
 	}
 
 	fun enable() {

@@ -1,3 +1,5 @@
 package se.gustavkarlsson.skylight.android.actions
 
-interface GetNewAuroraReport : () -> Unit
+import io.reactivex.Completable
+
+interface GetNewAuroraReport : () -> Completable
