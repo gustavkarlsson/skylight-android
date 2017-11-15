@@ -21,7 +21,7 @@ import javax.inject.Inject
 class AuroraReportViewModelFactory
 @Inject
 constructor(
-	private val auroraReportLiveData: Observable<AuroraReport>,
+	private val auroraReports: Observable<AuroraReport>,
 	private val chanceEvaluator: ChanceEvaluator<AuroraReport>,
 	private val kpIndexChaneEvaluator: ChanceEvaluator<KpIndex>,
 	private val geomagLocationChanceEvaluator: ChanceEvaluator<GeomagLocation>,
@@ -33,7 +33,7 @@ constructor(
 	@Suppress("UNCHECKED_CAST")
 	override fun <T : ViewModel> create(modelClass: Class<T>): T {
 		require(modelClass == CLASS) { "Unsupported ViewModel class: $modelClass, expected: $CLASS" }
-		return auroraReportLiveData.observeOn(Schedulers.computation()).let {
+		return auroraReports.let {
 			val chanceLevel = createChanceLevel(it)
 			val locationName = createLocationName(it)
 			val timestamp = createTimestamp(it)
@@ -119,27 +119,27 @@ constructor(
 	}
 
 	private fun evaluateKpIndexText(factor: KpIndex): String {
+		fun parsePart(part: Double): String {
+			if (part < 0.15) {
+				return ""
+			}
+			if (part < 0.5) {
+				return "+"
+			}
+			return "-"
+		}
+
+		fun parseWhole(whole: Int, partString: String): String {
+			val wholeAdjusted = if (partString == "-") whole + 1 else whole
+			return Integer.toString(wholeAdjusted)
+		}
+
 		val kpIndex = factor.value ?: return "?"
 		val whole = kpIndex.toInt()
 		val part = kpIndex - whole
 		val partString = parsePart(part)
 		val wholeString = parseWhole(whole, partString)
 		return wholeString + partString
-	}
-
-	private fun parsePart(part: Double): String {
-		if (part < 0.15) {
-			return ""
-		}
-		if (part < 0.5) {
-			return "+"
-		}
-		return "-"
-	}
-
-	private fun parseWhole(whole: Int, partString: String): String {
-		val wholeAdjusted = if (partString == "-") whole + 1 else whole
-		return Integer.toString(wholeAdjusted)
 	}
 
 	 private fun evaluateGeomagLocationText(factor: GeomagLocation): String {
@@ -166,7 +166,7 @@ constructor(
 	}
 
 	companion object {
-		val CLASS = AuroraReportViewModel::class.java
+		private val CLASS = AuroraReportViewModel::class.java
 	}
 }
 
