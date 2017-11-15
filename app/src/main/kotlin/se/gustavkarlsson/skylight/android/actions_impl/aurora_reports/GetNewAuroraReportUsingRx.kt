@@ -29,7 +29,6 @@ constructor(
 			.doOnError {
 				propagateError(it)
 			}
-			.cache()
 			.toCompletable()
 	}
 

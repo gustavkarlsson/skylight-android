@@ -45,30 +45,6 @@ class GetNewAuroraReportUsingRxTest {
 	}
 
 	@Test
-	fun invokeWithTwoSubscribersPublishesOnce() {
-		whenever(mockProvider.get()).thenReturn(Single.just(AuroraReport.empty))
-
-		val completable = impl()
-		completable.blockingGet()
-		completable.blockingGet()
-
-		verify(mockConsumer).accept(AuroraReport.empty)
-		verifyZeroInteractions(mockErrorConsumer)
-	}
-
-	@Test
-	fun invokeWithErrorAndTwoSubscribersPublishesErrorOnce() {
-		whenever(mockProvider.get()).thenReturn(Single.error(RuntimeException()))
-
-		val completable = impl()
-		completable.blockingGet()
-		completable.blockingGet()
-
-		verify(mockErrorConsumer).accept(any())
-		verifyZeroInteractions(mockConsumer)
-	}
-
-	@Test
 	fun invokeWithSingleSubscriberPublishes() {
 		whenever(mockProvider.get()).thenReturn(Single.just(AuroraReport.empty))
 
