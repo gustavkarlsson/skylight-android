@@ -50,6 +50,6 @@ constructor(
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(MainActivity::class.java)
         stackBuilder.addNextIntent(mainActivityIntent)
-        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)!!
     }
 }

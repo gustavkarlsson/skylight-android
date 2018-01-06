@@ -76,7 +76,7 @@ class AuroraFactorFragment : Fragment() {
 	private fun toastFactor( // TODO extract
 		titleResourceId: Int,
 		descriptionResourceId: Int) {
-		context.alert {
+		context!!.alert {
 			iconResource = R.drawable.info_white_24dp
 			title = ctx.getString(titleResourceId)
 			message = ctx.getString(descriptionResourceId)
