@@ -17,11 +17,11 @@ import javax.inject.Singleton
 	UpdateSchedulerModule::class,
 	SetupNotificationsModule::class,
 	EvaluationModule::class,
-	AuroraReportStreamModule::class,
+	AuroraReportModule::class,
 	UserFriendlyExceptionStreamModule::class,
 	TestLocationProviderModule::class,
 	AuroraFactorsModule::class,
-	NewAuroraReportProviderModule::class,
+	AuroraReportProviderModule::class,
 	TestLocationNameProviderModule::class,
 	GetNewAuroraReportModule::class
 ))

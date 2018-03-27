@@ -1,10 +1,10 @@
 package se.gustavkarlsson.skylight.android.services_impl.evaluation
 
 import dagger.Reusable
+import se.gustavkarlsson.skylight.android.entities.Chance
+import se.gustavkarlsson.skylight.android.entities.Chance.Companion.UNKNOWN
 import se.gustavkarlsson.skylight.android.entities.KpIndex
-import se.gustavkarlsson.skylight.android.services.evaluation.Chance
-import se.gustavkarlsson.skylight.android.services.evaluation.Chance.Companion.UNKNOWN
-import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import javax.inject.Inject
 
 @Reusable

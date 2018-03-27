@@ -10,10 +10,10 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.mockito.any
-import se.gustavkarlsson.skylight.android.services.evaluation.Chance
-import se.gustavkarlsson.skylight.android.services.evaluation.Chance.Companion.IMPOSSIBLE
-import se.gustavkarlsson.skylight.android.services.evaluation.Chance.Companion.UNKNOWN
-import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.entities.Chance
+import se.gustavkarlsson.skylight.android.entities.Chance.Companion.IMPOSSIBLE
+import se.gustavkarlsson.skylight.android.entities.Chance.Companion.UNKNOWN
+import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 
 @RunWith(MockitoJUnitRunner::class)
 class AuroraReportEvaluatorTest {

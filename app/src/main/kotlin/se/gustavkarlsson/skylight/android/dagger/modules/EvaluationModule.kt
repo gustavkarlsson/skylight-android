@@ -4,7 +4,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.entities.*
-import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services_impl.evaluation.*
 
 @Module

@@ -2,8 +2,8 @@ package se.gustavkarlsson.skylight.android.services.providers
 
 import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
-import se.gustavkarlsson.skylight.android.services.Location
+import se.gustavkarlsson.skylight.android.entities.Location
 
 interface GeomagLocationProvider {
-	fun getGeomagLocation(location: Single<Location>): Single<GeomagLocation>
+	fun get(location: Single<Location>): Single<GeomagLocation>
 }

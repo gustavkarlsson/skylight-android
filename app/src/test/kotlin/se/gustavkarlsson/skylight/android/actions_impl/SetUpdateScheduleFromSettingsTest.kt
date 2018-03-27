@@ -8,7 +8,6 @@ import org.mockito.Mock
 import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 import se.gustavkarlsson.skylight.android.services.Scheduler
-import se.gustavkarlsson.skylight.android.services.Settings
 
 @RunWith(MockitoJUnitRunner::class)
 class SetUpdateScheduleFromSettingsTest {

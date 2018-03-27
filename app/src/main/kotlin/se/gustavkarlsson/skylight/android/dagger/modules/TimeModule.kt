@@ -3,25 +3,22 @@ package se.gustavkarlsson.skylight.android.dagger.modules
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import org.threeten.bp.Clock
+import io.reactivex.Single
+import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
-import org.threeten.bp.ZoneOffset
-import se.gustavkarlsson.skylight.android.util.ZoneIdProvider
+import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
+import se.gustavkarlsson.skylight.android.services_impl.providers.SystemTimeWithFixedZoneIdProvider
+import javax.inject.Singleton
 
 @Module
 class TimeModule {
 
     @Provides
-    @Reusable
-    fun provideClock(): Clock = Clock.systemUTC()
+    @Singleton
+    fun provideTimeProvider(): TimeProvider = SystemTimeWithFixedZoneIdProvider(ZoneId.systemDefault())
 
 	@Provides
 	@Reusable
-	fun provideZoneIdProvider(): ZoneIdProvider {
-        return object : ZoneIdProvider {
-            override val zoneId: ZoneId
-                get() = ZoneOffset.systemDefault()
-        }
-    }
+	fun provideNow(timeProvider: TimeProvider): Single<Instant> = timeProvider.getTime()
 
 }

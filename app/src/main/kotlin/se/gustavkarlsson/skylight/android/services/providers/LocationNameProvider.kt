@@ -1,9 +1,9 @@
 package se.gustavkarlsson.skylight.android.services.providers
 
-import io.reactivex.Maybe
+import com.hadisatrio.optional.Optional
 import io.reactivex.Single
-import se.gustavkarlsson.skylight.android.services.Location
+import se.gustavkarlsson.skylight.android.entities.Location
 
 interface LocationNameProvider {
-	fun getLocationName(location: Single<Location>): Maybe<String>
+	fun get(location: Single<Location>): Single<Optional<String>>
 }

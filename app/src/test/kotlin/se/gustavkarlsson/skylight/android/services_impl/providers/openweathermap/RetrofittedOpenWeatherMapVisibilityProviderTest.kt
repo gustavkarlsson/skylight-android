@@ -17,7 +17,7 @@ import org.robolectric.RobolectricTestRunner
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import se.gustavkarlsson.skylight.android.services.Location
+import se.gustavkarlsson.skylight.android.entities.Location
 import java.nio.charset.Charset
 
 @RunWith(RobolectricTestRunner::class)
@@ -68,9 +68,9 @@ class RetrofittedOpenWeatherMapVisibilityProviderTest {
 			.addConverterFactory(GsonConverterFactory.create())
 			.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 			.build()
-			.create(OpenWeatherMapService::class.java), "fake-app-id")
+			.create(OpenWeatherMapApi::class.java), "fake-app-id")
 
-		val cloudiness = runBlocking { service.getVisibility(Single.just(Location(0.0, 0.0))).blockingGet().cloudPercentage }
+		val cloudiness = runBlocking { service.get(Single.just(Location(0.0, 0.0))).blockingGet().cloudPercentage }
 
 		assertThat(cloudiness).isEqualTo(68)
 	}

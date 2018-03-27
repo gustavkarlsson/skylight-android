@@ -7,7 +7,7 @@ import org.jetbrains.anko.AnkoLogger
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.services.providers.KpIndexProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.kpindex.KpIndexService
+import se.gustavkarlsson.skylight.android.services_impl.providers.kpindex.KpIndexApi
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import javax.inject.Inject
 
@@ -15,16 +15,16 @@ import javax.inject.Inject
 class RetrofittedKpIndexProvider
 @Inject
 constructor(
-	private val service: KpIndexService
+	private val api: KpIndexApi
 ) : KpIndexProvider, AnkoLogger {
 
-	override fun getKpIndex(): Single<KpIndex> {
-		return service.get()
+	override fun get(): Single<KpIndex> {
+		return api.get()
 			.subscribeOn(Schedulers.io())
 			.onErrorResumeNext {
 				Single.error(UserFriendlyException(R.string.error_could_not_determine_kp_index, it))
 			}.map {
-			KpIndex(it.value.toDouble())
-		}
+				KpIndex(it.value.toDouble())
+			}
 	}
 }

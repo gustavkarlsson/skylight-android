@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.view_aurora_factor.view.*
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.services.evaluation.Chance
+import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.util.ChanceToColorConverter
 
 

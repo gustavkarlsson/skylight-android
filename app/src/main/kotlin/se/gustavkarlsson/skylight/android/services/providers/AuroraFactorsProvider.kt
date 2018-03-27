@@ -1,9 +1,10 @@
 package se.gustavkarlsson.skylight.android.services.providers
 
 import io.reactivex.Single
+import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.AuroraFactors
-import se.gustavkarlsson.skylight.android.services.Location
+import se.gustavkarlsson.skylight.android.entities.Location
 
 interface AuroraFactorsProvider {
-	fun getAuroraFactors(location: Single<Location>): Single<AuroraFactors>
+	fun get(time: Single<Instant>, location: Single<Location>): Single<AuroraFactors>
 }

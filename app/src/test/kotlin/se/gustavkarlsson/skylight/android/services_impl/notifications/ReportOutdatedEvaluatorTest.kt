@@ -13,7 +13,7 @@ import org.threeten.bp.ZoneOffset
 import org.threeten.bp.temporal.ChronoUnit.DAYS
 import org.threeten.bp.temporal.ChronoUnit.HOURS
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.util.ZoneIdProvider
+import se.gustavkarlsson.skylight.android.services.providers.ZoneIdProvider
 
 @RunWith(MockitoJUnitRunner::class)
 class ReportOutdatedEvaluatorTest {

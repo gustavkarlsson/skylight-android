@@ -13,8 +13,8 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.mockito.any
-import se.gustavkarlsson.skylight.android.services.evaluation.Chance
-import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.entities.Chance
+import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 
 @RunWith(RobolectricTestRunner::class)
 class AuroraReportNotifierTest {

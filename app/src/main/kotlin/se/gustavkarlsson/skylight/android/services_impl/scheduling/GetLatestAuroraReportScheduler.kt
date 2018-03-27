@@ -22,18 +22,21 @@ class GetLatestAuroraReportScheduler(
 				.setRequirementsEnforced(true)
 				.build()
 				.schedule()
-			debug("Scheduling update to run periodically")
+			debug("Scheduling periodic updates")
 		}
 	}
 
 	override fun unschedule() {
 		if (isScheduled()) {
 			JobManager.instance().cancelAllForTag(UPDATE_JOB_TAG)
+			debug("Unscheduling periodic updates")
 		}
 	}
 
 	private fun isScheduled(): Boolean  {
 		val jobRequests = JobManager.instance().getAllJobRequestsForTag(UPDATE_JOB_TAG)
-		return !jobRequests.isEmpty()
+		val scheduled = !jobRequests.isEmpty()
+		debug(if (scheduled) "updates are scheduled" else "updates are not scheduled")
+		return scheduled
 	}
 }

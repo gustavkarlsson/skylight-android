@@ -1,8 +1,12 @@
 package se.gustavkarlsson.skylight.android.dagger.components
 
 import dagger.Component
-import se.gustavkarlsson.skylight.android.actions.SetupNotifications
 import se.gustavkarlsson.skylight.android.dagger.modules.*
+import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModelFactory
+import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceViewModelFactory
+import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorsViewModelFactory
+import se.gustavkarlsson.skylight.android.services.Scheduler
+import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob
 import javax.inject.Singleton
 
@@ -10,26 +14,31 @@ import javax.inject.Singleton
 	ContextModule::class,
 	TimeModule::class,
 	SystemServiceModule::class,
-	GeocoderModule::class,
 	SharedPreferencesModule::class,
 	SettingsModule::class,
 	NotifierModule::class,
 	UpdateSchedulerModule::class,
-	SetupNotificationsModule::class,
 	EvaluationModule::class,
-	AuroraReportStreamModule::class,
-	UserFriendlyExceptionStreamModule::class,
-	LocationProviderModule::class,
+	AuroraReportModule::class,
+	CacheModule::class,
+	LocationModule::class,
 	AuroraFactorsModule::class,
-	NewAuroraReportProviderModule::class,
+	DarknessModule::class,
+	VisibilityModule::class,
+	GeomagLocationModule::class,
+	KpIndexModule::class,
 	LocationNameProviderModule::class,
-	GetNewAuroraReportModule::class
+	ViewModelsModule::class,
+	FormattingModule::class,
+	LocalizationModule::class
 ))
 @Singleton
 interface ApplicationComponent {
-	fun getSetupNotifications(): SetupNotifications
 	fun getUpdateJob(): UpdateJob
 
-	fun getMainActivityComponent(activityModule: ActivityModule): MainActivityComponent
-	fun getSettingsActivityComponent(): SettingsActivityComponent
+	fun getAuroraChanceViewModelFactory(): AuroraChanceViewModelFactory
+	fun getAuroraFactorsViewModelFactory(): AuroraFactorsViewModelFactory
+	fun getMainViewModelFactory(): MainViewModelFactory
+	fun getSettings(): Settings
+	fun getScheduler(): Scheduler
 }

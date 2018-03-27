@@ -17,7 +17,7 @@ import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Visibility
 import se.gustavkarlsson.skylight.android.mockito.any
-import se.gustavkarlsson.skylight.android.services.Location
+import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.providers.DarknessProvider
 import se.gustavkarlsson.skylight.android.services.providers.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.services.providers.KpIndexProvider
@@ -59,10 +59,10 @@ class AggregatingAuroraFactorsProviderTest {
 		visibility = Single.just(Visibility(50))
 		darkness = Single.just(Darkness(30.0))
 		geomagLocation = Single.just(GeomagLocation(55.3))
-		whenever(mockKpIndexProvider.getKpIndex()).thenReturn(kpIndex)
-		whenever(mockVisibilityProvider.getVisibility(any())).thenReturn(visibility)
-		whenever(mockDarknessProvider.getDarkness(any(), any())).thenReturn(darkness)
-		whenever(mockGeomagLocationProvider.getGeomagLocation(any())).thenReturn(geomagLocation)
+		whenever(mockKpIndexProvider.get()).thenReturn(kpIndex)
+		whenever(mockVisibilityProvider.get(any())).thenReturn(visibility)
+		whenever(mockDarknessProvider.get(any(), any())).thenReturn(darkness)
+		whenever(mockGeomagLocationProvider.get(any())).thenReturn(geomagLocation)
 		impl = AggregatingAuroraFactorsProvider(
 			mockKpIndexProvider,
 			mockVisibilityProvider,
@@ -73,13 +73,13 @@ class AggregatingAuroraFactorsProviderTest {
 
 	@Test
 	fun evaluatesFactorsConcurrently() {
-		whenever(mockKpIndexProvider.getKpIndex()).thenReturn(kpIndex.delayedBy100Millis())
-		whenever(mockVisibilityProvider.getVisibility(any())).thenReturn(visibility.delayedBy100Millis())
-		whenever(mockDarknessProvider.getDarkness(any(), any())).thenReturn(darkness.delayedBy100Millis())
-		whenever(mockGeomagLocationProvider.getGeomagLocation(any())).thenReturn(geomagLocation.delayedBy100Millis())
+		whenever(mockKpIndexProvider.get()).thenReturn(kpIndex.delayedBy100Millis())
+		whenever(mockVisibilityProvider.get(any())).thenReturn(visibility.delayedBy100Millis())
+		whenever(mockDarknessProvider.get(any(), any())).thenReturn(darkness.delayedBy100Millis())
+		whenever(mockGeomagLocationProvider.get(any())).thenReturn(geomagLocation.delayedBy100Millis())
 
 		val timeTakenMillis = measureTimeMillis {
-			impl.getAuroraFactors(location).blockingGet()
+			impl.get(location).blockingGet()
 		}
 
 		assertThat(timeTakenMillis).isBetween(100, 199)

@@ -5,7 +5,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.graphics.ColorUtils
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.services.evaluation.Chance
+import se.gustavkarlsson.skylight.android.entities.Chance
 import javax.inject.Inject
 
 @Reusable

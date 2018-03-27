@@ -1,86 +1,85 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.jakewharton.rxbinding2.view.clicks
 import kotlinx.android.synthetic.main.fragment_aurora_factors.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.okButton
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.dagger.FRAGMENT_ROOT_NAME
-import se.gustavkarlsson.skylight.android.dagger.modules.FragmentRootViewModule
-import se.gustavkarlsson.skylight.android.extensions.observe
-import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
-import se.gustavkarlsson.skylight.android.gui.viewmodels.AuroraReportViewModel
-import javax.inject.Inject
-import javax.inject.Named
+import se.gustavkarlsson.skylight.android.Skylight
+import se.gustavkarlsson.skylight.android.extensions.forUi
 
 class AuroraFactorFragment : Fragment() {
 
-    @Inject
-    @field:Named(FRAGMENT_ROOT_NAME)
-    lateinit var rootView: View
+	private val factory: AuroraFactorsViewModelFactory by lazy {
+		Skylight.instance.component.getAuroraFactorsViewModelFactory()
+	}
 
-	@Inject
-	lateinit var auroraReports: AuroraReportViewModel
+	private val darknessViewModel: DarknessViewModel by lazy {
+		ViewModelProviders.of(this, factory).get(DarknessViewModel::class.java)
+	}
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        (activity as MainActivity).component
-                .getAuroraFactorsFragmentComponent(FragmentRootViewModule(inflater, container, R.layout.fragment_aurora_factors))
-                .inject(this)
-        return rootView
-    }
+	private val geomagLocationViewModel: GeomagLocationViewModel by lazy {
+		ViewModelProviders.of(this, factory).get(GeomagLocationViewModel::class.java)
+	}
 
-	override fun onActivityCreated(savedInstanceState: Bundle?) {
-		super.onActivityCreated(savedInstanceState)
+	private val kpIndexViewModel: KpIndexViewModel by lazy {
+		ViewModelProviders.of(this, factory).get(KpIndexViewModel::class.java)
+	}
+
+	private val visibilityViewModel: VisibilityViewModel by lazy {
+		ViewModelProviders.of(this, factory).get(VisibilityViewModel::class.java)
+	}
+
+	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+		return inflater.inflate(R.layout.fragment_aurora_factors, container)
+	}
+
+	override fun onStart() {
+		super.onStart()
 		bindData()
 	}
 
 	private fun bindData() {
-		auroraReports.kpIndex.observe(this) {
-			kpIndex.value = it!!.value
-			kpIndex.chance = it.chance
-		}
-		auroraReports.location.observe(this) {
-			geomagLocation.value = it!!.value
-			geomagLocation.chance = it.chance
-		}
-		auroraReports.visibility.observe(this) {
-			visibility.value = it!!.value
-			visibility.chance = it.chance
-		}
-		auroraReports.darkness.observe(this) {
-			darkness.value = it!!.value
-			darkness.chance = it.chance
-		}
-
-		kpIndex.setOnClickListener {
-			toastFactor(R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc)
-		}
-
-		geomagLocation.setOnClickListener {
-			toastFactor(R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc)
-		}
-
-		visibility.setOnClickListener {
-			toastFactor(R.string.factor_visibility_title_full, R.string.factor_visibility_desc)
-		}
-
-		darkness.setOnClickListener {
-			toastFactor(R.string.factor_darkness_title_full, R.string.factor_darkness_desc)
-		}
+		bindFactor(darknessViewModel, darkness,
+			R.string.factor_darkness_title_full, R.string.factor_darkness_desc)
+		bindFactor(geomagLocationViewModel, geomagLocation,
+			R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc)
+		bindFactor(kpIndexViewModel, kpIndex,
+			R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc)
+		bindFactor(visibilityViewModel, visibility,
+			R.string.factor_visibility_title_full, R.string.factor_visibility_desc)
 	}
 
-	private fun toastFactor( // TODO extract
+	private fun bindFactor(viewModel: FactorViewModel<*>, view: AuroraFactorView, titleResourceId: Int, descriptionResourceId: Int) {
+		viewModel.value
+			.forUi(this)
+			.subscribe { view.value = it }
+
+		viewModel.chance
+			.forUi(this)
+			.subscribe { view.chance = it }
+
+		view.clicks()
+			.forUi(this)
+			.subscribe {
+				toastFactorInfo(titleResourceId, descriptionResourceId)
+			}
+	}
+
+	private fun toastFactorInfo(
 		titleResourceId: Int,
 		descriptionResourceId: Int) {
-		context!!.alert {
+		context?.alert {
 			iconResource = R.drawable.info_white_24dp
 			title = ctx.getString(titleResourceId)
 			message = ctx.getString(descriptionResourceId)
 			okButton { it.dismiss() }
-		}.show()
+		}?.show()
 	}
 }

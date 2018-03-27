@@ -4,10 +4,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import se.gustavkarlsson.skylight.android.entities.Visibility
-import se.gustavkarlsson.skylight.android.services.evaluation.Chance
-import se.gustavkarlsson.skylight.android.services.evaluation.Chance.Companion.IMPOSSIBLE
-import se.gustavkarlsson.skylight.android.services.evaluation.Chance.Companion.MAX
-import se.gustavkarlsson.skylight.android.services.evaluation.Chance.Companion.UNKNOWN
+import se.gustavkarlsson.skylight.android.entities.Chance
+import se.gustavkarlsson.skylight.android.entities.Chance.Companion.IMPOSSIBLE
+import se.gustavkarlsson.skylight.android.entities.Chance.Companion.MAX
+import se.gustavkarlsson.skylight.android.entities.Chance.Companion.UNKNOWN
 
 class VisibilityEvaluatorTest {
 

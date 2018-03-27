@@ -2,8 +2,7 @@ package se.gustavkarlsson.skylight.android.services_impl.evaluation
 
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.entities.*
-import se.gustavkarlsson.skylight.android.services.evaluation.Chance
-import se.gustavkarlsson.skylight.android.services.evaluation.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import javax.inject.Inject
 
 @Reusable

@@ -1,15 +1,29 @@
 package se.gustavkarlsson.skylight.android.dagger.modules
 
-import dagger.Binds
+import android.content.Context
+import android.content.SharedPreferences
+import com.f2prateek.rx.preferences2.RxSharedPreferences
 import dagger.Module
-import dagger.Reusable
+import dagger.Provides
 import se.gustavkarlsson.skylight.android.services.Settings
-import se.gustavkarlsson.skylight.android.services_impl.SharedPreferencesSettings
+import se.gustavkarlsson.skylight.android.services_impl.RxPreferencesSettings
+import javax.inject.Singleton
+
 
 @Module
-abstract class SettingsModule {
+class SettingsModule {
 
-    @Binds
-    @Reusable
-    abstract fun bindSettings(impl: SharedPreferencesSettings): Settings
+	@Provides
+	@Singleton
+	fun provideRxSharedPreferences(sharedPreferences: SharedPreferences): RxSharedPreferences =
+		RxSharedPreferences.create(sharedPreferences)
+
+	@Provides
+	@Singleton
+	fun provideSettings(context: Context, rxSharedPreferences: RxSharedPreferences): Settings {
+		return RxPreferencesSettings(
+			context,
+			rxSharedPreferences
+		)
+	}
 }

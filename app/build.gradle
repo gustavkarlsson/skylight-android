@@ -5,7 +5,7 @@ apply plugin: "kotlin-android-extensions"
 
 android {
 	compileSdkVersion 27
-	buildToolsVersion "27.0.2"
+	buildToolsVersion "27.0.3"
 
 	sourceSets {
 		main.java.srcDirs += "src/main/kotlin"
@@ -39,6 +39,8 @@ android {
 		versionCode 1
 		versionName "1.0"
 		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+		multiDexEnabled true
+		// TODO https://developer.android.com/studio/build/multidex.html#dev-build
 	}
 
 	signingConfigs {
@@ -92,10 +94,14 @@ dependencies {
 		mockito_version = "2.10.0"
 		mockito_kotlin_version = "1.5.0"
 		commons_io_version = "2.4" // Don't upgrade, as later versions require Java 6 libs
+		rxbinding_version = "2.1.1"
+		autodispose_version = "0.6.1"
 	}
+	implementation "com.android.support:multidex:1.0.1"
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 	implementation "com.android.support:appcompat-v7:$android_support_version"
 	implementation "com.android.support:design:$android_support_version"
+	implementation "com.android.support:support-annotations:$android_support_version"
 	implementation "com.android.support.constraint:constraint-layout:1.0.2"
 	implementation "com.google.android.gms:play-services-location:$google_play_services_version"
 	implementation "com.google.android.gms:play-services-gcm:$google_play_services_version"
@@ -105,6 +111,7 @@ dependencies {
 	implementation "net.e175.klaus:solarpositioning:0.0.9"
 	implementation "com.vincentbrison.openlibraries.android:dualcache:3.1.1"
 	implementation "com.jakewharton.threetenabp:threetenabp:1.0.5"
+	implementation "com.hadisatrio:Optional:v1.0.1"
 
 	// Anko
 	implementation "org.jetbrains.anko:anko-commons:$anko_version"
@@ -120,15 +127,32 @@ dependencies {
 	kapt "com.google.dagger:dagger-compiler:$dagger_version"
 	compileOnly "javax.annotation:jsr250-api:1.0"
 
-	// Reactive
+	// ReactiveX
 	implementation "io.reactivex.rxjava2:rxjava:2.1.8"
 	implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
 	implementation "io.reactivex.rxjava2:rxkotlin:2.2.0"
+
+	// Rx misc
 	implementation "com.jakewharton.rxrelay2:rxrelay:2.0.0"
+	implementation "com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar"
+	implementation "pl.charmas.android:android-reactive-location2:2.1@aar"
+	implementation "com.f2prateek.rx.preferences2:rx-preferences:2.0.0-RC3"
+
+	// RxBinding
+	implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxbinding_version"
+	implementation "com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:$rxbinding_version"
+	implementation "com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:$rxbinding_version"
+	implementation "com.jakewharton.rxbinding2:rxbinding-design-kotlin:$rxbinding_version"
+	implementation "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:$rxbinding_version"
+	implementation "com.jakewharton.rxbinding2:rxbinding-leanback-v17-kotlin:$rxbinding_version"
+
+	// AutoDispose
+	implementation "com.uber.autodispose:autodispose-kotlin:$autodispose_version"
+	implementation "com.uber.autodispose:autodispose-android-kotlin:$autodispose_version"
+	implementation "com.uber.autodispose:autodispose-android-archcomponents-kotlin:$autodispose_version"
 
 	// Lifecycle
-	implementation "android.arch.lifecycle:extensions:1.0.0"
-	implementation "android.arch.lifecycle:reactivestreams:1.0.0"
+	implementation "android.arch.lifecycle:extensions:1.1.0"
 
 
 	// Testing

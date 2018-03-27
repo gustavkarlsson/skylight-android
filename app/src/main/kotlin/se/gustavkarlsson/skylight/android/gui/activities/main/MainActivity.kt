@@ -1,57 +1,28 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main
 
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import io.reactivex.schedulers.Schedulers
+import com.jakewharton.rxbinding2.support.v4.widget.refreshes
+import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
-import se.gustavkarlsson.skylight.android.actions.GetNewAuroraReport
-import se.gustavkarlsson.skylight.android.actions.PresentingErrors
-import se.gustavkarlsson.skylight.android.actions.SetUpdateSchedule
-import se.gustavkarlsson.skylight.android.dagger.components.MainActivityComponent
-import se.gustavkarlsson.skylight.android.dagger.modules.ActivityModule
-import se.gustavkarlsson.skylight.android.extensions.observe
+import se.gustavkarlsson.skylight.android.extensions.forUi
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
-import se.gustavkarlsson.skylight.android.gui.viewmodels.AuroraReportViewModel
-import javax.inject.Inject
 
 class MainActivity : AuroraRequirementsCheckingActivity() {
 
-	@Inject
-	lateinit var swipeToRefreshController: SwipeToRefreshController
-
-	@Inject
-	lateinit var presentingErrors: PresentingErrors
-
-	@Inject
-	lateinit var setUpdateSchedule: SetUpdateSchedule
-
-	@Inject
-	lateinit var auroraReportViewModel: AuroraReportViewModel
-
-	@Inject
-	lateinit var getNewAuroraReport: GetNewAuroraReport
-
-	lateinit var component: MainActivityComponent
-		private set
+	private val viewModel: MainViewModel by lazy {
+		val factory = Skylight.instance.component.getMainViewModelFactory()
+		ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
+	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		component = Skylight.instance.component.getMainActivityComponent(ActivityModule(this))
 		setContentView(R.layout.activity_main)
-		component.inject(this)
-		bindData()
-	}
-
-	private fun bindData() {
-		auroraReportViewModel.locationName.observe(this) {
-			it?.let {
-				supportActionBar!!.title = it
-			}
-		}
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -70,22 +41,26 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 
 	public override fun onStart() {
 		super.onStart()
-		presentingErrors.start()
-		swipeToRefreshController.disable()
 		ensureRequirementsMet()
+		bindData()
 	}
-
 	override fun onRequirementsMet() {
-		setUpdateSchedule()
-		swipeToRefreshController.enable()
-		getNewAuroraReport() // TODO Call only when necessary
-			.subscribeOn(Schedulers.io())
-			.onErrorComplete()
-			.subscribe()
+		viewModel.refresh.accept(Unit)
 	}
 
-	override fun onStop() {
-		super.onStop()
-		presentingErrors.stop()
+	private fun bindData() {
+		viewModel.locationName
+			.forUi(this)
+			.subscribe(supportActionBar!!::setTitle)
+
+		viewModel.refreshFinished
+			.forUi(this)
+			.subscribe {
+				swipeRefreshLayout.isRefreshing = false
+			}
+
+		swipeRefreshLayout.refreshes()
+			.forUi(this)
+			.subscribe(viewModel.refresh)
 	}
 }

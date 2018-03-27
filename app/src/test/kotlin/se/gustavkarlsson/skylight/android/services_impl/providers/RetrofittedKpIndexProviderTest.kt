@@ -16,7 +16,7 @@ import org.robolectric.RobolectricTestRunner
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import se.gustavkarlsson.skylight.android.services_impl.providers.kpindex.KpIndexService
+import se.gustavkarlsson.skylight.android.services_impl.providers.kpindex.KpIndexApi
 
 
 @RunWith(RobolectricTestRunner::class)
@@ -67,9 +67,9 @@ class RetrofittedKpIndexProviderTest {
 			.addConverterFactory(GsonConverterFactory.create())
 			.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 			.build()
-			.create(KpIndexService::class.java))
+			.create(KpIndexApi::class.java))
 
-		val kpIndex = runBlocking { service.getKpIndex().blockingGet().value }
+		val kpIndex = runBlocking { service.get().blockingGet().value }
 
 		assertThat(kpIndex).isCloseTo(1.33, within(0.01))
 	}

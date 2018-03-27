@@ -1,15 +1,19 @@
 package se.gustavkarlsson.skylight.android.extensions
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.LiveDataReactiveStreams
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.Observable
+import io.reactivex.FlowableTransformer
+import org.reactivestreams.Publisher
+import se.gustavkarlsson.skylight.android.services.SingletonCache
 
-fun <T> Observable<T>.toLiveData(backpressureStrategy: BackpressureStrategy) : LiveData<T> {
-	return toFlowable(backpressureStrategy).toLiveData()
+
+fun <T> Flowable<T>.singletonCache(cache: SingletonCache<T>): Flowable<T> {
+	return this.compose(SingletonCachingTransformer(cache))
 }
 
-fun <T> Flowable<T>.toLiveData() : LiveData<T> {
-	return LiveDataReactiveStreams.fromPublisher(this)
+private class SingletonCachingTransformer<T>(private val cache: SingletonCache<T>) :
+	FlowableTransformer<T, T> {
+	override fun apply(upstream: Flowable<T>): Publisher<T> {
+		return Flowable.concat(Flowable.fromCallable { cache.value }, upstream)
+			.doOnNext { cache.value = it }
+	}
 }

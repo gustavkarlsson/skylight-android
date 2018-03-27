@@ -14,7 +14,7 @@ import org.mockito.junit.MockitoJUnitRunner
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.mockito.any
 import se.gustavkarlsson.skylight.android.services.Notifier
-import se.gustavkarlsson.skylight.android.services_impl.notifications.AuroraReportNotificationEvaluator
+import se.gustavkarlsson.skylight.android.services_impl.notifications.AuroraReportNotificationDecider
 
 @RunWith(MockitoJUnitRunner::class)
 class SetupNotificationsFromObservableTest {
@@ -24,7 +24,7 @@ class SetupNotificationsFromObservableTest {
 	private lateinit var observable: Observable<AuroraReport>
 
 	@Mock
-	private lateinit var mockEvaluator: AuroraReportNotificationEvaluator
+	private lateinit var mockDecider: AuroraReportNotificationDecider
 
 	@Mock
 	private lateinit var mockNotifier: Notifier<AuroraReport>
@@ -38,7 +38,7 @@ class SetupNotificationsFromObservableTest {
 	fun setUp() {
 		relay = PublishRelay.create<AuroraReport>()
 		observable = relay
-		impl = SetupNotificationsFromObservable(observable, mockEvaluator, mockNotifier)
+		impl = SetupNotificationsFromObservable(observable, mockDecider, mockNotifier)
 	}
 
 	@Test(expected = IllegalStateException::class)
@@ -49,7 +49,7 @@ class SetupNotificationsFromObservableTest {
 
 	@Test
 	fun whenSubscribedAndShouldNotifyCallNotify() {
-		whenever(mockEvaluator.shouldNotify(mockReport)).thenReturn(true)
+		whenever(mockDecider.shouldNotify(mockReport)).thenReturn(true)
 
 		impl()
 		relay.accept(mockReport)
@@ -59,17 +59,17 @@ class SetupNotificationsFromObservableTest {
 
 	@Test
 	fun whenSubscribedAndShouldNotifyCallOnNotified() {
-		whenever(mockEvaluator.shouldNotify(mockReport)).thenReturn(true)
+		whenever(mockDecider.shouldNotify(mockReport)).thenReturn(true)
 
 		impl()
 		relay.accept(mockReport)
 
-		verify(mockEvaluator).onNotified(mockReport)
+		verify(mockDecider).onNotified(mockReport)
 	}
 
 	@Test
 	fun whenSubscribedAndShouldNotNotifyNotifyIsNotCalled() {
-		whenever(mockEvaluator.shouldNotify(mockReport)).thenReturn(false)
+		whenever(mockDecider.shouldNotify(mockReport)).thenReturn(false)
 
 		impl()
 		relay.accept(mockReport)
@@ -79,11 +79,11 @@ class SetupNotificationsFromObservableTest {
 
 	@Test
 	fun whenSubscribedAndShouldNotNotifyOnNotifiedIsNotCalled() {
-		whenever(mockEvaluator.shouldNotify(mockReport)).thenReturn(false)
+		whenever(mockDecider.shouldNotify(mockReport)).thenReturn(false)
 
 		impl()
 		relay.accept(mockReport)
 
-		verify(mockEvaluator, never()).onNotified(any())
+		verify(mockDecider, never()).onNotified(any())
 	}
 }

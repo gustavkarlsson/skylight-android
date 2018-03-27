@@ -1,9 +1,8 @@
 package se.gustavkarlsson.skylight.android.services.providers
 
 import io.reactivex.Single
-import se.gustavkarlsson.skylight.android.services.Location
-
+import se.gustavkarlsson.skylight.android.entities.Location
 
 interface LocationProvider {
-	fun getLocation(): Single<Location>
+	fun get(): Single<Location>
 }

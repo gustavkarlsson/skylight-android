@@ -1,31 +1,34 @@
 package se.gustavkarlsson.skylight.android.services_impl.providers
 
 import io.reactivex.Single
-import org.threeten.bp.Clock
 import se.gustavkarlsson.skylight.android.entities.*
-import se.gustavkarlsson.skylight.android.extensions.now
 import se.gustavkarlsson.skylight.android.services.DebugSettings
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
+import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
 import java.util.concurrent.TimeUnit
 
 class DebugAuroraReportProvider(
 	private val realProvider: AuroraReportProvider,
 	private val debugSettings: DebugSettings,
-	private val clock: Clock
+	private val timeProvider: TimeProvider
 ) : AuroraReportProvider {
 
 	override fun get(): Single<AuroraReport> {
-		if (debugSettings.overrideValues) {
-			return Single.fromCallable {
-				val auroraFactors = createAuroraFactors()
-				AuroraReport(clock.now, "Fake Location", auroraFactors)
-			}.delay(5, TimeUnit.SECONDS)
+		return Single.fromCallable {
+			if (debugSettings.overrideValues) {
+				val auroraFactors = createDebugFactors()
+				val locationName = "Fake Location"
+				val timestamp = timeProvider.getTime().blockingGet()
+				Single.just(AuroraReport(timestamp, locationName, auroraFactors))
+					.delay(5, TimeUnit.SECONDS)
+			} else {
+				realProvider.get()
+			}
+		}.flatMap { it }
 
-		}
-		return realProvider.get()
 	}
 
-	private fun createAuroraFactors(): AuroraFactors {
+	private fun createDebugFactors(): AuroraFactors {
 		val kpIndex = KpIndex(debugSettings.kpIndex)
 		val geomagLocation = GeomagLocation(debugSettings.geomagLatitude)
 		val darkness = Darkness(debugSettings.sunZenithAngle)

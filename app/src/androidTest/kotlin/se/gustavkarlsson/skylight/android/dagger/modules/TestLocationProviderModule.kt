@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.dagger.modules
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import se.gustavkarlsson.skylight.android.services.Location
+import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 import se.gustavkarlsson.skylight.android.test.TestLocationProvider
 
