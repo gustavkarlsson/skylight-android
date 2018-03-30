@@ -12,6 +12,7 @@ import se.gustavkarlsson.skylight.android.Skylight
 import se.gustavkarlsson.skylight.android.extensions.forUi
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
+import timber.log.Timber
 
 class MainActivity : AuroraRequirementsCheckingActivity() {
 
@@ -45,21 +46,24 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 		bindData()
 	}
 	override fun onRequirementsMet() {
+		Timber.i("Refreshing...")
 		viewModel.refresh.accept(Unit)
 	}
 
 	private fun bindData() {
 		viewModel.locationName
+			.doOnNext { Timber.d("Updating locationName view: %s", it) }
 			.forUi(this)
 			.subscribe(supportActionBar!!::setTitle)
 
 		viewModel.refreshFinished
+			.doOnNext { Timber.i("Finished refreshing") }
+			.map { false }
 			.forUi(this)
-			.subscribe {
-				swipeRefreshLayout.isRefreshing = false
-			}
+			.subscribe(swipeRefreshLayout::setRefreshing)
 
 		swipeRefreshLayout.refreshes()
+			.doOnNext { Timber.i("Refreshing...") }
 			.forUi(this)
 			.subscribe(viewModel.refresh)
 	}

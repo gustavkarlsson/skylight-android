@@ -13,6 +13,7 @@ import org.jetbrains.anko.okButton
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
 import se.gustavkarlsson.skylight.android.extensions.forUi
+import timber.log.Timber
 
 class AuroraFactorFragment : Fragment() {
 
@@ -36,7 +37,11 @@ class AuroraFactorFragment : Fragment() {
 		ViewModelProviders.of(this, factory).get(VisibilityViewModel::class.java)
 	}
 
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+	override fun onCreateView(
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View {
 		return inflater.inflate(R.layout.fragment_aurora_factors, container)
 	}
 
@@ -46,22 +51,41 @@ class AuroraFactorFragment : Fragment() {
 	}
 
 	private fun bindData() {
-		bindFactor(darknessViewModel, darkness,
-			R.string.factor_darkness_title_full, R.string.factor_darkness_desc)
-		bindFactor(geomagLocationViewModel, geomagLocation,
-			R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc)
-		bindFactor(kpIndexViewModel, kpIndex,
-			R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc)
-		bindFactor(visibilityViewModel, visibility,
-			R.string.factor_visibility_title_full, R.string.factor_visibility_desc)
+		bindFactor(
+			darknessViewModel, darkness,
+			R.string.factor_darkness_title_full, R.string.factor_darkness_desc, "darkness"
+		)
+		bindFactor(
+			geomagLocationViewModel,
+			geomagLocation,
+			R.string.factor_geomag_location_title_full,
+			R.string.factor_geomag_location_desc,
+			"geomagLocation"
+		)
+		bindFactor(
+			kpIndexViewModel, kpIndex,
+			R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc, "kpIndex"
+		)
+		bindFactor(
+			visibilityViewModel, visibility,
+			R.string.factor_visibility_title_full, R.string.factor_visibility_desc, "visibility"
+		)
 	}
 
-	private fun bindFactor(viewModel: FactorViewModel<*>, view: AuroraFactorView, titleResourceId: Int, descriptionResourceId: Int) {
+	private fun bindFactor(
+		viewModel: FactorViewModel<*>,
+		view: AuroraFactorView,
+		titleResourceId: Int,
+		descriptionResourceId: Int,
+		factorDebugName: String
+	) {
 		viewModel.value
+			.doOnNext { Timber.d("Updating %s value view: %s", factorDebugName, it) }
 			.forUi(this)
 			.subscribe { view.value = it }
 
 		viewModel.chance
+			.doOnNext { Timber.d("Updating %s chance view: %s", factorDebugName, it) }
 			.forUi(this)
 			.subscribe { view.chance = it }
 
@@ -74,7 +98,8 @@ class AuroraFactorFragment : Fragment() {
 
 	private fun toastFactorInfo(
 		titleResourceId: Int,
-		descriptionResourceId: Int) {
+		descriptionResourceId: Int
+	) {
 		context?.alert {
 			iconResource = R.drawable.info_white_24dp
 			title = ctx.getString(titleResourceId)

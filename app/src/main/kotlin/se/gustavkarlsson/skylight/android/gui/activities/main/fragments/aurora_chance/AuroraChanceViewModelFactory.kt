@@ -7,7 +7,6 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.dagger.RIGHT_NOW_NAME
 import se.gustavkarlsson.skylight.android.dagger.RIGHT_NOW_THRESHOLD_NAME
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
@@ -20,7 +19,6 @@ class AuroraChanceViewModelFactory
 @Inject
 constructor(
 	private val auroraReports: Flowable<AuroraReport>,
-	@Named(RIGHT_NOW_NAME) private val rightNowText: CharSequence,
 	private val auroraChanceEvaluator: ChanceEvaluator<AuroraReport>,
 	private val relativeTimeFormatter: RelativeTimeFormatter,
 	private val now: Single<Instant>,
@@ -30,8 +28,13 @@ constructor(
 	@Suppress("UNCHECKED_CAST")
 	override fun <T : ViewModel?> create(modelClass: Class<T>): T {
 		require(modelClass == CLASS) { "Unsupported ViewModel class: $modelClass, expected: $CLASS" }
-		return AuroraChanceViewModel(auroraReports, rightNowText,
-			auroraChanceEvaluator, relativeTimeFormatter, now, rightNowThreshold) as T
+		return AuroraChanceViewModel(
+			auroraReports,
+			auroraChanceEvaluator,
+			relativeTimeFormatter,
+			now,
+			rightNowThreshold
+		) as T
 	}
 
 	companion object {

@@ -5,7 +5,6 @@ import com.hadisatrio.optional.Optional
 import io.reactivex.Single
 import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
-import org.jetbrains.anko.AnkoLogger
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.AuroraFactors
@@ -19,7 +18,7 @@ class RealAuroraReportProvider(
 	private val auroraFactorsProvider: AuroraFactorsProvider,
 	private val locationNameProvider: LocationNameProvider,
 	private val timeProvider: TimeProvider
-) : AuroraReportProvider, AnkoLogger {
+) : AuroraReportProvider {
 
 	override fun get(): Single<AuroraReport> {
 		return Single.fromCallable {

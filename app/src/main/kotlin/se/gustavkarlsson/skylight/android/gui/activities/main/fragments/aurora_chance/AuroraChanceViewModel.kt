@@ -13,11 +13,10 @@ import java.util.concurrent.TimeUnit
 
 class AuroraChanceViewModel(
 	auroraReports: Flowable<AuroraReport>,
-	rightNowText: CharSequence,
 	auroraChanceEvaluator: ChanceEvaluator<AuroraReport>,
-	private val relativeTimeFormatter: RelativeTimeFormatter,
-	private val now: Single<Instant>,
-	private val nowTextThreshold: Duration
+	relativeTimeFormatter: RelativeTimeFormatter,
+	now: Single<Instant>,
+	nowTextThreshold: Duration
 ) : ViewModel() {
 
 	private val timestamps = auroraReports

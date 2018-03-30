@@ -7,6 +7,11 @@ import se.gustavkarlsson.skylight.android.dagger.components.ApplicationComponent
 import se.gustavkarlsson.skylight.android.dagger.components.DaggerApplicationComponent
 import se.gustavkarlsson.skylight.android.dagger.modules.ContextModule
 import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob
+import se.gustavkarlsson.skylight.android.util.NullTree
+import timber.log.Timber
+import timber.log.Timber.DebugTree
+
+
 
 class Skylight : MultiDexApplication() {
 
@@ -23,8 +28,17 @@ class Skylight : MultiDexApplication() {
     }
 
 	private fun bootstrap() {
+		setupLogging()
 		AndroidThreeTen.init(this)
 		initJobManager()
+	}
+
+	private fun setupLogging() {
+		if (BuildConfig.DEBUG) {
+			Timber.plant(DebugTree())
+		} else {
+			Timber.plant(NullTree())
+		}
 	}
 
 	private fun initJobManager() {

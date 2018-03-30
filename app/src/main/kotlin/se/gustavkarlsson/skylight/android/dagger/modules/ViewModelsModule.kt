@@ -7,17 +7,11 @@ import dagger.Reusable
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.dagger.DEFAULT_LOCATION_NAME
-import se.gustavkarlsson.skylight.android.dagger.RIGHT_NOW_NAME
 import se.gustavkarlsson.skylight.android.dagger.RIGHT_NOW_THRESHOLD_NAME
 import javax.inject.Named
 
 @Module
 class ViewModelsModule {
-
-	@Provides
-	@Reusable
-	@Named(RIGHT_NOW_NAME)
-	fun provideRightNowText(context: Context): CharSequence = context.getText(R.string.right_now)
 
 	@Provides
 	@Reusable

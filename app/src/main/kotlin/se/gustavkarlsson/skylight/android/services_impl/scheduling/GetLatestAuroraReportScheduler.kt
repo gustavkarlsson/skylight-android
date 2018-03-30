@@ -2,16 +2,15 @@ package se.gustavkarlsson.skylight.android.services_impl.scheduling
 
 import com.evernote.android.job.JobManager
 import com.evernote.android.job.JobRequest
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.debug
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.services.Scheduler
 import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob.Companion.UPDATE_JOB_TAG
+import timber.log.Timber
 
 class GetLatestAuroraReportScheduler(
 	private val scheduleInterval: Duration,
 	private val scheduleFlex: Duration
-) : Scheduler, AnkoLogger {
+) : Scheduler {
 
 	override fun schedule() {
 		if(!isScheduled()) {
@@ -22,21 +21,21 @@ class GetLatestAuroraReportScheduler(
 				.setRequirementsEnforced(true)
 				.build()
 				.schedule()
-			debug("Scheduling periodic updates")
+			Timber.d("Scheduling periodic updates")
 		}
 	}
 
 	override fun unschedule() {
 		if (isScheduled()) {
 			JobManager.instance().cancelAllForTag(UPDATE_JOB_TAG)
-			debug("Unscheduling periodic updates")
+			Timber.d("Unscheduling periodic updates")
 		}
 	}
 
 	private fun isScheduled(): Boolean  {
 		val jobRequests = JobManager.instance().getAllJobRequestsForTag(UPDATE_JOB_TAG)
 		val scheduled = !jobRequests.isEmpty()
-		debug(if (scheduled) "updates are scheduled" else "updates are not scheduled")
+		Timber.d(if (scheduled) "updates are scheduled" else "updates are not scheduled")
 		return scheduled
 	}
 }

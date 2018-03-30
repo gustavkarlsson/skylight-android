@@ -9,11 +9,10 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import se.gustavkarlsson.skylight.android.R
+import timber.log.Timber
 
-abstract class AuroraRequirementsCheckingActivity : AppCompatActivity(), AnkoLogger {
+abstract class AuroraRequirementsCheckingActivity : AppCompatActivity() {
 
     protected fun ensureRequirementsMet() {
         if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) != ConnectionResult.SUCCESS) {
@@ -63,12 +62,12 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity(), AnkoLog
     }
 
     private fun handlePermissionDenied() {
-        info("Permission denied: $LOCATION_PERMISSION")
+        Timber.i("Permission denied: %s", LOCATION_PERMISSION)
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, LOCATION_PERMISSION)) {
-            info("Showing rationale to user for another chance")
+            Timber.i("Showing rationale to user for another chance")
             showLocationPermissionRequiredDialog()
         } else {
-            info("Showing permission denied dialog and exiting")
+			Timber.i("Showing permission denied dialog and exiting")
             showLocationPermissionDeniedDialog()
         }
     }

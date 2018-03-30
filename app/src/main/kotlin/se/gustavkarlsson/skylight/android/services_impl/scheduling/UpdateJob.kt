@@ -4,11 +4,10 @@ import com.evernote.android.job.Job
 import com.evernote.android.job.Job.Result.FAILURE
 import com.evernote.android.job.Job.Result.SUCCESS
 import io.reactivex.Single
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.error
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.Notifier
 import se.gustavkarlsson.skylight.android.services_impl.notifications.AuroraReportNotificationDecider
+import timber.log.Timber
 import javax.inject.Inject
 
 class UpdateJob
@@ -17,7 +16,7 @@ constructor(
 	private val auroraReportSingle: Single<AuroraReport>,
 	private val decider: AuroraReportNotificationDecider,
 	private val notifier: Notifier<AuroraReport>
-) : Job(), AnkoLogger {
+) : Job() {
 
 	override fun onRunJob(params: Job.Params): Job.Result {
 		return try {
@@ -30,7 +29,7 @@ constructor(
 				}
 			SUCCESS
 		} catch (e: Exception) {
-			error("Failed to run job", e)
+			Timber.e(e, "Failed to run job")
 			FAILURE
 		}
 	}

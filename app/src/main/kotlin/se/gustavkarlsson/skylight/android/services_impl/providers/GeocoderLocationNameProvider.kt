@@ -5,10 +5,9 @@ import com.hadisatrio.optional.Optional
 import dagger.Reusable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.warn
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
+import timber.log.Timber
 import java.io.IOException
 import javax.inject.Inject
 
@@ -17,7 +16,7 @@ class GeocoderLocationNameProvider
 @Inject
 constructor(
 	private val geocoder: Geocoder
-) : LocationNameProvider, AnkoLogger {
+) : LocationNameProvider {
 
 	override fun get(location: Single<Location>): Single<Optional<String>> {
 		return location
@@ -27,7 +26,7 @@ constructor(
 					val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
 					Optional.ofNullable<String>(addresses.firstOrNull()?.locality)
 				} catch (e: IOException) {
-					warn("Failed to perform reverse geocoding", e)
+					Timber.w(e, "Failed to perform reverse geocoding")
 					Optional.absent<String>()
 				}
 			}

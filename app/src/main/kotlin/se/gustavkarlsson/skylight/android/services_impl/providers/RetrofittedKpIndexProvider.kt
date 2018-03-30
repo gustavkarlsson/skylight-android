@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.services_impl.providers
 import dagger.Reusable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import org.jetbrains.anko.AnkoLogger
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.services.providers.KpIndexProvider
@@ -16,7 +15,7 @@ class RetrofittedKpIndexProvider
 @Inject
 constructor(
 	private val api: KpIndexApi
-) : KpIndexProvider, AnkoLogger {
+) : KpIndexProvider {
 
 	override fun get(): Single<KpIndex> {
 		return api.get()

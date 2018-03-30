@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.services_impl.providers.openweatherma
 
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import org.jetbrains.anko.AnkoLogger
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Visibility
@@ -12,7 +11,7 @@ import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 class RetrofittedOpenWeatherMapVisibilityProvider constructor(
 	private val api: OpenWeatherMapApi,
 	private val appId: String
-) : VisibilityProvider, AnkoLogger {
+) : VisibilityProvider {
 
 	override fun get(location: Single<Location>): Single<Visibility> {
 		return location

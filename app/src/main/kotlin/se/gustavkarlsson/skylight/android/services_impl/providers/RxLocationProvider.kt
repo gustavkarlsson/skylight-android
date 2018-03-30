@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.services_impl.providers
 import dagger.Reusable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import org.jetbrains.anko.AnkoLogger
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.Location
@@ -18,7 +17,7 @@ class RxLocationProvider
 @Inject
 constructor(
 	private val reactiveLocationProvider: ReactiveLocationProvider
-) : LocationProvider, AnkoLogger {
+) : LocationProvider {
 
 	override fun get(): Single<Location> {
 		return reactiveLocationProvider.lastKnownLocation
