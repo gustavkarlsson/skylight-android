@@ -17,14 +17,24 @@ constructor() : GeomagLocationProvider {
 	override fun get(location: Single<Location>): Single<GeomagLocation> {
 		return location
 			.map {
-				val geomagneticLatitude = calculateGeomagneticLatitude(it.latitude, it.longitude, MAGNETIC_NORTH_POLE_LATITUDE, MAGNETIC_NORTH_POLE_LONGITUDE)
+				val geomagneticLatitude = calculateGeomagneticLatitude(
+					it.latitude,
+					it.longitude,
+					MAGNETIC_NORTH_POLE_LATITUDE,
+					MAGNETIC_NORTH_POLE_LONGITUDE
+				)
 				GeomagLocation(geomagneticLatitude)
 			}
 			.doOnSuccess { Timber.i("Provided geomagnetic location: %s", it) }
 	}
 
 	// http://stackoverflow.com/a/7949249/940731
-	private fun calculateGeomagneticLatitude(latitude1: Double, longitude1: Double, latitude2: Double, longitude2: Double): Double {
+	private fun calculateGeomagneticLatitude(
+		latitude1: Double,
+		longitude1: Double,
+		latitude2: Double,
+		longitude2: Double
+	): Double {
 		var Dlong = longitude2
 		var Dlat = latitude2
 		val R = 1.0

@@ -23,7 +23,7 @@ constructor(
 	override fun get(): Single<Location> {
 		return reactiveLocationProvider.lastKnownLocation
 			.subscribeOn(Schedulers.io())
-			.firstOrError()
+			.singleOrError()
 			.timeout(timeoutMillis, TimeUnit.MILLISECONDS)
 			.map { Location(it.latitude, it.longitude) }
 			.onErrorResumeNext {
@@ -31,6 +31,10 @@ constructor(
 					is TimeoutException -> UserFriendlyException(
 						R.string.error_could_not_determine_location,
 						"Timed out after $timeoutMillis ms"
+					)
+					is NoSuchElementException -> UserFriendlyException(
+						R.string.error_could_not_determine_location,
+						"Location not available"
 					)
 					else -> UserFriendlyException(R.string.error_could_not_determine_location, it)
 				}.let { Single.error(it) }

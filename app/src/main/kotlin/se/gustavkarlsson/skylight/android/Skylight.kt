@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android
 import android.support.multidex.MultiDexApplication
 import com.evernote.android.job.JobManager
 import com.jakewharton.threetenabp.AndroidThreeTen
+import io.reactivex.plugins.RxJavaPlugins
 import se.gustavkarlsson.skylight.android.dagger.components.ApplicationComponent
 import se.gustavkarlsson.skylight.android.dagger.components.DaggerApplicationComponent
 import se.gustavkarlsson.skylight.android.dagger.modules.ContextModule
@@ -30,6 +31,7 @@ class Skylight : MultiDexApplication() {
 	private fun bootstrap() {
 		setupLogging()
 		AndroidThreeTen.init(this)
+		setupRxJavaErrorHandling()
 		initJobManager()
 	}
 
@@ -38,6 +40,12 @@ class Skylight : MultiDexApplication() {
 			Timber.plant(DebugTree())
 		} else {
 			Timber.plant(NullTree())
+		}
+	}
+
+	private fun setupRxJavaErrorHandling() {
+		RxJavaPlugins.setErrorHandler {
+			Timber.w(it, "Unhandled RxJava error")
 		}
 	}
 
