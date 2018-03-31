@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.gui.activities.main
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat
 import android.view.Menu
 import android.view.MenuItem
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
@@ -12,8 +11,8 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
-import se.gustavkarlsson.skylight.android.extensions.disableSwipeToDismiss
 import se.gustavkarlsson.skylight.android.extensions.forUi
+import se.gustavkarlsson.skylight.android.extensions.indefiniteErrorSnackbar
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
 import timber.log.Timber
@@ -86,12 +85,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 			.subscribe {
 				snackbar?.run { dismiss() }
 				it.ifPresent {
-					snackbar = Snackbar.make(coordinatorLayout, it, Snackbar.LENGTH_INDEFINITE)
-						.apply {
-							disableSwipeToDismiss()
-							view.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.snackbar_error_background));
-							show()
-						}
+					snackbar = indefiniteErrorSnackbar(coordinatorLayout, it).apply { show() }
 				}
 			}
 
