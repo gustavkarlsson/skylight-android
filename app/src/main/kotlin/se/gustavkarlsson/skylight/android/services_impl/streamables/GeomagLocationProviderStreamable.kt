@@ -22,6 +22,4 @@ class GeomagLocationProviderStreamable(
 				.toFlowable()
 		}
 		.doOnNext { Timber.i("Streamed geomag location: %s", it) }
-		.replay(1)
-		.refCount()
 }

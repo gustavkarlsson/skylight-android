@@ -36,4 +36,6 @@ class AuroraFactorsModule {
 	fun provideAuroraFactorsFlowable(
 		streamable: Streamable<AuroraFactors>
 	): Flowable<AuroraFactors> = streamable.stream
+		.replay(1)
+		.refCount()
 }

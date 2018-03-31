@@ -47,6 +47,8 @@ class KpIndexModule {
 	fun provideKpIndexFlowable(
 		streamable: Streamable<KpIndex>
 	): Flowable<KpIndex> = streamable.stream
+		.replay(1)
+		.refCount()
 
 	companion object {
 		private const val API_URL = "https://skylight-web-service-1.herokuapp.com"

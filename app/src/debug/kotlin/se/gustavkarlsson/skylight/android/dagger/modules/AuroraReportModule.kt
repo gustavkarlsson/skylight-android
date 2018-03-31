@@ -58,10 +58,10 @@ class AuroraReportModule {
 	@Reusable
 	fun provideAuroraReportSingle(
 		auroraReportProvider: AuroraReportProvider,
-		cache: SingletonCache<AuroraReport>
+		relay: Relay<AuroraReport>
 	): Single<AuroraReport> {
 		return auroraReportProvider.get()
-			.doOnSuccess { cache.value = it }
+			.doOnSuccess(relay)
 	}
 
 	@Provides
@@ -85,11 +85,9 @@ class AuroraReportModule {
 		locationNames: Flowable<Optional<String>>,
 		factors: Flowable<AuroraFactors>,
 		now: Single<Instant>,
-		debugSettings: DebugSettings,
-		auroraReportRelay: Relay<AuroraReport>
+		debugSettings: DebugSettings
 	): Streamable<AuroraReport> {
-		val realStreamable = CombiningAuroraReportStreamable(locationNames, factors, now,
-			auroraReportRelay.toFlowable(BackpressureStrategy.LATEST))
+		val realStreamable = CombiningAuroraReportStreamable(locationNames, factors, now)
 		return DebugAuroraReportStreamable(realStreamable, debugSettings, now)
 	}
 
@@ -97,9 +95,11 @@ class AuroraReportModule {
 	@Reusable
 	fun provideAuroraReportFlowable(
 		cache: SingletonCache<AuroraReport>,
-		streamable: Streamable<AuroraReport>
-	): Flowable<AuroraReport> = streamable.stream
-		.singletonCache(cache)
-		.replay(1)
-		.refCount()
+		streamable: Streamable<AuroraReport>,
+		relay: Relay<AuroraReport>
+	): Flowable<AuroraReport> =
+		Flowable.merge(streamable.stream, relay.toFlowable(BackpressureStrategy.LATEST))
+			.singletonCache(cache)
+			.replay(1)
+			.refCount()
 }

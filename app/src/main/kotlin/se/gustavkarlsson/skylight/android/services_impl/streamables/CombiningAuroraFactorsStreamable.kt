@@ -19,6 +19,4 @@ class CombiningAuroraFactorsStreamable(
 				AuroraFactors(kpIndex, geomagLocation, darkness, visibility)
 			})
 			.doOnNext { Timber.i("Streamed aurora factors: %s", it) }
-			.replay(1)
-			.refCount()
 }

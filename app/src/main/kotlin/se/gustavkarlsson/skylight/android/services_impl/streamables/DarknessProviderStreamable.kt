@@ -33,6 +33,4 @@ class DarknessProviderStreamable(
 				it.toFlowable()
 			}
 			.doOnNext { Timber.i("Streamed darkness: %s", it) }
-			.replay(1)
-			.refCount()
 }

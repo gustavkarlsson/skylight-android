@@ -16,7 +16,6 @@ class MainViewModel(
 	auroraReportSingle: Single<AuroraReport>,
 	auroraReports: Flowable<AuroraReport>,
 	isConnectedToInternet: Flowable<Boolean>,
-	postAuroraReport: Consumer<AuroraReport>,
 	defaultLocationName: CharSequence,
 	notConnectedToInternetMessage: CharSequence
 ) : AutoDisposableViewModel() {
@@ -53,7 +52,7 @@ class MainViewModel(
 		auroraReportSingle
 			.doOnEvent { _, _ -> refreshFinishedRelay.accept(Unit) }
 			.autoDisposable(scope())
-			.subscribe(postAuroraReport, errorRelay)
+			.subscribe(Consumer {}, errorRelay)
 	}
 
 	private val refreshFinishedRelay = PublishRelay.create<Unit>()

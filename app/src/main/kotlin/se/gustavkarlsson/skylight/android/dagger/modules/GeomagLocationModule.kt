@@ -31,6 +31,8 @@ class GeomagLocationModule {
 	fun provideGeomagLocationFlowable(
 		streamable: Streamable<GeomagLocation>
 	): Flowable<GeomagLocation> = streamable.stream
+		.replay(1)
+		.refCount()
 
 	companion object {
 		private val RETRY_DELAY = Duration.ofSeconds(5)

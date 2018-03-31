@@ -35,6 +35,8 @@ class DarknessModule {
 	fun provideDarknessFlowable(
 		streamable: Streamable<Darkness>
 	): Flowable<Darkness> = streamable.stream
+		.replay(1)
+		.refCount()
 
 	companion object {
 	    private val DARKNESS_POLLING_INTERVAL = Duration.ofMinutes(1)

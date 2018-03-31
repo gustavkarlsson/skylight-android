@@ -23,6 +23,4 @@ class VisibilityProviderStreamable(
 				.retryWhen { it.delay(retryDelay.toMillis(), TimeUnit.MILLISECONDS) }
 		}
 		.doOnNext { Timber.i("Streamed visibility: %s", it) }
-		.replay(1)
-		.refCount()
 }

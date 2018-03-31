@@ -13,18 +13,12 @@ import timber.log.Timber
 class CombiningAuroraReportStreamable(
 	locationNames: Flowable<Optional<String>>,
 	factors: Flowable<AuroraFactors>,
-	now: Single<Instant>,
-	otherAuroraReports: Flowable<AuroraReport>
+	now: Single<Instant>
 ) : Streamable<AuroraReport> {
 	override val stream: Flowable<AuroraReport> =
-		Flowable.merge(
-			Flowable.combineLatest(locationNames, factors,
-				BiFunction<Optional<String>, AuroraFactors, AuroraReport> { locationName, factors ->
-					AuroraReport(now.blockingGet(), locationName.orNull(), factors)
-				}),
-			otherAuroraReports
-		)
+		Flowable.combineLatest(locationNames, factors,
+			BiFunction<Optional<String>, AuroraFactors, AuroraReport> { locationName, factors ->
+				AuroraReport(now.blockingGet(), locationName.orNull(), factors)
+			})
 			.doOnNext { Timber.i("Streamed aurora report: %s", it) }
-			.replay(1)
-			.refCount()
 }

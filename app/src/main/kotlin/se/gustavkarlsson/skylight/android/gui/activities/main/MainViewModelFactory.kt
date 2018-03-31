@@ -19,7 +19,6 @@ constructor(
 	private val auroraReportSingle: Single<AuroraReport>,
 	private val auroraReports: Flowable<AuroraReport>,
 	@ConnectedToInternet private val isConnectedToInternet: Flowable<Boolean>,
-	private val postAuroraReport: Consumer<AuroraReport>,
 	@DefaultLocationName private val defaultLocationName: CharSequence,
 	@NotConnectedToInternet private val notConnectedToInternetMessage: CharSequence
 ) : ViewModelProvider.Factory {
@@ -31,7 +30,6 @@ constructor(
 			auroraReportSingle,
 			auroraReports,
 			isConnectedToInternet,
-			postAuroraReport,
 			defaultLocationName,
 			notConnectedToInternetMessage
 		) as T

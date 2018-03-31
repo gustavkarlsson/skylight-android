@@ -20,7 +20,7 @@ class DebugAuroraReportProvider(
 				val locationName = "Fake Location"
 				val timestamp = timeProvider.getTime().blockingGet()
 				Single.just(AuroraReport(timestamp, locationName, auroraFactors))
-					.delay(5, TimeUnit.SECONDS)
+					.delay(2, TimeUnit.SECONDS)
 			} else {
 				realProvider.get()
 			}

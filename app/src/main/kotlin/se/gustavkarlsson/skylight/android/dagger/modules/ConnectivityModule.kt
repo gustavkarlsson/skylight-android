@@ -17,7 +17,7 @@ class ConnectivityModule {
 	@Provides
 	@Singleton
 	@ConnectedToInternet
-	fun provideConnectivityFlowable(context: Context): Flowable<Boolean> {
+	fun provideConnectivityFlowable(): Flowable<Boolean> {
 		return ReactiveNetwork.observeInternetConnectivity()
 			.toFlowable(BackpressureStrategy.LATEST)
 	}
@@ -26,6 +26,6 @@ class ConnectivityModule {
 	@Singleton
 	@NotConnectedToInternet
 	fun provideNotConnectedToInternetMessage(context: Context): CharSequence {
-		return context.getString(R.string.error_not_connected_to_internet)
+		return context.getString(R.string.error_no_internet)
 	}
 }

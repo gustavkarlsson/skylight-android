@@ -22,6 +22,4 @@ class LocationNameProviderStreamable(
 				.toFlowable()
 		}
 		.doOnNext { Timber.i("Streamed location name: %s", it.orNull()) }
-		.replay(1)
-		.refCount()
 }

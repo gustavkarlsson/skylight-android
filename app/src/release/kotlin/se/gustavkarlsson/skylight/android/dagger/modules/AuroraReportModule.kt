@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.dagger.modules
 
-import android.net.ConnectivityManager
 import com.hadisatrio.optional.Optional
 import com.jakewharton.rxrelay2.PublishRelay
 import com.jakewharton.rxrelay2.Relay
@@ -18,8 +17,8 @@ import se.gustavkarlsson.skylight.android.extensions.singletonCache
 import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.*
-import se.gustavkarlsson.skylight.android.services_impl.providers.RealAuroraReportProvider
-import se.gustavkarlsson.skylight.android.services_impl.streamables.MergingAuroraReportStreamable
+import se.gustavkarlsson.skylight.android.services_impl.providers.CombiningAuroraReportProvider
+import se.gustavkarlsson.skylight.android.services_impl.streamables.CombiningAuroraReportStreamable
 
 @Module
 class AuroraReportModule {
@@ -27,13 +26,11 @@ class AuroraReportModule {
 	@Provides
 	@Reusable
 	fun provideAuroraReportProvider(
-		connectivityManager: ConnectivityManager,
 		locationProvider: LocationProvider,
 		auroraFactorsProvider: AuroraFactorsProvider,
 		locationNameProvider: LocationNameProvider,
 		timeProvider: TimeProvider
-	): AuroraReportProvider = RealAuroraReportProvider(
-		connectivityManager,
+	): AuroraReportProvider = CombiningAuroraReportProvider(
 		locationProvider,
 		auroraFactorsProvider,
 		locationNameProvider,
@@ -43,9 +40,11 @@ class AuroraReportModule {
 	@Provides
 	@Reusable
 	fun provideAuroraReportSingle(
-		auroraReportProvider: AuroraReportProvider
+		auroraReportProvider: AuroraReportProvider,
+		relay: Relay<AuroraReport>
 	): Single<AuroraReport> {
 		return auroraReportProvider.get()
+			.doOnSuccess(relay)
 	}
 
 	@Provides
@@ -68,18 +67,18 @@ class AuroraReportModule {
 	fun provideAuroraReportStreamable(
 		locationNames: Flowable<Optional<String>>,
 		factors: Flowable<AuroraFactors>,
-		now: Single<Instant>,
-		auroraReportRelay: Relay<AuroraReport>
-	): Streamable<AuroraReport> = MergingAuroraReportStreamable(
-		locationNames, factors, now, auroraReportRelay.toFlowable(BackpressureStrategy.LATEST))
+		now: Single<Instant>
+	): Streamable<AuroraReport> = CombiningAuroraReportStreamable(locationNames, factors, now)
 
 	@Provides
 	@Reusable
 	fun provideAuroraReportFlowable(
 		cache: SingletonCache<AuroraReport>,
-		streamable: Streamable<AuroraReport>
-	): Flowable<AuroraReport> = streamable.stream
-		.singletonCache(cache)
-		.replay(1)
-		.refCount()
+		streamable: Streamable<AuroraReport>,
+		relay: Relay<AuroraReport>
+	): Flowable<AuroraReport> =
+		Flowable.merge(streamable.stream, relay.toFlowable(BackpressureStrategy.LATEST))
+			.singletonCache(cache)
+			.replay(1)
+			.refCount()
 }

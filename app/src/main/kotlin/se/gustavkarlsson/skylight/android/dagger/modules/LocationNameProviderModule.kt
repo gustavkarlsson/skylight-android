@@ -42,6 +42,8 @@ class LocationNameProviderModule {
 	fun provideLocationFlowable(
 		streamable: Streamable<Optional<String>>
 	): Flowable<Optional<String>> = streamable.stream
+		.replay(1)
+		.refCount()
 
 	companion object {
 		private val RETRY_DELAY = Duration.ofSeconds(10)

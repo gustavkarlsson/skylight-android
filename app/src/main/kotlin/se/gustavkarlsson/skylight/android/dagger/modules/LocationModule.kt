@@ -40,6 +40,8 @@ class LocationModule {
 	fun provideLocationFlowable(
 		streamable: Streamable<Location>
 	): Flowable<Location> = streamable.stream
+		.replay(1)
+		.refCount()
 
 	companion object {
 		private val POLLING_INTERVAL = Duration.ofMinutes(15)

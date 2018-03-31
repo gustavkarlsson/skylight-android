@@ -31,6 +31,4 @@ class ReactiveLocationProviderStreamable(
 		.map { Location(it.latitude, it.longitude) }
 		.toFlowable(BackpressureStrategy.LATEST)
 		.doOnNext { Timber.i("Streamed location: %s", it) }
-		.replay(1)
-		.refCount()
 }
