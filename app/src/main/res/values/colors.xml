@@ -9,6 +9,7 @@
 	<color name="secondary_text">#757575</color>
 	<color name="icons">#FFFFFF</color>
 	<color name="divider">#616161</color>
+	<color name="snackbar_error_background">#FF5252</color>
 
 	<!-- Custom colors -->
 	<color name="background_darkish">#424242</color>

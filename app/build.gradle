@@ -116,6 +116,7 @@ dependencies {
 
 	// Anko
 	implementation "org.jetbrains.anko:anko-commons:$anko_version"
+	implementation "org.jetbrains.anko:anko-design:$anko_version"
 	implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
 
 	// Retrofit
@@ -138,6 +139,7 @@ dependencies {
 	implementation "com.tbruyelle.rxpermissions2:rxpermissions:0.9.5@aar"
 	implementation "pl.charmas.android:android-reactive-location2:2.1@aar"
 	implementation "com.f2prateek.rx.preferences2:rx-preferences:2.0.0-RC3"
+	implementation "com.github.pwittchen:reactivenetwork-rx2:0.12.3"
 
 	// RxBinding
 	implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxbinding_version"

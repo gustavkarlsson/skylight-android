@@ -6,7 +6,9 @@ import dagger.Reusable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.Consumer
+import se.gustavkarlsson.skylight.android.dagger.qualifiers.ConnectedToInternet
 import se.gustavkarlsson.skylight.android.dagger.qualifiers.DefaultLocationName
+import se.gustavkarlsson.skylight.android.dagger.qualifiers.NotConnectedToInternet
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import javax.inject.Inject
 
@@ -16,8 +18,10 @@ class MainViewModelFactory
 constructor(
 	private val auroraReportSingle: Single<AuroraReport>,
 	private val auroraReports: Flowable<AuroraReport>,
+	@ConnectedToInternet private val isConnectedToInternet: Flowable<Boolean>,
 	private val postAuroraReport: Consumer<AuroraReport>,
-	@DefaultLocationName private val defaultLocationName: CharSequence
+	@DefaultLocationName private val defaultLocationName: CharSequence,
+	@NotConnectedToInternet private val notConnectedToInternetMessage: CharSequence
 ) : ViewModelProvider.Factory {
 
 	@Suppress("UNCHECKED_CAST")
@@ -26,8 +30,10 @@ constructor(
 		return MainViewModel(
 			auroraReportSingle,
 			auroraReports,
+			isConnectedToInternet,
 			postAuroraReport,
-			defaultLocationName
+			defaultLocationName,
+			notConnectedToInternetMessage
 		) as T
 	}
 

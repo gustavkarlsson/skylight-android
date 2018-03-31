@@ -22,4 +22,5 @@
 
 	<string name="error_aurora_notifications_disabled_title">Aurora notifications disabled</string>
 	<string name="error_aurora_notifications_disabled_content">Location permission missing. Please enable location permission and re-enable notifications.</string>
+	<string name="error_not_connected_to_internet">Not connected to internet</string>
 </resources>

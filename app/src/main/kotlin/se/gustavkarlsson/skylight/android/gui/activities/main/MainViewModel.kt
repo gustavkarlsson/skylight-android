@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main
 
+import com.hadisatrio.optional.Optional
 import com.jakewharton.rxrelay2.PublishRelay
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.BackpressureStrategy
@@ -14,8 +15,10 @@ import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 class MainViewModel(
 	auroraReportSingle: Single<AuroraReport>,
 	auroraReports: Flowable<AuroraReport>,
+	isConnectedToInternet: Flowable<Boolean>,
 	postAuroraReport: Consumer<AuroraReport>,
-	defaultLocationName: CharSequence
+	defaultLocationName: CharSequence,
+	notConnectedToInternetMessage: CharSequence
 ) : AutoDisposableViewModel() {
 
 	private val errorRelay = PublishRelay.create<Throwable>()
@@ -28,6 +31,17 @@ class MainViewModel(
 				R.string.error_unknown_update_error
 			}
 		}
+
+	val connectivityMessages: Flowable<Optional<CharSequence>> =
+		Flowable.concat(Flowable.just(true), isConnectedToInternet)
+			.map { connected ->
+				if (connected) {
+					Optional.absent()
+				} else {
+					Optional.of(notConnectedToInternetMessage)
+				}
+			}
+			.distinctUntilChanged()
 
 	val locationName: Flowable<CharSequence> = auroraReports
 		.map {

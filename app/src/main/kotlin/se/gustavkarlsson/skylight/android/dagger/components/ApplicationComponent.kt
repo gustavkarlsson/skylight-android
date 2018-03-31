@@ -30,7 +30,8 @@ import javax.inject.Singleton
 	LocationNameProviderModule::class,
 	ViewModelsModule::class,
 	FormattingModule::class,
-	LocalizationModule::class
+	LocalizationModule::class,
+	ConnectivityModule::class
 ))
 @Singleton
 interface ApplicationComponent {
