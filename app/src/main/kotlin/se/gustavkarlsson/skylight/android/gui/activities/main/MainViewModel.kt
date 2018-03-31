@@ -6,8 +6,10 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.Consumer
+import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.gui.AutoDisposableViewModel
+import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
 class MainViewModel(
 	auroraReportSingle: Single<AuroraReport>,
@@ -15,6 +17,18 @@ class MainViewModel(
 	postAuroraReport: Consumer<AuroraReport>,
 	defaultLocationName: CharSequence
 ) : AutoDisposableViewModel() {
+
+	private val errorRelay = PublishRelay.create<Throwable>()
+	val errorMessages: Flowable<Int> = errorRelay
+		.toFlowable(BackpressureStrategy.BUFFER)
+		.map {
+			if (it is UserFriendlyException) {
+				it.stringResourceId
+			} else {
+				R.string.error_unknown_update_error
+			}
+		}
+
 	val locationName: Flowable<CharSequence> = auroraReports
 		.map {
 			it.locationName ?: defaultLocationName
@@ -25,10 +39,10 @@ class MainViewModel(
 		auroraReportSingle
 			.doOnEvent { _, _ -> refreshFinishedRelay.accept(Unit) }
 			.autoDisposable(scope())
-			.subscribe(postAuroraReport)
+			.subscribe(postAuroraReport, errorRelay)
 	}
 
 	private val refreshFinishedRelay = PublishRelay.create<Unit>()
-	val refreshFinished: Flowable<*> = refreshFinishedRelay
+	val refreshFinished: Flowable<Unit> = refreshFinishedRelay
 		.toFlowable(BackpressureStrategy.LATEST)
 }

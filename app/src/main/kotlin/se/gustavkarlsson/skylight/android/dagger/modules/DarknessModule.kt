@@ -27,7 +27,8 @@ class DarknessModule {
 		locations: Flowable<Location>,
 		provider: DarknessProvider,
 		now: Single<Instant>
-	): Streamable<Darkness> = DarknessProviderStreamable(locations, provider, now, DARKNESS_POLLING_INTERVAL)
+	): Streamable<Darkness> =
+		DarknessProviderStreamable(locations, provider, now, DARKNESS_POLLING_INTERVAL, RETRY_DELAY)
 
 	@Provides
 	@Reusable
@@ -37,5 +38,6 @@ class DarknessModule {
 
 	companion object {
 	    private val DARKNESS_POLLING_INTERVAL = Duration.ofMinutes(1)
+		private val RETRY_DELAY = Duration.ofSeconds(5)
 	}
 }

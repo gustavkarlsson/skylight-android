@@ -25,9 +25,7 @@ constructor(
 			.subscribeOn(Schedulers.io())
 			.firstOrError()
 			.timeout(timeoutMillis, TimeUnit.MILLISECONDS)
-			.map {
-				Location(it.latitude, it.longitude)
-			}
+			.map { Location(it.latitude, it.longitude) }
 			.onErrorResumeNext {
 				when (it) {
 					is TimeoutException -> UserFriendlyException(

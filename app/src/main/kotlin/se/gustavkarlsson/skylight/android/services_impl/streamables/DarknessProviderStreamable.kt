@@ -16,7 +16,8 @@ class DarknessProviderStreamable(
 	locations: Flowable<Location>,
 	darknessProvider: DarknessProvider,
 	now: Single<Instant>,
-	pollingInterval: Duration
+	pollingInterval: Duration,
+	retryDelay: Duration
 ) : Streamable<Darkness> {
 
 	private val timeUpdates: Flowable<Instant> = now
@@ -26,6 +27,7 @@ class DarknessProviderStreamable(
 		Flowable.combineLatest(locations, timeUpdates,
 			BiFunction<Location, Instant, Single<Darkness>> { location, time ->
 				darknessProvider.get(Single.just(time), Single.just(location))
+					.retryWhen { it.delay(retryDelay.toMillis(), TimeUnit.MILLISECONDS) }
 			})
 			.switchMap {
 				it.toFlowable()

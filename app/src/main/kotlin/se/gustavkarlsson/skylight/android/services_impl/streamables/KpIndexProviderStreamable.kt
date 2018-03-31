@@ -10,10 +10,12 @@ import java.util.concurrent.TimeUnit
 
 class KpIndexProviderStreamable(
 	kpIndexProvider: KpIndexProvider,
-	pollingInterval: Duration
+	pollingInterval: Duration,
+	retryDelay: Duration
 ) : Streamable<KpIndex> {
 	override val stream: Flowable<KpIndex> = kpIndexProvider.get()
 		.repeatWhen { it.delay(pollingInterval.toMillis(), TimeUnit.MILLISECONDS) }
+		.retryWhen { it.delay(retryDelay.toMillis(), TimeUnit.MILLISECONDS) }
 		.doOnNext { Timber.i("Streamed Kp index: %s", it) }
 		.replay(1)
 		.refCount()

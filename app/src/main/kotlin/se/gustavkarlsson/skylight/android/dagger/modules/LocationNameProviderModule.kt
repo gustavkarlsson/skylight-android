@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import io.reactivex.Flowable
+import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
@@ -33,11 +34,16 @@ class LocationNameProviderModule {
 	fun provideLocationNameStreamable(
 		locations: Flowable<Location>,
 		provider: LocationNameProvider
-	): Streamable<Optional<String>> = LocationNameProviderStreamable(locations, provider)
+	): Streamable<Optional<String>> =
+		LocationNameProviderStreamable(locations, provider, RETRY_DELAY)
 
 	@Provides
 	@Reusable
 	fun provideLocationFlowable(
 		streamable: Streamable<Optional<String>>
 	): Flowable<Optional<String>> = streamable.stream
+
+	companion object {
+		private val RETRY_DELAY = Duration.ofSeconds(10)
+	}
 }

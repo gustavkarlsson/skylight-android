@@ -43,7 +43,7 @@ class AuroraChanceFragment : Fragment() {
 			.forUi(this)
 			.subscribe(timeSinceUpdate.text())
 
-		viewModel.timeSinceUpdateVisible
+		viewModel.timeSinceUpdateVisibility
 			.doOnNext { Timber.d("Updating timeSinceUpdate visibility: %s", it) }
 			.forUi(this)
 			.subscribe(timeSinceUpdate.visibility())

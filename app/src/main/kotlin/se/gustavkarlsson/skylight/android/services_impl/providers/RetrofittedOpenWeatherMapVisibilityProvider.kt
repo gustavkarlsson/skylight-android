@@ -22,16 +22,9 @@ class RetrofittedOpenWeatherMapVisibilityProvider constructor(
 					.subscribeOn(Schedulers.io())
 			}
 			.onErrorResumeNext {
-				Single.error(
-					UserFriendlyException(
-						R.string.error_could_not_determine_visibility,
-						it
-					)
-				)
+				Single.error(UserFriendlyException(R.string.error_could_not_determine_visibility, it))
 			}
-			.map {
-				Visibility(it.clouds.percentage)
-			}
+			.map { Visibility(it.clouds.percentage) }
 			.doOnSuccess { Timber.i("Provided visibility: %s", it) }
 	}
 }

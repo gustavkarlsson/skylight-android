@@ -23,9 +23,8 @@ constructor(
 			.subscribeOn(Schedulers.io())
 			.onErrorResumeNext {
 				Single.error(UserFriendlyException(R.string.error_could_not_determine_kp_index, it))
-			}.map {
-				KpIndex(it.value.toDouble())
 			}
+			.map { KpIndex(it.value.toDouble()) }
 			.doOnSuccess { Timber.i("Provided Kp index: %s", it) }
 	}
 }

@@ -7,6 +7,7 @@ import android.view.MenuItem
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.toast
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
 import se.gustavkarlsson.skylight.android.extensions.forUi
@@ -61,6 +62,11 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 			.map { false }
 			.forUi(this)
 			.subscribe(swipeRefreshLayout::setRefreshing)
+
+		viewModel.errorMessages
+			.doOnNext { Timber.d("Showing error message") }
+			.forUi(this)
+			.subscribe { toast(it) }
 
 		swipeRefreshLayout.refreshes()
 			.doOnNext { Timber.i("Refreshing...") }

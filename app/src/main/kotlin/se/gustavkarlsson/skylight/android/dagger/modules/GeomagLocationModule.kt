@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import io.reactivex.Flowable
+import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.Streamable
@@ -23,12 +24,16 @@ class GeomagLocationModule {
 	fun provideGeomagLocationStreamable(
 		locations: Flowable<Location>,
 		provider: GeomagLocationProvider
-	): Streamable<GeomagLocation> = GeomagLocationProviderStreamable(locations, provider)
+	): Streamable<GeomagLocation> = GeomagLocationProviderStreamable(locations, provider, RETRY_DELAY)
 
 	@Provides
 	@Reusable
 	fun provideGeomagLocationFlowable(
-		streamable: GeomagLocationProviderStreamable
+		streamable: Streamable<GeomagLocation>
 	): Flowable<GeomagLocation> = streamable.stream
+
+	companion object {
+		private val RETRY_DELAY = Duration.ofSeconds(5)
+	}
 
 }

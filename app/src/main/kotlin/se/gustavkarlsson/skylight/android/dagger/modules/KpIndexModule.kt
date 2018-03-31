@@ -24,7 +24,7 @@ class KpIndexModule {
 	@Reusable
 	fun provideKpIndexService(): KpIndexApi {
 		return Retrofit.Builder()
-			.baseUrl(KP_INDEX_API_URL)
+			.baseUrl(API_URL)
 			.addConverterFactory(GsonConverterFactory.create())
 			.addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
 			.build().create()
@@ -40,7 +40,7 @@ class KpIndexModule {
 	@Reusable
 	fun provideKpIndexStreamable(
 		provider: KpIndexProvider
-	): Streamable<KpIndex> = KpIndexProviderStreamable(provider, KP_INDEX_POLLING_INTERVAL)
+	): Streamable<KpIndex> = KpIndexProviderStreamable(provider, POLLING_INTERVAL, RETRY_DELAY)
 
 	@Provides
 	@Reusable
@@ -49,7 +49,8 @@ class KpIndexModule {
 	): Flowable<KpIndex> = streamable.stream
 
 	companion object {
-		private const val KP_INDEX_API_URL = "https://skylight-web-service-1.herokuapp.com"
-		private val KP_INDEX_POLLING_INTERVAL = Duration.ofMinutes(15)
+		private const val API_URL = "https://skylight-web-service-1.herokuapp.com"
+		private val POLLING_INTERVAL = Duration.ofMinutes(15)
+		private val RETRY_DELAY = Duration.ofSeconds(10)
 	}
 }

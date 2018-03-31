@@ -41,7 +41,7 @@ class AuroraChanceViewModel(
 		}
 		.distinctUntilChanged()
 
-	val timeSinceUpdateVisible: Flowable<Boolean> = timestamps
+	val timeSinceUpdateVisibility: Flowable<Boolean> = timestamps
 		.map {
 			when {
 				it <= Instant.EPOCH -> false

@@ -6,6 +6,7 @@ import dagger.Provides
 import dagger.Reusable
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
+import org.threeten.bp.Duration
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -15,8 +16,8 @@ import se.gustavkarlsson.skylight.android.entities.Visibility
 import se.gustavkarlsson.skylight.android.extensions.create
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.VisibilityProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapApi
 import se.gustavkarlsson.skylight.android.services_impl.providers.RetrofittedOpenWeatherMapVisibilityProvider
+import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapApi
 import se.gustavkarlsson.skylight.android.services_impl.streamables.VisibilityProviderStreamable
 
 @Module
@@ -26,7 +27,7 @@ class VisibilityModule {
 	@Reusable
 	fun provideOpenWeatherMapService(): OpenWeatherMapApi {
 		return Retrofit.Builder()
-			.baseUrl(OPENWEATHERMAP_API_URL)
+			.baseUrl(API_URL)
 			.addConverterFactory(GsonConverterFactory.create())
 			.addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
 			.build().create()
@@ -50,7 +51,8 @@ class VisibilityModule {
 	fun provideVisibilityStreamable(
 		locations: Flowable<Location>,
 		provider: VisibilityProvider
-	): Streamable<Visibility> = VisibilityProviderStreamable(locations, provider)
+	): Streamable<Visibility> =
+		VisibilityProviderStreamable(locations, provider, POLLING_INTERVAL, RETRY_DELAY)
 
 	@Provides
 	@Reusable
@@ -59,6 +61,8 @@ class VisibilityModule {
 	): Flowable<Visibility> = streamable.stream
 
 	companion object {
-		private const val OPENWEATHERMAP_API_URL = "http://api.openweathermap.org/data/2.5/"
+		private const val API_URL = "http://api.openweathermap.org/data/2.5/"
+		private val POLLING_INTERVAL = Duration.ofMinutes(15)
+		private val RETRY_DELAY = Duration.ofSeconds(10)
 	}
 }
