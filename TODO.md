@@ -4,9 +4,7 @@
 * Look into country changes while app running (Locale etc)
 * Use reactive permissions (especially with location)
 * Use reactive connectivity
-* Convert NAMEs to qualifier annotations
 * Look into moving data binding to lifecycle bound listener
-* Replace <*> With <Unit>
 * Testing
   * Fix existing tests
   * Add more tests

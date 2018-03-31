@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.services_impl.notifications
 
 import dagger.Reusable
-import se.gustavkarlsson.skylight.android.dagger.LAST_NOTIFIED_NAME
+import se.gustavkarlsson.skylight.android.dagger.qualifiers.LastNotified
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
@@ -9,13 +9,12 @@ import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.services_impl.AppVisibilityEvaluator
 import javax.inject.Inject
-import javax.inject.Named
 
 @Reusable
 class AuroraReportNotificationDecider
 @Inject
 constructor(
-	@param:Named(LAST_NOTIFIED_NAME) private val lastNotifiedReportCache: SingletonCache<AuroraReport>,
+	@LastNotified private val lastNotifiedReportCache: SingletonCache<AuroraReport>,
 	private val chanceEvaluator: ChanceEvaluator<AuroraReport>,
 	private val settings: Settings,
 	private val outdatedEvaluator: ReportOutdatedEvaluator,
