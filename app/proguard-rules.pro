@@ -61,6 +61,11 @@
 }
 -dontwarn sun.misc.Unsafe
 
+# ReactiveNetwork
+-dontwarn com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
+-dontwarn io.reactivex.functions.Function
+-dontwarn rx.internal.util.**
+-dontwarn sun.misc.Unsafe
 
 # don't remember what this is for
 -dontwarn javax.annotation.**

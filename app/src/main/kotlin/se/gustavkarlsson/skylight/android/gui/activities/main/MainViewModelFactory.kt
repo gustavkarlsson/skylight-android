@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModelProvider
 import dagger.Reusable
 import io.reactivex.Flowable
 import io.reactivex.Single
-import io.reactivex.functions.Consumer
 import se.gustavkarlsson.skylight.android.dagger.qualifiers.ConnectedToInternet
 import se.gustavkarlsson.skylight.android.dagger.qualifiers.DefaultLocationName
 import se.gustavkarlsson.skylight.android.dagger.qualifiers.NotConnectedToInternet
