@@ -4,8 +4,9 @@ import io.reactivex.Flowable
 import io.reactivex.functions.Function4
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.services.Streamable
+import timber.log.Timber
 
-class AuroraFactorsStreamable(
+class CombiningAuroraFactorsStreamable(
 	kpIndexes: Flowable<KpIndex>,
 	visibilities: Flowable<Visibility>,
 	darknesses: Flowable<Darkness>,
@@ -17,6 +18,7 @@ class AuroraFactorsStreamable(
 				kpIndex, geomagLocation, darkness, visibility ->
 				AuroraFactors(kpIndex, geomagLocation, darkness, visibility)
 			})
+			.doOnNext { Timber.i("Streamed aurora factors: %s", it) }
 			.replay(1)
 			.refCount()
 }

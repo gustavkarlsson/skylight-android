@@ -10,8 +10,8 @@ import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.RxLocationProvider
-import se.gustavkarlsson.skylight.android.services_impl.streamables.LocationStreamable
+import se.gustavkarlsson.skylight.android.services_impl.providers.ReactiveLocationLocationProvider
+import se.gustavkarlsson.skylight.android.services_impl.streamables.ReactiveLocationProviderStreamable
 
 @Module
 class LocationModule {
@@ -26,14 +26,14 @@ class LocationModule {
 	@Reusable
 	fun provideLocationProvider(
 		reactiveLocationProvider: ReactiveLocationProvider
-	): LocationProvider = RxLocationProvider(reactiveLocationProvider)
+	): LocationProvider = ReactiveLocationLocationProvider(reactiveLocationProvider)
 
 	@Provides
 	@Reusable
 	fun provideLocationStreamable(
 		reactiveLocationProvider: ReactiveLocationProvider
 	): Streamable<Location> =
-		LocationStreamable(reactiveLocationProvider, POLLING_INTERVAL, RETRY_DELAY)
+		ReactiveLocationProviderStreamable(reactiveLocationProvider, POLLING_INTERVAL, RETRY_DELAY)
 
 	@Provides
 	@Reusable

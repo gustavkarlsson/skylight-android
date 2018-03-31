@@ -9,9 +9,10 @@ import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.DarknessProvider
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class DarknessStreamable(
+class DarknessProviderStreamable(
 	locations: Flowable<Location>,
 	darknessProvider: DarknessProvider,
 	now: Single<Instant>,
@@ -29,6 +30,7 @@ class DarknessStreamable(
 			.switchMap {
 				it.toFlowable()
 			}
+			.doOnNext { Timber.i("Streamed darkness: %s", it) }
 			.replay(1)
 			.refCount()
 }

@@ -11,7 +11,7 @@ import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.GeocoderLocationNameProvider
-import se.gustavkarlsson.skylight.android.services_impl.streamables.LocationNameStreamable
+import se.gustavkarlsson.skylight.android.services_impl.streamables.LocationNameProviderStreamable
 
 @Module
 class LocationNameProviderModule {
@@ -33,7 +33,7 @@ class LocationNameProviderModule {
 	fun provideLocationNameStreamable(
 		locations: Flowable<Location>,
 		provider: LocationNameProvider
-	): Streamable<Optional<String>> = LocationNameStreamable(locations, provider)
+	): Streamable<Optional<String>> = LocationNameProviderStreamable(locations, provider)
 
 	@Provides
 	@Reusable

@@ -16,8 +16,8 @@ import se.gustavkarlsson.skylight.android.extensions.create
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.VisibilityProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapApi
-import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.RetrofittedOpenWeatherMapVisibilityProvider
-import se.gustavkarlsson.skylight.android.services_impl.streamables.VisibilityStreamable
+import se.gustavkarlsson.skylight.android.services_impl.providers.RetrofittedOpenWeatherMapVisibilityProvider
+import se.gustavkarlsson.skylight.android.services_impl.streamables.VisibilityProviderStreamable
 
 @Module
 class VisibilityModule {
@@ -39,7 +39,10 @@ class VisibilityModule {
 		openWeatherMapApi: OpenWeatherMapApi
 	): VisibilityProvider {
 		val apiKey = context.getString(R.string.api_key_openweathermap)
-		return RetrofittedOpenWeatherMapVisibilityProvider(openWeatherMapApi, apiKey)
+		return RetrofittedOpenWeatherMapVisibilityProvider(
+			openWeatherMapApi,
+			apiKey
+		)
 	}
 
 	@Provides
@@ -47,7 +50,7 @@ class VisibilityModule {
 	fun provideVisibilityStreamable(
 		locations: Flowable<Location>,
 		provider: VisibilityProvider
-	): Streamable<Visibility> = VisibilityStreamable(locations, provider)
+	): Streamable<Visibility> = VisibilityProviderStreamable(locations, provider)
 
 	@Provides
 	@Reusable

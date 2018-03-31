@@ -11,8 +11,9 @@ import se.gustavkarlsson.skylight.android.entities.AuroraFactors
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.providers.*
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
+import timber.log.Timber
 
-class RealAuroraReportProvider(
+class CombiningAuroraReportProvider(
 	private val connectivityManager: ConnectivityManager,
 	private val locationProvider: LocationProvider,
 	private val auroraFactorsProvider: AuroraFactorsProvider,
@@ -36,6 +37,7 @@ class RealAuroraReportProvider(
 		}
 			.subscribeOn(Schedulers.computation())
 			.flatMap { it }
+			.doOnSuccess { Timber.i("Provided aurora report: %s", it) }
 	}
 
 	private fun checkConnectivity() { // TODO Should we check connectivity here?

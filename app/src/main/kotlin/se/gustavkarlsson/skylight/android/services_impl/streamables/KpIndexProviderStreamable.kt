@@ -5,14 +5,16 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.KpIndexProvider
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class KpIndexStreamable(
+class KpIndexProviderStreamable(
 	kpIndexProvider: KpIndexProvider,
 	pollingInterval: Duration
 ) : Streamable<KpIndex> {
 	override val stream: Flowable<KpIndex> = kpIndexProvider.get()
 		.repeatWhen { it.delay(pollingInterval.toMillis(), TimeUnit.MILLISECONDS) }
+		.doOnNext { Timber.i("Streamed Kp index: %s", it) }
 		.replay(1)
 		.refCount()
 }

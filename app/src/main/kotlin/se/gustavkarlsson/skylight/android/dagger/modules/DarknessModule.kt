@@ -12,7 +12,7 @@ import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.DarknessProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.KlausBrunnerDarknessProvider
-import se.gustavkarlsson.skylight.android.services_impl.streamables.DarknessStreamable
+import se.gustavkarlsson.skylight.android.services_impl.streamables.DarknessProviderStreamable
 
 @Module
 class DarknessModule {
@@ -27,7 +27,7 @@ class DarknessModule {
 		locations: Flowable<Location>,
 		provider: DarknessProvider,
 		now: Single<Instant>
-	): Streamable<Darkness> = DarknessStreamable(locations, provider, now, DARKNESS_POLLING_INTERVAL)
+	): Streamable<Darkness> = DarknessProviderStreamable(locations, provider, now, DARKNESS_POLLING_INTERVAL)
 
 	@Provides
 	@Reusable

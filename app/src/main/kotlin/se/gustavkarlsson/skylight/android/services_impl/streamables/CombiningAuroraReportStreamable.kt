@@ -8,8 +8,9 @@ import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.AuroraFactors
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.Streamable
+import timber.log.Timber
 
-class MergingAuroraReportStreamable(
+class CombiningAuroraReportStreamable(
 	locationNames: Flowable<Optional<String>>,
 	factors: Flowable<AuroraFactors>,
 	now: Single<Instant>,
@@ -23,6 +24,7 @@ class MergingAuroraReportStreamable(
 				}),
 			otherAuroraReports
 		)
+			.doOnNext { Timber.i("Streamed aurora report: %s", it) }
 			.replay(1)
 			.refCount()
 }

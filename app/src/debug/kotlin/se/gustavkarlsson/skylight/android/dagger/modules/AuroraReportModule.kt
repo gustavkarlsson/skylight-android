@@ -22,9 +22,9 @@ import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.*
 import se.gustavkarlsson.skylight.android.services_impl.RxPreferencesDebugSettings
+import se.gustavkarlsson.skylight.android.services_impl.providers.CombiningAuroraReportProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.DebugAuroraReportProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.RealAuroraReportProvider
-import se.gustavkarlsson.skylight.android.services_impl.streamables.MergingAuroraReportStreamable
+import se.gustavkarlsson.skylight.android.services_impl.streamables.CombiningAuroraReportStreamable
 import se.gustavkarlsson.skylight.android.services_impl.streamables.DebugAuroraReportStreamable
 
 @Module
@@ -47,7 +47,7 @@ class AuroraReportModule {
 		timeProvider: TimeProvider,
 		debugSettings: DebugSettings
 	): AuroraReportProvider {
-		val realProvider = RealAuroraReportProvider(
+		val realProvider = CombiningAuroraReportProvider(
 			connectivityManager,
 			locationProvider,
 			auroraFactorsProvider,
@@ -89,7 +89,7 @@ class AuroraReportModule {
 		debugSettings: DebugSettings,
 		auroraReportRelay: Relay<AuroraReport>
 	): Streamable<AuroraReport> {
-		val realStreamable = MergingAuroraReportStreamable(locationNames, factors, now,
+		val realStreamable = CombiningAuroraReportStreamable(locationNames, factors, now,
 			auroraReportRelay.toFlowable(BackpressureStrategy.LATEST))
 		return DebugAuroraReportStreamable(realStreamable, debugSettings, now)
 	}

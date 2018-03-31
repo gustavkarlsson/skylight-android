@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.system.measureTimeMillis
 
 @RunWith(MockitoJUnitRunner::class)
-class AggregatingAuroraFactorsProviderTest {
+class CombiningAuroraFactorsProviderTest {
 
 	@Mock
 	lateinit var mockKpIndexProvider: KpIndexProvider
@@ -50,7 +50,7 @@ class AggregatingAuroraFactorsProviderTest {
 
 	lateinit var geomagLocation: Single<GeomagLocation>
 
-	lateinit var impl: AggregatingAuroraFactorsProvider
+	lateinit var impl: CombiningAuroraFactorsProvider
 
 	@Before
 	fun setUp() {
@@ -63,7 +63,7 @@ class AggregatingAuroraFactorsProviderTest {
 		whenever(mockVisibilityProvider.get(any())).thenReturn(visibility)
 		whenever(mockDarknessProvider.get(any(), any())).thenReturn(darkness)
 		whenever(mockGeomagLocationProvider.get(any())).thenReturn(geomagLocation)
-		impl = AggregatingAuroraFactorsProvider(
+		impl = CombiningAuroraFactorsProvider(
 			mockKpIndexProvider,
 			mockVisibilityProvider,
 			mockDarknessProvider,

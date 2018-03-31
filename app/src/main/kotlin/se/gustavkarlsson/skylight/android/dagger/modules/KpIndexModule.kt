@@ -15,7 +15,7 @@ import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.KpIndexProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.RetrofittedKpIndexProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.kpindex.KpIndexApi
-import se.gustavkarlsson.skylight.android.services_impl.streamables.KpIndexStreamable
+import se.gustavkarlsson.skylight.android.services_impl.streamables.KpIndexProviderStreamable
 
 @Module
 class KpIndexModule {
@@ -40,7 +40,7 @@ class KpIndexModule {
 	@Reusable
 	fun provideKpIndexStreamable(
 		provider: KpIndexProvider
-	): Streamable<KpIndex> = KpIndexStreamable(provider, KP_INDEX_POLLING_INTERVAL)
+	): Streamable<KpIndex> = KpIndexProviderStreamable(provider, KP_INDEX_POLLING_INTERVAL)
 
 	@Provides
 	@Reusable

@@ -7,10 +7,11 @@ import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.services.providers.*
+import timber.log.Timber
 import javax.inject.Inject
 
 @Reusable
-class AggregatingAuroraFactorsProvider
+class CombiningAuroraFactorsProvider
 @Inject
 constructor(
 	private val kpIndexProvider: KpIndexProvider,
@@ -30,5 +31,6 @@ constructor(
 				AuroraFactors(kpIndex, geomagLocation, darkness, visibility)
 			})
 			.subscribeOn(Schedulers.computation())
+			.doOnSuccess { Timber.i("Provided aurora factors: %s", it) }
 	}
 }

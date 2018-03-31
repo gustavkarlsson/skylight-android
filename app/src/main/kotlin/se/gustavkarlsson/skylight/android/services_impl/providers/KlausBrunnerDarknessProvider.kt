@@ -8,6 +8,7 @@ import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.providers.DarknessProvider
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -23,5 +24,6 @@ constructor() : DarknessProvider {
 				val azimuthZenithAngle = Grena3.calculateSolarPosition(date, locationValue.latitude, locationValue.longitude, 0.0)
 				Darkness(azimuthZenithAngle.zenithAngle)
 			})
+			.doOnSuccess { Timber.i("Provided darkness: %s", it) }
 	}
 }

@@ -8,12 +8,13 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 
 @Reusable
-class RxLocationProvider
+class ReactiveLocationLocationProvider
 @Inject
 constructor(
 	private val reactiveLocationProvider: ReactiveLocationProvider
@@ -36,6 +37,7 @@ constructor(
 					else -> UserFriendlyException(R.string.error_could_not_determine_location, it)
 				}.let { Single.error(it) }
 			}
+			.doOnSuccess { Timber.i("Provided location: %s", it) }
 	}
 
 	companion object {

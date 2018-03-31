@@ -10,9 +10,10 @@ import org.threeten.bp.Duration
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.Streamable
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class LocationStreamable(
+class ReactiveLocationProviderStreamable(
 	reactiveLocationProvider: ReactiveLocationProvider,
 	pollingInterval: Duration,
 	retryDelay: Duration
@@ -29,6 +30,7 @@ class LocationStreamable(
 		.retryWhen { it.delay(retryDelay.toMillis(), TimeUnit.MILLISECONDS) }
 		.map { Location(it.latitude, it.longitude) }
 		.toFlowable(BackpressureStrategy.LATEST)
+		.doOnNext { Timber.i("Streamed location: %s", it) }
 		.replay(1)
 		.refCount()
 }

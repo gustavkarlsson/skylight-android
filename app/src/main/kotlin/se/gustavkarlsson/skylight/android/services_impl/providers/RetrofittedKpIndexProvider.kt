@@ -8,6 +8,7 @@ import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.services.providers.KpIndexProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.kpindex.KpIndexApi
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
+import timber.log.Timber
 import javax.inject.Inject
 
 @Reusable
@@ -25,5 +26,6 @@ constructor(
 			}.map {
 				KpIndex(it.value.toDouble())
 			}
+			.doOnSuccess { Timber.i("Provided Kp index: %s", it) }
 	}
 }

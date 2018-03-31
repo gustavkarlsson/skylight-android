@@ -7,8 +7,8 @@ import io.reactivex.Flowable
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.*
-import se.gustavkarlsson.skylight.android.services_impl.providers.AggregatingAuroraFactorsProvider
-import se.gustavkarlsson.skylight.android.services_impl.streamables.AuroraFactorsStreamable
+import se.gustavkarlsson.skylight.android.services_impl.providers.CombiningAuroraFactorsProvider
+import se.gustavkarlsson.skylight.android.services_impl.streamables.CombiningAuroraFactorsStreamable
 
 @Module
 class AuroraFactorsModule {
@@ -20,7 +20,7 @@ class AuroraFactorsModule {
 		visibilityProvider: VisibilityProvider,
 		darknessProvider: DarknessProvider,
 		geomagLocProvider: GeomagLocationProvider
-	): AuroraFactorsProvider = AggregatingAuroraFactorsProvider(kpIndexProvider, visibilityProvider, darknessProvider, geomagLocProvider)
+	): AuroraFactorsProvider = CombiningAuroraFactorsProvider(kpIndexProvider, visibilityProvider, darknessProvider, geomagLocProvider)
 
 	@Provides
 	@Reusable
@@ -29,7 +29,7 @@ class AuroraFactorsModule {
 		visibilities: Flowable<Visibility>,
 		darknesses: Flowable<Darkness>,
 		geomagLocations: Flowable<GeomagLocation>
-	): Streamable<AuroraFactors> = AuroraFactorsStreamable(kpIndexes, visibilities, darknesses, geomagLocations)
+	): Streamable<AuroraFactors> = CombiningAuroraFactorsStreamable(kpIndexes, visibilities, darknesses, geomagLocations)
 
 	@Provides
 	@Reusable

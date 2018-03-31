@@ -7,10 +7,11 @@ import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
+import timber.log.Timber
 import javax.inject.Inject
 
 @Reusable
-class LocationNameStreamable
+class LocationNameProviderStreamable
 @Inject
 constructor(
 	locations: Flowable<Location>,
@@ -21,6 +22,7 @@ constructor(
 			locationNameProvider.get(Single.just(it))
 				.toFlowable()
 		}
+		.doOnNext { Timber.i("Streamed location name: %s", it.orNull()) }
 		.replay(1)
 		.refCount()
 }

@@ -30,5 +30,6 @@ constructor(
 					Optional.absent<String>()
 				}
 			}
+			.doOnSuccess { Timber.i("Provided location name: %s", it.orNull()) }
 	}
 }

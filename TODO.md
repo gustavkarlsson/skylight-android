@@ -5,6 +5,7 @@
 * Use reactive permissions (especially with location)
 * Use reactive connectivity
 * Convert NAMEs to qualifier annotations
+* Look into moving data binding to lifecycle bound listener
 * Testing
   * Fix existing tests
   * Add more tests

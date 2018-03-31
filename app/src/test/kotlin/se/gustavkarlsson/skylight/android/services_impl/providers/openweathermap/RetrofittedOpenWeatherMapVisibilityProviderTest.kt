@@ -18,6 +18,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.services_impl.providers.RetrofittedOpenWeatherMapVisibilityProvider
 import java.nio.charset.Charset
 
 @RunWith(RobolectricTestRunner::class)
@@ -62,13 +63,16 @@ class RetrofittedOpenWeatherMapVisibilityProviderTest {
 
 	@Test
 	fun parsesCloudinessCorrectly() {
-		val service = RetrofittedOpenWeatherMapVisibilityProvider(Retrofit.Builder()
-			.client(mockedClient)
-			.baseUrl("http://mocked.com")
-			.addConverterFactory(GsonConverterFactory.create())
-			.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-			.build()
-			.create(OpenWeatherMapApi::class.java), "fake-app-id")
+		val service =
+			RetrofittedOpenWeatherMapVisibilityProvider(
+				Retrofit.Builder()
+					.client(mockedClient)
+					.baseUrl("http://mocked.com")
+					.addConverterFactory(GsonConverterFactory.create())
+					.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+					.build()
+					.create(OpenWeatherMapApi::class.java), "fake-app-id"
+			)
 
 		val cloudiness = runBlocking { service.get(Single.just(Location(0.0, 0.0))).blockingGet().cloudPercentage }
 

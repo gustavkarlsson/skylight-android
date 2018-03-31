@@ -5,6 +5,7 @@ import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.providers.GeomagLocationProvider
+import timber.log.Timber
 import java.lang.Math.*
 import javax.inject.Inject
 
@@ -19,6 +20,7 @@ constructor() : GeomagLocationProvider {
 				val geomagneticLatitude = calculateGeomagneticLatitude(it.latitude, it.longitude, MAGNETIC_NORTH_POLE_LATITUDE, MAGNETIC_NORTH_POLE_LONGITUDE)
 				GeomagLocation(geomagneticLatitude)
 			}
+			.doOnSuccess { Timber.i("Provided geomagnetic location: %s", it) }
 	}
 
 	// http://stackoverflow.com/a/7949249/940731
