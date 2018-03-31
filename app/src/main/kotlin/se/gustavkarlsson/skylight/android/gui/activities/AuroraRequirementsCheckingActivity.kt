@@ -96,7 +96,7 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity() {
     abstract fun onRequirementsMet()
 
 	companion object {
-        private val LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION
-        private val REQUEST_CODE_LOCATION_PERMISSION = 1973
+        private const val LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION
+        private const val REQUEST_CODE_LOCATION_PERMISSION = 1973
 	}
 }

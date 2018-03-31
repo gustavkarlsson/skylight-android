@@ -59,7 +59,7 @@ class DualSingletonCacheTest {
 
 
 	companion object {
-        private val DEFAULT = "default"
+        private const val DEFAULT = "default"
 	}
 }
 

@@ -33,6 +33,6 @@ class DualSingletonCache<T>(
 		set(value) = dualCache.put(KEY, value)
 
 	companion object {
-		private val KEY = "singleton" // Must match [a-z0-9_-]{1,64}
+		private const val KEY = "singleton" // Must match [a-z0-9_-]{1,64}
 	}
 }

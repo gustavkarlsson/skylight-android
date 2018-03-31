@@ -47,8 +47,8 @@ class Chance(value: Double?) : Comparable<Chance> {
 	override fun toString() = "Chance(value=$value)"
 
 	companion object {
-		private val HIGHEST = 1.0
-		private val LOWEST = 0.0
+		private const val HIGHEST = 1.0
+		private const val LOWEST = 0.0
 		val UNKNOWN = Chance(null)
 		val IMPOSSIBLE = Chance(LOWEST)
         val MAX = Chance(HIGHEST)

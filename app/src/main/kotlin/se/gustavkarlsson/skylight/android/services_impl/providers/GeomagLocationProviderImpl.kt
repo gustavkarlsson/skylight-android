@@ -86,7 +86,7 @@ constructor() : GeomagLocationProvider {
 	}
 
 	companion object {
-		private val MAGNETIC_NORTH_POLE_LATITUDE = 80.4
-		private val MAGNETIC_NORTH_POLE_LONGITUDE = -72.6
+		private const val MAGNETIC_NORTH_POLE_LATITUDE = 80.4
+		private const val MAGNETIC_NORTH_POLE_LONGITUDE = -72.6
 	}
 }
