@@ -4,8 +4,8 @@
 * Look into country changes while app running (Locale etc)
 * Look into moving data binding to lifecycle bound listener
 * Testing
-  * Fix existing tests
   * Add more tests
+  * Look into using Spek and Kluent for unit tests
 * Automate release
   * Publish on GitHub
   * Integrate with CI (https://appcenter.ms?)

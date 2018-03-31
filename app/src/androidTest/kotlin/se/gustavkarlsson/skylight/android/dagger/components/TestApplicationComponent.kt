@@ -6,25 +6,29 @@ import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivityTest
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceFragmentTest
 import javax.inject.Singleton
 
-@Component(modules = arrayOf(
+@Component(modules = [
 	ContextModule::class,
 	TimeModule::class,
 	SystemServiceModule::class,
-	GeocoderModule::class,
 	TestSharedPreferencesModule::class,
 	SettingsModule::class,
 	NotifierModule::class,
 	UpdateSchedulerModule::class,
-	SetupNotificationsModule::class,
 	EvaluationModule::class,
 	AuroraReportModule::class,
-	UserFriendlyExceptionStreamModule::class,
-	TestLocationProviderModule::class,
+	CacheModule::class,
+	TestLocationModule::class,
 	AuroraFactorsModule::class,
-	AuroraReportProviderModule::class,
-	TestLocationNameProviderModule::class,
-	GetNewAuroraReportModule::class
-))
+	DarknessModule::class,
+	VisibilityModule::class,
+	GeomagLocationModule::class,
+	KpIndexModule::class,
+	TestLocationNameModule::class,
+	ViewModelsModule::class,
+	FormattingModule::class,
+	LocalizationModule::class,
+	ConnectivityModule::class
+])
 @Singleton
 interface TestApplicationComponent : ApplicationComponent {
 	fun inject(auroraChanceFragmentTest: AuroraChanceFragmentTest)

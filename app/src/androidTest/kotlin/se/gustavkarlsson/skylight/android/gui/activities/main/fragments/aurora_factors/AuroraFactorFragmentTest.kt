@@ -14,8 +14,8 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
 import se.gustavkarlsson.skylight.android.dagger.components.DaggerTestApplicationComponent
 import se.gustavkarlsson.skylight.android.dagger.modules.ContextModule
-import se.gustavkarlsson.skylight.android.dagger.modules.TestLocationNameProviderModule
-import se.gustavkarlsson.skylight.android.dagger.modules.TestLocationProviderModule
+import se.gustavkarlsson.skylight.android.dagger.modules.TestLocationModule
+import se.gustavkarlsson.skylight.android.dagger.modules.TestLocationNameModule
 import se.gustavkarlsson.skylight.android.dagger.modules.TestSharedPreferencesModule
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import se.gustavkarlsson.skylight.android.test.ApplicationComponentActivityTestRule
@@ -33,8 +33,8 @@ class AuroraFactorFragmentTest {
 		DaggerTestApplicationComponent.builder()
 			.contextModule(ContextModule(Skylight.instance))
 			.testSharedPreferencesModule(TestSharedPreferencesModule())
-			.testLocationProviderModule(TestLocationProviderModule())
-			.testLocationNameProviderModule(TestLocationNameProviderModule())
+			.testLocationModule(TestLocationModule())
+			.testLocationNameModule(TestLocationNameModule())
 			.build()
 	}
 

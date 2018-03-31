@@ -10,7 +10,7 @@ import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob
 import javax.inject.Singleton
 
-@Component(modules = arrayOf(
+@Component(modules = [
 	ContextModule::class,
 	TimeModule::class,
 	SystemServiceModule::class,
@@ -27,12 +27,12 @@ import javax.inject.Singleton
 	VisibilityModule::class,
 	GeomagLocationModule::class,
 	KpIndexModule::class,
-	LocationNameProviderModule::class,
+	LocationNameModule::class,
 	ViewModelsModule::class,
 	FormattingModule::class,
 	LocalizationModule::class,
 	ConnectivityModule::class
-))
+])
 @Singleton
 interface ApplicationComponent {
 	fun getUpdateJob(): UpdateJob

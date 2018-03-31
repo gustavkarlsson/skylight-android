@@ -1,7 +1,5 @@
 package se.gustavkarlsson.skylight.android.dagger.modules
 
-import android.content.Context
-import android.location.Geocoder
 import com.hadisatrio.optional.Optional
 import dagger.Module
 import dagger.Provides
@@ -11,23 +9,20 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.GeocoderLocationNameProvider
 import se.gustavkarlsson.skylight.android.services_impl.streamables.LocationNameProviderStreamable
+import se.gustavkarlsson.skylight.android.test.TestLocationNameProvider
 
 @Module
-class LocationNameProviderModule {
+class TestLocationNameModule {
+
+    @Provides
+    @Reusable
+	fun provideTestLocationNameProvider(): TestLocationNameProvider =
+		TestLocationNameProvider({ "Garden of Eden" })
 
 	@Provides
 	@Reusable
-	fun provideGeocoder(
-		context: Context
-	): Geocoder = Geocoder(context)
-
-	@Provides
-	@Reusable
-	fun provideLocationNameProvider(
-		geocoder: Geocoder
-	): LocationNameProvider = GeocoderLocationNameProvider(geocoder)
+	fun provideLocationNameProvider(testLocationNameProvider: TestLocationNameProvider): LocationNameProvider = testLocationNameProvider
 
 	@Provides
 	@Reusable
