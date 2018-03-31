@@ -30,6 +30,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
+		ensureRequirementsMet()
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -48,7 +49,6 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 
 	public override fun onStart() {
 		super.onStart()
-		ensureRequirementsMet()
 		bindData()
 	}
 	override fun onRequirementsMet() {

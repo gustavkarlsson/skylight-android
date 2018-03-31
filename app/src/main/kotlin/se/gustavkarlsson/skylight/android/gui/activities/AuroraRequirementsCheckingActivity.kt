@@ -1,28 +1,35 @@
 package se.gustavkarlsson.skylight.android.gui.activities
 
 import android.Manifest
-import android.content.pm.PackageManager
-import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
+import android.arch.lifecycle.Lifecycle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.tbruyelle.rxpermissions2.RxPermissions
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
+import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
 import timber.log.Timber
 
 abstract class AuroraRequirementsCheckingActivity : AppCompatActivity() {
 
+	private val rxPermissions: RxPermissions by lazy {
+		RxPermissions(this)
+			.apply { setLogging(BuildConfig.DEBUG) }
+	}
+
     protected fun ensureRequirementsMet() {
         if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) != ConnectionResult.SUCCESS) {
-			showGooglePlayServicesNotAvailable()
+			// TODO Flesh out to handle more cases (like installs, upgrades, etc)
+			showGooglePlayServicesNotAvailableDialog()
         } else {
 			ensureLocationPermission()
         }
     }
 
-	private fun showGooglePlayServicesNotAvailable() {
+	private fun showGooglePlayServicesNotAvailableDialog() {
 		AlertDialog.Builder(this)
 			.setIcon(R.drawable.warning_white_24dp)
 			.setTitle(R.string.error_google_play_services_is_not_available_title)
@@ -33,43 +40,25 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity() {
 	}
 
     private fun ensureLocationPermission() {
-        if (ContextCompat.checkSelfPermission(this, LOCATION_PERMISSION) != PackageManager.PERMISSION_GRANTED) {
-            showLocationPermissionRequest()
-        } else {
-            onRequirementsMet()
-        }
-    }
-
-	private fun showLocationPermissionRequest() {
-        ActivityCompat.requestPermissions(this, arrayOf(LOCATION_PERMISSION), REQUEST_CODE_LOCATION_PERMISSION)
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (REQUEST_CODE_LOCATION_PERMISSION == requestCode) {
-            for (i in permissions.indices) {
-                val permission = permissions[i]
-                val result = grantResults[i]
-                if (LOCATION_PERMISSION == permission) {
-                    if (PERMISSION_GRANTED != result) {
-                        handlePermissionDenied()
-                    } else {
-                        onRequirementsMet()
-                    }
-                }
-            }
-        }
-    }
-
-    private fun handlePermissionDenied() {
-        Timber.i("Permission denied: %s", LOCATION_PERMISSION)
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, LOCATION_PERMISSION)) {
-            Timber.i("Showing rationale to user for another chance")
-            showLocationPermissionRequiredDialog()
-        } else {
-			Timber.i("Showing permission denied dialog and exiting")
-            showLocationPermissionDeniedDialog()
-        }
+		rxPermissions
+			.requestEach(LOCATION_PERMISSION)
+			.autoDisposable(scope(Lifecycle.Event.ON_DESTROY))
+			.subscribe {
+				when {
+					it.granted -> {
+						Timber.i("Permission met")
+						onRequirementsMet()
+					}
+					it.shouldShowRequestPermissionRationale -> {
+						Timber.i("Showing permission rationale to user for another chance")
+						showLocationPermissionRequiredDialog()
+					}
+					else -> {
+						Timber.i("Showing permission denied dialog and exiting")
+						showLocationPermissionDeniedDialog()
+					}
+				}
+			}
     }
 
     private fun showLocationPermissionRequiredDialog() {
@@ -77,7 +66,7 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity() {
                 .setIcon(R.drawable.warning_white_24dp)
                 .setTitle(getString(R.string.location_permission_required_title))
                 .setMessage(R.string.location_permission_required_desc)
-                .setPositiveButton(android.R.string.yes) { _, _ -> showLocationPermissionRequest() }
+                .setPositiveButton(android.R.string.yes) { _, _ -> ensureLocationPermission() }
                 .setNegativeButton(R.string.exit) { _, _ -> System.exit(2) }
                 .setCancelable(false)
                 .show()
@@ -97,6 +86,5 @@ abstract class AuroraRequirementsCheckingActivity : AppCompatActivity() {
 
 	companion object {
         private const val LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION
-        private const val REQUEST_CODE_LOCATION_PERMISSION = 1973
 	}
 }

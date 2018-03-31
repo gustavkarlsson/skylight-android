@@ -2,7 +2,6 @@
 
 * Set timestamp based on earliest/latest factor for streams?
 * Look into country changes while app running (Locale etc)
-* Use reactive permissions (especially with location)
 * Look into moving data binding to lifecycle bound listener
 * Testing
   * Fix existing tests
