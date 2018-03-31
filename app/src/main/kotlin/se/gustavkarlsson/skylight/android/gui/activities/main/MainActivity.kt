@@ -74,17 +74,14 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 			.subscribe { toast(it) }
 
 		viewModel.connectivityMessages
-			.doOnNext {
-				if (it.isPresent) {
-					Timber.d("Showing connectivity message: %s", it.get())
-				} else {
-					Timber.d("Hiding connectivity message")
-				}
-			}
 			.forUi(this)
 			.subscribe {
-				snackbar?.run { dismiss() }
+				snackbar?.run {
+					Timber.d("Hiding connectivity message")
+					dismiss()
+				}
 				it.ifPresent {
+					Timber.d("Showing connectivity message: %s", it)
 					snackbar = indefiniteErrorSnackbar(coordinatorLayout, it).apply { show() }
 				}
 			}
