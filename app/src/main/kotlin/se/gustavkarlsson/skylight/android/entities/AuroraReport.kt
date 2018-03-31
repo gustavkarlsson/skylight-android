@@ -17,25 +17,3 @@ data class AuroraReport(
 	}
 }
 
-data class AuroraFactors(
-	val kpIndex: KpIndex,
-	val geomagLocation: GeomagLocation,
-	val darkness: Darkness,
-	val visibility: Visibility
-)
-
-data class Darkness(
-    val sunZenithAngle: Double? = null
-)
-
-data class KpIndex(
-    val value: Double? = null
-)
-
-data class GeomagLocation(
-    val latitude: Double? = null
-)
-
-data class Visibility(
-	val cloudPercentage: Int? = null
-)
