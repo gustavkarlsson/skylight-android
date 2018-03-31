@@ -8,16 +8,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
-import org.threeten.bp.Clock
-import org.threeten.bp.Duration
 import org.threeten.bp.Instant
-import org.threeten.bp.ZoneOffset
-import se.gustavkarlsson.skylight.android.entities.Darkness
-import se.gustavkarlsson.skylight.android.entities.GeomagLocation
-import se.gustavkarlsson.skylight.android.entities.KpIndex
-import se.gustavkarlsson.skylight.android.entities.Visibility
+import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.mockito.any
-import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.providers.DarknessProvider
 import se.gustavkarlsson.skylight.android.services.providers.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.services.providers.KpIndexProvider
@@ -40,6 +33,8 @@ class CombiningAuroraFactorsProviderTest {
 	@Mock
 	lateinit var mockGeomagLocationProvider: GeomagLocationProvider
 
+	lateinit var time: Single<Instant>
+
 	lateinit var location: Single<Location>
 
 	lateinit var kpIndex: Single<KpIndex>
@@ -54,6 +49,7 @@ class CombiningAuroraFactorsProviderTest {
 
 	@Before
 	fun setUp() {
+		time = Single.just(Instant.ofEpochSecond(950_000))
 		location = Single.just(Location(5.5, 10.5))
 		kpIndex = Single.just(KpIndex(4.5))
 		visibility = Single.just(Visibility(50))
@@ -67,8 +63,7 @@ class CombiningAuroraFactorsProviderTest {
 			mockKpIndexProvider,
 			mockVisibilityProvider,
 			mockDarknessProvider,
-			mockGeomagLocationProvider,
-			Clock.fixed(Instant.EPOCH.plus(Duration.ofDays(5000)), ZoneOffset.UTC))
+			mockGeomagLocationProvider)
 	}
 
 	@Test
@@ -79,7 +74,7 @@ class CombiningAuroraFactorsProviderTest {
 		whenever(mockGeomagLocationProvider.get(any())).thenReturn(geomagLocation.delayedBy100Millis())
 
 		val timeTakenMillis = measureTimeMillis {
-			impl.get(location).blockingGet()
+			impl.get(time, location).blockingGet()
 		}
 
 		assertThat(timeTakenMillis).isBetween(100, 199)

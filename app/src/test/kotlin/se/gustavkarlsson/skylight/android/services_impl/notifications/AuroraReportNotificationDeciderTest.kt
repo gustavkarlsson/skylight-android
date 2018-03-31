@@ -12,10 +12,11 @@ import org.mockito.Mockito.never
 import org.mockito.Mockito.verifyZeroInteractions
 import org.mockito.junit.MockitoJUnitRunner
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.entities.Chance
-import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
+import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.services.Settings
+import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.services_impl.AppVisibilityEvaluator
 
 @RunWith(MockitoJUnitRunner::class)
@@ -47,7 +48,7 @@ class AuroraReportNotificationDeciderTest {
     @Before
     fun setUp() {
         whenever(mockLastNotifiedReportCache.value).thenReturn(mockLastAuroraReport)
-        whenever(mockSettings.isEnableNotifications).thenReturn(true)
+        whenever(mockSettings.notificationsEnabled).thenReturn(true)
         whenever(mockOutdatedEvaluator.isOutdated(mockLastAuroraReport)).thenReturn(false)
 		whenever(mockAppVisibilityEvaluator.isVisible()).thenReturn(false)
 
@@ -66,8 +67,7 @@ class AuroraReportNotificationDeciderTest {
     }
 
     @Test
-    fun notifyIfNewChanceIsSameAsOldChanceButOldChanceIsOutdated() {
-        whenever(mockChanceEvaluator.evaluate(mockLastAuroraReport)).thenReturn(Chance(0.5))
+    fun notifyIfNewChanceIsAboveTriggerLevelAndLastValueIsOutdated() {
         whenever(mockChanceEvaluator.evaluate(mockNewAuroraReport)).thenReturn(Chance(0.5))
         whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.LOW)
         whenever(mockOutdatedEvaluator.isOutdated(mockLastAuroraReport)).thenReturn(true)
@@ -79,11 +79,11 @@ class AuroraReportNotificationDeciderTest {
 
     @Test
     fun dontNotifyIfNotificationsAreDisabled() {
-        whenever(mockSettings.isEnableNotifications).thenReturn(false)
+        whenever(mockSettings.notificationsEnabled).thenReturn(false)
 
         val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
 
-        verify(mockSettings).isEnableNotifications
+        verify(mockSettings).notificationsEnabled
 		verifyNoMoreInteractions(mockSettings)
 		verifyZeroInteractions(mockChanceEvaluator)
         verifyZeroInteractions(mockOutdatedEvaluator)

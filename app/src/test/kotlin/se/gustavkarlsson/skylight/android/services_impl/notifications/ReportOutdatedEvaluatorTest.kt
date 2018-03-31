@@ -1,28 +1,26 @@
 package se.gustavkarlsson.skylight.android.services_impl.notifications
 
 import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Single
 import org.assertj.core.api.SoftAssertions
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
-import org.threeten.bp.Clock
 import org.threeten.bp.Instant
+import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.temporal.ChronoUnit.DAYS
 import org.threeten.bp.temporal.ChronoUnit.HOURS
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.services.providers.ZoneIdProvider
+import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
 
 @RunWith(MockitoJUnitRunner::class)
 class ReportOutdatedEvaluatorTest {
 
     @Mock
-	lateinit var mockClock: Clock
-
-    @Mock
-	lateinit var mockZoneIdProvider: ZoneIdProvider
+	lateinit var mockTimeProvider: TimeProvider
 
     @Mock
     lateinit var mockReport: AuroraReport
@@ -31,9 +29,8 @@ class ReportOutdatedEvaluatorTest {
 
     @Before
     fun setUp() {
-        whenever(mockZoneIdProvider.zoneId).thenReturn(ZONE_OFFSET)
-        whenever(mockClock.zone).thenReturn(ZONE_OFFSET)
-        impl = ReportOutdatedEvaluator(mockClock, mockZoneIdProvider)
+        whenever(mockTimeProvider.getZoneId()).thenReturn(Single.just(ZONE_OFFSET))
+        impl = ReportOutdatedEvaluator(mockTimeProvider)
     }
 
     @Test
@@ -62,8 +59,11 @@ class ReportOutdatedEvaluatorTest {
     }
 
     private fun assertOutdated(lastReportTime: Instant, currentTime: Instant, expected: Boolean, softly: SoftAssertions) {
-        whenever(mockReport.timestamp).thenReturn(lastReportTime)
-        whenever(mockClock.instant()).thenReturn(currentTime)
+		whenever(mockReport.timestamp).thenReturn(lastReportTime)
+		whenever(mockTimeProvider.getTime()).thenReturn(Single.just(currentTime))
+		whenever(mockTimeProvider.getLocalDate()).thenReturn(
+			Single.just(LocalDateTime.ofInstant(currentTime, ZONE_OFFSET).toLocalDate())
+		)
 
         val outdated = impl.isOutdated(mockReport)
 
