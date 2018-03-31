@@ -20,8 +20,8 @@ class RxPreferencesSettings(context: Context, rxSharedPreferences: RxSharedPrefe
 
 	private val triggerLevelPreference by lazy {
 		val key = context.getString(R.string.pref_trigger_level_key)
-		val default = Integer.parseInt(context.getString(R.string.pref_trigger_level_default))
-		val preference = rxSharedPreferences.getInteger(key, default)
+		val default = context.getString(R.string.pref_trigger_level_default)
+		val preference = rxSharedPreferences.getString(key, default)
 		preference
 	}
 
@@ -33,10 +33,10 @@ class RxPreferencesSettings(context: Context, rxSharedPreferences: RxSharedPrefe
 		.toFlowable(BackpressureStrategy.LATEST)
 
 	override val triggerLevel: ChanceLevel
-		get() = triggerLevelPreference.get().let { ChanceLevel.values()[it] }
+		get() = triggerLevelPreference.get().let { ChanceLevel.values()[it.toInt()] }
 
 	override val triggerLevelChanges: Flowable<ChanceLevel> = triggerLevelPreference
 		.asObservable()
-		.map { ChanceLevel.values()[it] }
+		.map { ChanceLevel.values()[it.toInt()] }
 		.toFlowable(BackpressureStrategy.LATEST)
 }
