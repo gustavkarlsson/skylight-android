@@ -1,20 +1,16 @@
 package se.gustavkarlsson.skylight.android.services_impl.providers
 
-import android.net.ConnectivityManager
 import com.hadisatrio.optional.Optional
 import io.reactivex.Single
 import io.reactivex.functions.Function3
 import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.AuroraFactors
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.providers.*
-import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import timber.log.Timber
 
 class CombiningAuroraReportProvider(
-	private val connectivityManager: ConnectivityManager,
 	private val locationProvider: LocationProvider,
 	private val auroraFactorsProvider: AuroraFactorsProvider,
 	private val locationNameProvider: LocationNameProvider,
@@ -23,7 +19,6 @@ class CombiningAuroraReportProvider(
 
 	override fun get(): Single<AuroraReport> {
 		return Single.fromCallable {
-			checkConnectivity()
 			val location = locationProvider.get().cache()
 			val time = timeProvider.getTime().cache()
 			Single.zip(
@@ -38,12 +33,5 @@ class CombiningAuroraReportProvider(
 			.subscribeOn(Schedulers.computation())
 			.flatMap { it }
 			.doOnSuccess { Timber.i("Provided aurora report: %s", it) }
-	}
-
-	private fun checkConnectivity() { // TODO Should we check connectivity here?
-		val networkInfo = connectivityManager.activeNetworkInfo
-		if (networkInfo == null || !networkInfo.isConnected) {
-			throw UserFriendlyException(R.string.error_no_internet)
-		}
 	}
 }

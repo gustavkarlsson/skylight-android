@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.dagger.modules
 
 import android.content.Context
-import android.net.ConnectivityManager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import com.hadisatrio.optional.Optional
 import com.jakewharton.rxrelay2.PublishRelay
@@ -40,7 +39,6 @@ class AuroraReportModule {
 	@Provides
 	@Reusable
 	fun provideAuroraReportProvider(
-		connectivityManager: ConnectivityManager,
 		locationProvider: LocationProvider,
 		auroraFactorsProvider: AuroraFactorsProvider,
 		locationNameProvider: LocationNameProvider,
@@ -48,7 +46,6 @@ class AuroraReportModule {
 		debugSettings: DebugSettings
 	): AuroraReportProvider {
 		val realProvider = CombiningAuroraReportProvider(
-			connectivityManager,
 			locationProvider,
 			auroraFactorsProvider,
 			locationNameProvider,
@@ -60,9 +57,11 @@ class AuroraReportModule {
 	@Provides
 	@Reusable
 	fun provideAuroraReportSingle(
-		auroraReportProvider: AuroraReportProvider
+		auroraReportProvider: AuroraReportProvider,
+		cache: SingletonCache<AuroraReport>
 	): Single<AuroraReport> {
 		return auroraReportProvider.get()
+			.doOnSuccess { cache.value = it }
 	}
 
 	@Provides
