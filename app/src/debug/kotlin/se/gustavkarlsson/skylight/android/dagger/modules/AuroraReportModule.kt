@@ -23,6 +23,7 @@ import se.gustavkarlsson.skylight.android.services_impl.providers.CombiningAuror
 import se.gustavkarlsson.skylight.android.services_impl.providers.DebugAuroraReportProvider
 import se.gustavkarlsson.skylight.android.services_impl.streamables.CombiningAuroraReportStreamable
 import se.gustavkarlsson.skylight.android.services_impl.streamables.DebugAuroraReportStreamable
+import javax.inject.Singleton
 
 @Module
 class AuroraReportModule {
@@ -63,7 +64,7 @@ class AuroraReportModule {
 	}
 
 	@Provides
-	@Reusable
+	@Singleton
 	fun provideAuroraReportRelay(
 	): Relay<AuroraReport> {
 		return PublishRelay.create()
