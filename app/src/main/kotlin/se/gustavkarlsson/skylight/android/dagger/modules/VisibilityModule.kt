@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.dagger.modules
 
-import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -10,7 +9,6 @@ import org.threeten.bp.Duration
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Visibility
 import se.gustavkarlsson.skylight.android.extensions.create
@@ -21,7 +19,7 @@ import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap
 import se.gustavkarlsson.skylight.android.services_impl.streamables.VisibilityProviderStreamable
 
 @Module
-class VisibilityModule {
+class VisibilityModule(private val openWeatherMapApiKey: String) {
 
 	@Provides
 	@Reusable
@@ -36,13 +34,11 @@ class VisibilityModule {
 	@Provides
 	@Reusable
 	fun provideVisibilityProvider(
-		context: Context,
 		openWeatherMapApi: OpenWeatherMapApi
 	): VisibilityProvider {
-		val apiKey = context.getString(R.string.api_key_openweathermap)
 		return RetrofittedOpenWeatherMapVisibilityProvider(
 			openWeatherMapApi,
-			apiKey
+			openWeatherMapApiKey
 		)
 	}
 

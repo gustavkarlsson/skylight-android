@@ -69,6 +69,9 @@ android {
 			applicationIdSuffix ".debug"
 		}
 	}
+	buildTypes.each {
+		it.buildConfigField 'String', 'OPENWEATHERMAP_API_KEY', "\"$project.openweathermap_api_key\""
+	}
 }
 
 kotlin {

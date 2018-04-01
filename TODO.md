@@ -10,5 +10,4 @@
   * Publish on GitHub
   * Integrate with CI (https://appcenter.ms?)
   * Add fastlane
-  * Move secrets to env
 * Manage state like Jake Wharton: https://www.youtube.com/watch?v=0IKHxjkgop4

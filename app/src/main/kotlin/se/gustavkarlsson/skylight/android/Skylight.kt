@@ -7,6 +7,7 @@ import io.reactivex.plugins.RxJavaPlugins
 import se.gustavkarlsson.skylight.android.dagger.components.ApplicationComponent
 import se.gustavkarlsson.skylight.android.dagger.components.DaggerApplicationComponent
 import se.gustavkarlsson.skylight.android.dagger.modules.ContextModule
+import se.gustavkarlsson.skylight.android.dagger.modules.VisibilityModule
 import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob
 import se.gustavkarlsson.skylight.android.util.NullTree
 import timber.log.Timber
@@ -21,9 +22,10 @@ class Skylight : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
 		instance = this
-        component = DaggerApplicationComponent.builder()
-                .contextModule(ContextModule(this))
-                .build()
+		component = DaggerApplicationComponent.builder()
+			.contextModule(ContextModule(this))
+			.visibilityModule(VisibilityModule(BuildConfig.OPENWEATHERMAP_API_KEY))
+			.build()
 		bootstrap()
 		setupNotifications()
     }
