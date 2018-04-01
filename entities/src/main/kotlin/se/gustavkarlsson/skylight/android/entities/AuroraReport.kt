@@ -8,12 +8,11 @@ data class AuroraReport(
 	val factors: AuroraFactors
 ) {
 	companion object {
-	    val empty = AuroraReport(Instant.EPOCH, null, AuroraFactors(
-			KpIndex(),
-			GeomagLocation(),
-			Darkness(),
-			Visibility()
-		))
+		val empty = AuroraReport(
+			Instant.EPOCH,
+			null,
+			AuroraFactors(KpIndex(), GeomagLocation(), Darkness(), Visibility())
+		)
 	}
 }
 

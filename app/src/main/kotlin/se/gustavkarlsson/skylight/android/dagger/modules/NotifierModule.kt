@@ -7,9 +7,11 @@ import dagger.Provides
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.dagger.qualifiers.LastNotified
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Notifier
 import se.gustavkarlsson.skylight.android.services.SingletonCache
+import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
 import se.gustavkarlsson.skylight.android.services_impl.cache.DualSingletonCache
 import se.gustavkarlsson.skylight.android.services_impl.cache.auroraReportCacheSerializer
 import se.gustavkarlsson.skylight.android.services_impl.notifications.AuroraReportNotifier
@@ -30,8 +32,9 @@ class NotifierModule {
     fun provideNotifier(
 		context: Context,
 		notificationManager: NotificationManager,
+		chanceLevelFormatter: SingleValueFormatter<ChanceLevel>,
 		chanceEvaluator: ChanceEvaluator<AuroraReport>
-	): Notifier<AuroraReport> = AuroraReportNotifier(context, notificationManager, chanceEvaluator)
+	): Notifier<AuroraReport> = AuroraReportNotifier(context, notificationManager, chanceLevelFormatter, chanceEvaluator)
 
 	companion object {
 		private const val LAST_NOTIFIED_CACHE_ID = "last-notified-aurora-report"

@@ -9,12 +9,14 @@ import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
+import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
 import java.util.concurrent.TimeUnit
 
 class AuroraChanceViewModel(
 	auroraReports: Flowable<AuroraReport>,
 	auroraChanceEvaluator: ChanceEvaluator<AuroraReport>,
 	relativeTimeFormatter: RelativeTimeFormatter,
+	chanceLevelFormatter: SingleValueFormatter<ChanceLevel>,
 	now: Single<Instant>,
 	nowTextThreshold: Duration
 ) : ViewModel() {
@@ -25,10 +27,10 @@ class AuroraChanceViewModel(
 		.replay(1)
 		.refCount()
 
-	val chanceLevel: Flowable<Int> = auroraReports
+	val chanceLevel: Flowable<CharSequence> = auroraReports
 		.map(auroraChanceEvaluator::evaluate)
 		.map(ChanceLevel.Companion::fromChance)
-		.map(ChanceLevel::resourceId)
+		.map(chanceLevelFormatter::format)
 		.distinctUntilChanged()
 
 	val timeSinceUpdate: Flowable<CharSequence> = timestamps

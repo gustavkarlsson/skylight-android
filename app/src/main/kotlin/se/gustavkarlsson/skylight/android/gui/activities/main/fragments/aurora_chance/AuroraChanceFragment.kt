@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.visibility
 import com.jakewharton.rxbinding2.widget.text
-import com.jakewharton.rxbinding2.widget.textRes
 import kotlinx.android.synthetic.main.fragment_aurora_chance.*
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
@@ -34,9 +33,9 @@ class AuroraChanceFragment : Fragment() {
 
 	private fun bindData() {
 		viewModel.chanceLevel
-			.doOnNext { Timber.d("Updating chanceLevel view") }
+			.doOnNext { Timber.d("Updating chanceLevel view: %s", it) }
 			.forUi(this)
-			.subscribe(chance.textRes())
+			.subscribe(chance.text())
 
 		viewModel.timeSinceUpdate
 			.doOnNext { Timber.d("Updating timeSinceUpdate view: %s", it) }

@@ -9,8 +9,10 @@ import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.dagger.qualifiers.RightNowThresholdName
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
+import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
 import javax.inject.Inject
 
 @Reusable
@@ -20,6 +22,7 @@ constructor(
 	private val auroraReports: Flowable<AuroraReport>,
 	private val auroraChanceEvaluator: ChanceEvaluator<AuroraReport>,
 	private val relativeTimeFormatter: RelativeTimeFormatter,
+	private val chanceLevelFormatter: SingleValueFormatter<ChanceLevel>,
 	private val now: Single<Instant>,
 	@RightNowThresholdName private val rightNowThreshold: Duration
 ) : ViewModelProvider.Factory {
@@ -31,6 +34,7 @@ constructor(
 			auroraReports,
 			auroraChanceEvaluator,
 			relativeTimeFormatter,
+			chanceLevelFormatter,
 			now,
 			rightNowThreshold
 		) as T

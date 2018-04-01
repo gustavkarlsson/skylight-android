@@ -1,6 +1,17 @@
 buildscript {
 	ext {
 		kotlin_version = "1.2.31"
+		retrofit_version = "2.3.0"
+		dagger_version = "2.14.1"
+		google_play_services_version = "11.8.0"
+		android_support_version = "27.0.2"
+		anko_version = "0.10.4"
+		mockito_version = "2.10.0"
+		mockito_kotlin_version = "1.5.0"
+		commons_io_version = "2.4" // Don't upgrade, as later versions require Java 6 libs
+		rxbinding_version = "2.1.1"
+		autodispose_version = "0.6.1"
+		threetenabp_version = "1.0.5"
 	}
 	repositories {
 		jcenter()
