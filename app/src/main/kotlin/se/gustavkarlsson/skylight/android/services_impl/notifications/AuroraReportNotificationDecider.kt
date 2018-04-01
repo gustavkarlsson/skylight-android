@@ -1,12 +1,12 @@
 package se.gustavkarlsson.skylight.android.services_impl.notifications
 
 import dagger.Reusable
+import se.gustavkarlsson.skylight.android.caching.SingletonCache
 import se.gustavkarlsson.skylight.android.dagger.qualifiers.LastNotified
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Settings
-import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.services_impl.AppVisibilityEvaluator
 import javax.inject.Inject
 

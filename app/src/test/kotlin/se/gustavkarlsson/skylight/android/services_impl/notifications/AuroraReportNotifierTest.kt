@@ -12,9 +12,11 @@ import org.mockito.Mockito.verify
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.mockito.any
 import se.gustavkarlsson.skylight.android.entities.Chance
+import se.gustavkarlsson.skylight.android.entities.ChanceLevel
+import se.gustavkarlsson.skylight.android.mockito.any
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
 
 @RunWith(RobolectricTestRunner::class)
 class AuroraReportNotifierTest {
@@ -25,6 +27,8 @@ class AuroraReportNotifierTest {
 
 	lateinit var mockChanceEvaluator: ChanceEvaluator<AuroraReport>
 
+	lateinit var mockChanceLevelFormatter: SingleValueFormatter<ChanceLevel>
+
     lateinit var mockAuroraReport: AuroraReport
 
 	lateinit var impl: AuroraReportNotifier
@@ -34,9 +38,10 @@ class AuroraReportNotifierTest {
         context = RuntimeEnvironment.application
 		mockNotificationManager = mock()
 		mockChanceEvaluator = mock()
+		mockChanceLevelFormatter = mock()
         mockAuroraReport = mock()
         whenever(mockChanceEvaluator.evaluate(any())).thenReturn(Chance(0.5))
-        impl = AuroraReportNotifier(context, mockNotificationManager, mockChanceEvaluator)
+        impl = AuroraReportNotifier(context, mockNotificationManager, mockChanceLevelFormatter, mockChanceEvaluator)
     }
 
     @Test

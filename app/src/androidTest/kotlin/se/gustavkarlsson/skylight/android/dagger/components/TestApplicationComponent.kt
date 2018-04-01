@@ -16,7 +16,6 @@ import javax.inject.Singleton
 	UpdateSchedulerModule::class,
 	EvaluationModule::class,
 	AuroraReportModule::class,
-	CacheModule::class,
 	TestLocationModule::class,
 	AuroraFactorsModule::class,
 	DarknessModule::class,

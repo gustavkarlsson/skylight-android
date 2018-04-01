@@ -10,13 +10,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
 import se.gustavkarlsson.skylight.android.dagger.components.DaggerTestApplicationComponent
-import se.gustavkarlsson.skylight.android.dagger.modules.ContextModule
-import se.gustavkarlsson.skylight.android.dagger.modules.TestLocationModule
-import se.gustavkarlsson.skylight.android.dagger.modules.TestLocationNameModule
-import se.gustavkarlsson.skylight.android.dagger.modules.TestSharedPreferencesModule
+import se.gustavkarlsson.skylight.android.dagger.modules.*
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import se.gustavkarlsson.skylight.android.test.ApplicationComponentActivityTestRule
 import se.gustavkarlsson.skylight.android.test.clearCache
@@ -35,6 +33,7 @@ class AuroraFactorFragmentTest {
 			.testSharedPreferencesModule(TestSharedPreferencesModule())
 			.testLocationModule(TestLocationModule())
 			.testLocationNameModule(TestLocationNameModule())
+			.visibilityModule(VisibilityModule(BuildConfig.OPENWEATHERMAP_API_KEY))
 			.build()
 	}
 

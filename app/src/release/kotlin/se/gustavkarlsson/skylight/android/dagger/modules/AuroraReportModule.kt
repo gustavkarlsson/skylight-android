@@ -13,8 +13,6 @@ import io.reactivex.functions.Consumer
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.AuroraFactors
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.extensions.singletonCache
-import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.*
 import se.gustavkarlsson.skylight.android.services_impl.providers.CombiningAuroraReportProvider
@@ -73,12 +71,11 @@ class AuroraReportModule {
 	@Provides
 	@Reusable
 	fun provideAuroraReportFlowable(
-		cache: SingletonCache<AuroraReport>,
 		streamable: Streamable<AuroraReport>,
 		relay: Relay<AuroraReport>
 	): Flowable<AuroraReport> =
 		Flowable.merge(streamable.stream, relay.toFlowable(BackpressureStrategy.LATEST))
-			.singletonCache(cache)
+			.startWith(AuroraReport.empty)
 			.replay(1)
 			.refCount()
 }
