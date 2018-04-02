@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.services_impl.notifications
 
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
-import org.assertj.core.api.SoftAssertions
+import org.amshove.kluent.should
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,30 +31,26 @@ class OutdatedEvaluatorTest {
 
     @Test
     fun testMultiple() {
-        val softly = SoftAssertions()
+        assertOutdated(BEFORE_MIDNIGHT, AFTER_MIDNIGHT, false)
+        assertOutdated(BEFORE_MIDNIGHT, MIDNIGHT, false)
+        assertOutdated(MIDNIGHT, AFTER_MIDNIGHT, false)
 
-        assertOutdated(BEFORE_MIDNIGHT, AFTER_MIDNIGHT, false, softly)
-        assertOutdated(BEFORE_MIDNIGHT, MIDNIGHT, false, softly)
-        assertOutdated(MIDNIGHT, AFTER_MIDNIGHT, false, softly)
+        assertOutdated(BEFORE_MIDNIGHT, BEFORE_NOON, false)
+        assertOutdated(AFTER_MIDNIGHT, BEFORE_NOON, false)
 
-        assertOutdated(BEFORE_MIDNIGHT, BEFORE_NOON, false, softly)
-        assertOutdated(AFTER_MIDNIGHT, BEFORE_NOON, false, softly)
+        assertOutdated(BEFORE_MIDNIGHT, AFTER_NOON, true)
+        assertOutdated(AFTER_MIDNIGHT, AFTER_NOON, true)
 
-        assertOutdated(BEFORE_MIDNIGHT, AFTER_NOON, true, softly)
-        assertOutdated(AFTER_MIDNIGHT, AFTER_NOON, true, softly)
+        assertOutdated(BEFORE_NOON, AFTER_NOON, true)
 
-        assertOutdated(BEFORE_NOON, AFTER_NOON, true, softly)
+        assertOutdated(BEFORE_NOON.minus(1, DAYS), BEFORE_NOON, true)
+        assertOutdated(BEFORE_NOON.minus(1, DAYS), AFTER_NOON, true)
 
-        assertOutdated(BEFORE_NOON.minus(1, DAYS), BEFORE_NOON, true, softly)
-        assertOutdated(BEFORE_NOON.minus(1, DAYS), AFTER_NOON, true, softly)
-
-        assertOutdated(AFTER_NOON.minus(1, DAYS), BEFORE_NOON, true, softly)
-        assertOutdated(AFTER_NOON.minus(1, DAYS), AFTER_NOON, true, softly)
-
-        softly.assertAll()
+        assertOutdated(AFTER_NOON.minus(1, DAYS), BEFORE_NOON, true)
+        assertOutdated(AFTER_NOON.minus(1, DAYS), AFTER_NOON, true)
     }
 
-    private fun assertOutdated(time: Instant, currentTime: Instant, expected: Boolean, softly: SoftAssertions) {
+    private fun assertOutdated(time: Instant, currentTime: Instant, expected: Boolean) {
 		whenever(mockTimeProvider.getTime()).thenReturn(Single.just(currentTime))
 		whenever(mockTimeProvider.getLocalDate()).thenReturn(
 			Single.just(LocalDateTime.ofInstant(currentTime, ZONE_OFFSET).toLocalDate())
@@ -62,12 +58,15 @@ class OutdatedEvaluatorTest {
 
         val outdated = impl.isOutdated(time)
 
-        val assertion = softly.assertThat(outdated).`as`("Last time: %s, Current time: %s", time, currentTime)
-        if (expected) {
-            assertion.isTrue
-        } else {
-            assertion.isFalse
-        }
+		if (expected) {
+			outdated.should("$time is not outdated but should be for current time: $currentTime") {
+				outdated
+			}
+		} else {
+			outdated.should("$time is outdated but should not be for current time: $currentTime") {
+				!outdated
+			}
+		}
     }
 
 	companion object {

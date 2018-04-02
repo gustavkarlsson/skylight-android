@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.services_impl.notifications
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.verifyNoMoreInteractions
 import com.nhaarman.mockito_kotlin.whenever
-import org.assertj.core.api.Assertions.assertThat
+import org.amshove.kluent.shouldEqual
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -67,7 +67,7 @@ class AuroraReportNotificationDeciderTest {
 
         val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
 
-		assertThat(shouldNotify).isEqualTo(true)
+		shouldNotify shouldEqual true
     }
 
     @Test
@@ -78,7 +78,7 @@ class AuroraReportNotificationDeciderTest {
 
         val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
 
-        assertThat(shouldNotify).isEqualTo(true)
+        shouldNotify shouldEqual true
     }
 
     @Test
@@ -91,7 +91,7 @@ class AuroraReportNotificationDeciderTest {
 		verifyNoMoreInteractions(mockSettings)
 		verifyZeroInteractions(mockChanceEvaluator)
         verifyZeroInteractions(mockOutdatedEvaluator)
-        assertThat(shouldNotify).isEqualTo(false)
+        shouldNotify shouldEqual false
     }
 
     @Test
@@ -101,7 +101,7 @@ class AuroraReportNotificationDeciderTest {
 
         val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
 
-        assertThat(shouldNotify).isEqualTo(false)
+        shouldNotify shouldEqual false
     }
 
     @Test
@@ -112,7 +112,7 @@ class AuroraReportNotificationDeciderTest {
 
         val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
 
-        assertThat(shouldNotify).isEqualTo(false)
+        shouldNotify shouldEqual false
     }
 
     @Test
@@ -123,7 +123,7 @@ class AuroraReportNotificationDeciderTest {
 
         val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
 
-        assertThat(shouldNotify).isEqualTo(false)
+        shouldNotify shouldEqual false
     }
 
     @Test
@@ -132,6 +132,6 @@ class AuroraReportNotificationDeciderTest {
 
         val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
 
-        assertThat(shouldNotify).isEqualTo(false)
+        shouldNotify shouldEqual false
     }
 }

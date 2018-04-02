@@ -4,7 +4,7 @@ package se.gustavkarlsson.skylight.android.ui
 import com.jakewharton.rxrelay2.PublishRelay
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.observers.TestObserver
-import org.assertj.core.api.Assertions.assertThat
+import org.amshove.kluent.shouldEqual
 import org.junit.Before
 import org.junit.Test
 import se.gustavkarlsson.skylight.android.gui.AutoDisposableViewModel
@@ -24,7 +24,7 @@ class AutoDisposableViewModelTest {
     @Test
     fun scopePeekLifecycle_initial_isActive() {
         val lifecycleState = impl.scope().peekLifecycle()
-        assertThat(lifecycleState).isEqualTo(ACTIVE)
+        lifecycleState shouldEqual ACTIVE
     }
 
     @Test
@@ -32,7 +32,7 @@ class AutoDisposableViewModelTest {
         impl.clear()
 
         val lifecycleState = impl.scope().peekLifecycle()
-        assertThat(lifecycleState).isEqualTo(CLEARED)
+        lifecycleState shouldEqual CLEARED
     }
 
 

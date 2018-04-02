@@ -6,8 +6,6 @@ import com.nhaarman.mockito_kotlin.whenever
 import kotlinx.coroutines.experimental.runBlocking
 import okhttp3.*
 import org.apache.commons.io.IOUtils
-import org.assertj.core.api.Java6Assertions.assertThat
-import org.assertj.core.api.Java6Assertions.within
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -17,6 +15,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import se.gustavkarlsson.skylight.android.services_impl.providers.kpindex.KpIndexApi
+import se.gustavkarlsson.skylight.android.test.shouldBeInRange
 
 
 @RunWith(RobolectricTestRunner::class)
@@ -69,8 +68,8 @@ class RetrofittedKpIndexProviderTest {
 			.build()
 			.create(KpIndexApi::class.java))
 
-		val kpIndex = runBlocking { service.get().blockingGet().value }
+		val kpIndex = runBlocking { service.get().blockingGet().value }!!
 
-		assertThat(kpIndex).isCloseTo(1.33, within(0.01))
+		kpIndex shouldBeInRange 1.32..1.34
 	}
 }

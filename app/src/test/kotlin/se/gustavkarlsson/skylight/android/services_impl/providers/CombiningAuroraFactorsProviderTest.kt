@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.services_impl.providers
 
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
-import org.assertj.core.api.Assertions.assertThat
+import org.amshove.kluent.shouldBeInRange
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -77,7 +77,7 @@ class CombiningAuroraFactorsProviderTest {
 			impl.get(time, location).blockingGet()
 		}
 
-		assertThat(timeTakenMillis).isBetween(100, 199)
+		timeTakenMillis shouldBeInRange 100L..199L
 	}
 
 	// Test time is provided lazy

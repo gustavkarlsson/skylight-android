@@ -7,8 +7,8 @@ import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
 import kotlinx.coroutines.experimental.runBlocking
 import okhttp3.*
+import org.amshove.kluent.shouldEqual
 import org.apache.commons.io.IOUtils
-import org.assertj.core.api.Java6Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -76,7 +76,7 @@ class RetrofittedOpenWeatherMapVisibilityProviderTest {
 
 		val cloudiness = runBlocking { service.get(Single.just(Location(0.0, 0.0))).blockingGet().cloudPercentage }
 
-		assertThat(cloudiness).isEqualTo(68)
+		cloudiness shouldEqual 68
 	}
 
 	@Test
@@ -88,6 +88,6 @@ class RetrofittedOpenWeatherMapVisibilityProviderTest {
 		val (clouds) = gson.fromJson(xml, OpenWeatherMapWeather::class.java)
 
 		val cloudiness = clouds.percentage
-		assertThat(cloudiness).isEqualTo(68)
+		cloudiness shouldEqual 68
 	}
 }
