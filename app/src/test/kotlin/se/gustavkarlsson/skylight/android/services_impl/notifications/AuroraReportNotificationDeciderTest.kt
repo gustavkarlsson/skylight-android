@@ -8,22 +8,24 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.Mockito.never
 import org.mockito.Mockito.verifyZeroInteractions
 import org.mockito.junit.MockitoJUnitRunner
+import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
+import se.gustavkarlsson.skylight.android.entities.NotifiedChance
+import se.gustavkarlsson.skylight.android.mockito.any
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.services.LastNotifiedChanceRepository
 import se.gustavkarlsson.skylight.android.services.Settings
-import se.gustavkarlsson.skylight.android.caching.SingletonCache
 import se.gustavkarlsson.skylight.android.services_impl.AppVisibilityEvaluator
 
 @RunWith(MockitoJUnitRunner::class)
 class AuroraReportNotificationDeciderTest {
 
 	@Mock
-	lateinit var mockLastNotifiedReportCache: SingletonCache<AuroraReport>
+	lateinit var mockLastNotifiedChanceRepository: LastNotifiedChanceRepository
 
 	@Mock
 	lateinit var mockChanceEvaluator: ChanceEvaluator<AuroraReport>
@@ -32,7 +34,7 @@ class AuroraReportNotificationDeciderTest {
 	lateinit var mockSettings: Settings
 
 	@Mock
-	lateinit var mockOutdatedEvaluator: ReportOutdatedEvaluator
+	lateinit var mockOutdatedEvaluator: OutdatedEvaluator
 
 	@Mock
 	lateinit var mockAppVisibilityEvaluator: AppVisibilityEvaluator
@@ -41,23 +43,25 @@ class AuroraReportNotificationDeciderTest {
     lateinit var mockNewAuroraReport: AuroraReport
 
     @Mock
-    lateinit var mockLastAuroraReport: AuroraReport
+    lateinit var mockLastNotifiedChance: NotifiedChance
 
 	lateinit var impl: AuroraReportNotificationDecider
 
     @Before
     fun setUp() {
-        whenever(mockLastNotifiedReportCache.value).thenReturn(mockLastAuroraReport)
+		whenever(mockLastNotifiedChance.chance).thenReturn(Chance(0.5))
+		whenever(mockLastNotifiedChance.timestamp).thenReturn(Instant.ofEpochMilli(50000))
+        whenever(mockLastNotifiedChanceRepository.get()).thenReturn(mockLastNotifiedChance)
         whenever(mockSettings.notificationsEnabled).thenReturn(true)
-        whenever(mockOutdatedEvaluator.isOutdated(mockLastAuroraReport)).thenReturn(false)
+        whenever(mockOutdatedEvaluator.isOutdated(any())).thenReturn(false)
 		whenever(mockAppVisibilityEvaluator.isVisible()).thenReturn(false)
 
-        impl = AuroraReportNotificationDecider(mockLastNotifiedReportCache, mockChanceEvaluator, mockSettings, mockOutdatedEvaluator, mockAppVisibilityEvaluator)
+        impl = AuroraReportNotificationDecider(mockLastNotifiedChanceRepository, mockChanceEvaluator, mockSettings, mockOutdatedEvaluator, mockAppVisibilityEvaluator)
     }
 
     @Test
     fun notifyIfNewChanceIsHigherThanOldChanceAndTriggerLevel() {
-        whenever(mockChanceEvaluator.evaluate(mockLastAuroraReport)).thenReturn(Chance(0.2))
+        whenever(mockChanceEvaluator.evaluate(any())).thenReturn(Chance(0.2))
         whenever(mockChanceEvaluator.evaluate(mockNewAuroraReport)).thenReturn(Chance(0.9))
         whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.MEDIUM)
 
@@ -70,7 +74,7 @@ class AuroraReportNotificationDeciderTest {
     fun notifyIfNewChanceIsAboveTriggerLevelAndLastValueIsOutdated() {
         whenever(mockChanceEvaluator.evaluate(mockNewAuroraReport)).thenReturn(Chance(0.5))
         whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.LOW)
-        whenever(mockOutdatedEvaluator.isOutdated(mockLastAuroraReport)).thenReturn(true)
+        whenever(mockOutdatedEvaluator.isOutdated(any())).thenReturn(true)
 
         val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
 
@@ -97,13 +101,12 @@ class AuroraReportNotificationDeciderTest {
 
         val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
 
-		verify(mockChanceEvaluator, never()).evaluate(mockLastAuroraReport)
         assertThat(shouldNotify).isEqualTo(false)
     }
 
     @Test
     fun dontNotifyIfNewChanceIsLowerThanOldChance() {
-        whenever(mockChanceEvaluator.evaluate(mockLastAuroraReport)).thenReturn(Chance(0.5))
+        whenever(mockLastNotifiedChance.chance).thenReturn(Chance(0.5))
         whenever(mockChanceEvaluator.evaluate(mockNewAuroraReport)).thenReturn(Chance(0.2))
         whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.LOW)
 
@@ -114,7 +117,7 @@ class AuroraReportNotificationDeciderTest {
 
     @Test
     fun dontNotifyIfNewChanceIsSameAsOldChance() {
-        whenever(mockChanceEvaluator.evaluate(mockLastAuroraReport)).thenReturn(Chance(0.5))
+        whenever(mockLastNotifiedChance.chance).thenReturn(Chance(0.5))
         whenever(mockChanceEvaluator.evaluate(mockNewAuroraReport)).thenReturn(Chance(0.5))
         whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.LOW)
 

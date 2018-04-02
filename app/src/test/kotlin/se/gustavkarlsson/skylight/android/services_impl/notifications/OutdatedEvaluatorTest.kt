@@ -13,24 +13,20 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.temporal.ChronoUnit.DAYS
 import org.threeten.bp.temporal.ChronoUnit.HOURS
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
 
 @RunWith(MockitoJUnitRunner::class)
-class ReportOutdatedEvaluatorTest {
+class OutdatedEvaluatorTest {
 
     @Mock
 	lateinit var mockTimeProvider: TimeProvider
 
-    @Mock
-    lateinit var mockReport: AuroraReport
-
-    lateinit var impl: ReportOutdatedEvaluator
+    lateinit var impl: OutdatedEvaluator
 
     @Before
     fun setUp() {
         whenever(mockTimeProvider.getZoneId()).thenReturn(Single.just(ZONE_OFFSET))
-        impl = ReportOutdatedEvaluator(mockTimeProvider)
+        impl = OutdatedEvaluator(mockTimeProvider)
     }
 
     @Test
@@ -58,16 +54,15 @@ class ReportOutdatedEvaluatorTest {
         softly.assertAll()
     }
 
-    private fun assertOutdated(lastReportTime: Instant, currentTime: Instant, expected: Boolean, softly: SoftAssertions) {
-		whenever(mockReport.timestamp).thenReturn(lastReportTime)
+    private fun assertOutdated(time: Instant, currentTime: Instant, expected: Boolean, softly: SoftAssertions) {
 		whenever(mockTimeProvider.getTime()).thenReturn(Single.just(currentTime))
 		whenever(mockTimeProvider.getLocalDate()).thenReturn(
 			Single.just(LocalDateTime.ofInstant(currentTime, ZONE_OFFSET).toLocalDate())
 		)
 
-        val outdated = impl.isOutdated(mockReport)
+        val outdated = impl.isOutdated(time)
 
-        val assertion = softly.assertThat(outdated).`as`("Last report time: %s, Current time: %s", lastReportTime, currentTime)
+        val assertion = softly.assertThat(outdated).`as`("Last time: %s, Current time: %s", time, currentTime)
         if (expected) {
             assertion.isTrue
         } else {

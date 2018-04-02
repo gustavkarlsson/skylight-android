@@ -84,7 +84,7 @@ gradle.projectsEvaluated {
 dependencies {
 	implementation project(":services")
 	implementation project(":entities")
-	implementation project(":caching")
+	implementation project(":persistence")
 
 	implementation "com.android.support:multidex:1.0.1"
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
@@ -143,7 +143,7 @@ dependencies {
 	implementation "com.uber.autodispose:autodispose-android-archcomponents-kotlin:$autodispose_version"
 
 	// Lifecycle
-	implementation "android.arch.lifecycle:extensions:1.1.0"
+	implementation "android.arch.lifecycle:extensions:1.1.1"
 
 
 	// Testing
