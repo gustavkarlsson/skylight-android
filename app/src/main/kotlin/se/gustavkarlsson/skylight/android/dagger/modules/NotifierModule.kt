@@ -6,7 +6,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.caching.AuroraReportDualCache
-import se.gustavkarlsson.skylight.android.caching.SingletonCache
+import se.gustavkarlsson.skylight.android.services.SingletonCache
 import se.gustavkarlsson.skylight.android.dagger.qualifiers.LastNotified
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel

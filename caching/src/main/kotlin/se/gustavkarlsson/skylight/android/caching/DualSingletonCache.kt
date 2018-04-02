@@ -4,6 +4,7 @@ import android.content.Context
 import com.vincentbrison.openlibraries.android.dualcache.Builder
 import com.vincentbrison.openlibraries.android.dualcache.CacheSerializer
 import com.vincentbrison.openlibraries.android.dualcache.DualCache
+import se.gustavkarlsson.skylight.android.services.SingletonCache
 
 internal class DualSingletonCache<T>(
 	context: Context,

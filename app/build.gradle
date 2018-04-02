@@ -82,6 +82,7 @@ gradle.projectsEvaluated {
 }
 
 dependencies {
+	implementation project(":services")
 	implementation project(":entities")
 	implementation project(":caching")
 
@@ -98,7 +99,7 @@ dependencies {
 	implementation "com.github.gustavkarlsson:aurora-notifier-common:aurora-notifier-common-1.5.0"
 	implementation "net.e175.klaus:solarpositioning:0.0.9"
 	implementation "com.jakewharton.threetenabp:threetenabp:$threetenabp_version"
-	implementation "com.hadisatrio:Optional:v1.0.1"
+	implementation "com.hadisatrio:Optional:$optional_version"
 	implementation "com.jakewharton.timber:timber:4.7.0"
 
 	// Anko
@@ -117,7 +118,7 @@ dependencies {
 	compileOnly "javax.annotation:jsr250-api:1.0"
 
 	// ReactiveX
-	implementation "io.reactivex.rxjava2:rxjava:2.1.8"
+	implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
 	implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
 	implementation "io.reactivex.rxjava2:rxkotlin:2.2.0"
 
