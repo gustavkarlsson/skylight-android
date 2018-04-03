@@ -29,6 +29,7 @@ constructor() : DarknessProvider {
 				)
 				Darkness(azimuthZenithAngle.zenithAngle)
 			})
+			.onErrorReturnItem(Darkness())
 			.doOnSuccess { Timber.i("Provided darkness: %s", it) }
 	}
 }

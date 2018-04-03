@@ -4,8 +4,6 @@
 
 	<string name="error_could_not_determine_location">Could not determine current location</string>
 	<string name="error_unknown_update_error">An unknown error occurred while updating</string>
-	<string name="error_could_not_determine_kp_index">Could not determine current Kp index</string>
-	<string name="error_could_not_determine_visibility">Could not determine current visibility</string>
 	<string name="error_updating_took_too_long">Updating took too long</string>
 
 	<string name="error_location_permission_denied_title">Location permission denied</string>

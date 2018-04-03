@@ -17,6 +17,7 @@ class CombiningAuroraReportProvider(
 	private val timeProvider: TimeProvider
 ) : AuroraReportProvider {
 
+	// TODO Add timeout
 	override fun get(): Single<AuroraReport> {
 		return Single.fromCallable {
 			val location = locationProvider.get().cache()

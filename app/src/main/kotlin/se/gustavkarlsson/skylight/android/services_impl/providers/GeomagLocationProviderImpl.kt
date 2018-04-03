@@ -25,6 +25,7 @@ constructor() : GeomagLocationProvider {
 				)
 				GeomagLocation(geomagneticLatitude)
 			}
+			.onErrorReturnItem(GeomagLocation())
 			.doOnSuccess { Timber.i("Provided geomagnetic location: %s", it) }
 	}
 
