@@ -43,6 +43,7 @@ constructor(
 	}
 
 	companion object {
+		// TODO Make configurable
 		private const val timeoutMillis = 5000L
 	}
 }
