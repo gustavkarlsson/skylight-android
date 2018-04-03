@@ -2,8 +2,9 @@
 import android.arch.persistence.room.Room
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
-import org.amshove.kluent.shouldBeNull
-import org.amshove.kluent.shouldEqual
+import assertk.assert
+import assertk.assertions.isEqualTo
+import assertk.assertions.isNull
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -38,7 +39,7 @@ class LastNotifiedChanceRoomRepositoryTest {
 	fun getNonExistingIsNull() {
 		val result: Any? = impl.get()
 
-		result.shouldBeNull()
+		assert(result).isNull()
 	}
 
 	@Test
@@ -47,7 +48,7 @@ class LastNotifiedChanceRoomRepositoryTest {
 
 		val result = impl.get()
 
-		result shouldEqual value1
+		assert(result).isEqualTo(value1)
 	}
 
 	@Test
@@ -57,6 +58,6 @@ class LastNotifiedChanceRoomRepositoryTest {
 
 		val result = impl.get()
 
-		result shouldEqual value2
+		assert(result).isEqualTo(value2)
 	}
 }

@@ -3,6 +3,9 @@
 * Set timestamp based on earliest/latest factor for streams?
 * Look into country changes while app running (Locale etc)
 * Look into moving data binding to lifecycle bound listener
+* Add crash reporting (Ensure log levels are OK)
+* Add analytics
+* Tweak values for aurora detection
 * Testing
   * Add more tests
   * Look into using Spek

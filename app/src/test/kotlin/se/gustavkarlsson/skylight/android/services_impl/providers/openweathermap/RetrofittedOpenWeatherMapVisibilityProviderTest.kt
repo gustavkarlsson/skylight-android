@@ -1,13 +1,14 @@
 package se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap
 
 
+import assertk.assert
+import assertk.assertions.isEqualTo
 import com.google.gson.Gson
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
 import kotlinx.coroutines.experimental.runBlocking
 import okhttp3.*
-import org.amshove.kluent.shouldEqual
 import org.apache.commons.io.IOUtils
 import org.junit.Before
 import org.junit.Test
@@ -76,7 +77,7 @@ class RetrofittedOpenWeatherMapVisibilityProviderTest {
 
 		val cloudiness = runBlocking { service.get(Single.just(Location(0.0, 0.0))).blockingGet().cloudPercentage }
 
-		cloudiness shouldEqual 68
+		assert(cloudiness).isEqualTo(68)
 	}
 
 	@Test
@@ -88,6 +89,6 @@ class RetrofittedOpenWeatherMapVisibilityProviderTest {
 		val (clouds) = gson.fromJson(xml, OpenWeatherMapWeather::class.java)
 
 		val cloudiness = clouds.percentage
-		cloudiness shouldEqual 68
+		assert(cloudiness).isEqualTo(68)
 	}
 }

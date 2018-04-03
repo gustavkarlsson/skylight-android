@@ -152,7 +152,7 @@ dependencies {
 	testImplementation "org.mockito:mockito-core:$mockito_version"
 	testImplementation "com.nhaarman:mockito-kotlin-kt1.1:$mockito_kotlin_version", { exclude group: "org.jetbrains.kotlin" }
 	testImplementation "commons-io:commons-io:$commons_io_version"
-	testImplementation "org.amshove.kluent:kluent-android:$kluent_version"
+	testImplementation "com.willowtreeapps.assertk:assertk:$assertk_version"
 
 	// Instrumentation testing
 	androidTestImplementation "com.android.support:support-annotations:$android_support_version"

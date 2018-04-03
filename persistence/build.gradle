@@ -33,6 +33,6 @@ dependencies {
 	implementation "android.arch.persistence.room:runtime:$room_version"
 	kapt "android.arch.persistence.room:compiler:$room_version"
 
-	androidTestImplementation "org.amshove.kluent:kluent-android:$kluent_version"
+	androidTestImplementation "com.willowtreeapps.assertk:assertk:$assertk_version"
 	androidTestImplementation "com.android.support.test:runner:$android_support_test_version"
 }

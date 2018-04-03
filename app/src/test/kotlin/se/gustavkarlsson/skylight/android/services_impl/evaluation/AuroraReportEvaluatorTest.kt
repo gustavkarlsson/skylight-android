@@ -1,8 +1,10 @@
 package se.gustavkarlsson.skylight.android.services_impl.evaluation
 
+import assertk.assert
+import assertk.assertions.isBetween
+import assertk.assertions.isEqualTo
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
-import org.amshove.kluent.shouldEqual
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -13,7 +15,6 @@ import se.gustavkarlsson.skylight.android.entities.Chance.Companion.IMPOSSIBLE
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.UNKNOWN
 import se.gustavkarlsson.skylight.android.mockito.any
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.test.shouldBeInRange
 
 @RunWith(MockitoJUnitRunner::class)
 class AuroraReportEvaluatorTest {
@@ -50,7 +51,7 @@ class AuroraReportEvaluatorTest {
 
         val chance = impl.evaluate(mockAuroraReport)
 
-		chance shouldEqual IMPOSSIBLE
+		assert(chance).isEqualTo(IMPOSSIBLE)
     }
 
     @Test
@@ -59,7 +60,7 @@ class AuroraReportEvaluatorTest {
 
         val chance = impl.evaluate(mockAuroraReport)
 
-		chance shouldEqual UNKNOWN
+		assert(chance).isEqualTo(UNKNOWN)
     }
 
     @Test
@@ -69,7 +70,7 @@ class AuroraReportEvaluatorTest {
 
         val chance = impl.evaluate(mockAuroraReport)
 
-		chance shouldEqual lowChance
+		assert(chance).isEqualTo(lowChance)
     }
 
     @Test
@@ -81,6 +82,6 @@ class AuroraReportEvaluatorTest {
 
         val chance = impl.evaluate(mockAuroraReport)
 
-		chance shouldBeInRange IMPOSSIBLE..lowestChance
+		assert(chance).isBetween(IMPOSSIBLE, lowestChance)
     }
 }

@@ -1,8 +1,10 @@
 package se.gustavkarlsson.skylight.android.services_impl.notifications
 
+import assertk.assert
+import assertk.assertions.isEqualTo
+import assertk.tableOf
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
-import org.amshove.kluent.should
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,42 +33,29 @@ class OutdatedEvaluatorTest {
 
     @Test
     fun testMultiple() {
-        assertOutdated(BEFORE_MIDNIGHT, AFTER_MIDNIGHT, false)
-        assertOutdated(BEFORE_MIDNIGHT, MIDNIGHT, false)
-        assertOutdated(MIDNIGHT, AFTER_MIDNIGHT, false)
+		tableOf("time", "now", "expected")
+			.row(BEFORE_MIDNIGHT, AFTER_MIDNIGHT, false)
+			.row(BEFORE_MIDNIGHT, MIDNIGHT, false)
+        	.row(MIDNIGHT, AFTER_MIDNIGHT, false)
+        	.row(BEFORE_MIDNIGHT, BEFORE_NOON, false)
+        	.row(AFTER_MIDNIGHT, BEFORE_NOON, false)
+        	.row(BEFORE_MIDNIGHT, AFTER_NOON, true)
+        	.row(AFTER_MIDNIGHT, AFTER_NOON, true)
+        	.row(BEFORE_NOON, AFTER_NOON, true)
+        	.row(BEFORE_NOON.minus(1, DAYS), BEFORE_NOON, true)
+        	.row(BEFORE_NOON.minus(1, DAYS), AFTER_NOON, true)
+        	.row(AFTER_NOON.minus(1, DAYS), BEFORE_NOON, true)
+        	.row(AFTER_NOON.minus(1, DAYS), AFTER_NOON, true)
+			.forAll { time, now, expected ->
+				whenever(mockTimeProvider.getTime()).thenReturn(Single.just(now))
+				whenever(mockTimeProvider.getLocalDate()).thenReturn(
+					Single.just(LocalDateTime.ofInstant(now, ZONE_OFFSET).toLocalDate())
+				)
 
-        assertOutdated(BEFORE_MIDNIGHT, BEFORE_NOON, false)
-        assertOutdated(AFTER_MIDNIGHT, BEFORE_NOON, false)
+				val actual = impl.isOutdated(time)
 
-        assertOutdated(BEFORE_MIDNIGHT, AFTER_NOON, true)
-        assertOutdated(AFTER_MIDNIGHT, AFTER_NOON, true)
-
-        assertOutdated(BEFORE_NOON, AFTER_NOON, true)
-
-        assertOutdated(BEFORE_NOON.minus(1, DAYS), BEFORE_NOON, true)
-        assertOutdated(BEFORE_NOON.minus(1, DAYS), AFTER_NOON, true)
-
-        assertOutdated(AFTER_NOON.minus(1, DAYS), BEFORE_NOON, true)
-        assertOutdated(AFTER_NOON.minus(1, DAYS), AFTER_NOON, true)
-    }
-
-    private fun assertOutdated(time: Instant, currentTime: Instant, expected: Boolean) {
-		whenever(mockTimeProvider.getTime()).thenReturn(Single.just(currentTime))
-		whenever(mockTimeProvider.getLocalDate()).thenReturn(
-			Single.just(LocalDateTime.ofInstant(currentTime, ZONE_OFFSET).toLocalDate())
-		)
-
-        val outdated = impl.isOutdated(time)
-
-		if (expected) {
-			outdated.should("$time is not outdated but should be for current time: $currentTime") {
-				outdated
+				assert(actual).isEqualTo(expected)
 			}
-		} else {
-			outdated.should("$time is outdated but should not be for current time: $currentTime") {
-				!outdated
-			}
-		}
     }
 
 	companion object {

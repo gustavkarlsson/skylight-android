@@ -20,7 +20,7 @@ buildscript {
 		rxjava_version = "2.1.8"
 		optional_version = "v1.0.1"
 		android_support_test_version = "1.0.1"
-		kluent_version = "1.35"
+		assertk_version = "0.10"
 	}
 	repositories {
 		jcenter()
