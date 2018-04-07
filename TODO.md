@@ -1,6 +1,5 @@
 # TODO
 
-* Allow "empty" factor values
 * Add error property in AuroraReport
 * Set timestamp based on earliest/latest factor for streams?
 * Look into country changes while app running (Locale etc)
