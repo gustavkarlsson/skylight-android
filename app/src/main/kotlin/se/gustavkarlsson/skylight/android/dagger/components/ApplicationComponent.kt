@@ -21,7 +21,6 @@ import javax.inject.Singleton
 	EvaluationModule::class,
 	AuroraReportModule::class,
 	LocationModule::class,
-	AuroraFactorsModule::class,
 	DarknessModule::class,
 	VisibilityModule::class,
 	GeomagLocationModule::class,

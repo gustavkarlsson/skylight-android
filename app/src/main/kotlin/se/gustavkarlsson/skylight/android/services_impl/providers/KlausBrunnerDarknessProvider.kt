@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.services_impl.providers
 
+import com.hadisatrio.optional.Optional
 import dagger.Reusable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
@@ -17,17 +18,19 @@ class KlausBrunnerDarknessProvider
 @Inject
 constructor() : DarknessProvider {
 
-	override fun get(time: Single<Instant>, location: Single<Location>): Single<Darkness> {
+	override fun get(time: Single<Instant>, location: Single<Optional<Location>>): Single<Darkness> {
 		return Single.zip(time, location,
-			BiFunction<Instant, Location, Darkness> { timeValue, locationValue ->
-				val date = timeValue.toGregorianCalendar()
-				val azimuthZenithAngle = Grena3.calculateSolarPosition(
-					date,
-					locationValue.latitude,
-					locationValue.longitude,
-					0.0
-				)
-				Darkness(azimuthZenithAngle.zenithAngle)
+			BiFunction<Instant, Optional<Location>, Darkness> { timeValue, maybeLocation ->
+				maybeLocation.orNull()?.let {
+					val date = timeValue.toGregorianCalendar()
+					val azimuthZenithAngle = Grena3.calculateSolarPosition(
+						date,
+						it.latitude,
+						it.longitude,
+						0.0
+					)
+					Darkness(azimuthZenithAngle.zenithAngle)
+				} ?: Darkness()
 			})
 			.onErrorReturnItem(Darkness())
 			.doOnSuccess { Timber.i("Provided darkness: %s", it) }

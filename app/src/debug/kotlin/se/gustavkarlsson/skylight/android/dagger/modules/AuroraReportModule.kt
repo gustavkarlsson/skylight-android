@@ -13,8 +13,7 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.Consumer
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.entities.AuroraFactors
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.services.DebugSettings
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.*
@@ -38,17 +37,23 @@ class AuroraReportModule {
 	@Provides
 	@Reusable
 	fun provideAuroraReportProvider(
-		locationProvider: LocationProvider,
-		auroraFactorsProvider: AuroraFactorsProvider,
-		locationNameProvider: LocationNameProvider,
 		timeProvider: TimeProvider,
+		locationProvider: LocationProvider,
+		locationNameProvider: LocationNameProvider,
+		darknessProvider: DarknessProvider,
+		geomagLocationProvider: GeomagLocationProvider,
+		kpIndexProvider: KpIndexProvider,
+		visibilityProvider: VisibilityProvider,
 		debugSettings: DebugSettings
 	): AuroraReportProvider {
 		val realProvider = CombiningAuroraReportProvider(
+			timeProvider,
 			locationProvider,
-			auroraFactorsProvider,
 			locationNameProvider,
-			timeProvider
+			darknessProvider,
+			geomagLocationProvider,
+			kpIndexProvider,
+			visibilityProvider
 		)
 		return DebugAuroraReportProvider(realProvider, debugSettings, timeProvider)
 	}
@@ -81,23 +86,33 @@ class AuroraReportModule {
 	@Provides
 	@Reusable
 	fun provideAuroraReportStreamable(
-		locationNames: Flowable<Optional<String>>,
-		factors: Flowable<AuroraFactors>,
 		now: Single<Instant>,
-		debugSettings: DebugSettings
+		locationNames: Flowable<Optional<String>>,
+		kpIndexes: Flowable<KpIndex>,
+		geomagLocations: Flowable<GeomagLocation>,
+		darknesses: Flowable<Darkness>,
+		visibilities: Flowable<Visibility>,
+		debugSettings: DebugSettings,
+		relay: Relay<AuroraReport>
 	): Streamable<AuroraReport> {
-		val realStreamable = CombiningAuroraReportStreamable(locationNames, factors, now)
+		val realStreamable = CombiningAuroraReportStreamable(
+			now,
+			locationNames,
+			kpIndexes,
+			geomagLocations,
+			darknesses,
+			visibilities,
+			relay.toFlowable(BackpressureStrategy.LATEST)
+		)
 		return DebugAuroraReportStreamable(realStreamable, debugSettings, now)
 	}
 
 	@Provides
 	@Reusable
 	fun provideAuroraReportFlowable(
-		streamable: Streamable<AuroraReport>,
-		relay: Relay<AuroraReport>
-	): Flowable<AuroraReport> =
-		Flowable.merge(streamable.stream, relay.toFlowable(BackpressureStrategy.LATEST))
-			.startWith(AuroraReport.empty)
-			.replay(1)
-			.refCount()
+		streamable: Streamable<AuroraReport>
+	): Flowable<AuroraReport> = streamable.stream
+		.startWith(AuroraReport.empty)
+		.replay(1)
+		.refCount()
 }

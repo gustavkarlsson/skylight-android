@@ -17,19 +17,20 @@ constructor(
 	private val geocoder: Geocoder
 ) : LocationNameProvider {
 
-	override fun get(location: Single<Location>): Single<Optional<String>> {
+	override fun get(location: Single<Optional<Location>>): Single<Optional<String>> {
 		return location
 			.observeOn(Schedulers.io())
 			.map {
-				try {
-					val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-					Optional.ofNullable<String>(addresses.firstOrNull()?.locality)
-				} catch (e: Throwable) {
-					Timber.w(e, "Failed to perform reverse geocoding")
-					throw e
-				}
+				it.orNull()?.let {
+					try {
+						val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
+						Optional.ofNullable<String>(addresses.firstOrNull()?.locality)
+					} catch (e: Throwable) {
+						Timber.w(e, "Failed to perform reverse geocoding")
+						Optional.absent<String>()
+					}
+				} ?: Optional.absent()
 			}
-			.onErrorReturnItem(Optional.absent())
 			.doOnSuccess { Timber.i("Provided location name: %s", it.orNull()) }
 	}
 }

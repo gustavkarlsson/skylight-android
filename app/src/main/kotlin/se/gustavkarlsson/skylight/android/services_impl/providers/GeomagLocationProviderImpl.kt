@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.services_impl.providers
 
+import com.hadisatrio.optional.Optional
 import dagger.Reusable
 import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
@@ -14,18 +15,19 @@ class GeomagLocationProviderImpl
 @Inject
 constructor() : GeomagLocationProvider {
 
-	override fun get(location: Single<Location>): Single<GeomagLocation> {
+	override fun get(location: Single<Optional<Location>>): Single<GeomagLocation> {
 		return location
 			.map {
-				val geomagneticLatitude = calculateGeomagneticLatitude(
-					it.latitude,
-					it.longitude,
-					MAGNETIC_NORTH_POLE_LATITUDE,
-					MAGNETIC_NORTH_POLE_LONGITUDE
-				)
-				GeomagLocation(geomagneticLatitude)
+				it.orNull()?.let {
+					val geomagneticLatitude = calculateGeomagneticLatitude(
+						it.latitude,
+						it.longitude,
+						MAGNETIC_NORTH_POLE_LATITUDE,
+						MAGNETIC_NORTH_POLE_LONGITUDE
+					)
+					GeomagLocation(geomagneticLatitude)
+				} ?: GeomagLocation()
 			}
-			.onErrorReturnItem(GeomagLocation())
 			.doOnSuccess { Timber.i("Provided geomagnetic location: %s", it) }
 	}
 

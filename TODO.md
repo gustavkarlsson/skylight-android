@@ -7,6 +7,7 @@
 * Look into moving data binding to lifecycle bound listener
 * Add crash reporting (Ensure log levels are OK)
 * Add analytics
+* Remove need for all annotation processors
 * Tweak values for aurora detection
 * Testing
   * Add more tests

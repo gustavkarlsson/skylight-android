@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.dagger.modules
 
+import com.hadisatrio.optional.Optional
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -21,7 +22,8 @@ class TestLocationModule {
 
 	@Provides
 	@Reusable
-	fun provideLocationProvider(testLocationProvider: TestLocationProvider): LocationProvider = testLocationProvider
+	fun provideLocationProvider(testLocationProvider: TestLocationProvider): LocationProvider =
+		testLocationProvider
 
 	@Provides
 	@Reusable
@@ -31,7 +33,8 @@ class TestLocationModule {
 		override val stream: Flowable<Location>
 			get() = locationProvider.get()
 				.repeatWhen { it.delay(POLLING_INTERVAL.toMillis(), TimeUnit.MILLISECONDS) }
-				.retryWhen { it.delay(RETRY_DELAY.toMillis(), TimeUnit.MILLISECONDS) }
+				.filter(Optional<Location>::isPresent)
+				.map(Optional<Location>::get)
 
 	}
 
@@ -45,6 +48,5 @@ class TestLocationModule {
 
 	companion object {
 		private val POLLING_INTERVAL = Duration.ofMinutes(15)
-		private val RETRY_DELAY = Duration.ofMinutes(1)
 	}
 }

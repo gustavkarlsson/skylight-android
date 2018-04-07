@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.services_impl.streamables
 
+import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
@@ -26,7 +27,7 @@ class DarknessProviderStreamable(
 	override val stream: Flowable<Darkness> =
 		Flowable.combineLatest(locations, timeUpdates,
 			BiFunction<Location, Instant, Single<Darkness>> { location, time ->
-				darknessProvider.get(Single.just(time), Single.just(location))
+				darknessProvider.get(Single.just(time), Single.just(Optional.of(location)))
 					.retryWhen { it.delay(retryDelay.toMillis(), TimeUnit.MILLISECONDS) }
 			})
 			.switchMap {

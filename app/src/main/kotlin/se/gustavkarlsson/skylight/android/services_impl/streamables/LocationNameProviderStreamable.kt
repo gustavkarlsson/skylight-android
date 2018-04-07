@@ -17,7 +17,7 @@ class LocationNameProviderStreamable(
 ) : Streamable<Optional<String>> {
 	override val stream: Flowable<Optional<String>> = locations
 		.switchMap {
-			locationNameProvider.get(Single.just(it))
+			locationNameProvider.get(Single.just(Optional.of(it)))
 				.retryWhen { it.delay(retryDelay.toMillis(), TimeUnit.MILLISECONDS) }
 				.toFlowable()
 		}

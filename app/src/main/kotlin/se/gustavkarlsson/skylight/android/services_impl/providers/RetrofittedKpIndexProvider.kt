@@ -19,8 +19,8 @@ constructor(
 	override fun get(): Single<KpIndex> {
 		return api.get()
 			.subscribeOn(Schedulers.io())
-			.doOnError { Timber.w(it, "Failed to get Kp index from KpIndex API") }
 			.map { KpIndex(it.value.toDouble()) }
+			.doOnError { Timber.w(it, "Failed to get Kp index from KpIndex API") }
 			.onErrorReturnItem(KpIndex())
 			.doOnSuccess { Timber.i("Provided Kp index: %s", it) }
 	}

@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.services_impl.streamables
 
+import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
 import io.reactivex.Single
 import org.threeten.bp.Duration
@@ -17,7 +18,7 @@ class GeomagLocationProviderStreamable(
 ) : Streamable<GeomagLocation> {
 	override val stream: Flowable<GeomagLocation> = locations
 		.switchMap {
-			geomagLocationProvider.get(Single.just(it))
+			geomagLocationProvider.get(Single.just(Optional.of(it)))
 				.retryWhen { it.delay(retryDelay.toMillis(), TimeUnit.MILLISECONDS) }
 				.toFlowable()
 		}

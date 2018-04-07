@@ -66,6 +66,6 @@ class DarknessEvaluatorTest {
 	fun _100ZenithAngleEvaluatesToMediumChance() {
 		val chance = impl.evaluate(Darkness(100.0))
 
-		assert(chance).isBetween(Chance(0.4), Chance(0.6))
+		assert(chance).isBetween(Chance(0.2), Chance(0.4))
 	}
 }

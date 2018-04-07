@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.services_impl.streamables
 
+import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
 import io.reactivex.Single
 import org.threeten.bp.Duration
@@ -18,7 +19,7 @@ class VisibilityProviderStreamable(
 ) : Streamable<Visibility> {
 	override val stream: Flowable<Visibility> = locations
 		.switchMap {
-			visibilityProvider.get(Single.just(it))
+			visibilityProvider.get(Single.just(Optional.of(it)))
 				.repeatWhen { it.delay(pollingInterval.toMillis(), TimeUnit.MILLISECONDS) }
 				.retryWhen { it.delay(retryDelay.toMillis(), TimeUnit.MILLISECONDS) }
 		}

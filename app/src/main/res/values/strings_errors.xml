@@ -2,7 +2,6 @@
 <resources>
 	<string name="error_no_internet">No internet connection</string>
 
-	<string name="error_could_not_determine_location">Could not determine current location</string>
 	<string name="error_unknown_update_error">An unknown error occurred while updating</string>
 	<string name="error_updating_took_too_long">Updating took too long</string>
 
