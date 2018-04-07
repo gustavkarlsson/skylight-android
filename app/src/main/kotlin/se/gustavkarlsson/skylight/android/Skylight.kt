@@ -16,10 +16,6 @@ import se.gustavkarlsson.skylight.android.util.CrashlyticsTree
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
-
-
-
-
 class Skylight : MultiDexApplication() {
 
 	lateinit var component: ApplicationComponent
@@ -61,7 +57,7 @@ class Skylight : MultiDexApplication() {
 
 	private fun setupRxJavaErrorHandling() {
 		RxJavaPlugins.setErrorHandler {
-			Timber.w(it, "Unhandled RxJava error")
+			Timber.e(it, "Unhandled RxJava error")
 		}
 	}
 
