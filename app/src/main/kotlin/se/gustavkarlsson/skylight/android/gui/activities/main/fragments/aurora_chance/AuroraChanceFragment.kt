@@ -2,20 +2,20 @@ package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.visibility
 import com.jakewharton.rxbinding2.widget.text
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_aurora_chance.*
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
-import se.gustavkarlsson.skylight.android.extensions.forUi
+import se.gustavkarlsson.skylight.android.gui.AutoDisposingFragment
 import timber.log.Timber
 
 
-class AuroraChanceFragment : Fragment() {
+class AuroraChanceFragment : AutoDisposingFragment() {
 
 	private val viewModel: AuroraChanceViewModel by lazy {
 		val factory = Skylight.instance.component.getAuroraChanceViewModelFactory()
@@ -34,17 +34,20 @@ class AuroraChanceFragment : Fragment() {
 	private fun bindData() {
 		viewModel.chanceLevel
 			.doOnNext { Timber.d("Updating chanceLevel view: %s", it) }
-			.forUi(this)
+			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe(chance.text())
+			.autoDisposeOnStop()
 
 		viewModel.timeSinceUpdate
 			.doOnNext { Timber.d("Updating timeSinceUpdate view: %s", it) }
-			.forUi(this)
+			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe(timeSinceUpdate.text())
+			.autoDisposeOnStop()
 
 		viewModel.timeSinceUpdateVisibility
 			.doOnNext { Timber.d("Updating timeSinceUpdate visibility: %s", it) }
-			.forUi(this)
+			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe(timeSinceUpdate.visibility())
+			.autoDisposeOnStop()
 	}
 }

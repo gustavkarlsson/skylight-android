@@ -6,12 +6,12 @@ import android.support.design.widget.Snackbar
 import android.view.Menu
 import android.view.MenuItem
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
-import se.gustavkarlsson.skylight.android.extensions.forUi
 import se.gustavkarlsson.skylight.android.extensions.indefiniteErrorSnackbar
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
@@ -59,22 +59,25 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 	private fun bindData() {
 		viewModel.locationName
 			.doOnNext { Timber.d("Updating locationName view: %s", it) }
-			.forUi(this)
+			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe(supportActionBar!!::setTitle)
+			.autoDisposeOnStop()
 
 		viewModel.refreshFinished
 			.doOnNext { Timber.i("Finished refreshing") }
 			.map { false }
-			.forUi(this)
+			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe(swipeRefreshLayout::setRefreshing)
+			.autoDisposeOnStop()
 
 		viewModel.errorMessages
 			.doOnNext { Timber.d("Showing error message") }
-			.forUi(this)
+			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe { toast(it) }
+			.autoDisposeOnStop()
 
 		viewModel.connectivityMessages
-			.forUi(this)
+			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe {
 				snackbar?.run {
 					Timber.d("Hiding connectivity message")
@@ -85,10 +88,12 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 					snackbar = indefiniteErrorSnackbar(coordinatorLayout, it).apply { show() }
 				}
 			}
+			.autoDisposeOnStop()
 
 		swipeRefreshLayout.refreshes()
 			.doOnNext { Timber.i("Refreshing...") }
-			.forUi(this)
+			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe(viewModel.refresh)
+			.autoDisposeOnStop()
 	}
 }

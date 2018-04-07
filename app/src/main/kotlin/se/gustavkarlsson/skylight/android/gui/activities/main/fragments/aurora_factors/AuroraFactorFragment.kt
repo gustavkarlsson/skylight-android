@@ -2,20 +2,20 @@ package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.clicks
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_aurora_factors.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.okButton
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.Skylight
-import se.gustavkarlsson.skylight.android.extensions.forUi
+import se.gustavkarlsson.skylight.android.gui.AutoDisposingFragment
 import timber.log.Timber
 
-class AuroraFactorFragment : Fragment() {
+class AuroraFactorFragment : AutoDisposingFragment() {
 
 	private val factory: AuroraFactorsViewModelFactory by lazy {
 		Skylight.instance.component.getAuroraFactorsViewModelFactory()
@@ -81,19 +81,22 @@ class AuroraFactorFragment : Fragment() {
 	) {
 		viewModel.value
 			.doOnNext { Timber.d("Updating %s value view: %s", factorDebugName, it) }
-			.forUi(this)
+			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe { view.value = it }
+			.autoDisposeOnStop()
 
 		viewModel.chance
 			.doOnNext { Timber.d("Updating %s chance view: %s", factorDebugName, it) }
-			.forUi(this)
+			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe { view.chance = it }
+			.autoDisposeOnStop()
 
 		view.clicks()
-			.forUi(this)
+			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe {
 				toastFactorInfo(titleResourceId, descriptionResourceId)
 			}
+			.autoDisposeOnStop()
 	}
 
 	private fun toastFactorInfo(

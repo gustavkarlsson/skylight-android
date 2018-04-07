@@ -2,14 +2,13 @@ package se.gustavkarlsson.skylight.android.gui.activities.main
 
 import com.hadisatrio.optional.Optional
 import com.jakewharton.rxrelay2.PublishRelay
-import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.Consumer
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.gui.AutoDisposableViewModel
+import se.gustavkarlsson.skylight.android.gui.AutoDisposingViewModel
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
 class MainViewModel(
@@ -18,7 +17,7 @@ class MainViewModel(
 	isConnectedToInternet: Flowable<Boolean>,
 	defaultLocationName: CharSequence,
 	notConnectedToInternetMessage: CharSequence
-) : AutoDisposableViewModel() {
+) : AutoDisposingViewModel() {
 
 	private val errorRelay = PublishRelay.create<Throwable>()
 	val errorMessages: Flowable<Int> = errorRelay
@@ -51,8 +50,8 @@ class MainViewModel(
 	val refresh: Consumer<Unit> = Consumer {
 		auroraReportSingle
 			.doOnEvent { _, _ -> refreshFinishedRelay.accept(Unit) }
-			.autoDisposable(scope())
 			.subscribe(Consumer {}, errorRelay)
+			.autoDisposeOnCleared()
 	}
 
 	private val refreshFinishedRelay = PublishRelay.create<Unit>()
