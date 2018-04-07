@@ -12,16 +12,19 @@ buildscript {
 		mockito_kotlin_version = "1.5.0"
 		commons_io_version = "2.4" // Don't upgrade
 		rxbinding_version = "2.1.1"
-		autodispose_version = "0.6.1"
+		autodispose_version = "0.7.0"
 		threetenabp_version = "1.0.5"
 		robolectric_version = "3.4.2"
 		junit_version = "4.12"
 		room_version = "1.1.0-beta1"
-		rxjava_version = "2.1.8"
+		rxjava_version = "2.1.12"
+		rxandroid_version = "2.0.2"
+		rxkotlin_version = "2.2.0"
 		optional_version = "v1.0.1"
 		android_support_test_version = "1.0.1"
 		assertk_version = "0.10"
 		gson_version = "2.8.2"
+		espresso_version = "3.0.1"
 	}
 	repositories {
 		jcenter()
