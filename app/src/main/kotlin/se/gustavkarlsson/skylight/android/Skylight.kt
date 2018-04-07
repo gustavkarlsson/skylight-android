@@ -92,7 +92,7 @@ class Skylight : MultiDexApplication() {
 			.subscribe(analytics::setNotificationsEnabled)
 
 		settings.triggerLevelChanges
-			.subscribe(analytics::setNotifyThreshold)
+			.subscribe(analytics::setNotifyTriggerLevel)
 	}
 
 	companion object {

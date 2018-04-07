@@ -8,5 +8,5 @@ interface Analytics {
 	fun logManualRefresh()
 
 	fun setNotificationsEnabled(enabled: Boolean)
-	fun setNotifyThreshold(chanceLevel: ChanceLevel)
+	fun setNotifyTriggerLevel(triggerLevel: ChanceLevel)
 }

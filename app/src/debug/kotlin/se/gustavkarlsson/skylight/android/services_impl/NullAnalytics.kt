@@ -11,5 +11,5 @@ class NullAnalytics : Analytics {
 
 	override fun setNotificationsEnabled(enabled: Boolean) = Unit
 
-	override fun setNotifyThreshold(chanceLevel: ChanceLevel) = Unit
+	override fun setNotifyTriggerLevel(triggerLevel: ChanceLevel) = Unit
 }
