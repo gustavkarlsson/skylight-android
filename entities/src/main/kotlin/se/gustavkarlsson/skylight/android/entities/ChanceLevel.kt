@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.entities
 
 enum class ChanceLevel {
 	// Warning. These ordinals relate directly to pref_trigger_level_values
+	// Warning. The names are used to report analytics data
 	UNKNOWN,
 	NONE,
 	LOW,

@@ -5,6 +5,7 @@ import se.gustavkarlsson.skylight.android.dagger.modules.*
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModelFactory
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceViewModelFactory
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorsViewModelFactory
+import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.Scheduler
 import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob
@@ -29,7 +30,8 @@ import javax.inject.Singleton
 	ViewModelsModule::class,
 	FormattingModule::class,
 	LocalizationModule::class,
-	ConnectivityModule::class
+	ConnectivityModule::class,
+	AnalyticsModule::class
 ])
 @Singleton
 interface ApplicationComponent {
@@ -39,5 +41,6 @@ interface ApplicationComponent {
 	fun getAuroraFactorsViewModelFactory(): AuroraFactorsViewModelFactory
 	fun getMainViewModelFactory(): MainViewModelFactory
 	fun getSettings(): Settings
+	fun getAnalytics(): Analytics
 	fun getScheduler(): Scheduler
 }

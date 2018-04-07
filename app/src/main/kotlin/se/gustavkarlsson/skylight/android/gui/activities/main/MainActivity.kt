@@ -11,7 +11,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.Skylight
+import se.gustavkarlsson.skylight.android.analytics
+import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.extensions.indefiniteErrorSnackbar
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
@@ -23,7 +24,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 	private var snackbar: Snackbar? = null
 
 	private val viewModel: MainViewModel by lazy {
-		val factory = Skylight.instance.component.getMainViewModelFactory()
+		val factory = appComponent.getMainViewModelFactory()
 		ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
 	}
 
@@ -91,7 +92,10 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 			.autoDisposeOnStop()
 
 		swipeRefreshLayout.refreshes()
-			.doOnNext { Timber.i("Refreshing...") }
+			.doOnNext {
+				Timber.i("Refreshing...")
+				analytics.logManualRefresh()
+			}
 			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe(viewModel.refresh)
 			.autoDisposeOnStop()

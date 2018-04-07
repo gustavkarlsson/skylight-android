@@ -11,6 +11,7 @@ import se.gustavkarlsson.skylight.android.dagger.components.ApplicationComponent
 import se.gustavkarlsson.skylight.android.dagger.components.DaggerApplicationComponent
 import se.gustavkarlsson.skylight.android.dagger.modules.ContextModule
 import se.gustavkarlsson.skylight.android.dagger.modules.VisibilityModule
+import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob
 import se.gustavkarlsson.skylight.android.util.CrashlyticsTree
 import timber.log.Timber
@@ -20,8 +21,8 @@ class Skylight : MultiDexApplication() {
 
 	lateinit var component: ApplicationComponent
 
-    override fun onCreate() {
-        super.onCreate()
+	override fun onCreate() {
+		super.onCreate()
 		instance = this
 		component = DaggerApplicationComponent.builder()
 			.contextModule(ContextModule(this))
@@ -29,7 +30,8 @@ class Skylight : MultiDexApplication() {
 			.build()
 		bootstrap()
 		setupNotifications()
-    }
+		setupSettingsAnalytics(component.getSettings())
+	}
 
 	private fun bootstrap() {
 		setupCrashReporting()
@@ -83,6 +85,14 @@ class Skylight : MultiDexApplication() {
 					scheduler.unschedule()
 				}
 			}
+	}
+
+	private fun setupSettingsAnalytics(settings: Settings) {
+		settings.notificationsEnabledChanges
+			.subscribe(analytics::setNotificationsEnabled)
+
+		settings.triggerLevelChanges
+			.subscribe(analytics::setNotifyThreshold)
 	}
 
 	companion object {

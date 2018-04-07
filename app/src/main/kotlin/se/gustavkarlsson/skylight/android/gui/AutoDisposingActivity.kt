@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.gui
 import android.support.v7.app.AppCompatActivity
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import se.gustavkarlsson.skylight.android.extensions.addTo
 
 abstract class AutoDisposingActivity : AppCompatActivity() {
 
@@ -26,14 +27,14 @@ abstract class AutoDisposingActivity : AppCompatActivity() {
 	}
 
 	protected fun Disposable.autoDisposeOnPause() {
-		onPauseDisposables.add(this)
+		this.addTo(onPauseDisposables)
 	}
 
 	protected fun Disposable.autoDisposeOnStop() {
-		onStopDisposables.add(this)
+		this.addTo(onStopDisposables)
 	}
 
 	protected fun Disposable.autoDisposeOnDestroy() {
-		onDestroyDisposables.add(this)
+		this.addTo(onDestroyDisposables)
 	}
 }

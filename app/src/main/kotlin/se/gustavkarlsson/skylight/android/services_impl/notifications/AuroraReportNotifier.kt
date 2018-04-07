@@ -7,6 +7,7 @@ import android.content.Intent
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.TaskStackBuilder
 import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.analytics
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
@@ -45,6 +46,7 @@ constructor(
                 .build()
 
         notificationManager.notify(1, notification)
+		analytics.logNotificationSent(chance)
     }
 
     private fun createActivityPendingIntent(): PendingIntent {

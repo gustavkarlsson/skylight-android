@@ -11,14 +11,14 @@ import kotlinx.android.synthetic.main.fragment_aurora_factors.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.okButton
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.Skylight
+import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.gui.AutoDisposingFragment
 import timber.log.Timber
 
 class AuroraFactorFragment : AutoDisposingFragment() {
 
 	private val factory: AuroraFactorsViewModelFactory by lazy {
-		Skylight.instance.component.getAuroraFactorsViewModelFactory()
+		appComponent.getAuroraFactorsViewModelFactory()
 	}
 
 	private val darknessViewModel: DarknessViewModel by lazy {
