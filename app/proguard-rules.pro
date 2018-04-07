@@ -49,3 +49,7 @@
 # don't remember what this is for
 -dontwarn javax.annotation.**
 
+# Crashlytics reports
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+-keep public class * extends java.lang.Exception
