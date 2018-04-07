@@ -5,7 +5,7 @@ buildscript {
 		kotlin_version = "1.2.31"
 		retrofit_version = "2.3.0"
 		dagger_version = "2.14.1"
-		google_play_services_version = "11.8.0"
+		google_play_services_version = "11.4.2"
 		android_support_version = "27.0.2"
 		anko_version = "0.10.4"
 		mockito_version = "2.10.0"
@@ -24,6 +24,8 @@ buildscript {
 		assertk_version = "0.10"
 		gson_version = "2.8.2"
 		espresso_version = "3.0.1"
+		google_services_version = "3.2.1"
+		firebase_version = "11.4.2"
 	}
 	repositories {
 		jcenter()
@@ -33,6 +35,7 @@ buildscript {
 	dependencies {
 		classpath "com.android.tools.build:gradle:3.1.0"
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+		classpath "com.google.gms:google-services:$google_services_version"
 	}
 }
 

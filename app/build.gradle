@@ -2,6 +2,7 @@ apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 apply plugin: "kotlin-kapt"
 apply plugin: "kotlin-android-extensions"
+apply plugin: "com.google.gms.google-services"
 
 android {
 	compileSdkVersion project.compilesdk_version
@@ -140,6 +141,9 @@ dependencies {
 
 	// Lifecycle
 	implementation "android.arch.lifecycle:extensions:1.1.1"
+
+	// Firebase
+	implementation "com.google.firebase:firebase-core:$firebase_version"
 
 
 	// Testing

@@ -17,3 +17,5 @@ gradle.properties
 
 # Captures
 /captures
+
+google-services.json
