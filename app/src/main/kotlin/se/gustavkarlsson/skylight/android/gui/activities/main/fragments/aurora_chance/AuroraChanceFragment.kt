@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,7 +9,7 @@ import com.jakewharton.rxbinding2.widget.text
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_aurora_chance.*
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.appModule
+import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.gui.AutoDisposingFragment
 import timber.log.Timber
 
@@ -18,8 +17,7 @@ import timber.log.Timber
 class AuroraChanceFragment : AutoDisposingFragment() {
 
 	private val viewModel: AuroraChanceViewModel by lazy {
-		val factory = appModule.auroraChanceViewModelFactory
-		ViewModelProviders.of(this, factory).get(AuroraChanceViewModel::class.java)
+		appComponent.auroraChanceViewModel(this)
 	}
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

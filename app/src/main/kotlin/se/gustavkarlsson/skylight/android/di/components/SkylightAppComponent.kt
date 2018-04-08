@@ -1,18 +1,24 @@
-package se.gustavkarlsson.skylight.android.di.modules
+package se.gustavkarlsson.skylight.android.di.components
 
 import android.app.Application
-import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModelFactory
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceViewModelFactory
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorsViewModelFactory
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentActivity
+import se.gustavkarlsson.skylight.android.di.modules.*
+import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModel
+import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceViewModel
+import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.DarknessViewModel
+import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.GeomagLocationViewModel
+import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.KpIndexViewModel
+import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.VisibilityViewModel
 import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.Scheduler
 import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob
 
-open class SkylightAppModule(
+open class SkylightAppComponent(
 	openWeatherMapApiKey: String, // TODO Is this really the right way to do this?
 	application: Application
-) : AppModule {
+) : AppComponent {
 
 	open val contextModule: ContextModule by lazy {
 		ApplicationContextModule(application)
@@ -56,7 +62,8 @@ open class SkylightAppModule(
 		)
 	}
 
-	open val kpIndexModule: KpIndexModule = RealKpIndexModule()
+	open val kpIndexModule: KpIndexModule =
+		RealKpIndexModule()
 
 	open val visibilityModule: VisibilityModule by lazy {
 		OpenWeatherMapVisibilityModule(
@@ -89,7 +96,8 @@ open class SkylightAppModule(
 		)
 	}
 
-	open val evaluationModule: EvaluationModule = RealEvaluationModule()
+	open val evaluationModule: EvaluationModule =
+		RealEvaluationModule()
 
 	open val notifierModule: NotifierModule by lazy {
 		AndroidNotifierModule(
@@ -99,7 +107,11 @@ open class SkylightAppModule(
 		)
 	}
 
-	open val settingsModule: SettingsModule by lazy { RxSettingsModule(contextModule.context) }
+	open val settingsModule: SettingsModule by lazy {
+		RxSettingsModule(
+			contextModule.context
+		)
+	}
 
 	open val updateSchedulerModule: UpdateSchedulerModule by lazy { RealUpdateSchedulerModule() }
 
@@ -135,7 +147,11 @@ open class SkylightAppModule(
 		)
 	}
 
-	open val analyticsModule: AnalyticsModule by lazy { FirebasedAnalyticsModule(contextModule.context) }
+	open val analyticsModule: AnalyticsModule by lazy {
+		FirebasedAnalyticsModule(
+			contextModule.context
+		)
+	}
 
 	final override val settings: Settings
 		get() = settingsModule.settings
@@ -143,12 +159,18 @@ open class SkylightAppModule(
 		get() = updateSchedulerModule.updateScheduler
 	final override val updateJob: UpdateJob
 		get() = updateJobModule.updateJob
-	final override val auroraChanceViewModelFactory: AuroraChanceViewModelFactory
-		get() = viewModelsModule.auroraChanceViewModelFactory
-	final override val auroraFactorsViewModelFactory: AuroraFactorsViewModelFactory
-		get() = viewModelsModule.auroraFactorsViewModelFactory
-	final override val mainViewModelFactory: MainViewModelFactory
-		get() = viewModelsModule.mainViewModelFactory
 	final override val analytics: Analytics
 		get() = analyticsModule.analytics
+	final override fun auroraChanceViewModel(fragment: Fragment): AuroraChanceViewModel =
+		viewModelsModule.auroraChanceViewModel(fragment)
+	final override fun darknessViewModel(fragment: Fragment): DarknessViewModel =
+		viewModelsModule.darknessViewModel(fragment)
+	final override fun geomagLocationViewModel(fragment: Fragment): GeomagLocationViewModel =
+		viewModelsModule.geomagLocationViewModel(fragment)
+	final override fun kpIndexViewModel(fragment: Fragment): KpIndexViewModel =
+		viewModelsModule.kpIndexViewModel(fragment)
+	final override fun visibilityViewModel(fragment: Fragment): VisibilityViewModel =
+		viewModelsModule.visibilityViewModel(fragment)
+	final override fun mainViewModel(activity: FragmentActivity): MainViewModel =
+		viewModelsModule.mainViewModel(activity)
 }

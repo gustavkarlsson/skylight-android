@@ -1,15 +1,20 @@
 package se.gustavkarlsson.skylight.android.di.modules
 
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentActivity
 import io.reactivex.Flowable
 import io.reactivex.Single
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.*
+import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModel
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModelFactory
+import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceViewModel
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceViewModelFactory
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorsViewModelFactory
+import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.*
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
@@ -33,7 +38,7 @@ class AndroidViewModelsModule(
 	now: Single<Instant>
 ) : ViewModelsModule {
 
-	override val auroraChanceViewModelFactory: AuroraChanceViewModelFactory by lazy {
+	private val auroraChanceViewModelFactory: AuroraChanceViewModelFactory by lazy {
 		AuroraChanceViewModelFactory(
 			auroraReportFlowable,
 			auroraChanceEvaluator,
@@ -44,7 +49,7 @@ class AndroidViewModelsModule(
 		)
 	}
 
-	override val auroraFactorsViewModelFactory: AuroraFactorsViewModelFactory by lazy {
+	private val auroraFactorsViewModelFactory: AuroraFactorsViewModelFactory by lazy {
 		AuroraFactorsViewModelFactory(
 			auroraReportFlowable,
 			darknessChanceEvaluator,
@@ -59,7 +64,7 @@ class AndroidViewModelsModule(
 	}
 
 
-	override val mainViewModelFactory: MainViewModelFactory by lazy {
+	private val mainViewModelFactory: MainViewModelFactory by lazy {
 		MainViewModelFactory(
 			auroraReportSingle,
 			auroraReportFlowable,
@@ -68,6 +73,29 @@ class AndroidViewModelsModule(
 			context.getString(R.string.error_no_internet)
 		)
 	}
+	override fun auroraChanceViewModel(fragment: Fragment): AuroraChanceViewModel =
+		ViewModelProviders.of(fragment, auroraChanceViewModelFactory)
+			.get(AuroraChanceViewModel::class.java)
+
+	override fun darknessViewModel(fragment: Fragment): DarknessViewModel =
+		ViewModelProviders.of(fragment, auroraFactorsViewModelFactory)
+			.get(DarknessViewModel::class.java)
+
+	override fun geomagLocationViewModel(fragment: Fragment): GeomagLocationViewModel =
+		ViewModelProviders.of(fragment, auroraFactorsViewModelFactory)
+			.get(GeomagLocationViewModel::class.java)
+
+	override fun kpIndexViewModel(fragment: Fragment): KpIndexViewModel =
+		ViewModelProviders.of(fragment, auroraFactorsViewModelFactory)
+			.get(KpIndexViewModel::class.java)
+
+	override fun visibilityViewModel(fragment: Fragment): VisibilityViewModel =
+		ViewModelProviders.of(fragment, auroraFactorsViewModelFactory)
+			.get(VisibilityViewModel::class.java)
+
+	override fun mainViewModel(activity: FragmentActivity): MainViewModel =
+		ViewModelProviders.of(activity, mainViewModelFactory)
+			.get(MainViewModel::class.java)
 
 	companion object {
 		private val RIGHT_NOW_THRESHOLD = Duration.ofMinutes(1)

@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors
 
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,30 +10,26 @@ import kotlinx.android.synthetic.main.fragment_aurora_factors.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.okButton
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.appModule
+import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.gui.AutoDisposingFragment
 import timber.log.Timber
 
 class AuroraFactorFragment : AutoDisposingFragment() {
 
-	private val factory: AuroraFactorsViewModelFactory by lazy {
-		appModule.auroraFactorsViewModelFactory
-	}
-
 	private val darknessViewModel: DarknessViewModel by lazy {
-		ViewModelProviders.of(this, factory).get(DarknessViewModel::class.java)
+		appComponent.darknessViewModel(this)
 	}
 
 	private val geomagLocationViewModel: GeomagLocationViewModel by lazy {
-		ViewModelProviders.of(this, factory).get(GeomagLocationViewModel::class.java)
+		appComponent.geomagLocationViewModel(this)
 	}
 
 	private val kpIndexViewModel: KpIndexViewModel by lazy {
-		ViewModelProviders.of(this, factory).get(KpIndexViewModel::class.java)
+		appComponent.kpIndexViewModel(this)
 	}
 
 	private val visibilityViewModel: VisibilityViewModel by lazy {
-		ViewModelProviders.of(this, factory).get(VisibilityViewModel::class.java)
+		appComponent.visibilityViewModel(this)
 	}
 
 	override fun onCreateView(

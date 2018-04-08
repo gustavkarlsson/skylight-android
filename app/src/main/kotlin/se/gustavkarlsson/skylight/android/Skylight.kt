@@ -23,7 +23,7 @@ class Skylight : MultiDexApplication() {
 		super.onCreate()
 		bootstrap()
 		setupNotifications()
-		setupSettingsAnalytics(appModule.settings)
+		setupSettingsAnalytics(appComponent.settings)
 	}
 
 	private fun bootstrap() {
@@ -60,7 +60,7 @@ class Skylight : MultiDexApplication() {
 		JobManager.create(this).run {
 			addJobCreator { tag ->
 				when (tag) {
-					UpdateJob.UPDATE_JOB_TAG -> appModule.updateJob
+					UpdateJob.UPDATE_JOB_TAG -> appComponent.updateJob
 					else -> null
 				}
 			}
@@ -68,8 +68,8 @@ class Skylight : MultiDexApplication() {
 	}
 
 	private fun setupNotifications() {
-		val settings = appModule.settings
-		val scheduler = appModule.updateScheduler
+		val settings = appComponent.settings
+		val scheduler = appComponent.updateScheduler
 		settings.notificationsEnabledChanges
 			.subscribe { enabled ->
 				if (enabled) {
