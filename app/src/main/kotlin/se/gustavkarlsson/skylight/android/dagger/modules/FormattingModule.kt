@@ -4,6 +4,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
@@ -17,9 +18,7 @@ class FormattingModule {
 	@Provides
 	@Reusable
 	fun provideRelativeTimeFormatter(context: Context): RelativeTimeFormatter =
-		DateUtilsRelativeTimeFormatter(
-			context.getString(R.string.right_now)
-		)
+		DateUtilsRelativeTimeFormatter({ context.getString(R.string.right_now) })
 
 	@Provides
 	@Reusable
@@ -27,7 +26,7 @@ class FormattingModule {
 
 	@Provides
 	@Reusable
-	fun provideGeomagLocationFormatter(locale: Locale): SingleValueFormatter<GeomagLocation> =
+	fun provideGeomagLocationFormatter(locale: Single<Locale>): SingleValueFormatter<GeomagLocation> =
 		GeomagLocationFormatter(locale)
 
 	@Provides
