@@ -11,53 +11,34 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.Skylight
-import se.gustavkarlsson.skylight.android.dagger.components.DaggerTestApplicationComponent
-import se.gustavkarlsson.skylight.android.dagger.modules.*
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import se.gustavkarlsson.skylight.android.test.*
-import javax.inject.Inject
+import se.gustavkarlsson.skylight.android.testappComponent
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class AuroraChanceFragmentTest {
 
-	@Inject lateinit var testLocationProvider: TestLocationProvider
-
-	@Inject lateinit var testLocationNameProvider: TestLocationNameProvider
+	private val testLocationNameProvider: TestLocationNameProvider by lazy {
+		testappComponent.testLocationNameProvider
+	}
 
 	@Rule
 	@JvmField
-	var testRule = ApplicationComponentActivityTestRule(MainActivity::class, false, false) {
-		DaggerTestApplicationComponent.builder()
-			.contextModule(ContextModule(Skylight.instance))
-			.testSharedPreferencesModule(TestSharedPreferencesModule())
-			.testLocationModule(TestLocationModule())
-			.testLocationNameModule(TestLocationNameModule())
-			.visibilityModule(VisibilityModule(BuildConfig.OPENWEATHERMAP_API_KEY))
-			.build()
-	}
+	var testRule = ApplicationComponentActivityTestRule(MainActivity::class, false, false)
 
 	@Before
 	fun setUp() {
-		initMocks()
 		clearCache()
 		clearSharedPreferences()
 		testRule.launchActivity()
-		testRule.component.inject(this)
 	}
 
-    @Test
-    fun locationTextShownImmediately() {
-		onView(allOf(isDescendantOfA(withId(R.id.action_bar)), withText(R.string.your_location))).check(matches(isDisplayed()))
-    }
-
 	@Test
-	fun locationTextUpdatesToActualLocation() {
+	fun locationTextShowsActualLocation() {
 		onView(withId(R.id.swipeRefreshLayout)).perform(ViewActions.swipeDown())
-		waitForView(2000L, allOf(isDescendantOfA(withId(R.id.action_bar)), withText(testLocationNameProvider.delegate())), isDisplayed())
+		waitForView(2000L, allOf(isDescendantOfA(withId(R.id.action_bar)), withText(testLocationNameProvider.delegate().get())), isDisplayed())
 	}
 
     @Test

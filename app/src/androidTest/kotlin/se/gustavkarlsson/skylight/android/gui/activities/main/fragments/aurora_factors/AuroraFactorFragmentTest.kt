@@ -10,16 +10,11 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.Skylight
-import se.gustavkarlsson.skylight.android.dagger.components.DaggerTestApplicationComponent
-import se.gustavkarlsson.skylight.android.dagger.modules.*
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import se.gustavkarlsson.skylight.android.test.ApplicationComponentActivityTestRule
 import se.gustavkarlsson.skylight.android.test.clearCache
 import se.gustavkarlsson.skylight.android.test.clearSharedPreferences
-import se.gustavkarlsson.skylight.android.test.initMocks
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -27,19 +22,10 @@ class AuroraFactorFragmentTest {
 
 	@Rule
 	@JvmField
-	var testRule = ApplicationComponentActivityTestRule(MainActivity::class, false, false) {
-		DaggerTestApplicationComponent.builder()
-			.contextModule(ContextModule(Skylight.instance))
-			.testSharedPreferencesModule(TestSharedPreferencesModule())
-			.testLocationModule(TestLocationModule())
-			.testLocationNameModule(TestLocationNameModule())
-			.visibilityModule(VisibilityModule(BuildConfig.OPENWEATHERMAP_API_KEY))
-			.build()
-	}
+	var testRule = ApplicationComponentActivityTestRule(MainActivity::class, false, false)
 
 	@Before
 	fun setUp() {
-		initMocks()
 		clearCache()
 		clearSharedPreferences()
 		testRule.launchActivity()

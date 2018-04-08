@@ -38,7 +38,6 @@ class DebugAuroraReportModule(
 
 	private val debugSettings: DebugSettings by lazy {
 		RxPreferencesDebugSettings(context, rxSharedPreferences)
-
 	}
 
 	private val auroraReportRelay: Relay<AuroraReport> by lazy {

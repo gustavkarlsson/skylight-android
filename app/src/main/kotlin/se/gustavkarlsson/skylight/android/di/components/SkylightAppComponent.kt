@@ -107,9 +107,14 @@ open class SkylightAppComponent(
 		)
 	}
 
+	open val sharedPreferencesModule: SharedPreferencesModule by lazy {
+		DefaultSharedPreferencesModule(contextModule.context)
+	}
+
 	open val settingsModule: SettingsModule by lazy {
 		RxSettingsModule(
-			contextModule.context
+			contextModule.context,
+			sharedPreferencesModule.sharedPreferences
 		)
 	}
 

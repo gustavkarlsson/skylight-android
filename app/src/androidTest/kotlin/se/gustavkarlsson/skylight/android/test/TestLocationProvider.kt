@@ -6,10 +6,10 @@ import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 
 class TestLocationProvider(
-	var delegate: () -> Location
+	var delegate: () -> Optional<Location>
 ) : LocationProvider {
 
 	override fun get(): Single<Optional<Location>> {
-		return Single.fromCallable({ Optional.of<Location>(delegate()) })
+		return Single.fromCallable({ delegate() })
 	}
 }
