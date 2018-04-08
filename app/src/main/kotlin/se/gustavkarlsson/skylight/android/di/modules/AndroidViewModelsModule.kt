@@ -6,10 +6,10 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import io.reactivex.Flowable
 import io.reactivex.Single
-import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.*
+import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModel
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModelFactory
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceViewModel
@@ -98,6 +98,6 @@ class AndroidViewModelsModule(
 			.get(MainViewModel::class.java)
 
 	companion object {
-		private val RIGHT_NOW_THRESHOLD = Duration.ofMinutes(1)
+		private val RIGHT_NOW_THRESHOLD = 1.minutes
 	}
 }

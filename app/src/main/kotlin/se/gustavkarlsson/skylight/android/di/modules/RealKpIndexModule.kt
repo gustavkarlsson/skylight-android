@@ -2,12 +2,13 @@ package se.gustavkarlsson.skylight.android.di.modules
 
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
-import org.threeten.bp.Duration
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.extensions.create
+import se.gustavkarlsson.skylight.android.extensions.minutes
+import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.KpIndexProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.RetrofittedKpIndexProvider
@@ -38,8 +39,8 @@ class RealKpIndexModule : KpIndexModule {
 
 	// TODO Make some configurable in constructor
 	companion object {
-		private const val API_URL = "https://skylight-web-service-1.herokuapp.com"
-		private val POLLING_INTERVAL = Duration.ofMinutes(15)
-		private val RETRY_DELAY = Duration.ofSeconds(10)
+		private const val API_URL = "http://api.skylight-app.net"
+		private val POLLING_INTERVAL = 15.minutes
+		private val RETRY_DELAY = 10.seconds
 	}
 }

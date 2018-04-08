@@ -2,8 +2,8 @@ package se.gustavkarlsson.skylight.android.di.modules
 
 import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
-import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
 import se.gustavkarlsson.skylight.android.services_impl.streamables.LocationNameProviderStreamable
@@ -27,6 +27,6 @@ class TestLocationNameModule(
 	}
 
 	companion object {
-		private val RETRY_DELAY = Duration.ofSeconds(10)
+		private val RETRY_DELAY = 10.seconds
 	}
 }

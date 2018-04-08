@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.di.modules
 
-import org.threeten.bp.Duration
+import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.services.Scheduler
 import se.gustavkarlsson.skylight.android.services_impl.scheduling.GetLatestAuroraReportScheduler
 
@@ -12,7 +12,7 @@ class RealUpdateSchedulerModule : UpdateSchedulerModule {
 
 	// TODO Make configurable in cosntructor
 	companion object {
-		private val SCHEDULE_INTERVAL: Duration = Duration.ofMinutes(20)
-		private val SCHEDULE_FLEX: Duration = Duration.ofMinutes(10)
+		private val SCHEDULE_INTERVAL = 20.minutes
+		private val SCHEDULE_FLEX = 10.minutes
 	}
 }

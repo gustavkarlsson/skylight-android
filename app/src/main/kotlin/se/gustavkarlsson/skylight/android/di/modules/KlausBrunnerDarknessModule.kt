@@ -2,10 +2,11 @@ package se.gustavkarlsson.skylight.android.di.modules
 
 import io.reactivex.Flowable
 import io.reactivex.Single
-import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.extensions.minutes
+import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.DarknessProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.KlausBrunnerDarknessProvider
@@ -26,7 +27,7 @@ class KlausBrunnerDarknessModule(now: Single<Instant>, locations: Flowable<Locat
 
 	// TODO Configure via constructor
 	companion object {
-	    private val DARKNESS_POLLING_INTERVAL = Duration.ofMinutes(1)
-		private val RETRY_DELAY = Duration.ofSeconds(5)
+	    private val DARKNESS_POLLING_INTERVAL = 1.minutes
+		private val RETRY_DELAY = 5.seconds
 	}
 }

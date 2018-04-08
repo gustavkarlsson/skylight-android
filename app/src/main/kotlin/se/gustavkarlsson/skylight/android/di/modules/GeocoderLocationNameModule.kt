@@ -4,8 +4,8 @@ import android.content.Context
 import android.location.Geocoder
 import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
-import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.GeocoderLocationNameProvider
@@ -31,6 +31,6 @@ class GeocoderLocationNameModule(context: Context, locationFlowable: Flowable<Lo
 
 	// TODO Make configurable in constructor?
 	companion object {
-		private val RETRY_DELAY = Duration.ofSeconds(10)
+		private val RETRY_DELAY = 10.seconds
 	}
 }
