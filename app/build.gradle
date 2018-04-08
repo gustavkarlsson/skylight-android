@@ -1,7 +1,6 @@
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 apply plugin: "kotlin-android-extensions"
-apply plugin: "com.google.gms.google-services"
 apply plugin: "io.fabric"
 
 android {
@@ -149,3 +148,6 @@ dependencies {
 	androidTestImplementation "com.nhaarman:mockito-kotlin-kt1.1:$mockito_kotlin_version", { exclude group: "org.jetbrains.kotlin" }
 	androidTestImplementation "commons-io:commons-io:$commons_io_version"
 }
+
+// Recommended to be applied at bottom
+apply plugin: "com.google.gms.google-services"
