@@ -4,7 +4,6 @@
 * Look into country changes while app running (Locale etc)
 * Look into moving data binding to lifecycle bound listener
 * Add performance traces
-* Remove need for all annotation processors
 * Tweak values for aurora detection
 * Testing
   * Add more tests

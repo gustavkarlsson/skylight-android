@@ -5,12 +5,14 @@ import android.content.Context
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
+import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mockito.verify
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import se.gustavkarlsson.skylight.android.disableAnalytics
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
@@ -50,5 +52,13 @@ class AuroraReportNotifierTest {
 
         verify(mockNotificationManager).notify(anyInt(), any())
     }
+
+	companion object {
+		@BeforeClass
+		@JvmStatic
+		fun setUpClass() {
+			disableAnalytics()
+		}
+	}
 }
 
