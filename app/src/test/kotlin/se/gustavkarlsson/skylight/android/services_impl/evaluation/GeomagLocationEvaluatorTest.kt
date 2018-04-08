@@ -10,6 +10,7 @@ import se.gustavkarlsson.skylight.android.entities.Chance.Companion.IMPOSSIBLE
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.MAX
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.UNKNOWN
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
+import se.gustavkarlsson.skylight.android.services_impl.evaluation.GeomagLocationEvaluator.Companion.BEST
 
 class GeomagLocationEvaluatorTest {
 
@@ -49,15 +50,15 @@ class GeomagLocationEvaluatorTest {
     }
 
     @Test
-    fun _67LatitudeEvaluatesToMax() {
-        val chance = impl.evaluate(GeomagLocation(67.0))
+    fun bestLatitudeEvaluatesToMax() {
+        val chance = impl.evaluate(GeomagLocation(BEST))
 
         assert(chance).isEqualTo(MAX)
     }
 
     @Test
-    fun minus67LatitudeEvaluatesToMax() {
-        val chance = impl.evaluate(GeomagLocation(-67.0))
+    fun minusBestLatitudeEvaluatesToMax() {
+        val chance = impl.evaluate(GeomagLocation(-BEST))
 
         assert(chance).isEqualTo(MAX)
     }

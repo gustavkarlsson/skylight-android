@@ -42,10 +42,10 @@ class KpIndexEvaluatorTest {
     }
 
     @Test
-    fun _5KpIndexEvaluatesToMediumChance() {
-        val chance = impl.evaluate(KpIndex(5.0))
+    fun _4KpIndexEvaluatesToMediumChance() {
+        val chance = impl.evaluate(KpIndex(4.0))
 
-		assert(chance).isBetween(Chance(0.4), Chance(0.6))
+		assert(chance).isBetween(Chance(0.6), Chance(0.8))
     }
 
     @Test

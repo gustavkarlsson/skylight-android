@@ -10,10 +10,15 @@ class GeomagLocationEvaluator : ChanceEvaluator<GeomagLocation> {
     override fun evaluate(value: GeomagLocation): Chance {
         val latitude = value.latitude ?: return UNKNOWN
         val absoluteLatitude = Math.abs(latitude)
-        var chance = 1.0 / 12.0 * absoluteLatitude - 55.0 / 12.0 // 55-67
+        var chance = ((1.0 / FLEX) * absoluteLatitude) - ((BEST - FLEX) / FLEX)
         if (chance > 1.0) {
             chance = 2.0 - chance
         }
         return Chance(chance)
     }
+
+	companion object {
+	    const val BEST = 67.0
+		const val FLEX = 13.0
+	}
 }
