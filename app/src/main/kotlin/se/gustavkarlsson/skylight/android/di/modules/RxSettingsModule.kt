@@ -8,9 +8,12 @@ import se.gustavkarlsson.skylight.android.services_impl.RxPreferencesSettings
 
 class RxSettingsModule(context: Context) : SettingsModule {
 
-	override val settings: Settings by lazy {
+	override val rxSharedPreferences: RxSharedPreferences by lazy {
 		val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-		val rxSharedPreferences = RxSharedPreferences.create(sharedPreferences)
+		RxSharedPreferences.create(sharedPreferences)
+	}
+
+	override val settings: Settings by lazy {
 		RxPreferencesSettings(context, rxSharedPreferences)
 	}
 }
