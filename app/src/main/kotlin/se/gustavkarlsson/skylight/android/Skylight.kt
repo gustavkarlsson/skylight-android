@@ -7,10 +7,6 @@ import com.evernote.android.job.JobManager
 import com.jakewharton.threetenabp.AndroidThreeTen
 import io.fabric.sdk.android.Fabric
 import io.reactivex.plugins.RxJavaPlugins
-import se.gustavkarlsson.skylight.android.dagger.components.ApplicationComponent
-import se.gustavkarlsson.skylight.android.dagger.components.DaggerApplicationComponent
-import se.gustavkarlsson.skylight.android.dagger.modules.ContextModule
-import se.gustavkarlsson.skylight.android.dagger.modules.VisibilityModule
 import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob
 import se.gustavkarlsson.skylight.android.util.CrashlyticsTree
@@ -19,18 +15,15 @@ import timber.log.Timber.DebugTree
 
 class Skylight : MultiDexApplication() {
 
-	lateinit var component: ApplicationComponent
+	init {
+		instance = this
+	}
 
 	override fun onCreate() {
 		super.onCreate()
-		instance = this
-		component = DaggerApplicationComponent.builder()
-			.contextModule(ContextModule(this))
-			.visibilityModule(VisibilityModule(BuildConfig.OPENWEATHERMAP_API_KEY))
-			.build()
 		bootstrap()
 		setupNotifications()
-		setupSettingsAnalytics(component.getSettings())
+		setupSettingsAnalytics(appModule.settings)
 	}
 
 	private fun bootstrap() {
@@ -67,7 +60,7 @@ class Skylight : MultiDexApplication() {
 		JobManager.create(this).run {
 			addJobCreator { tag ->
 				when (tag) {
-					UpdateJob.UPDATE_JOB_TAG -> component.getUpdateJob()
+					UpdateJob.UPDATE_JOB_TAG -> appModule.updateJob
 					else -> null
 				}
 			}
@@ -75,8 +68,8 @@ class Skylight : MultiDexApplication() {
 	}
 
 	private fun setupNotifications() {
-		val settings = component.getSettings()
-		val scheduler = component.getScheduler()
+		val settings = appModule.settings
+		val scheduler = appModule.updateScheduler
 		settings.notificationsEnabledChanges
 			.subscribe { enabled ->
 				if (enabled) {
@@ -97,6 +90,7 @@ class Skylight : MultiDexApplication() {
 
 	companion object {
 		lateinit var instance: Skylight
+			private set
 	}
 
 }

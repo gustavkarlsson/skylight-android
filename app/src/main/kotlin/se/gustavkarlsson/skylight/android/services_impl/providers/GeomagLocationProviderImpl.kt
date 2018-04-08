@@ -1,19 +1,14 @@
 package se.gustavkarlsson.skylight.android.services_impl.providers
 
 import com.hadisatrio.optional.Optional
-import dagger.Reusable
 import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.providers.GeomagLocationProvider
 import timber.log.Timber
 import java.lang.Math.*
-import javax.inject.Inject
 
-@Reusable
-class GeomagLocationProviderImpl
-@Inject
-constructor() : GeomagLocationProvider {
+class GeomagLocationProviderImpl : GeomagLocationProvider {
 
 	override fun get(location: Single<Optional<Location>>): Single<GeomagLocation> {
 		return location

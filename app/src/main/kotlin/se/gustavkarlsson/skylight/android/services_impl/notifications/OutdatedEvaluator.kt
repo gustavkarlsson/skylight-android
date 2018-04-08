@@ -1,16 +1,11 @@
 package se.gustavkarlsson.skylight.android.services_impl.notifications
 
-import dagger.Reusable
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalTime.NOON
 import se.gustavkarlsson.skylight.android.extensions.until
 import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
-import javax.inject.Inject
 
-@Reusable
-class OutdatedEvaluator
-@Inject
-constructor(
+class OutdatedEvaluator(
 	private val timeProvider: TimeProvider
 ) {
 

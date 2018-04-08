@@ -1,16 +1,11 @@
 package se.gustavkarlsson.skylight.android.services_impl.evaluation
 
-import dagger.Reusable
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.UNKNOWN
 import se.gustavkarlsson.skylight.android.entities.Visibility
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
-import javax.inject.Inject
 
-@Reusable
-class VisibilityEvaluator
-@Inject
-constructor() : ChanceEvaluator<Visibility> {
+class VisibilityEvaluator : ChanceEvaluator<Visibility> {
 
     override fun evaluate(value: Visibility): Chance {
         val clouds = value.cloudPercentage ?: return UNKNOWN

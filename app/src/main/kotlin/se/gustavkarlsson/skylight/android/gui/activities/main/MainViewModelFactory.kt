@@ -2,24 +2,16 @@ package se.gustavkarlsson.skylight.android.gui.activities.main
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import dagger.Reusable
 import io.reactivex.Flowable
 import io.reactivex.Single
-import se.gustavkarlsson.skylight.android.dagger.qualifiers.ConnectedToInternet
-import se.gustavkarlsson.skylight.android.dagger.qualifiers.DefaultLocationName
-import se.gustavkarlsson.skylight.android.dagger.qualifiers.NotConnectedToInternet
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import javax.inject.Inject
 
-@Reusable
-class MainViewModelFactory
-@Inject
-constructor(
+class MainViewModelFactory(
 	private val auroraReportSingle: Single<AuroraReport>,
 	private val auroraReports: Flowable<AuroraReport>,
-	@ConnectedToInternet private val isConnectedToInternet: Flowable<Boolean>,
-	@DefaultLocationName private val defaultLocationName: CharSequence,
-	@NotConnectedToInternet private val notConnectedToInternetMessage: CharSequence
+	private val isConnectedToInternet: Flowable<Boolean>,
+	private val defaultLocationName: CharSequence,
+	private val notConnectedToInternetMessage: CharSequence
 ) : ViewModelProvider.Factory {
 
 	@Suppress("UNCHECKED_CAST")

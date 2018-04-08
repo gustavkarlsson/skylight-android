@@ -1,18 +1,13 @@
 package se.gustavkarlsson.skylight.android.services_impl.providers
 
-import dagger.Reusable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.services.providers.KpIndexProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.kpindex.KpIndexApi
 import timber.log.Timber
-import javax.inject.Inject
 
-@Reusable
-class RetrofittedKpIndexProvider
-@Inject
-constructor(
+class RetrofittedKpIndexProvider(
 	private val api: KpIndexApi
 ) : KpIndexProvider {
 

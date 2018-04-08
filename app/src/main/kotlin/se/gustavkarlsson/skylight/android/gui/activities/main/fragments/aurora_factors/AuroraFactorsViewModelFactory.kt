@@ -2,17 +2,12 @@ package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import dagger.Reusable
 import io.reactivex.Flowable
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
-import javax.inject.Inject
 
-@Reusable
-class AuroraFactorsViewModelFactory
-@Inject
-constructor(
+class AuroraFactorsViewModelFactory(
 	private val auroraReports: Flowable<AuroraReport>,
 	private val darknessChanceEvaluator: ChanceEvaluator<Darkness>,
 	private val darknessFormatter: SingleValueFormatter<Darkness>,

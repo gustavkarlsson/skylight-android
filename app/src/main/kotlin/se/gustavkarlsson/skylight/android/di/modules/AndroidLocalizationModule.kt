@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.di.modules
 
 import android.content.Context
 import android.os.Build
-import dagger.Module
 import io.reactivex.Single
 import java.util.*
 

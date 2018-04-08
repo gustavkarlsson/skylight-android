@@ -1,16 +1,11 @@
 package se.gustavkarlsson.skylight.android.services_impl.evaluation
 
-import dagger.Reusable
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.UNKNOWN
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
-import javax.inject.Inject
 
-@Reusable
-class GeomagLocationEvaluator
-@Inject
-constructor() : ChanceEvaluator<GeomagLocation> {
+class GeomagLocationEvaluator : ChanceEvaluator<GeomagLocation> {
 
     override fun evaluate(value: GeomagLocation): Chance {
         val latitude = value.latitude ?: return UNKNOWN

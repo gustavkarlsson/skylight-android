@@ -1,16 +1,11 @@
 package se.gustavkarlsson.skylight.android.services_impl.evaluation
 
-import dagger.Reusable
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.UNKNOWN
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
-import javax.inject.Inject
 
-@Reusable
-class DarknessEvaluator
-@Inject
-constructor() : ChanceEvaluator<Darkness> {
+class DarknessEvaluator : ChanceEvaluator<Darkness> {
 
 	// Technique explained here: https://stackoverflow.com/a/7869457/940731
     override fun evaluate(value: Darkness): Chance {

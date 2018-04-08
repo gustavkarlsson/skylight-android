@@ -2,18 +2,13 @@ package se.gustavkarlsson.skylight.android.services_impl.providers
 
 import android.location.Geocoder
 import com.hadisatrio.optional.Optional
-import dagger.Reusable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
 import timber.log.Timber
-import javax.inject.Inject
 
-@Reusable
-class GeocoderLocationNameProvider
-@Inject
-constructor(
+class GeocoderLocationNameProvider(
 	private val geocoder: Geocoder
 ) : LocationNameProvider {
 

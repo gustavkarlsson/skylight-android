@@ -2,29 +2,23 @@ package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import dagger.Reusable
 import io.reactivex.Flowable
 import io.reactivex.Single
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.dagger.qualifiers.RightNowThresholdName
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
-import javax.inject.Inject
 
-@Reusable
-class AuroraChanceViewModelFactory
-@Inject
-constructor(
+class AuroraChanceViewModelFactory(
 	private val auroraReports: Flowable<AuroraReport>,
 	private val auroraChanceEvaluator: ChanceEvaluator<AuroraReport>,
 	private val relativeTimeFormatter: RelativeTimeFormatter,
 	private val chanceLevelFormatter: SingleValueFormatter<ChanceLevel>,
 	private val now: Single<Instant>,
-	@RightNowThresholdName private val rightNowThreshold: Duration
+	private val rightNowThreshold: Duration
 ) : ViewModelProvider.Factory {
 
 	@Suppress("UNCHECKED_CAST")

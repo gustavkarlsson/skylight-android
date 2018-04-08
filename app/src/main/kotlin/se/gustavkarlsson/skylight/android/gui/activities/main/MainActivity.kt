@@ -12,7 +12,7 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.analytics
-import se.gustavkarlsson.skylight.android.appComponent
+import se.gustavkarlsson.skylight.android.appModule
 import se.gustavkarlsson.skylight.android.extensions.indefiniteErrorSnackbar
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
@@ -24,7 +24,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 	private var snackbar: Snackbar? = null
 
 	private val viewModel: MainViewModel by lazy {
-		val factory = appComponent.getMainViewModelFactory()
+		val factory = appModule.mainViewModelFactory
 		ViewModelProviders.of(this, factory).get(MainViewModel::class.java)
 	}
 

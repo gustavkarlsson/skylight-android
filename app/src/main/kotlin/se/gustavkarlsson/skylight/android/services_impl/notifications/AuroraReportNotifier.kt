@@ -14,13 +14,8 @@ import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Notifier
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class AuroraReportNotifier
-@Inject
-constructor(
+class AuroraReportNotifier(
 	private val context: Context,
 	private val notificationManager: NotificationManager,
 	private val chanceLevelFormatter: SingleValueFormatter<ChanceLevel>,

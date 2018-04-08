@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.services_impl.providers
 
 import com.hadisatrio.optional.Optional
-import dagger.Reusable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
@@ -9,12 +8,8 @@ import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
-@Reusable
-class ReactiveLocationLocationProvider
-@Inject
-constructor(
+class ReactiveLocationLocationProvider(
 	private val reactiveLocationProvider: ReactiveLocationProvider
 ) : LocationProvider {
 

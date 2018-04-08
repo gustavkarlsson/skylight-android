@@ -4,7 +4,6 @@ buildscript {
 
 		kotlin_version = "1.2.31"
 		retrofit_version = "2.3.0"
-		dagger_version = "2.14.1"
 		google_play_services_version = "11.4.2"
 		android_support_version = "27.0.2"
 		anko_version = "0.10.4"

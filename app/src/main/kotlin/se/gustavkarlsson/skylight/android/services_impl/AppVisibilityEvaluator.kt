@@ -3,13 +3,8 @@ package se.gustavkarlsson.skylight.android.services_impl
 import android.app.ActivityManager
 import android.app.ActivityManager.RunningAppProcessInfo
 import android.app.KeyguardManager
-import dagger.Reusable
-import javax.inject.Inject
 
-@Reusable
-class AppVisibilityEvaluator
-@Inject
-constructor(
+class AppVisibilityEvaluator(
         private val keyguardManager: KeyguardManager
 ) {
 

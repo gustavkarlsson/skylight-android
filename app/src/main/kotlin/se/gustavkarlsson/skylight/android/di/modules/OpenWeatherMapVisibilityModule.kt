@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.di.modules
 
-import dagger.Module
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.Duration
@@ -16,7 +15,6 @@ import se.gustavkarlsson.skylight.android.services_impl.providers.RetrofittedOpe
 import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapApi
 import se.gustavkarlsson.skylight.android.services_impl.streamables.VisibilityProviderStreamable
 
-@Module
 class OpenWeatherMapVisibilityModule(apiKey: String, locationFlowable: Flowable<Location>) :
 	VisibilityModule {
 

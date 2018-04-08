@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.services_impl.providers
 
 import com.hadisatrio.optional.Optional
-import dagger.Reusable
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import net.e175.klaus.solarpositioning.Grena3
@@ -11,12 +10,8 @@ import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.extensions.toGregorianCalendar
 import se.gustavkarlsson.skylight.android.services.providers.DarknessProvider
 import timber.log.Timber
-import javax.inject.Inject
 
-@Reusable
-class KlausBrunnerDarknessProvider
-@Inject
-constructor() : DarknessProvider {
+class KlausBrunnerDarknessProvider : DarknessProvider {
 
 	override fun get(time: Single<Instant>, location: Single<Optional<Location>>): Single<Darkness> {
 		return Single.zip(time, location,

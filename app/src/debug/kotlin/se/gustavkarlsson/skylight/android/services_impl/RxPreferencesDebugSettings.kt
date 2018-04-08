@@ -2,17 +2,12 @@ package se.gustavkarlsson.skylight.android.services_impl
 
 import android.content.Context
 import com.f2prateek.rx.preferences2.RxSharedPreferences
-import dagger.Reusable
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.services.DebugSettings
-import javax.inject.Inject
 
-@Reusable
-class RxPreferencesDebugSettings
-@Inject
-constructor(
+class RxPreferencesDebugSettings(
 	context: Context,
 	rxSharedPreferences: RxSharedPreferences
 ) : DebugSettings {

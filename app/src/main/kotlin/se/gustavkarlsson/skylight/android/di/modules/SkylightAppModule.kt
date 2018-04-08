@@ -74,7 +74,8 @@ class SkylightAppModule(
 		auroraReportModule.auroraReportSingle,
 		connectivityModule.connectivityFlowable,
 		timeModule.now
-	)
+	),
+	analyticsModule: AnalyticsModule = FirebasedAnalyticsModule(contextModule.context)
 ) : AppModule,
 	ContextModule by contextModule,
 	TimeModule by timeModule,
@@ -93,4 +94,5 @@ class SkylightAppModule(
 	SettingsModule by settingsModule,
 	UpdateSchedulerModule by updateSchedulerModule,
 	UpdateJobModule by updateJobModule,
-	ViewModelsModule by viewModelsModule
+	ViewModelsModule by viewModelsModule,
+	AnalyticsModule by analyticsModule

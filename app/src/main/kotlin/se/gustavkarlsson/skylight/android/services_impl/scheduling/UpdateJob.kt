@@ -8,11 +8,8 @@ import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.Notifier
 import se.gustavkarlsson.skylight.android.services_impl.notifications.AuroraReportNotificationDecider
 import timber.log.Timber
-import javax.inject.Inject
 
-class UpdateJob
-@Inject
-constructor(
+class UpdateJob(
 	private val auroraReportSingle: Single<AuroraReport>,
 	private val decider: AuroraReportNotificationDecider,
 	private val notifier: Notifier<AuroraReport>

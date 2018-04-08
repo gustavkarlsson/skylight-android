@@ -1,14 +1,9 @@
 package se.gustavkarlsson.skylight.android.services_impl.evaluation
 
-import dagger.Reusable
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
-import javax.inject.Inject
 
-@Reusable
-class AuroraReportEvaluator
-@Inject
-constructor(
+class AuroraReportEvaluator(
 	private val kpIndexEvaluator: ChanceEvaluator<KpIndex>,
 	private val geomagLocationEvaluator: ChanceEvaluator<GeomagLocation>,
 	private val visibilityEvaluator: ChanceEvaluator<Visibility>,
