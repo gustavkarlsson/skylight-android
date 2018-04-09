@@ -5,7 +5,6 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Visibility
 import se.gustavkarlsson.skylight.android.extensions.create
 import se.gustavkarlsson.skylight.android.extensions.minutes
@@ -16,8 +15,10 @@ import se.gustavkarlsson.skylight.android.services_impl.providers.RetrofittedOpe
 import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapApi
 import se.gustavkarlsson.skylight.android.services_impl.streamables.VisibilityProviderStreamable
 
-class OpenWeatherMapVisibilityModule(apiKey: String, locationFlowable: Flowable<Location>) :
-	VisibilityModule {
+class OpenWeatherMapVisibilityModule(
+	apiKey: String,
+	locationModule: LocationModule
+) : VisibilityModule {
 
 	override val visibilityProvider: VisibilityProvider by lazy {
 		val api = Retrofit.Builder()
@@ -30,7 +31,12 @@ class OpenWeatherMapVisibilityModule(apiKey: String, locationFlowable: Flowable<
 	}
 
 	override val visibilityStreamable: Streamable<Visibility> by lazy {
-		VisibilityProviderStreamable(locationFlowable, visibilityProvider, POLLING_INTERVAL, RETRY_DELAY)
+		VisibilityProviderStreamable(
+			locationModule.locationFlowable,
+			visibilityProvider,
+			POLLING_INTERVAL,
+			RETRY_DELAY
+		)
 	}
 
 	override val visibilityFlowable: Flowable<Visibility> by lazy {

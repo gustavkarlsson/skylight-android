@@ -15,20 +15,15 @@ class DebugSkylightAppComponent(openWeatherMapApiKey: String, application: Appli
 
 	override val auroraReportModule: AuroraReportModule by lazy {
 		DebugAuroraReportModule(
-			timeModule.timeProvider,
-			locationModule.locationProvider,
-			locationNameModule.locationNameProvider,
-			darknessModule.darknessProvider,
-			geomagLocationModule.geomagLocationProvider,
-			kpIndexModule.kpIndexProvider,
-			visibilityModule.visibilityProvider,
-			locationNameModule.locationNameFlowable,
-			kpIndexModule.kpIndexFlowable,
-			geomagLocationModule.geomagLocationFlowable,
-			darknessModule.darknessFlowable,
-			visibilityModule.visibilityFlowable,
-			contextModule.context,
-			settingsModule.rxSharedPreferences
+			timeModule,
+			locationModule,
+			locationNameModule,
+			darknessModule,
+			geomagLocationModule,
+			kpIndexModule,
+			visibilityModule,
+			contextModule,
+			settingsModule
 		)
 	}
 }

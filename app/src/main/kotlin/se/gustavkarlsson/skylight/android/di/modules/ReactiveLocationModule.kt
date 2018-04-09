@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.di.modules
 
-import android.content.Context
 import io.reactivex.Flowable
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import se.gustavkarlsson.skylight.android.entities.Location
@@ -10,10 +9,10 @@ import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.ReactiveLocationLocationProvider
 import se.gustavkarlsson.skylight.android.services_impl.streamables.ReactiveLocationProviderStreamable
 
-class ReactiveLocationModule(context: Context) : LocationModule {
+class ReactiveLocationModule(contextModule: ContextModule) : LocationModule {
 
 	private val reactiveLocationProvider: ReactiveLocationProvider by lazy {
-		ReactiveLocationProvider(context)
+		ReactiveLocationProvider(contextModule.context)
 	}
 
 	override val locationProvider: LocationProvider by lazy {

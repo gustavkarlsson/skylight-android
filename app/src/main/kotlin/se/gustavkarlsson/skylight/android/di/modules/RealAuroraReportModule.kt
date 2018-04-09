@@ -1,31 +1,25 @@
 package se.gustavkarlsson.skylight.android.di.modules
 
-import com.hadisatrio.optional.Optional
 import com.jakewharton.rxrelay2.PublishRelay
 import com.jakewharton.rxrelay2.Relay
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.functions.Consumer
-import se.gustavkarlsson.skylight.android.entities.*
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.Streamable
-import se.gustavkarlsson.skylight.android.services.providers.*
+import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.CombiningAuroraReportProvider
 import se.gustavkarlsson.skylight.android.services_impl.streamables.CombiningAuroraReportStreamable
 
 class RealAuroraReportModule(
-	timeProvider: TimeProvider,
-	locationProvider: LocationProvider,
-	locationNameProvider: LocationNameProvider,
-	darknessProvider: DarknessProvider,
-	geomagLocationProvider: GeomagLocationProvider,
-	kpIndexProvider: KpIndexProvider,
-	visibilityProvider: VisibilityProvider,
-	locationNames: Flowable<Optional<String>>,
-	kpIndexes: Flowable<KpIndex>,
-	geomagLocations: Flowable<GeomagLocation>,
-	darknesses: Flowable<Darkness>,
-	visibilities: Flowable<Visibility>
+	timeModule: TimeModule,
+	locationModule: LocationModule,
+	locationNameModule: LocationNameModule,
+	darknessModule: DarknessModule,
+	geomagLocationModule: GeomagLocationModule,
+	kpIndexModule: KpIndexModule,
+	visibilityModule: VisibilityModule
 ) : AuroraReportModule {
 
 	private val auroraReportRelay: Relay<AuroraReport> by lazy {
@@ -34,13 +28,13 @@ class RealAuroraReportModule(
 
 	override val auroraReportProvider: AuroraReportProvider by lazy {
 		CombiningAuroraReportProvider(
-			timeProvider,
-			locationProvider,
-			locationNameProvider,
-			darknessProvider,
-			geomagLocationProvider,
-			kpIndexProvider,
-			visibilityProvider
+			timeModule.timeProvider,
+			locationModule.locationProvider,
+			locationNameModule.locationNameProvider,
+			darknessModule.darknessProvider,
+			geomagLocationModule.geomagLocationProvider,
+			kpIndexModule.kpIndexProvider,
+			visibilityModule.visibilityProvider
 		)
 	}
 
@@ -55,12 +49,12 @@ class RealAuroraReportModule(
 
 	override val auroraReportStreamable: Streamable<AuroraReport> by lazy {
 		CombiningAuroraReportStreamable(
-			timeProvider.getTime(),
-			locationNames,
-			kpIndexes,
-			geomagLocations,
-			darknesses,
-			visibilities,
+			timeModule.now,
+			locationNameModule.locationNameFlowable,
+			kpIndexModule.kpIndexFlowable,
+			geomagLocationModule.geomagLocationFlowable,
+			darknessModule.darknessFlowable,
+			visibilityModule.visibilityFlowable,
 			auroraReportRelay.toFlowable(BackpressureStrategy.LATEST)
 		)
 	}

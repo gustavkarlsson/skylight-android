@@ -29,7 +29,7 @@ open class SkylightAppComponent(
 	}
 
 	open val locationModule: LocationModule by lazy {
-		ReactiveLocationModule(contextModule.context)
+		ReactiveLocationModule(contextModule)
 	}
 
 	open val connectivityModule: ConnectivityModule by lazy {
@@ -37,62 +37,41 @@ open class SkylightAppComponent(
 	}
 
 	open val localizationModule: LocalizationModule by lazy {
-		AndroidLocalizationModule(
-			contextModule.context
-		)
+		AndroidLocalizationModule(contextModule)
 	}
 
 	open val formattingModule: FormattingModule by lazy {
-		DateUtilsFormattingModule(
-			contextModule.context,
-			localizationModule.locale
-		)
+		DateUtilsFormattingModule(contextModule, localizationModule)
 	}
 
 	open val darknessModule: DarknessModule by lazy {
-		KlausBrunnerDarknessModule(
-			timeModule.now,
-			locationModule.locationFlowable
-		)
+		KlausBrunnerDarknessModule(timeModule, locationModule)
 	}
 
 	open val geomagLocationModule: GeomagLocationModule by lazy {
-		RealGeomagLocationModule(
-			locationModule.locationFlowable
-		)
+		RealGeomagLocationModule(locationModule)
 	}
 
 	open val kpIndexModule: KpIndexModule =
 		RealKpIndexModule()
 
 	open val visibilityModule: VisibilityModule by lazy {
-		OpenWeatherMapVisibilityModule(
-			openWeatherMapApiKey,
-			locationModule.locationFlowable
-		)
+		OpenWeatherMapVisibilityModule(openWeatherMapApiKey, locationModule)
 	}
 
 	open val locationNameModule: LocationNameModule by lazy {
-		GeocoderLocationNameModule(
-			contextModule.context,
-			locationModule.locationFlowable
-		)
+		GeocoderLocationNameModule(contextModule, locationModule)
 	}
 
 	open val auroraReportModule: AuroraReportModule by lazy {
 		RealAuroraReportModule(
-			timeModule.timeProvider,
-			locationModule.locationProvider,
-			locationNameModule.locationNameProvider,
-			darknessModule.darknessProvider,
-			geomagLocationModule.geomagLocationProvider,
-			kpIndexModule.kpIndexProvider,
-			visibilityModule.visibilityProvider,
-			locationNameModule.locationNameFlowable,
-			kpIndexModule.kpIndexFlowable,
-			geomagLocationModule.geomagLocationFlowable,
-			darknessModule.darknessFlowable,
-			visibilityModule.visibilityFlowable
+			timeModule,
+			locationModule,
+			locationNameModule,
+			darknessModule,
+			geomagLocationModule,
+			kpIndexModule,
+			visibilityModule
 		)
 	}
 
@@ -100,62 +79,43 @@ open class SkylightAppComponent(
 		RealEvaluationModule()
 
 	open val notifierModule: NotifierModule by lazy {
-		AndroidNotifierModule(
-			contextModule.context,
-			formattingModule.chanceLevelFormatter,
-			evaluationModule.auroraReportEvaluator
-		)
+		AndroidNotifierModule(contextModule, formattingModule, evaluationModule)
 	}
 
 	open val sharedPreferencesModule: SharedPreferencesModule by lazy {
-		DefaultSharedPreferencesModule(contextModule.context)
+		DefaultSharedPreferencesModule(contextModule)
 	}
 
 	open val settingsModule: SettingsModule by lazy {
-		RxSettingsModule(
-			contextModule.context,
-			sharedPreferencesModule.sharedPreferences
-		)
+		RxSettingsModule(contextModule, sharedPreferencesModule)
 	}
 
 	open val updateSchedulerModule: UpdateSchedulerModule by lazy { RealUpdateSchedulerModule() }
 
 	open val updateJobModule: UpdateJobModule by lazy {
 		RealUpdateJobModule(
-			contextModule.context,
-			timeModule.timeProvider,
-			evaluationModule.auroraReportEvaluator,
-			settingsModule.settings,
-			auroraReportModule.auroraReportSingle,
-			notifierModule.notifier
+			contextModule,
+			timeModule,
+			evaluationModule,
+			settingsModule,
+			auroraReportModule,
+			notifierModule
 		)
 	}
 
 	open val viewModelsModule: ViewModelsModule by lazy {
 		AndroidViewModelsModule(
-			contextModule.context,
-			auroraReportModule.auroraReportFlowable,
-			evaluationModule.auroraReportEvaluator,
-			formattingModule.relativeTimeFormatter,
-			formattingModule.chanceLevelFormatter,
-			evaluationModule.darknessEvaluator,
-			formattingModule.darknessFormatter,
-			evaluationModule.geomagLocationEvaluator,
-			formattingModule.geomagLocationFormatter,
-			evaluationModule.kpIndexEvaluator,
-			formattingModule.kpIndexFormatter,
-			evaluationModule.visibilityEvaluator,
-			formattingModule.visibilityFormatter,
-			auroraReportModule.auroraReportSingle,
-			connectivityModule.connectivityFlowable,
-			timeModule.now
+			contextModule,
+			auroraReportModule,
+			evaluationModule,
+			formattingModule,
+			connectivityModule,
+			timeModule
 		)
 	}
 
 	open val analyticsModule: AnalyticsModule by lazy {
-		FirebasedAnalyticsModule(
-			contextModule.context
-		)
+		FirebasedAnalyticsModule(contextModule)
 	}
 
 	final override val settings: Settings
@@ -166,16 +126,22 @@ open class SkylightAppComponent(
 		get() = updateJobModule.updateJob
 	final override val analytics: Analytics
 		get() = analyticsModule.analytics
+
 	final override fun auroraChanceViewModel(fragment: Fragment): AuroraChanceViewModel =
 		viewModelsModule.auroraChanceViewModel(fragment)
+
 	final override fun darknessViewModel(fragment: Fragment): DarknessViewModel =
 		viewModelsModule.darknessViewModel(fragment)
+
 	final override fun geomagLocationViewModel(fragment: Fragment): GeomagLocationViewModel =
 		viewModelsModule.geomagLocationViewModel(fragment)
+
 	final override fun kpIndexViewModel(fragment: Fragment): KpIndexViewModel =
 		viewModelsModule.kpIndexViewModel(fragment)
+
 	final override fun visibilityViewModel(fragment: Fragment): VisibilityViewModel =
 		viewModelsModule.visibilityViewModel(fragment)
+
 	final override fun mainViewModel(activity: FragmentActivity): MainViewModel =
 		viewModelsModule.mainViewModel(activity)
 }
