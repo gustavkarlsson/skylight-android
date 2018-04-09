@@ -39,10 +39,10 @@ android {
 
 	signingConfigs {
 		release {
-			storeFile file(project.android_store_file)
-			storePassword project.android_store_password
-			keyAlias project.android_key_alias
-			keyPassword project.android_key_password
+			storeFile file(project.findProperty("android_store_file") ?: "android_store_file_not_set")
+			storePassword project.findProperty("android_store_password") ?: "android_store_password_not_set"
+			keyAlias project.findProperty("android_key_alias") ?: "android_key_alias_not_set"
+			keyPassword project.findProperty("android_key_password") ?: "android_key_password_not_set"
 		}
 	}
 
@@ -60,7 +60,8 @@ android {
 		}
 	}
 	buildTypes.each {
-		it.buildConfigField 'String', 'OPENWEATHERMAP_API_KEY', "\"$project.openweathermap_api_key\""
+		def openWeatherMapApiKey = project.findProperty("openweathermap_api_key") ?: "openweathermap_api_key_not_set"
+		it.buildConfigField 'String', 'OPENWEATHERMAP_API_KEY', "\"$openWeatherMapApiKey\""
 	}
 }
 
