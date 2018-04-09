@@ -65,12 +65,6 @@ android {
 	}
 }
 
-kotlin {
-	experimental {
-		coroutines "enable"
-	}
-}
-
 dependencies {
 	implementation project(":services")
 	implementation project(":entities")
@@ -96,7 +90,6 @@ dependencies {
 	// Anko
 	implementation "org.jetbrains.anko:anko-commons:$anko_version"
 	implementation "org.jetbrains.anko:anko-design:$anko_version"
-	implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
 
 	// Retrofit
 	implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
