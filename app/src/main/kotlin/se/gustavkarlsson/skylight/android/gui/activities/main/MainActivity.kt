@@ -13,6 +13,7 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.analytics
 import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.extensions.indefiniteErrorSnackbar
+import se.gustavkarlsson.skylight.android.extensions.invoke
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
 import timber.log.Timber
@@ -52,7 +53,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 	}
 	override fun onRequirementsMet() {
 		Timber.i("Refreshing...")
-		viewModel.refresh.accept(Unit)
+		viewModel.refresh()
 	}
 
 	private fun bindData() {

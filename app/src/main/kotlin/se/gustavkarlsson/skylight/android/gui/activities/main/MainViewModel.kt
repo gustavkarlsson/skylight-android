@@ -8,6 +8,7 @@ import io.reactivex.Single
 import io.reactivex.functions.Consumer
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.extensions.invoke
 import se.gustavkarlsson.skylight.android.gui.AutoDisposingViewModel
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
@@ -49,7 +50,7 @@ class MainViewModel(
 
 	val refresh: Consumer<Unit> = Consumer {
 		auroraReportSingle
-			.doOnEvent { _, _ -> refreshFinishedRelay.accept(Unit) }
+			.doOnEvent { _, _ -> refreshFinishedRelay() }
 			.subscribe(Consumer {}, errorRelay)
 			.autoDisposeOnCleared()
 	}
