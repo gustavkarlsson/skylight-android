@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap
+package se.gustavkarlsson.skylight.android.services_impl.providers
 
 
 import assertk.assert
@@ -8,7 +8,6 @@ import com.hadisatrio.optional.Optional
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
-import kotlinx.coroutines.experimental.runBlocking
 import okhttp3.*
 import org.apache.commons.io.IOUtils
 import org.junit.Before
@@ -20,7 +19,8 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import se.gustavkarlsson.skylight.android.entities.Location
-import se.gustavkarlsson.skylight.android.services_impl.providers.RetrofittedOpenWeatherMapVisibilityProvider
+import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapApi
+import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapWeather
 import java.nio.charset.Charset
 
 @RunWith(RobolectricTestRunner::class)
@@ -76,7 +76,7 @@ class RetrofittedOpenWeatherMapVisibilityProviderTest {
 					.create(OpenWeatherMapApi::class.java), "fake-app-id"
 			)
 
-		val cloudiness = runBlocking { service.get(Single.just(Optional.of(Location(0.0, 0.0)))).blockingGet().cloudPercentage }
+		val cloudiness = service.get(Single.just(Optional.of(Location(0.0, 0.0)))).blockingGet().cloudPercentage
 
 		assert(cloudiness).isEqualTo(68)
 	}
