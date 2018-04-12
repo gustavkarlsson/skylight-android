@@ -15,6 +15,7 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.temporal.ChronoUnit.DAYS
 import org.threeten.bp.temporal.ChronoUnit.HOURS
+import se.gustavkarlsson.skylight.android.background.notifications.OutdatedEvaluator
 import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
 
 @RunWith(MockitoJUnitRunner::class)
@@ -28,7 +29,9 @@ class OutdatedEvaluatorTest {
     @Before
     fun setUp() {
         whenever(mockTimeProvider.getZoneId()).thenReturn(Single.just(ZONE_OFFSET))
-        impl = OutdatedEvaluator(mockTimeProvider)
+        impl = OutdatedEvaluator(
+			mockTimeProvider
+		)
     }
 
     @Test

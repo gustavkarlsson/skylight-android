@@ -13,6 +13,8 @@ import org.mockito.Mock
 import org.mockito.Mockito.verifyZeroInteractions
 import org.mockito.junit.MockitoJUnitRunner
 import org.threeten.bp.Instant
+import se.gustavkarlsson.skylight.android.background.notifications.AuroraReportNotificationDecider
+import se.gustavkarlsson.skylight.android.background.notifications.OutdatedEvaluator
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
@@ -21,7 +23,7 @@ import se.gustavkarlsson.skylight.android.mockito.any
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.LastNotifiedChanceRepository
 import se.gustavkarlsson.skylight.android.services.Settings
-import se.gustavkarlsson.skylight.android.services_impl.AppVisibilityEvaluator
+import se.gustavkarlsson.skylight.android.background.notifications.AppVisibilityEvaluator
 
 @RunWith(MockitoJUnitRunner::class)
 class AuroraReportNotificationDeciderTest {
@@ -58,7 +60,14 @@ class AuroraReportNotificationDeciderTest {
         whenever(mockOutdatedEvaluator.isOutdated(any())).thenReturn(false)
 		whenever(mockAppVisibilityEvaluator.isVisible()).thenReturn(false)
 
-        impl = AuroraReportNotificationDecider(mockLastNotifiedChanceRepository, mockChanceEvaluator, mockSettings, mockOutdatedEvaluator, mockAppVisibilityEvaluator)
+        impl =
+			AuroraReportNotificationDecider(
+				mockLastNotifiedChanceRepository,
+				mockChanceEvaluator,
+				mockSettings,
+				mockOutdatedEvaluator,
+				mockAppVisibilityEvaluator
+			)
     }
 
     @Test

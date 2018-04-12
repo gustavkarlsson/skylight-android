@@ -25,11 +25,14 @@ class DebugAuroraReportModule(
 	kpIndexModule: KpIndexModule,
 	visibilityModule: VisibilityModule,
 	contextModule: ContextModule,
-	settingsModule: SettingsModule
+	rxSharedPreferencesModule: RxSharedPreferencesModule
 ) : AuroraReportModule {
 
 	private val debugSettings: DebugSettings by lazy {
-		RxPreferencesDebugSettings(contextModule.context, settingsModule.rxSharedPreferences)
+		RxPreferencesDebugSettings(
+			contextModule.context,
+			rxSharedPreferencesModule.rxSharedPreferences
+		)
 	}
 
 	private val auroraReportRelay: Relay<AuroraReport> by lazy {
