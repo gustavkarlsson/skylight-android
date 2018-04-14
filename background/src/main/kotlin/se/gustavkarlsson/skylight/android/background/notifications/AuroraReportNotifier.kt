@@ -10,6 +10,7 @@ import android.support.v4.app.TaskStackBuilder
 import se.gustavkarlsson.skylight.android.background.R
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
+import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
 
@@ -40,7 +41,7 @@ internal class AuroraReportNotifier(
                 .build()
 
         notificationManager.notify(1, notification)
-		// TODO analytics.logNotificationSent(chance)
+		Analytics.logNotificationSent(chance)
     }
 
     private fun createActivityPendingIntent(): PendingIntent {

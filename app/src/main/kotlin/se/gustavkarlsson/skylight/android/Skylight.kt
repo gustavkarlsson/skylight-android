@@ -6,6 +6,7 @@ import com.crashlytics.android.core.CrashlyticsCore
 import com.jakewharton.threetenabp.AndroidThreeTen
 import io.fabric.sdk.android.Fabric
 import io.reactivex.plugins.RxJavaPlugins
+import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.util.CrashlyticsTree
 import timber.log.Timber
@@ -21,17 +22,18 @@ class Skylight : MultiDexApplication() {
 		super.onCreate()
 		bootstrap()
 		setupSettingsAnalytics(appComponent.settings)
-	}
-
-	private fun bootstrap() {
-		setupCrashReporting()
-		setupLogging()
-		AndroidThreeTen.init(this)
-		setupRxJavaErrorHandling()
 		scheduleBackgroundNotifications()
 	}
 
-	private fun setupCrashReporting() {
+	private fun bootstrap() {
+		initCrashReporting()
+		initLogging()
+		initAnalytics()
+		AndroidThreeTen.init(this)
+		initRxJavaErrorHandling()
+	}
+
+	private fun initCrashReporting() {
 		val crashlytics = Crashlytics.Builder()
 			.core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
 			.build()
@@ -39,7 +41,7 @@ class Skylight : MultiDexApplication() {
 		Fabric.with(this, crashlytics)
 	}
 
-	private fun setupLogging() {
+	private fun initLogging() {
 		if (BuildConfig.DEBUG) {
 			Timber.plant(DebugTree())
 		} else {
@@ -47,7 +49,11 @@ class Skylight : MultiDexApplication() {
 		}
 	}
 
-	private fun setupRxJavaErrorHandling() {
+	private fun initAnalytics() {
+		Analytics.instance = appComponent.analytics
+	}
+
+	private fun initRxJavaErrorHandling() {
 		RxJavaPlugins.setErrorHandler {
 			Timber.e(it, "Unhandled RxJava error")
 		}
@@ -60,10 +66,10 @@ class Skylight : MultiDexApplication() {
 
 	private fun setupSettingsAnalytics(settings: Settings) {
 		settings.notificationsEnabledChanges
-			.subscribe(analytics::setNotificationsEnabled)
+			.subscribe { Analytics.setNotificationsEnabled(it) }
 
 		settings.triggerLevelChanges
-			.subscribe(analytics::setNotifyTriggerLevel)
+			.subscribe { Analytics.setNotifyTriggerLevel(it) }
 	}
 
 	companion object {
