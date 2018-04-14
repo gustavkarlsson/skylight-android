@@ -25,15 +25,13 @@ open class SkylightBackgroundComponent(
 			evaluationModule,
 			settingsModule,
 			timeModule,
-			notifiedRepositoryModule,
+			notifiedChanceRepositoryModule,
 			activityClass
 		)
 	}
 
-	open val notifiedRepositoryModule: NotifiedRepositoryModule by lazy {
-		RoomNotifiedRepositoryModule(
-			contextModule
-		)
+	open val notifiedChanceRepositoryModule: NotifiedChanceRepositoryModule by lazy {
+		RoomNotifiedChanceRepositoryModule(contextModule)
 	}
 
 	open val schedulingModule: SchedulingModule by lazy {

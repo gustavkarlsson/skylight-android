@@ -5,18 +5,19 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.TypeConverters
 import android.content.Context
+import se.gustavkarlsson.skylight.android.background.persistence.entities.NotifiedChanceEntity
 import se.gustavkarlsson.skylight.android.background.persistence.typeconverters.ChanceConverters
 import se.gustavkarlsson.skylight.android.background.persistence.typeconverters.InstantConverters
 
-@Database(entities = [DbNotifiedChance::class], version = 1)
+@Database(entities = [NotifiedChanceEntity::class], version = 1)
 @TypeConverters(value = [InstantConverters::class, ChanceConverters::class])
-internal abstract class AppDatabase : RoomDatabase() {
-    abstract fun lastNotifiedChanceDao(): LastNotifiedChanceDao
+internal abstract class BackgroundDatabase : RoomDatabase() {
+    abstract fun lastNotifiedDao(): LastNotifiedChanceDao
 
 	companion object {
 		@Synchronized
-	    fun create(context: Context): AppDatabase =
-			Room.databaseBuilder(context, AppDatabase::class.java, "skylight")
+	    fun create(context: Context): BackgroundDatabase =
+			Room.databaseBuilder(context, BackgroundDatabase::class.java, "skylight")
 				.build()
 	}
 }

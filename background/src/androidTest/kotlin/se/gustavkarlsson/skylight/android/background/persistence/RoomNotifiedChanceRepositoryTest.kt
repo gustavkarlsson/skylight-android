@@ -10,15 +10,15 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.background.persistence.AppDatabase
-import se.gustavkarlsson.skylight.android.background.persistence.RoomNotifiedRepository
+import se.gustavkarlsson.skylight.android.background.persistence.BackgroundDatabase
+import se.gustavkarlsson.skylight.android.background.persistence.RoomNotifiedChanceRepository
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.NotifiedChance
 
 @RunWith(AndroidJUnit4::class)
-class RoomNotifiedRepositoryTest {
-	private lateinit var db: AppDatabase
-	private lateinit var impl: RoomNotifiedRepository
+class RoomNotifiedChanceRepositoryTest {
+	private lateinit var db: BackgroundDatabase
+	private lateinit var impl: RoomNotifiedChanceRepository
 
 	private val value1 = NotifiedChance(Chance(3.0), Instant.ofEpochSecond(78253))
 	private val value2 = NotifiedChance(Chance(1.0), Instant.ofEpochSecond(5000))
@@ -26,8 +26,8 @@ class RoomNotifiedRepositoryTest {
 	@Before
 	fun setUp() {
 		val context = InstrumentationRegistry.getTargetContext()
-		db = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
-		impl = RoomNotifiedRepository(db)
+		db = Room.inMemoryDatabaseBuilder(context, BackgroundDatabase::class.java).build()
+		impl = RoomNotifiedChanceRepository(db)
 	}
 
 	@After

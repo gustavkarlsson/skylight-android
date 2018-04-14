@@ -1,19 +1,17 @@
-package se.gustavkarlsson.skylight.android.services_impl.notifications
+package se.gustavkarlsson.skylight.android.background.notifications
 
+import android.app.Activity
 import android.app.NotificationManager
 import android.content.Context
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
-import org.junit.BeforeClass
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mockito.verify
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
-import se.gustavkarlsson.skylight.android.background.notifications.AuroraReportNotifier
-import se.gustavkarlsson.skylight.android.disableAnalytics
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
@@ -22,7 +20,7 @@ import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
 
 @RunWith(RobolectricTestRunner::class)
-class AuroraReportNotifierTest {
+internal class AuroraReportNotifierTest {
 
     lateinit var context: Context
 
@@ -34,6 +32,8 @@ class AuroraReportNotifierTest {
 
     lateinit var mockAuroraReport: AuroraReport
 
+	lateinit var activityClass: Class<Activity>
+
 	lateinit var impl: AuroraReportNotifier
 
     @Before
@@ -43,12 +43,14 @@ class AuroraReportNotifierTest {
 		mockChanceEvaluator = mock()
 		mockChanceLevelFormatter = mock()
         mockAuroraReport = mock()
+		activityClass = Activity::class.java
         whenever(mockChanceEvaluator.evaluate(any())).thenReturn(Chance(0.5))
         impl = AuroraReportNotifier(
 			context,
 			mockNotificationManager,
 			mockChanceLevelFormatter,
-			mockChanceEvaluator
+			mockChanceEvaluator,
+			activityClass
 		)
     }
 
@@ -58,13 +60,5 @@ class AuroraReportNotifierTest {
 
         verify(mockNotificationManager).notify(anyInt(), any())
     }
-
-	companion object {
-		@BeforeClass
-		@JvmStatic
-		fun setUpClass() {
-			disableAnalytics()
-		}
-	}
 }
 

@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.background.persistence
+package se.gustavkarlsson.skylight.android.background.persistence.entities
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
@@ -7,7 +7,7 @@ import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.Chance
 
 @Entity(tableName = "notified_chance")
-internal class DbNotifiedChance(chance: Chance, timestamp: Instant) {
+internal class NotifiedChanceEntity(chance: Chance, timestamp: Instant) {
     @PrimaryKey()
     var id: Long = 1
 

@@ -14,7 +14,7 @@ class AndroidNotificationModule(
 	evaluationModule: EvaluationModule,
 	settingsModule: SettingsModule,
 	timeModule: TimeModule,
-	notifiedRepositoryModule: NotifiedRepositoryModule,
+	notifiedChanceRepositoryModule: NotifiedChanceRepositoryModule,
 	activityClass: Class<out Activity>
 ) : NotificationModule {
 
@@ -32,7 +32,7 @@ class AndroidNotificationModule(
 
 	override val decider: AuroraReportNotificationDecider by lazy {
 		AuroraReportNotificationDeciderImpl(
-			notifiedRepositoryModule.notifiedRepository,
+			notifiedChanceRepositoryModule.notifiedChanceRepository,
 			evaluationModule.auroraReportEvaluator,
 			settingsModule.settings,
 			OutdatedEvaluator(timeModule.timeProvider),
