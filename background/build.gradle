@@ -28,7 +28,7 @@ dependencies {
 	implementation "com.evernote:android-job:$android_job_version"
 
 	// Room
-	implementation "android.arch.persistence.room:runtime:$room_version"
+	implementation "android.arch.persistence.room:runtime:$room_version", { exclude group: "com.android.support" }
 	kapt "android.arch.persistence.room:compiler:$room_version"
 
 
