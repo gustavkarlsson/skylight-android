@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors
+package se.gustavkarlsson.skylight.android.gui.views
 
 import android.content.Context
 import android.graphics.drawable.ColorDrawable

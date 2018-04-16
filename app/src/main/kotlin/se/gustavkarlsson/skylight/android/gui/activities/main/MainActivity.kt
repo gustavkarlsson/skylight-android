@@ -22,6 +22,7 @@ import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheck
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceViewModel
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.*
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
+import se.gustavkarlsson.skylight.android.gui.views.AuroraFactorView
 import se.gustavkarlsson.skylight.android.services.Analytics
 import timber.log.Timber
 

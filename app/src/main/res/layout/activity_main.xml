@@ -96,7 +96,7 @@
 
 				</RelativeLayout>
 
-				<se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+				<se.gustavkarlsson.skylight.android.gui.views.AuroraFactorView
 					android:id="@+id/kpIndex"
 					android:layout_width="@dimen/factor_box_width"
 					android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
 					custom:layout_constraintTop_toTopOf="parent"
 					custom:name="@string/factor_kp_index_title_compact" />
 
-				<se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+				<se.gustavkarlsson.skylight.android.gui.views.AuroraFactorView
 					android:id="@+id/geomagLocation"
 					android:layout_width="@dimen/factor_box_width"
 					android:layout_height="wrap_content"
@@ -118,7 +118,7 @@
 					custom:layout_constraintTop_toTopOf="parent"
 					custom:name="@string/factor_geomag_location_title_compact" />
 
-				<se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+				<se.gustavkarlsson.skylight.android.gui.views.AuroraFactorView
 					android:id="@+id/visibility"
 					android:layout_width="@dimen/factor_box_width"
 					android:layout_height="wrap_content"
@@ -129,7 +129,7 @@
 					custom:layout_constraintTop_toBottomOf="@+id/kpIndex"
 					custom:name="@string/factor_visibility_title_compact" />
 
-				<se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.AuroraFactorView
+				<se.gustavkarlsson.skylight.android.gui.views.AuroraFactorView
 					android:id="@+id/darkness"
 					android:layout_width="@dimen/factor_box_width"
 					android:layout_height="wrap_content"
