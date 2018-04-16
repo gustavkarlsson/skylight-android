@@ -9,8 +9,8 @@ android {
 
 	sourceSets {
 		main.java.srcDirs += "src/main/kotlin"
-		debug.java.srcDirs += "src/debug/kotlin"
-		release.java.srcDirs += "src/release/kotlin"
+		production.java.srcDirs += "src/production/kotlin"
+		staging.java.srcDirs += "src/staging/kotlin"
 		test.java.srcDirs += "src/test/kotlin"
 		androidTest.java.srcDirs += "src/androidTest/kotlin"
 	}
@@ -59,9 +59,38 @@ android {
 			ext.enableCrashlytics = false
 		}
 	}
-	buildTypes.each {
+
+	flavorDimensions "environment"
+
+	productFlavors {
+		production {
+			dimension "environment"
+		}
+
+		staging {
+			dimension "environment"
+			versionNameSuffix "-staging"
+			applicationIdSuffix ".staging"
+		}
+	}
+
+	applicationVariants.all { variant ->
+		def appName = "Skylight"
+
+		if (variant.flavorName != "production") {
+			appName += " ${variant.flavorName.capitalize()}"
+		}
+
+		if (variant.buildType.name != "release") {
+			appName += " (${variant.buildType.name.capitalize()})"
+		}
+
+		resValue "string", "app_name", appName
+	}
+
+	productFlavors.each { flavor ->
 		def openWeatherMapApiKey = project.findProperty("openweathermap_api_key") ?: "openweathermap_api_key_not_set"
-		it.buildConfigField 'String', 'OPENWEATHERMAP_API_KEY', "\"$openWeatherMapApiKey\""
+		flavor.buildConfigField "String", "OPENWEATHERMAP_API_KEY", "\"$openWeatherMapApiKey\""
 	}
 }
 
@@ -143,3 +172,10 @@ dependencies {
 
 // Recommended to be applied at bottom
 apply plugin: "com.google.gms.google-services"
+
+// Disable Google Services for specific variants
+android.applicationVariants.all { variant ->
+	if (variant.buildType.name == "debug") {
+		project.tasks.getByName("process${variant.name.capitalize()}GoogleServices").enabled = false
+	}
+}
