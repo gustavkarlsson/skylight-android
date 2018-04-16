@@ -17,10 +17,10 @@
 			android:layout_height="match_parent">
 
 			<android.support.constraint.ConstraintLayout
-				android:id="@+id/auroraChanceFragment"
+				android:id="@+id/auroraChanceSection"
 				android:layout_width="0dp"
 				android:layout_height="0dp"
-				custom:layout_constraintBottom_toTopOf="@+id/auroraFactorsFragment"
+				custom:layout_constraintBottom_toTopOf="@+id/auroraFactorsSection"
 				custom:layout_constraintLeft_toLeftOf="parent"
 				custom:layout_constraintRight_toRightOf="parent"
 				custom:layout_constraintTop_toTopOf="parent"
@@ -50,13 +50,13 @@
 			</android.support.constraint.ConstraintLayout>
 
 			<android.support.constraint.ConstraintLayout
-				android:id="@+id/auroraFactorsFragment"
+				android:id="@+id/auroraFactorsSection"
 				android:layout_width="0dp"
 				android:layout_height="0dp"
 				custom:layout_constraintBottom_toBottomOf="parent"
 				custom:layout_constraintLeft_toLeftOf="parent"
 				custom:layout_constraintRight_toRightOf="parent"
-				custom:layout_constraintTop_toBottomOf="@+id/auroraChanceFragment"
+				custom:layout_constraintTop_toBottomOf="@+id/auroraChanceSection"
 				custom:layout_constraintVertical_weight="3">
 
 				<RelativeLayout
