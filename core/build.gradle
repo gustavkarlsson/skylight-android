@@ -1,0 +1,28 @@
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+android {
+	compileSdkVersion project.compilesdk_version
+
+	sourceSets {
+		main.java.srcDirs += "src/main/kotlin"
+		test.java.srcDirs += "src/test/kotlin"
+		androidTest.java.srcDirs += "src/androidTest/kotlin"
+	}
+
+	defaultConfig {
+		minSdkVersion project.min_sdk_version
+		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+	}
+}
+
+dependencies {
+	api "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+	api "com.jakewharton.threetenabp:threetenabp:$threetenabp_version"
+	api "com.jakewharton.timber:timber:$timber_version"
+	api "com.hadisatrio:Optional:$optional_version"
+	api "io.reactivex.rxjava2:rxjava:$rxjava_version"
+
+	androidTestImplementation "com.willowtreeapps.assertk:assertk:$assertk_version"
+	androidTestImplementation "com.android.support.test:runner:$android_support_test_version"
+}

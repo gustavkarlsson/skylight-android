@@ -1,4 +1,3 @@
-include ":entities"
-include ":services"
-include ":persistence"
+include ":core"
+include ":background"
 include ":app"

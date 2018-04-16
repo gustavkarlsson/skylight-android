@@ -66,9 +66,8 @@ android {
 }
 
 dependencies {
-	implementation project(":services")
-	implementation project(":entities")
-	implementation project(":persistence")
+	implementation project(":core")
+	implementation project(":background")
 
 	implementation "com.android.support:multidex:$multidex_version"
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
@@ -80,7 +79,6 @@ dependencies {
 	implementation "com.google.android.gms:play-services-location:$google_play_services_version"
 	implementation "com.google.android.gms:play-services-gcm:$google_play_services_version"
 
-	implementation "com.evernote:android-job:$android_job_version"
 	implementation "com.github.gustavkarlsson:aurora-notifier-common:$aurora_notifier_common_version"
 	implementation "net.e175.klaus:solarpositioning:$solarpositioning_version"
 	implementation "com.jakewharton.threetenabp:threetenabp:$threetenabp_version"

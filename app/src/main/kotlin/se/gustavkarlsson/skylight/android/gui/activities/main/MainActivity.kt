@@ -10,12 +10,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.analytics
 import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.extensions.indefiniteErrorSnackbar
 import se.gustavkarlsson.skylight.android.extensions.invoke
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
+import se.gustavkarlsson.skylight.android.services.Analytics
 import timber.log.Timber
 
 
@@ -93,7 +93,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 		swipeRefreshLayout.refreshes()
 			.doOnNext {
 				Timber.i("Refreshing...")
-				analytics.logManualRefresh()
+				Analytics.logManualRefresh()
 			}
 			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe(viewModel.refresh)

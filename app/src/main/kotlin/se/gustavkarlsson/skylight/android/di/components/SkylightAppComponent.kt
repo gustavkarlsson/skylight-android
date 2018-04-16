@@ -3,7 +3,11 @@ package se.gustavkarlsson.skylight.android.di.components
 import android.app.Application
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
+import se.gustavkarlsson.skylight.android.background.di.components.BackgroundComponent
+import se.gustavkarlsson.skylight.android.background.di.components.SkylightBackgroundComponent
 import se.gustavkarlsson.skylight.android.di.modules.*
+import se.gustavkarlsson.skylight.android.extensions.minutes
+import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModel
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceViewModel
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.DarknessViewModel
@@ -11,9 +15,7 @@ import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_f
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.KpIndexViewModel
 import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.VisibilityViewModel
 import se.gustavkarlsson.skylight.android.services.Analytics
-import se.gustavkarlsson.skylight.android.services.Scheduler
 import se.gustavkarlsson.skylight.android.services.Settings
-import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob
 
 open class SkylightAppComponent(
 	openWeatherMapApiKey: String, // TODO Is this really the right way to do this?
@@ -75,32 +77,20 @@ open class SkylightAppComponent(
 		)
 	}
 
-	open val evaluationModule: EvaluationModule =
+	open val evaluationModule: EvaluationModule by lazy {
 		RealEvaluationModule()
-
-	open val notifierModule: NotifierModule by lazy {
-		AndroidNotifierModule(contextModule, formattingModule, evaluationModule)
 	}
 
 	open val sharedPreferencesModule: SharedPreferencesModule by lazy {
 		DefaultSharedPreferencesModule(contextModule)
 	}
 
-	open val settingsModule: SettingsModule by lazy {
-		RxSettingsModule(contextModule, sharedPreferencesModule)
+	open val rxSharedPreferencesModule: RxSharedPreferencesModule by lazy {
+		RealRxSharedPreferencesModule(sharedPreferencesModule)
 	}
 
-	open val updateSchedulerModule: UpdateSchedulerModule by lazy { RealUpdateSchedulerModule() }
-
-	open val updateJobModule: UpdateJobModule by lazy {
-		RealUpdateJobModule(
-			contextModule,
-			timeModule,
-			evaluationModule,
-			settingsModule,
-			auroraReportModule,
-			notifierModule
-		)
+	open val settingsModule: SettingsModule by lazy {
+		RxSettingsModule(contextModule, rxSharedPreferencesModule)
 	}
 
 	open val viewModelsModule: ViewModelsModule by lazy {
@@ -120,10 +110,6 @@ open class SkylightAppComponent(
 
 	final override val settings: Settings
 		get() = settingsModule.settings
-	final override val updateScheduler: Scheduler
-		get() = updateSchedulerModule.updateScheduler
-	final override val updateJob: UpdateJob
-		get() = updateJobModule.updateJob
 	final override val analytics: Analytics
 		get() = analyticsModule.analytics
 
@@ -144,4 +130,19 @@ open class SkylightAppComponent(
 
 	final override fun mainViewModel(activity: FragmentActivity): MainViewModel =
 		viewModelsModule.mainViewModel(activity)
+
+	final override val backgroundComponent: BackgroundComponent by lazy {
+		SkylightBackgroundComponent(
+			contextModule,
+			formattingModule,
+			evaluationModule,
+			settingsModule,
+			auroraReportModule,
+			timeModule,
+			MainActivity::class.java,
+			20.minutes,
+			10.minutes
+		)
+	}
+
 }

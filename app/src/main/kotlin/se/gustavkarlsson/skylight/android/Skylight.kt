@@ -3,12 +3,11 @@ package se.gustavkarlsson.skylight.android
 import android.support.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
-import com.evernote.android.job.JobManager
 import com.jakewharton.threetenabp.AndroidThreeTen
 import io.fabric.sdk.android.Fabric
 import io.reactivex.plugins.RxJavaPlugins
+import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.Settings
-import se.gustavkarlsson.skylight.android.services_impl.scheduling.UpdateJob
 import se.gustavkarlsson.skylight.android.util.CrashlyticsTree
 import timber.log.Timber
 import timber.log.Timber.DebugTree
@@ -22,19 +21,19 @@ class Skylight : MultiDexApplication() {
 	override fun onCreate() {
 		super.onCreate()
 		bootstrap()
-		setupNotifications()
 		setupSettingsAnalytics(appComponent.settings)
+		scheduleBackgroundNotifications()
 	}
 
 	private fun bootstrap() {
-		setupCrashReporting()
-		setupLogging()
+		initCrashReporting()
+		initLogging()
+		initAnalytics()
 		AndroidThreeTen.init(this)
-		setupRxJavaErrorHandling()
-		initJobManager()
+		initRxJavaErrorHandling()
 	}
 
-	private fun setupCrashReporting() {
+	private fun initCrashReporting() {
 		val crashlytics = Crashlytics.Builder()
 			.core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
 			.build()
@@ -42,7 +41,7 @@ class Skylight : MultiDexApplication() {
 		Fabric.with(this, crashlytics)
 	}
 
-	private fun setupLogging() {
+	private fun initLogging() {
 		if (BuildConfig.DEBUG) {
 			Timber.plant(DebugTree())
 		} else {
@@ -50,42 +49,27 @@ class Skylight : MultiDexApplication() {
 		}
 	}
 
-	private fun setupRxJavaErrorHandling() {
+	private fun initAnalytics() {
+		Analytics.instance = appComponent.analytics
+	}
+
+	private fun initRxJavaErrorHandling() {
 		RxJavaPlugins.setErrorHandler {
 			Timber.e(it, "Unhandled RxJava error")
 		}
 	}
 
-	private fun initJobManager() {
-		JobManager.create(this).run {
-			addJobCreator { tag ->
-				when (tag) {
-					UpdateJob.UPDATE_JOB_TAG -> appComponent.updateJob
-					else -> null
-				}
-			}
-		}
-	}
-
-	private fun setupNotifications() {
-		val settings = appComponent.settings
-		val scheduler = appComponent.updateScheduler
-		settings.notificationsEnabledChanges
-			.subscribe { enabled ->
-				if (enabled) {
-					scheduler.schedule()
-				} else {
-					scheduler.unschedule()
-				}
-			}
+	private fun scheduleBackgroundNotifications() {
+		appComponent.backgroundComponent.scheduleBackgroundNotifications
+			.subscribe()
 	}
 
 	private fun setupSettingsAnalytics(settings: Settings) {
 		settings.notificationsEnabledChanges
-			.subscribe(analytics::setNotificationsEnabled)
+			.subscribe { Analytics.setNotificationsEnabled(it) }
 
 		settings.triggerLevelChanges
-			.subscribe(analytics::setNotifyTriggerLevel)
+			.subscribe { Analytics.setNotifyTriggerLevel(it) }
 	}
 
 	companion object {

@@ -1,0 +1,46 @@
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-kapt"
+
+android {
+	compileSdkVersion project.compilesdk_version
+
+	sourceSets {
+		main.java.srcDirs += "src/main/kotlin"
+		test.java.srcDirs += "src/test/kotlin"
+		androidTest.java.srcDirs += "src/androidTest/kotlin"
+	}
+
+	defaultConfig {
+		minSdkVersion project.min_sdk_version
+		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+		kapt {
+			arguments {
+				arg("room.schemaLocation", "$projectDir/schemas")
+			}
+		}
+	}
+}
+
+dependencies {
+	implementation project(":core")
+
+	implementation "com.evernote:android-job:$android_job_version"
+
+	// Room
+	implementation "android.arch.persistence.room:runtime:$room_version", { exclude group: "com.android.support" }
+	kapt "android.arch.persistence.room:compiler:$room_version"
+
+
+	// Testing
+	testImplementation "org.robolectric:robolectric:$robolectric_version"
+	testImplementation "junit:junit:$junit_version"
+	testImplementation "org.mockito:mockito-core:$mockito_version"
+	testImplementation "com.nhaarman:mockito-kotlin-kt1.1:$mockito_kotlin_version", { exclude group: "org.jetbrains.kotlin" }
+	testImplementation "commons-io:commons-io:$commons_io_version"
+	testImplementation "com.willowtreeapps.assertk:assertk:$assertk_version"
+	testImplementation "com.google.code.gson:gson:$gson_version"
+
+	androidTestImplementation "com.willowtreeapps.assertk:assertk:$assertk_version"
+	androidTestImplementation "com.android.support.test:runner:$android_support_test_version"
+}
