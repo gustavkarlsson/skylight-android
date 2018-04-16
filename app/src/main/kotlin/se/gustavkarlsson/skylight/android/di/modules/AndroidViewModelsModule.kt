@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.di.modules
 
 import android.arch.lifecycle.ViewModelProviders
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.minutes
@@ -56,24 +55,24 @@ class AndroidViewModelsModule(
 		)
 	}
 
-	override fun auroraChanceViewModel(fragment: Fragment): AuroraChanceViewModel =
-		ViewModelProviders.of(fragment, auroraChanceViewModelFactory)
+	override fun auroraChanceViewModel(activity: FragmentActivity): AuroraChanceViewModel =
+		ViewModelProviders.of(activity, auroraChanceViewModelFactory)
 			.get(AuroraChanceViewModel::class.java)
 
-	override fun darknessViewModel(fragment: Fragment): DarknessViewModel =
-		ViewModelProviders.of(fragment, auroraFactorsViewModelFactory)
+	override fun darknessViewModel(activity: FragmentActivity): DarknessViewModel =
+		ViewModelProviders.of(activity, auroraFactorsViewModelFactory)
 			.get(DarknessViewModel::class.java)
 
-	override fun geomagLocationViewModel(fragment: Fragment): GeomagLocationViewModel =
-		ViewModelProviders.of(fragment, auroraFactorsViewModelFactory)
+	override fun geomagLocationViewModel(activity: FragmentActivity): GeomagLocationViewModel =
+		ViewModelProviders.of(activity, auroraFactorsViewModelFactory)
 			.get(GeomagLocationViewModel::class.java)
 
-	override fun kpIndexViewModel(fragment: Fragment): KpIndexViewModel =
-		ViewModelProviders.of(fragment, auroraFactorsViewModelFactory)
+	override fun kpIndexViewModel(activity: FragmentActivity): KpIndexViewModel =
+		ViewModelProviders.of(activity, auroraFactorsViewModelFactory)
 			.get(KpIndexViewModel::class.java)
 
-	override fun visibilityViewModel(fragment: Fragment): VisibilityViewModel =
-		ViewModelProviders.of(fragment, auroraFactorsViewModelFactory)
+	override fun visibilityViewModel(activity: FragmentActivity): VisibilityViewModel =
+		ViewModelProviders.of(activity, auroraFactorsViewModelFactory)
 			.get(VisibilityViewModel::class.java)
 
 	override fun mainViewModel(activity: FragmentActivity): MainViewModel =

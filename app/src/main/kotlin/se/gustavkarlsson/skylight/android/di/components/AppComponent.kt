@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.di.components
 
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import se.gustavkarlsson.skylight.android.background.di.components.BackgroundComponent
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModel
@@ -16,11 +15,11 @@ interface AppComponent {
 	val settings: Settings
 	val analytics: Analytics
 
-	fun auroraChanceViewModel(fragment: Fragment): AuroraChanceViewModel
-	fun darknessViewModel(fragment: Fragment): DarknessViewModel
-	fun geomagLocationViewModel(fragment: Fragment): GeomagLocationViewModel
-	fun kpIndexViewModel(fragment: Fragment): KpIndexViewModel
-	fun visibilityViewModel(fragment: Fragment): VisibilityViewModel
+	fun auroraChanceViewModel(activity: FragmentActivity): AuroraChanceViewModel
+	fun darknessViewModel(activity: FragmentActivity): DarknessViewModel
+	fun geomagLocationViewModel(activity: FragmentActivity): GeomagLocationViewModel
+	fun kpIndexViewModel(activity: FragmentActivity): KpIndexViewModel
+	fun visibilityViewModel(activity: FragmentActivity): VisibilityViewModel
 	fun mainViewModel(activity: FragmentActivity): MainViewModel
 
 	val backgroundComponent: BackgroundComponent
