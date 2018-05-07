@@ -42,7 +42,7 @@ buildscript {
 		reactive_location_version = "2.1"
 		solarpositioning_version = "0.0.9"
 		aurora_notifier_common_version = "aurora-notifier-common-1.5.0"
-		android_gradle_version = "3.1.1"
+		android_gradle_version = "3.1.2"
 	}
 	repositories {
 		jcenter()
