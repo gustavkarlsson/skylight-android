@@ -39,13 +39,13 @@ class MainActivityTest {
 	}
 
 	@Test
-    fun auroraFactorsFragmentShown() {
-        onView(withId(R.id.auroraFactorsFragment)).check(matches(isDisplayed()))
+    fun auroraFactorsSectionShown() {
+        onView(withId(R.id.auroraFactorsSection)).check(matches(isDisplayed()))
     }
 
     @Test
-    fun auroraChanceFragmentShown() {
-        onView(withId(R.id.auroraChanceFragment)).check(matches(isDisplayed()))
+    fun auroraChanceSectionShown() {
+        onView(withId(R.id.auroraChanceSection)).check(matches(isDisplayed()))
     }
 
 	@Test

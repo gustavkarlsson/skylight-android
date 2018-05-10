@@ -10,6 +10,7 @@ class AndroidLocalizationModule(private val contextModule: ContextModule) : Loca
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 				contextModule.context.resources.configuration.locales[0]
 			} else {
+				@Suppress("DEPRECATION")
 				contextModule.context.resources.configuration.locale
 			}
 		}

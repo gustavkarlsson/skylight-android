@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android
 
 import android.support.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
-import com.crashlytics.android.core.CrashlyticsCore
 import com.jakewharton.threetenabp.AndroidThreeTen
 import io.fabric.sdk.android.Fabric
 import io.reactivex.plugins.RxJavaPlugins
@@ -34,11 +33,9 @@ class Skylight : MultiDexApplication() {
 	}
 
 	private fun initCrashReporting() {
-		val crashlytics = Crashlytics.Builder()
-			.core(CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
-			.build()
-
-		Fabric.with(this, crashlytics)
+		if (!BuildConfig.DEBUG) {
+			Fabric.with(this, Crashlytics())
+		}
 	}
 
 	private fun initLogging() {

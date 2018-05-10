@@ -24,7 +24,7 @@ class FirebasedAnalytics(context: Context) : Analytics {
 		firebaseAnalytics.setUserProperty("notifications_enabled", enabled.toString())
 	}
 
-	override fun setNotifyTriggerLevel(level: ChanceLevel) {
-		firebaseAnalytics.setUserProperty("notifications_trigger_level", level.name)
+	override fun setNotifyTriggerLevel(triggerLevel: ChanceLevel) {
+		firebaseAnalytics.setUserProperty("notifications_trigger_level", triggerLevel.name)
 	}
 }

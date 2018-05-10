@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.di.components
 
 import android.app.Application
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import se.gustavkarlsson.skylight.android.background.di.components.BackgroundComponent
 import se.gustavkarlsson.skylight.android.background.di.components.SkylightBackgroundComponent
@@ -9,11 +8,6 @@ import se.gustavkarlsson.skylight.android.di.modules.*
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModel
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceViewModel
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.DarknessViewModel
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.GeomagLocationViewModel
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.KpIndexViewModel
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.VisibilityViewModel
 import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.Settings
 
@@ -112,21 +106,6 @@ open class SkylightAppComponent(
 		get() = settingsModule.settings
 	final override val analytics: Analytics
 		get() = analyticsModule.analytics
-
-	final override fun auroraChanceViewModel(fragment: Fragment): AuroraChanceViewModel =
-		viewModelsModule.auroraChanceViewModel(fragment)
-
-	final override fun darknessViewModel(fragment: Fragment): DarknessViewModel =
-		viewModelsModule.darknessViewModel(fragment)
-
-	final override fun geomagLocationViewModel(fragment: Fragment): GeomagLocationViewModel =
-		viewModelsModule.geomagLocationViewModel(fragment)
-
-	final override fun kpIndexViewModel(fragment: Fragment): KpIndexViewModel =
-		viewModelsModule.kpIndexViewModel(fragment)
-
-	final override fun visibilityViewModel(fragment: Fragment): VisibilityViewModel =
-		viewModelsModule.visibilityViewModel(fragment)
 
 	final override fun mainViewModel(activity: FragmentActivity): MainViewModel =
 		viewModelsModule.mainViewModel(activity)
