@@ -8,11 +8,6 @@ import se.gustavkarlsson.skylight.android.di.modules.*
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModel
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_chance.AuroraChanceViewModel
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.DarknessViewModel
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.GeomagLocationViewModel
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.KpIndexViewModel
-import se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors.VisibilityViewModel
 import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.Settings
 
@@ -111,21 +106,6 @@ open class SkylightAppComponent(
 		get() = settingsModule.settings
 	final override val analytics: Analytics
 		get() = analyticsModule.analytics
-
-	final override fun auroraChanceViewModel(activity: FragmentActivity): AuroraChanceViewModel =
-		viewModelsModule.auroraChanceViewModel(activity)
-
-	final override fun darknessViewModel(activity: FragmentActivity): DarknessViewModel =
-		viewModelsModule.darknessViewModel(activity)
-
-	final override fun geomagLocationViewModel(activity: FragmentActivity): GeomagLocationViewModel =
-		viewModelsModule.geomagLocationViewModel(activity)
-
-	final override fun kpIndexViewModel(activity: FragmentActivity): KpIndexViewModel =
-		viewModelsModule.kpIndexViewModel(activity)
-
-	final override fun visibilityViewModel(activity: FragmentActivity): VisibilityViewModel =
-		viewModelsModule.visibilityViewModel(activity)
 
 	final override fun mainViewModel(activity: FragmentActivity): MainViewModel =
 		viewModelsModule.mainViewModel(activity)
