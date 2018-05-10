@@ -13,27 +13,23 @@ import se.gustavkarlsson.skylight.android.di.modules.SettingsModule
 
 class EvernoteJobSchedulingModule(
 	contextModule: ContextModule,
-	auroraReportModule: AuroraReportModule,
-	notificationModule: NotificationModule,
+	private val auroraReportModule: AuroraReportModule,
+	private val notificationModule: NotificationModule,
 	settingsModule: SettingsModule,
 	scheduleInterval: Duration,
 	schedulerFlex: Duration
 ) : SchedulingModule {
-
-	private val updateJob: UpdateJob by lazy {
-		UpdateJob(
-			auroraReportModule.auroraReportSingle,
-			notificationModule.decider,
-			notificationModule.notifier
-		)
-	}
 
 	private val initiateJobManager: Completable by lazy {
 		Completable.fromCallable {
 			JobManager.create(contextModule.context).run {
 				addJobCreator { tag ->
 					when (tag) {
-						UpdateJob.UPDATE_JOB_TAG -> updateJob
+						UpdateJob.UPDATE_JOB_TAG -> UpdateJob(
+							auroraReportModule.auroraReportSingle,
+							notificationModule.decider,
+							notificationModule.notifier
+						)
 						else -> null
 					}
 				}
