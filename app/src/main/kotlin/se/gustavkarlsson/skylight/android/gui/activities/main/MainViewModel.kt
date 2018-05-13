@@ -4,16 +4,18 @@ import com.hadisatrio.optional.Optional
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.ObservableTransformer
 import io.reactivex.Single
-import io.reactivex.functions.Consumer
+import io.reactivex.rxkotlin.ofType
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.actions.RefreshAction
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.extensions.delay
-import se.gustavkarlsson.skylight.android.extensions.invoke
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.gui.AutoDisposingViewModel
+import se.gustavkarlsson.skylight.android.results.AuroraReportResult
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
@@ -68,17 +70,6 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val refresh: Consumer<Unit> = Consumer {
-		auroraReportSingle
-			.doOnEvent { _, _ -> refreshFinishedRelay() }
-			.subscribe(Consumer {}, errorRelay)
-			.autoDisposeOnCleared()
-	}
-
-	private val refreshFinishedRelay = PublishRelay.create<Unit>()
-	val refreshFinished: Flowable<Unit> = refreshFinishedRelay
-		.toFlowable(BackpressureStrategy.LATEST)
-
 	private val timestamps = auroraReports
 		.map(AuroraReport::timestamp)
 		.distinctUntilChanged()
@@ -118,9 +109,10 @@ class MainViewModel(
 		.map(darknessChanceEvaluator::evaluate)
 		.distinctUntilChanged()
 
-	val geomagLocationValue: Flowable<CharSequence> = auroraReports.map { it.factors.geomagLocation }
-		.map(geomagLocationFormatter::format)
-		.distinctUntilChanged()
+	val geomagLocationValue: Flowable<CharSequence> =
+		auroraReports.map { it.factors.geomagLocation }
+			.map(geomagLocationFormatter::format)
+			.distinctUntilChanged()
 
 	val geomagLocationChance: Flowable<Chance> = auroraReports.map { it.factors.geomagLocation }
 		.map(geomagLocationChanceEvaluator::evaluate)
@@ -141,4 +133,46 @@ class MainViewModel(
 	val visibilityChance: Flowable<Chance> = auroraReports.map { it.factors.visibility }
 		.map(visibilityChanceEvaluator::evaluate)
 		.distinctUntilChanged()
+
+	private val initialState: MainUiState = MainUiState(
+		defaultLocationName,
+		false,
+		null,
+		null,
+		chanceLevelFormatter.format(ChanceLevel.UNKNOWN),
+		null,
+		MainUiState.Factor(darknessFormatter.format(Darkness()), Chance.UNKNOWN),
+		MainUiState.Factor(geomagLocationFormatter.format(GeomagLocation()), Chance.UNKNOWN),
+		MainUiState.Factor(kpIndexFormatter.format(KpIndex()), Chance.UNKNOWN),
+		MainUiState.Factor(visibilityFormatter.format(Visibility()), Chance.UNKNOWN)
+	)
+
+	val states: ObservableTransformer<MainUiEvent, MainUiState> =
+		ObservableTransformer { events ->
+			events
+				.publish {
+					// Merge if multiple event types
+					it.ofType<RefreshEvent>()
+						.map { RefreshAction }
+						.compose(refreshActionToResult)
+				}
+				.scan(initialState) { lastState, result ->
+					when (result) {
+						is AuroraReportResult.InFlight -> lastState.copy(isRefreshing = true)
+						is AuroraReportResult.Success -> lastState.copy(isRefreshing = false)
+						is AuroraReportResult.Failure -> lastState.copy(isRefreshing = false)
+					}
+				}
+		}
+
+	private val refreshActionToResult = ObservableTransformer<RefreshAction, AuroraReportResult> {
+		it.switchMap {
+			auroraReportSingle
+				.map<AuroraReportResult> { AuroraReportResult.Success(it) }
+				.onErrorReturn { AuroraReportResult.Failure(it) }
+				// TODO Consider .observeOn(AndroidSchedulers.mainThread())
+				.toObservable()
+				.startWith(AuroraReportResult.InFlight)
+		}
+	}
 }

@@ -9,6 +9,7 @@ import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.visibility
 import com.jakewharton.rxbinding2.widget.text
 import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.alert
@@ -19,7 +20,6 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.extensions.indefiniteErrorSnackbar
-import se.gustavkarlsson.skylight.android.extensions.invoke
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
 import se.gustavkarlsson.skylight.android.gui.views.AuroraFactorView
@@ -33,6 +33,19 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 
 	private val viewModel: MainViewModel by lazy {
 		appComponent.mainViewModel(this)
+	}
+
+	private val swipeRefreshEvents: Observable<RefreshEvent> by lazy {
+		swipeRefreshLayout.refreshes()
+			.doOnNext {
+				Timber.i("Refreshing...")
+				Analytics.logManualRefresh()
+			}
+			.map { RefreshEvent }
+	}
+
+	private val events: Observable<out MainUiEvent> by lazy {
+		swipeRefreshEvents
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,25 +71,16 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 	public override fun onStart() {
 		super.onStart()
 		bindData()
+		bindDataNew()
 	}
 
-	override fun onRequirementsMet() {
-		Timber.i("Refreshing...")
-		viewModel.refresh()
-	}
+	override fun onRequirementsMet() = Unit
 
 	private fun bindData() {
 		viewModel.locationName
 			.doOnNext { Timber.d("Updating locationName view: %s", it) }
 			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe(supportActionBar!!::setTitle)
-			.autoDisposeOnStop()
-
-		viewModel.refreshFinished
-			.doOnNext { Timber.i("Finished refreshing") }
-			.map { false }
-			.observeOn(AndroidSchedulers.mainThread())
-			.subscribe(swipeRefreshLayout::setRefreshing)
 			.autoDisposeOnStop()
 
 		viewModel.errorMessages
@@ -97,15 +101,6 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 					snackbar = indefiniteErrorSnackbar(coordinatorLayout, it).apply { show() }
 				}
 			}
-			.autoDisposeOnStop()
-
-		swipeRefreshLayout.refreshes()
-			.doOnNext {
-				Timber.i("Refreshing...")
-				Analytics.logManualRefresh()
-			}
-			.observeOn(AndroidSchedulers.mainThread())
-			.subscribe(viewModel.refresh)
 			.autoDisposeOnStop()
 
 		viewModel.chanceLevel
@@ -146,6 +141,17 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 			R.string.factor_visibility_title_full, R.string.factor_visibility_desc,
 			"visibility"
 		)
+	}
+
+	private fun bindDataNew() {
+		// TODO What about initial refresh?
+		events
+			.compose(viewModel.states)
+			.observeOn(AndroidSchedulers.mainThread())
+			.subscribe { state ->
+				swipeRefreshLayout.isRefreshing = state.isRefreshing
+			}
+			.autoDisposeOnStop()
 	}
 
 	private fun bindFactor(
