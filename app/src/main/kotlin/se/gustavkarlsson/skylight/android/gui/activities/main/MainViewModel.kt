@@ -10,13 +10,14 @@ import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.*
+import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.invoke
+import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.gui.AutoDisposingViewModel
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
-import java.util.concurrent.TimeUnit
 
 class MainViewModel(
 	auroraReportSingle: Single<AuroraReport>,
@@ -93,7 +94,7 @@ class MainViewModel(
 	val timeSinceUpdate: Flowable<CharSequence> = timestamps
 		.switchMap {
 			Flowable.just(it)
-				.repeatWhen { it.delay(1, TimeUnit.SECONDS) }
+				.repeatWhen { it.delay(1.seconds) }
 		}
 		.map {
 			relativeTimeFormatter.format(it, now.blockingGet(), nowTextThreshold)

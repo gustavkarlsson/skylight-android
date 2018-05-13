@@ -4,9 +4,10 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.*
+import se.gustavkarlsson.skylight.android.extensions.delay
+import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.services.DebugSettings
 import se.gustavkarlsson.skylight.android.services.Streamable
-import java.util.concurrent.TimeUnit
 
 class DebugAuroraReportStreamable(
 	private val realStreamable: Streamable<AuroraReport>,
@@ -22,7 +23,7 @@ class DebugAuroraReportStreamable(
 						val auroraFactors = createDebugFactors()
 						val timestamp = now.blockingGet()
 						AuroraReport(timestamp, "Fake Location", auroraFactors)
-					}.repeatWhen { it.delay(1, TimeUnit.MINUTES) }
+					}.repeatWhen { it.delay(POLLING_INTERVAL) }
 				} else {
 					realStreamable.stream
 				}
@@ -34,5 +35,9 @@ class DebugAuroraReportStreamable(
 		val darkness = Darkness(debugSettings.sunZenithAngle)
 		val visibility = Visibility(debugSettings.cloudPercentage)
 		return AuroraFactors(kpIndex, geomagLocation, darkness, visibility)
+	}
+
+	companion object {
+		val POLLING_INTERVAL = 1.minutes
 	}
 }
