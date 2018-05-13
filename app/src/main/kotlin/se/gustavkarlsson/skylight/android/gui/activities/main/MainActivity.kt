@@ -77,12 +77,6 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 	override fun onRequirementsMet() = Unit
 
 	private fun bindData() {
-		viewModel.locationName
-			.doOnNext { Timber.d("Updating locationName view: %s", it) }
-			.observeOn(AndroidSchedulers.mainThread())
-			.subscribe(supportActionBar!!::setTitle)
-			.autoDisposeOnStop()
-
 		viewModel.errorMessages
 			.doOnNext { Timber.d("Showing error message") }
 			.observeOn(AndroidSchedulers.mainThread())
@@ -101,12 +95,6 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 					snackbar = indefiniteErrorSnackbar(coordinatorLayout, it).apply { show() }
 				}
 			}
-			.autoDisposeOnStop()
-
-		viewModel.chanceLevel
-			.doOnNext { Timber.d("Updating chanceLevel view: %s", it) }
-			.observeOn(AndroidSchedulers.mainThread())
-			.subscribe(chance.text())
 			.autoDisposeOnStop()
 
 		viewModel.timeSinceUpdate
@@ -149,10 +137,11 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 			.autoDisposeOnStop()
 
 		viewModel.states
-			.doOnNext { Timber.i(it.toString()) }
 			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe { state ->
 				swipeRefreshLayout.isRefreshing = state.isRefreshing
+				supportActionBar!!.title = state.locationName
+				chance.text = state.chanceLevel
 			}
 			.autoDisposeOnStop()
 	}

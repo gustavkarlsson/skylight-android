@@ -64,23 +64,11 @@ class MainViewModel(
 			}
 			.distinctUntilChanged()
 
-	val locationName: Flowable<CharSequence> = auroraReports
-		.map {
-			it.locationName ?: defaultLocationName
-		}
-		.distinctUntilChanged()
-
 	private val timestamps = auroraReports
 		.map(AuroraReport::timestamp)
 		.distinctUntilChanged()
 		.replay(1)
 		.refCount()
-
-	val chanceLevel: Flowable<CharSequence> = auroraReports
-		.map(auroraChanceEvaluator::evaluate)
-		.map(ChanceLevel.Companion::fromChance)
-		.map(chanceLevelFormatter::format)
-		.distinctUntilChanged()
 
 	val timeSinceUpdate: Flowable<CharSequence> = timestamps
 		.switchMap {
@@ -167,7 +155,6 @@ class MainViewModel(
 			auroraReportSingle
 				.map<AuroraReportResult> { AuroraReportResult.Success(it) }
 				.onErrorReturn { AuroraReportResult.Failure(it) }
-				// TODO Consider .observeOn(AndroidSchedulers.mainThread())
 				.toObservable()
 				.startWith(AuroraReportResult.InFlight)
 		}
@@ -177,7 +164,18 @@ class MainViewModel(
 		.scan(initialState) { lastState, result ->
 			when (result) {
 				is AuroraReportResult.InFlight -> lastState.copy(isRefreshing = true)
-				is AuroraReportResult.Success -> lastState.copy(isRefreshing = false)
+				is AuroraReportResult.Success -> {
+					val locationName = result.auroraReport.locationName ?: defaultLocationName
+					val chanceLevel = result.auroraReport
+						.let(auroraChanceEvaluator::evaluate)
+						.let(ChanceLevel.Companion::fromChance)
+						.let(chanceLevelFormatter::format)
+					lastState.copy(
+						isRefreshing = false,
+						locationName = locationName,
+						chanceLevel = chanceLevel
+					)
+				}
 				is AuroraReportResult.Failure -> lastState.copy(isRefreshing = false)
 			}
 		}
