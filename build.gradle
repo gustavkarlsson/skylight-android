@@ -18,7 +18,7 @@ buildscript {
 		threetenabp_version = "1.0.5"
 		robolectric_version = "3.4.2"
 		junit_version = "4.12"
-		room_version = "1.1.0-beta1"
+		room_version = "1.1.0-rc1"
 		rxjava_version = "2.1.12"
 		rxandroid_version = "2.0.2"
 		rxkotlin_version = "2.2.0"

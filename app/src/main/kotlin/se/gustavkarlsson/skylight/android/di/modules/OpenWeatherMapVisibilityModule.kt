@@ -7,8 +7,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import se.gustavkarlsson.skylight.android.entities.Visibility
 import se.gustavkarlsson.skylight.android.extensions.create
-import se.gustavkarlsson.skylight.android.extensions.minutes
-import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.VisibilityProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.RetrofittedOpenWeatherMapVisibilityProvider
@@ -33,9 +31,7 @@ class OpenWeatherMapVisibilityModule(
 	override val visibilityStreamable: Streamable<Visibility> by lazy {
 		VisibilityProviderStreamable(
 			locationModule.locationFlowable,
-			visibilityProvider,
-			POLLING_INTERVAL,
-			RETRY_DELAY
+			visibilityProvider
 		)
 	}
 
@@ -45,10 +41,8 @@ class OpenWeatherMapVisibilityModule(
 			.refCount()
 	}
 
-	// TODO Make some configurable in constructor
 	companion object {
-		private const val API_URL = "http://api.openweathermap.org/data/2.5/"
-		private val POLLING_INTERVAL = 15.minutes
-		private val RETRY_DELAY = 10.seconds
+		// TODO Make configurable in constructor
+		const val API_URL = "http://api.openweathermap.org/data/2.5/"
 	}
 }
