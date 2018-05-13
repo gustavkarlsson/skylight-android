@@ -2,20 +2,20 @@ package se.gustavkarlsson.skylight.android.gui.activities.main
 
 import com.hadisatrio.optional.Optional
 import com.jakewharton.rxrelay2.PublishRelay
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
-import io.reactivex.ObservableTransformer
-import io.reactivex.Single
+import io.reactivex.*
+import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.ofType
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.actions.Action
 import se.gustavkarlsson.skylight.android.actions.RefreshAction
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.gui.AutoDisposingViewModel
 import se.gustavkarlsson.skylight.android.results.AuroraReportResult
+import se.gustavkarlsson.skylight.android.results.Result
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
@@ -147,22 +147,19 @@ class MainViewModel(
 		MainUiState.Factor(visibilityFormatter.format(Visibility()), Chance.UNKNOWN)
 	)
 
-	val states: ObservableTransformer<MainUiEvent, MainUiState> =
-		ObservableTransformer { events ->
-			events
-				.publish {
-					// Merge if multiple event types
-					it.ofType<RefreshEvent>()
-						.map { RefreshAction }
-						.compose(refreshActionToResult)
-				}
-				.scan(initialState) { lastState, result ->
-					when (result) {
-						is AuroraReportResult.InFlight -> lastState.copy(isRefreshing = true)
-						is AuroraReportResult.Success -> lastState.copy(isRefreshing = false)
-						is AuroraReportResult.Failure -> lastState.copy(isRefreshing = false)
-					}
-				}
+	private val events = PublishRelay.create<MainUiEvent>()
+	val onEvent: Consumer<MainUiEvent> = events
+
+	private val actions: Observable<out Action> = events
+		.publish {
+			// Merge if multiple event types
+			it.ofType<RefreshEvent>().map { RefreshAction }
+		}
+
+	private val results: Observable<out Result> = actions
+		.publish {
+			// Merge if multiple action types
+			it.ofType<RefreshAction>().startWith(RefreshAction).compose(refreshActionToResult)
 		}
 
 	private val refreshActionToResult = ObservableTransformer<RefreshAction, AuroraReportResult> {
@@ -174,5 +171,20 @@ class MainViewModel(
 				.toObservable()
 				.startWith(AuroraReportResult.InFlight)
 		}
+	}
+
+	val states: Observable<MainUiState> = results
+		.scan(initialState) { lastState, result ->
+			when (result) {
+				is AuroraReportResult.InFlight -> lastState.copy(isRefreshing = true)
+				is AuroraReportResult.Success -> lastState.copy(isRefreshing = false)
+				is AuroraReportResult.Failure -> lastState.copy(isRefreshing = false)
+			}
+		}
+		.replay(1)
+		.refCount()
+
+	init {
+	    states.subscribe().autoDisposeOnCleared()
 	}
 }

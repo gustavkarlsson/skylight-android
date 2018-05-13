@@ -144,9 +144,12 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 	}
 
 	private fun bindDataNew() {
-		// TODO What about initial refresh?
 		events
-			.compose(viewModel.states)
+			.subscribe(viewModel.onEvent)
+			.autoDisposeOnStop()
+
+		viewModel.states
+			.doOnNext { Timber.i(it.toString()) }
 			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe { state ->
 				swipeRefreshLayout.isRefreshing = state.isRefreshing
