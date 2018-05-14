@@ -89,39 +89,6 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val darknessValue: Flowable<CharSequence> = auroraReports.map { it.factors.darkness }
-		.map(darknessFormatter::format)
-		.distinctUntilChanged()
-
-	val darknessChance: Flowable<Chance> = auroraReports.map { it.factors.darkness }
-		.map(darknessChanceEvaluator::evaluate)
-		.distinctUntilChanged()
-
-	val geomagLocationValue: Flowable<CharSequence> =
-		auroraReports.map { it.factors.geomagLocation }
-			.map(geomagLocationFormatter::format)
-			.distinctUntilChanged()
-
-	val geomagLocationChance: Flowable<Chance> = auroraReports.map { it.factors.geomagLocation }
-		.map(geomagLocationChanceEvaluator::evaluate)
-		.distinctUntilChanged()
-
-	val kpIndexValue: Flowable<CharSequence> = auroraReports.map { it.factors.kpIndex }
-		.map(kpIndexFormatter::format)
-		.distinctUntilChanged()
-
-	val kpIndexChance: Flowable<Chance> = auroraReports.map { it.factors.kpIndex }
-		.map(kpIndexChanceEvaluator::evaluate)
-		.distinctUntilChanged()
-
-	val visibilityValue: Flowable<CharSequence> = auroraReports.map { it.factors.visibility }
-		.map(visibilityFormatter::format)
-		.distinctUntilChanged()
-
-	val visibilityChance: Flowable<Chance> = auroraReports.map { it.factors.visibility }
-		.map(visibilityChanceEvaluator::evaluate)
-		.distinctUntilChanged()
-
 	private val initialState: MainUiState = MainUiState(
 		defaultLocationName,
 		false,
@@ -165,15 +132,37 @@ class MainViewModel(
 			when (result) {
 				is AuroraReportResult.InFlight -> lastState.copy(isRefreshing = true)
 				is AuroraReportResult.Success -> {
-					val locationName = result.auroraReport.locationName ?: defaultLocationName
-					val chanceLevel = result.auroraReport
+					val auroraReport = result.auroraReport
+					val factors = auroraReport.factors
+					val locationName = auroraReport.locationName ?: defaultLocationName
+					val chanceLevel = auroraReport
 						.let(auroraChanceEvaluator::evaluate)
 						.let(ChanceLevel.Companion::fromChance)
 						.let(chanceLevelFormatter::format)
+					val darkness = MainUiState.Factor(
+						darknessFormatter.format(factors.darkness),
+						darknessChanceEvaluator.evaluate(factors.darkness)
+					)
+					val geomagLocation = MainUiState.Factor(
+						geomagLocationFormatter.format(factors.geomagLocation),
+						geomagLocationChanceEvaluator.evaluate(factors.geomagLocation)
+					)
+					val kpIndex = MainUiState.Factor(
+						kpIndexFormatter.format(factors.kpIndex),
+						kpIndexChanceEvaluator.evaluate(factors.kpIndex)
+					)
+					val visibility = MainUiState.Factor(
+						visibilityFormatter.format(factors.visibility),
+						visibilityChanceEvaluator.evaluate(factors.visibility)
+					)
 					lastState.copy(
 						isRefreshing = false,
 						locationName = locationName,
-						chanceLevel = chanceLevel
+						chanceLevel = chanceLevel,
+						darkness = darkness,
+						geomagLocation = geomagLocation,
+						kpIndex = kpIndex,
+						visibility = visibility
 					)
 				}
 				is AuroraReportResult.Failure -> lastState.copy(isRefreshing = false)

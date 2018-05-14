@@ -8,7 +8,6 @@ import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.visibility
 import com.jakewharton.rxbinding2.widget.text
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,7 +17,6 @@ import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.appComponent
-import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.extensions.indefiniteErrorSnackbar
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
@@ -70,13 +68,58 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 
 	public override fun onStart() {
 		super.onStart()
+		initUi()
+		bindDataOld()
 		bindData()
-		bindDataNew()
 	}
 
 	override fun onRequirementsMet() = Unit
 
-	private fun bindData() {
+	private fun initUi() {
+		initFactor(
+			darkness,
+			R.string.factor_darkness_title_full,
+			R.string.factor_darkness_desc
+		)
+		initFactor(
+			geomagLocation,
+			R.string.factor_geomag_location_title_full,
+			R.string.factor_geomag_location_desc
+		)
+		initFactor(
+			kpIndex,
+			R.string.factor_kp_index_title_full,
+			R.string.factor_kp_index_desc
+		)
+		initFactor(
+			visibility,
+			R.string.factor_visibility_title_full,
+			R.string.factor_visibility_desc
+		)
+	}
+
+	private fun initFactor(
+		view: AuroraFactorView,
+		titleResourceId: Int,
+		descriptionResourceId: Int
+	) {
+		view.clicks()
+			.subscribe {
+				toastFactorInfo(titleResourceId, descriptionResourceId)
+			}
+			.autoDisposeOnStop()
+	}
+
+	private fun toastFactorInfo(titleResourceId: Int, descriptionResourceId: Int) {
+		alert {
+			iconResource = R.drawable.info_white_24dp
+			title = ctx.getString(titleResourceId)
+			message = ctx.getString(descriptionResourceId)
+			okButton { it.dismiss() }
+		}.show()
+	}
+
+	private fun bindDataOld() {
 		viewModel.errorMessages
 			.doOnNext { Timber.d("Showing error message") }
 			.observeOn(AndroidSchedulers.mainThread())
@@ -108,30 +151,9 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 			.observeOn(AndroidSchedulers.mainThread())
 			.subscribe(timeSinceUpdate.visibility())
 			.autoDisposeOnStop()
-
-		bindFactor(
-			viewModel.darknessValue, viewModel.darknessChance, darkness,
-			R.string.factor_darkness_title_full, R.string.factor_darkness_desc,
-			"darkness"
-		)
-		bindFactor(
-			viewModel.geomagLocationValue, viewModel.geomagLocationChance, geomagLocation,
-			R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc,
-			"geomagLocation"
-		)
-		bindFactor(
-			viewModel.kpIndexValue, viewModel.kpIndexChance, kpIndex,
-			R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc,
-			"kpIndex"
-		)
-		bindFactor(
-			viewModel.visibilityValue, viewModel.visibilityChance, visibility,
-			R.string.factor_visibility_title_full, R.string.factor_visibility_desc,
-			"visibility"
-		)
 	}
 
-	private fun bindDataNew() {
+	private fun bindData() {
 		events
 			.subscribe(viewModel.onEvent)
 			.autoDisposeOnStop()
@@ -142,44 +164,19 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 				swipeRefreshLayout.isRefreshing = state.isRefreshing
 				supportActionBar!!.title = state.locationName
 				chance.text = state.chanceLevel
+				setFactor(state.darkness, darkness)
+				setFactor(state.geomagLocation, geomagLocation)
+				setFactor(state.kpIndex, kpIndex)
+				setFactor(state.visibility, visibility)
 			}
 			.autoDisposeOnStop()
 	}
 
-	private fun bindFactor(
-		values: Flowable<CharSequence>,
-		chances: Flowable<Chance>,
-		view: AuroraFactorView,
-		titleResourceId: Int,
-		descriptionResourceId: Int,
-		factorDebugName: String
+	private fun setFactor(
+		factor: MainUiState.Factor,
+		view: AuroraFactorView
 	) {
-		values
-			.doOnNext { Timber.d("Updating %s value view: %s", factorDebugName, it) }
-			.observeOn(AndroidSchedulers.mainThread())
-			.subscribe { view.value = it }
-			.autoDisposeOnStop()
-
-		chances
-			.doOnNext { Timber.d("Updating %s chance view: %s", factorDebugName, it) }
-			.observeOn(AndroidSchedulers.mainThread())
-			.subscribe { view.chance = it }
-			.autoDisposeOnStop()
-
-		view.clicks()
-			.observeOn(AndroidSchedulers.mainThread())
-			.subscribe {
-				toastFactorInfo(titleResourceId, descriptionResourceId)
-			}
-			.autoDisposeOnStop()
-	}
-
-	private fun toastFactorInfo(titleResourceId: Int, descriptionResourceId: Int) {
-		alert {
-			iconResource = R.drawable.info_white_24dp
-			title = ctx.getString(titleResourceId)
-			message = ctx.getString(descriptionResourceId)
-			okButton { it.dismiss() }
-		}.show()
+		view.value = factor.value
+		view.chance = factor.chance
 	}
 }
