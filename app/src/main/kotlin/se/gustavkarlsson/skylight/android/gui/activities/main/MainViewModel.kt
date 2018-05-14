@@ -58,7 +58,9 @@ class MainViewModel(
 	private val actions: Observable<out Action> = events
 		.publish {
 			Observable.merge(
-				it.ofType<RefreshEvent>().map { GetAuroraReportAction }.startWith(GetAuroraReportAction),
+				it.ofType<RefreshEvent>().map { GetAuroraReportAction }.startWith(
+					GetAuroraReportAction
+				),
 				Observable.just(StreamAuroraReportsAction),
 				Observable.just(StreamConnectivityAction)
 			)
@@ -73,35 +75,38 @@ class MainViewModel(
 			)
 		}
 
-	private val refreshActionToResult = ObservableTransformer<GetAuroraReportAction, AuroraReportResult> {
-		it.switchMap {
-			auroraReportSingle
-				.map<AuroraReportResult> { AuroraReportResult.Success(it) }
-				.onErrorReturn { AuroraReportResult.Failure(it) }
-				.toObservable()
-				.startWith(AuroraReportResult.InFlight)
-				.concatWith(Observable.just(AuroraReportResult.Idle))
+	private val refreshActionToResult =
+		ObservableTransformer<GetAuroraReportAction, AuroraReportResult> {
+			it.switchMap {
+				auroraReportSingle
+					.map<AuroraReportResult> { AuroraReportResult.Success(it) }
+					.onErrorReturn { AuroraReportResult.Failure(it) }
+					.toObservable()
+					.startWith(AuroraReportResult.InFlight)
+					.concatWith(Observable.just(AuroraReportResult.Idle))
+			}
 		}
-	}
 
-	private val streamAuroraReportsActionToResult = ObservableTransformer<StreamAuroraReportsAction, AuroraReportResult> {
-		it.switchMap {
-			auroraReports
-				.map<AuroraReportResult> { AuroraReportResult.Success(it) }
-				.onErrorReturn { AuroraReportResult.Failure(it) }
-				.toObservable()
-				.startWith(AuroraReportResult.InFlight)
-				.concatWith(Observable.just(AuroraReportResult.Idle))
+	private val streamAuroraReportsActionToResult =
+		ObservableTransformer<StreamAuroraReportsAction, AuroraReportResult> {
+			it.switchMap {
+				auroraReports
+					.map<AuroraReportResult> { AuroraReportResult.Success(it) }
+					.onErrorReturn { AuroraReportResult.Failure(it) }
+					.toObservable()
+					.startWith(AuroraReportResult.InFlight)
+					.concatWith(Observable.just(AuroraReportResult.Idle))
+			}
 		}
-	}
 
-	private val streamConnectivityActionToResult = ObservableTransformer<StreamConnectivityAction, ConnectivityResult> {
-		it.switchMap {
-			isConnectedToInternet
-				.map(::ConnectivityResult)
-				.toObservable()
+	private val streamConnectivityActionToResult =
+		ObservableTransformer<StreamConnectivityAction, ConnectivityResult> {
+			it.switchMap {
+				isConnectedToInternet
+					.map(::ConnectivityResult)
+					.toObservable()
+			}
 		}
-	}
 
 	private val states: Observable<MainUiState> = results
 		.scan(MainUiState()) { lastState, result ->
@@ -132,7 +137,7 @@ class MainViewModel(
 		.observeOn(AndroidSchedulers.mainThread())
 
 	init {
-	    states.subscribe().autoDisposeOnCleared()
+		states.subscribe().autoDisposeOnCleared()
 	}
 
 	val errorMessages: Observable<Int> = states
@@ -166,6 +171,17 @@ class MainViewModel(
 		.map(MainUiState::isRefreshing)
 		.distinctUntilChanged()
 
+	val chanceLevel: Observable<CharSequence> = states
+		.map {
+			it.auroraReport
+				?.let(auroraChanceEvaluator::evaluate)
+				?: Chance.UNKNOWN
+		}
+		.map(ChanceLevel.Companion::fromChance)
+		.map(chanceLevelFormatter::format)
+		.distinctUntilChanged()
+
+	// TODO Reconsider this
 	private val timestamps = states
 		.filter { it.auroraReport != null }
 		.map { it.auroraReport!!.timestamp }
@@ -173,14 +189,7 @@ class MainViewModel(
 		.replay(1)
 		.refCount()
 
-	val chanceLevel: Observable<CharSequence> = states
-		.filter { it.auroraReport != null }
-		.map { it.auroraReport!! }
-		.map(auroraChanceEvaluator::evaluate)
-		.map(ChanceLevel.Companion::fromChance)
-		.map(chanceLevelFormatter::format)
-		.distinctUntilChanged()
-
+	// TODO Reconsider this
 	val timeSinceUpdate: Observable<CharSequence> = timestamps
 		.switchMap {
 			Observable.just(it)
@@ -191,6 +200,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
+	// TODO Reconsider this
 	val timeSinceUpdateVisibility: Observable<Boolean> = timestamps
 		.map {
 			when {
@@ -206,7 +216,7 @@ class MainViewModel(
 				?.let(AuroraReport::factors)
 				?.let(AuroraFactors::darkness)
 				?.let(darknessFormatter::format)
-			?: "?"
+				?: "?"
 		}
 		.distinctUntilChanged()
 
