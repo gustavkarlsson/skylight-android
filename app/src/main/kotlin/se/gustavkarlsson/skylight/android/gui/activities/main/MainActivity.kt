@@ -18,6 +18,7 @@ import org.jetbrains.anko.toast
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.extensions.indefiniteErrorSnackbar
+import se.gustavkarlsson.skylight.android.extensions.toDisposable
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
 import se.gustavkarlsson.skylight.android.gui.views.AuroraFactorView
@@ -116,7 +117,7 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 			title = ctx.getString(titleResourceId)
 			message = ctx.getString(descriptionResourceId)
 			okButton { it.dismiss() }
-		}.show()
+		}.show().toDisposable().autoDisposeOnDestroy()
 	}
 
 	private fun bindDataOld() {
