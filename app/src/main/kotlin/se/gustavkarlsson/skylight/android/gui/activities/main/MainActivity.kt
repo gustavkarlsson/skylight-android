@@ -1,5 +1,9 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main
 
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.OnLifecycleEvent
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.view.Menu
@@ -8,6 +12,8 @@ import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.visibility
 import com.jakewharton.rxbinding2.widget.text
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.alert
@@ -18,7 +24,6 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.extensions.indefiniteErrorSnackbar
-import se.gustavkarlsson.skylight.android.extensions.toDisposable
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
 import se.gustavkarlsson.skylight.android.gui.views.AuroraFactorView
@@ -26,7 +31,11 @@ import se.gustavkarlsson.skylight.android.services.Analytics
 import timber.log.Timber
 
 
-class MainActivity : AuroraRequirementsCheckingActivity() {
+class MainActivity : AuroraRequirementsCheckingActivity(), LifecycleObserver {
+
+	init {
+	    lifecycle.addObserver(this)
+	}
 
 	private var snackbar: Snackbar? = null
 
@@ -54,38 +63,35 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 		}
 	}
 
-	public override fun onStart() {
-		super.onStart()
-		bindData()
-	}
-
 	override fun onRequirementsMet() = Unit
 
+	@OnLifecycleEvent(Lifecycle.Event.ON_START)
 	private fun bindData() {
 		swipeRefreshLayout.refreshes()
 			.doOnNext {
 				Timber.i("Triggering refresh")
 				Analytics.logManualRefresh()
 			}
+			.autoDisposable(scope())
 			.subscribe(viewModel.refresh)
-			.autoDisposeOnStop()
 
 		viewModel.locationName
 			.doOnNext { Timber.d("Updating locationName view: %s", it) }
+			.autoDisposable(scope())
 			.subscribe(supportActionBar!!::setTitle)
-			.autoDisposeOnStop()
 
 		viewModel.isRefreshing
 			.doOnNext { Timber.i("Refreshing: $it") }
+			.autoDisposable(scope())
 			.subscribe(swipeRefreshLayout::setRefreshing)
-			.autoDisposeOnStop()
 
 		viewModel.errorMessages
 			.doOnNext { Timber.d("Showing error message") }
+			.autoDisposable(scope())
 			.subscribe { toast(it) }
-			.autoDisposeOnStop()
 
 		viewModel.connectivityMessages
+			.autoDisposable(scope())
 			.subscribe {
 				snackbar?.run {
 					Timber.d("Hiding connectivity message")
@@ -96,22 +102,21 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 					snackbar = indefiniteErrorSnackbar(coordinatorLayout, it).apply { show() }
 				}
 			}
-			.autoDisposeOnStop()
 
 		viewModel.chanceLevel
 			.doOnNext { Timber.d("Updating chanceLevel view: %s", it) }
+			.autoDisposable(scope())
 			.subscribe(chance.text())
-			.autoDisposeOnStop()
 
 		viewModel.timeSinceUpdate
 			.doOnNext { Timber.d("Updating timeSinceUpdate view: %s", it) }
+			.autoDisposable(scope())
 			.subscribe(timeSinceUpdate.text())
-			.autoDisposeOnStop()
 
 		viewModel.timeSinceUpdateVisibility
 			.doOnNext { Timber.d("Updating timeSinceUpdate visibility: %s", it) }
+			.autoDisposable(scope())
 			.subscribe(timeSinceUpdate.visibility())
-			.autoDisposeOnStop()
 
 		bindFactor(
 			viewModel.darknessValue, viewModel.darknessChance, darkness,
@@ -145,19 +150,17 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 	) {
 		values
 			.doOnNext { Timber.d("Updating %s value view: %s", factorDebugName, it) }
+			.autoDisposable(scope())
 			.subscribe { view.value = it }
-			.autoDisposeOnStop()
 
 		chances
 			.doOnNext { Timber.d("Updating %s chance view: %s", factorDebugName, it) }
+			.autoDisposable(scope())
 			.subscribe { view.chance = it }
-			.autoDisposeOnStop()
 
 		view.clicks()
-			.subscribe {
-				toastFactorInfo(titleResourceId, descriptionResourceId)
-			}
-			.autoDisposeOnStop()
+			.autoDisposable(scope())
+			.subscribe { toastFactorInfo(titleResourceId, descriptionResourceId) }
 	}
 
 	// TODO Make toasts part of state
@@ -167,6 +170,6 @@ class MainActivity : AuroraRequirementsCheckingActivity() {
 			title = ctx.getString(titleResourceId)
 			message = ctx.getString(descriptionResourceId)
 			okButton { it.dismiss() }
-		}.show().toDisposable().autoDisposeOnDestroy()
+		}.show().doOnDestroy(DialogInterface::dismiss)
 	}
 }

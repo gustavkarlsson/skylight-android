@@ -43,6 +43,7 @@ buildscript {
 		solarpositioning_version = "0.0.9"
 		aurora_notifier_common_version = "aurora-notifier-common-1.5.0"
 		android_gradle_version = "3.1.2"
+		autodispose_version = "0.8.0"
 	}
 	repositories {
 		jcenter()

@@ -143,6 +143,11 @@ dependencies {
 	implementation "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:$rxbinding_version"
 	implementation "com.jakewharton.rxbinding2:rxbinding-leanback-v17-kotlin:$rxbinding_version"
 
+	// AutoDispose
+	implementation "com.uber.autodispose:autodispose-kotlin:$autodispose_version"
+	implementation "com.uber.autodispose:autodispose-android-kotlin:$autodispose_version"
+	implementation "com.uber.autodispose:autodispose-android-archcomponents-kotlin:$autodispose_version"
+
 	// Lifecycle
 	implementation "android.arch.lifecycle:extensions:$arch_lifecycle_version"
 
