@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.gui.activities
 import android.Manifest
 import android.arch.lifecycle.Lifecycle
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -10,10 +11,9 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.gui.LifecycleSchedulingActivity
 import timber.log.Timber
 
-abstract class AuroraRequirementsCheckingActivity : LifecycleSchedulingActivity() {
+abstract class AuroraRequirementsCheckingActivity : AppCompatActivity() {
 
 	private val rxPermissions: RxPermissions by lazy {
 		RxPermissions(this)

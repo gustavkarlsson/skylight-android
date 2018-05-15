@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.gui.activities.main
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
-import android.content.DialogInterface
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.view.Menu
@@ -23,6 +22,7 @@ import org.jetbrains.anko.toast
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.entities.Chance
+import se.gustavkarlsson.skylight.android.extensions.doWhen
 import se.gustavkarlsson.skylight.android.extensions.indefiniteErrorSnackbar
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
@@ -170,6 +170,8 @@ class MainActivity : AuroraRequirementsCheckingActivity(), LifecycleObserver {
 			title = ctx.getString(titleResourceId)
 			message = ctx.getString(descriptionResourceId)
 			okButton { it.dismiss() }
-		}.show().doOnDestroy(DialogInterface::dismiss)
+		}.show().doWhen(scope(Lifecycle.Event.ON_DESTROY)) {
+			it.dismiss()
+		}
 	}
 }
