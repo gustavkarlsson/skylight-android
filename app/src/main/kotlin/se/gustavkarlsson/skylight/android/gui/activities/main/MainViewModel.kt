@@ -1,12 +1,10 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main
 
 import com.hadisatrio.optional.Optional
-import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import io.reactivex.rxkotlin.ofType
 import org.threeten.bp.Duration
@@ -19,7 +17,7 @@ import se.gustavkarlsson.skylight.android.actions.StreamConnectivityAction
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.seconds
-import se.gustavkarlsson.skylight.android.gui.AutoDisposingViewModel
+import se.gustavkarlsson.skylight.android.gui.FluxViewModel
 import se.gustavkarlsson.skylight.android.results.AuroraReportResult
 import se.gustavkarlsson.skylight.android.results.ConnectivityResult
 import se.gustavkarlsson.skylight.android.results.Result
@@ -47,31 +45,64 @@ class MainViewModel(
 	visibilityFormatter: SingleValueFormatter<Visibility>,
 	now: Single<Instant>,
 	nowTextThreshold: Duration
-) : AutoDisposingViewModel() {
+) : FluxViewModel<MainUiEvent, MainUiState, Action, Result>() {
 
 	val refresh: Consumer<Unit> = Consumer {
-		events.accept(RefreshEvent)
+		postEvent(RefreshEvent)
 	}
 
-	private val events = PublishRelay.create<MainUiEvent>()
-
-	private val actions: Observable<out Action> = events
-		.publish {
-			Observable.merge(
-				it.ofType<RefreshEvent>().map { GetAuroraReportAction }.startWith(
-					GetAuroraReportAction
-				),
-				Observable.just(StreamAuroraReportsAction),
+	override fun createEventToActionTransformers(
+	): Iterable<ObservableTransformer<in MainUiEvent, out Action>> =
+		listOf(
+			ObservableTransformer {
+				it.ofType<RefreshEvent>()
+					.map<Action> { GetAuroraReportAction }
+					.startWith(GetAuroraReportAction)
+			},
+			ObservableTransformer {
+				Observable.just(StreamAuroraReportsAction)
+			},
+			ObservableTransformer {
 				Observable.just(StreamConnectivityAction)
-			)
-		}
+			}
+		)
 
-	private val results: Observable<out Result> = actions
-		.publish {
-			Observable.merge(
-				it.ofType<GetAuroraReportAction>().compose(refreshActionToResult),
-				it.ofType<StreamAuroraReportsAction>().compose(streamAuroraReportsActionToResult),
+	override fun createActionToResultTransformers(
+	): Iterable<ObservableTransformer<in Action, out Result>> =
+		listOf(
+			ObservableTransformer {
+				it.ofType<GetAuroraReportAction>().compose(refreshActionToResult)
+			},
+			ObservableTransformer {
+				it.ofType<StreamAuroraReportsAction>().compose(streamAuroraReportsActionToResult)
+			},
+			ObservableTransformer {
 				it.ofType<StreamConnectivityAction>().compose(streamConnectivityActionToResult)
+			}
+		)
+
+	override fun createInitialState(): MainUiState = MainUiState()
+
+	override fun accumulateState(last: MainUiState, result: Result): MainUiState =
+		when (result) {
+			is AuroraReportResult.Idle -> last.copy(
+				throwable = null
+			)
+			is AuroraReportResult.InFlight -> last.copy(
+				isRefreshing = true,
+				throwable = null
+			)
+			is AuroraReportResult.Success -> last.copy(
+				isRefreshing = false,
+				auroraReport = result.auroraReport,
+				throwable = null
+			)
+			is AuroraReportResult.Failure -> last.copy(
+				isRefreshing = false,
+				throwable = result.throwable
+			)
+			is ConnectivityResult -> last.copy(
+				isConnectedToInternet = result.isConnectedToInternet
 			)
 		}
 
@@ -107,38 +138,6 @@ class MainViewModel(
 					.toObservable()
 			}
 		}
-
-	private val states: Observable<MainUiState> = results
-		.scan(MainUiState()) { lastState, result ->
-			when (result) {
-				is AuroraReportResult.Idle -> lastState.copy(
-					throwable = null
-				)
-				is AuroraReportResult.InFlight -> lastState.copy(
-					isRefreshing = true,
-					throwable = null
-				)
-				is AuroraReportResult.Success -> lastState.copy(
-					isRefreshing = false,
-					auroraReport = result.auroraReport,
-					throwable = null
-				)
-				is AuroraReportResult.Failure -> lastState.copy(
-					isRefreshing = false,
-					throwable = result.throwable
-				)
-				is ConnectivityResult -> lastState.copy(
-					isConnectedToInternet = result.isConnectedToInternet
-				)
-			}
-		}
-		.replay(1)
-		.refCount()
-		.observeOn(AndroidSchedulers.mainThread())
-
-	init {
-		states.subscribe().autoDisposeOnCleared()
-	}
 
 	val errorMessages: Observable<Int> = states
 		.filter { it.throwable != null }
