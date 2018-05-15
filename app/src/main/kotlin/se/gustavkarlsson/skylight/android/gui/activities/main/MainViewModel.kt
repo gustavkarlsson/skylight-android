@@ -181,16 +181,9 @@ class MainViewModel(
 		.map(chanceLevelFormatter::format)
 		.distinctUntilChanged()
 
-	// TODO Reconsider this
-	private val timestamps = states
+	val timeSinceUpdate: Observable<CharSequence> = states
 		.filter { it.auroraReport != null }
 		.map { it.auroraReport!!.timestamp }
-		.distinctUntilChanged()
-		.replay(1)
-		.refCount()
-
-	// TODO Reconsider this
-	val timeSinceUpdate: Observable<CharSequence> = timestamps
 		.switchMap {
 			Observable.just(it)
 				.repeatWhen { it.delay(1.seconds) }
@@ -200,8 +193,9 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	// TODO Reconsider this
-	val timeSinceUpdateVisibility: Observable<Boolean> = timestamps
+	val timeSinceUpdateVisibility: Observable<Boolean> = states
+		.filter { it.auroraReport != null }
+		.map { it.auroraReport!!.timestamp }
 		.map {
 			when {
 				it <= Instant.EPOCH -> false
