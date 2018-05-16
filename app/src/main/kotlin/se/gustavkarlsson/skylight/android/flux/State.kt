@@ -1,8 +1,8 @@
-package se.gustavkarlsson.skylight.android.gui.activities.main
+package se.gustavkarlsson.skylight.android.flux
 
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 
-data class MainUiState(
+data class State(
 	val isRefreshing: Boolean = false,
 	val isConnectedToInternet: Boolean = true,
 	val auroraReport: AuroraReport? = null,

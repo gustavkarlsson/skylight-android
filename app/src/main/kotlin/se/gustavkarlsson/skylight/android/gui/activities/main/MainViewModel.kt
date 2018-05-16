@@ -10,17 +10,11 @@ import io.reactivex.rxkotlin.ofType
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.actions.Action
-import se.gustavkarlsson.skylight.android.actions.GetAuroraReportAction
-import se.gustavkarlsson.skylight.android.actions.StreamAuroraReportsAction
-import se.gustavkarlsson.skylight.android.actions.StreamConnectivityAction
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.seconds
+import se.gustavkarlsson.skylight.android.flux.*
 import se.gustavkarlsson.skylight.android.gui.FluxViewModel
-import se.gustavkarlsson.skylight.android.results.AuroraReportResult
-import se.gustavkarlsson.skylight.android.results.ConnectivityResult
-import se.gustavkarlsson.skylight.android.results.Result
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
@@ -45,7 +39,7 @@ class MainViewModel(
 	visibilityFormatter: SingleValueFormatter<Visibility>,
 	now: Single<Instant>,
 	nowTextThreshold: Duration
-) : FluxViewModel<MainUiState, Action, Result>() {
+) : FluxViewModel<State, Action, Result>() {
 
 	val swipedToRefresh: Consumer<Unit> = Consumer {
 		postAction(GetAuroraReportAction)
@@ -58,16 +52,17 @@ class MainViewModel(
 				it.ofType<GetAuroraReportAction>().compose(refreshActionToResult)
 			},
 			ObservableTransformer {
-				it.ofType<StreamAuroraReportsAction>().compose(streamAuroraReportsActionToResult)
+				it.ofType<AuroraReportStreamAction>().compose(streamAuroraReportsActionToResult)
 			},
 			ObservableTransformer {
-				it.ofType<StreamConnectivityAction>().compose(streamConnectivityActionToResult)
+				it.ofType<ConnectivityStreamAction>().compose(streamConnectivityActionToResult)
 			}
 		)
 
-	override fun createInitialState(): MainUiState = MainUiState()
+	override fun createInitialState(): State =
+		State()
 
-	override fun accumulateState(last: MainUiState, result: Result): MainUiState =
+	override fun accumulateState(last: State, result: Result): State =
 		when (result) {
 			is AuroraReportResult.Idle -> last.copy(
 				throwable = null
@@ -103,19 +98,23 @@ class MainViewModel(
 		}
 
 	private val streamAuroraReportsActionToResult =
-		ObservableTransformer<StreamAuroraReportsAction, AuroraReportResult> {
+		ObservableTransformer<AuroraReportStreamAction, AuroraReportResult> {
 			it.switchMap {
-				auroraReports
-					.map<AuroraReportResult> { AuroraReportResult.Success(it) }
-					.onErrorReturn { AuroraReportResult.Failure(it) }
-					.toObservable()
-					.startWith(AuroraReportResult.InFlight)
-					.concatWith(Observable.just(AuroraReportResult.Idle))
+				if (it.stream) {
+					auroraReports
+						.map<AuroraReportResult> { AuroraReportResult.Success(it) }
+						.onErrorReturn { AuroraReportResult.Failure(it) }
+						.toObservable()
+						.startWith(AuroraReportResult.InFlight)
+						.concatWith(Observable.just(AuroraReportResult.Idle))
+				} else {
+					Observable.empty()
+				}
 			}
 		}
 
 	private val streamConnectivityActionToResult =
-		ObservableTransformer<StreamConnectivityAction, ConnectivityResult> {
+		ObservableTransformer<ConnectivityStreamAction, ConnectivityResult> {
 			it.switchMap {
 				isConnectedToInternet
 					.map(::ConnectivityResult)
@@ -134,7 +133,7 @@ class MainViewModel(
 		}
 
 	val connectivityMessages: Observable<Optional<CharSequence>> = states
-		.map(MainUiState::isConnectedToInternet)
+		.map(State::isConnectedToInternet)
 		.map { connected ->
 			if (connected) {
 				Optional.absent()
@@ -151,7 +150,7 @@ class MainViewModel(
 		.distinctUntilChanged()
 
 	val isRefreshing: Observable<Boolean> = states
-		.map(MainUiState::isRefreshing)
+		.map(State::isRefreshing)
 		.distinctUntilChanged()
 
 	val chanceLevel: Observable<CharSequence> = states

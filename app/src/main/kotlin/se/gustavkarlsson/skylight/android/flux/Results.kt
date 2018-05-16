@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.results
+package se.gustavkarlsson.skylight.android.flux
 
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 
