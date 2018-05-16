@@ -73,7 +73,7 @@ class MainActivity : AuroraRequirementsCheckingActivity(), LifecycleObserver {
 				Analytics.logManualRefresh()
 			}
 			.autoDisposable(scope())
-			.subscribe(viewModel.refresh)
+			.subscribe(viewModel.swipedToRefresh)
 
 		viewModel.locationName
 			.doOnNext { Timber.d("Updating locationName view: %s", it) }

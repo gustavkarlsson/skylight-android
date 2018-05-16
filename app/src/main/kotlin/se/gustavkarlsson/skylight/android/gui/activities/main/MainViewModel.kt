@@ -45,27 +45,11 @@ class MainViewModel(
 	visibilityFormatter: SingleValueFormatter<Visibility>,
 	now: Single<Instant>,
 	nowTextThreshold: Duration
-) : FluxViewModel<MainUiEvent, MainUiState, Action, Result>() {
+) : FluxViewModel<MainUiState, Action, Result>() {
 
-	val refresh: Consumer<Unit> = Consumer {
-		postEvent(RefreshEvent)
+	val swipedToRefresh: Consumer<Unit> = Consumer {
+		postAction(GetAuroraReportAction)
 	}
-
-	override fun createEventToActionTransformers(
-	): Iterable<ObservableTransformer<in MainUiEvent, out Action>> =
-		listOf(
-			ObservableTransformer {
-				it.ofType<RefreshEvent>()
-					.map<Action> { GetAuroraReportAction }
-					.startWith(GetAuroraReportAction)
-			},
-			ObservableTransformer {
-				Observable.just(StreamAuroraReportsAction)
-			},
-			ObservableTransformer {
-				Observable.just(StreamConnectivityAction)
-			}
-		)
 
 	override fun createActionToResultTransformers(
 	): Iterable<ObservableTransformer<in Action, out Result>> =

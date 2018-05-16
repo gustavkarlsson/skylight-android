@@ -7,20 +7,15 @@ import io.reactivex.ObservableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 
-abstract class FluxViewModel<Event, State, Action, Result> : ViewModel() {
+abstract class FluxViewModel<State, Action, Result> : ViewModel() {
 
 	private var statesDisposable: Disposable? = null
 
-	private val events = PublishRelay.create<Event>()
+	fun postAction(action: Action) = actions.accept(action)
 
-	private fun createActions(): Observable<out Action> = events
-		.publish { events ->
-			val actions = createEventToActionTransformers()
-				.map { events.compose(it) }
-			Observable.merge(actions)
-		}
+	private val actions = PublishRelay.create<Action>()
 
-	private fun createResults(): Observable<out Result> = createActions()
+	private fun createResults(): Observable<out Result> = actions
 		.publish { actions ->
 			val results = createActionToResultTransformers()
 				.map { actions.compose(it) }
@@ -33,8 +28,6 @@ abstract class FluxViewModel<Event, State, Action, Result> : ViewModel() {
 		.refCount()
 		.observeOn(AndroidSchedulers.mainThread())
 
-	fun postEvent(event: Event) = events.accept(event)
-
 	val states: Observable<out State> by lazy {
 		createStates().apply {
 			statesDisposable = subscribe()
@@ -45,9 +38,8 @@ abstract class FluxViewModel<Event, State, Action, Result> : ViewModel() {
 		statesDisposable?.dispose()
 	}
 
-	protected abstract fun createEventToActionTransformers(): Iterable<ObservableTransformer<in Event, out Action>>
-
-	protected abstract fun createActionToResultTransformers(): Iterable<ObservableTransformer<in Action, out Result>>
+	protected abstract fun createActionToResultTransformers():
+		Iterable<ObservableTransformer<in Action, out Result>>
 
 	protected abstract fun createInitialState(): State
 
