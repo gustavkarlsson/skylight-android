@@ -7,16 +7,22 @@ import io.reactivex.ObservableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 
-open class Store<S, in A, out R>(
+open class Store<S, A, R>(
 	initialState: S,
-	private val transformers: Iterable<ObservableTransformer<in A, out R>>,
+	transformers: Iterable<ObservableTransformer<A, R>>,
 	accumulator: (current: S, result: R) -> S,
 	private vararg val startActions: A
 ) {
 
 	private var statesSubscription: Disposable? = null
 
-	fun postAction(action: A) = actions.accept(action)
+	fun postAction(action: A) {
+		if (statesSubscription == null) {
+			throw IllegalStateException("Can't accept actions until started")
+		} else {
+			actions.accept(action)
+		}
+	}
 
 	private val actions: Relay<A> = PublishRelay.create<A>()
 
@@ -31,7 +37,7 @@ open class Store<S, in A, out R>(
 		.scan(initialState, accumulator)
 		.replay(1)
 
-	val states: Observable<out S> = connectableStates
+	val states: Observable<S> = connectableStates
 		.observeOn(AndroidSchedulers.mainThread())
 
 	@Synchronized

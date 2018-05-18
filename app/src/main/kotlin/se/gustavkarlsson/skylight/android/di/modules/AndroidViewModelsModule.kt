@@ -8,20 +8,17 @@ import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModel
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModelFactory
 
 class AndroidViewModelsModule(
+	fluxModule: FluxModule,
 	contextModule: ContextModule,
-	auroraReportModule: AuroraReportModule,
 	evaluationModule: EvaluationModule,
 	formattingModule: FormattingModule,
-	connectivityModule: ConnectivityModule,
 	timeModule: TimeModule
 ) : ViewModelsModule {
 
 
 	private val mainViewModelFactory: MainViewModelFactory by lazy {
 		MainViewModelFactory(
-			auroraReportModule.auroraReportSingle,
-			auroraReportModule.auroraReportFlowable,
-			connectivityModule.connectivityFlowable,
+			fluxModule.store,
 			contextModule.context.getString(R.string.your_location),
 			contextModule.context.getString(R.string.error_no_internet),
 			evaluationModule.auroraReportEvaluator,

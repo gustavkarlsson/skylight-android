@@ -1,29 +1,28 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main
 
+import android.arch.lifecycle.ViewModel
 import com.hadisatrio.optional.Optional
-import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.ObservableTransformer
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
-import io.reactivex.rxkotlin.ofType
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.seconds
-import se.gustavkarlsson.skylight.android.flux.*
-import se.gustavkarlsson.skylight.android.gui.FluxViewModel
+import se.gustavkarlsson.skylight.android.flux.AuroraReportStreamAction
+import se.gustavkarlsson.skylight.android.flux.GetAuroraReportAction
+import se.gustavkarlsson.skylight.android.flux.SkylightStore
+import se.gustavkarlsson.skylight.android.flux.State
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
 class MainViewModel(
-	auroraReportSingle: Single<AuroraReport>,
-	auroraReports: Flowable<AuroraReport>,
-	isConnectedToInternet: Flowable<Boolean>,
+	private val store: SkylightStore,
 	defaultLocationName: CharSequence,
 	notConnectedToInternetMessage: CharSequence,
 	auroraChanceEvaluator: ChanceEvaluator<AuroraReport>,
@@ -39,90 +38,17 @@ class MainViewModel(
 	visibilityFormatter: SingleValueFormatter<Visibility>,
 	now: Single<Instant>,
 	nowTextThreshold: Duration
-) : FluxViewModel<State, Action, Result>() {
+) : ViewModel() {
 
-	val swipedToRefresh: Consumer<Unit> = Consumer {
-		postAction(GetAuroraReportAction)
+	init {
+	    store.postAction(AuroraReportStreamAction(true))
 	}
 
-	override fun createActionToResultTransformers(
-	): Iterable<ObservableTransformer<in Action, out Result>> =
-		listOf(
-			ObservableTransformer {
-				it.ofType<GetAuroraReportAction>().compose(refreshActionToResult)
-			},
-			ObservableTransformer {
-				it.ofType<AuroraReportStreamAction>().compose(streamAuroraReportsActionToResult)
-			},
-			ObservableTransformer {
-				it.ofType<ConnectivityStreamAction>().compose(streamConnectivityActionToResult)
-			}
-		)
+	val swipedToRefresh: Consumer<Unit> = Consumer {
+		store.postAction(GetAuroraReportAction)
+	}
 
-	override fun createInitialState(): State =
-		State()
-
-	override fun accumulateState(last: State, result: Result): State =
-		when (result) {
-			is AuroraReportResult.Idle -> last.copy(
-				throwable = null
-			)
-			is AuroraReportResult.InFlight -> last.copy(
-				isRefreshing = true,
-				throwable = null
-			)
-			is AuroraReportResult.Success -> last.copy(
-				isRefreshing = false,
-				auroraReport = result.auroraReport,
-				throwable = null
-			)
-			is AuroraReportResult.Failure -> last.copy(
-				isRefreshing = false,
-				throwable = result.throwable
-			)
-			is ConnectivityResult -> last.copy(
-				isConnectedToInternet = result.isConnectedToInternet
-			)
-		}
-
-	private val refreshActionToResult =
-		ObservableTransformer<GetAuroraReportAction, AuroraReportResult> {
-			it.switchMap {
-				auroraReportSingle
-					.map<AuroraReportResult> { AuroraReportResult.Success(it) }
-					.onErrorReturn { AuroraReportResult.Failure(it) }
-					.toObservable()
-					.startWith(AuroraReportResult.InFlight)
-					.concatWith(Observable.just(AuroraReportResult.Idle))
-			}
-		}
-
-	private val streamAuroraReportsActionToResult =
-		ObservableTransformer<AuroraReportStreamAction, AuroraReportResult> {
-			it.switchMap {
-				if (it.stream) {
-					auroraReports
-						.map<AuroraReportResult> { AuroraReportResult.Success(it) }
-						.onErrorReturn { AuroraReportResult.Failure(it) }
-						.toObservable()
-						.startWith(AuroraReportResult.InFlight)
-						.concatWith(Observable.just(AuroraReportResult.Idle))
-				} else {
-					Observable.empty()
-				}
-			}
-		}
-
-	private val streamConnectivityActionToResult =
-		ObservableTransformer<ConnectivityStreamAction, ConnectivityResult> {
-			it.switchMap {
-				isConnectedToInternet
-					.map(::ConnectivityResult)
-					.toObservable()
-			}
-		}
-
-	val errorMessages: Observable<Int> = states
+	val errorMessages: Observable<Int> = store.states
 		.filter { it.throwable != null }
 		.map {
 			if (it.throwable is UserFriendlyException) {
@@ -132,7 +58,7 @@ class MainViewModel(
 			}
 		}
 
-	val connectivityMessages: Observable<Optional<CharSequence>> = states
+	val connectivityMessages: Observable<Optional<CharSequence>> = store.states
 		.map(State::isConnectedToInternet)
 		.map { connected ->
 			if (connected) {
@@ -143,17 +69,17 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val locationName: Observable<CharSequence> = states
+	val locationName: Observable<CharSequence> = store.states
 		.map {
 			it.auroraReport?.locationName ?: defaultLocationName
 		}
 		.distinctUntilChanged()
 
-	val isRefreshing: Observable<Boolean> = states
+	val isRefreshing: Observable<Boolean> = store.states
 		.map(State::isRefreshing)
 		.distinctUntilChanged()
 
-	val chanceLevel: Observable<CharSequence> = states
+	val chanceLevel: Observable<CharSequence> = store.states
 		.map {
 			it.auroraReport
 				?.let(auroraChanceEvaluator::evaluate)
@@ -163,19 +89,20 @@ class MainViewModel(
 		.map(chanceLevelFormatter::format)
 		.distinctUntilChanged()
 
-	val timeSinceUpdate: Observable<CharSequence> = states
+	val timeSinceUpdate: Observable<CharSequence> = store.states
 		.filter { it.auroraReport != null }
 		.map { it.auroraReport!!.timestamp }
 		.switchMap {
 			Observable.just(it)
 				.repeatWhen { it.delay(1.seconds) }
+				.observeOn(AndroidSchedulers.mainThread())
 		}
 		.map {
 			relativeTimeFormatter.format(it, now.blockingGet(), nowTextThreshold)
 		}
 		.distinctUntilChanged()
 
-	val timeSinceUpdateVisibility: Observable<Boolean> = states
+	val timeSinceUpdateVisibility: Observable<Boolean> = store.states
 		.filter { it.auroraReport != null }
 		.map { it.auroraReport!!.timestamp }
 		.map {
@@ -186,7 +113,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val darknessValue: Observable<CharSequence> = states
+	val darknessValue: Observable<CharSequence> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -196,7 +123,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val darknessChance: Observable<Chance> = states
+	val darknessChance: Observable<Chance> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -206,7 +133,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val geomagLocationValue: Observable<CharSequence> = states
+	val geomagLocationValue: Observable<CharSequence> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -216,7 +143,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val geomagLocationChance: Observable<Chance> = states
+	val geomagLocationChance: Observable<Chance> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -226,7 +153,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val kpIndexValue: Observable<CharSequence> = states
+	val kpIndexValue: Observable<CharSequence> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -236,7 +163,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val kpIndexChance: Observable<Chance> = states
+	val kpIndexChance: Observable<Chance> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -246,7 +173,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val visibilityValue: Observable<CharSequence> = states
+	val visibilityValue: Observable<CharSequence> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -256,7 +183,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val visibilityChance: Observable<Chance> = states
+	val visibilityChance: Observable<Chance> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -265,4 +192,8 @@ class MainViewModel(
 				?: Chance.UNKNOWN
 		}
 		.distinctUntilChanged()
+
+	override fun onCleared() {
+		store.postAction(AuroraReportStreamAction(false))
+	}
 }

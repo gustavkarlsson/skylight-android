@@ -2,19 +2,17 @@ package se.gustavkarlsson.skylight.android.gui.activities.main
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import io.reactivex.Flowable
 import io.reactivex.Single
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.*
+import se.gustavkarlsson.skylight.android.flux.SkylightStore
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
 
 class MainViewModelFactory(
-	private val auroraReportSingle: Single<AuroraReport>,
-	private val auroraReports: Flowable<AuroraReport>,
-	private val isConnectedToInternet: Flowable<Boolean>,
+	private val store: SkylightStore,
 	private val defaultLocationName: CharSequence,
 	private val notConnectedToInternetMessage: CharSequence,
 	private val auroraChanceEvaluator: ChanceEvaluator<AuroraReport>,
@@ -36,9 +34,7 @@ class MainViewModelFactory(
 	override fun <T : ViewModel> create(modelClass: Class<T>): T {
 		require(modelClass == CLASS) { "Unsupported ViewModel class: $modelClass, expected: $CLASS" }
 		return MainViewModel(
-			auroraReportSingle,
-			auroraReports,
-			isConnectedToInternet,
+			store,
 			defaultLocationName,
 			notConnectedToInternetMessage,
 			auroraChanceEvaluator,

@@ -6,6 +6,7 @@ import se.gustavkarlsson.skylight.android.background.di.components.BackgroundCom
 import se.gustavkarlsson.skylight.android.background.di.components.SkylightBackgroundComponent
 import se.gustavkarlsson.skylight.android.di.modules.*
 import se.gustavkarlsson.skylight.android.extensions.minutes
+import se.gustavkarlsson.skylight.android.flux.SkylightStore
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModel
 import se.gustavkarlsson.skylight.android.services.Analytics
@@ -89,11 +90,10 @@ open class SkylightAppComponent(
 
 	open val viewModelsModule: ViewModelsModule by lazy {
 		AndroidViewModelsModule(
+			fluxModule,
 			contextModule,
-			auroraReportModule,
 			evaluationModule,
 			formattingModule,
-			connectivityModule,
 			timeModule
 		)
 	}
@@ -102,10 +102,16 @@ open class SkylightAppComponent(
 		FirebasedAnalyticsModule(contextModule)
 	}
 
+	open val fluxModule: FluxModule by lazy {
+		RealFluxModule(auroraReportModule, connectivityModule)
+	}
+
 	final override val settings: Settings
 		get() = settingsModule.settings
 	final override val analytics: Analytics
 		get() = analyticsModule.analytics
+	final override val store: SkylightStore
+		get() = fluxModule.store
 
 	final override fun mainViewModel(activity: FragmentActivity): MainViewModel =
 		viewModelsModule.mainViewModel(activity)
