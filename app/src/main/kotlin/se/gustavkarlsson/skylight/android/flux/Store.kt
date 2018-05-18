@@ -4,10 +4,9 @@ import com.jakewharton.rxrelay2.PublishRelay
 import com.jakewharton.rxrelay2.Relay
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 
-open class Store<S: Any, A: Any, R: Any>(
+open class Store<S : Any, A : Any, R : Any>(
 	initialState: S,
 	transformers: Iterable<ObservableTransformer<A, R>>,
 	reducer: (current: S, result: R) -> S
@@ -18,9 +17,8 @@ open class Store<S: Any, A: Any, R: Any>(
 	fun postAction(action: A) {
 		if (statesSubscription == null) {
 			throw IllegalStateException("Can't accept actions until started")
-		} else {
-			actions.accept(action)
 		}
+		actions.accept(action)
 	}
 
 	private val actions: Relay<A> = PublishRelay.create<A>()
@@ -36,13 +34,19 @@ open class Store<S: Any, A: Any, R: Any>(
 		.scan(initialState, reducer)
 		.replay(1)
 
-	val states: Observable<S> = connectableStates
-		.observeOn(AndroidSchedulers.mainThread())
+	val states: Observable<S>
+		@Synchronized
+		get() {
+			if (statesSubscription == null) {
+				throw IllegalStateException("Can't observe state until started")
+			}
+			return connectableStates
+		}
 
 	@Synchronized
 	fun start() {
 		if (statesSubscription != null) return
-		statesSubscription = states.subscribe()
+		statesSubscription = connectableStates.subscribe()
 		connectableStates.connect()
 	}
 }

@@ -41,14 +41,16 @@ class MainViewModel(
 ) : ViewModel() {
 
 	init {
-	    store.postAction(AuroraReportStreamAction(true))
+		store.postAction(AuroraReportStreamAction(true))
 	}
+
+	private val states = store.states.observeOn(AndroidSchedulers.mainThread())
 
 	val swipedToRefresh: Consumer<Unit> = Consumer {
 		store.postAction(GetAuroraReportAction)
 	}
 
-	val errorMessages: Observable<Int> = store.states
+	val errorMessages: Observable<Int> = states
 		.filter { it.throwable != null }
 		.map {
 			if (it.throwable is UserFriendlyException) {
@@ -58,7 +60,7 @@ class MainViewModel(
 			}
 		}
 
-	val connectivityMessages: Observable<Optional<CharSequence>> = store.states
+	val connectivityMessages: Observable<Optional<CharSequence>> = states
 		.map(State::isConnectedToInternet)
 		.map { connected ->
 			if (connected) {
@@ -69,17 +71,17 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val locationName: Observable<CharSequence> = store.states
+	val locationName: Observable<CharSequence> = states
 		.map {
 			it.auroraReport?.locationName ?: defaultLocationName
 		}
 		.distinctUntilChanged()
 
-	val isRefreshing: Observable<Boolean> = store.states
+	val isRefreshing: Observable<Boolean> = states
 		.map(State::isRefreshing)
 		.distinctUntilChanged()
 
-	val chanceLevel: Observable<CharSequence> = store.states
+	val chanceLevel: Observable<CharSequence> = states
 		.map {
 			it.auroraReport
 				?.let(auroraChanceEvaluator::evaluate)
@@ -89,7 +91,7 @@ class MainViewModel(
 		.map(chanceLevelFormatter::format)
 		.distinctUntilChanged()
 
-	val timeSinceUpdate: Observable<CharSequence> = store.states
+	val timeSinceUpdate: Observable<CharSequence> = states
 		.filter { it.auroraReport != null }
 		.map { it.auroraReport!!.timestamp }
 		.switchMap {
@@ -102,7 +104,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val timeSinceUpdateVisibility: Observable<Boolean> = store.states
+	val timeSinceUpdateVisibility: Observable<Boolean> = states
 		.filter { it.auroraReport != null }
 		.map { it.auroraReport!!.timestamp }
 		.map {
@@ -113,7 +115,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val darknessValue: Observable<CharSequence> = store.states
+	val darknessValue: Observable<CharSequence> = states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -123,7 +125,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val darknessChance: Observable<Chance> = store.states
+	val darknessChance: Observable<Chance> = states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -133,7 +135,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val geomagLocationValue: Observable<CharSequence> = store.states
+	val geomagLocationValue: Observable<CharSequence> = states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -143,7 +145,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val geomagLocationChance: Observable<Chance> = store.states
+	val geomagLocationChance: Observable<Chance> = states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -153,7 +155,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val kpIndexValue: Observable<CharSequence> = store.states
+	val kpIndexValue: Observable<CharSequence> = states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -163,7 +165,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val kpIndexChance: Observable<Chance> = store.states
+	val kpIndexChance: Observable<Chance> = states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -173,7 +175,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val visibilityValue: Observable<CharSequence> = store.states
+	val visibilityValue: Observable<CharSequence> = states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -183,7 +185,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val visibilityChance: Observable<Chance> = store.states
+	val visibilityChance: Observable<Chance> = states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
