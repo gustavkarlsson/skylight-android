@@ -10,7 +10,7 @@ class RealFluxModule(
 	private val connectivityModule: ConnectivityModule
 ) : FluxModule {
 	override val store: SkylightStore by lazy {
-		SkylightStore(State(), transformers, accumulator, GetAuroraReportAction)
+		SkylightStore(State(), transformers, accumulator)
 	}
 
 	private val transformers: Iterable<ObservableTransformer<Action, Result>> by lazy {

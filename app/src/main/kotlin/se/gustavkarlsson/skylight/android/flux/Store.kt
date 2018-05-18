@@ -7,11 +7,10 @@ import io.reactivex.ObservableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 
-open class Store<S, A, R>(
+open class Store<S: Any, A: Any, R: Any>(
 	initialState: S,
 	transformers: Iterable<ObservableTransformer<A, R>>,
-	accumulator: (current: S, result: R) -> S,
-	private vararg val startActions: A
+	reducer: (current: S, result: R) -> S
 ) {
 
 	private var statesSubscription: Disposable? = null
@@ -34,7 +33,7 @@ open class Store<S, A, R>(
 		}
 
 	private val connectableStates = results
-		.scan(initialState, accumulator)
+		.scan(initialState, reducer)
 		.replay(1)
 
 	val states: Observable<S> = connectableStates
@@ -45,6 +44,5 @@ open class Store<S, A, R>(
 		if (statesSubscription != null) return
 		statesSubscription = states.subscribe()
 		connectableStates.connect()
-		startActions.forEach(::postAction)
 	}
 }
