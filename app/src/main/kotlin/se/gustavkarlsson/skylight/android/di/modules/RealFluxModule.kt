@@ -9,14 +9,14 @@ class RealFluxModule(
 	private val connectivityModule: ConnectivityModule
 ) : FluxModule {
 	override val store: SkylightStore by lazy {
-		Store.Builder<SkylightState, SkylightAction, SkylightResult>(SkylightState(), reducer)
-			.switchMapAction(::getAuroraReport)
-			.switchMapAction(::streamAuroraReports)
-			.switchMapAction(::streamConnectivity)
-			.mapAction(::showDialog)
-			.mapAction(::hideDialog)
-			.setObserveScheduler(AndroidSchedulers.mainThread())
-			.build()
+		buildStore<SkylightState, SkylightAction, SkylightResult>(SkylightState(), reducer) {
+			switchMapAction(::getAuroraReport)
+			switchMapAction(::streamAuroraReports)
+			switchMapAction(::streamConnectivity)
+			mapAction(::showDialog)
+			mapAction(::hideDialog)
+			setObserveScheduler(AndroidSchedulers.mainThread())
+		}
 	}
 
 	private fun getAuroraReport(action: GetAuroraReportAction): Observable<AuroraReportResult> =
