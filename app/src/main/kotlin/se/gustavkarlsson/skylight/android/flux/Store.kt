@@ -6,6 +6,7 @@ import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.ofType
+import io.reactivex.schedulers.Schedulers
 
 open class Store<State : Any, Action : Any, Result : Any>
 private constructor(
@@ -28,6 +29,7 @@ private constructor(
 	private val actions: Relay<Action> = PublishRelay.create<Action>()
 
 	private val results: Observable<Result> = actions
+		.observeOn(Schedulers.newThread())
 		.publish { actions ->
 			val results = transformers
 				.map { actions.compose(it) }
