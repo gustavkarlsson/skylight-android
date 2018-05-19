@@ -11,9 +11,9 @@ import io.reactivex.rxkotlin.ofType
 class Store<State : Any, Action : Any, Result : Any>
 internal constructor(
 	initialState: State,
+	reducer: (current: State, result: Result) -> State,
 	actionTransformers: List<(Observable<Action>) -> Observable<Result>>,
 	actionWithStateTransformers: List<(Observable<State>, Observable<Action>) -> Observable<Result>>,
-	reducer: (current: State, result: Result) -> State,
 	observeScheduler: Scheduler?,
 	private val startActions: List<Action>
 ) {
@@ -74,8 +74,8 @@ internal constructor(
 		MutableList<(Observable<Action>) -> Observable<Result>> = mutableListOf()
 	private val actionWithStateTransformers:
 		MutableList<(Observable<State>, Observable<Action>) -> Observable<Result>> = mutableListOf()
-	private val startActions: MutableList<Action> = mutableListOf()
 	private var observeScheduler: Scheduler? = null
+	private val startActions: MutableList<Action> = mutableListOf()
 
 	fun transformActions(transformer: (Observable<Action>) -> Observable<Result>) {
 		actionTransformers += transformer
@@ -134,21 +134,21 @@ internal constructor(
 		}
 	}
 
-	fun addStartActions(vararg actions: Action) {
-		startActions += actions
-	}
-
 	fun setObserveScheduler(scheduler: Scheduler?) {
 		observeScheduler = scheduler
+	}
+
+	fun addStartActions(vararg actions: Action) {
+		startActions += actions
 	}
 
 	fun build(): Store<State, Action, Result> {
 		if (actionTransformers.isEmpty()) throw IllegalStateException("No action transformers added")
 		return Store(
 			initialState,
+			reducer,
 			actionTransformers,
 			actionWithStateTransformers,
-			reducer,
 			observeScheduler,
 			startActions
 		)
