@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.flux
 
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 
-data class State(
+data class SkylightState(
 	val isRefreshing: Boolean = false,
 	val isConnectedToInternet: Boolean = true,
 	val auroraReport: AuroraReport? = null,
