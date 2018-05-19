@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.gui.activities.main
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.view.Menu
@@ -14,6 +15,7 @@ import com.jakewharton.rxbinding2.widget.text
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Observable
+import io.reactivex.functions.Consumer
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.okButton
@@ -22,7 +24,6 @@ import org.jetbrains.anko.toast
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.entities.Chance
-import se.gustavkarlsson.skylight.android.extensions.doOnLifecycle
 import se.gustavkarlsson.skylight.android.extensions.indefiniteErrorSnackbar
 import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
@@ -38,6 +39,8 @@ class MainActivity : AuroraRequirementsCheckingActivity(), LifecycleObserver {
 	}
 
 	private var snackbar: Snackbar? = null
+
+	private var dialog: DialogInterface? = null
 
 	private val viewModel: MainViewModel by lazy {
 		appComponent.mainViewModel(this)
@@ -118,24 +121,43 @@ class MainActivity : AuroraRequirementsCheckingActivity(), LifecycleObserver {
 			.autoDisposable(scope())
 			.subscribe(timeSinceUpdate.visibility())
 
+		viewModel.showDialog
+			.doOnNext { Timber.d("Showing dialog: %s", it) }
+			.autoDisposable(scope())
+			.subscribe {
+				dialog?.dismiss()
+				dialog = alert {
+					iconResource = R.drawable.info_white_24dp
+					titleResource = it.titleResource
+					messageResource = it.messageResource
+					okButton { viewModel.hideDialogClicked.accept(Unit) }
+					onCancelled { viewModel.hideDialogClicked.accept(Unit) }
+				}.show()
+			}
+
+		viewModel.hideDialog
+			.doOnNext { Timber.d("Hiding dialog") }
+			.autoDisposable(scope())
+			.subscribe { dialog?.dismiss() }
+
 		bindFactor(
 			viewModel.darknessValue, viewModel.darknessChance, darkness,
-			R.string.factor_darkness_title_full, R.string.factor_darkness_desc,
+			viewModel.darknessFactorClicked,
 			"darkness"
 		)
 		bindFactor(
 			viewModel.geomagLocationValue, viewModel.geomagLocationChance, geomagLocation,
-			R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc,
+			viewModel.geomagLocationFactorClicked,
 			"geomagLocation"
 		)
 		bindFactor(
 			viewModel.kpIndexValue, viewModel.kpIndexChance, kpIndex,
-			R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc,
+			viewModel.kpIndexFactorClicked,
 			"kpIndex"
 		)
 		bindFactor(
 			viewModel.visibilityValue, viewModel.visibilityChance, visibility,
-			R.string.factor_visibility_title_full, R.string.factor_visibility_desc,
+			viewModel.visibilityFactorClicked,
 			"visibility"
 		)
 	}
@@ -144,8 +166,7 @@ class MainActivity : AuroraRequirementsCheckingActivity(), LifecycleObserver {
 		values: Observable<CharSequence>,
 		chances: Observable<Chance>,
 		view: AuroraFactorView,
-		titleResourceId: Int,
-		descriptionResourceId: Int,
+		clickConsumer: Consumer<Unit>,
 		factorDebugName: String
 	) {
 		values
@@ -160,18 +181,11 @@ class MainActivity : AuroraRequirementsCheckingActivity(), LifecycleObserver {
 
 		view.clicks()
 			.autoDisposable(scope())
-			.subscribe { toastFactorInfo(titleResourceId, descriptionResourceId) }
+			.subscribe(clickConsumer)
 	}
 
-	// TODO Make toasts part of state
-	private fun toastFactorInfo(titleResourceId: Int, descriptionResourceId: Int) {
-		alert {
-			iconResource = R.drawable.info_white_24dp
-			title = ctx.getString(titleResourceId)
-			message = ctx.getString(descriptionResourceId)
-			okButton { it.dismiss() }
-		}.show().doOnLifecycle(this, Lifecycle.Event.ON_DESTROY) {
-			it.dismiss()
-		}
+	override fun onDestroy() {
+		super.onDestroy()
+		dialog?.dismiss()
 	}
 }

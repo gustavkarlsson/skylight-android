@@ -13,6 +13,8 @@ class RealFluxModule(
 			.switchMapAction(::getAuroraReport)
 			.switchMapAction(::streamAuroraReports)
 			.switchMapAction(::streamConnectivity)
+			.mapAction(::showDialog)
+			.mapAction(::hideDialog)
 			.setObserveScheduler(AndroidSchedulers.mainThread())
 			.build()
 	}
@@ -35,6 +37,12 @@ class RealFluxModule(
 		} else {
 			Observable.just(AuroraReportResult.Idle)
 		}
+
+	private fun showDialog(action: ShowDialogAction): DialogResult =
+		DialogResult(SkylightState.Dialog(action.titleResource, action.messageResource))
+
+	private fun hideDialog(action: HideDialogAction): DialogResult =
+		DialogResult(null)
 
 	private fun streamConnectivity(action: ConnectivityStreamAction): Observable<ConnectivityResult> =
 		connectivityModule.connectivityFlowable
@@ -62,6 +70,9 @@ class RealFluxModule(
 				)
 				is ConnectivityResult -> current.copy(
 					isConnectedToInternet = result.isConnectedToInternet
+				)
+				is DialogResult -> current.copy(
+					dialog = result.dialog
 				)
 			}
 		}

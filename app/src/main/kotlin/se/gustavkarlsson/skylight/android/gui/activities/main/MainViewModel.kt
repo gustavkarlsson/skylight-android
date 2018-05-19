@@ -12,10 +12,7 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.seconds
-import se.gustavkarlsson.skylight.android.flux.AuroraReportStreamAction
-import se.gustavkarlsson.skylight.android.flux.GetAuroraReportAction
-import se.gustavkarlsson.skylight.android.flux.SkylightState
-import se.gustavkarlsson.skylight.android.flux.SkylightStore
+import se.gustavkarlsson.skylight.android.flux.*
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
@@ -192,6 +189,44 @@ class MainViewModel(
 				?: Chance.UNKNOWN
 		}
 		.distinctUntilChanged()
+
+	val hideDialogClicked: Consumer<Unit> = Consumer {
+		store.postAction(HideDialogAction)
+	}
+
+	val darknessFactorClicked: Consumer<Unit> = Consumer {
+		store.postAction(
+			ShowDialogAction(R.string.factor_darkness_title_full, R.string.factor_darkness_desc))
+	}
+
+	val geomagLocationFactorClicked: Consumer<Unit> = Consumer {
+		store.postAction(
+			ShowDialogAction(R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc))
+	}
+
+	val kpIndexFactorClicked: Consumer<Unit> = Consumer {
+		store.postAction(
+			ShowDialogAction(R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc))
+	}
+
+	val visibilityFactorClicked: Consumer<Unit> = Consumer {
+		store.postAction(
+			ShowDialogAction(R.string.factor_visibility_title_full, R.string.factor_visibility_desc))
+	}
+
+	val showDialog: Observable<SkylightState.Dialog> = store.states
+		.distinctUntilChanged { last, new ->
+			last.dialog == new.dialog
+		}
+		.filter { it.dialog != null }
+		.map { it.dialog!! }
+
+	val hideDialog: Observable<Unit> = store.states
+		.distinctUntilChanged { last, new ->
+			last.dialog == new.dialog
+		}
+		.filter { it.dialog == null }
+		.map { Unit }
 
 	override fun onCleared() {
 		store.postAction(AuroraReportStreamAction(false))
