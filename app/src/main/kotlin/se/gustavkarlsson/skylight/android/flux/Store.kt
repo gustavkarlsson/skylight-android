@@ -5,12 +5,14 @@ import com.jakewharton.rxrelay2.Relay
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
+import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.ofType
 
 class Store<State : Any, Action : Any, Result : Any>
 internal constructor(
 	initialState: State,
-	transformers: List<(Observable<Action>) -> Observable<Result>>,
+	actionTransformers: List<(Observable<Action>) -> Observable<Result>>,
+	actionWithStateTransformers: List<(Observable<State>, Observable<Action>) -> Observable<Result>>,
 	reducer: (current: State, result: Result) -> State,
 	observeScheduler: Scheduler?,
 	private val startActions: List<Action>
@@ -26,14 +28,16 @@ internal constructor(
 
 	private val actions: Relay<Action> = PublishRelay.create<Action>()
 
-	private val results: Observable<Result> = actions
+	private val createRresults: Observable<Result> = actions
 		.publish { actions ->
-			val results = transformers
-				.map { actions.compose(it) }
-			Observable.merge(results)
+			val actionResults =
+				actionTransformers.map { it(actions) }
+			val actionWithStateResults =
+				actionWithStateTransformers.map { it(connectableStates, actions) }
+			Observable.merge(actionResults + actionWithStateResults)
 		}
 
-	private val connectableStates = results
+	private val connectableStates = createRresults
 		.scan(initialState, reducer)
 		.run {
 			if (observeScheduler != null) {
@@ -66,33 +70,67 @@ internal constructor(
 	private val initialState: State,
 	private val reducer: (current: State, result: Result) -> State
 ) {
-	private val transformers: MutableList<(Observable<Action>) -> Observable<Result>> =
-		mutableListOf()
+	private val actionTransformers:
+		MutableList<(Observable<Action>) -> Observable<Result>> = mutableListOf()
+	private val actionWithStateTransformers:
+		MutableList<(Observable<State>, Observable<Action>) -> Observable<Result>> = mutableListOf()
 	private val startActions: MutableList<Action> = mutableListOf()
 	private var observeScheduler: Scheduler? = null
 
-	fun addActionTransformer(transformer: (Observable<Action>) -> Observable<Result>) {
-		transformers += transformer
+	fun transformActions(transformer: (Observable<Action>) -> Observable<Result>) {
+		actionTransformers += transformer
 	}
 
-	@JvmName("addActionTransformer6")
-	inline fun <reified A : Action, reified R : Result> flatMapAction(noinline mapper: (A) -> Observable<R>) {
-		addActionTransformer { actions: Observable<Action> ->
+	inline fun <reified A : Action, reified R : Result> mapAction(noinline mapper: (A) -> R) {
+		transformActions { actions: Observable<Action> ->
+			actions.ofType<A>().map(mapper)
+		}
+	}
+
+	inline fun <reified A : Action, reified R : Result> flatMapAction(
+		noinline mapper: (A) -> Observable<R>
+	) {
+		transformActions { actions: Observable<Action> ->
 			actions.ofType<A>().flatMap(mapper)
 		}
 	}
 
-	@JvmName("addActionTransformer7")
-	inline fun <reified A : Action, reified R : Result> switchMapAction(noinline mapper: (A) -> Observable<R>) {
-		addActionTransformer { actions: Observable<Action> ->
+	inline fun <reified A : Action, reified R : Result> switchMapAction(
+		noinline mapper: (A) -> Observable<R>
+	) {
+		transformActions { actions: Observable<Action> ->
 			actions.ofType<A>().switchMap(mapper)
 		}
 	}
 
-	@JvmName("addActionTransformer8")
-	inline fun <reified A : Action, reified R : Result> mapAction(noinline mapper: (A) -> R) {
-		addActionTransformer { actions: Observable<Action> ->
-			actions.ofType<A>().map(mapper)
+	fun transformActionsWithState(transformer: (Observable<State>, Observable<Action>) -> Observable<Result>) {
+		actionWithStateTransformers += transformer
+	}
+
+	inline fun <reified A : Action, reified R : Result> mapActionWithState(noinline mapper: (State, A) -> R) {
+		val function = BiFunction<A, State, R> { action, state ->
+			mapper(state, action)
+		}
+		transformActionsWithState { states: Observable<State>, actions: Observable<Action> ->
+			actions.ofType<A>().withLatestFrom(states, function)
+		}
+	}
+
+	inline fun <reified A : Action, reified R : Result> flatMapActionWithState(noinline mapper: (State, A) -> Observable<R>) {
+		val function = BiFunction<A, State, Observable<R>> { action, state ->
+			mapper(state, action)
+		}
+		transformActionsWithState { states: Observable<State>, actions: Observable<Action> ->
+			actions.ofType<A>().withLatestFrom(states, function).flatMap { it }
+		}
+	}
+
+	inline fun <reified A : Action, reified R : Result> switchMapActionWithState(noinline mapper: (State, A) -> Observable<R>) {
+		val function = BiFunction<A, State, Observable<R>> { action, state ->
+			mapper(state, action)
+		}
+		transformActionsWithState { states: Observable<State>, actions: Observable<Action> ->
+			actions.ofType<A>().withLatestFrom(states, function).switchMap { it }
 		}
 	}
 
@@ -105,8 +143,15 @@ internal constructor(
 	}
 
 	fun build(): Store<State, Action, Result> {
-		if (transformers.isEmpty()) throw IllegalStateException("No transformers added")
-		return Store(initialState, transformers, reducer, observeScheduler, startActions)
+		if (actionTransformers.isEmpty()) throw IllegalStateException("No action transformers added")
+		return Store(
+			initialState,
+			actionTransformers,
+			actionWithStateTransformers,
+			reducer,
+			observeScheduler,
+			startActions
+		)
 	}
 }
 
