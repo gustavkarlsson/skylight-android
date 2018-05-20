@@ -49,7 +49,7 @@ class RealFluxModule(
 			.map(::ConnectivityResult)
 			.toObservable()
 
-	private val reducer: (current: SkylightState, result: SkylightResult) -> SkylightState by lazy {
+	private val reducer: (current: SkylightState, result: SkylightResult) -> SkylightState =
 		{ current: SkylightState, result: SkylightResult ->
 			when (result) {
 				is AuroraReportResult.Idle -> current.copy(
@@ -76,5 +76,4 @@ class RealFluxModule(
 				)
 			}
 		}
-	}
 }
