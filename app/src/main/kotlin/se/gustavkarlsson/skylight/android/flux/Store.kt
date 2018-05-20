@@ -7,6 +7,7 @@ import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.ofType
+import io.reactivex.schedulers.Schedulers
 
 class Store<State : Any, Action : Any, Result : Any>
 internal constructor(
@@ -38,6 +39,7 @@ internal constructor(
 		}
 
 	private val connectableStates = createRresults
+		.observeOn(Schedulers.newThread()) // Scan is not thread safe so must run sequentially
 		.scan(initialState, reducer)
 		.run {
 			if (observeScheduler != null) {
