@@ -29,7 +29,7 @@ internal constructor(
 
 	private val actions: Relay<Action> = PublishRelay.create<Action>()
 
-	private val createRresults: Observable<Result> = actions
+	private val results: Observable<Result> = actions
 		.publish { actions ->
 			val actionResults =
 				actionTransformers.map { it(actions) }
@@ -38,7 +38,7 @@ internal constructor(
 			Observable.merge(actionResults + actionWithStateResults)
 		}
 
-	private val connectableStates = createRresults
+	private val connectableStates = results
 		.observeOn(Schedulers.newThread()) // Scan is not thread safe so must run sequentially
 		.scan(initialState, reducer)
 		.run {
