@@ -12,6 +12,7 @@ internal constructor(
 	actionTransformers: List<ActionTransformer<Action, Result>>,
 	actionWithStateTransformers: List<ActionWithStateTransformer<State, Action, Result>>,
 	resultReducers: List<ResultReducer<State, Result>>,
+	stateWatchers: List<StateWatcher<State>>,
 	observeScheduler: Scheduler?,
 	reduceScheduler: Scheduler
 ) {
@@ -40,6 +41,7 @@ internal constructor(
 	private val states = results
 		.observeOn(reduceScheduler)
 		.scanWith(initialState, CompositeReducer(resultReducers))
+		.doOnNext { state -> stateWatchers.forEach { it(state) } }
 		.let {
 			if (observeScheduler != null) {
 				it.observeOn(observeScheduler)

@@ -15,6 +15,8 @@ internal constructor() {
 		mutableListOf<ActionWithStateTransformer<State, Action, Result>>()
 	private val resultReducers =
 		mutableListOf<ResultReducer<State, Result>>()
+	private val stateWatchers =
+		mutableListOf<StateWatcher<State>>()
 	private var observeScheduler: Scheduler? = null
 
 	fun initWith(initialState: () -> State) {
@@ -31,7 +33,7 @@ internal constructor() {
 		actionTransformers += transformer
 	}
 
-	inline fun <reified A : Action, reified R : Result> mapAction(
+	inline fun <reified A : Action, R : Result> mapAction(
 		noinline mapper: (A) -> R
 	) {
 		transformActions { actions: Observable<Action> ->
@@ -39,7 +41,7 @@ internal constructor() {
 		}
 	}
 
-	inline fun <reified A : Action, reified R : Result> flatMapAction(
+	inline fun <reified A : Action, R : Result> flatMapAction(
 		noinline mapper: (A) -> Observable<R>
 	) {
 		transformActions { actions: Observable<Action> ->
@@ -47,7 +49,7 @@ internal constructor() {
 		}
 	}
 
-	inline fun <reified A : Action, reified R : Result> switchMapAction(
+	inline fun <reified A : Action, R : Result> switchMapAction(
 		noinline mapper: (A) -> Observable<R>
 	) {
 		transformActions { actions: Observable<Action> ->
@@ -61,7 +63,7 @@ internal constructor() {
 		actionWithStateTransformers += transformers
 	}
 
-	inline fun <reified A : Action, reified R : Result> mapActionWithState(
+	inline fun <reified A : Action, R : Result> mapActionWithState(
 		noinline mapper: (A, State) -> R
 	) {
 		transformActionsWithState { states: Observable<State>, actions: Observable<Action> ->
@@ -69,7 +71,7 @@ internal constructor() {
 		}
 	}
 
-	inline fun <reified A : Action, reified R : Result> flatMapActionWithState(
+	inline fun <reified A : Action, R : Result> flatMapActionWithState(
 		noinline mapper: (A, State) -> Observable<R>
 	) {
 		transformActionsWithState { states: Observable<State>, actions: Observable<Action> ->
@@ -77,7 +79,7 @@ internal constructor() {
 		}
 	}
 
-	inline fun <reified A : Action, reified R : Result> switchMapActionWithState(
+	inline fun <reified A : Action, R : Result> switchMapActionWithState(
 		noinline mapper: (A, State) -> Observable<R>
 	) {
 		transformActionsWithState { states: Observable<State>, actions: Observable<Action> ->
@@ -101,6 +103,24 @@ internal constructor() {
 		observeScheduler = scheduler
 	}
 
+	inline fun <reified A : Action> doOnAction(crossinline block: (A) -> Unit) {
+		flatMapAction { action: A ->
+			block(action)
+			Observable.empty<Result>()
+		}
+	}
+
+	inline fun <reified R : Result> doOnResult(crossinline block: (R) -> Unit) {
+		reduceResult { state: State, result: R ->
+			block(result)
+			state
+		}
+	}
+
+	fun doOnState(block: (State) -> Unit) {
+		stateWatchers += block
+	}
+
 	fun build(): Store<State, Action, Result> {
 		val initialState = initialState
 			?: throw IllegalStateException("No initial state set")
@@ -113,6 +133,7 @@ internal constructor() {
 			actionTransformers,
 			actionWithStateTransformers,
 			resultReducers,
+			stateWatchers,
 			observeScheduler,
 			Schedulers.newThread() // Scan is not thread safe so a dedicated thread is a good idea
 		)

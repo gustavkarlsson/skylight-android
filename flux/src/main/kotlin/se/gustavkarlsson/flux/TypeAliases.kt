@@ -6,3 +6,5 @@ internal typealias ActionTransformer<Action, Result> = (Observable<Action>) -> O
 
 internal typealias ActionWithStateTransformer<State, Action, Result> =
 		(Observable<State>, Observable<Action>) -> Observable<Result>
+
+internal typealias StateWatcher<State> = (State) -> Unit
