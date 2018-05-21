@@ -6,16 +6,19 @@ import io.reactivex.functions.BiFunction
 import io.reactivex.rxkotlin.ofType
 
 class StoreBuilder<State : Any, Action : Any, Result : Any>
-internal constructor(
-	private val initialState: State,
-	private val reducer: (current: State, result: Result) -> State
-) {
+internal constructor() {
+	private var initialState: State? = null
 	private val actionTransformers:
 		MutableList<(Observable<Action>) -> Observable<Result>> = mutableListOf()
 	private val actionWithStateTransformers:
 		MutableList<(Observable<State>, Observable<Action>) -> Observable<Result>> = mutableListOf()
+	private val reducers = linkedMapOf<Class<out Result>, (State, Result) -> State>()
 	private var observeScheduler: Scheduler? = null
 	private val startActions: MutableList<Action> = mutableListOf()
+
+	fun setInitialState(state: State) {
+		initialState = state
+	}
 
 	fun transformActions(vararg transformers: (Observable<Action>) -> Observable<Result>) {
 		actionTransformers += transformers
@@ -65,6 +68,15 @@ internal constructor(
 		})
 	}
 
+	fun <R : Result> reduce(clazz: Class<R>, reducer: (State, R) -> State) {
+		@Suppress("UNCHECKED_CAST")
+		reducers[clazz] = (reducer as (State, Result) -> State)
+	}
+
+	inline fun <reified R : Result> reduce(noinline reducer: (State, R) -> State) {
+		reduce(R::class.java, reducer)
+	}
+
 	inline fun <reified A : Action, reified R : Result> switchMapActionWithState(noinline mapper: (State, A) -> Observable<R>) {
 		val function = BiFunction<A, State, Observable<R>> { action, state ->
 			mapper(state, action)
@@ -84,11 +96,12 @@ internal constructor(
 
 	fun build(): Store<State, Action, Result> {
 		if (actionTransformers.isEmpty()) throw IllegalStateException("No action transformers added")
+		val initialState = initialState ?: throw IllegalStateException("No initial state set")
 		return Store(
 			initialState,
-			reducer,
 			actionTransformers,
 			actionWithStateTransformers,
+			reducers,
 			observeScheduler,
 			startActions
 		)
@@ -96,11 +109,9 @@ internal constructor(
 }
 
 fun <State : Any, Action : Any, Result : Any> buildStore(
-	initialState: State,
-	reducer: (current: State, result: Result) -> State,
 	block: StoreBuilder<State, Action, Result>.() -> Unit
 ): Store<State, Action, Result> {
-	val builder = StoreBuilder<State, Action, Result>(initialState, reducer)
+	val builder = StoreBuilder<State, Action, Result>()
 	builder.block()
 	return builder.build()
 }

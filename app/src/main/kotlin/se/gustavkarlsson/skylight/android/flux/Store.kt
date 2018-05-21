@@ -10,9 +10,9 @@ import io.reactivex.schedulers.Schedulers
 class Store<State : Any, Action : Any, Result : Any>
 internal constructor(
 	initialState: State,
-	reducer: (current: State, result: Result) -> State,
 	actionTransformers: List<(Observable<Action>) -> Observable<Result>>,
 	actionWithStateTransformers: List<(Observable<State>, Observable<Action>) -> Observable<Result>>,
+	reducers: Map<Class<out Result>, (State, Result) -> State>,
 	observeScheduler: Scheduler?,
 	private val startActions: List<Action>
 ) {
@@ -36,9 +36,17 @@ internal constructor(
 			Observable.merge(actionResults + actionWithStateResults)
 		}
 
+	private val selectingReducer: (State, Result) -> State = { state, result ->
+		val selectedReducer: (State, Result) -> State = (reducers.entries
+			.filter { it.key.isInstance(result) }
+			.map { it.value }.firstOrNull()
+			?: { s, _ -> s }) // Identity
+		selectedReducer(state, result)
+	}
+
 	private val connectableStates = results
 		.observeOn(Schedulers.newThread()) // Scan is not thread safe so must run sequentially
-		.scan(initialState, reducer)
+		.scan(initialState, selectingReducer)
 		.run {
 			if (observeScheduler != null) {
 				observeOn(observeScheduler)

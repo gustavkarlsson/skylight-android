@@ -9,13 +9,33 @@ class RealFluxModule(
 	private val connectivityModule: ConnectivityModule
 ) : FluxModule {
 	override val store: SkylightStore by lazy {
-		buildStore<SkylightState, SkylightAction, SkylightResult>(SkylightState(), reducer) {
+		buildStore<SkylightState, SkylightAction, SkylightResult> {
+			setInitialState(SkylightState())
 			switchMapAction(::getAuroraReport)
 			switchMapAction(::streamAuroraReports)
 			switchMapAction(::streamConnectivity)
 			mapAction(::showDialog)
 			mapAction(::hideDialog)
+			reduce { state, _: AuroraReportResult.Idle ->
+				state.copy(throwable = null)
+			}
+			reduce { state, _: AuroraReportResult.InFlight ->
+				state.copy(isRefreshing = true, throwable = null)
+			}
+			reduce { state, result: AuroraReportResult.Success ->
+				state.copy(isRefreshing = false, throwable = null, auroraReport = result.auroraReport)
+			}
+			reduce { state, result: AuroraReportResult.Failure ->
+				state.copy(isRefreshing = false, throwable = result.throwable)
+			}
+			reduce { state, result: ConnectivityResult ->
+				state.copy(isConnectedToInternet = result.isConnectedToInternet)
+			}
+			reduce { state, result: DialogResult ->
+				state.copy(dialog = result.dialog)
+			}
 			setObserveScheduler(AndroidSchedulers.mainThread())
+			addStartActions(GetAuroraReportAction)
 		}
 	}
 
@@ -48,32 +68,4 @@ class RealFluxModule(
 		connectivityModule.connectivityFlowable
 			.map(::ConnectivityResult)
 			.toObservable()
-
-	private val reducer: (current: SkylightState, result: SkylightResult) -> SkylightState =
-		{ current: SkylightState, result: SkylightResult ->
-			when (result) {
-				is AuroraReportResult.Idle -> current.copy(
-					throwable = null
-				)
-				is AuroraReportResult.InFlight -> current.copy(
-					isRefreshing = true,
-					throwable = null
-				)
-				is AuroraReportResult.Success -> current.copy(
-					isRefreshing = false,
-					auroraReport = result.auroraReport,
-					throwable = null
-				)
-				is AuroraReportResult.Failure -> current.copy(
-					isRefreshing = false,
-					throwable = result.throwable
-				)
-				is ConnectivityResult -> current.copy(
-					isConnectedToInternet = result.isConnectedToInternet
-				)
-				is DialogResult -> current.copy(
-					dialog = result.dialog
-				)
-			}
-		}
 }
