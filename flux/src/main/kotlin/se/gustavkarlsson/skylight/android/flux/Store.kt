@@ -27,15 +27,17 @@ internal constructor(
 	private val actions: Relay<Action> = PublishRelay.create<Action>()
 
 	private val results: Observable<Result> = actions
-		.publish { actions ->
-			val actionResults = actionTransformers
-				.map { it(actions) }
-			val actionWithStateResults = actionWithStateTransformers
-				.map { it(connectableStates, actions) }
-			Observable.merge(actionResults + actionWithStateResults)
+		.publish {
+			it.compose(
+				ActionToResultTransformer(
+					states,
+					actionTransformers,
+					actionWithStateTransformers
+				)
+			)
 		}
 
-	private val connectableStates = results
+	private val states = results
 		.observeOn(Schedulers.newThread()) // Scan is not thread safe so must run sequentially
 		.scanWith(initialState, CompositeReducer(resultReducers))
 		.run {
@@ -52,13 +54,13 @@ internal constructor(
 		if (statesSubscription == null) {
 			throw IllegalStateException("Can't observe state until started")
 		}
-		return connectableStates
+		return states
 	}
 
 	@Synchronized
 	fun start() {
 		if (statesSubscription != null) return
-		connectableStates.connect()
-		statesSubscription = connectableStates.subscribe()
+		states.connect()
+		statesSubscription = states.subscribe()
 	}
 }
