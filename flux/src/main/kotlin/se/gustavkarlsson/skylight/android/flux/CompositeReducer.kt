@@ -1,14 +1,14 @@
 package se.gustavkarlsson.skylight.android.flux
 
-
 internal class CompositeReducer<State : Any, Result : Any>(
-	private val resultReducers: List<Pair<Class<out Result>, (State, Result) -> State>>
+	private val resultReducers: List<ResultReducer<State, Result>>
 ) : (State, Result) -> State {
+
 	override fun invoke(currentState: State, result: Result): State {
 		var newState = currentState
 		resultReducers
-			.filter { it.first.isInstance(result) }
-			.map { it.second }
+			.filter { it.clazz.isInstance(result) }
+			.map { it.reducer }
 			.forEach {
 				newState = it(newState, result)
 			}

@@ -5,15 +5,15 @@ import com.jakewharton.rxrelay2.Relay
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 
 class Store<State : Any, Action : Any, Result : Any>
 internal constructor(
 	initialState: () -> State,
-	actionTransformers: List<(Observable<Action>) -> Observable<Result>>,
-	actionWithStateTransformers: List<(Observable<State>, Observable<Action>) -> Observable<Result>>,
-	resultReducers: List<Pair<Class<out Result>, (State, Result) -> State>>,
-	observeScheduler: Scheduler?
+	actionTransformers: List<ActionTransformer<Action, Result>>,
+	actionWithStateTransformers: List<ActionWithStateTransformer<State, Action, Result>>,
+	resultReducers: List<ResultReducer<State, Result>>,
+	observeScheduler: Scheduler?,
+	reduceScheduler: Scheduler
 ) {
 	private var statesSubscription: Disposable? = null
 
@@ -38,13 +38,13 @@ internal constructor(
 		}
 
 	private val states = results
-		.observeOn(Schedulers.newThread()) // Scan is not thread safe so must run sequentially
+		.observeOn(reduceScheduler)
 		.scanWith(initialState, CompositeReducer(resultReducers))
-		.run {
+		.let {
 			if (observeScheduler != null) {
-				observeOn(observeScheduler)
+				it.observeOn(observeScheduler)
 			} else {
-				this
+				it
 			}
 		}
 		.replay(1)

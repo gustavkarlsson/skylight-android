@@ -44,6 +44,7 @@ class RealFluxModule(
 			reduceResult { state, result: DialogResult ->
 				state.copy(dialog = result.dialog)
 			}
+
 			observeOn(AndroidSchedulers.mainThread())
 		}
 	}

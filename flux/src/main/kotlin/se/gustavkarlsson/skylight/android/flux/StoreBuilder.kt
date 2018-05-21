@@ -4,16 +4,17 @@ import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.rxkotlin.ofType
 import io.reactivex.rxkotlin.withLatestFrom
+import io.reactivex.schedulers.Schedulers
 
 class StoreBuilder<State : Any, Action : Any, Result : Any>
 internal constructor() {
 	private var initialState: (() -> State)? = null
 	private val actionTransformers =
-		mutableListOf<(Observable<Action>) -> Observable<Result>>()
+		mutableListOf<ActionTransformer<Action, Result>>()
 	private val actionWithStateTransformers =
-		mutableListOf<(Observable<State>, Observable<Action>) -> Observable<Result>>()
+		mutableListOf<ActionWithStateTransformer<State, Action, Result>>()
 	private val resultReducers =
-		mutableListOf<Pair<Class<out Result>, (State, Result) -> State>>()
+		mutableListOf<ResultReducer<State, Result>>()
 	private var observeScheduler: Scheduler? = null
 
 	fun initWith(initialState: () -> State) {
@@ -86,7 +87,7 @@ internal constructor() {
 
 	fun <R : Result> reduceResult(clazz: Class<R>, reducer: (State, R) -> State) {
 		@Suppress("UNCHECKED_CAST")
-		resultReducers += clazz to (reducer as (State, Result) -> State)
+		resultReducers += ResultReducer<State, Result>(clazz, reducer as (State, Result) -> State)
 	}
 
 	inline fun <reified R : Result> reduceResult(noinline reducer: (State, R) -> State) {
@@ -109,7 +110,8 @@ internal constructor() {
 			actionTransformers,
 			actionWithStateTransformers,
 			resultReducers,
-			observeScheduler
+			observeScheduler,
+			Schedulers.newThread() // Scan is not thread safe so a dedicated thread is a good idea
 		)
 	}
 }
