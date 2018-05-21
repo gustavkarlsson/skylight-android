@@ -12,7 +12,8 @@ internal constructor() {
 		mutableListOf<(Observable<Action>) -> Observable<Result>>()
 	private val actionWithStateTransformers =
 		mutableListOf<(Observable<State>, Observable<Action>) -> Observable<Result>>()
-	private val resultReducers = linkedMapOf<Class<out Result>, (State, Result) -> State>()
+	private val resultReducers =
+		mutableListOf<Pair<Class<out Result>, (State, Result) -> State>>()
 	private var observeScheduler: Scheduler? = null
 
 	fun initWith(initialState: () -> State) {
@@ -85,7 +86,7 @@ internal constructor() {
 
 	fun <R : Result> reduceResult(clazz: Class<R>, reducer: (State, R) -> State) {
 		@Suppress("UNCHECKED_CAST")
-		resultReducers[clazz] = (reducer as (State, Result) -> State)
+		resultReducers += clazz to (reducer as (State, Result) -> State)
 	}
 
 	inline fun <reified R : Result> reduceResult(noinline reducer: (State, R) -> State) {
@@ -97,7 +98,8 @@ internal constructor() {
 	}
 
 	fun build(): Store<State, Action, Result> {
-		val initialState = initialState ?: throw IllegalStateException("No initial state set")
+		val initialState = initialState
+			?: throw IllegalStateException("No initial state set")
 		if (actionTransformers.isEmpty() && actionWithStateTransformers.isEmpty()) {
 			throw IllegalStateException("No action transformers defined")
 		}

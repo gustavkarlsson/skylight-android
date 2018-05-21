@@ -12,7 +12,7 @@ internal constructor(
 	initialState: () -> State,
 	actionTransformers: List<(Observable<Action>) -> Observable<Result>>,
 	actionWithStateTransformers: List<(Observable<State>, Observable<Action>) -> Observable<Result>>,
-	resultReducers: Map<Class<out Result>, (State, Result) -> State>,
+	resultReducers: List<Pair<Class<out Result>, (State, Result) -> State>>,
 	observeScheduler: Scheduler?
 ) {
 	private var statesSubscription: Disposable? = null
@@ -35,17 +35,24 @@ internal constructor(
 			Observable.merge(actionResults + actionWithStateResults)
 		}
 
-	private val selectingReducer: (State, Result) -> State = { state, result ->
-		val selectedReducer: (State, Result) -> State = (resultReducers.entries
-			.filter { it.key.isInstance(result) }
-			.map { it.value }.firstOrNull()
-			?: { s, _ -> s }) // Identity
-		selectedReducer(state, result)
+	private val compositeReducer: (State, Result) -> State = { state, result ->
+		val matchingReducers: List<(State, Result) -> State> =
+			listOf({ s: State, _: Result -> s }) +
+				resultReducers
+					.filter { it.first.isInstance(result) }
+					.map { it.second }
+
+		val reducer = matchingReducers.reduce { lastReducer, currentReducer ->
+			{ state: State, result: Result ->
+				currentReducer(lastReducer(state, result), result)
+			}
+		}
+		reducer(state, result)
 	}
 
 	private val connectableStates = results
 		.observeOn(Schedulers.newThread()) // Scan is not thread safe so must run sequentially
-		.scanWith(initialState, selectingReducer)
+		.scanWith(initialState, compositeReducer)
 		.run {
 			if (observeScheduler != null) {
 				observeOn(observeScheduler)
