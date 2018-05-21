@@ -11,4 +11,3 @@
   * version management?
   * fastlane?
   * gradle plugin?
-* Manage state like Jake Wharton: https://www.youtube.com/watch?v=0IKHxjkgop4
