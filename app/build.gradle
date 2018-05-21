@@ -99,7 +99,7 @@ dependencies {
 	implementation project(":background")
 
 	implementation "com.android.support:multidex:$multidex_version"
-	implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 	implementation "com.android.support:appcompat-v7:$android_support_version"
 	implementation "com.android.support:design:$android_support_version"
 	implementation "com.android.support:support-fragment:$android_support_version"
@@ -123,12 +123,8 @@ dependencies {
 	implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 	implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
 
-	// ReactiveX
-	implementation "io.reactivex.rxjava2:rxjava:$rxjava_version"
-	implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
-	implementation "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
-
 	// Rx misc
+	implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
 	implementation "com.jakewharton.rxrelay2:rxrelay:$rxrelay_version"
 	implementation "com.tbruyelle.rxpermissions2:rxpermissions:${rxpermissions_version}@aar"
 	implementation "pl.charmas.android:android-reactive-location2:${reactive_location_version}@aar"
@@ -143,12 +139,21 @@ dependencies {
 	implementation "com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:$rxbinding_version"
 	implementation "com.jakewharton.rxbinding2:rxbinding-leanback-v17-kotlin:$rxbinding_version"
 
+	// AutoDispose
+	implementation "com.uber.autodispose:autodispose-kotlin:$autodispose_version"
+	implementation "com.uber.autodispose:autodispose-android-kotlin:$autodispose_version"
+	implementation "com.uber.autodispose:autodispose-android-archcomponents-kotlin:$autodispose_version"
+
 	// Lifecycle
 	implementation "android.arch.lifecycle:extensions:$arch_lifecycle_version"
 
 	// Firebase
 	implementation "com.google.firebase:firebase-core:$firebase_version"
 	implementation "com.crashlytics.sdk.android:crashlytics:$crashlytics_version"
+
+	// Leakcanary
+	debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
+	releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
 
 
 	// Testing

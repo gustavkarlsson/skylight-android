@@ -33,7 +33,7 @@ class RealKpIndexModule : KpIndexModule {
 
 	override val kpIndexProvider: KpIndexProvider by lazy { RetrofittedKpIndexProvider(kpIndexApi) }
 
-	override val kpIndexStreamable: Streamable<KpIndex> by lazy {
+	private val kpIndexStreamable: Streamable<KpIndex> by lazy {
 		KpIndexProviderStreamable(kpIndexProvider)
 	}
 

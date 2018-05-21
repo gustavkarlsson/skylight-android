@@ -1,28 +1,25 @@
 package se.gustavkarlsson.skylight.android.gui.activities.main
 
+import android.arch.lifecycle.ViewModel
 import com.hadisatrio.optional.Optional
-import com.jakewharton.rxrelay2.PublishRelay
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.extensions.delay
-import se.gustavkarlsson.skylight.android.extensions.invoke
 import se.gustavkarlsson.skylight.android.extensions.seconds
-import se.gustavkarlsson.skylight.android.gui.AutoDisposingViewModel
+import se.gustavkarlsson.skylight.android.flux.*
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
 class MainViewModel(
-	auroraReportSingle: Single<AuroraReport>,
-	auroraReports: Flowable<AuroraReport>,
-	isConnectedToInternet: Flowable<Boolean>,
+	private val store: SkylightStore,
 	defaultLocationName: CharSequence,
 	notConnectedToInternetMessage: CharSequence,
 	auroraChanceEvaluator: ChanceEvaluator<AuroraReport>,
@@ -38,70 +35,75 @@ class MainViewModel(
 	visibilityFormatter: SingleValueFormatter<Visibility>,
 	now: Single<Instant>,
 	nowTextThreshold: Duration
-) : AutoDisposingViewModel() {
+) : ViewModel() {
 
-	private val errorRelay = PublishRelay.create<Throwable>()
-	val errorMessages: Flowable<Int> = errorRelay
-		.toFlowable(BackpressureStrategy.BUFFER)
+	init {
+		store.postAction(GetAuroraReportAction)
+		store.postAction(AuroraReportStreamAction(true))
+	}
+
+	val swipedToRefresh: Consumer<Unit> = Consumer {
+		store.postAction(GetAuroraReportAction)
+	}
+
+	val errorMessages: Observable<Int> = store.getState()
+		.filter { it.throwable != null }
 		.map {
-			if (it is UserFriendlyException) {
-				it.stringResourceId
+			val throwable = it.throwable
+			if (throwable is UserFriendlyException) {
+				throwable.stringResourceId
 			} else {
 				R.string.error_unknown_update_error
 			}
 		}
 
-	val connectivityMessages: Flowable<Optional<CharSequence>> =
-		Flowable.concat(Flowable.just(true), isConnectedToInternet)
-			.map { connected ->
-				if (connected) {
-					Optional.absent()
-				} else {
-					Optional.of(notConnectedToInternetMessage)
-				}
+	val connectivityMessages: Observable<Optional<CharSequence>> = store.getState()
+		.map(SkylightState::isConnectedToInternet)
+		.map { connected ->
+			if (connected) {
+				Optional.absent()
+			} else {
+				Optional.of(notConnectedToInternetMessage)
 			}
-			.distinctUntilChanged()
-
-	val locationName: Flowable<CharSequence> = auroraReports
-		.map {
-			it.locationName ?: defaultLocationName
 		}
 		.distinctUntilChanged()
 
-	val refresh: Consumer<Unit> = Consumer {
-		auroraReportSingle
-			.doOnEvent { _, _ -> refreshFinishedRelay() }
-			.subscribe(Consumer {}, errorRelay)
-			.autoDisposeOnCleared()
-	}
-
-	private val refreshFinishedRelay = PublishRelay.create<Unit>()
-	val refreshFinished: Flowable<Unit> = refreshFinishedRelay
-		.toFlowable(BackpressureStrategy.LATEST)
-
-	private val timestamps = auroraReports
-		.map(AuroraReport::timestamp)
+	val locationName: Observable<CharSequence> = store.getState()
+		.map {
+			it.auroraReport?.locationName ?: defaultLocationName
+		}
 		.distinctUntilChanged()
-		.replay(1)
-		.refCount()
 
-	val chanceLevel: Flowable<CharSequence> = auroraReports
-		.map(auroraChanceEvaluator::evaluate)
+	val isRefreshing: Observable<Boolean> = store.getState()
+		.map(SkylightState::isRefreshing)
+		.distinctUntilChanged()
+
+	val chanceLevel: Observable<CharSequence> = store.getState()
+		.map {
+			it.auroraReport
+				?.let(auroraChanceEvaluator::evaluate)
+				?: Chance.UNKNOWN
+		}
 		.map(ChanceLevel.Companion::fromChance)
 		.map(chanceLevelFormatter::format)
 		.distinctUntilChanged()
 
-	val timeSinceUpdate: Flowable<CharSequence> = timestamps
+	val timeSinceUpdate: Observable<CharSequence> = store.getState()
+		.filter { it.auroraReport != null }
+		.map { it.auroraReport!!.timestamp }
 		.switchMap {
-			Flowable.just(it)
+			Observable.just(it)
 				.repeatWhen { it.delay(1.seconds) }
+				.observeOn(AndroidSchedulers.mainThread())
 		}
 		.map {
 			relativeTimeFormatter.format(it, now.blockingGet(), nowTextThreshold)
 		}
 		.distinctUntilChanged()
 
-	val timeSinceUpdateVisibility: Flowable<Boolean> = timestamps
+	val timeSinceUpdateVisibility: Observable<Boolean> = store.getState()
+		.filter { it.auroraReport != null }
+		.map { it.auroraReport!!.timestamp }
 		.map {
 			when {
 				it <= Instant.EPOCH -> false
@@ -110,35 +112,125 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val darknessValue: Flowable<CharSequence> = auroraReports.map { it.factors.darkness }
-		.map(darknessFormatter::format)
+	val darknessValue: Observable<CharSequence> = store.getState()
+		.map {
+			it.auroraReport
+				?.let(AuroraReport::factors)
+				?.let(AuroraFactors::darkness)
+				?.let(darknessFormatter::format)
+				?: "?"
+		}
 		.distinctUntilChanged()
 
-	val darknessChance: Flowable<Chance> = auroraReports.map { it.factors.darkness }
-		.map(darknessChanceEvaluator::evaluate)
+	val darknessChance: Observable<Chance> = store.getState()
+		.map {
+			it.auroraReport
+				?.let(AuroraReport::factors)
+				?.let(AuroraFactors::darkness)
+				?.let(darknessChanceEvaluator::evaluate)
+				?: Chance.UNKNOWN
+		}
 		.distinctUntilChanged()
 
-	val geomagLocationValue: Flowable<CharSequence> = auroraReports.map { it.factors.geomagLocation }
-		.map(geomagLocationFormatter::format)
+	val geomagLocationValue: Observable<CharSequence> = store.getState()
+		.map {
+			it.auroraReport
+				?.let(AuroraReport::factors)
+				?.let(AuroraFactors::geomagLocation)
+				?.let(geomagLocationFormatter::format)
+				?: "?"
+		}
 		.distinctUntilChanged()
 
-	val geomagLocationChance: Flowable<Chance> = auroraReports.map { it.factors.geomagLocation }
-		.map(geomagLocationChanceEvaluator::evaluate)
+	val geomagLocationChance: Observable<Chance> = store.getState()
+		.map {
+			it.auroraReport
+				?.let(AuroraReport::factors)
+				?.let(AuroraFactors::geomagLocation)
+				?.let(geomagLocationChanceEvaluator::evaluate)
+				?: Chance.UNKNOWN
+		}
 		.distinctUntilChanged()
 
-	val kpIndexValue: Flowable<CharSequence> = auroraReports.map { it.factors.kpIndex }
-		.map(kpIndexFormatter::format)
+	val kpIndexValue: Observable<CharSequence> = store.getState()
+		.map {
+			it.auroraReport
+				?.let(AuroraReport::factors)
+				?.let(AuroraFactors::kpIndex)
+				?.let(kpIndexFormatter::format)
+				?: "?"
+		}
 		.distinctUntilChanged()
 
-	val kpIndexChance: Flowable<Chance> = auroraReports.map { it.factors.kpIndex }
-		.map(kpIndexChanceEvaluator::evaluate)
+	val kpIndexChance: Observable<Chance> = store.getState()
+		.map {
+			it.auroraReport
+				?.let(AuroraReport::factors)
+				?.let(AuroraFactors::kpIndex)
+				?.let(kpIndexChanceEvaluator::evaluate)
+				?: Chance.UNKNOWN
+		}
 		.distinctUntilChanged()
 
-	val visibilityValue: Flowable<CharSequence> = auroraReports.map { it.factors.visibility }
-		.map(visibilityFormatter::format)
+	val visibilityValue: Observable<CharSequence> = store.getState()
+		.map {
+			it.auroraReport
+				?.let(AuroraReport::factors)
+				?.let(AuroraFactors::visibility)
+				?.let(visibilityFormatter::format)
+				?: "?"
+		}
 		.distinctUntilChanged()
 
-	val visibilityChance: Flowable<Chance> = auroraReports.map { it.factors.visibility }
-		.map(visibilityChanceEvaluator::evaluate)
+	val visibilityChance: Observable<Chance> = store.getState()
+		.map {
+			it.auroraReport
+				?.let(AuroraReport::factors)
+				?.let(AuroraFactors::visibility)
+				?.let(visibilityChanceEvaluator::evaluate)
+				?: Chance.UNKNOWN
+		}
 		.distinctUntilChanged()
+
+	val hideDialogClicked: Consumer<Unit> = Consumer {
+		store.postAction(HideDialogAction)
+	}
+
+	val darknessFactorClicked: Consumer<Unit> = Consumer {
+		store.postAction(
+			ShowDialogAction(R.string.factor_darkness_title_full, R.string.factor_darkness_desc))
+	}
+
+	val geomagLocationFactorClicked: Consumer<Unit> = Consumer {
+		store.postAction(
+			ShowDialogAction(R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc))
+	}
+
+	val kpIndexFactorClicked: Consumer<Unit> = Consumer {
+		store.postAction(
+			ShowDialogAction(R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc))
+	}
+
+	val visibilityFactorClicked: Consumer<Unit> = Consumer {
+		store.postAction(
+			ShowDialogAction(R.string.factor_visibility_title_full, R.string.factor_visibility_desc))
+	}
+
+	val showDialog: Observable<SkylightState.Dialog> = store.getState()
+		.distinctUntilChanged { last, new ->
+			last.dialog == new.dialog
+		}
+		.filter { it.dialog != null }
+		.map { it.dialog!! }
+
+	val hideDialog: Observable<Unit> = store.getState()
+		.distinctUntilChanged { last, new ->
+			last.dialog == new.dialog
+		}
+		.filter { it.dialog == null }
+		.map { Unit }
+
+	override fun onCleared() {
+		store.postAction(AuroraReportStreamAction(false))
+	}
 }

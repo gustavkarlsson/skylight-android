@@ -7,13 +7,13 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.background.scheduling.GetLatestAuroraReportScheduler
 import se.gustavkarlsson.skylight.android.background.scheduling.Scheduler
 import se.gustavkarlsson.skylight.android.background.scheduling.UpdateJob
-import se.gustavkarlsson.skylight.android.di.modules.AuroraReportModule
 import se.gustavkarlsson.skylight.android.di.modules.ContextModule
+import se.gustavkarlsson.skylight.android.di.modules.FluxModule
 import se.gustavkarlsson.skylight.android.di.modules.SettingsModule
 
 class EvernoteJobSchedulingModule(
 	contextModule: ContextModule,
-	private val auroraReportModule: AuroraReportModule,
+	private val fluxModule: FluxModule,
 	private val notificationModule: NotificationModule,
 	settingsModule: SettingsModule,
 	scheduleInterval: Duration,
@@ -26,7 +26,7 @@ class EvernoteJobSchedulingModule(
 				addJobCreator { tag ->
 					when (tag) {
 						UpdateJob.UPDATE_JOB_TAG -> UpdateJob(
-							auroraReportModule.auroraReportSingle,
+							fluxModule.store,
 							notificationModule.decider,
 							notificationModule.notifier
 						)

@@ -17,7 +17,7 @@ class ReactiveLocationModule(contextModule: ContextModule) : LocationModule {
 	override val locationProvider: LocationProvider by lazy {
 		ReactiveLocationLocationProvider(reactiveLocationProvider)
 	}
-	override val locationStreamable: Streamable<Location> by lazy {
+	private val locationStreamable: Streamable<Location> by lazy {
 		ReactiveLocationProviderStreamable(reactiveLocationProvider)
 	}
 

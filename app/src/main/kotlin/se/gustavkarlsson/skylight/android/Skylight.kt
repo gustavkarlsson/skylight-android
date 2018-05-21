@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android
 import android.support.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
 import com.jakewharton.threetenabp.AndroidThreeTen
+import com.squareup.leakcanary.LeakCanary
 import io.fabric.sdk.android.Fabric
 import io.reactivex.plugins.RxJavaPlugins
 import se.gustavkarlsson.skylight.android.services.Analytics
@@ -19,12 +20,15 @@ class Skylight : MultiDexApplication() {
 
 	override fun onCreate() {
 		super.onCreate()
+		if (LeakCanary.isInAnalyzerProcess(this)) return
 		bootstrap()
+		appComponent.store.start()
 		setupSettingsAnalytics(appComponent.settings)
 		scheduleBackgroundNotifications()
 	}
 
 	private fun bootstrap() {
+		LeakCanary.install(this)
 		initCrashReporting()
 		initLogging()
 		initAnalytics()
