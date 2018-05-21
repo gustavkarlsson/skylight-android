@@ -9,12 +9,11 @@ import io.reactivex.schedulers.Schedulers
 
 class Store<State : Any, Action : Any, Result : Any>
 internal constructor(
-	initialState: State,
+	initialState: () -> State,
 	actionTransformers: List<(Observable<Action>) -> Observable<Result>>,
 	actionWithStateTransformers: List<(Observable<State>, Observable<Action>) -> Observable<Result>>,
-	reducers: Map<Class<out Result>, (State, Result) -> State>,
-	observeScheduler: Scheduler?,
-	private val startActions: List<Action>
+	resultReducers: Map<Class<out Result>, (State, Result) -> State>,
+	observeScheduler: Scheduler?
 ) {
 	private var statesSubscription: Disposable? = null
 
@@ -37,7 +36,7 @@ internal constructor(
 		}
 
 	private val selectingReducer: (State, Result) -> State = { state, result ->
-		val selectedReducer: (State, Result) -> State = (reducers.entries
+		val selectedReducer: (State, Result) -> State = (resultReducers.entries
 			.filter { it.key.isInstance(result) }
 			.map { it.value }.firstOrNull()
 			?: { s, _ -> s }) // Identity
@@ -46,7 +45,7 @@ internal constructor(
 
 	private val connectableStates = results
 		.observeOn(Schedulers.newThread()) // Scan is not thread safe so must run sequentially
-		.scan(initialState, selectingReducer)
+		.scanWith(initialState, selectingReducer)
 		.run {
 			if (observeScheduler != null) {
 				observeOn(observeScheduler)
@@ -67,8 +66,7 @@ internal constructor(
 	@Synchronized
 	fun start() {
 		if (statesSubscription != null) return
-		statesSubscription = connectableStates.subscribe()
 		connectableStates.connect()
-		startActions.forEach(::postAction)
+		statesSubscription = connectableStates.subscribe()
 	}
 }
