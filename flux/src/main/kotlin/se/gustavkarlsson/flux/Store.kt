@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.flux
+package se.gustavkarlsson.flux
 
 import com.jakewharton.rxrelay2.PublishRelay
 import com.jakewharton.rxrelay2.Relay

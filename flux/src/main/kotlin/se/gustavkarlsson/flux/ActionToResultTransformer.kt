@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.flux
+package se.gustavkarlsson.flux
 
 import io.reactivex.Observable
 

@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.flux
+package se.gustavkarlsson.flux
 
 import io.reactivex.Observable
 import io.reactivex.Scheduler
@@ -87,7 +87,10 @@ internal constructor() {
 
 	fun <R : Result> reduceResult(clazz: Class<R>, reducer: (State, R) -> State) {
 		@Suppress("UNCHECKED_CAST")
-		resultReducers += ResultReducer<State, Result>(clazz, reducer as (State, Result) -> State)
+		resultReducers += ResultReducer<State, Result>(
+			clazz,
+			reducer as (State, Result) -> State
+		)
 	}
 
 	inline fun <reified R : Result> reduceResult(noinline reducer: (State, R) -> State) {

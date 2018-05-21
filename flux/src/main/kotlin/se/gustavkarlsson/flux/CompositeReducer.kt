@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.flux
+package se.gustavkarlsson.flux
 
 internal class CompositeReducer<State : Any, Result : Any>(
 	private val resultReducers: List<ResultReducer<State, Result>>

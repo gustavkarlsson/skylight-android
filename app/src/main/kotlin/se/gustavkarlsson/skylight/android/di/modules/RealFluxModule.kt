@@ -2,7 +2,9 @@ package se.gustavkarlsson.skylight.android.di.modules
 
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import se.gustavkarlsson.flux.buildStore
 import se.gustavkarlsson.skylight.android.flux.*
+import timber.log.Timber
 
 class RealFluxModule(
 	private val auroraReportModule: AuroraReportModule,
@@ -13,12 +15,20 @@ class RealFluxModule(
 		buildStore<SkylightState, SkylightAction, SkylightResult> {
 			initWith(SkylightState())
 
+			flatMapAction { action: SkylightAction ->
+				Timber.d("Action received: $action")
+				Observable.empty<SkylightResult>()
+			}
 			switchMapAction(::getAuroraReport)
 			switchMapAction(::streamAuroraReports)
 			switchMapAction(::streamConnectivity)
 			mapAction(::showDialog)
 			mapAction(::hideDialog)
 
+			reduceResult { state, result: SkylightResult ->
+				Timber.d("Result received: $result")
+				state
+			}
 			reduceResult { state, _: AuroraReportResult.JustFinished ->
 				state.copy(justFinishedRefreshing = true)
 			}

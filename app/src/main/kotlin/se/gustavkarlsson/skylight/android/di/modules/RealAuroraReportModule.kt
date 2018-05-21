@@ -42,7 +42,6 @@ class RealAuroraReportModule(
 
 	override val auroraReportFlowable: Flowable<AuroraReport> by lazy {
 		auroraReportStreamable.stream
-			.startWith(AuroraReport.empty)
 			.replay(1)
 			.refCount()
 	}
