@@ -38,6 +38,7 @@ class MainViewModel(
 ) : ViewModel() {
 
 	init {
+		store.postAction(GetAuroraReportAction)
 		store.postAction(AuroraReportStreamAction(true))
 	}
 

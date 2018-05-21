@@ -1,11 +1,7 @@
 package se.gustavkarlsson.skylight.android.di.modules
 
-import com.jakewharton.rxrelay2.PublishRelay
-import com.jakewharton.rxrelay2.Relay
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
-import io.reactivex.functions.Consumer
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.DebugSettings
 import se.gustavkarlsson.skylight.android.services.Streamable
@@ -35,10 +31,6 @@ class DebugAuroraReportModule(
 		)
 	}
 
-	private val auroraReportRelay: Relay<AuroraReport> by lazy {
-		PublishRelay.create<AuroraReport>()
-	}
-
 	override val auroraReportProvider: AuroraReportProvider by lazy {
 		val realProvider = CombiningAuroraReportProvider(
 			timeModule.timeProvider,
@@ -54,10 +46,6 @@ class DebugAuroraReportModule(
 
 	override val auroraReportSingle: Single<AuroraReport> by lazy {
 		auroraReportProvider.get()
-			.doOnSuccess(auroraReportRelay)
-	}
-	override val provideAuroraReportConsumer: Consumer<AuroraReport> by lazy {
-		auroraReportRelay
 	}
 
 	override val auroraReportStreamable: Streamable<AuroraReport> by lazy {
@@ -67,8 +55,7 @@ class DebugAuroraReportModule(
 			kpIndexModule.kpIndexFlowable,
 			geomagLocationModule.geomagLocationFlowable,
 			darknessModule.darknessFlowable,
-			visibilityModule.visibilityFlowable,
-			auroraReportRelay.toFlowable(BackpressureStrategy.LATEST)
+			visibilityModule.visibilityFlowable
 		)
 		DebugAuroraReportStreamable(realStreamable, debugSettings, timeModule.now)
 	}

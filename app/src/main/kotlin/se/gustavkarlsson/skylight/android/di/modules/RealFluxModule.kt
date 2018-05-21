@@ -19,7 +19,7 @@ class RealFluxModule(
 			mapAction(::hideDialog)
 
 			reduceResult { state, _: AuroraReportResult.Idle ->
-				state.copy(throwable = null)
+				state.copy(isRefreshing = false, throwable = null)
 			}
 			reduceResult { state, _: AuroraReportResult.InFlight ->
 				state.copy(isRefreshing = true, throwable = null)
@@ -58,7 +58,7 @@ class RealFluxModule(
 				.map<AuroraReportResult> { AuroraReportResult.Success(it) }
 				.onErrorReturn { AuroraReportResult.Failure(it) }
 				.toObservable()
-				.startWith(AuroraReportResult.InFlight)
+				.concatWith(Observable.just(AuroraReportResult.Idle))
 		} else {
 			Observable.just(AuroraReportResult.Idle)
 		}

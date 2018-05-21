@@ -5,7 +5,6 @@ import com.crashlytics.android.Crashlytics
 import com.jakewharton.threetenabp.AndroidThreeTen
 import io.fabric.sdk.android.Fabric
 import io.reactivex.plugins.RxJavaPlugins
-import se.gustavkarlsson.skylight.android.flux.GetAuroraReportAction
 import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.util.CrashlyticsTree
@@ -24,7 +23,6 @@ class Skylight : MultiDexApplication() {
 		setupSettingsAnalytics(appComponent.settings)
 		scheduleBackgroundNotifications()
 		appComponent.store.start()
-		appComponent.store.postAction(GetAuroraReportAction)
 	}
 
 	private fun bootstrap() {

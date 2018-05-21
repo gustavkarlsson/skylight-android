@@ -15,39 +15,16 @@ class CombiningAuroraReportStreamable(
 	kpIndexes: Flowable<KpIndex>,
 	geomagLocations: Flowable<GeomagLocation>,
 	darknesses: Flowable<Darkness>,
-	visibilities: Flowable<Visibility>,
-	otherAuroraReports: Flowable<AuroraReport>
+	visibilities: Flowable<Visibility>
 ) : Streamable<AuroraReport> {
-
-	private val otherAuroraReportsShared = otherAuroraReports.publish().autoConnect(5)
-
-	private val mergedLocationNames = otherAuroraReportsShared
-		.map { Optional.ofNullable<String>(it.locationName) }
-		.mergeWith(locationNames)
-
-	private val mergedKpIndexes = otherAuroraReportsShared
-		.map { it.factors.kpIndex }
-		.mergeWith(kpIndexes)
-
-	private val mergedGeomagLocations = otherAuroraReportsShared
-		.map { it.factors.geomagLocation }
-		.mergeWith(geomagLocations)
-
-	private val mergedDarknesses = otherAuroraReportsShared
-		.map { it.factors.darkness }
-		.mergeWith(darknesses)
-
-	private val mergedVisibilities = otherAuroraReportsShared
-		.map { it.factors.visibility }
-		.mergeWith(visibilities)
 
 	override val stream: Flowable<AuroraReport> =
 		Flowable.combineLatest(
-			mergedLocationNames,
-			mergedKpIndexes,
-			mergedGeomagLocations,
-			mergedDarknesses,
-			mergedVisibilities,
+			locationNames,
+			kpIndexes,
+			geomagLocations,
+			darknesses,
+			visibilities,
 			Function5 { locationName: Optional<String>,
 						kpIndex: KpIndex,
 						geomagLocation: GeomagLocation,
