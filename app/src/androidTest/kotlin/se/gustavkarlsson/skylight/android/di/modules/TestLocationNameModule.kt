@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.di.modules
 import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
 import se.gustavkarlsson.skylight.android.entities.Location
-import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
 import se.gustavkarlsson.skylight.android.services_impl.streamables.LocationNameProviderStreamable
@@ -16,17 +15,13 @@ class TestLocationNameModule(
 
 	override val locationNameProvider: LocationNameProvider = testLocationNameProvider
 
-	override val locationNameStreamable: Streamable<Optional<String>> by lazy {
-		LocationNameProviderStreamable(locationFlowable, locationNameProvider, RETRY_DELAY)
+	private val locationNameStreamable: Streamable<Optional<String>> by lazy {
+		LocationNameProviderStreamable(locationFlowable, locationNameProvider)
 	}
 
 	override val locationNameFlowable: Flowable<Optional<String>> by lazy {
 		locationNameStreamable.stream
 			.replay(1)
 			.refCount()
-	}
-
-	companion object {
-		private val RETRY_DELAY = 10.seconds
 	}
 }

@@ -5,6 +5,7 @@ import io.reactivex.Single
 import java.util.*
 
 class AndroidLocalizationModule(private val contextModule: ContextModule) : LocalizationModule {
+
 	override val locale: Single<Locale>
 		get() = Single.fromCallable {
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

@@ -7,14 +7,13 @@ import se.gustavkarlsson.skylight.android.services.providers.GeomagLocationProvi
 import se.gustavkarlsson.skylight.android.services_impl.providers.GeomagLocationProviderImpl
 import se.gustavkarlsson.skylight.android.services_impl.streamables.GeomagLocationProviderStreamable
 
-class RealGeomagLocationModule(locationModule: LocationModule) :
-	GeomagLocationModule {
+class RealGeomagLocationModule(locationModule: LocationModule) : GeomagLocationModule {
 
 	override val geomagLocationProvider: GeomagLocationProvider by lazy {
 		GeomagLocationProviderImpl()
 	}
 
-	override val geomagLocationStreamable: Streamable<GeomagLocation> by lazy {
+	private val geomagLocationStreamable: Streamable<GeomagLocation> by lazy {
 		GeomagLocationProviderStreamable(
 			locationModule.locationFlowable,
 			geomagLocationProvider

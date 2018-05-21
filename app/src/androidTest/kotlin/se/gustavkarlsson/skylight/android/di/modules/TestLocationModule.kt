@@ -13,7 +13,7 @@ class TestLocationModule(testLocationProvider: TestLocationProvider) : LocationM
 
 	override val locationProvider: LocationProvider = testLocationProvider
 
-	override val locationStreamable: Streamable<Location> by lazy {
+	private val locationStreamable: Streamable<Location> by lazy {
 		object : Streamable<Location> {
 			override val stream: Flowable<Location>
 				get() = locationProvider.get()

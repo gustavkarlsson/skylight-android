@@ -7,6 +7,7 @@ import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.SystemTimeWithFixedZoneIdProvider
 
 class SystemTimeModule : TimeModule {
+
 	override val timeProvider: TimeProvider by lazy {
 		SystemTimeWithFixedZoneIdProvider(ZoneId.systemDefault())
 	}

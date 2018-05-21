@@ -28,7 +28,7 @@ class OpenWeatherMapVisibilityModule(
 		)
 	}
 
-	override val visibilityStreamable: Streamable<Visibility> by lazy {
+	private val visibilityStreamable: Streamable<Visibility> by lazy {
 		VisibilityProviderStreamable(
 			locationModule.locationFlowable,
 			visibilityProvider

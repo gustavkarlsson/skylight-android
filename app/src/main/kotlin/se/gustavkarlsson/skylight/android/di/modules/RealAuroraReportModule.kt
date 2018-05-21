@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.di.modules
 
 import io.reactivex.Flowable
-import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
@@ -30,11 +29,7 @@ class RealAuroraReportModule(
 		)
 	}
 
-	override val auroraReportSingle: Single<AuroraReport> by lazy {
-		auroraReportProvider.get()
-	}
-
-	override val auroraReportStreamable: Streamable<AuroraReport> by lazy {
+	private val auroraReportStreamable: Streamable<AuroraReport> by lazy {
 		CombiningAuroraReportStreamable(
 			timeModule.now,
 			locationNameModule.locationNameFlowable,

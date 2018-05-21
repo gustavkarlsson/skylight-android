@@ -8,6 +8,7 @@ class RealFluxModule(
 	private val auroraReportModule: AuroraReportModule,
 	private val connectivityModule: ConnectivityModule
 ) : FluxModule {
+
 	override val store: SkylightStore by lazy {
 		buildStore<SkylightState, SkylightAction, SkylightResult> {
 			initWith(SkylightState())
@@ -48,7 +49,7 @@ class RealFluxModule(
 	}
 
 	private fun getAuroraReport(action: GetAuroraReportAction): Observable<AuroraReportResult> =
-		auroraReportModule.auroraReportSingle
+		auroraReportModule.auroraReportProvider.get()
 			.map<AuroraReportResult> { AuroraReportResult.Success(it) }
 			.onErrorReturn { AuroraReportResult.Failure(it) }
 			.toObservable()

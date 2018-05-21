@@ -5,6 +5,7 @@ import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services_impl.evaluation.*
 
 class RealEvaluationModule : EvaluationModule {
+
 	override val kpIndexEvaluator: ChanceEvaluator<KpIndex> by lazy {
 		KpIndexEvaluator()
 	}

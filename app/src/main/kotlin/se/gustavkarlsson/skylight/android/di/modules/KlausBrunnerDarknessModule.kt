@@ -14,7 +14,7 @@ class KlausBrunnerDarknessModule(
 
 	override val darknessProvider: DarknessProvider by lazy { KlausBrunnerDarknessProvider() }
 
-	override val darknessStreamable: Streamable<Darkness> by lazy {
+	private val darknessStreamable: Streamable<Darkness> by lazy {
 		DarknessProviderStreamable(
 			locationModule.locationFlowable,
 			darknessProvider,

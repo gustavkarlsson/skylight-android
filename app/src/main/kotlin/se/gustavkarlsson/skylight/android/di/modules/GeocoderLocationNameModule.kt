@@ -18,7 +18,7 @@ class GeocoderLocationNameModule(
 		GeocoderLocationNameProvider(geocoder)
 	}
 
-	override val locationNameStreamable: Streamable<Optional<String>> by lazy {
+	private val locationNameStreamable: Streamable<Optional<String>> by lazy {
 		LocationNameProviderStreamable(
 			locationModule.locationFlowable,
 			locationNameProvider

@@ -15,7 +15,6 @@ class AndroidViewModelsModule(
 	timeModule: TimeModule
 ) : ViewModelsModule {
 
-
 	private val mainViewModelFactory: MainViewModelFactory by lazy {
 		MainViewModelFactory(
 			fluxModule.store,
