@@ -123,10 +123,8 @@ dependencies {
 	implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 	implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
 
-	// ReactiveX
-	implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
-
 	// Rx misc
+	implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
 	implementation "com.jakewharton.rxrelay2:rxrelay:$rxrelay_version"
 	implementation "com.tbruyelle.rxpermissions2:rxpermissions:${rxpermissions_version}@aar"
 	implementation "pl.charmas.android:android-reactive-location2:${reactive_location_version}@aar"
@@ -152,6 +150,10 @@ dependencies {
 	// Firebase
 	implementation "com.google.firebase:firebase-core:$firebase_version"
 	implementation "com.crashlytics.sdk.android:crashlytics:$crashlytics_version"
+
+	// Leakcanary
+	debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
+	releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
 
 
 	// Testing
