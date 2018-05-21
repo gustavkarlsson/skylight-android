@@ -22,6 +22,7 @@ dependencies {
 	api "com.jakewharton.timber:timber:$timber_version"
 	api "com.hadisatrio:Optional:$optional_version"
 	api "io.reactivex.rxjava2:rxjava:$rxjava_version"
+	api "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
 
 	androidTestImplementation "com.willowtreeapps.assertk:assertk:$assertk_version"
 	androidTestImplementation "com.android.support.test:runner:$android_support_test_version"
