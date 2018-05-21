@@ -11,7 +11,7 @@ open class SkylightBackgroundComponent(
 	formattingModule: FormattingModule,
 	evaluationModule: EvaluationModule,
 	settingsModule: SettingsModule,
-	auroraReportModule: AuroraReportModule,
+	fluxModule: FluxModule,
 	timeModule: TimeModule,
 	activityClass: Class<out Activity>,
 	scheduleInterval: Duration,
@@ -37,7 +37,7 @@ open class SkylightBackgroundComponent(
 	open val schedulingModule: SchedulingModule by lazy {
 		EvernoteJobSchedulingModule(
 			contextModule,
-			auroraReportModule,
+			fluxModule,
 			notificationModule,
 			settingsModule,
 			scheduleInterval,

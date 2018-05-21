@@ -18,8 +18,11 @@ class RealFluxModule(
 			mapAction(::showDialog)
 			mapAction(::hideDialog)
 
+			reduceResult { state, _: AuroraReportResult.JustFinished ->
+				state.copy(justFinishedRefreshing = true)
+			}
 			reduceResult { state, _: AuroraReportResult.Idle ->
-				state.copy(isRefreshing = false, throwable = null)
+				state.copy(isRefreshing = false, throwable = null, justFinishedRefreshing = false)
 			}
 			reduceResult { state, _: AuroraReportResult.InFlight ->
 				state.copy(isRefreshing = true, throwable = null)
@@ -50,7 +53,7 @@ class RealFluxModule(
 			.onErrorReturn { AuroraReportResult.Failure(it) }
 			.toObservable()
 			.startWith(AuroraReportResult.InFlight)
-			.concatWith(Observable.just(AuroraReportResult.Idle))
+			.concatWith(Observable.just(AuroraReportResult.JustFinished, AuroraReportResult.Idle))
 
 	private fun streamAuroraReports(action: AuroraReportStreamAction): Observable<AuroraReportResult> =
 		if (action.stream) {
@@ -58,7 +61,6 @@ class RealFluxModule(
 				.map<AuroraReportResult> { AuroraReportResult.Success(it) }
 				.onErrorReturn { AuroraReportResult.Failure(it) }
 				.toObservable()
-				.concatWith(Observable.just(AuroraReportResult.Idle))
 		} else {
 			Observable.just(AuroraReportResult.Idle)
 		}

@@ -122,7 +122,7 @@ open class SkylightAppComponent(
 			formattingModule,
 			evaluationModule,
 			settingsModule,
-			auroraReportModule,
+			fluxModule,
 			timeModule,
 			MainActivity::class.java,
 			20.minutes,

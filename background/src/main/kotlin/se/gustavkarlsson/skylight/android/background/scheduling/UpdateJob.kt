@@ -7,17 +7,19 @@ import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.background.notifications.AuroraReportNotificationDecider
 import se.gustavkarlsson.skylight.android.background.notifications.Notifier
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.flux.GetAuroraReportAction
+import se.gustavkarlsson.skylight.android.flux.SkylightStore
 import timber.log.Timber
 
 internal class UpdateJob(
-	private val auroraReportSingle: Single<AuroraReport>,
+	private val store: SkylightStore,
 	private val decider: AuroraReportNotificationDecider,
 	private val notifier: Notifier<AuroraReport>
 ) : Job() {
 
 	override fun onRunJob(params: Job.Params): Job.Result {
 		return try {
-			auroraReportSingle
+			getAuroraReport()
 				.blockingGet().let {
 					if (decider.shouldNotify(it)) {
 						notifier.notify(it)
@@ -29,6 +31,28 @@ internal class UpdateJob(
 			Timber.e(e, "Failed to run job")
 			FAILURE
 		}
+	}
+
+	private fun getAuroraReport(): Single<AuroraReport> {
+		return store.getState()
+			.doOnSubscribe { store.postAction(GetAuroraReportAction) }
+			.flatMapSingle {
+				if (it.throwable == null) {
+					Single.just(it)
+				} else {
+					Single.error(it.throwable)
+				}
+			}
+			.filter { it.justFinishedRefreshing }
+			.flatMapSingle {
+				val auroraReport = it.auroraReport
+				if (auroraReport != null) {
+					Single.just(auroraReport)
+				} else {
+					Single.error(Exception("No aurora report after refreshing"))
+				}
+			}
+			.firstOrError()
 	}
 
 	companion object {

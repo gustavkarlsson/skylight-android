@@ -96,7 +96,6 @@ android {
 
 dependencies {
 	implementation project(":core")
-	implementation project(":flux")
 	implementation project(":background")
 
 	implementation "com.android.support:multidex:$multidex_version"

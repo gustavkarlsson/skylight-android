@@ -49,8 +49,9 @@ class MainViewModel(
 	val errorMessages: Observable<Int> = store.getState()
 		.filter { it.throwable != null }
 		.map {
-			if (it.throwable is UserFriendlyException) {
-				it.throwable.stringResourceId
+			val throwable = it.throwable
+			if (throwable is UserFriendlyException) {
+				throwable.stringResourceId
 			} else {
 				R.string.error_unknown_update_error
 			}
