@@ -8,7 +8,7 @@ import io.reactivex.schedulers.Schedulers
 
 class StoreBuilder<State : Any, Command : Any, Result : Any>
 internal constructor() {
-	private var initialState: (() -> State)? = null
+	private var initialState: State? = null
 	private val commandTransformers =
 		mutableListOf<CommandTransformer<Command, Result>>()
 	private val commandWithStateTransformers =
@@ -19,12 +19,8 @@ internal constructor() {
 		mutableListOf<StateWatcher<State>>()
 	private var observeScheduler: Scheduler? = null
 
-	fun initWith(initialState: () -> State) {
-		this.initialState = initialState
-	}
-
 	fun initWith(initialState: State) {
-		initWith { initialState }
+		this.initialState = initialState
 	}
 
 	fun transformCommands(
