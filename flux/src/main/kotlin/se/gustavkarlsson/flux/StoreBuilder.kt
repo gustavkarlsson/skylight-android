@@ -6,13 +6,13 @@ import io.reactivex.rxkotlin.ofType
 import io.reactivex.rxkotlin.withLatestFrom
 import io.reactivex.schedulers.Schedulers
 
-class StoreBuilder<State : Any, Action : Any, Result : Any>
+class StoreBuilder<State : Any, Command : Any, Result : Any>
 internal constructor() {
 	private var initialState: (() -> State)? = null
-	private val actionTransformers =
-		mutableListOf<ActionTransformer<Action, Result>>()
-	private val actionWithStateTransformers =
-		mutableListOf<ActionWithStateTransformer<State, Action, Result>>()
+	private val commandTransformers =
+		mutableListOf<CommandTransformer<Command, Result>>()
+	private val commandWithStateTransformers =
+		mutableListOf<CommandWithStateTransformer<State, Command, Result>>()
 	private val resultReducers =
 		mutableListOf<ResultReducer<State, Result>>()
 	private val stateWatchers =
@@ -27,63 +27,63 @@ internal constructor() {
 		initWith { initialState }
 	}
 
-	fun transformActions(
-		transformer: (Observable<Action>) -> Observable<Result>
+	fun transformCommands(
+		transformer: (Observable<Command>) -> Observable<Result>
 	) {
-		actionTransformers += transformer
+		commandTransformers += transformer
 	}
 
-	inline fun <reified A : Action, R : Result> mapAction(
-		noinline mapper: (A) -> R
+	inline fun <reified C : Command, R : Result> mapCommand(
+		noinline mapper: (C) -> R
 	) {
-		transformActions { actions: Observable<Action> ->
-			actions.ofType<A>().map(mapper)
+		transformCommands { commands: Observable<Command> ->
+			commands.ofType<C>().map(mapper)
 		}
 	}
 
-	inline fun <reified A : Action, R : Result> flatMapAction(
-		noinline mapper: (A) -> Observable<R>
+	inline fun <reified C : Command, R : Result> flatMapCommand(
+		noinline mapper: (C) -> Observable<R>
 	) {
-		transformActions { actions: Observable<Action> ->
-			actions.ofType<A>().flatMap(mapper)
+		transformCommands { commands: Observable<Command> ->
+			commands.ofType<C>().flatMap(mapper)
 		}
 	}
 
-	inline fun <reified A : Action, R : Result> switchMapAction(
-		noinline mapper: (A) -> Observable<R>
+	inline fun <reified C : Command, R : Result> switchMapCommand(
+		noinline mapper: (C) -> Observable<R>
 	) {
-		transformActions { actions: Observable<Action> ->
-			actions.ofType<A>().switchMap(mapper)
+		transformCommands { commands: Observable<Command> ->
+			commands.ofType<C>().switchMap(mapper)
 		}
 	}
 
-	fun transformActionsWithState(
-		transformers: (Observable<State>, Observable<Action>) -> Observable<Result>
+	fun transformCommandsWithState(
+		transformers: (Observable<State>, Observable<Command>) -> Observable<Result>
 	) {
-		actionWithStateTransformers += transformers
+		commandWithStateTransformers += transformers
 	}
 
-	inline fun <reified A : Action, R : Result> mapActionWithState(
-		noinline mapper: (A, State) -> R
+	inline fun <reified C : Command, R : Result> mapCommandWithState(
+		noinline mapper: (C, State) -> R
 	) {
-		transformActionsWithState { states: Observable<State>, actions: Observable<Action> ->
-			actions.ofType<A>().withLatestFrom(states, mapper)
+		transformCommandsWithState { states: Observable<State>, commands: Observable<Command> ->
+			commands.ofType<C>().withLatestFrom(states, mapper)
 		}
 	}
 
-	inline fun <reified A : Action, R : Result> flatMapActionWithState(
-		noinline mapper: (A, State) -> Observable<R>
+	inline fun <reified C : Command, R : Result> flatMapCommandWithState(
+		noinline mapper: (C, State) -> Observable<R>
 	) {
-		transformActionsWithState { states: Observable<State>, actions: Observable<Action> ->
-			actions.ofType<A>().withLatestFrom(states, mapper).flatMap { it }
+		transformCommandsWithState { states: Observable<State>, commands: Observable<Command> ->
+			commands.ofType<C>().withLatestFrom(states, mapper).flatMap { it }
 		}
 	}
 
-	inline fun <reified A : Action, R : Result> switchMapActionWithState(
-		noinline mapper: (A, State) -> Observable<R>
+	inline fun <reified C : Command, R : Result> switchMapCommandWithState(
+		noinline mapper: (C, State) -> Observable<R>
 	) {
-		transformActionsWithState { states: Observable<State>, actions: Observable<Action> ->
-			actions.ofType<A>().withLatestFrom(states, mapper).switchMap { it }
+		transformCommandsWithState { states: Observable<State>, commands: Observable<Command> ->
+			commands.ofType<C>().withLatestFrom(states, mapper).switchMap { it }
 		}
 	}
 
@@ -103,9 +103,9 @@ internal constructor() {
 		observeScheduler = scheduler
 	}
 
-	inline fun <reified A : Action> doOnAction(crossinline block: (A) -> Unit) {
-		flatMapAction { action: A ->
-			block(action)
+	inline fun <reified C : Command> doOnCommand(crossinline block: (C) -> Unit) {
+		flatMapCommand { command: C ->
+			block(command)
 			Observable.empty<Result>()
 		}
 	}
@@ -121,17 +121,17 @@ internal constructor() {
 		stateWatchers += block
 	}
 
-	fun build(): Store<State, Action, Result> {
+	fun build(): Store<State, Command, Result> {
 		val initialState = initialState
 			?: throw IllegalStateException("No initial state set")
-		if (actionTransformers.isEmpty() && actionWithStateTransformers.isEmpty()) {
-			throw IllegalStateException("No action transformers defined")
+		if (commandTransformers.isEmpty() && commandWithStateTransformers.isEmpty()) {
+			throw IllegalStateException("No command transformers defined")
 		}
 		if (resultReducers.isEmpty()) throw IllegalStateException("No result reducers defined")
 		return Store(
 			initialState,
-			actionTransformers,
-			actionWithStateTransformers,
+			commandTransformers,
+			commandWithStateTransformers,
 			resultReducers,
 			stateWatchers,
 			observeScheduler,
@@ -140,10 +140,10 @@ internal constructor() {
 	}
 }
 
-fun <State : Any, Action : Any, Result : Any> buildStore(
-	block: StoreBuilder<State, Action, Result>.() -> Unit
-): Store<State, Action, Result> {
-	val builder = StoreBuilder<State, Action, Result>()
+fun <State : Any, Command : Any, Result : Any> buildStore(
+	block: StoreBuilder<State, Command, Result>.() -> Unit
+): Store<State, Command, Result> {
+	val builder = StoreBuilder<State, Command, Result>()
 	builder.block()
 	return builder.build()
 }

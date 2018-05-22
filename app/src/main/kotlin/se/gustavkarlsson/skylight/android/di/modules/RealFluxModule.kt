@@ -13,14 +13,14 @@ class RealFluxModule(
 ) : FluxModule {
 
 	override val store: SkylightStore by lazy {
-		buildStore<SkylightState, SkylightAction, SkylightResult> {
+		buildStore<SkylightState, SkylightCommand, SkylightResult> {
 			initWith(SkylightState())
 
-			switchMapAction(::getAuroraReport)
-			switchMapAction(::streamAuroraReports)
-			switchMapAction(::streamConnectivity)
-			mapAction(::showDialog)
-			mapAction(::hideDialog)
+			switchMapCommand(::getAuroraReport)
+			switchMapCommand(::streamAuroraReports)
+			switchMapCommand(::streamConnectivity)
+			mapCommand(::showDialog)
+			mapCommand(::hideDialog)
 
 			reduceResult { state, _: AuroraReportResult.JustFinished ->
 				state.copy(justFinishedRefreshing = true)
@@ -51,14 +51,14 @@ class RealFluxModule(
 			observeOn(AndroidSchedulers.mainThread())
 
 			if (BuildConfig.DEBUG) {
-				doOnAction<SkylightAction> { Timber.d("Got action: $it") }
+				doOnCommand<SkylightCommand> { Timber.d("Got action: $it") }
 				doOnResult<SkylightResult> { Timber.d("Got result: $it") }
 				doOnState { Timber.d("Got state: $it") }
 			}
 		}
 	}
 
-	private fun getAuroraReport(action: GetAuroraReportAction): Observable<AuroraReportResult> =
+	private fun getAuroraReport(action: GetAuroraReportCommand): Observable<AuroraReportResult> =
 		auroraReportModule.auroraReportProvider.get()
 			.map<AuroraReportResult> { AuroraReportResult.Success(it) }
 			.onErrorReturn { AuroraReportResult.Failure(it) }
@@ -66,7 +66,7 @@ class RealFluxModule(
 			.startWith(AuroraReportResult.InFlight)
 			.concatWith(Observable.just(AuroraReportResult.JustFinished, AuroraReportResult.Idle))
 
-	private fun streamAuroraReports(action: AuroraReportStreamAction): Observable<AuroraReportResult> =
+	private fun streamAuroraReports(action: AuroraReportStreamCommand): Observable<AuroraReportResult> =
 		if (action.stream) {
 			auroraReportModule.auroraReportFlowable
 				.map<AuroraReportResult> { AuroraReportResult.Success(it) }
@@ -76,13 +76,13 @@ class RealFluxModule(
 			Observable.just(AuroraReportResult.Idle)
 		}
 
-	private fun showDialog(action: ShowDialogAction): DialogResult =
+	private fun showDialog(action: ShowDialogCommand): DialogResult =
 		DialogResult(SkylightState.Dialog(action.titleResource, action.messageResource))
 
-	private fun hideDialog(action: HideDialogAction): DialogResult =
+	private fun hideDialog(action: HideDialogCommand): DialogResult =
 		DialogResult(null)
 
-	private fun streamConnectivity(action: ConnectivityStreamAction): Observable<ConnectivityResult> =
+	private fun streamConnectivity(action: ConnectivityStreamCommand): Observable<ConnectivityResult> =
 		connectivityModule.connectivityFlowable
 			.map(::ConnectivityResult)
 			.toObservable()

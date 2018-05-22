@@ -6,11 +6,11 @@ import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
 
-class Store<State : Any, Action : Any, Result : Any>
+class Store<State : Any, Command : Any, Result : Any>
 internal constructor(
 	initialState: () -> State,
-	actionTransformers: List<ActionTransformer<Action, Result>>,
-	actionWithStateTransformers: List<ActionWithStateTransformer<State, Action, Result>>,
+	commandTransformers: List<CommandTransformer<Command, Result>>,
+	commandWithStateTransformers: List<CommandWithStateTransformer<State, Command, Result>>,
 	resultReducers: List<ResultReducer<State, Result>>,
 	stateWatchers: List<StateWatcher<State>>,
 	observeScheduler: Scheduler?,
@@ -18,22 +18,22 @@ internal constructor(
 ) {
 	private var statesSubscription: Disposable? = null
 
-	fun postAction(action: Action) {
+	fun post(issue: Command) {
 		if (statesSubscription == null) {
-			throw IllegalStateException("Can't post actions until started")
+			throw IllegalStateException("Can't post commands until started")
 		}
-		actions.accept(action)
+		commands.accept(issue)
 	}
 
-	private val actions: Relay<Action> = PublishRelay.create<Action>()
+	private val commands: Relay<Command> = PublishRelay.create<Command>()
 
-	private val results: Observable<Result> = actions
+	private val results: Observable<Result> = commands
 		.publish {
 			it.compose(
-				ActionToResultTransformer(
+				CommandToResultTransformer(
 					states,
-					actionTransformers,
-					actionWithStateTransformers
+					commandTransformers,
+					commandWithStateTransformers
 				)
 			)
 		}

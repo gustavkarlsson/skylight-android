@@ -38,12 +38,12 @@ class MainViewModel(
 ) : ViewModel() {
 
 	init {
-		store.postAction(GetAuroraReportAction)
-		store.postAction(AuroraReportStreamAction(true))
+		store.post(GetAuroraReportCommand)
+		store.post(AuroraReportStreamCommand(true))
 	}
 
 	val swipedToRefresh: Consumer<Unit> = Consumer {
-		store.postAction(GetAuroraReportAction)
+		store.post(GetAuroraReportCommand)
 	}
 
 	val errorMessages: Observable<Int> = store.getState()
@@ -193,27 +193,27 @@ class MainViewModel(
 		.distinctUntilChanged()
 
 	val hideDialogClicked: Consumer<Unit> = Consumer {
-		store.postAction(HideDialogAction)
+		store.post(HideDialogCommand)
 	}
 
 	val darknessFactorClicked: Consumer<Unit> = Consumer {
-		store.postAction(
-			ShowDialogAction(R.string.factor_darkness_title_full, R.string.factor_darkness_desc))
+		store.post(
+			ShowDialogCommand(R.string.factor_darkness_title_full, R.string.factor_darkness_desc))
 	}
 
 	val geomagLocationFactorClicked: Consumer<Unit> = Consumer {
-		store.postAction(
-			ShowDialogAction(R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc))
+		store.post(
+			ShowDialogCommand(R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc))
 	}
 
 	val kpIndexFactorClicked: Consumer<Unit> = Consumer {
-		store.postAction(
-			ShowDialogAction(R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc))
+		store.post(
+			ShowDialogCommand(R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc))
 	}
 
 	val visibilityFactorClicked: Consumer<Unit> = Consumer {
-		store.postAction(
-			ShowDialogAction(R.string.factor_visibility_title_full, R.string.factor_visibility_desc))
+		store.post(
+			ShowDialogCommand(R.string.factor_visibility_title_full, R.string.factor_visibility_desc))
 	}
 
 	val showDialog: Observable<SkylightState.Dialog> = store.getState()
@@ -231,6 +231,6 @@ class MainViewModel(
 		.map { Unit }
 
 	override fun onCleared() {
-		store.postAction(AuroraReportStreamAction(false))
+		store.post(AuroraReportStreamCommand(false))
 	}
 }

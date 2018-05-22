@@ -2,9 +2,9 @@ package se.gustavkarlsson.flux
 
 import io.reactivex.Observable
 
-internal typealias ActionTransformer<Action, Result> = (Observable<Action>) -> Observable<Result>
+internal typealias CommandTransformer<Command, Result> = (Observable<Command>) -> Observable<Result>
 
-internal typealias ActionWithStateTransformer<State, Action, Result> =
-		(Observable<State>, Observable<Action>) -> Observable<Result>
+internal typealias CommandWithStateTransformer<State, Command, Result> =
+		(Observable<State>, Observable<Command>) -> Observable<Result>
 
 internal typealias StateWatcher<State> = (State) -> Unit

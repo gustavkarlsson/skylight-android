@@ -7,7 +7,7 @@ import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.background.notifications.AuroraReportNotificationDecider
 import se.gustavkarlsson.skylight.android.background.notifications.Notifier
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.flux.GetAuroraReportAction
+import se.gustavkarlsson.skylight.android.flux.GetAuroraReportCommand
 import se.gustavkarlsson.skylight.android.flux.SkylightStore
 import timber.log.Timber
 
@@ -35,7 +35,7 @@ internal class UpdateJob(
 
 	private fun getAuroraReport(): Single<AuroraReport> {
 		return store.getState()
-			.doOnSubscribe { store.postAction(GetAuroraReportAction) }
+			.doOnSubscribe { store.post(GetAuroraReportCommand) }
 			.flatMapSingle {
 				if (it.throwable == null) {
 					Single.just(it)
