@@ -53,3 +53,7 @@
 -keepattributes *Annotation*
 -keepattributes SourceFile,LineNumberTable
 -keep public class * extends java.lang.Exception
+
+# GMS
+-keep public class com.google.android.gms.* { public *; }
+-dontwarn com.google.android.gms.**
