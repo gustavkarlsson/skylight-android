@@ -34,8 +34,8 @@ internal class UpdateJob(
 	}
 
 	private fun getAuroraReport(): Single<AuroraReport> {
-		return store.getState()
-			.doOnSubscribe { store.post(GetAuroraReportCommand) }
+		return store.states
+			.doOnSubscribe { store.issue(GetAuroraReportCommand) }
 			.flatMapSingle {
 				if (it.throwable == null) {
 					Single.just(it)

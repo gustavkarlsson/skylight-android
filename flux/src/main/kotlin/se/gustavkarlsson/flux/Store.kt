@@ -6,6 +6,14 @@ import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
 
+/**
+ * Manages application (sub)state by accepting commands,
+ * transforming them into any number of results, which are then used to generate new states
+ *
+ * @param State The type representing the state of the store
+ * @param Command Commands are issued to produce results
+ * @param Result The result of a command used to produce a new state
+ */
 class Store<State : Any, Command : Any, Result : Any>
 internal constructor(
 	initialState: () -> State,
@@ -16,13 +24,20 @@ internal constructor(
 	observeScheduler: Scheduler?,
 	reduceScheduler: Scheduler
 ) {
-	private var statesSubscription: Disposable? = null
+	private var internalSubscription: Disposable? = null
+	private var connection: Disposable? = null
 
-	fun post(issue: Command) {
-		if (statesSubscription == null) {
-			throw IllegalStateException("Can't post commands until started")
+	/**
+	 * Issue a [Command] to the store.
+	 *
+	 * @param command the command to issue
+	 * @throws IllegalStateException if store was not first [start]ed
+	 */
+	fun issue(command: Command) {
+		if (internalSubscription == null) {
+			throw IllegalStateException("Can't issue commands until started")
 		}
-		commands.accept(issue)
+		commands.accept(command)
 	}
 
 	private val commands: Relay<Command> = PublishRelay.create<Command>()
@@ -31,14 +46,14 @@ internal constructor(
 		.publish {
 			it.compose(
 				CommandToResultTransformer(
-					states,
+					connectableStates,
 					commandTransformers,
 					commandWithStateTransformers
 				)
 			)
 		}
 
-	private val states = results
+	private val connectableStates = results
 		.observeOn(reduceScheduler)
 		.scanWith(initialState, CompositeReducer(resultReducers))
 		.doOnNext { state -> stateWatchers.forEach { it(state) } }
@@ -51,18 +66,50 @@ internal constructor(
 		}
 		.replay(1)
 
-	@Synchronized
-	fun getState(): Observable<State> {
-		if (statesSubscription == null) {
-			throw IllegalStateException("Can't observe state until started")
-		}
-		return states
-	}
+	/**
+	 * An [Observable] of [State] objects emitted by this store, starting with the current state.
+	 *
+	 * Items will be observed on the observe [Scheduler] if one was specified
+	 * or a store-unique background thread.
+	 *
+	 * *Note: The store will not emit any [State] until [start]ed*
+	 *
+	 * *Note: All subscribers share a single upstream subscription,
+	 * so there is no need to use publishing operators such as [Observable.publish]*
+	 * @return An [Observable] of [State] updates
+	 */
+	val states: Observable<State>
+		@Synchronized
+		get() = connectableStates
 
+	/**
+	 * Starts processing of this store.
+	 * When started, [Command]s issued via [issue] will be accepted
+	 * and any observer of [states] will start receiving states.
+	 */
 	@Synchronized
 	fun start() {
-		if (statesSubscription != null) return
-		states.connect()
-		statesSubscription = states.subscribe()
+		if (isRunning) return
+		connection = connectableStates.connect()
+		internalSubscription = connectableStates.subscribe()
 	}
+
+	/**
+	 * Stops processing of this store.
+	 * When started, [Command]s issued via [issue] will no longer be accepted
+	 * and [states] will stop emitting [State]
+	 */
+	@Synchronized
+	fun stop() {
+		if (!isRunning) return
+		internalSubscription?.dispose()
+		connection?.dispose()
+		internalSubscription = null
+		connection = null
+	}
+
+	/**
+	 * Is this store running (has been [start]ed)
+	 */
+	val isRunning get() = internalSubscription != null
 }

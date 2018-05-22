@@ -38,15 +38,15 @@ class MainViewModel(
 ) : ViewModel() {
 
 	init {
-		store.post(GetAuroraReportCommand)
-		store.post(AuroraReportStreamCommand(true))
+		store.issue(GetAuroraReportCommand)
+		store.issue(AuroraReportStreamCommand(true))
 	}
 
 	val swipedToRefresh: Consumer<Unit> = Consumer {
-		store.post(GetAuroraReportCommand)
+		store.issue(GetAuroraReportCommand)
 	}
 
-	val errorMessages: Observable<Int> = store.getState()
+	val errorMessages: Observable<Int> = store.states
 		.filter { it.throwable != null }
 		.map {
 			val throwable = it.throwable
@@ -57,7 +57,7 @@ class MainViewModel(
 			}
 		}
 
-	val connectivityMessages: Observable<Optional<CharSequence>> = store.getState()
+	val connectivityMessages: Observable<Optional<CharSequence>> = store.states
 		.map(SkylightState::isConnectedToInternet)
 		.map { connected ->
 			if (connected) {
@@ -68,17 +68,17 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val locationName: Observable<CharSequence> = store.getState()
+	val locationName: Observable<CharSequence> = store.states
 		.map {
 			it.auroraReport?.locationName ?: defaultLocationName
 		}
 		.distinctUntilChanged()
 
-	val isRefreshing: Observable<Boolean> = store.getState()
+	val isRefreshing: Observable<Boolean> = store.states
 		.map(SkylightState::isRefreshing)
 		.distinctUntilChanged()
 
-	val chanceLevel: Observable<CharSequence> = store.getState()
+	val chanceLevel: Observable<CharSequence> = store.states
 		.map {
 			it.auroraReport
 				?.let(auroraChanceEvaluator::evaluate)
@@ -88,7 +88,7 @@ class MainViewModel(
 		.map(chanceLevelFormatter::format)
 		.distinctUntilChanged()
 
-	val timeSinceUpdate: Observable<CharSequence> = store.getState()
+	val timeSinceUpdate: Observable<CharSequence> = store.states
 		.filter { it.auroraReport != null }
 		.map { it.auroraReport!!.timestamp }
 		.switchMap {
@@ -101,7 +101,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val timeSinceUpdateVisibility: Observable<Boolean> = store.getState()
+	val timeSinceUpdateVisibility: Observable<Boolean> = store.states
 		.filter { it.auroraReport != null }
 		.map { it.auroraReport!!.timestamp }
 		.map {
@@ -112,7 +112,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val darknessValue: Observable<CharSequence> = store.getState()
+	val darknessValue: Observable<CharSequence> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -122,7 +122,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val darknessChance: Observable<Chance> = store.getState()
+	val darknessChance: Observable<Chance> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -132,7 +132,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val geomagLocationValue: Observable<CharSequence> = store.getState()
+	val geomagLocationValue: Observable<CharSequence> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -142,7 +142,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val geomagLocationChance: Observable<Chance> = store.getState()
+	val geomagLocationChance: Observable<Chance> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -152,7 +152,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val kpIndexValue: Observable<CharSequence> = store.getState()
+	val kpIndexValue: Observable<CharSequence> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -162,7 +162,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val kpIndexChance: Observable<Chance> = store.getState()
+	val kpIndexChance: Observable<Chance> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -172,7 +172,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val visibilityValue: Observable<CharSequence> = store.getState()
+	val visibilityValue: Observable<CharSequence> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -182,7 +182,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val visibilityChance: Observable<Chance> = store.getState()
+	val visibilityChance: Observable<Chance> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -193,37 +193,37 @@ class MainViewModel(
 		.distinctUntilChanged()
 
 	val hideDialogClicked: Consumer<Unit> = Consumer {
-		store.post(HideDialogCommand)
+		store.issue(HideDialogCommand)
 	}
 
 	val darknessFactorClicked: Consumer<Unit> = Consumer {
-		store.post(
+		store.issue(
 			ShowDialogCommand(R.string.factor_darkness_title_full, R.string.factor_darkness_desc))
 	}
 
 	val geomagLocationFactorClicked: Consumer<Unit> = Consumer {
-		store.post(
+		store.issue(
 			ShowDialogCommand(R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc))
 	}
 
 	val kpIndexFactorClicked: Consumer<Unit> = Consumer {
-		store.post(
+		store.issue(
 			ShowDialogCommand(R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc))
 	}
 
 	val visibilityFactorClicked: Consumer<Unit> = Consumer {
-		store.post(
+		store.issue(
 			ShowDialogCommand(R.string.factor_visibility_title_full, R.string.factor_visibility_desc))
 	}
 
-	val showDialog: Observable<SkylightState.Dialog> = store.getState()
+	val showDialog: Observable<SkylightState.Dialog> = store.states
 		.distinctUntilChanged { last, new ->
 			last.dialog == new.dialog
 		}
 		.filter { it.dialog != null }
 		.map { it.dialog!! }
 
-	val hideDialog: Observable<Unit> = store.getState()
+	val hideDialog: Observable<Unit> = store.states
 		.distinctUntilChanged { last, new ->
 			last.dialog == new.dialog
 		}
@@ -231,6 +231,6 @@ class MainViewModel(
 		.map { Unit }
 
 	override fun onCleared() {
-		store.post(AuroraReportStreamCommand(false))
+		store.issue(AuroraReportStreamCommand(false))
 	}
 }
