@@ -42,8 +42,8 @@ class AuroraFactorFragmentTest {
     }
 
     @Test
-    fun visibilityFactorViewShown() {
-        onView(withId(R.id.visibility)).check(matches(isDisplayed()))
+    fun weatherFactorViewShown() {
+        onView(withId(R.id.weather)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -62,8 +62,8 @@ class AuroraFactorFragmentTest {
     }
 
     @Test
-    fun clickVisibility_detailViewShown() {
-        whenFactorViewClickedDetailViewOpens(R.id.visibility, R.string.factor_visibility_title_full, R.string.factor_visibility_desc)
+    fun clickWeather_detailViewShown() {
+        whenFactorViewClickedDetailViewOpens(R.id.weather, R.string.factor_weather_title_full, R.string.factor_weather_desc)
     }
 
     @Test

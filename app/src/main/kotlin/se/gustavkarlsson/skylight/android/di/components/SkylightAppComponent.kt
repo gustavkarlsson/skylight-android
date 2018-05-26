@@ -52,8 +52,8 @@ open class SkylightAppComponent(
 	open val kpIndexModule: KpIndexModule =
 		RealKpIndexModule()
 
-	open val visibilityModule: VisibilityModule by lazy {
-		OpenWeatherMapVisibilityModule(openWeatherMapApiKey, locationModule)
+	open val weatherModule: WeatherModule by lazy {
+		OpenWeatherMapWeatherModule(openWeatherMapApiKey, locationModule)
 	}
 
 	open val locationNameModule: LocationNameModule by lazy {
@@ -68,7 +68,7 @@ open class SkylightAppComponent(
 			darknessModule,
 			geomagLocationModule,
 			kpIndexModule,
-			visibilityModule
+			weatherModule
 		)
 	}
 

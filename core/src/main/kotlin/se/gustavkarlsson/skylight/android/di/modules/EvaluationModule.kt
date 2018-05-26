@@ -6,7 +6,7 @@ import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 interface EvaluationModule {
     val kpIndexEvaluator: ChanceEvaluator<KpIndex>
     val geomagLocationEvaluator: ChanceEvaluator<GeomagLocation>
-    val visibilityEvaluator: ChanceEvaluator<Visibility>
+    val weatherEvaluator: ChanceEvaluator<Weather>
     val darknessEvaluator: ChanceEvaluator<Darkness>
     val auroraReportEvaluator: ChanceEvaluator<AuroraReport>
 }

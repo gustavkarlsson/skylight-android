@@ -117,7 +117,7 @@ class MainActivity : AuroraRequirementsCheckingActivity(), LifecycleObserver {
 			.subscribe(timeSinceUpdate.text())
 
 		viewModel.timeSinceUpdateVisibility
-			.doOnNext { Timber.d("Updating timeSinceUpdate visibility: %s", it) }
+			.doOnNext { Timber.d("Updating timeSinceUpdate weather: %s", it) }
 			.autoDisposable(scope())
 			.subscribe(timeSinceUpdate.visibility())
 
@@ -156,9 +156,9 @@ class MainActivity : AuroraRequirementsCheckingActivity(), LifecycleObserver {
 			"kpIndex"
 		)
 		bindFactor(
-			viewModel.visibilityValue, viewModel.visibilityChance, visibility,
-			viewModel.visibilityFactorClicked,
-			"visibility"
+			viewModel.weatherValue, viewModel.weatherChance, weather,
+			viewModel.weatherFactorClicked,
+			"weather"
 		)
 	}
 

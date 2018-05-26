@@ -3,7 +3,6 @@
 ## Soon
 * Rename chance to score
 * Remove exact value (only keep score)
-* Rename visibility to weather
 * Make settings part of store?
 * Integrate static analysis service (Code Climate, Codebeat, Codacy, Codecov, Coveralls, etc)
 * Add instrumentation testing to CI

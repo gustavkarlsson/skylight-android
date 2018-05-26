@@ -16,12 +16,12 @@
 		This value shows the Kp index which ranges from 0 to 9.
 		A higher value means higher chance to see the aurora.
 	</string>
-	<string name="factor_visibility_title_full">Visibility</string>
-	<string name="factor_visibility_title_compact">Visibility</string>
-	<string name="factor_visibility_desc">
+	<string name="factor_weather_title_full">Weather</string>
+	<string name="factor_weather_title_compact">Weather</string>
+	<string name="factor_weather_desc">
 		Bad weather can block your view of the aurora.
-		This value shows the visibility of the sky based on current weather conditions.
-		100% visibility means clear skies and is therefore ideal.
+		This value shows the current weather conditions in %.
+		100% means clear skies and is therefore ideal.
 	</string>
 	<string name="factor_darkness_title_full">Darkness</string>
 	<string name="factor_darkness_title_compact">Darkness</string>
