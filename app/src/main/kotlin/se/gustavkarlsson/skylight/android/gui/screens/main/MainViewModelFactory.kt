@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.gui.activities.main
+package se.gustavkarlsson.skylight.android.gui.screens.main
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider

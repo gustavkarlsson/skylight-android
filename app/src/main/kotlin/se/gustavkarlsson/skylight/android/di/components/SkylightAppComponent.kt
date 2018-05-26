@@ -7,8 +7,8 @@ import se.gustavkarlsson.skylight.android.background.di.components.SkylightBackg
 import se.gustavkarlsson.skylight.android.di.modules.*
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.flux.SkylightStore
-import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
-import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModel
+import se.gustavkarlsson.skylight.android.gui.MainActivity
+import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
 import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.Settings
 

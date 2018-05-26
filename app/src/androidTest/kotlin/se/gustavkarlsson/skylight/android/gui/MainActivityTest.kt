@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.gui.activities.main
+package se.gustavkarlsson.skylight.android.gui
 
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions
@@ -17,19 +17,19 @@ import se.gustavkarlsson.skylight.android.test.ApplicationComponentActivityTestR
 import se.gustavkarlsson.skylight.android.test.TestLocationProvider
 import se.gustavkarlsson.skylight.android.test.clearCache
 import se.gustavkarlsson.skylight.android.test.clearSharedPreferences
-import se.gustavkarlsson.skylight.android.testappComponent
+import se.gustavkarlsson.skylight.android.testAppComponent
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class MainActivityTest {
 
 	private val testLocationProvider: TestLocationProvider by lazy {
-		testappComponent.testLocationProvider
+		testAppComponent.testLocationProvider
 	}
 
     @Rule
 	@JvmField
-    var testRule = ApplicationComponentActivityTestRule(MainActivity::class, false, false)
+    var testRule = ApplicationComponentActivityTestRule(MainActivity::class)
 
 	@Before
 	fun setUp() {

@@ -1,11 +1,10 @@
-package se.gustavkarlsson.skylight.android.gui.activities.main
+package se.gustavkarlsson.skylight.android.gui
 
 import android.arch.lifecycle.LifecycleObserver
 import android.os.Bundle
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.findNavController
 import se.gustavkarlsson.skylight.android.extensions.setupActionBarWithNavController
-import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
 
 
 class MainActivity : AuroraRequirementsCheckingActivity(), LifecycleObserver {

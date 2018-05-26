@@ -4,8 +4,8 @@ import android.arch.lifecycle.ViewModelProviders
 import android.support.v4.app.Fragment
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.minutes
-import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModel
-import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModelFactory
+import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
+import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModelFactory
 
 class AndroidViewModelsModule(
 	fluxModule: FluxModule,
