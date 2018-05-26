@@ -37,10 +37,15 @@ class MainViewModel(
 	nowTextThreshold: Duration
 ) : ViewModel() {
 
-	init {
-		store.issue(GetAuroraReportCommand)
-		store.issue(AuroraReportStreamCommand(true))
-	}
+	private val locationPermissionGrantedDisposable = store.states
+		.distinctUntilChanged { last, new ->
+			last.locationPermission == new.locationPermission
+		}
+		.filter { it.locationPermission == SkylightState.LocationPermission.GRANTED }
+		.subscribe {
+			store.issue(GetAuroraReportCommand)
+			store.issue(AuroraReportStreamCommand(true))
+		}
 
 	val swipedToRefresh: Consumer<Unit> = Consumer {
 		store.issue(GetAuroraReportCommand)
@@ -230,7 +235,19 @@ class MainViewModel(
 		.filter { it.dialog == null }
 		.map { Unit }
 
+	val ensureLocationPermission: Observable<Unit> = store.states
+		.distinctUntilChanged { last, new ->
+			last.locationPermission == new.locationPermission
+		}
+		.filter { it.locationPermission == SkylightState.LocationPermission.UNKNOWN }
+		.map { Unit }
+
+	val reportLocationPermissionGranted: Consumer<Unit> = Consumer {
+		store.issue(SetLocationPermissionGrantedCommand)
+	}
+
 	override fun onCleared() {
 		store.issue(AuroraReportStreamCommand(false))
+		locationPermissionGrantedDisposable.dispose()
 	}
 }
