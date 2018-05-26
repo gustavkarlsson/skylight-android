@@ -45,6 +45,7 @@ buildscript {
 		android_gradle_version = "3.1.2"
 		autodispose_version = "0.8.0"
 		leakcanary_version = "1.5.4"
+		navigation_version = "1.0.0-alpha01"
 	}
 	repositories {
 		jcenter()

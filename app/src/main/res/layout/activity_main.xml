@@ -1,149 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:custom="http://schemas.android.com/apk/res-auto"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/coordinatorLayout"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	tools:context=".gui.activities.main.MainActivity">
+	tools:context=".gui.MainActivity">
 
-	<android.support.v4.widget.SwipeRefreshLayout
-		android:id="@+id/swipeRefreshLayout"
+	<fragment
+		android:id="@+id/mainNavHost"
+		android:name="androidx.navigation.fragment.NavHostFragment"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
-
-		<android.support.constraint.ConstraintLayout
-			android:layout_width="match_parent"
-			android:layout_height="match_parent">
-
-			<android.support.constraint.ConstraintLayout
-				android:id="@+id/auroraChanceSection"
-				android:layout_width="0dp"
-				android:layout_height="0dp"
-				custom:layout_constraintBottom_toTopOf="@+id/auroraFactorsSection"
-				custom:layout_constraintLeft_toLeftOf="parent"
-				custom:layout_constraintRight_toRightOf="parent"
-				custom:layout_constraintTop_toTopOf="parent"
-				custom:layout_constraintVertical_weight="2">
-
-				<TextView
-					android:id="@+id/chance"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:textSize="@dimen/chance_value_size"
-					android:textStyle="bold"
-					custom:layout_constraintBottom_toBottomOf="parent"
-					custom:layout_constraintLeft_toLeftOf="parent"
-					custom:layout_constraintRight_toRightOf="parent"
-					custom:layout_constraintTop_toTopOf="parent"
-					custom:layout_constraintVertical_bias="0.45"
-					tools:text="Medium Chance" />
-
-				<TextView
-					android:id="@+id/timeSinceUpdate"
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					custom:layout_constraintRight_toRightOf="@+id/chance"
-					custom:layout_constraintTop_toBottomOf="@+id/chance"
-					tools:text="3 minutes ago" />
-
-			</android.support.constraint.ConstraintLayout>
-
-			<android.support.constraint.ConstraintLayout
-				android:id="@+id/auroraFactorsSection"
-				android:layout_width="0dp"
-				android:layout_height="0dp"
-				custom:layout_constraintBottom_toBottomOf="parent"
-				custom:layout_constraintLeft_toLeftOf="parent"
-				custom:layout_constraintRight_toRightOf="parent"
-				custom:layout_constraintTop_toBottomOf="@+id/auroraChanceSection"
-				custom:layout_constraintVertical_weight="3">
-
-				<RelativeLayout
-					android:id="@+id/factorsHeader"
-					android:layout_width="0dp"
-					android:layout_height="wrap_content"
-					android:layout_centerVertical="true"
-					android:layout_marginBottom="20dp"
-					custom:layout_constraintBottom_toTopOf="@+id/kpIndex"
-					custom:layout_constraintLeft_toLeftOf="parent"
-					custom:layout_constraintRight_toRightOf="parent">
-
-					<TextView
-						android:id="@+id/text"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_centerInParent="true"
-						android:layout_marginLeft="10dp"
-						android:layout_marginRight="10dp"
-						android:text="@string/factors" />
-
-					<View
-						android:layout_width="match_parent"
-						android:layout_height="1dp"
-						android:layout_centerVertical="true"
-						android:layout_marginStart="@dimen/activity_horizontal_margin"
-						android:layout_toStartOf="@id/text"
-						android:background="@color/divider" />
-
-					<View
-						android:layout_width="match_parent"
-						android:layout_height="1dp"
-						android:layout_centerVertical="true"
-						android:layout_marginEnd="@dimen/activity_horizontal_margin"
-						android:layout_toEndOf="@id/text"
-						android:background="@color/divider" />
-
-				</RelativeLayout>
-
-				<se.gustavkarlsson.skylight.android.gui.views.AuroraFactorView
-					android:id="@+id/kpIndex"
-					android:layout_width="@dimen/factor_box_width"
-					android:layout_height="wrap_content"
-					custom:badgeIcon="@drawable/factor_kp_index_white_20dp"
-					custom:layout_constraintBottom_toTopOf="@+id/weather"
-					custom:layout_constraintLeft_toLeftOf="parent"
-					custom:layout_constraintRight_toLeftOf="@+id/geomagLocation"
-					custom:layout_constraintTop_toTopOf="parent"
-					custom:name="@string/factor_kp_index_title_compact" />
-
-				<se.gustavkarlsson.skylight.android.gui.views.AuroraFactorView
-					android:id="@+id/geomagLocation"
-					android:layout_width="@dimen/factor_box_width"
-					android:layout_height="wrap_content"
-					custom:badgeIcon="@drawable/factor_location_white_20dp"
-					custom:layout_constraintBottom_toTopOf="@+id/darkness"
-					custom:layout_constraintLeft_toRightOf="@+id/kpIndex"
-					custom:layout_constraintRight_toRightOf="parent"
-					custom:layout_constraintTop_toTopOf="parent"
-					custom:name="@string/factor_geomag_location_title_compact" />
-
-				<se.gustavkarlsson.skylight.android.gui.views.AuroraFactorView
-					android:id="@+id/weather"
-					android:layout_width="@dimen/factor_box_width"
-					android:layout_height="wrap_content"
-					custom:badgeIcon="@drawable/factor_weather_white_20dp"
-					custom:layout_constraintBottom_toBottomOf="parent"
-					custom:layout_constraintLeft_toLeftOf="parent"
-					custom:layout_constraintRight_toLeftOf="@+id/darkness"
-					custom:layout_constraintTop_toBottomOf="@+id/kpIndex"
-					custom:name="@string/factor_weather_title_compact" />
-
-				<se.gustavkarlsson.skylight.android.gui.views.AuroraFactorView
-					android:id="@+id/darkness"
-					android:layout_width="@dimen/factor_box_width"
-					android:layout_height="wrap_content"
-					custom:badgeIcon="@drawable/factor_darkness_white_20dp"
-					custom:layout_constraintBottom_toBottomOf="parent"
-					custom:layout_constraintLeft_toRightOf="@id/weather"
-					custom:layout_constraintRight_toRightOf="parent"
-					custom:layout_constraintTop_toBottomOf="@id/geomagLocation"
-					custom:name="@string/factor_darkness_title_compact" />
-
-			</android.support.constraint.ConstraintLayout>
-
-		</android.support.constraint.ConstraintLayout>
-
-	</android.support.v4.widget.SwipeRefreshLayout>
+		android:layout_height="match_parent"
+		app:defaultNavHost="true"
+		app:navGraph="@navigation/main" />
 
 </android.support.design.widget.CoordinatorLayout>

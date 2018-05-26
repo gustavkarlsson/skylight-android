@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.gui.activities
+package se.gustavkarlsson.skylight.android.gui
 
 import android.Manifest
 import android.arch.lifecycle.Lifecycle

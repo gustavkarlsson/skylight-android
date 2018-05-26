@@ -23,7 +23,7 @@ class RealFluxModule(
 			mapCommand(::hideDialog)
 
 			reduceResult { state, _: AuroraReportResult.JustFinished ->
-				state.copy(justFinishedRefreshing = true)
+				state.copy(isRefreshing = false, throwable = null, justFinishedRefreshing = true)
 			}
 			reduceResult { state, _: AuroraReportResult.Idle ->
 				state.copy(isRefreshing = false, throwable = null, justFinishedRefreshing = false)

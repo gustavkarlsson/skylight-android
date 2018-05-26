@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.gui.activities.main
+package se.gustavkarlsson.skylight.android.gui.screens.main
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
@@ -6,8 +6,8 @@ import android.arch.lifecycle.OnLifecycleEvent
 import android.content.DialogInterface
 import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.view.Menu
-import android.view.MenuItem
+import android.support.v4.app.Fragment
+import android.view.*
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.visibility
@@ -16,27 +16,21 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Observable
 import io.reactivex.functions.Consumer
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_main.*
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.okButton
-import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.toast
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.entities.Chance
+import se.gustavkarlsson.skylight.android.extensions.appCompatActivity
+import se.gustavkarlsson.skylight.android.extensions.findNavController
 import se.gustavkarlsson.skylight.android.extensions.indefiniteErrorSnackbar
-import se.gustavkarlsson.skylight.android.gui.activities.AuroraRequirementsCheckingActivity
-import se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsActivity
 import se.gustavkarlsson.skylight.android.gui.views.AuroraFactorView
 import se.gustavkarlsson.skylight.android.services.Analytics
 import timber.log.Timber
 
-
-class MainActivity : AuroraRequirementsCheckingActivity(), LifecycleObserver {
-
-	init {
-	    lifecycle.addObserver(this)
-	}
+class MainFragment : Fragment(), LifecycleObserver {
 
 	private var snackbar: Snackbar? = null
 
@@ -48,25 +42,29 @@ class MainActivity : AuroraRequirementsCheckingActivity(), LifecycleObserver {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_main)
-		ensureRequirementsMet()
+		setHasOptionsMenu(true)
+		lifecycle.addObserver(this)
 	}
 
-	override fun onCreateOptionsMenu(menu: Menu): Boolean {
-		menuInflater.inflate(R.menu.menu_main, menu)
-		return true
+	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+		inflater.inflate(R.menu.menu_main, menu)
 	}
 
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		return when (item.itemId) {
 			R.id.action_settings -> {
-				startActivity<SettingsActivity>(); true
+				findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
+				true
 			}
 			else -> super.onOptionsItemSelected(item)
 		}
 	}
 
-	override fun onRequirementsMet() = Unit
+	override fun onCreateView(
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View? = inflater.inflate(R.layout.fragment_main, container, false)
 
 	@OnLifecycleEvent(Lifecycle.Event.ON_START)
 	private fun bindData() {
@@ -81,7 +79,9 @@ class MainActivity : AuroraRequirementsCheckingActivity(), LifecycleObserver {
 		viewModel.locationName
 			.doOnNext { Timber.d("Updating locationName view: %s", it) }
 			.autoDisposable(scope())
-			.subscribe(supportActionBar!!::setTitle)
+			.subscribe {
+				appCompatActivity?.supportActionBar?.title = it
+			}
 
 		viewModel.isRefreshing
 			.doOnNext { Timber.i("Refreshing: $it") }
@@ -91,7 +91,7 @@ class MainActivity : AuroraRequirementsCheckingActivity(), LifecycleObserver {
 		viewModel.errorMessages
 			.doOnNext { Timber.d("Showing error message") }
 			.autoDisposable(scope())
-			.subscribe { toast(it) }
+			.subscribe { activity?.toast(it) }
 
 		viewModel.connectivityMessages
 			.autoDisposable(scope())
@@ -102,7 +102,9 @@ class MainActivity : AuroraRequirementsCheckingActivity(), LifecycleObserver {
 				}
 				it.ifPresent {
 					Timber.d("Showing connectivity message: %s", it)
-					snackbar = indefiniteErrorSnackbar(coordinatorLayout, it).apply { show() }
+					view?.let { view ->
+						snackbar = indefiniteErrorSnackbar(view, it).apply { show() }
+					}
 				}
 			}
 
@@ -126,13 +128,13 @@ class MainActivity : AuroraRequirementsCheckingActivity(), LifecycleObserver {
 			.autoDisposable(scope())
 			.subscribe {
 				dialog?.dismiss()
-				dialog = alert {
+				dialog = activity?.alert {
 					iconResource = R.drawable.info_white_24dp
 					titleResource = it.titleResource
 					messageResource = it.messageResource
 					okButton { viewModel.hideDialogClicked.accept(Unit) }
 					onCancelled { viewModel.hideDialogClicked.accept(Unit) }
-				}.show()
+				}?.show()
 			}
 
 		viewModel.hideDialog
@@ -187,5 +189,7 @@ class MainActivity : AuroraRequirementsCheckingActivity(), LifecycleObserver {
 	override fun onDestroy() {
 		super.onDestroy()
 		dialog?.dismiss()
+		snackbar?.dismiss()
+		lifecycle.removeObserver(this)
 	}
 }

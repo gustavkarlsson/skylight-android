@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<SwitchPreference
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<android.support.v7.preference.SwitchPreferenceCompat
 		android:key="@string/pref_notifications_key"
 		android:title="@string/pref_notifications_name"
 		android:summary="@string/pref_notifications_summary"
 		android:defaultValue="@bool/pref_notifications_default" />
 
-	<ListPreference
+	<android.support.v7.preference.SwitchPreferenceCompat
 		android:dependency="@string/pref_notifications_key"
 		android:key="@string/pref_trigger_level_key"
 		android:title="@string/pref_trigger_level_name"
@@ -14,4 +14,4 @@
 		android:entries="@array/pref_trigger_level_entries"
 		android:entryValues="@array/pref_trigger_level_values"
 		android:defaultValue="@string/pref_trigger_level_default" />
-</PreferenceScreen>
+</android.support.v7.preference.PreferenceScreen>

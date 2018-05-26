@@ -104,6 +104,8 @@ dependencies {
 	implementation "com.android.support:design:$android_support_version"
 	implementation "com.android.support:support-fragment:$android_support_version"
 	implementation "com.android.support:support-annotations:$android_support_version"
+	implementation "com.android.support:preference-v7:$android_support_version"
+	implementation "com.android.support:preference-v14:$android_support_version"
 	implementation "com.android.support.constraint:constraint-layout:$constraint_layout_version"
 	implementation "com.google.android.gms:play-services-location:$google_play_services_version"
 	implementation "com.google.android.gms:play-services-gcm:$google_play_services_version"
@@ -113,6 +115,8 @@ dependencies {
 	implementation "com.jakewharton.threetenabp:threetenabp:$threetenabp_version"
 	implementation "com.hadisatrio:Optional:$optional_version"
 	implementation "com.jakewharton.timber:timber:$timber_version"
+	implementation "android.arch.navigation:navigation-fragment:$navigation_version"
+	implementation "android.arch.navigation:navigation-ui:$navigation_version"
 
 	// Anko
 	implementation "org.jetbrains.anko:anko-commons:$anko_version"

@@ -1,6 +1,7 @@
-package se.gustavkarlsson.skylight.android.gui.activities.main.fragments.aurora_factors
+package se.gustavkarlsson.skylight.android.gui.main
 
 import android.support.test.espresso.Espresso.onView
+import android.support.test.espresso.Espresso.pressBack
 import android.support.test.espresso.action.ViewActions.click
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.matcher.ViewMatchers.*
@@ -11,18 +12,18 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.gui.activities.main.MainActivity
+import se.gustavkarlsson.skylight.android.gui.MainActivity
 import se.gustavkarlsson.skylight.android.test.ApplicationComponentActivityTestRule
 import se.gustavkarlsson.skylight.android.test.clearCache
 import se.gustavkarlsson.skylight.android.test.clearSharedPreferences
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class AuroraFactorFragmentTest {
+class FactorsTest {
 
 	@Rule
 	@JvmField
-	var testRule = ApplicationComponentActivityTestRule(MainActivity::class, false, false)
+	var testRule = ApplicationComponentActivityTestRule(MainActivity::class)
 
 	@Before
 	fun setUp() {
@@ -31,7 +32,7 @@ class AuroraFactorFragmentTest {
 		testRule.launchActivity()
 	}
 
-    @Test
+	@Test
     fun kpIndexFactorViewShown() {
         onView(withId(R.id.kpIndex)).check(matches(isDisplayed()))
     }
@@ -75,5 +76,6 @@ class AuroraFactorFragmentTest {
         onView(withId(viewId)).perform(click())
         onView(withText(titleString)).check(matches(isDisplayed()))
         onView(withText(descriptionString)).check(matches(isDisplayed()))
+		pressBack()
     }
 }
