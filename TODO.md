@@ -10,6 +10,7 @@
 
 ## Some day
 * KTX
+* Kakao instrumentation tests (https://github.com/agoda-com/Kakao)
 * Redesign
   * https://assets.materialup.com/uploads/1454191f-24de-4d06-8d3b-80eea7a794ad/material_statistics_page_small.jpg
   * https://items.epicpxls.com/uploads/photo/ecec512f-9733-440f-8d81-1d4e68c96b09.png
