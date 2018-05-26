@@ -52,5 +52,12 @@
 			app:min="0"
 			android:max="180"
 			android:defaultValue="90" />
+		<android.support.v7.preference.SeekBarPreference
+			android:dependency="@string/pref_override_values_key"
+			android:key="@string/pref_refresh_duration_seconds_key"
+			android:title="@string/pref_refresh_duration_seconds_title"
+			app:min="0"
+			android:max="20"
+			android:defaultValue="2" />
 	</android.support.v7.preference.PreferenceCategory>
 </android.support.v7.preference.PreferenceScreen>
