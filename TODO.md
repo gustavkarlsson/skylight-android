@@ -9,6 +9,7 @@
 * Add more tests
 
 ## Some day
+* KTX
 * Redesign
   * https://assets.materialup.com/uploads/1454191f-24de-4d06-8d3b-80eea7a794ad/material_statistics_page_small.jpg
   * https://items.epicpxls.com/uploads/photo/ecec512f-9733-440f-8d81-1d4e68c96b09.png
@@ -22,7 +23,6 @@
 * Look into country changes while app running (Locale etc)
 * Add performance traces
 * Automate release in CI (Gradle release plugin? Fastlane? Automatic version management?)
-* Navigation Controller?
 * WorkManager?
 * Detail View
 * Additional analytics(Failed remote calls, Notifications on/off, Manually started app, Started app from notification, denied location permission, no Google Play Services installed, first start)
