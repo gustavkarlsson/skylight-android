@@ -114,6 +114,8 @@ dependencies {
 	implementation "com.jakewharton.threetenabp:threetenabp:$threetenabp_version"
 	implementation "com.hadisatrio:Optional:$optional_version"
 	implementation "com.jakewharton.timber:timber:$timber_version"
+	implementation "android.arch.navigation:navigation-fragment:$navigation_version"
+	implementation "android.arch.navigation:navigation-ui:$navigation_version"
 
 	// Anko
 	implementation "org.jetbrains.anko:anko-commons:$anko_version"

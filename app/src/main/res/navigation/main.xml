@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	app:startDestination="@id/mainFragment">
+
+	<fragment
+		android:id="@+id/mainFragment"
+		android:name="se.gustavkarlsson.skylight.android.gui.activities.main.MainFragment">
+		<action
+			android:id="@+id/action_mainFragment_to_settingsFragment"
+			app:destination="@id/settingsFragment"
+			app:enterAnim="@anim/nav_default_enter_anim"
+			app:popEnterAnim="@anim/nav_default_pop_enter_anim" />
+	</fragment>
+
+	<fragment
+		android:id="@+id/settingsFragment"
+		android:name="se.gustavkarlsson.skylight.android.gui.activities.settings.SettingsFragment"
+		android:label="@string/settings" />
+</navigation>

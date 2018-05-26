@@ -7,9 +7,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.visibility
@@ -26,6 +24,7 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.extensions.appCompatActivity
+import se.gustavkarlsson.skylight.android.extensions.findNavController
 import se.gustavkarlsson.skylight.android.extensions.indefiniteErrorSnackbar
 import se.gustavkarlsson.skylight.android.gui.views.AuroraFactorView
 import se.gustavkarlsson.skylight.android.services.Analytics
@@ -43,14 +42,29 @@ class MainFragment : Fragment(), LifecycleObserver {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		setHasOptionsMenu(true)
 		lifecycle.addObserver(this)
+	}
+
+	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+		inflater.inflate(R.menu.menu_main, menu)
+	}
+
+	override fun onOptionsItemSelected(item: MenuItem): Boolean {
+		return when (item.itemId) {
+			R.id.action_settings -> {
+				findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
+				true
+			}
+			else -> super.onOptionsItemSelected(item)
+		}
 	}
 
 	override fun onCreateView(
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
-	): View? = inflater.inflate(R.layout.fragment_main, null)
+	): View? = inflater.inflate(R.layout.fragment_main, container, false)
 
 	@OnLifecycleEvent(Lifecycle.Event.ON_START)
 	private fun bindData() {
@@ -175,6 +189,7 @@ class MainFragment : Fragment(), LifecycleObserver {
 	override fun onDestroy() {
 		super.onDestroy()
 		dialog?.dismiss()
+		snackbar?.dismiss()
 		lifecycle.removeObserver(this)
 	}
 }
