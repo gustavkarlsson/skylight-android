@@ -4,27 +4,27 @@ import com.hadisatrio.optional.Optional
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import se.gustavkarlsson.skylight.android.entities.Location
-import se.gustavkarlsson.skylight.android.entities.Visibility
-import se.gustavkarlsson.skylight.android.services.providers.VisibilityProvider
+import se.gustavkarlsson.skylight.android.entities.Weather
+import se.gustavkarlsson.skylight.android.services.providers.WeatherProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapApi
 import timber.log.Timber
 
-class RetrofittedOpenWeatherMapVisibilityProvider constructor(
+class RetrofittedOpenWeatherMapWeatherProvider constructor(
 	private val api: OpenWeatherMapApi,
 	private val appId: String
-) : VisibilityProvider {
+) : WeatherProvider {
 
-	override fun get(location: Single<Optional<Location>>): Single<Visibility> {
+	override fun get(location: Single<Optional<Location>>): Single<Weather> {
 		return location
 			.flatMap {
 				it.orNull()?.let {
 					api.get(it.latitude, it.longitude, "json", appId)
 						.subscribeOn(Schedulers.io())
-						.map { Visibility(it.clouds.percentage) }
-						.doOnError { Timber.w(it, "Failed to get Visibility from OpenWeatherMap API") }
-						.onErrorReturnItem(Visibility())
-				} ?: Single.just(Visibility())
+						.map { Weather(it.clouds.percentage) }
+						.doOnError { Timber.w(it, "Failed to get Weather from OpenWeatherMap API") }
+						.onErrorReturnItem(Weather())
+				} ?: Single.just(Weather())
 			}
-			.doOnSuccess { Timber.i("Provided visibility: %s", it) }
+			.doOnSuccess { Timber.i("Provided weather: %s", it) }
 	}
 }

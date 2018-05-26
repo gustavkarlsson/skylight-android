@@ -29,8 +29,8 @@ class AndroidViewModelsModule(
 			formattingModule.geomagLocationFormatter,
 			evaluationModule.kpIndexEvaluator,
 			formattingModule.kpIndexFormatter,
-			evaluationModule.visibilityEvaluator,
-			formattingModule.visibilityFormatter,
+			evaluationModule.weatherEvaluator,
+			formattingModule.weatherFormatter,
 			timeModule.now,
 			RIGHT_NOW_THRESHOLD
 		)

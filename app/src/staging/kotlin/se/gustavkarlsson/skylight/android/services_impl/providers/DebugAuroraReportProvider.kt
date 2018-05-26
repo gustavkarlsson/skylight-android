@@ -33,8 +33,8 @@ class DebugAuroraReportProvider(
 		val kpIndex = KpIndex(debugSettings.kpIndex)
 		val geomagLocation = GeomagLocation(debugSettings.geomagLatitude)
 		val darkness = Darkness(debugSettings.sunZenithAngle)
-		val visibility = Visibility(debugSettings.cloudPercentage)
-		return AuroraFactors(kpIndex, geomagLocation, darkness, visibility)
+		val weather = Weather(debugSettings.cloudPercentage)
+		return AuroraFactors(kpIndex, geomagLocation, darkness, weather)
 	}
 
 	companion object {

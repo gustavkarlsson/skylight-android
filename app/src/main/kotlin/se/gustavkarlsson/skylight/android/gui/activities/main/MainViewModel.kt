@@ -31,8 +31,8 @@ class MainViewModel(
 	geomagLocationFormatter: SingleValueFormatter<GeomagLocation>,
 	kpIndexChanceEvaluator: ChanceEvaluator<KpIndex>,
 	kpIndexFormatter: SingleValueFormatter<KpIndex>,
-	visibilityChanceEvaluator: ChanceEvaluator<Visibility>,
-	visibilityFormatter: SingleValueFormatter<Visibility>,
+	weatherChanceEvaluator: ChanceEvaluator<Weather>,
+	weatherFormatter: SingleValueFormatter<Weather>,
 	now: Single<Instant>,
 	nowTextThreshold: Duration
 ) : ViewModel() {
@@ -172,22 +172,22 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val visibilityValue: Observable<CharSequence> = store.states
+	val weatherValue: Observable<CharSequence> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
-				?.let(AuroraFactors::visibility)
-				?.let(visibilityFormatter::format)
+				?.let(AuroraFactors::weather)
+				?.let(weatherFormatter::format)
 				?: "?"
 		}
 		.distinctUntilChanged()
 
-	val visibilityChance: Observable<Chance> = store.states
+	val weatherChance: Observable<Chance> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
-				?.let(AuroraFactors::visibility)
-				?.let(visibilityChanceEvaluator::evaluate)
+				?.let(AuroraFactors::weather)
+				?.let(weatherChanceEvaluator::evaluate)
 				?: Chance.UNKNOWN
 		}
 		.distinctUntilChanged()
@@ -211,9 +211,9 @@ class MainViewModel(
 			ShowDialogCommand(R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc))
 	}
 
-	val visibilityFactorClicked: Consumer<Unit> = Consumer {
+	val weatherFactorClicked: Consumer<Unit> = Consumer {
 		store.issue(
-			ShowDialogCommand(R.string.factor_visibility_title_full, R.string.factor_visibility_desc))
+			ShowDialogCommand(R.string.factor_weather_title_full, R.string.factor_weather_desc))
 	}
 
 	val showDialog: Observable<SkylightState.Dialog> = store.states

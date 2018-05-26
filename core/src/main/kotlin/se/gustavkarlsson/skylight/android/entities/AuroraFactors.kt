@@ -4,5 +4,5 @@ data class AuroraFactors(
 	val kpIndex: KpIndex,
 	val geomagLocation: GeomagLocation,
 	val darkness: Darkness,
-	val visibility: Visibility
+	val weather: Weather
 )

@@ -101,7 +101,7 @@
 					android:layout_width="@dimen/factor_box_width"
 					android:layout_height="wrap_content"
 					custom:badgeIcon="@drawable/factor_kp_index_white_20dp"
-					custom:layout_constraintBottom_toTopOf="@+id/visibility"
+					custom:layout_constraintBottom_toTopOf="@+id/weather"
 					custom:layout_constraintLeft_toLeftOf="parent"
 					custom:layout_constraintRight_toLeftOf="@+id/geomagLocation"
 					custom:layout_constraintTop_toTopOf="parent"
@@ -119,15 +119,15 @@
 					custom:name="@string/factor_geomag_location_title_compact" />
 
 				<se.gustavkarlsson.skylight.android.gui.views.AuroraFactorView
-					android:id="@+id/visibility"
+					android:id="@+id/weather"
 					android:layout_width="@dimen/factor_box_width"
 					android:layout_height="wrap_content"
-					custom:badgeIcon="@drawable/factor_visibility_white_20dp"
+					custom:badgeIcon="@drawable/factor_weather_white_20dp"
 					custom:layout_constraintBottom_toBottomOf="parent"
 					custom:layout_constraintLeft_toLeftOf="parent"
 					custom:layout_constraintRight_toLeftOf="@+id/darkness"
 					custom:layout_constraintTop_toBottomOf="@+id/kpIndex"
-					custom:name="@string/factor_visibility_title_compact" />
+					custom:name="@string/factor_weather_title_compact" />
 
 				<se.gustavkarlsson.skylight.android.gui.views.AuroraFactorView
 					android:id="@+id/darkness"
@@ -135,7 +135,7 @@
 					android:layout_height="wrap_content"
 					custom:badgeIcon="@drawable/factor_darkness_white_20dp"
 					custom:layout_constraintBottom_toBottomOf="parent"
-					custom:layout_constraintLeft_toRightOf="@id/visibility"
+					custom:layout_constraintLeft_toRightOf="@id/weather"
 					custom:layout_constraintRight_toRightOf="parent"
 					custom:layout_constraintTop_toBottomOf="@id/geomagLocation"
 					custom:name="@string/factor_darkness_title_compact" />
