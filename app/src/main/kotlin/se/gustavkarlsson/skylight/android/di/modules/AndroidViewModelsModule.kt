@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.di.modules
 
 import android.arch.lifecycle.ViewModelProviders
-import android.support.v4.app.FragmentActivity
+import android.support.v4.app.Fragment
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModel
@@ -36,8 +36,8 @@ class AndroidViewModelsModule(
 		)
 	}
 
-	override fun mainViewModel(activity: FragmentActivity): MainViewModel =
-		ViewModelProviders.of(activity, mainViewModelFactory)
+	override fun mainViewModel(fragment: Fragment): MainViewModel =
+		ViewModelProviders.of(fragment, mainViewModelFactory)
 			.get(MainViewModel::class.java)
 
 	companion object {

@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.di.components
 
 import android.app.Application
-import android.support.v4.app.FragmentActivity
+import android.support.v4.app.Fragment
 import se.gustavkarlsson.skylight.android.background.di.components.BackgroundComponent
 import se.gustavkarlsson.skylight.android.background.di.components.SkylightBackgroundComponent
 import se.gustavkarlsson.skylight.android.di.modules.*
@@ -113,8 +113,8 @@ open class SkylightAppComponent(
 	final override val store: SkylightStore
 		get() = fluxModule.store
 
-	final override fun mainViewModel(activity: FragmentActivity): MainViewModel =
-		viewModelsModule.mainViewModel(activity)
+	final override fun mainViewModel(fragment: Fragment): MainViewModel =
+		viewModelsModule.mainViewModel(fragment)
 
 	final override val backgroundComponent: BackgroundComponent by lazy {
 		SkylightBackgroundComponent(

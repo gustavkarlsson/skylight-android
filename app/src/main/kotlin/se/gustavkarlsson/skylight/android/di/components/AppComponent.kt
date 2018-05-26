@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.di.components
 
-import android.support.v4.app.FragmentActivity
+import android.support.v4.app.Fragment
 import se.gustavkarlsson.skylight.android.background.di.components.BackgroundComponent
 import se.gustavkarlsson.skylight.android.flux.SkylightStore
 import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModel
@@ -12,7 +12,7 @@ interface AppComponent {
 	val analytics: Analytics
 	val store: SkylightStore
 
-	fun mainViewModel(activity: FragmentActivity): MainViewModel
+	fun mainViewModel(fragment: Fragment): MainViewModel
 
 	val backgroundComponent: BackgroundComponent
 }

@@ -34,12 +34,6 @@
 			</intent-filter>
 		</activity>
 
-		<activity
-			android:name=".gui.activities.settings.SettingsActivity"
-			android:label="@string/settings"
-			android:parentActivityName=".gui.activities.main.MainActivity">
-		</activity>
-
 	</application>
 
 </manifest>

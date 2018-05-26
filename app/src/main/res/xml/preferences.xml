@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<SwitchPreference
+	<SwitchPreferenceCompat
 		android:key="@string/pref_notifications_key"
 		android:title="@string/pref_notifications_name"
 		android:summary="@string/pref_notifications_summary"
 		android:defaultValue="@bool/pref_notifications_default" />
 
-	<ListPreference
+	<SwitchPreferenceCompat
 		android:dependency="@string/pref_notifications_key"
 		android:key="@string/pref_trigger_level_key"
 		android:title="@string/pref_trigger_level_name"
