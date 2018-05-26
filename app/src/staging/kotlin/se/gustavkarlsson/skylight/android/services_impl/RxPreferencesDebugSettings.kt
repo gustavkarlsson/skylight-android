@@ -19,25 +19,25 @@ class RxPreferencesDebugSettings(
 
 	private val kpIndexPreference by lazy {
 		val key = context.getString(R.string.pref_kp_index_key)
-		val preference = rxSharedPreferences.getString(key, "0")
+		val preference = rxSharedPreferences.getInteger(key, 5)
 		preference
 	}
 
 	private val geomagLatitudePreference by lazy {
 		val key = context.getString(R.string.pref_geomag_latitude_key)
-		val preference = rxSharedPreferences.getString(key, "0")
+		val preference = rxSharedPreferences.getInteger(key, 0)
 		preference
 	}
 
 	private val sunZenithAnglePreference by lazy {
 		val key = context.getString(R.string.pref_sun_position_key)
-		val preference = rxSharedPreferences.getString(key, "0")
+		val preference = rxSharedPreferences.getInteger(key, 90)
 		preference
 	}
 
 	private val cloudPercentagePreference by lazy {
 		val key = context.getString(R.string.pref_cloud_percentage_key)
-		val preference = rxSharedPreferences.getString(key, "0")
+		val preference = rxSharedPreferences.getInteger(key, 50)
 		preference
 	}
 
@@ -58,6 +58,6 @@ class RxPreferencesDebugSettings(
         get() = sunZenithAnglePreference.get().toDouble()
 
     override val cloudPercentage: Int
-        get() = cloudPercentagePreference.get().toInt()
+        get() = cloudPercentagePreference.get()
 
 }

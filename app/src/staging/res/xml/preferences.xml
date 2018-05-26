@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
 	<android.support.v7.preference.SwitchPreferenceCompat
 		android:key="@string/pref_notifications_key"
 		android:title="@string/pref_notifications_name"
@@ -23,29 +24,33 @@
 			android:key="@string/pref_override_values_key"
 			android:title="@string/pref_override_values_title"
 			android:defaultValue="false" />
-		<android.support.v7.preference.EditTextPreference
+		<android.support.v7.preference.SeekBarPreference
 			android:dependency="@string/pref_override_values_key"
 			android:key="@string/pref_kp_index_key"
 			android:title="@string/pref_kp_index_title"
-			android:defaultValue="0"
-			android:inputType="numberDecimal" />
-		<android.support.v7.preference.EditTextPreference
+			app:min="0"
+			android:max="9"
+			android:defaultValue="5" />
+		<android.support.v7.preference.SeekBarPreference
 			android:dependency="@string/pref_override_values_key"
 			android:key="@string/pref_geomag_latitude_key"
 			android:title="@string/pref_geomag_latitude_title"
-			android:defaultValue="0"
-			android:inputType="numberDecimal|numberSigned" />
-		<android.support.v7.preference.EditTextPreference
+			app:min="-90"
+			android:max="90"
+			android:defaultValue="0" />
+		<android.support.v7.preference.SeekBarPreference
 			android:dependency="@string/pref_override_values_key"
 			android:key="@string/pref_cloud_percentage_key"
 			android:title="@string/pref_cloud_percentage_title"
-			android:defaultValue="0"
-			android:inputType="number" />
-		<android.support.v7.preference.EditTextPreference
+			app:min="0"
+			android:max="100"
+			android:defaultValue="50" />
+		<android.support.v7.preference.SeekBarPreference
 			android:dependency="@string/pref_override_values_key"
 			android:key="@string/pref_sun_position_key"
 			android:title="@string/pref_sun_position_title"
-			android:defaultValue="0"
-			android:inputType="numberDecimal" />
+			app:min="0"
+			android:max="180"
+			android:defaultValue="90" />
 	</android.support.v7.preference.PreferenceCategory>
 </android.support.v7.preference.PreferenceScreen>
