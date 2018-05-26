@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.gui
+package se.gustavkarlsson.skylight.android.gui.main
 
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions
@@ -7,29 +7,32 @@ import android.support.test.espresso.matcher.RootMatchers.withDecorView
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.filters.LargeTest
 import android.support.test.runner.AndroidJUnit4
+import org.hamcrest.Matchers
 import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.test.ApplicationComponentActivityTestRule
-import se.gustavkarlsson.skylight.android.test.TestLocationProvider
-import se.gustavkarlsson.skylight.android.test.clearCache
-import se.gustavkarlsson.skylight.android.test.clearSharedPreferences
+import se.gustavkarlsson.skylight.android.gui.MainActivity
+import se.gustavkarlsson.skylight.android.test.*
 import se.gustavkarlsson.skylight.android.testAppComponent
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class MainActivityTest {
+class BasicsTest {
+
+	@Rule
+	@JvmField
+	var testRule = ApplicationComponentActivityTestRule(MainActivity::class)
 
 	private val testLocationProvider: TestLocationProvider by lazy {
 		testAppComponent.testLocationProvider
 	}
 
-    @Rule
-	@JvmField
-    var testRule = ApplicationComponentActivityTestRule(MainActivity::class)
+	private val testLocationNameProvider: TestLocationNameProvider by lazy {
+		testAppComponent.testLocationNameProvider
+	}
 
 	@Before
 	fun setUp() {
@@ -53,5 +56,22 @@ class MainActivityTest {
 		testLocationProvider.delegate = { throw RuntimeException("ERROR!") }
 		onView(withId(R.id.swipeRefreshLayout)).perform(ViewActions.swipeDown())
 		onView(withText(R.string.error_unknown_update_error)).inRoot(withDecorView(not(testRule.activity.window.decorView))).check(matches(isDisplayed()))
+	}
+
+	@Test
+	fun locationTextShowsActualLocation() {
+		onView(withId(R.id.swipeRefreshLayout)).perform(ViewActions.swipeDown())
+		waitForView(2000L, Matchers.allOf(isDescendantOfA(withId(R.id.action_bar)), withText(testLocationNameProvider.delegate().get())), isDisplayed())
+	}
+
+	@Test
+	fun chanceTextShown() {
+		onView(withId(R.id.chance)).check(matches(isDisplayed()))
+	}
+
+	@Test
+	fun timeSinceUpdateTextShown() {
+		waitForView(2000L, withId(R.id.timeSinceUpdate), isDisplayed())
+		onView(withId(R.id.timeSinceUpdate)).check(matches(isDisplayed()))
 	}
 }

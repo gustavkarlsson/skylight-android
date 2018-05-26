@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.gui
+package se.gustavkarlsson.skylight.android.gui.main
 
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.Espresso.pressBack
@@ -12,13 +12,14 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.gui.MainActivity
 import se.gustavkarlsson.skylight.android.test.ApplicationComponentActivityTestRule
 import se.gustavkarlsson.skylight.android.test.clearCache
 import se.gustavkarlsson.skylight.android.test.clearSharedPreferences
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class AuroraFactorFragmentTest {
+class FactorsTest {
 
 	@Rule
 	@JvmField
