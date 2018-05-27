@@ -34,42 +34,42 @@ class FactorsTest {
 
 	@Test
     fun kpIndexFactorViewShown() {
-        onView(withId(R.id.kpIndex)).check(matches(isDisplayed()))
+        onView(withId(R.id.kpIndexCard)).check(matches(isDisplayed()))
     }
 
     @Test
     fun geomagLocationFactorViewShown() {
-        onView(withId(R.id.geomagLocation)).check(matches(isDisplayed()))
+        onView(withId(R.id.geomagLocationCard)).check(matches(isDisplayed()))
     }
 
     @Test
     fun weatherFactorViewShown() {
-        onView(withId(R.id.weather)).check(matches(isDisplayed()))
+        onView(withId(R.id.weatherCard)).check(matches(isDisplayed()))
     }
 
     @Test
     fun darknessFactorViewShown() {
-        onView(withId(R.id.darkness)).check(matches(isDisplayed()))
+        onView(withId(R.id.darknessCard)).check(matches(isDisplayed()))
     }
 
     @Test
     fun clickKpIndex_detailViewShown() {
-        whenFactorViewClickedDetailViewOpens(R.id.kpIndex, R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc)
+        whenFactorViewClickedDetailViewOpens(R.id.kpIndexCard, R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc)
     }
 
     @Test
     fun clickGeomagLocation_detailViewShown() {
-        whenFactorViewClickedDetailViewOpens(R.id.geomagLocation, R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc)
+        whenFactorViewClickedDetailViewOpens(R.id.geomagLocationCard, R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc)
     }
 
     @Test
     fun clickWeather_detailViewShown() {
-        whenFactorViewClickedDetailViewOpens(R.id.weather, R.string.factor_weather_title_full, R.string.factor_weather_desc)
+        whenFactorViewClickedDetailViewOpens(R.id.weatherCard, R.string.factor_weather_title_full, R.string.factor_weather_desc)
     }
 
     @Test
     fun clickDarkness_detailViewShown() {
-        whenFactorViewClickedDetailViewOpens(R.id.darkness, R.string.factor_darkness_title_full, R.string.factor_darkness_desc)
+        whenFactorViewClickedDetailViewOpens(R.id.darknessCard, R.string.factor_darkness_title_full, R.string.factor_darkness_desc)
     }
 
     private fun whenFactorViewClickedDetailViewOpens(viewId: Int, titleString: Int, descriptionString: Int) {

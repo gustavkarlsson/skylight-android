@@ -3,7 +3,7 @@
 ## Soon
 * Rename chance to score
 * Make settings part of store?
-* Replace anko with KTX
+* Add KTX
 * Add instrumentation testing to CI
 * Add more tests
 

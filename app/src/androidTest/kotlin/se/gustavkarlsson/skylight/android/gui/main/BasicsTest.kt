@@ -3,12 +3,9 @@ package se.gustavkarlsson.skylight.android.gui.main
 import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.action.ViewActions
 import android.support.test.espresso.assertion.ViewAssertions.matches
-import android.support.test.espresso.matcher.RootMatchers.withDecorView
 import android.support.test.espresso.matcher.ViewMatchers.*
 import android.support.test.filters.LargeTest
 import android.support.test.runner.AndroidJUnit4
-import org.hamcrest.Matchers
-import org.hamcrest.Matchers.not
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -42,26 +39,16 @@ class BasicsTest {
 	}
 
 	@Test
-    fun auroraFactorsSectionShown() {
-        onView(withId(R.id.auroraFactorsSection)).check(matches(isDisplayed()))
-    }
-
-    @Test
-    fun auroraChanceSectionShown() {
-        onView(withId(R.id.auroraChanceSection)).check(matches(isDisplayed()))
-    }
-
-	@Test
 	fun unknownErrorWhenRefreshingShowsErrorToast() {
 		testLocationProvider.delegate = { throw RuntimeException("ERROR!") }
 		onView(withId(R.id.swipeRefreshLayout)).perform(ViewActions.swipeDown())
-		onView(withText(R.string.error_unknown_update_error)).inRoot(withDecorView(not(testRule.activity.window.decorView))).check(matches(isDisplayed()))
+		onView(withText(R.string.error_unknown_update_error)).check(matches(isDisplayed()))
 	}
 
 	@Test
 	fun locationTextShowsActualLocation() {
 		onView(withId(R.id.swipeRefreshLayout)).perform(ViewActions.swipeDown())
-		waitForView(2000L, Matchers.allOf(isDescendantOfA(withId(R.id.action_bar)), withText(testLocationNameProvider.delegate().get())), isDisplayed())
+		waitForView(2000L, withText(testLocationNameProvider.delegate().get()), isDisplayed())
 	}
 
 	@Test

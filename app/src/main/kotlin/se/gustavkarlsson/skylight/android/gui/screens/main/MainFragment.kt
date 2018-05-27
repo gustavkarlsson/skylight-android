@@ -16,18 +16,18 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_main.*
-import org.jetbrains.anko.toast
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.extensions.findNavController
-import se.gustavkarlsson.skylight.android.extensions.indefiniteErrorSnackbar
+import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
 import se.gustavkarlsson.skylight.android.services.Analytics
 import timber.log.Timber
 
 class MainFragment : Fragment(), LifecycleObserver {
 
-	private var snackbar: Snackbar? = null
+	private var connectivitySnackbar: Snackbar? = null
+	private var errorSnackbar: Snackbar? = null
 
 	private val viewModel: MainViewModel by lazy {
 		appComponent.mainViewModel(this)
@@ -87,19 +87,29 @@ class MainFragment : Fragment(), LifecycleObserver {
 		viewModel.errorMessages
 			.doOnNext { Timber.d("Showing error message") }
 			.autoDisposable(scope)
-			.subscribe { activity?.toast(it) }
+			.subscribe {
+				errorSnackbar?.run {
+					Timber.d("Hiding previous error message")
+					dismiss()
+				}
+				view?.let { view ->
+					errorSnackbar =
+						showErrorSnackbar(view, it, Snackbar.LENGTH_LONG).apply { show() }
+				}
+			}
 
 		viewModel.connectivityMessages
 			.autoDisposable(scope)
 			.subscribe {
-				snackbar?.run {
-					Timber.d("Hiding connectivity message")
+				connectivitySnackbar?.run {
+					Timber.d("Hiding previous connectivity message")
 					dismiss()
 				}
 				it.ifPresent {
 					Timber.d("Showing connectivity message: %s", it)
 					view?.let { view ->
-						snackbar = indefiniteErrorSnackbar(view, it).apply { show() }
+						connectivitySnackbar =
+							showErrorSnackbar(view, it, Snackbar.LENGTH_INDEFINITE).apply { show() }
 					}
 				}
 			}
@@ -233,7 +243,8 @@ class MainFragment : Fragment(), LifecycleObserver {
 
 	override fun onDestroy() {
 		super.onDestroy()
-		snackbar?.dismiss()
+		connectivitySnackbar?.dismiss()
+		errorSnackbar?.dismiss()
 		lifecycle.removeObserver(this)
 	}
 

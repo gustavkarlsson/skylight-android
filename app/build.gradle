@@ -119,10 +119,6 @@ dependencies {
 	implementation "android.arch.navigation:navigation-fragment:$navigation_version"
 	implementation "android.arch.navigation:navigation-ui:$navigation_version"
 
-	// Anko
-	implementation "org.jetbrains.anko:anko-commons:$anko_version"
-	implementation "org.jetbrains.anko:anko-design:$anko_version"
-
 	// Retrofit
 	implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
 	implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
