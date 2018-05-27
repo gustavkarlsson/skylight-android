@@ -1,14 +1,14 @@
 buildscript {
 	ext {
 		compilesdk_version = 27
-		min_sdk_version = 19
+		min_sdk_version = 21
 		target_sdk_version = 27
 		build_tools_version = "27.0.3"
 
 		kotlin_version = "1.2.41"
 		retrofit_version = "2.3.0"
 		multidex_version = "1.0.1"
-		google_play_services_version = "11.4.2"
+		google_play_services_version = "15.0.1"
 		android_support_version = "27.0.2"
 		anko_version = "0.10.4"
 		mockito_version = "2.10.0"
@@ -28,7 +28,7 @@ buildscript {
 		gson_version = "2.8.2"
 		espresso_version = "3.0.1"
 		google_services_version = "3.2.1"
-		firebase_version = "11.4.2"
+		firebase_version = "16.0.0"
 		fabric_version = "1.25.1"
 		crashlytics_version = "2.9.1"
 		arch_lifecycle_version = "1.1.1"
@@ -36,13 +36,13 @@ buildscript {
 		rxpreferences_version = "2.0.0-RC3"
 		rxrelay_version = "2.0.0"
 		android_job_version = "1.2.0"
-		constraint_layout_version = "1.0.2"
+		constraint_layout_version = "1.1.0"
 		timber_version = "4.7.0"
 		rxpermissions_version = "0.9.5"
 		reactive_location_version = "2.1"
 		solarpositioning_version = "0.0.9"
 		aurora_notifier_common_version = "aurora-notifier-common-1.5.0"
-		android_gradle_version = "3.1.2"
+		android_gradle_version = "3.2.0-alpha15"
 		autodispose_version = "0.8.0"
 		leakcanary_version = "1.5.4"
 		navigation_version = "1.0.0-alpha01"

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-	<declare-styleable name="AuroraFactorView">
-		<attr name="name" format="string" />
-		<attr name="badgeIcon" format="reference" />
-		<attr name="chance" format="float" />
-		<attr name="value" format="string" />
-	</declare-styleable>
-</resources>
