@@ -29,14 +29,21 @@ class FactorPresenter(
 	private val factorDebugName: String
 ) {
 	fun present() {
-		val chanceToColorConverter = ChanceToColorConverter(cardView.context)
-		val maxProgress = progressBar.max
+		presentValues()
+		presentChances()
+		presentCardClicks()
+	}
 
+	private fun presentValues() {
 		values
 			.doOnNext { Timber.d("Updating %s value view: %s", factorDebugName, it) }
 			.autoDisposable(scope)
 			.subscribe(valueView.text())
+	}
 
+	private fun presentChances() {
+		val chanceToColorConverter = ChanceToColorConverter(cardView.context)
+		val maxProgress = progressBar.max
 		chances
 			.doOnNext { Timber.d("Updating %s chance view: %s", factorDebugName, it) }
 			.autoDisposable(scope)
@@ -52,10 +59,6 @@ class FactorPresenter(
 					progressBar.animateProgress(progress)
 				}
 			}
-
-		cardView.clicks()
-			.autoDisposable(scope)
-			.subscribe(clickConsumer)
 	}
 
 	private fun ProgressBar.animateProgress(progress: Int) {
@@ -64,5 +67,11 @@ class FactorPresenter(
 		animation.interpolator = AccelerateDecelerateInterpolator()
 		animation.setAutoCancel(true)
 		animation.start()
+	}
+
+	private fun presentCardClicks() {
+		cardView.clicks()
+			.autoDisposable(scope)
+			.subscribe(clickConsumer)
 	}
 }
