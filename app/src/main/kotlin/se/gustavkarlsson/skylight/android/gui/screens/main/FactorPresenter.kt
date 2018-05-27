@@ -11,7 +11,6 @@ import com.jakewharton.rxbinding2.widget.text
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Observable
-import io.reactivex.functions.Consumer
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.util.ChanceToColorConverter
 import timber.log.Timber
@@ -24,7 +23,7 @@ class FactorPresenter(
 	private val valueView: TextView,
 	private val progressBar: ProgressBar,
 	private val cardView: CardView,
-	private val clickConsumer: Consumer<Unit>,
+	private val showDialog: () -> Unit,
 	private val scope: LifecycleScopeProvider<*>,
 	private val factorDebugName: String
 ) {
@@ -72,6 +71,6 @@ class FactorPresenter(
 	private fun presentCardClicks() {
 		cardView.clicks()
 			.autoDisposable(scope)
-			.subscribe(clickConsumer)
+			.subscribe { showDialog() }
 	}
 }

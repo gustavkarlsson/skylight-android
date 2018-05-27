@@ -9,21 +9,21 @@
 		The best latitude for aurora sightings is around 67°.
 	</string>
 	<string name="factor_kp_index_title_full">Kp index</string>
-	<string name="factor_kp_index_title_compact">Kp index</string>
+	<string name="factor_kp_index_title_compact">Kp</string>
 	<string name="factor_kp_index_desc">
 		Disturbances in earth\'s magnetic field is the cause of the aurora and is measured
 		on a scale called the Kp index.
 		This value shows the Kp index which ranges from 0 to 9.
 		A higher value means higher chance to see the aurora.
 	</string>
-	<string name="factor_weather_title_full">Weather</string>
+	<string name="factor_weather_title_full">Weather conditions</string>
 	<string name="factor_weather_title_compact">Weather</string>
 	<string name="factor_weather_desc">
 		Bad weather can block your view of the aurora.
 		This value shows the current weather conditions.
 		Clear skies ensure good visibility of the aurora.
 	</string>
-	<string name="factor_darkness_title_full">Darkness</string>
+	<string name="factor_darkness_title_full">Outdoor darkness</string>
 	<string name="factor_darkness_title_compact">Darkness</string>
 	<string name="factor_darkness_desc">
 		The aurora is only visible in the dark so the position of the sun is critical.

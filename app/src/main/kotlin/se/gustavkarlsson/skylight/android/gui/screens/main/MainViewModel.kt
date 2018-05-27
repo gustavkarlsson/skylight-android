@@ -201,40 +201,6 @@ class MainViewModel(
 		store.issue(HideDialogCommand)
 	}
 
-	val darknessFactorClicked: Consumer<Unit> = Consumer {
-		store.issue(
-			ShowDialogCommand(R.string.factor_darkness_title_full, R.string.factor_darkness_desc))
-	}
-
-	val geomagLocationFactorClicked: Consumer<Unit> = Consumer {
-		store.issue(
-			ShowDialogCommand(R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc))
-	}
-
-	val kpIndexFactorClicked: Consumer<Unit> = Consumer {
-		store.issue(
-			ShowDialogCommand(R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc))
-	}
-
-	val weatherFactorClicked: Consumer<Unit> = Consumer {
-		store.issue(
-			ShowDialogCommand(R.string.factor_weather_title_full, R.string.factor_weather_desc))
-	}
-
-	val showDialog: Observable<SkylightState.Dialog> = store.states
-		.distinctUntilChanged { last, new ->
-			last.dialog == new.dialog
-		}
-		.filter { it.dialog != null }
-		.map { it.dialog!! }
-
-	val hideDialog: Observable<Unit> = store.states
-		.distinctUntilChanged { last, new ->
-			last.dialog == new.dialog
-		}
-		.filter { it.dialog == null }
-		.map { Unit }
-
 	val ensureLocationPermission: Observable<Unit> = store.states
 		.distinctUntilChanged { last, new ->
 			last.locationPermission == new.locationPermission

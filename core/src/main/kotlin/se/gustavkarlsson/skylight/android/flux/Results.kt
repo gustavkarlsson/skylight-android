@@ -14,6 +14,4 @@ sealed class AuroraReportResult : SkylightResult() {
 
 data class ConnectivityResult(val isConnectedToInternet: Boolean) : SkylightResult()
 
-data class DialogResult(val dialog: SkylightState.Dialog?) : SkylightResult()
-
 object LocationPermissionGrantedResult : SkylightResult()
