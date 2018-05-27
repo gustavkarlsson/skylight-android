@@ -1,5 +1,5 @@
 package se.gustavkarlsson.skylight.android.entities
 
-data class Visibility(
+data class Weather(
 	val cloudPercentage: Int? = null
 )

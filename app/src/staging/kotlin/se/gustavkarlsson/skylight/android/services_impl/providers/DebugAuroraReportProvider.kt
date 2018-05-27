@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.services_impl.providers
 import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.extensions.delay
-import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.DebugSettings
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
@@ -21,7 +20,7 @@ class DebugAuroraReportProvider(
 				val locationName = "Fake Location"
 				val timestamp = timeProvider.getTime().blockingGet()
 				Single.just(AuroraReport(timestamp, locationName, auroraFactors))
-					.delay(DELAY)
+					.delay(debugSettings.refreshDuration)
 			} else {
 				realProvider.get()
 			}
@@ -33,11 +32,7 @@ class DebugAuroraReportProvider(
 		val kpIndex = KpIndex(debugSettings.kpIndex)
 		val geomagLocation = GeomagLocation(debugSettings.geomagLatitude)
 		val darkness = Darkness(debugSettings.sunZenithAngle)
-		val visibility = Visibility(debugSettings.cloudPercentage)
-		return AuroraFactors(kpIndex, geomagLocation, darkness, visibility)
-	}
-
-	companion object {
-	    val DELAY = 2.seconds
+		val weather = Weather(debugSettings.cloudPercentage)
+		return AuroraFactors(kpIndex, geomagLocation, darkness, weather)
 	}
 }

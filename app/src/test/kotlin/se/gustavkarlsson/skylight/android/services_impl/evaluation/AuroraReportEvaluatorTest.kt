@@ -25,7 +25,7 @@ class AuroraReportEvaluatorTest {
     lateinit var mockGeomagLocationEvaluator: ChanceEvaluator<GeomagLocation>
 
     @Mock
-    lateinit var mockVisibilityEvaluator: ChanceEvaluator<Visibility>
+    lateinit var mockWeatherEvaluator: ChanceEvaluator<Weather>
 
     @Mock
     lateinit var mockDarknessEvaluator: ChanceEvaluator<Darkness>
@@ -39,10 +39,10 @@ class AuroraReportEvaluatorTest {
     fun setUp() {
 		whenever(mockKpIndexEvaluator.evaluate(any())).thenReturn(Chance(0.5))
         whenever(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(Chance(0.5))
-        whenever(mockVisibilityEvaluator.evaluate(any())).thenReturn(Chance(0.5))
+        whenever(mockWeatherEvaluator.evaluate(any())).thenReturn(Chance(0.5))
         whenever(mockDarknessEvaluator.evaluate(any())).thenReturn(Chance(0.5))
 		whenever(mockAuroraReport.factors).thenReturn(mock())
-        impl = AuroraReportEvaluator(mockKpIndexEvaluator, mockGeomagLocationEvaluator, mockVisibilityEvaluator, mockDarknessEvaluator)
+        impl = AuroraReportEvaluator(mockKpIndexEvaluator, mockGeomagLocationEvaluator, mockWeatherEvaluator, mockDarknessEvaluator)
     }
 
     @Test
@@ -64,9 +64,9 @@ class AuroraReportEvaluatorTest {
     }
 
     @Test
-    fun lowVisibilityEvaluatesToInvisibilityChance() {
+    fun lowWeatherEvaluatesToLowChance() {
         val lowChance = Chance(0.1)
-        whenever(mockVisibilityEvaluator.evaluate(any())).thenReturn(lowChance)
+        whenever(mockWeatherEvaluator.evaluate(any())).thenReturn(lowChance)
 
         val chance = impl.evaluate(mockAuroraReport)
 

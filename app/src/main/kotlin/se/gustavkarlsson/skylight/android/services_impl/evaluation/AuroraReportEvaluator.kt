@@ -6,7 +6,7 @@ import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 class AuroraReportEvaluator(
 	private val kpIndexEvaluator: ChanceEvaluator<KpIndex>,
 	private val geomagLocationEvaluator: ChanceEvaluator<GeomagLocation>,
-	private val visibilityEvaluator: ChanceEvaluator<Visibility>,
+	private val weatherEvaluator: ChanceEvaluator<Weather>,
 	private val darknessEvaluator: ChanceEvaluator<Darkness>
 ) : ChanceEvaluator<AuroraReport> {
 
@@ -14,10 +14,10 @@ class AuroraReportEvaluator(
 		val factors = value.factors
 		val activityChance = kpIndexEvaluator.evaluate(factors.kpIndex)
 		val locationChance = geomagLocationEvaluator.evaluate(factors.geomagLocation)
-		val visibilityChance = visibilityEvaluator.evaluate(factors.visibility)
+		val weatherChance = weatherEvaluator.evaluate(factors.weather)
 		val darknessChance = darknessEvaluator.evaluate(factors.darkness)
 
-		val chances = listOf(activityChance, locationChance, visibilityChance, darknessChance)
+		val chances = listOf(activityChance, locationChance, weatherChance, darknessChance)
 
 		if (chances.any { !it.isKnown }) {
 			return Chance.UNKNOWN
@@ -27,6 +27,6 @@ class AuroraReportEvaluator(
 			return Chance.IMPOSSIBLE
 		}
 
-		return listOf(visibilityChance, darknessChance, activityChance * locationChance).min()!!
+		return listOf(weatherChance, darknessChance, activityChance * locationChance).min()!!
 	}
 }

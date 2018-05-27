@@ -1,11 +1,11 @@
 package se.gustavkarlsson.skylight.android.di.modules
 
 import android.arch.lifecycle.ViewModelProviders
-import android.support.v4.app.FragmentActivity
+import android.support.v4.app.Fragment
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.minutes
-import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModel
-import se.gustavkarlsson.skylight.android.gui.activities.main.MainViewModelFactory
+import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
+import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModelFactory
 
 class AndroidViewModelsModule(
 	fluxModule: FluxModule,
@@ -29,15 +29,15 @@ class AndroidViewModelsModule(
 			formattingModule.geomagLocationFormatter,
 			evaluationModule.kpIndexEvaluator,
 			formattingModule.kpIndexFormatter,
-			evaluationModule.visibilityEvaluator,
-			formattingModule.visibilityFormatter,
+			evaluationModule.weatherEvaluator,
+			formattingModule.weatherFormatter,
 			timeModule.now,
 			RIGHT_NOW_THRESHOLD
 		)
 	}
 
-	override fun mainViewModel(activity: FragmentActivity): MainViewModel =
-		ViewModelProviders.of(activity, mainViewModelFactory)
+	override fun mainViewModel(fragment: Fragment): MainViewModel =
+		ViewModelProviders.of(fragment, mainViewModelFactory)
 			.get(MainViewModel::class.java)
 
 	companion object {

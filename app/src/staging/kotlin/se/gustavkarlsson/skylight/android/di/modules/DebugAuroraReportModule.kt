@@ -18,7 +18,7 @@ class DebugAuroraReportModule(
 	darknessModule: DarknessModule,
 	geomagLocationModule: GeomagLocationModule,
 	kpIndexModule: KpIndexModule,
-	visibilityModule: VisibilityModule,
+	weatherModule: WeatherModule,
 	contextModule: ContextModule,
 	rxSharedPreferencesModule: RxSharedPreferencesModule
 ) : AuroraReportModule {
@@ -38,7 +38,7 @@ class DebugAuroraReportModule(
 			darknessModule.darknessProvider,
 			geomagLocationModule.geomagLocationProvider,
 			kpIndexModule.kpIndexProvider,
-			visibilityModule.visibilityProvider
+			weatherModule.weatherProvider
 		)
 		DebugAuroraReportProvider(realProvider, debugSettings, timeModule.timeProvider)
 	}
@@ -50,7 +50,7 @@ class DebugAuroraReportModule(
 			kpIndexModule.kpIndexFlowable,
 			geomagLocationModule.geomagLocationFlowable,
 			darknessModule.darknessFlowable,
-			visibilityModule.visibilityFlowable
+			weatherModule.weatherFlowable
 		)
 		DebugAuroraReportStreamable(realStreamable, debugSettings, timeModule.now)
 	}

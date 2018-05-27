@@ -9,6 +9,6 @@ interface FormattingModule {
 	val darknessFormatter: SingleValueFormatter<Darkness>
 	val geomagLocationFormatter: SingleValueFormatter<GeomagLocation>
 	val kpIndexFormatter: SingleValueFormatter<KpIndex>
-	val visibilityFormatter: SingleValueFormatter<Visibility>
+	val weatherFormatter: SingleValueFormatter<Weather>
 	val chanceLevelFormatter: SingleValueFormatter<ChanceLevel>
 }

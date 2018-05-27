@@ -15,7 +15,7 @@ class CombiningAuroraReportProvider(
 	private val darknessProvider: DarknessProvider,
 	private val geomagLocationProvider: GeomagLocationProvider,
 	private val kpIndexProvider: KpIndexProvider,
-	private val visibilityProvider: VisibilityProvider
+	private val weatherProvider: WeatherProvider
 ) : AuroraReportProvider {
 
 	override fun get(): Single<AuroraReport> {
@@ -38,15 +38,15 @@ class CombiningAuroraReportProvider(
 			kpIndexProvider.get(),
 			geomagLocationProvider.get(location),
 			darknessProvider.get(time, location),
-			visibilityProvider.get(location),
+			weatherProvider.get(location),
 			Function6 { theTime: Instant,
 						locationName: Optional<String>,
 						kpIndex: KpIndex,
 						geomagLocation: GeomagLocation,
 						darkness: Darkness,
-						visibility: Visibility
+						weather: Weather
 				->
-				val factors = AuroraFactors(kpIndex, geomagLocation, darkness, visibility)
+				val factors = AuroraFactors(kpIndex, geomagLocation, darkness, weather)
 				AuroraReport(theTime, locationName.orNull(), factors)
 			})
 	}

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:custom="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
-	android:id="@+id/coordinatorLayout"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	tools:context=".gui.activities.main.MainActivity">
+	tools:context=".gui.MainActivity"
+	tools:showIn="@layout/activity_main">
 
 	<android.support.v4.widget.SwipeRefreshLayout
 		android:id="@+id/swipeRefreshLayout"
@@ -112,28 +112,28 @@
 					custom:layout_constraintTop_toTopOf="parent"
 					custom:layout_constraintBottom_toBottomOf="parent"
 					custom:layout_constraintLeft_toRightOf="@+id/kpIndex"
-					custom:layout_constraintRight_toLeftOf="@+id/visibility"
+					custom:layout_constraintRight_toLeftOf="@+id/weather"
 					android:layout_width="@dimen/factor_box_width"
 					android:layout_height="wrap_content"
 					custom:badgeIcon="@drawable/factor_location_white_20dp"
 					custom:name="@string/factor_geomag_location_title_compact" />
 
 				<se.gustavkarlsson.skylight.android.gui.views.AuroraFactorView
-					android:id="@+id/visibility"
+					android:id="@+id/weather"
 					custom:layout_constraintTop_toTopOf="parent"
 					custom:layout_constraintBottom_toBottomOf="parent"
 					custom:layout_constraintLeft_toRightOf="@+id/geomagLocation"
 					custom:layout_constraintRight_toLeftOf="@+id/darkness"
 					android:layout_width="@dimen/factor_box_width"
 					android:layout_height="wrap_content"
-					custom:badgeIcon="@drawable/factor_visibility_white_20dp"
-					custom:name="@string/factor_visibility_title_compact" />
+					custom:badgeIcon="@drawable/factor_weather_white_20dp"
+					custom:name="@string/factor_weather_title_compact" />
 
 				<se.gustavkarlsson.skylight.android.gui.views.AuroraFactorView
 					android:id="@+id/darkness"
 					custom:layout_constraintTop_toTopOf="parent"
 					custom:layout_constraintBottom_toBottomOf="parent"
-					custom:layout_constraintLeft_toRightOf="@+id/visibility"
+					custom:layout_constraintLeft_toRightOf="@+id/weather"
 					custom:layout_constraintRight_toRightOf="parent"
 					android:layout_width="@dimen/factor_box_width"
 					android:layout_height="wrap_content"
@@ -146,4 +146,4 @@
 
 	</android.support.v4.widget.SwipeRefreshLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+</FrameLayout>

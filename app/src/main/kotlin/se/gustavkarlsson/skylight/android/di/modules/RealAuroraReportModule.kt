@@ -14,7 +14,7 @@ class RealAuroraReportModule(
 	darknessModule: DarknessModule,
 	geomagLocationModule: GeomagLocationModule,
 	kpIndexModule: KpIndexModule,
-	visibilityModule: VisibilityModule
+	weatherModule: WeatherModule
 ) : AuroraReportModule {
 
 	override val auroraReportProvider: AuroraReportProvider by lazy {
@@ -25,7 +25,7 @@ class RealAuroraReportModule(
 			darknessModule.darknessProvider,
 			geomagLocationModule.geomagLocationProvider,
 			kpIndexModule.kpIndexProvider,
-			visibilityModule.visibilityProvider
+			weatherModule.weatherProvider
 		)
 	}
 
@@ -36,7 +36,7 @@ class RealAuroraReportModule(
 			kpIndexModule.kpIndexFlowable,
 			geomagLocationModule.geomagLocationFlowable,
 			darknessModule.darknessFlowable,
-			visibilityModule.visibilityFlowable
+			weatherModule.weatherFlowable
 		)
 	}
 

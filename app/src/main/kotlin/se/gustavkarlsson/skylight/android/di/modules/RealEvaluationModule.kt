@@ -14,8 +14,8 @@ class RealEvaluationModule : EvaluationModule {
 		GeomagLocationEvaluator()
 	}
 
-	override val visibilityEvaluator: ChanceEvaluator<Visibility> by lazy {
-		VisibilityEvaluator()
+	override val weatherEvaluator: ChanceEvaluator<Weather> by lazy {
+		WeatherEvaluator()
 	}
 
 	override val darknessEvaluator: ChanceEvaluator<Darkness> by lazy {
@@ -26,7 +26,7 @@ class RealEvaluationModule : EvaluationModule {
 		AuroraReportEvaluator(
 			kpIndexEvaluator,
 			geomagLocationEvaluator,
-			visibilityEvaluator,
+			weatherEvaluator,
 			darknessEvaluator
 		)
 	}

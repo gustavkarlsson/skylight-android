@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.gui.activities.main
+package se.gustavkarlsson.skylight.android.gui.screens.main
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
@@ -24,8 +24,8 @@ class MainViewModelFactory(
 	private val geomagLocationFormatter: SingleValueFormatter<GeomagLocation>,
 	private val kpIndexChanceEvaluator: ChanceEvaluator<KpIndex>,
 	private val kpIndexFormatter: SingleValueFormatter<KpIndex>,
-	private val visibilityChanceEvaluator: ChanceEvaluator<Visibility>,
-	private val visibilityFormatter: SingleValueFormatter<Visibility>,
+	private val weatherChanceEvaluator: ChanceEvaluator<Weather>,
+	private val weatherFormatter: SingleValueFormatter<Weather>,
 	private val now: Single<Instant>,
 	private val rightNowThreshold: Duration
 ) : ViewModelProvider.Factory {
@@ -46,8 +46,8 @@ class MainViewModelFactory(
 			geomagLocationFormatter,
 			kpIndexChanceEvaluator,
 			kpIndexFormatter,
-			visibilityChanceEvaluator,
-			visibilityFormatter,
+			weatherChanceEvaluator,
+			weatherFormatter,
 			now,
 			rightNowThreshold
 		) as T

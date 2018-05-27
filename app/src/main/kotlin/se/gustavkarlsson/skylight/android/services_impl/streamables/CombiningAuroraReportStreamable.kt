@@ -15,7 +15,7 @@ class CombiningAuroraReportStreamable(
 	kpIndexes: Flowable<KpIndex>,
 	geomagLocations: Flowable<GeomagLocation>,
 	darknesses: Flowable<Darkness>,
-	visibilities: Flowable<Visibility>
+	visibilities: Flowable<Weather>
 ) : Streamable<AuroraReport> {
 
 	override val stream: Flowable<AuroraReport> =
@@ -29,8 +29,8 @@ class CombiningAuroraReportStreamable(
 						kpIndex: KpIndex,
 						geomagLocation: GeomagLocation,
 						darkness: Darkness,
-						visibility: Visibility ->
-				val factors = AuroraFactors(kpIndex, geomagLocation, darkness, visibility)
+						weather: Weather ->
+				val factors = AuroraFactors(kpIndex, geomagLocation, darkness, weather)
 				AuroraReport(now.blockingGet(), locationName.orNull(), factors)
 			})
 			.doOnNext { Timber.i("Streamed aurora report: %s", it) }

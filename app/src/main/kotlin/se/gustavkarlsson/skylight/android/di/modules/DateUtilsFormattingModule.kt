@@ -23,9 +23,7 @@ class DateUtilsFormattingModule(
 
 	override val kpIndexFormatter: SingleValueFormatter<KpIndex> by lazy { KpIndexFormatter() }
 
-	override val visibilityFormatter: SingleValueFormatter<Visibility> by lazy {
-		VisibilityFormatter()
-	}
+	override val weatherFormatter: SingleValueFormatter<Weather> by lazy { WeatherFormatter() }
 
 	override val chanceLevelFormatter: SingleValueFormatter<ChanceLevel> by lazy {
 		ChanceLevelFormatter(contextModule.context)

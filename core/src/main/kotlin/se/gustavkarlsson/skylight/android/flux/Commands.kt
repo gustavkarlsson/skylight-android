@@ -14,3 +14,5 @@ data class ShowDialogCommand(
 ) : SkylightCommand()
 
 object HideDialogCommand : SkylightCommand()
+
+object SetLocationPermissionGrantedCommand : SkylightCommand()

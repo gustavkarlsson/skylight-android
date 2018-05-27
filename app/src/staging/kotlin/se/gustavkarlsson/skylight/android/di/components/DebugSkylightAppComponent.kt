@@ -21,7 +21,7 @@ class DebugSkylightAppComponent(openWeatherMapApiKey: String, application: Appli
 			darknessModule,
 			geomagLocationModule,
 			kpIndexModule,
-			visibilityModule,
+			weatherModule,
 			contextModule,
 			rxSharedPreferencesModule
 		)

@@ -20,10 +20,11 @@ class RealFluxModule(
 			switchMapCommand(::streamAuroraReports)
 			switchMapCommand(::streamConnectivity)
 			mapCommand(::showDialog)
-			mapCommand(::hideDialog)
+			mapCommand { _: HideDialogCommand -> DialogResult(null)}
+			mapCommand { _: SetLocationPermissionGrantedCommand -> LocationPermissionGrantedResult }
 
 			reduceResult { state, _: AuroraReportResult.JustFinished ->
-				state.copy(justFinishedRefreshing = true)
+				state.copy(isRefreshing = false, throwable = null, justFinishedRefreshing = true)
 			}
 			reduceResult { state, _: AuroraReportResult.Idle ->
 				state.copy(isRefreshing = false, throwable = null, justFinishedRefreshing = false)
@@ -46,6 +47,9 @@ class RealFluxModule(
 			}
 			reduceResult { state, result: DialogResult ->
 				state.copy(dialog = result.dialog)
+			}
+			reduceResult { state, _: LocationPermissionGrantedResult ->
+				state.copy(locationPermission = SkylightState.LocationPermission.GRANTED)
 			}
 
 			observeOn(AndroidSchedulers.mainThread())
@@ -78,9 +82,6 @@ class RealFluxModule(
 
 	private fun showDialog(action: ShowDialogCommand): DialogResult =
 		DialogResult(SkylightState.Dialog(action.titleResource, action.messageResource))
-
-	private fun hideDialog(action: HideDialogCommand): DialogResult =
-		DialogResult(null)
 
 	private fun streamConnectivity(action: ConnectivityStreamCommand): Observable<ConnectivityResult> =
 		connectivityModule.connectivityFlowable

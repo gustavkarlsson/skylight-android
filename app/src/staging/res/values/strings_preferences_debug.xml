@@ -17,4 +17,7 @@
 
 	<string name="pref_sun_position_key">sun_position</string>
 	<string name="pref_sun_position_title">Sun position</string>
+
+	<string name="pref_refresh_duration_seconds_key">refresh_duration_seconds</string>
+	<string name="pref_refresh_duration_seconds_title">Refresh duration (seconds)</string>
 </resources>
