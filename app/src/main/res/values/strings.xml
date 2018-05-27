@@ -17,4 +17,9 @@
 	<string name="your_location">Your Location</string>
 	<string name="settings">Settings</string>
 	<string name="factors">Factors</string>
+
+	<string name="weather_clear">Clear</string>
+	<string name="weather_some_clouds">Some clouds</string>
+	<string name="weather_cloudy">Cloudy</string>
+	<string name="weather_overcast">Overcast</string>
 </resources>

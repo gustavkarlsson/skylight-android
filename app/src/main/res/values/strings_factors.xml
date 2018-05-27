@@ -20,8 +20,8 @@
 	<string name="factor_weather_title_compact">Weather</string>
 	<string name="factor_weather_desc">
 		Bad weather can block your view of the aurora.
-		This value shows the current weather conditions in %.
-		100% means clear skies and is therefore ideal.
+		This value shows the current weather conditions.
+		Clear skies ensure good visibility of the aurora.
 	</string>
 	<string name="factor_darkness_title_full">Darkness</string>
 	<string name="factor_darkness_title_compact">Darkness</string>
