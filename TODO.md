@@ -1,11 +1,15 @@
 # TODO
 
 ## Soon
+* Make testing use other settings
+* Rename staging to testing
 * Make settings part of store?
 * Add instrumentation testing to CI
 * Add more tests
 
 ## Some day
+* Add manual clearing of "notification sent"
+* Add more testing options (individual overrides for example)
 * Look into country changes while app running (Locale etc)
 * Add performance traces
 * Automate release in CI (Gradle release plugin? Fastlane? Automatic version management?)
