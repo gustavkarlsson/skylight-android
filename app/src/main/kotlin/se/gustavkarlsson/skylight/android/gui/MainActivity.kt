@@ -3,11 +3,11 @@ package se.gustavkarlsson.skylight.android.gui
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.extensions.findNavController
-import se.gustavkarlsson.skylight.android.extensions.setupActionBarWithNavController
 
 
 class MainActivity : AppCompatActivity() {

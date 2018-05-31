@@ -45,6 +45,7 @@ buildscript {
 		autodispose_version = "0.8.0"
 		leakcanary_version = "1.5.4"
 		navigation_version = "1.0.0-alpha01"
+		ktx_navigation_ui_version = "1.0.0-alpha01"
 	}
 	repositories {
 		jcenter()

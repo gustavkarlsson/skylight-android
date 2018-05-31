@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
 import android.view.*
+import androidx.navigation.findNavController
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.visibility
 import com.jakewharton.rxbinding2.widget.text
@@ -19,7 +20,6 @@ import kotlinx.android.synthetic.main.fragment_main.*
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.appComponent
-import se.gustavkarlsson.skylight.android.extensions.findNavController
 import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
 import se.gustavkarlsson.skylight.android.services.Analytics
 import timber.log.Timber
@@ -50,7 +50,7 @@ class MainFragment : Fragment(), LifecycleObserver {
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		return when (item.itemId) {
 			R.id.action_settings -> {
-				findNavController().navigate(R.id.action_mainFragment_to_settingsFragment)
+				view?.findNavController()?.navigate(R.id.action_mainFragment_to_settingsFragment)
 				true
 			}
 			else -> super.onOptionsItemSelected(item)
