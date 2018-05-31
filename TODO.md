@@ -1,7 +1,7 @@
 # TODO
 
 ## Soon
-* Rename chance to score
+* Rename geomag location to proximity
 * Make settings part of store?
 * Add KTX
 * Add instrumentation testing to CI
@@ -19,6 +19,7 @@
 * Integrate code coverage (Coveralls or Codecov)
 
 ## Never?
+* Rename chance to score?
 * Slices
 * Widget
 * Instant app
