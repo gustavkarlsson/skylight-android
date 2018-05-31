@@ -1,9 +1,7 @@
 # TODO
 
 ## Soon
-* Rename geomag location to proximity
 * Make settings part of store?
-* Add KTX
 * Add instrumentation testing to CI
 * Add more tests
 
@@ -17,6 +15,7 @@
 * Additional analytics(Failed remote calls, Notifications on/off, Manually started app, Started app from notification, denied location permission, no Google Play Services installed, first start)
 * Firebase performance monitoring
 * Integrate code coverage (Coveralls or Codecov)
+* Add more KTX
 
 ## Never?
 * Rename chance to score?

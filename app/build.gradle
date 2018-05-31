@@ -119,6 +119,9 @@ dependencies {
 	implementation "android.arch.navigation:navigation-fragment:$navigation_version"
 	implementation "android.arch.navigation:navigation-ui:$navigation_version"
 
+	// KTX
+	implementation "android.arch.navigation:navigation-ui-ktx:$ktx_navigation_ui_version"
+
 	// Retrofit
 	implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
 	implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
