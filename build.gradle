@@ -46,6 +46,7 @@ buildscript {
 		leakcanary_version = "1.5.4"
 		navigation_version = "1.0.0-alpha01"
 		ktx_navigation_ui_version = "1.0.0-alpha01"
+		kakao_version = "1.3.0"
 	}
 	repositories {
 		jcenter()

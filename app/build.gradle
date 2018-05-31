@@ -176,6 +176,7 @@ dependencies {
 	androidTestImplementation "org.mockito:mockito-android:$mockito_version"
 	androidTestImplementation "com.nhaarman:mockito-kotlin-kt1.1:$mockito_kotlin_version", { exclude group: "org.jetbrains.kotlin" }
 	androidTestImplementation "commons-io:commons-io:$commons_io_version"
+	androidTestImplementation "com.agoda.kakao:kakao:$kakao_version"
 }
 
 // Recommended to be applied at bottom

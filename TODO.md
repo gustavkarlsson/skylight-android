@@ -6,8 +6,6 @@
 * Add more tests
 
 ## Some day
-* Kakao instrumentation tests (https://github.com/agoda-com/Kakao)
-* Look into using Spek
 * Look into country changes while app running (Locale etc)
 * Add performance traces
 * Automate release in CI (Gradle release plugin? Fastlane? Automatic version management?)
@@ -16,6 +14,7 @@
 * Firebase performance monitoring
 * Integrate code coverage (Coveralls or Codecov)
 * Add more KTX
+* Look into using Spek (problems with junit5 and android)
 
 ## Never?
 * Rename chance to score?
