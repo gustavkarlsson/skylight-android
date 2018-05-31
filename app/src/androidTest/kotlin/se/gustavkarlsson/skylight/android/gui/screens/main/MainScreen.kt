@@ -2,6 +2,8 @@ package se.gustavkarlsson.skylight.android.gui.screens.main
 
 import com.agoda.kakao.*
 import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.test.KBottomSheetDialogFragment
+import se.gustavkarlsson.skylight.android.test.KOutsideBottomSheetDialogFragment
 
 class MainScreen : Screen<MainScreen>() {
 	val swipeRefreshLayout = KSwipeRefreshLayout { withId(R.id.swipeRefreshLayout) }
@@ -14,7 +16,7 @@ class MainScreen : Screen<MainScreen>() {
 	val geomagLocationCard = KView { withId(R.id.geomagLocationCard) }
 	val weatherCard = KView { withId(R.id.weatherCard) }
 
-	val detailView = KView { withId(android.support.design.R.id.design_bottom_sheet) }
-	val outsideDetailView = KView { withId(android.support.design.R.id.touch_outside) }
+	val detailView = KBottomSheetDialogFragment()
+	val outsideDetailView = KOutsideBottomSheetDialogFragment()
 	val snackbar = KSnackbar()
 }
