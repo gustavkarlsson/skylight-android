@@ -8,7 +8,6 @@ import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 class TestLocationProvider(
 	var delegate: () -> Optional<Location>
 ) : LocationProvider {
-
 	override fun get(): Single<Optional<Location>> {
 		return Single.fromCallable({ delegate() })
 	}
