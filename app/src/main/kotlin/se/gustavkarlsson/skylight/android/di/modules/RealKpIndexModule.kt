@@ -8,9 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import se.gustavkarlsson.skylight.android.entities.KpIndex
-import se.gustavkarlsson.skylight.android.extensions.connectTimeout
-import se.gustavkarlsson.skylight.android.extensions.create
-import se.gustavkarlsson.skylight.android.extensions.seconds
+import se.gustavkarlsson.skylight.android.extensions.*
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.KpIndexProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.RetrofittedKpIndexProvider
@@ -19,15 +17,17 @@ import se.gustavkarlsson.skylight.android.services_impl.streamables.KpIndexProvi
 
 class RealKpIndexModule(
 	apiUrl: String = "http://api.skylight-app.net",
-	connectTimeout: Duration = 20.seconds
+	timeout: Duration = 30.seconds
 ) : KpIndexModule {
 
 	private val kpIndexApi: KpIndexApi by lazy {
 		Retrofit.Builder()
 			.client(
 				OkHttpClient.Builder()
-				.connectTimeout(connectTimeout)
-				.build()
+					.connectTimeout(timeout)
+					.readTimeout(timeout)
+					.writeTimeout(timeout)
+					.build()
 			)
 			.baseUrl(apiUrl)
 			.addConverterFactory(GsonConverterFactory.create())
