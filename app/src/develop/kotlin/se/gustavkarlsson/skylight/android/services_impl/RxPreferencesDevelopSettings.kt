@@ -7,12 +7,12 @@ import io.reactivex.Flowable
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.seconds
-import se.gustavkarlsson.skylight.android.services.DebugSettings
+import se.gustavkarlsson.skylight.android.services.DevelopSettings
 
-class RxPreferencesDebugSettings(
+class RxPreferencesDevelopSettings(
 	context: Context,
 	rxSharedPreferences: RxSharedPreferences
-) : DebugSettings {
+) : DevelopSettings {
 	private val overrideValuesPreference by lazy {
 		val key = context.getString(R.string.pref_override_values_key)
 		val preference = rxSharedPreferences.getBoolean(key, false)

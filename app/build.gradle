@@ -10,7 +10,7 @@ android {
 	sourceSets {
 		main.java.srcDirs += "src/main/kotlin"
 		production.java.srcDirs += "src/production/kotlin"
-		staging.java.srcDirs += "src/staging/kotlin"
+		develop.java.srcDirs += "src/develop/kotlin"
 		test.java.srcDirs += "src/test/kotlin"
 		androidTest.java.srcDirs += "src/androidTest/kotlin"
 	}
@@ -67,10 +67,10 @@ android {
 			dimension "environment"
 		}
 
-		staging {
+		develop {
 			dimension "environment"
-			versionNameSuffix "-staging"
-			applicationIdSuffix ".staging"
+			versionNameSuffix "-develop"
+			applicationIdSuffix ".develop"
 		}
 	}
 

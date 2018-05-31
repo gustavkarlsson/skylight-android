@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.services
 import io.reactivex.Flowable
 import org.threeten.bp.Duration
 
-interface DebugSettings {
+interface DevelopSettings {
 	val overrideValues: Boolean
 	val overrideValuesChanges: Flowable<Boolean>
 
