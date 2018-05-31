@@ -10,14 +10,15 @@ import se.gustavkarlsson.skylight.android.background.scheduling.UpdateJob
 import se.gustavkarlsson.skylight.android.di.modules.ContextModule
 import se.gustavkarlsson.skylight.android.di.modules.FluxModule
 import se.gustavkarlsson.skylight.android.di.modules.SettingsModule
+import se.gustavkarlsson.skylight.android.extensions.minutes
 
 class EvernoteJobSchedulingModule(
 	contextModule: ContextModule,
 	private val fluxModule: FluxModule,
 	private val notificationModule: NotificationModule,
 	settingsModule: SettingsModule,
-	scheduleInterval: Duration,
-	schedulerFlex: Duration
+	scheduleInterval: Duration = 20.minutes,
+	schedulerFlex: Duration = 10.minutes
 ) : SchedulingModule {
 
 	private val initiateJobManager: Completable by lazy {

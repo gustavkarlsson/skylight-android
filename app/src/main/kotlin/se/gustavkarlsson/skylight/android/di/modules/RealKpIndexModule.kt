@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.di.modules
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
+import org.threeten.bp.Duration
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,16 +17,19 @@ import se.gustavkarlsson.skylight.android.services_impl.providers.RetrofittedKpI
 import se.gustavkarlsson.skylight.android.services_impl.providers.kpindex.KpIndexApi
 import se.gustavkarlsson.skylight.android.services_impl.streamables.KpIndexProviderStreamable
 
-class RealKpIndexModule : KpIndexModule {
+class RealKpIndexModule(
+	apiUrl: String = "http://api.skylight-app.net",
+	connectTimeout: Duration = 20.seconds
+) : KpIndexModule {
 
 	private val kpIndexApi: KpIndexApi by lazy {
 		Retrofit.Builder()
 			.client(
 				OkHttpClient.Builder()
-				.connectTimeout(CONNECT_TIMEOUT)
+				.connectTimeout(connectTimeout)
 				.build()
 			)
-			.baseUrl(API_URL)
+			.baseUrl(apiUrl)
 			.addConverterFactory(GsonConverterFactory.create())
 			.addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
 			.build().create<KpIndexApi>()
@@ -41,11 +45,5 @@ class RealKpIndexModule : KpIndexModule {
 		kpIndexStreamable.stream
 			.replay(1)
 			.refCount()
-	}
-
-	companion object {
-		// TODO Make configurable in constructor
-		const val API_URL = "http://api.skylight-app.net"
-		val CONNECT_TIMEOUT = 20.seconds
 	}
 }

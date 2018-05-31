@@ -5,7 +5,9 @@ import com.crashlytics.android.Crashlytics
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.squareup.leakcanary.LeakCanary
 import io.fabric.sdk.android.Fabric
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.plugins.RxJavaPlugins
+import io.reactivex.rxkotlin.addTo
 import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.util.CrashlyticsTree
@@ -13,6 +15,7 @@ import timber.log.Timber
 import timber.log.Timber.DebugTree
 
 class Skylight : MultiDexApplication() {
+	private val disposables = CompositeDisposable()
 
 	init {
 		instance = this
@@ -68,9 +71,11 @@ class Skylight : MultiDexApplication() {
 	private fun setupSettingsAnalytics(settings: Settings) {
 		settings.notificationsEnabledChanges
 			.subscribe { Analytics.setNotificationsEnabled(it) }
+			.addTo(disposables)
 
 		settings.triggerLevelChanges
 			.subscribe { Analytics.setNotifyTriggerLevel(it) }
+			.addTo(disposables)
 	}
 
 	companion object {

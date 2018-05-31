@@ -13,7 +13,6 @@ import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.Settings
 
 open class SkylightAppComponent(
-	openWeatherMapApiKey: String, // TODO Is this really the right way to do this?
 	application: Application
 ) : AppComponent {
 
@@ -53,7 +52,7 @@ open class SkylightAppComponent(
 		RealKpIndexModule()
 
 	open val weatherModule: WeatherModule by lazy {
-		OpenWeatherMapWeatherModule(openWeatherMapApiKey, locationModule)
+		OpenWeatherMapWeatherModule(locationModule)
 	}
 
 	open val locationNameModule: LocationNameModule by lazy {
@@ -124,9 +123,7 @@ open class SkylightAppComponent(
 			settingsModule,
 			fluxModule,
 			timeModule,
-			MainActivity::class.java,
-			20.minutes,
-			10.minutes
+			MainActivity::class.java
 		)
 	}
 
