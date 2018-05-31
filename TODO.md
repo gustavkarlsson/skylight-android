@@ -14,7 +14,6 @@
 * Add performance traces
 * Automate release in CI (Gradle release plugin? Fastlane? Automatic version management?)
 * Look into replacing evernote-job with WorkManager
-* Detail View
 * Additional analytics(Failed remote calls, Notifications on/off, Manually started app, Started app from notification, denied location permission, no Google Play Services installed, first start)
 * Firebase performance monitoring
 * Integrate code coverage (Coveralls or Codecov)
