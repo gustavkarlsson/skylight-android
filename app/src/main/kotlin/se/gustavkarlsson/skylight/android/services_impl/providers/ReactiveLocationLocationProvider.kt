@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.services_impl.providers
 
+import android.annotation.SuppressLint
 import com.hadisatrio.optional.Optional
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -14,6 +15,7 @@ class ReactiveLocationLocationProvider(
 	private val reactiveLocationProvider: ReactiveLocationProvider
 ) : LocationProvider {
 
+	@SuppressLint("MissingPermission")
 	override fun get(): Single<Optional<Location>> {
 		return reactiveLocationProvider.lastKnownLocation
 			.subscribeOn(Schedulers.io())

@@ -4,7 +4,6 @@ import android.Manifest
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
-import android.content.DialogInterface
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -17,22 +16,18 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_main.*
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.okButton
-import org.jetbrains.anko.toast
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.extensions.findNavController
-import se.gustavkarlsson.skylight.android.extensions.indefiniteErrorSnackbar
+import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
 import se.gustavkarlsson.skylight.android.services.Analytics
 import timber.log.Timber
 
 class MainFragment : Fragment(), LifecycleObserver {
 
-	private var snackbar: Snackbar? = null
-
-	private var dialog: DialogInterface? = null
+	private var connectivitySnackbar: Snackbar? = null
+	private var errorSnackbar: Snackbar? = null
 
 	private val viewModel: MainViewModel by lazy {
 		appComponent.mainViewModel(this)
@@ -92,19 +87,29 @@ class MainFragment : Fragment(), LifecycleObserver {
 		viewModel.errorMessages
 			.doOnNext { Timber.d("Showing error message") }
 			.autoDisposable(scope)
-			.subscribe { activity?.toast(it) }
+			.subscribe {
+				errorSnackbar?.run {
+					Timber.d("Hiding previous error message")
+					dismiss()
+				}
+				view?.let { view ->
+					errorSnackbar =
+						showErrorSnackbar(view, it, Snackbar.LENGTH_LONG).apply { show() }
+				}
+			}
 
 		viewModel.connectivityMessages
 			.autoDisposable(scope)
 			.subscribe {
-				snackbar?.run {
-					Timber.d("Hiding connectivity message")
+				connectivitySnackbar?.run {
+					Timber.d("Hiding previous connectivity message")
 					dismiss()
 				}
 				it.ifPresent {
 					Timber.d("Showing connectivity message: %s", it)
 					view?.let { view ->
-						snackbar = indefiniteErrorSnackbar(view, it).apply { show() }
+						connectivitySnackbar =
+							showErrorSnackbar(view, it, Snackbar.LENGTH_INDEFINITE).apply { show() }
 					}
 				}
 			}
@@ -124,25 +129,6 @@ class MainFragment : Fragment(), LifecycleObserver {
 			.autoDisposable(scope)
 			.subscribe(timeSinceUpdate.visibility())
 
-		viewModel.showDialog
-			.doOnNext { Timber.d("Showing dialog: %s", it) }
-			.autoDisposable(scope)
-			.subscribe {
-				dialog?.dismiss()
-				dialog = activity?.alert {
-					iconResource = R.drawable.info_white_24dp
-					titleResource = it.titleResource
-					messageResource = it.messageResource
-					okButton { viewModel.hideDialogClicked.accept(Unit) }
-					onCancelled { viewModel.hideDialogClicked.accept(Unit) }
-				}?.show()
-			}
-
-		viewModel.hideDialog
-			.doOnNext { Timber.d("Hiding dialog") }
-			.autoDisposable(scope)
-			.subscribe { dialog?.dismiss() }
-
 		viewModel.ensureLocationPermission
 			.doOnNext { Timber.d("Location permission is unknown") }
 			.autoDisposable(scope)
@@ -153,28 +139,28 @@ class MainFragment : Fragment(), LifecycleObserver {
 		FactorPresenter(
 			viewModel.darknessValue, viewModel.darknessChance,
 			darknessValue, darknessBar, darknessCard,
-			viewModel.darknessFactorClicked,
+			::showDarknessDetails,
 			scope,
 			"darkness"
 		).present()
 		FactorPresenter(
 			viewModel.geomagLocationValue, viewModel.geomagLocationChance,
 			geomagLocationValue, geomagLocationBar, geomagLocationCard,
-			viewModel.geomagLocationFactorClicked,
+			::showGeomagLocationDetails,
 			scope,
 			"geomagLocation"
 		).present()
 		FactorPresenter(
 			viewModel.kpIndexValue, viewModel.kpIndexChance,
 			kpIndexValue, kpIndexBar, kpIndexCard,
-			viewModel.kpIndexFactorClicked,
+			::showKpIndexDetails,
 			scope,
 			"kpIndex"
 		).present()
 		FactorPresenter(
 			viewModel.weatherValue, viewModel.weatherChance,
 			weatherValue, weatherBar, weatherCard,
-			viewModel.weatherFactorClicked,
+			::showWeatherDetails,
 			scope,
 			"weather"
 		).present()
@@ -223,10 +209,42 @@ class MainFragment : Fragment(), LifecycleObserver {
 			.show()
 	}
 
+	private fun showKpIndexDetails() {
+		fragmentManager?.let {
+			FactorBottomSheetDialogFragment
+				.newInstance(R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc)
+				.show(it, FactorBottomSheetDialogFragment::class.java.simpleName)
+		}
+	}
+
+	private fun showGeomagLocationDetails() {
+		fragmentManager?.let {
+			FactorBottomSheetDialogFragment
+				.newInstance(R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc)
+				.show(it, FactorBottomSheetDialogFragment::class.java.simpleName)
+		}
+	}
+
+	private fun showWeatherDetails() {
+		fragmentManager?.let {
+			FactorBottomSheetDialogFragment
+				.newInstance(R.string.factor_weather_title_full, R.string.factor_weather_desc)
+				.show(it, FactorBottomSheetDialogFragment::class.java.simpleName)
+		}
+	}
+
+	private fun showDarknessDetails() {
+		fragmentManager?.let {
+			FactorBottomSheetDialogFragment
+				.newInstance(R.string.factor_darkness_title_full, R.string.factor_darkness_desc)
+				.show(it, FactorBottomSheetDialogFragment::class.java.simpleName)
+		}
+	}
+
 	override fun onDestroy() {
 		super.onDestroy()
-		dialog?.dismiss()
-		snackbar?.dismiss()
+		connectivitySnackbar?.dismiss()
+		errorSnackbar?.dismiss()
 		lifecycle.removeObserver(this)
 	}
 

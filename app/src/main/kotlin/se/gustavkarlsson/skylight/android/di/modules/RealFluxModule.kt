@@ -19,8 +19,6 @@ class RealFluxModule(
 			switchMapCommand(::getAuroraReport)
 			switchMapCommand(::streamAuroraReports)
 			switchMapCommand(::streamConnectivity)
-			mapCommand(::showDialog)
-			mapCommand { _: HideDialogCommand -> DialogResult(null)}
 			mapCommand { _: SetLocationPermissionGrantedCommand -> LocationPermissionGrantedResult }
 
 			reduceResult { state, _: AuroraReportResult.JustFinished ->
@@ -44,9 +42,6 @@ class RealFluxModule(
 			}
 			reduceResult { state, result: ConnectivityResult ->
 				state.copy(isConnectedToInternet = result.isConnectedToInternet)
-			}
-			reduceResult { state, result: DialogResult ->
-				state.copy(dialog = result.dialog)
 			}
 			reduceResult { state, _: LocationPermissionGrantedResult ->
 				state.copy(locationPermission = SkylightState.LocationPermission.GRANTED)
@@ -79,9 +74,6 @@ class RealFluxModule(
 		} else {
 			Observable.just(AuroraReportResult.Idle)
 		}
-
-	private fun showDialog(action: ShowDialogCommand): DialogResult =
-		DialogResult(SkylightState.Dialog(action.titleResource, action.messageResource))
 
 	private fun streamConnectivity(action: ConnectivityStreamCommand): Observable<ConnectivityResult> =
 		connectivityModule.connectivityFlowable

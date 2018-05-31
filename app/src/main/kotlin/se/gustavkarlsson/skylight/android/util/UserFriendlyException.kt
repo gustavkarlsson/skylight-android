@@ -1,23 +1,23 @@
 package se.gustavkarlsson.skylight.android.util
 
-import android.support.annotation.IdRes
+import android.support.annotation.StringRes
 
 class UserFriendlyException : RuntimeException {
     val stringResourceId: Int
 
-    constructor(@IdRes stringResourceId: Int, cause: Throwable) : super(cause) {
+    constructor(@StringRes stringResourceId: Int, cause: Throwable) : super(cause) {
         this.stringResourceId = stringResourceId
     }
 
-    constructor(@IdRes stringResourceId: Int, message: String, cause: Throwable) : super(message, cause) {
+    constructor(@StringRes stringResourceId: Int, message: String, cause: Throwable) : super(message, cause) {
         this.stringResourceId = stringResourceId
     }
 
-    constructor(@IdRes stringResourceId: Int, message: String) : super(message) {
+    constructor(@StringRes stringResourceId: Int, message: String) : super(message) {
         this.stringResourceId = stringResourceId
     }
 
-    constructor(@IdRes stringResourceId: Int) {
+    constructor(@StringRes stringResourceId: Int) {
         this.stringResourceId = stringResourceId
     }
 }

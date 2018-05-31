@@ -9,8 +9,7 @@ buildscript {
 		retrofit_version = "2.3.0"
 		multidex_version = "1.0.1"
 		google_play_services_version = "15.0.1"
-		android_support_version = "27.0.2"
-		anko_version = "0.10.4"
+		android_support_version = "27.1.0"
 		mockito_version = "2.10.0"
 		mockito_kotlin_version = "1.5.0"
 		commons_io_version = "2.4" // Don't upgrade
@@ -42,7 +41,7 @@ buildscript {
 		reactive_location_version = "2.1"
 		solarpositioning_version = "0.0.9"
 		aurora_notifier_common_version = "aurora-notifier-common-1.5.0"
-		android_gradle_version = "3.2.0-alpha15"
+		android_gradle_version = "3.2.0-alpha16"
 		autodispose_version = "0.8.0"
 		leakcanary_version = "1.5.4"
 		navigation_version = "1.0.0-alpha01"

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="#383838">
+
+	<TextView
+		android:id="@+id/title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:textColor="#FFF"
+		android:textSize="20sp"
+		app:layout_constraintBottom_toTopOf="@+id/titleGuide"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		tools:text="@string/factor_darkness_title_full" />
+
+	<android.support.constraint.Guideline
+		android:id="@+id/titleGuide"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		app:layout_constraintGuide_begin="56dp" />
+
+	<TextView
+		android:id="@+id/description"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:layout_marginEnd="16dp"
+		android:layout_marginBottom="16dp"
+		android:textSize="16sp"
+		android:textColor="#C1C1C1"
+		android:lineSpacingMultiplier="1.2"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/titleGuide"
+		app:layout_constraintBottom_toBottomOf="parent"
+		tools:text="@string/factor_darkness_desc" />
+
+</android.support.constraint.ConstraintLayout>
