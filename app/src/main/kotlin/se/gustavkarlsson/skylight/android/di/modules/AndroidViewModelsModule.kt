@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.di.modules
 
 import android.arch.lifecycle.ViewModelProviders
 import android.support.v4.app.Fragment
+import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
@@ -12,7 +13,8 @@ class AndroidViewModelsModule(
 	contextModule: ContextModule,
 	evaluationModule: EvaluationModule,
 	formattingModule: FormattingModule,
-	timeModule: TimeModule
+	timeModule: TimeModule,
+	rightNowThreshold: Duration = 1.minutes
 ) : ViewModelsModule {
 
 	private val mainViewModelFactory: MainViewModelFactory by lazy {
@@ -32,15 +34,11 @@ class AndroidViewModelsModule(
 			evaluationModule.weatherEvaluator,
 			formattingModule.weatherFormatter,
 			timeModule.now,
-			RIGHT_NOW_THRESHOLD
+			rightNowThreshold
 		)
 	}
 
 	override fun mainViewModel(fragment: Fragment): MainViewModel =
 		ViewModelProviders.of(fragment, mainViewModelFactory)
 			.get(MainViewModel::class.java)
-
-	companion object {
-		private val RIGHT_NOW_THRESHOLD = 1.minutes
-	}
 }

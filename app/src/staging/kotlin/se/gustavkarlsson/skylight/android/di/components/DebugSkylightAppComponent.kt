@@ -6,8 +6,8 @@ import se.gustavkarlsson.skylight.android.di.modules.AuroraReportModule
 import se.gustavkarlsson.skylight.android.di.modules.DebugAuroraReportModule
 import se.gustavkarlsson.skylight.android.di.modules.NullAnalyticsModule
 
-class DebugSkylightAppComponent(openWeatherMapApiKey: String, application: Application) :
-	SkylightAppComponent(openWeatherMapApiKey, application) {
+class DebugSkylightAppComponent(application: Application) :
+	SkylightAppComponent(application) {
 
 	override val analyticsModule: AnalyticsModule by lazy {
 		NullAnalyticsModule()

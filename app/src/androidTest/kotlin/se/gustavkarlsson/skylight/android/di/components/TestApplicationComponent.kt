@@ -7,8 +7,8 @@ import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.test.TestLocationNameProvider
 import se.gustavkarlsson.skylight.android.test.TestLocationProvider
 
-class TestSkylightAppComponent(openWeatherMapApiKey: String, application: Application) :
-	SkylightAppComponent(openWeatherMapApiKey, application) {
+class TestSkylightAppComponent(application: Application) :
+	SkylightAppComponent(application) {
 
 	override val analyticsModule: AnalyticsModule by lazy {
 		NullAnalyticsModule()

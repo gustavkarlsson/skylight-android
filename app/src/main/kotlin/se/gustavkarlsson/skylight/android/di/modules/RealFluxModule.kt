@@ -16,9 +16,29 @@ class RealFluxModule(
 		buildStore<SkylightState, SkylightCommand, SkylightResult> {
 			initWith(SkylightState())
 
-			switchMapCommand(::getAuroraReport)
-			switchMapCommand(::streamAuroraReports)
-			switchMapCommand(::streamConnectivity)
+			switchMapCommand { _: GetAuroraReportCommand ->
+				auroraReportModule.auroraReportProvider.get()
+					.map<AuroraReportResult> { AuroraReportResult.Success(it) }
+					.onErrorReturn { AuroraReportResult.Failure(it) }
+					.toObservable()
+					.startWith(AuroraReportResult.InFlight)
+					.concatWith(Observable.just(AuroraReportResult.JustFinished, AuroraReportResult.Idle))
+			}
+			switchMapCommand { action: AuroraReportStreamCommand ->
+				if (action.stream) {
+					auroraReportModule.auroraReportFlowable
+						.map<AuroraReportResult> { AuroraReportResult.Success(it) }
+						.onErrorReturn { AuroraReportResult.Failure(it) }
+						.toObservable()
+				} else {
+					Observable.just<AuroraReportResult>(AuroraReportResult.Idle)
+				}
+			}
+			switchMapCommand { _: ConnectivityStreamCommand ->
+				connectivityModule.connectivityFlowable
+					.map(::ConnectivityResult)
+					.toObservable()
+			}
 			mapCommand { _: SetLocationPermissionGrantedCommand -> LocationPermissionGrantedResult }
 
 			reduceResult { state, _: AuroraReportResult.JustFinished ->
@@ -56,27 +76,4 @@ class RealFluxModule(
 			}
 		}
 	}
-
-	private fun getAuroraReport(action: GetAuroraReportCommand): Observable<AuroraReportResult> =
-		auroraReportModule.auroraReportProvider.get()
-			.map<AuroraReportResult> { AuroraReportResult.Success(it) }
-			.onErrorReturn { AuroraReportResult.Failure(it) }
-			.toObservable()
-			.startWith(AuroraReportResult.InFlight)
-			.concatWith(Observable.just(AuroraReportResult.JustFinished, AuroraReportResult.Idle))
-
-	private fun streamAuroraReports(action: AuroraReportStreamCommand): Observable<AuroraReportResult> =
-		if (action.stream) {
-			auroraReportModule.auroraReportFlowable
-				.map<AuroraReportResult> { AuroraReportResult.Success(it) }
-				.onErrorReturn { AuroraReportResult.Failure(it) }
-				.toObservable()
-		} else {
-			Observable.just(AuroraReportResult.Idle)
-		}
-
-	private fun streamConnectivity(action: ConnectivityStreamCommand): Observable<ConnectivityResult> =
-		connectivityModule.connectivityFlowable
-			.map(::ConnectivityResult)
-			.toObservable()
 }

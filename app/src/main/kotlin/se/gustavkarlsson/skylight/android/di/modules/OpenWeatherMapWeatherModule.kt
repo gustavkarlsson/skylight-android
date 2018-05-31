@@ -5,6 +5,7 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.create
 import se.gustavkarlsson.skylight.android.services.Streamable
@@ -14,13 +15,14 @@ import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap
 import se.gustavkarlsson.skylight.android.services_impl.streamables.WeatherProviderStreamable
 
 class OpenWeatherMapWeatherModule(
-	apiKey: String,
-	locationModule: LocationModule
+	locationModule: LocationModule,
+	apiUrl: String = "http://api.openweathermap.org/data/2.5/",
+	apiKey: String = BuildConfig.OPENWEATHERMAP_API_KEY
 ) : WeatherModule {
 
 	override val weatherProvider: WeatherProvider by lazy {
 		val api = Retrofit.Builder()
-			.baseUrl(API_URL)
+			.baseUrl(apiUrl)
 			.addConverterFactory(GsonConverterFactory.create())
 			.addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
 			.build().create<OpenWeatherMapApi>()
@@ -39,10 +41,5 @@ class OpenWeatherMapWeatherModule(
 		weatherStreamable.stream
 			.replay(1)
 			.refCount()
-	}
-
-	companion object {
-		// TODO Make configurable in constructor
-		const val API_URL = "http://api.openweathermap.org/data/2.5/"
 	}
 }

@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.background.di.components
 
 import android.app.Activity
 import io.reactivex.Completable
-import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.background.di.modules.*
 import se.gustavkarlsson.skylight.android.di.modules.*
 
@@ -13,9 +12,7 @@ open class SkylightBackgroundComponent(
 	settingsModule: SettingsModule,
 	fluxModule: FluxModule,
 	timeModule: TimeModule,
-	activityClass: Class<out Activity>,
-	scheduleInterval: Duration,
-	schedulerFlex: Duration
+	activityClass: Class<out Activity>
 ) : BackgroundComponent {
 
 	open val notificationModule: NotificationModule by lazy {
@@ -39,9 +36,7 @@ open class SkylightBackgroundComponent(
 			contextModule,
 			fluxModule,
 			notificationModule,
-			settingsModule,
-			scheduleInterval,
-			schedulerFlex
+			settingsModule
 		)
 	}
 

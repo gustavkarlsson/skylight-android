@@ -6,6 +6,7 @@ import com.google.android.gms.location.LocationRequest.PRIORITY_BALANCED_POWER_A
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
+import org.threeten.bp.Duration
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.extensions.delay
@@ -14,24 +15,21 @@ import se.gustavkarlsson.skylight.android.services.Streamable
 import timber.log.Timber
 
 class ReactiveLocationProviderStreamable(
-	reactiveLocationProvider: ReactiveLocationProvider
+	reactiveLocationProvider: ReactiveLocationProvider,
+	pollingInterval: Duration = 15.minutes,
+	retryDelay: Duration = 1.minutes
 ) : Streamable<Location> {
 	private val locationRequest = LocationRequest().apply {
 		priority = PRIORITY_BALANCED_POWER_ACCURACY
-		interval = POLLING_INTERVAL.toMillis()
+		interval = pollingInterval.toMillis()
 	}
 
 	@SuppressLint("MissingPermission")
 	override val stream: Flowable<Location> = reactiveLocationProvider
 		.getUpdatedLocation(locationRequest)
 		.subscribeOn(Schedulers.io())
-		.retryWhen { it.delay(RETRY_DELAY) }
+		.retryWhen { it.delay(retryDelay) }
 		.map { Location(it.latitude, it.longitude) }
 		.toFlowable(BackpressureStrategy.LATEST)
 		.doOnNext { Timber.i("Streamed location: %s", it) }
-
-	companion object {
-		val POLLING_INTERVAL = 15.minutes
-		val RETRY_DELAY = 1.minutes
-	}
 }
