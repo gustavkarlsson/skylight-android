@@ -2,32 +2,26 @@
 <resources>
 	<string name="factor_geomag_location_title_full">Geomagnetic location</string>
 	<string name="factor_geomag_location_title_compact">Location</string>
-	<string name="factor_geomag_location_desc">
-		The aurora is only visible close to the geomagnetic poles
-		which are located close to the north and south poles.
+	<string name="factor_geomag_location_desc">The aurora is only visible close to the <i>geomagnetic</i> poles
+		located close to the <i>magnetic</i> north and south poles.
 		This value shows your geomagnetic latitude.
-		The best latitude for aurora sightings is around 67°.
-	</string>
+		The best latitude for aurora sightings is around <b>67°</b> and <b>-67°</b>.</string>
 	<string name="factor_kp_index_title_full">Kp index</string>
 	<string name="factor_kp_index_title_compact">Kp</string>
-	<string name="factor_kp_index_desc">
-		Disturbances in earth\'s magnetic field is the cause of the aurora and is measured
-		on a scale called the Kp index.
-		This value shows the Kp index which ranges from 0 to 9.
+	<string name="factor_kp_index_desc">The basic cause of the aurora involves the
+		interaction of the solar wind with the Earth\'s magnetosphere.
+		This can be represented as a value on the Kp index scale, ranging from <b>0 to 9</b>.
 		A higher value means higher chance to see the aurora.
-	</string>
+		\n\n
+		Read more at <a href="https://en.wikipedia.org/wiki/K-index">Wikipedia</a></string>
 	<string name="factor_weather_title_full">Weather conditions</string>
 	<string name="factor_weather_title_compact">Weather</string>
-	<string name="factor_weather_desc">
-		Bad weather can block your view of the aurora.
-		This value shows the current weather conditions.
-		Clear skies ensure good visibility of the aurora.
-	</string>
+	<string name="factor_weather_desc">Bad weather can block your view of the aurora.
+		This value indicates the current weather conditions.
+		Clear skies ensure good visibility of the aurora.</string>
 	<string name="factor_darkness_title_full">Outdoor darkness</string>
 	<string name="factor_darkness_title_compact">Darkness</string>
-	<string name="factor_darkness_desc">
-		The aurora is only visible in the dark so the position of the sun is critical.
+	<string name="factor_darkness_desc">Since the aurora is only visible in the dark the position of the sun is important.
 		This value shows how dark your current location is based on the sun\'s position.
-		100% darkness is perfect for aurora sightings.
-	</string>
+		<b>100% darkness is perfect</b> for aurora sightings.</string>
 </resources>

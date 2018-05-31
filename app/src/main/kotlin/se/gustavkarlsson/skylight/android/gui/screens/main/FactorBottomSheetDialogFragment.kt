@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.gui.screens.main
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.design.widget.BottomSheetDialogFragment
+import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ class FactorBottomSheetDialogFragment : BottomSheetDialogFragment() {
 		arguments!!.apply {
 			title.setText(getInt(TITLE_KEY))
 			description.setText(getInt(DESCRIPTION_KEY))
+			description.movementMethod = LinkMovementMethod.getInstance()
 		}
 	}
 
