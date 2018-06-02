@@ -3,10 +3,10 @@ package se.gustavkarlsson.skylight.android.di.components
 import android.app.Application
 import se.gustavkarlsson.skylight.android.di.modules.AnalyticsModule
 import se.gustavkarlsson.skylight.android.di.modules.AuroraReportModule
-import se.gustavkarlsson.skylight.android.di.modules.DebugAuroraReportModule
+import se.gustavkarlsson.skylight.android.di.modules.DevelopAuroraReportModule
 import se.gustavkarlsson.skylight.android.di.modules.NullAnalyticsModule
 
-class DebugSkylightAppComponent(application: Application) :
+class DevelopSkylightAppComponent(application: Application) :
 	SkylightAppComponent(application) {
 
 	override val analyticsModule: AnalyticsModule by lazy {
@@ -14,7 +14,7 @@ class DebugSkylightAppComponent(application: Application) :
 	}
 
 	override val auroraReportModule: AuroraReportModule by lazy {
-		DebugAuroraReportModule(
+		DevelopAuroraReportModule(
 			timeModule,
 			locationModule,
 			locationNameModule,

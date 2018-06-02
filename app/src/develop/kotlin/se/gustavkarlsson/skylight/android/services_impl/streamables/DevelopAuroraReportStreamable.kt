@@ -7,18 +7,18 @@ import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.minutes
-import se.gustavkarlsson.skylight.android.services.DebugSettings
+import se.gustavkarlsson.skylight.android.services.DevelopSettings
 import se.gustavkarlsson.skylight.android.services.Streamable
 
-class DebugAuroraReportStreamable(
+class DevelopAuroraReportStreamable(
 	private val realStreamable: Streamable<AuroraReport>,
-	private val debugSettings: DebugSettings,
+	private val developSettings: DevelopSettings,
 	private val now: Single<Instant>,
 	private val pollingInterval: Duration = 1.minutes
 ) : Streamable<AuroraReport> {
 
 	override val stream: Flowable<AuroraReport>
-		get() = debugSettings.overrideValuesChanges
+		get() = developSettings.overrideValuesChanges
 			.switchMap { enabled ->
 				if (enabled) {
 					Single.fromCallable {
@@ -32,10 +32,10 @@ class DebugAuroraReportStreamable(
 			}
 
 	private fun createDebugFactors(): AuroraFactors {
-		val kpIndex = KpIndex(debugSettings.kpIndex)
-		val geomagLocation = GeomagLocation(debugSettings.geomagLatitude)
-		val darkness = Darkness(debugSettings.sunZenithAngle)
-		val weather = Weather(debugSettings.cloudPercentage)
+		val kpIndex = KpIndex(developSettings.kpIndex)
+		val geomagLocation = GeomagLocation(developSettings.geomagLatitude)
+		val darkness = Darkness(developSettings.sunZenithAngle)
+		val weather = Weather(developSettings.cloudPercentage)
 		return AuroraFactors(kpIndex, geomagLocation, darkness, weather)
 	}
 }

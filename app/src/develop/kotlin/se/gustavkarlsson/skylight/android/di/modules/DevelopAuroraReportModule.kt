@@ -2,16 +2,16 @@ package se.gustavkarlsson.skylight.android.di.modules
 
 import io.reactivex.Flowable
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.services.DebugSettings
+import se.gustavkarlsson.skylight.android.services.DevelopSettings
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
-import se.gustavkarlsson.skylight.android.services_impl.RxPreferencesDebugSettings
+import se.gustavkarlsson.skylight.android.services_impl.RxPreferencesDevelopSettings
 import se.gustavkarlsson.skylight.android.services_impl.providers.CombiningAuroraReportProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.DebugAuroraReportProvider
+import se.gustavkarlsson.skylight.android.services_impl.providers.DevelopAuroraReportProvider
 import se.gustavkarlsson.skylight.android.services_impl.streamables.CombiningAuroraReportStreamable
-import se.gustavkarlsson.skylight.android.services_impl.streamables.DebugAuroraReportStreamable
+import se.gustavkarlsson.skylight.android.services_impl.streamables.DevelopAuroraReportStreamable
 
-class DebugAuroraReportModule(
+class DevelopAuroraReportModule(
 	timeModule: TimeModule,
 	locationModule: LocationModule,
 	locationNameModule: LocationNameModule,
@@ -23,8 +23,8 @@ class DebugAuroraReportModule(
 	rxSharedPreferencesModule: RxSharedPreferencesModule
 ) : AuroraReportModule {
 
-	private val debugSettings: DebugSettings by lazy {
-		RxPreferencesDebugSettings(
+	private val developSettings: DevelopSettings by lazy {
+		RxPreferencesDevelopSettings(
 			contextModule.context,
 			rxSharedPreferencesModule.rxSharedPreferences
 		)
@@ -40,7 +40,7 @@ class DebugAuroraReportModule(
 			kpIndexModule.kpIndexProvider,
 			weatherModule.weatherProvider
 		)
-		DebugAuroraReportProvider(realProvider, debugSettings, timeModule.timeProvider)
+		DevelopAuroraReportProvider(realProvider, developSettings, timeModule.timeProvider)
 	}
 
 	private val auroraReportStreamable: Streamable<AuroraReport> by lazy {
@@ -52,7 +52,7 @@ class DebugAuroraReportModule(
 			darknessModule.darknessFlowable,
 			weatherModule.weatherFlowable
 		)
-		DebugAuroraReportStreamable(realStreamable, debugSettings, timeModule.now)
+		DevelopAuroraReportStreamable(realStreamable, developSettings, timeModule.now)
 	}
 
 	override val auroraReportFlowable: Flowable<AuroraReport> by lazy {
