@@ -4,18 +4,19 @@ import se.gustavkarlsson.skylight.android.background.persistence.NotifiedChanceR
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.NotifiedChance
+import se.gustavkarlsson.skylight.android.flux.SkylightStore
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.services.Settings
 
 internal class AuroraReportNotificationDeciderImpl(
 	private val notifiedChanceRepository: NotifiedChanceRepository,
 	private val chanceEvaluator: ChanceEvaluator<AuroraReport>,
-	private val settings: Settings,
+	private val store: SkylightStore,
 	private val outdatedEvaluator: OutdatedEvaluator,
 	private val appVisibilityEvaluator: AppVisibilityEvaluator
 ) : AuroraReportNotificationDecider {
 
 	override fun shouldNotify(newReport: AuroraReport): Boolean {
+		val settings = store.currentState.settings
 		if (!settings.notificationsEnabled) return false
 		if (appVisibilityEvaluator.isVisible()) return false
 		val newChanceLevel = newReport.chanceLevel

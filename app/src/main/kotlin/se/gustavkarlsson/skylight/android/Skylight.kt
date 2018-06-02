@@ -8,8 +8,9 @@ import io.fabric.sdk.android.Fabric
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.rxkotlin.addTo
+import se.gustavkarlsson.skylight.android.flux.SettingsStreamCommand
+import se.gustavkarlsson.skylight.android.flux.SkylightStore
 import se.gustavkarlsson.skylight.android.services.Analytics
-import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.util.CrashlyticsTree
 import timber.log.Timber
 import timber.log.Timber.DebugTree
@@ -26,7 +27,8 @@ class Skylight : MultiDexApplication() {
 		if (LeakCanary.isInAnalyzerProcess(this)) return
 		bootstrap()
 		appComponent.store.start()
-		setupSettingsAnalytics(appComponent.settings)
+		setupSettingsAnalytics(appComponent.store)
+		appComponent.store.issue(SettingsStreamCommand(true))
 		scheduleBackgroundNotifications()
 	}
 
@@ -66,15 +68,17 @@ class Skylight : MultiDexApplication() {
 	private fun scheduleBackgroundNotifications() {
 		appComponent.backgroundComponent.scheduleBackgroundNotifications
 			.subscribe()
+			.addTo(disposables)
 	}
 
-	private fun setupSettingsAnalytics(settings: Settings) {
-		settings.notificationsEnabledChanges
-			.subscribe { Analytics.setNotificationsEnabled(it) }
-			.addTo(disposables)
-
-		settings.triggerLevelChanges
-			.subscribe { Analytics.setNotifyTriggerLevel(it) }
+	private fun setupSettingsAnalytics(store: SkylightStore) {
+		store.states
+			.map { it.settings }
+			.distinctUntilChanged()
+			.subscribe {
+				Analytics.setNotificationsEnabled(it.notificationsEnabled)
+				Analytics.setNotifyTriggerLevel(it.triggerLevel)
+			}
 			.addTo(disposables)
 	}
 

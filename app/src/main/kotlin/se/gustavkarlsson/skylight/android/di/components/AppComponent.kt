@@ -5,10 +5,8 @@ import se.gustavkarlsson.skylight.android.background.di.components.BackgroundCom
 import se.gustavkarlsson.skylight.android.flux.SkylightStore
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
 import se.gustavkarlsson.skylight.android.services.Analytics
-import se.gustavkarlsson.skylight.android.services.Settings
 
 interface AppComponent {
-	val settings: Settings
 	val analytics: Analytics
 	val store: SkylightStore
 

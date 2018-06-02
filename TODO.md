@@ -2,8 +2,6 @@
 
 ## Soon
 * Make testing use other settings
-* Rename staging to testing
-* Make settings part of store?
 * Add instrumentation testing to CI
 * Add more tests
 * Fix notifications

@@ -12,6 +12,8 @@ sealed class AuroraReportResult : SkylightResult() {
 	data class Failure(val throwable: Throwable) : AuroraReportResult()
 }
 
+data class SettingsResult(val settings: SkylightState.Settings) : SkylightResult()
+
 data class ConnectivityResult(val isConnectedToInternet: Boolean) : SkylightResult()
 
 object LocationPermissionGrantedResult : SkylightResult()
