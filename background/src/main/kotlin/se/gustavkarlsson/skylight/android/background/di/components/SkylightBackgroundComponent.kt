@@ -9,7 +9,6 @@ open class SkylightBackgroundComponent(
 	contextModule: ContextModule,
 	formattingModule: FormattingModule,
 	evaluationModule: EvaluationModule,
-	settingsModule: SettingsModule,
 	fluxModule: FluxModule,
 	timeModule: TimeModule,
 	activityClass: Class<out Activity>
@@ -20,7 +19,7 @@ open class SkylightBackgroundComponent(
 			contextModule,
 			formattingModule,
 			evaluationModule,
-			settingsModule,
+			fluxModule,
 			timeModule,
 			notifiedChanceRepositoryModule,
 			activityClass
@@ -35,8 +34,7 @@ open class SkylightBackgroundComponent(
 		EvernoteJobSchedulingModule(
 			contextModule,
 			fluxModule,
-			notificationModule,
-			settingsModule
+			notificationModule
 		)
 	}
 

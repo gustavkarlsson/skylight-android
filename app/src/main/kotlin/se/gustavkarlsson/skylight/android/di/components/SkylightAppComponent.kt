@@ -5,12 +5,10 @@ import android.support.v4.app.Fragment
 import se.gustavkarlsson.skylight.android.background.di.components.BackgroundComponent
 import se.gustavkarlsson.skylight.android.background.di.components.SkylightBackgroundComponent
 import se.gustavkarlsson.skylight.android.di.modules.*
-import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.flux.SkylightStore
 import se.gustavkarlsson.skylight.android.gui.MainActivity
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
 import se.gustavkarlsson.skylight.android.services.Analytics
-import se.gustavkarlsson.skylight.android.services.Settings
 
 open class SkylightAppComponent(
 	application: Application
@@ -102,11 +100,9 @@ open class SkylightAppComponent(
 	}
 
 	open val fluxModule: FluxModule by lazy {
-		RealFluxModule(auroraReportModule, connectivityModule)
+		RealFluxModule(auroraReportModule, connectivityModule, settingsModule)
 	}
 
-	final override val settings: Settings
-		get() = settingsModule.settings
 	final override val analytics: Analytics
 		get() = analyticsModule.analytics
 	final override val store: SkylightStore
@@ -120,7 +116,6 @@ open class SkylightAppComponent(
 			contextModule,
 			formattingModule,
 			evaluationModule,
-			settingsModule,
 			fluxModule,
 			timeModule,
 			MainActivity::class.java
