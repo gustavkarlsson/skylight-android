@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.di.modules
 
+import android.Manifest
 import io.reactivex.Flowable
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import se.gustavkarlsson.skylight.android.entities.Location
@@ -26,4 +27,6 @@ class ReactiveLocationModule(contextModule: ContextModule) : LocationModule {
 			.replay(1)
 			.refCount()
 	}
+
+	override val locationPermission = Manifest.permission.ACCESS_COARSE_LOCATION
 }
