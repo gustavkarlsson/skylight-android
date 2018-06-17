@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.design.widget.BottomSheetDialogFragment
@@ -11,6 +12,8 @@ import kotlinx.android.synthetic.main.layout_factor_bottom_sheet.*
 import se.gustavkarlsson.skylight.android.R
 
 class FactorBottomSheetDialogFragment : BottomSheetDialogFragment() {
+
+	var onCancelListener: (() -> Unit)? = null
 
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -25,6 +28,11 @@ class FactorBottomSheetDialogFragment : BottomSheetDialogFragment() {
 			description.setText(getInt(DESCRIPTION_KEY))
 			description.movementMethod = LinkMovementMethod.getInstance()
 		}
+	}
+
+	override fun onCancel(dialog: DialogInterface?) {
+		onCancelListener?.invoke()
+		super.onCancel(dialog)
 	}
 
 	companion object {
