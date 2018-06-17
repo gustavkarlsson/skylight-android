@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.services_impl.streamables
 
 import android.annotation.SuppressLint
 import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+import com.google.android.gms.location.LocationRequest.PRIORITY_LOW_POWER
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
@@ -20,7 +20,7 @@ class ReactiveLocationProviderStreamable(
 	retryDelay: Duration = 1.minutes
 ) : Streamable<Location> {
 	private val locationRequest = LocationRequest().apply {
-		priority = PRIORITY_BALANCED_POWER_ACCURACY
+		priority = PRIORITY_LOW_POWER
 		interval = pollingInterval.toMillis()
 	}
 
