@@ -9,6 +9,7 @@ import se.gustavkarlsson.skylight.android.services.Analytics
 interface AppComponent {
 	val analytics: Analytics
 	val store: SkylightStore
+	val locationPermission: String
 
 	fun mainViewModel(fragment: Fragment): MainViewModel
 

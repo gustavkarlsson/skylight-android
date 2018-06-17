@@ -7,4 +7,5 @@ import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 interface LocationModule {
 	val locationProvider: LocationProvider
 	val locationFlowable: Flowable<Location>
+	val locationPermission: String
 }

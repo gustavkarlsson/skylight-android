@@ -107,6 +107,8 @@ open class SkylightAppComponent(
 		get() = analyticsModule.analytics
 	final override val store: SkylightStore
 		get() = fluxModule.store
+	final override val locationPermission: String
+		get() = locationModule.locationPermission
 
 	final override fun mainViewModel(fragment: Fragment): MainViewModel =
 		viewModelsModule.mainViewModel(fragment)

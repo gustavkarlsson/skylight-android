@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
-import android.Manifest
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
@@ -168,7 +167,7 @@ class MainFragment : Fragment(), LifecycleObserver {
 
 	private fun ensureLocationPermission() {
 		rxPermissions
-			.requestEach(LOCATION_PERMISSION)
+			.requestEach(appComponent.locationPermission)
 			.autoDisposable(scope(Lifecycle.Event.ON_STOP))
 			.subscribe {
 				when {
@@ -246,9 +245,5 @@ class MainFragment : Fragment(), LifecycleObserver {
 		connectivitySnackbar?.dismiss()
 		errorSnackbar?.dismiss()
 		lifecycle.removeObserver(this)
-	}
-
-	companion object {
-		private const val LOCATION_PERMISSION = Manifest.permission.ACCESS_FINE_LOCATION
 	}
 }
