@@ -4,6 +4,7 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
 import android.os.Bundle
+import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
@@ -27,6 +28,7 @@ class MainFragment : Fragment(), LifecycleObserver {
 
 	private var connectivitySnackbar: Snackbar? = null
 	private var errorSnackbar: Snackbar? = null
+	private var currentBottomSheetTitle: Int? = null
 
 	private val viewModel: MainViewModel by lazy {
 		appComponent.mainViewModel(this)
@@ -209,34 +211,31 @@ class MainFragment : Fragment(), LifecycleObserver {
 	}
 
 	private fun showKpIndexDetails() {
-		fragmentManager?.let {
-			FactorBottomSheetDialogFragment
-				.newInstance(R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc)
-				.show(it, FactorBottomSheetDialogFragment::class.java.simpleName)
-		}
+		showFactorBottomSheetDialogFragment(R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc)
 	}
 
 	private fun showGeomagLocationDetails() {
-		fragmentManager?.let {
-			FactorBottomSheetDialogFragment
-				.newInstance(R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc)
-				.show(it, FactorBottomSheetDialogFragment::class.java.simpleName)
-		}
+		showFactorBottomSheetDialogFragment(R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc)
 	}
 
 	private fun showWeatherDetails() {
-		fragmentManager?.let {
-			FactorBottomSheetDialogFragment
-				.newInstance(R.string.factor_weather_title_full, R.string.factor_weather_desc)
-				.show(it, FactorBottomSheetDialogFragment::class.java.simpleName)
-		}
+		showFactorBottomSheetDialogFragment(R.string.factor_weather_title_full, R.string.factor_weather_desc)
 	}
 
 	private fun showDarknessDetails() {
+		showFactorBottomSheetDialogFragment(R.string.factor_darkness_title_full, R.string.factor_darkness_desc)
+	}
+
+	private fun showFactorBottomSheetDialogFragment(@StringRes title: Int, @StringRes description: Int) {
+		if (currentBottomSheetTitle == title) return
 		fragmentManager?.let {
 			FactorBottomSheetDialogFragment
-				.newInstance(R.string.factor_darkness_title_full, R.string.factor_darkness_desc)
-				.show(it, FactorBottomSheetDialogFragment::class.java.simpleName)
+				.newInstance(title, description)
+				.apply {
+					onCancelListener = { currentBottomSheetTitle = null }
+					show(it, javaClass.simpleName)
+				}
+			currentBottomSheetTitle = title
 		}
 	}
 
