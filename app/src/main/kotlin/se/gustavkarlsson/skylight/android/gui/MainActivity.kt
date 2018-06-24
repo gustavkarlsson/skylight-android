@@ -1,13 +1,16 @@
 package se.gustavkarlsson.skylight.android.gui
 
+import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.appComponent
 
 
 class MainActivity : AppCompatActivity() {
@@ -16,28 +19,31 @@ class MainActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
 		setupActionBarWithNavController(findNavController())
-		ensureRequirementsMet()
+		if (displayIntro()) {
+			findNavController().navigate(R.id.action_start_from_introFragment)
+		}
 	}
+
+	@SuppressLint("MissingSuperCall")
+	override fun onSaveInstanceState(outState: Bundle) {
+		//super.onSaveInstanceState(outState)
+		// Resolves issue with navigation
+	}
+
+	private fun displayIntro(): Boolean {
+		return (!(googleApiIsAvailable()) || !(locationPermissionGranted()))
+	}
+
+	private fun googleApiIsAvailable() = GoogleApiAvailability.getInstance()
+			.isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
+
+	private fun locationPermissionGranted() = ContextCompat.checkSelfPermission(
+		this,
+		appComponent.locationPermission
+	) == PackageManager.PERMISSION_GRANTED
 
 	override fun onSupportNavigateUp(): Boolean =
 		findNavController().navigateUp()
 
 	private fun findNavController() = findNavController(R.id.mainNavHost)
-
-	private fun ensureRequirementsMet() {
-		if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) != ConnectionResult.SUCCESS) {
-			// TODO Flesh out to handle more cases (like installs, upgrades, etc)
-			showGooglePlayServicesNotAvailableDialog()
-		}
-	}
-
-	private fun showGooglePlayServicesNotAvailableDialog() {
-		AlertDialog.Builder(this)
-			.setIcon(R.drawable.warning_white_24dp)
-			.setTitle(R.string.error_google_play_services_is_not_available_title)
-			.setMessage(R.string.error_google_play_services_is_not_available_desc)
-			.setPositiveButton(R.string.exit) { _, _ -> System.exit(1) }
-			.setCancelable(false)
-			.show()
-	}
 }

@@ -8,7 +8,6 @@ import se.gustavkarlsson.flux.buildStore
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.flux.*
-import se.gustavkarlsson.skylight.android.flux.SkylightState.LocationPermission
 import se.gustavkarlsson.skylight.android.flux.SkylightState.Settings
 import timber.log.Timber
 
@@ -79,7 +78,6 @@ class RealFluxModule(
 					Observable.empty()
 				}
 			}
-			mapCommand { _: SetLocationPermissionGrantedCommand -> LocationPermissionGrantedResult }
 
 			reduceResult { state, _: AuroraReportResult.JustFinished ->
 				state.copy(isRefreshing = false, throwable = null, justFinishedRefreshing = true)
@@ -102,9 +100,6 @@ class RealFluxModule(
 			}
 			reduceResult { state, result: ConnectivityResult ->
 				state.copy(isConnectedToInternet = result.isConnectedToInternet)
-			}
-			reduceResult { state, _: LocationPermissionGrantedResult ->
-				state.copy(locationPermission = LocationPermission.GRANTED)
 			}
 			reduceResult { state, result: SettingsResult ->
 				state.copy(settings = result.settings)

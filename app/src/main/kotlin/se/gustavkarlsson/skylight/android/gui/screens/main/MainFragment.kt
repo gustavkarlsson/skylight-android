@@ -7,19 +7,17 @@ import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
 import android.view.*
 import androidx.navigation.findNavController
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.visibility
 import com.jakewharton.rxbinding2.widget.text
-import com.tbruyelle.rxpermissions2.RxPermissions
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_main.*
-import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.appComponent
+import se.gustavkarlsson.skylight.android.extensions.appCompatActivity
 import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
 import se.gustavkarlsson.skylight.android.services.Analytics
 import timber.log.Timber
@@ -34,12 +32,9 @@ class MainFragment : Fragment(), LifecycleObserver {
 		appComponent.mainViewModel(this)
 	}
 
-	private val rxPermissions: RxPermissions by lazy {
-		RxPermissions(requireActivity()).apply { setLogging(BuildConfig.DEBUG) }
-	}
-
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		appCompatActivity!!.supportActionBar!!.show()
 		setHasOptionsMenu(true)
 		lifecycle.addObserver(this)
 	}
@@ -130,13 +125,6 @@ class MainFragment : Fragment(), LifecycleObserver {
 			.autoDisposable(scope)
 			.subscribe(timeSinceUpdate.visibility())
 
-		viewModel.ensureLocationPermission
-			.doOnNext { Timber.d("Location permission is unknown") }
-			.autoDisposable(scope)
-			.subscribe {
-				ensureLocationPermission()
-			}
-
 		FactorPresenter(
 			viewModel.darknessValue, viewModel.darknessChance,
 			darknessValue, darknessBar, darknessCard,
@@ -165,49 +153,6 @@ class MainFragment : Fragment(), LifecycleObserver {
 			scope,
 			"weather"
 		).present()
-	}
-
-	private fun ensureLocationPermission() {
-		rxPermissions
-			.requestEach(appComponent.locationPermission)
-			.autoDisposable(scope(Lifecycle.Event.ON_STOP))
-			.subscribe {
-				when {
-					it.granted -> {
-						Timber.i("Permission met")
-						viewModel.reportLocationPermissionGranted.accept(Unit)
-					}
-					it.shouldShowRequestPermissionRationale -> {
-						Timber.i("Showing permission rationale to user for another chance")
-						showLocationPermissionRequiredDialog()
-					}
-					else -> {
-						Timber.i("Showing permission denied dialog and exiting")
-						showLocationPermissionDeniedDialog()
-					}
-				}
-			}
-	}
-
-	private fun showLocationPermissionRequiredDialog() {
-		AlertDialog.Builder(requireContext())
-			.setIcon(R.drawable.warning_white_24dp)
-			.setTitle(getString(R.string.location_permission_required_title))
-			.setMessage(R.string.location_permission_required_desc)
-			.setPositiveButton(android.R.string.yes) { _, _ -> ensureLocationPermission() }
-			.setNegativeButton(R.string.exit) { _, _ -> System.exit(2) }
-			.setCancelable(false)
-			.show()
-	}
-
-	private fun showLocationPermissionDeniedDialog() {
-		AlertDialog.Builder(requireContext())
-			.setIcon(R.drawable.warning_white_24dp)
-			.setTitle(getString(R.string.error_location_permission_denied_title))
-			.setMessage(R.string.error_location_permission_denied_desc)
-			.setPositiveButton(R.string.exit) { _, _ -> System.exit(3) }
-			.setCancelable(false)
-			.show()
 	}
 
 	private fun showKpIndexDetails() {

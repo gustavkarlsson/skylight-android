@@ -11,5 +11,3 @@ data class SettingsStreamCommand(val stream: Boolean) : SkylightCommand()
 data class ConnectivityStreamCommand(val stream: Boolean) : SkylightCommand()
 
 object HideDialogCommand : SkylightCommand()
-
-object SetLocationPermissionGrantedCommand : SkylightCommand()

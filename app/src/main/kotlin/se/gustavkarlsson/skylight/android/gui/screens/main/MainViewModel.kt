@@ -12,7 +12,10 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.seconds
-import se.gustavkarlsson.skylight.android.flux.*
+import se.gustavkarlsson.skylight.android.flux.AuroraReportStreamCommand
+import se.gustavkarlsson.skylight.android.flux.GetAuroraReportCommand
+import se.gustavkarlsson.skylight.android.flux.SkylightState
+import se.gustavkarlsson.skylight.android.flux.SkylightStore
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
@@ -37,15 +40,9 @@ class MainViewModel(
 	nowTextThreshold: Duration
 ) : ViewModel() {
 
-	private val locationPermissionGrantedDisposable = store.states
-		.distinctUntilChanged { last, new ->
-			last.locationPermission == new.locationPermission
-		}
-		.filter { it.locationPermission == SkylightState.LocationPermission.GRANTED }
-		.subscribe {
-			store.issue(GetAuroraReportCommand)
-			store.issue(AuroraReportStreamCommand(true))
-		}
+	init {
+		store.issue(AuroraReportStreamCommand(true))
+	}
 
 	val swipedToRefresh: Consumer<Unit> = Consumer {
 		store.issue(GetAuroraReportCommand)
@@ -197,23 +194,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val hideDialogClicked: Consumer<Unit> = Consumer {
-		store.issue(HideDialogCommand)
-	}
-
-	val ensureLocationPermission: Observable<Unit> = store.states
-		.distinctUntilChanged { last, new ->
-			last.locationPermission == new.locationPermission
-		}
-		.filter { it.locationPermission == SkylightState.LocationPermission.UNKNOWN }
-		.map { Unit }
-
-	val reportLocationPermissionGranted: Consumer<Unit> = Consumer {
-		store.issue(SetLocationPermissionGrantedCommand)
-	}
-
 	override fun onCleared() {
 		store.issue(AuroraReportStreamCommand(false))
-		locationPermissionGrantedDisposable.dispose()
 	}
 }
