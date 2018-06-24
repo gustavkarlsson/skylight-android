@@ -33,8 +33,8 @@
 
 	<!-- Setup -->
 	<string name="setup_description">First, we must make sure that you are all set up.</string>
-	<string name="setup_location_permission">Location permission</string>
-	<string name="setup_google_play_services">Google Play Services</string>
+	<string name="setup_location_permission_granted">Location permission granted</string>
+	<string name="setup_google_play_services_installed">Google Play Services installed</string>
 	<string name="setup_fix">Fix</string>
 	<string name="setup_start">Start</string>
 	<string name="setup_dialog_location_permission_required_title">
