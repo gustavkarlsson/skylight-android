@@ -32,7 +32,7 @@ class IntroFragment : Fragment(), LifecycleObserver {
 
 	@OnLifecycleEvent(Lifecycle.Event.ON_START)
 	private fun bindData() {
-		setUpButton.clicks()
+		nextButton.clicks()
 			.autoDisposable(scope(Lifecycle.Event.ON_STOP))
 			.subscribe {
 				view!!.findNavController().navigate(R.id.action_introFragment_to_setupFragment)

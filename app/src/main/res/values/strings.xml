@@ -22,7 +22,14 @@
 	<string name="main_weather_overcast">Overcast</string>
 
 	<!-- Intro -->
-	<string name="intro_set_up">Set me up</string>
+	<string name="intro_welcome">Welcome to Skylight</string>
+	<string name="intro_description">
+		This app helps you figure out when you can see the aurora by
+		looking at different factors such as location, weather and time of day.
+		\n\nThe app will notify when the chance gets high enough.
+		\n\nBefore that however, we just need to make sure of a few things.
+	</string>
+	<string name="intro_next">Next</string>
 
 	<!-- Setup -->
 	<string name="setup_description">First, we must make sure that you are all set up.</string>
