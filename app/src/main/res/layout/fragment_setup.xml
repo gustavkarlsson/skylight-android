@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:padding="16dp"
+	tools:context=".gui.MainActivity">
+
+	<TextView
+		android:id="@+id/descriptionTextView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/setup_description"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<TextView
+		android:id="@+id/googlePlayServicesTextView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/setup_google_play_services"
+		app:layout_constraintBottom_toBottomOf="@+id/googlePlayServicesFixButton"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="@+id/googlePlayServicesFixButton" />
+
+	<TextView
+		android:id="@+id/locationPermissionTextView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/setup_location_permission"
+		app:layout_constraintBottom_toBottomOf="@+id/locationPermissionFixButton"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="@+id/locationPermissionFixButton" />
+
+	<android.support.constraint.Barrier
+		android:id="@+id/setupBarrier"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:barrierDirection="end"
+		app:constraint_referenced_ids="googlePlayServicesTextView,locationPermissionTextView" />
+
+	<ImageView
+		android:id="@+id/googlePlayServicesCheckboxImageView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/ic_close_white_24dp"
+		app:layout_constraintBottom_toBottomOf="@+id/googlePlayServicesFixButton"
+		app:layout_constraintStart_toEndOf="@id/setupBarrier"
+		app:layout_constraintTop_toTopOf="@+id/googlePlayServicesFixButton" />
+
+	<ImageView
+		android:id="@+id/locationPermissionCheckboxImageView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/ic_close_white_24dp"
+		app:layout_constraintBottom_toBottomOf="@+id/locationPermissionFixButton"
+		app:layout_constraintStart_toEndOf="@id/setupBarrier"
+		app:layout_constraintTop_toTopOf="@+id/locationPermissionFixButton" />
+
+	<Button
+		android:id="@+id/googlePlayServicesFixButton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/setup_fix"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/descriptionTextView" />
+
+	<Button
+		android:id="@+id/locationPermissionFixButton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/setup_fix"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/googlePlayServicesFixButton" />
+
+	<Button
+		android:id="@+id/startButton"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/setup_start"
+		android:visibility="invisible"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>

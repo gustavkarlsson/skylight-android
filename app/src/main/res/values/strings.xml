@@ -1,25 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<!-- General -->
 	<string name="exit">Exit</string>
-
-	<string name="location_permission_required_title">Location permission required</string>
-	<string name="location_permission_required_desc">
-		This app needs access to your location to calculate the chances of seeing the aurora. Please allow access to your location.
-	</string>
-
+	<string name="main_your_location">Your Location</string>
 	<string name="right_now">Right now</string>
+
+	<!-- Menu -->
+	<string name="menu_settings">Settings</string>
+
+	<!-- Aurora chance -->
 	<string name="aurora_chance_none">No Chance</string>
 	<string name="aurora_chance_low">Low Chance</string>
 	<string name="aurora_chance_medium">Medium Chance</string>
 	<string name="aurora_chance_high">High Chance</string>
 	<string name="aurora_chance_unknown">Unknown Chance</string>
 
-	<string name="your_location">Your Location</string>
-	<string name="settings">Settings</string>
-	<string name="factors">Factors</string>
+	<!-- Weather -->
+	<string name="main_weather_clear">Clear</string>
+	<string name="main_weather_some_clouds">Some clouds</string>
+	<string name="main_weather_cloudy">Cloudy</string>
+	<string name="main_weather_overcast">Overcast</string>
 
-	<string name="weather_clear">Clear</string>
-	<string name="weather_some_clouds">Some clouds</string>
-	<string name="weather_cloudy">Cloudy</string>
-	<string name="weather_overcast">Overcast</string>
+	<!-- Intro -->
+	<string name="intro_set_up">Set me up</string>
+
+	<!-- Setup -->
+	<string name="setup_description">First, we must make sure that you are all set up.</string>
+	<string name="setup_location_permission">Location permission</string>
+	<string name="setup_google_play_services">Google Play Services</string>
+	<string name="setup_fix">Fix</string>
+	<string name="setup_start">Start</string>
+	<string name="setup_dialog_location_permission_required_title">
+		Location permission required
+	</string>
+	<string name="setup_dialog_location_permission_required_desc">
+		This app needs access to your location to calculate the chances of seeing the aurora.
+		Please allow access to your location.
+	</string>
 </resources>

@@ -12,8 +12,7 @@
 		interaction of the solar wind with the Earth\'s magnetosphere.
 		This can be represented as a value on the Kp index scale, ranging from <b>0 to 9</b>.
 		A higher value means higher chance to see the aurora.
-		\n\n
-		Read more at <a href="https://en.wikipedia.org/wiki/K-index">Wikipedia</a></string>
+		\n\nRead more at <a href="https://en.wikipedia.org/wiki/K-index">Wikipedia</a></string>
 	<string name="factor_weather_title_full">Weather conditions</string>
 	<string name="factor_weather_title_compact">Weather</string>
 	<string name="factor_weather_desc">Bad weather can block your view of the aurora.

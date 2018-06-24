@@ -9,10 +9,10 @@ class WeatherFormatter(private val context: Context) : SingleValueFormatter<Weat
 	override fun format(value: Weather): CharSequence {
 		val clouds = value.cloudPercentage ?: return "?"
 		return when {
-			clouds < 10 -> context.getString(R.string.weather_clear)
-			clouds < 30 -> context.getString(R.string.weather_some_clouds)
-			clouds < 50 -> context.getString(R.string.weather_cloudy)
-			else -> context.getString(R.string.weather_overcast)
+			clouds < 10 -> context.getString(R.string.main_weather_clear)
+			clouds < 30 -> context.getString(R.string.main_weather_some_clouds)
+			clouds < 50 -> context.getString(R.string.main_weather_cloudy)
+			else -> context.getString(R.string.main_weather_overcast)
 		}
 	}
 }

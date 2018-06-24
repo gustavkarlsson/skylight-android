@@ -12,7 +12,7 @@ class DateUtilsFormattingModule(
 ) : FormattingModule {
 
 	override val relativeTimeFormatter: RelativeTimeFormatter by lazy {
-		DateUtilsRelativeTimeFormatter({ contextModule.context.getString(R.string.right_now) })
+		DateUtilsRelativeTimeFormatter { contextModule.context.getString(R.string.right_now) }
 	}
 
 	override val darknessFormatter: SingleValueFormatter<Darkness> by lazy { DarknessFormatter() }

@@ -20,7 +20,7 @@ class AndroidViewModelsModule(
 	private val mainViewModelFactory: MainViewModelFactory by lazy {
 		MainViewModelFactory(
 			fluxModule.store,
-			contextModule.context.getString(R.string.your_location),
+			contextModule.context.getString(R.string.main_your_location),
 			contextModule.context.getString(R.string.error_no_internet),
 			evaluationModule.auroraReportEvaluator,
 			formattingModule.relativeTimeFormatter,

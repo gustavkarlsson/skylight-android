@@ -7,11 +7,15 @@
 
 	<string name="error_location_permission_denied_title">Location permission denied</string>
 	<string name="error_location_permission_denied_desc">
-		This app needs access to your location to calculate the chances of seeing northern lights but the permission could not be acquired.
+		This app needs access to your location to calculate the chances of seeing northern lights
+		but the permission could not be acquired.
 	</string>
 
-	<string name="error_google_play_services_is_not_available_title">Google Play Services is not available</string>
+	<string name="error_google_play_services_is_not_available_title">
+		Google Play Services is not available
+	</string>
 	<string name="error_google_play_services_is_not_available_desc">
-		This app needs Google Play Services to calculate the chances of seeing northern lights, but Google Play Services is not installed on your device.
+		This app needs Google Play Services to calculate the chances of seeing northern lights,
+		but Google Play Services is not installed on your device.
 	</string>
 </resources>
