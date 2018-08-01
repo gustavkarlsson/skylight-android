@@ -5,7 +5,7 @@ buildscript {
 		target_sdk_version = 27
 		build_tools_version = "27.0.3"
 
-		kotlin_version = "1.2.50"
+		kotlin_version = "1.2.51"
 		retrofit_version = "2.3.0"
 		multidex_version = "1.0.3"
 		google_play_services_version = "15.0.1"
@@ -33,7 +33,7 @@ buildscript {
 		reactive_location_version = "2.1"
 		solarpositioning_version = "0.0.9"
 		aurora_notifier_common_version = "aurora-notifier-common-1.5.0"
-		android_gradle_version = "3.2.0-beta04"
+		android_gradle_version = "3.2.0-beta05"
 		autodispose_version = "0.8.0"
 		leakcanary_version = "1.5.4"
 		navigation_version = "1.0.0-alpha04"
