@@ -5,7 +5,7 @@ import android.support.v4.app.Fragment
 import se.gustavkarlsson.skylight.android.background.di.components.BackgroundComponent
 import se.gustavkarlsson.skylight.android.background.di.components.SkylightBackgroundComponent
 import se.gustavkarlsson.skylight.android.di.modules.*
-import se.gustavkarlsson.skylight.android.flux.SkylightStore
+import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.gui.MainActivity
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
 import se.gustavkarlsson.skylight.android.services.Analytics
@@ -87,7 +87,7 @@ open class SkylightAppComponent(
 
 	open val viewModelsModule: ViewModelsModule by lazy {
 		AndroidViewModelsModule(
-			fluxModule,
+			krateModule,
 			contextModule,
 			evaluationModule,
 			formattingModule,
@@ -99,14 +99,14 @@ open class SkylightAppComponent(
 		FirebasedAnalyticsModule(contextModule)
 	}
 
-	open val fluxModule: FluxModule by lazy {
-		RealFluxModule(auroraReportModule, connectivityModule, settingsModule)
+	open val krateModule: KrateModule by lazy {
+		RealKrateModule(auroraReportModule, connectivityModule, settingsModule)
 	}
 
 	final override val analytics: Analytics
 		get() = analyticsModule.analytics
 	final override val store: SkylightStore
-		get() = fluxModule.store
+		get() = krateModule.store
 	final override val locationPermission: String
 		get() = locationModule.locationPermission
 
@@ -118,7 +118,7 @@ open class SkylightAppComponent(
 			contextModule,
 			formattingModule,
 			evaluationModule,
-			fluxModule,
+			krateModule,
 			timeModule,
 			MainActivity::class.java
 		)

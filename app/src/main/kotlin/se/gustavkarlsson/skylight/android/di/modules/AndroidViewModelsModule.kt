@@ -9,7 +9,7 @@ import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModelFactory
 
 class AndroidViewModelsModule(
-	fluxModule: FluxModule,
+	krateModule: KrateModule,
 	contextModule: ContextModule,
 	evaluationModule: EvaluationModule,
 	formattingModule: FormattingModule,
@@ -19,7 +19,7 @@ class AndroidViewModelsModule(
 
 	private val mainViewModelFactory: MainViewModelFactory by lazy {
 		MainViewModelFactory(
-			fluxModule.store,
+			krateModule.store,
 			contextModule.context.getString(R.string.your_location),
 			contextModule.context.getString(R.string.error_no_internet),
 			evaluationModule.auroraReportEvaluator,
