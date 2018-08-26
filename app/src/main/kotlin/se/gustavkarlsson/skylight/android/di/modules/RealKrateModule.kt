@@ -7,7 +7,6 @@ import se.gustavkarlsson.krate.core.dsl.buildStore
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.krate.*
-import se.gustavkarlsson.skylight.android.krate.SkylightState.LocationPermission
 import se.gustavkarlsson.skylight.android.krate.SkylightState.Settings
 import timber.log.Timber
 
@@ -92,11 +91,6 @@ class RealKrateModule(
 						}
 					}
 				}
-				transform<SetLocationPermissionGrantedCommand> { commands ->
-					commands.map {
-						LocationPermissionGrantedResult
-					}
-				}
 				if (BuildConfig.DEBUG) {
 					watch<SkylightCommand> { Timber.d("Got command: $it") }
 				}
@@ -132,9 +126,6 @@ class RealKrateModule(
 				}
 				reduce<ConnectivityResult> { state, result ->
 					state.copy(isConnectedToInternet = result.isConnectedToInternet)
-				}
-				reduce<LocationPermissionGrantedResult> { state, _ ->
-					state.copy(locationPermission = LocationPermission.GRANTED)
 				}
 				reduce<SettingsResult> { state, result ->
 					state.copy(settings = result.settings)
