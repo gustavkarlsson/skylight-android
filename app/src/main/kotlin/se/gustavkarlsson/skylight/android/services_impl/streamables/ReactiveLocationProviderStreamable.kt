@@ -27,6 +27,7 @@ class ReactiveLocationProviderStreamable(
 	@SuppressLint("MissingPermission")
 	override val stream: Flowable<Location> = reactiveLocationProvider
 		.getUpdatedLocation(locationRequest)
+		.startWith(reactiveLocationProvider.lastKnownLocation)
 		.subscribeOn(Schedulers.io())
 		.retryWhen { it.delay(retryDelay) }
 		.map { Location(it.latitude, it.longitude) }
