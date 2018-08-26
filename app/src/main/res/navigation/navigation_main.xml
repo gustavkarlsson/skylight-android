@@ -20,6 +20,7 @@
 		android:label="IntroFragment">
 		<action
 			android:id="@+id/action_introFragment_to_setupFragment"
+			app:clearTask="true"
 			app:destination="@id/setupFragment"
 			app:enterAnim="@anim/nav_default_enter_anim"
 			app:popEnterAnim="@anim/nav_default_pop_enter_anim" />
@@ -46,13 +47,6 @@
 		android:id="@+id/action_start_from_introFragment"
 		app:clearTask="true"
 		app:destination="@id/introFragment"
-		app:enterAnim="@anim/nav_default_enter_anim"
-		app:popEnterAnim="@anim/nav_default_pop_enter_anim" />
-
-	<action
-		android:id="@+id/action_start_from_setupFragment"
-		app:clearTask="true"
-		app:destination="@id/setupFragment"
 		app:enterAnim="@anim/nav_default_enter_anim"
 		app:popEnterAnim="@anim/nav_default_pop_enter_anim" />
 
