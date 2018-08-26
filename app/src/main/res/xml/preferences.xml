@@ -6,7 +6,7 @@
 		android:summary="@string/pref_notifications_summary"
 		android:defaultValue="@bool/pref_notifications_default" />
 
-	<android.support.v7.preference.SwitchPreferenceCompat
+	<android.support.v7.preference.ListPreference
 		android:dependency="@string/pref_notifications_key"
 		android:key="@string/pref_trigger_level_key"
 		android:title="@string/pref_trigger_level_name"

@@ -9,7 +9,7 @@ open class SkylightBackgroundComponent(
 	contextModule: ContextModule,
 	formattingModule: FormattingModule,
 	evaluationModule: EvaluationModule,
-	fluxModule: FluxModule,
+	krateModule: KrateModule,
 	timeModule: TimeModule,
 	activityClass: Class<out Activity>
 ) : BackgroundComponent {
@@ -19,7 +19,7 @@ open class SkylightBackgroundComponent(
 			contextModule,
 			formattingModule,
 			evaluationModule,
-			fluxModule,
+			krateModule,
 			timeModule,
 			notifiedChanceRepositoryModule,
 			activityClass
@@ -33,7 +33,7 @@ open class SkylightBackgroundComponent(
 	open val schedulingModule: SchedulingModule by lazy {
 		EvernoteJobSchedulingModule(
 			contextModule,
-			fluxModule,
+			krateModule,
 			notificationModule
 		)
 	}

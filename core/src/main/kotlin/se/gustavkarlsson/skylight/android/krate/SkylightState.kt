@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.flux
+package se.gustavkarlsson.skylight.android.krate
 
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel

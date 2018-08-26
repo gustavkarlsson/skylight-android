@@ -7,8 +7,8 @@ import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.background.notifications.AuroraReportNotificationDecider
 import se.gustavkarlsson.skylight.android.background.notifications.Notifier
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.flux.GetAuroraReportCommand
-import se.gustavkarlsson.skylight.android.flux.SkylightStore
+import se.gustavkarlsson.skylight.android.krate.GetAuroraReportCommand
+import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import timber.log.Timber
 
 internal class UpdateJob(

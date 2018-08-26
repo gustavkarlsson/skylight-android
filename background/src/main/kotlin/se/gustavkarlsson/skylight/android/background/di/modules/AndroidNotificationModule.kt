@@ -12,7 +12,7 @@ class AndroidNotificationModule(
 	contextModule: ContextModule,
 	formattingModule: FormattingModule,
 	evaluationModule: EvaluationModule,
-	fluxModule: FluxModule,
+	krateModule: KrateModule,
 	timeModule: TimeModule,
 	notifiedChanceRepositoryModule: NotifiedChanceRepositoryModule,
 	activityClass: Class<out Activity>
@@ -34,7 +34,7 @@ class AndroidNotificationModule(
 		AuroraReportNotificationDeciderImpl(
 			notifiedChanceRepositoryModule.notifiedChanceRepository,
 			evaluationModule.auroraReportEvaluator,
-			fluxModule.store,
+			krateModule.store,
 			OutdatedEvaluator(timeModule.timeProvider),
 			AppVisibilityEvaluator(
 				contextModule.context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager

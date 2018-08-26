@@ -17,8 +17,7 @@ android {
 }
 
 dependencies {
-	api project(":flux")
-
+	api "com.github.gustavkarlsson:krate:$krate_version"
 	api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 	api "com.jakewharton.threetenabp:threetenabp:$threetenabp_version"
 	api "com.jakewharton.timber:timber:$timber_version"

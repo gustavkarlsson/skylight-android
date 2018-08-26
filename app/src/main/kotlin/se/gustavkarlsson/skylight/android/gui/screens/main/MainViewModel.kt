@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.gui.screens.main
 
 import android.arch.lifecycle.ViewModel
 import com.hadisatrio.optional.Optional
-import io.reactivex.Observable
+import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
@@ -12,10 +12,7 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.seconds
-import se.gustavkarlsson.skylight.android.flux.AuroraReportStreamCommand
-import se.gustavkarlsson.skylight.android.flux.GetAuroraReportCommand
-import se.gustavkarlsson.skylight.android.flux.SkylightState
-import se.gustavkarlsson.skylight.android.flux.SkylightStore
+import se.gustavkarlsson.skylight.android.krate.*
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
@@ -48,7 +45,7 @@ class MainViewModel(
 		store.issue(GetAuroraReportCommand)
 	}
 
-	val errorMessages: Observable<Int> = store.states
+	val errorMessages: Flowable<Int> = store.states
 		.filter { it.throwable != null }
 		.map {
 			val throwable = it.throwable
@@ -59,7 +56,7 @@ class MainViewModel(
 			}
 		}
 
-	val connectivityMessages: Observable<Optional<CharSequence>> = store.states
+	val connectivityMessages: Flowable<Optional<CharSequence>> = store.states
 		.map(SkylightState::isConnectedToInternet)
 		.map { connected ->
 			if (connected) {
@@ -70,17 +67,17 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val locationName: Observable<CharSequence> = store.states
+	val locationName: Flowable<CharSequence> = store.states
 		.map {
 			it.auroraReport?.locationName ?: defaultLocationName
 		}
 		.distinctUntilChanged()
 
-	val isRefreshing: Observable<Boolean> = store.states
+	val isRefreshing: Flowable<Boolean> = store.states
 		.map(SkylightState::isRefreshing)
 		.distinctUntilChanged()
 
-	val chanceLevel: Observable<CharSequence> = store.states
+	val chanceLevel: Flowable<CharSequence> = store.states
 		.map {
 			it.auroraReport
 				?.let(auroraChanceEvaluator::evaluate)
@@ -90,11 +87,11 @@ class MainViewModel(
 		.map(chanceLevelFormatter::format)
 		.distinctUntilChanged()
 
-	val timeSinceUpdate: Observable<CharSequence> = store.states
+	val timeSinceUpdate: Flowable<CharSequence> = store.states
 		.filter { it.auroraReport != null }
 		.map { it.auroraReport!!.timestamp }
 		.switchMap {
-			Observable.just(it)
+			Flowable.just(it)
 				.repeatWhen { it.delay(1.seconds) }
 				.observeOn(AndroidSchedulers.mainThread())
 		}
@@ -103,7 +100,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val timeSinceUpdateVisibility: Observable<Boolean> = store.states
+	val timeSinceUpdateVisibility: Flowable<Boolean> = store.states
 		.filter { it.auroraReport != null }
 		.map { it.auroraReport!!.timestamp }
 		.map {
@@ -114,7 +111,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val darknessValue: Observable<CharSequence> = store.states
+	val darknessValue: Flowable<CharSequence> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -124,7 +121,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val darknessChance: Observable<Chance> = store.states
+	val darknessChance: Flowable<Chance> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -134,7 +131,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val geomagLocationValue: Observable<CharSequence> = store.states
+	val geomagLocationValue: Flowable<CharSequence> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -144,7 +141,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val geomagLocationChance: Observable<Chance> = store.states
+	val geomagLocationChance: Flowable<Chance> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -154,7 +151,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val kpIndexValue: Observable<CharSequence> = store.states
+	val kpIndexValue: Flowable<CharSequence> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -164,7 +161,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val kpIndexChance: Observable<Chance> = store.states
+	val kpIndexChance: Flowable<Chance> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -174,7 +171,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val weatherValue: Observable<CharSequence> = store.states
+	val weatherValue: Flowable<CharSequence> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)
@@ -184,7 +181,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val weatherChance: Observable<Chance> = store.states
+	val weatherChance: Flowable<Chance> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::factors)

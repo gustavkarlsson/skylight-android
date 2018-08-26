@@ -10,7 +10,7 @@ import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.text
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
-import io.reactivex.Observable
+import io.reactivex.Flowable
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.util.ChanceToColorConverter
 import timber.log.Timber
@@ -18,8 +18,8 @@ import kotlin.math.roundToInt
 
 
 class FactorPresenter(
-	private val values: Observable<CharSequence>,
-	private val chances: Observable<Chance>,
+	private val values: Flowable<CharSequence>,
+	private val chances: Flowable<Chance>,
 	private val valueView: TextView,
 	private val progressBar: ProgressBar,
 	private val cardView: CardView,
