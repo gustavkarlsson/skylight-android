@@ -94,7 +94,7 @@ fun doOnEvery(owner: LifecycleOwner, event: Lifecycle.Event, block: () -> Unit):
 fun <T> T.doOnEvery(owner: LifecycleOwner, event: Lifecycle.Event, block: (T) -> Unit): LifecycleAction =
 	se.gustavkarlsson.skylight.android.extensions.doOnEvery(owner, event) { block(this) }
 
-fun doOnceOn(owner: LifecycleOwner, event: Lifecycle.Event, block: () -> Unit) {
+fun doOnNext(owner: LifecycleOwner, event: Lifecycle.Event, block: () -> Unit) {
 	val lifecycle = owner.lifecycle
 	val onAction = when (event) {
 		ON_CREATE -> OnCreate(block, lifecycle)
@@ -108,5 +108,5 @@ fun doOnceOn(owner: LifecycleOwner, event: Lifecycle.Event, block: () -> Unit) {
 	lifecycle.addObserver(onAction)
 }
 
-fun <T> T.doOnceOn(owner: LifecycleOwner, event: Lifecycle.Event, block: (T) -> Unit) =
-	se.gustavkarlsson.skylight.android.extensions.doOnceOn(owner, event) { block(this) }
+fun <T> T.doOnNext(owner: LifecycleOwner, event: Lifecycle.Event, block: (T) -> Unit) =
+	se.gustavkarlsson.skylight.android.extensions.doOnNext(owner, event) { block(this) }
