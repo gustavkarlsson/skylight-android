@@ -8,6 +8,7 @@ import io.fabric.sdk.android.Fabric
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.rxkotlin.addTo
+import se.gustavkarlsson.skylight.android.krate.BootstrapCommand
 import se.gustavkarlsson.skylight.android.krate.SettingsStreamCommand
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.services.Analytics
@@ -27,6 +28,7 @@ class Skylight : MultiDexApplication() {
 		if (LeakCanary.isInAnalyzerProcess(this)) return
 		bootstrap()
 		setupSettingsAnalytics(appComponent.store)
+		appComponent.store.issue(BootstrapCommand)
 		appComponent.store.issue(SettingsStreamCommand(true))
 		scheduleBackgroundNotifications()
 	}

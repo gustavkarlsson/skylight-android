@@ -2,8 +2,9 @@ package se.gustavkarlsson.skylight.android.di.components
 
 import android.support.v4.app.Fragment
 import se.gustavkarlsson.skylight.android.background.di.components.BackgroundComponent
-import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
+import se.gustavkarlsson.skylight.android.gui.screens.setup.SetupViewModel
+import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.services.Analytics
 
 interface AppComponent {
@@ -12,6 +13,7 @@ interface AppComponent {
 	val locationPermission: String
 
 	fun mainViewModel(fragment: Fragment): MainViewModel
+	fun setupViewModel(fragment: Fragment): SetupViewModel
 
 	val backgroundComponent: BackgroundComponent
 }

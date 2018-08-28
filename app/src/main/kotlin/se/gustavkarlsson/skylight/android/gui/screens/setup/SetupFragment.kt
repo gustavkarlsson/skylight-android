@@ -21,7 +21,6 @@ import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.extensions.appCompatActivity
-import se.gustavkarlsson.skylight.android.extensions.getViewModel
 import timber.log.Timber
 
 class SetupFragment : Fragment(), LifecycleObserver {
@@ -31,9 +30,7 @@ class SetupFragment : Fragment(), LifecycleObserver {
 	}
 
 	private val viewModel: SetupViewModel by lazy {
-		getViewModel<SetupViewModel>().also {
-			it.setLocationPermission(rxPermissions.isGranted(appComponent.locationPermission))
-		}
+		appComponent.setupViewModel(this)
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +53,7 @@ class SetupFragment : Fragment(), LifecycleObserver {
 		googlePlayServicesFixButton.clicks()
 			.autoDisposable(scope)
 			.subscribe {
+				// TODO try to add callback and signal success
 				GoogleApiAvailability.getInstance()
 					.makeGooglePlayServicesAvailable(requireActivity())
 			}
@@ -115,7 +113,7 @@ class SetupFragment : Fragment(), LifecycleObserver {
 				when {
 					it.granted -> {
 						Timber.i("Permission met")
-						viewModel.setLocationPermission(true)
+						viewModel.signalLocationPermissionGranted()
 					}
 					it.shouldShowRequestPermissionRationale -> {
 						Timber.i("Showing permission rationale to user for another chance")

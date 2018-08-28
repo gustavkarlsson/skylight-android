@@ -13,7 +13,9 @@ import timber.log.Timber
 class RealKrateModule(
 	private val auroraReportModule: AuroraReportModule,
 	private val connectivityModule: ConnectivityModule,
-	private val settingsModule: SettingsModule
+	private val settingsModule: SettingsModule,
+	private val permissionsModule: PermissionsModule,
+	private val googlePlayServicesModule: GooglePlayServicesModule
 ) : KrateModule {
 
 	private fun createSettings(): Settings {
@@ -26,15 +28,31 @@ class RealKrateModule(
 	override val store: SkylightStore by lazy {
 		buildStore<SkylightState, SkylightCommand, SkylightResult> {
 
-			states {
-				initial = SkylightState(createSettings())
-				observeScheduler = AndroidSchedulers.mainThread()
-				if (BuildConfig.DEBUG) {
-					watchAll { Timber.d("Got state: $it") }
-				}
-			}
-
 			commands {
+				transform<BootstrapCommand> { commands ->
+					commands.firstOrError()
+						.map<SkylightResult> {
+							LocationPermissionResult(
+								permissionsModule.permissionProvider.isLocationGranted)
+						}
+						.toFlowable()
+				}
+
+				transform<BootstrapCommand> { commands ->
+					commands.firstOrError()
+						.map<SkylightResult> {
+							GooglePlayServicesResult(
+								googlePlayServicesModule.googlePlayServicesProvider.isAvailable)
+						}
+						.toFlowable()
+				}
+
+				transform<SignalLocationPermissionGranted> { commands ->
+					commands.map {
+						LocationPermissionResult(true)
+					}
+				}
+
 				transform<GetAuroraReportCommand> { commands ->
 					commands.switchMap {
 						auroraReportModule.auroraReportProvider.get()
@@ -97,6 +115,12 @@ class RealKrateModule(
 			}
 
 			results {
+				reduce<LocationPermissionResult> { state, result ->
+					state.copy(isLocationPermissionGranted = result.isGranted)
+				}
+				reduce<GooglePlayServicesResult> { state, result ->
+					state.copy(isGooglePlayServicesAvailable = result.isAvailable)
+				}
 				reduce<AuroraReportResult.JustFinished> { state, _ ->
 					state.copy(
 						isRefreshing = false,
@@ -132,6 +156,14 @@ class RealKrateModule(
 				}
 				if (BuildConfig.DEBUG) {
 					watch<SkylightResult> { Timber.d("Got result: $it") }
+				}
+			}
+
+			states {
+				initial = SkylightState(createSettings())
+				observeScheduler = AndroidSchedulers.mainThread()
+				if (BuildConfig.DEBUG) {
+					watchAll { Timber.d("Got state: $it") }
 				}
 			}
 		}

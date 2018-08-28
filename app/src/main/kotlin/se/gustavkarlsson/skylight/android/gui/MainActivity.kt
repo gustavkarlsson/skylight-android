@@ -1,27 +1,43 @@
 package se.gustavkarlsson.skylight.android.gui
 
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.OnLifecycleEvent
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
+import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.kotlin.autoDisposable
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.appComponent
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), LifecycleObserver {
+
+	private val store by lazy {
+		appComponent.store
+	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
 		setupActionBarWithNavController(findNavController())
-		if (displayIntro()) {
-			findNavController().navigate(R.id.action_start_from_introFragment)
-		}
+		lifecycle.addObserver(this)
+	}
+
+	@OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+	private fun handleIntro() {
+		store.states
+			.filter {
+				it.isGooglePlayServicesAvailable == false || it.isLocationPermissionGranted == false
+			}
+			.firstOrError()
+			.autoDisposable(scope(Lifecycle.Event.ON_DESTROY))
+			.subscribe { _ ->
+				findNavController().navigate(R.id.action_start_from_introFragment)
+			}
 	}
 
 	@SuppressLint("MissingSuperCall")
@@ -30,20 +46,7 @@ class MainActivity : AppCompatActivity() {
 		// Resolves issue with navigation
 	}
 
-	private fun displayIntro(): Boolean {
-		return (!(googleApiIsAvailable()) || !(locationPermissionGranted()))
-	}
-
-	private fun googleApiIsAvailable() = GoogleApiAvailability.getInstance()
-			.isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
-
-	private fun locationPermissionGranted() = ContextCompat.checkSelfPermission(
-		this,
-		appComponent.locationPermission
-	) == PackageManager.PERMISSION_GRANTED
-
-	override fun onSupportNavigateUp(): Boolean =
-		findNavController().navigateUp()
+	override fun onSupportNavigateUp(): Boolean = findNavController().navigateUp()
 
 	private fun findNavController() = findNavController(R.id.mainNavHost)
 }

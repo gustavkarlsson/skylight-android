@@ -1,29 +1,43 @@
 package se.gustavkarlsson.skylight.android.gui.screens.setup
 
-import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.GoogleApiAvailability
-import com.jakewharton.rxrelay2.BehaviorRelay
-import io.reactivex.BackpressureStrategy
+import android.arch.lifecycle.ViewModel
 import io.reactivex.Flowable
-import io.reactivex.Single
+import io.reactivex.Maybe
 import io.reactivex.functions.BiFunction
+import se.gustavkarlsson.skylight.android.krate.SignalLocationPermissionGranted
+import se.gustavkarlsson.skylight.android.krate.SkylightStore
 
-class SetupViewModel(application: Application) : AndroidViewModel(application) {
+class SetupViewModel(
+	private val store: SkylightStore
+) : ViewModel() {
 
-	val googlePlayServicesCheckboxChecked: Flowable<Boolean> =
-		Single.fromCallable {
-			GoogleApiAvailability.getInstance()
-				.isGooglePlayServicesAvailable(getApplication()) == ConnectionResult.SUCCESS
-		}.toFlowable()
+	private val googlePlayServicesAvailable = store.states
+		.flatMapMaybe {
+			val granted = it.isGooglePlayServicesAvailable
+			if (granted != null) {
+				Maybe.just(granted)
+			} else {
+				Maybe.empty()
+			}
+		}
+
+	val googlePlayServicesCheckboxChecked: Flowable<Boolean> = googlePlayServicesAvailable
+
 	val googlePlayServicesFixButtonVisibility: Flowable<Boolean> =
 		googlePlayServicesCheckboxChecked.map(Boolean::not)
 
-	private val locationPermissionRelay = BehaviorRelay.create<Boolean>()
-	fun setLocationPermission(granted: Boolean) = locationPermissionRelay.accept(granted)
-	val locationPermissionCheckboxChecked: Flowable<Boolean> =
-		locationPermissionRelay.toFlowable(BackpressureStrategy.LATEST)
+	private val locationPermissionGranted = store.states
+		.flatMapMaybe {
+			val granted = it.isLocationPermissionGranted
+			if (granted != null) {
+				Maybe.just(granted)
+			} else {
+				Maybe.empty()
+			}
+		}
+
+	val locationPermissionCheckboxChecked: Flowable<Boolean> = locationPermissionGranted
+
 	val locationPermissionFixButtonVisibility: Flowable<Boolean> =
 		locationPermissionCheckboxChecked.map(Boolean::not)
 
@@ -32,4 +46,6 @@ class SetupViewModel(application: Application) : AndroidViewModel(application) {
 		locationPermissionCheckboxChecked,
 		BiFunction { google: Boolean, location: Boolean -> google && location }
 	)
+
+	fun signalLocationPermissionGranted() = store.issue(SignalLocationPermissionGranted)
 }

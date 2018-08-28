@@ -5,9 +5,10 @@ import android.support.v4.app.Fragment
 import se.gustavkarlsson.skylight.android.background.di.components.BackgroundComponent
 import se.gustavkarlsson.skylight.android.background.di.components.SkylightBackgroundComponent
 import se.gustavkarlsson.skylight.android.di.modules.*
-import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.gui.MainActivity
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
+import se.gustavkarlsson.skylight.android.gui.screens.setup.SetupViewModel
+import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.services.Analytics
 
 open class SkylightAppComponent(
@@ -99,8 +100,22 @@ open class SkylightAppComponent(
 		FirebasedAnalyticsModule(contextModule)
 	}
 
+	open val permissionModule: PermissionsModule by lazy {
+		RealPermissionModule(contextModule)
+	}
+
+	open val googlePlayServicesModule: GooglePlayServicesModule by lazy {
+		RealGooglePlayServicesModule(contextModule)
+	}
+
 	open val krateModule: KrateModule by lazy {
-		RealKrateModule(auroraReportModule, connectivityModule, settingsModule)
+		RealKrateModule(
+			auroraReportModule,
+			connectivityModule,
+			settingsModule,
+			permissionModule,
+			googlePlayServicesModule
+		)
 	}
 
 	final override val analytics: Analytics
@@ -112,6 +127,9 @@ open class SkylightAppComponent(
 
 	final override fun mainViewModel(fragment: Fragment): MainViewModel =
 		viewModelsModule.mainViewModel(fragment)
+
+	final override fun setupViewModel(fragment: Fragment): SetupViewModel =
+		viewModelsModule.setupViewModel(fragment)
 
 	final override val backgroundComponent: BackgroundComponent by lazy {
 		SkylightBackgroundComponent(
