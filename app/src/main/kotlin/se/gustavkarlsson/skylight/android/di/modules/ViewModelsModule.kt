@@ -1,10 +1,12 @@
 package se.gustavkarlsson.skylight.android.di.modules
 
 import android.support.v4.app.Fragment
+import se.gustavkarlsson.skylight.android.gui.screens.googleplayservices.GooglePlayServicesViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
-import se.gustavkarlsson.skylight.android.gui.screens.setup.SetupViewModel
+import se.gustavkarlsson.skylight.android.gui.screens.permission.PermissionViewModel
 
 interface ViewModelsModule {
 	fun mainViewModel(fragment: Fragment): MainViewModel
-	fun setupViewModel(fragment: Fragment): SetupViewModel
+	fun permissionViewModel(fragment: Fragment): PermissionViewModel
+	fun googlePlayServicesViewModel(fragment: Fragment): GooglePlayServicesViewModel
 }

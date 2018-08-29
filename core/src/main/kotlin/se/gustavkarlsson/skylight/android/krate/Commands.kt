@@ -13,3 +13,7 @@ data class ConnectivityStreamCommand(val stream: Boolean) : SkylightCommand()
 object BootstrapCommand : SkylightCommand()
 
 object SignalLocationPermissionGranted : SkylightCommand()
+
+object SignalGooglePlayServicesInstalled : SkylightCommand()
+
+object SignalFirstRunCompleted : SkylightCommand()

@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.gui.screens.setup
+package se.gustavkarlsson.skylight.android.gui.screens.permission
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
@@ -9,28 +9,26 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
-import com.google.android.gms.common.GoogleApiAvailability
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.visibility
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
-import kotlinx.android.synthetic.main.fragment_setup.*
+import kotlinx.android.synthetic.main.fragment_permission.*
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.extensions.appCompatActivity
 import timber.log.Timber
 
-class SetupFragment : Fragment(), LifecycleObserver {
+class PermissionFragment : Fragment(), LifecycleObserver {
 
 	private val rxPermissions: RxPermissions by lazy {
 		RxPermissions(requireActivity()).apply { setLogging(BuildConfig.DEBUG) }
 	}
 
-	private val viewModel: SetupViewModel by lazy {
-		appComponent.setupViewModel(this)
+	private val viewModel: PermissionViewModel by lazy {
+		appComponent.permissionViewModel(this)
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,42 +41,17 @@ class SetupFragment : Fragment(), LifecycleObserver {
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
-	): View? = inflater.inflate(R.layout.fragment_setup, container, false)
+	): View? = inflater.inflate(R.layout.fragment_permission, container, false)
 
 
 	@OnLifecycleEvent(Lifecycle.Event.ON_START)
 	private fun bindData() {
 		val scope = scope(Lifecycle.Event.ON_STOP)
 
-		googlePlayServicesFixButton.clicks()
-			.autoDisposable(scope)
-			.subscribe {
-				// TODO try to add callback and signal success
-				GoogleApiAvailability.getInstance()
-					.makeGooglePlayServicesAvailable(requireActivity())
-			}
-
 		locationPermissionFixButton.clicks()
 			.autoDisposable(scope)
 			.subscribe {
 				ensureLocationPermission()
-			}
-
-		startButton.clicks()
-			.autoDisposable(scope)
-			.subscribe {
-				view!!.findNavController().navigate(R.id.action_start_from_mainFragment)
-			}
-
-		viewModel.googlePlayServicesCheckboxChecked
-			.autoDisposable(scope)
-			.subscribe { checked ->
-				val resource = if (checked) {
-					R.drawable.ic_check_white_24dp
-				} else {
-					R.drawable.ic_close_white_24dp
-				}
-				googlePlayServicesCheckboxImageView.setImageResource(resource)
 			}
 
 		viewModel.locationPermissionCheckboxChecked
@@ -92,17 +65,9 @@ class SetupFragment : Fragment(), LifecycleObserver {
 				locationPermissionCheckboxImageView.setImageResource(resource)
 			}
 
-		viewModel.googlePlayServicesFixButtonVisibility
-			.autoDisposable(scope)
-			.subscribe(googlePlayServicesFixButton.visibility(View.INVISIBLE))
-
 		viewModel.locationPermissionFixButtonVisibility
 			.autoDisposable(scope)
 			.subscribe(locationPermissionFixButton.visibility(View.INVISIBLE))
-
-		viewModel.startButtonVisibility
-			.autoDisposable(scope)
-			.subscribe(startButton.visibility(View.INVISIBLE))
 	}
 
 	private fun ensureLocationPermission() {

@@ -1,30 +1,14 @@
-package se.gustavkarlsson.skylight.android.gui.screens.setup
+package se.gustavkarlsson.skylight.android.gui.screens.permission
 
 import android.arch.lifecycle.ViewModel
 import io.reactivex.Flowable
 import io.reactivex.Maybe
-import io.reactivex.functions.BiFunction
 import se.gustavkarlsson.skylight.android.krate.SignalLocationPermissionGranted
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 
-class SetupViewModel(
+class PermissionViewModel(
 	private val store: SkylightStore
 ) : ViewModel() {
-
-	private val googlePlayServicesAvailable = store.states
-		.flatMapMaybe {
-			val granted = it.isGooglePlayServicesAvailable
-			if (granted != null) {
-				Maybe.just(granted)
-			} else {
-				Maybe.empty()
-			}
-		}
-
-	val googlePlayServicesCheckboxChecked: Flowable<Boolean> = googlePlayServicesAvailable
-
-	val googlePlayServicesFixButtonVisibility: Flowable<Boolean> =
-		googlePlayServicesCheckboxChecked.map(Boolean::not)
 
 	private val locationPermissionGranted = store.states
 		.flatMapMaybe {
@@ -40,12 +24,6 @@ class SetupViewModel(
 
 	val locationPermissionFixButtonVisibility: Flowable<Boolean> =
 		locationPermissionCheckboxChecked.map(Boolean::not)
-
-	val startButtonVisibility: Flowable<Boolean> = Flowable.combineLatest(
-		googlePlayServicesCheckboxChecked,
-		locationPermissionCheckboxChecked,
-		BiFunction { google: Boolean, location: Boolean -> google && location }
-	)
 
 	fun signalLocationPermissionGranted() = store.issue(SignalLocationPermissionGranted)
 }

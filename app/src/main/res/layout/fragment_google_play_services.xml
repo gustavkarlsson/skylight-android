@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:padding="@dimen/screen_margin"
+	tools:context=".gui.MainActivity">
+
+	<TextView
+		android:id="@+id/descriptionTextView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/setup_description"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<ImageView
+		android:id="@+id/googlePlayServicesCheckboxImageView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/ic_close_white_24dp"
+		app:layout_constraintBottom_toBottomOf="@+id/googlePlayServicesFixButton"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="@+id/googlePlayServicesFixButton" />
+
+	<TextView
+		android:id="@+id/googlePlayServicesTextView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:text="@string/setup_google_play_services_installed"
+		app:layout_constraintBottom_toBottomOf="@+id/googlePlayServicesFixButton"
+		app:layout_constraintStart_toEndOf="@id/googlePlayServicesCheckboxImageView"
+		app:layout_constraintTop_toTopOf="@+id/googlePlayServicesFixButton" />
+
+	<android.support.constraint.Barrier
+		android:id="@+id/setupBarrier"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:barrierDirection="end"
+		app:constraint_referenced_ids="googlePlayServicesTextView" />
+
+	<Button
+		android:id="@+id/googlePlayServicesFixButton"
+		style="@style/Widget.AppCompat.Button.Borderless.Colored"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/setup_fix"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/descriptionTextView" />
+</android.support.constraint.ConstraintLayout>

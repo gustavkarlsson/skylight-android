@@ -15,7 +15,8 @@ class RealKrateModule(
 	private val connectivityModule: ConnectivityModule,
 	private val settingsModule: SettingsModule,
 	private val permissionsModule: PermissionsModule,
-	private val googlePlayServicesModule: GooglePlayServicesModule
+	private val googlePlayServicesModule: GooglePlayServicesModule,
+	private val runVersionModule: RunVersionsModule
 ) : KrateModule {
 
 	private fun createSettings(): Settings {
@@ -33,7 +34,7 @@ class RealKrateModule(
 					commands.firstOrError()
 						.map<SkylightResult> {
 							LocationPermissionResult(
-								permissionsModule.permissionProvider.isLocationGranted)
+								permissionsModule.permissionChecker.isLocationGranted)
 						}
 						.toFlowable()
 				}
@@ -42,14 +43,40 @@ class RealKrateModule(
 					commands.firstOrError()
 						.map<SkylightResult> {
 							GooglePlayServicesResult(
-								googlePlayServicesModule.googlePlayServicesProvider.isAvailable)
+								googlePlayServicesModule.googlePlayServicesChecker.isAvailable)
 						}
 						.toFlowable()
+				}
+
+				transform<BootstrapCommand> { commands ->
+					commands.firstOrError()
+						.map<SkylightResult> {
+							FirstRunResult(
+								runVersionModule.runVersionsManager.isFirstRun
+							)
+						}
+						.toFlowable()
+				}
+
+				transform<SignalFirstRunCompleted> { commands ->
+					commands
+						.doOnNext {
+							runVersionModule.runVersionsManager.signalFirstRunCompleted()
+						}
+						.map {
+							FirstRunResult(false)
+						}
 				}
 
 				transform<SignalLocationPermissionGranted> { commands ->
 					commands.map {
 						LocationPermissionResult(true)
+					}
+				}
+
+				transform<SignalGooglePlayServicesInstalled> { commands ->
+					commands.map {
+						GooglePlayServicesResult(true)
 					}
 				}
 
@@ -120,6 +147,9 @@ class RealKrateModule(
 				}
 				reduce<GooglePlayServicesResult> { state, result ->
 					state.copy(isGooglePlayServicesAvailable = result.isAvailable)
+				}
+				reduce<FirstRunResult> { state, result ->
+					state.copy(isFirstRun = result.isFirstRun)
 				}
 				reduce<AuroraReportResult.JustFinished> { state, _ ->
 					state.copy(

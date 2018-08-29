@@ -5,10 +5,12 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.getViewModel
 import se.gustavkarlsson.skylight.android.extensions.minutes
+import se.gustavkarlsson.skylight.android.gui.screens.googleplayservices.GooglePlayServicesViewModel
+import se.gustavkarlsson.skylight.android.gui.screens.googleplayservices.GooglePlayServicesViewModelFactory
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModelFactory
-import se.gustavkarlsson.skylight.android.gui.screens.setup.SetupViewModel
-import se.gustavkarlsson.skylight.android.gui.screens.setup.SetupViewModelFactory
+import se.gustavkarlsson.skylight.android.gui.screens.permission.PermissionViewModel
+import se.gustavkarlsson.skylight.android.gui.screens.permission.PermissionViewModelFactory
 
 class AndroidViewModelsModule(
 	krateModule: KrateModule,
@@ -40,13 +42,20 @@ class AndroidViewModelsModule(
 		)
 	}
 
-	private val setupViewModelFactory by lazy {
-		SetupViewModelFactory(krateModule.store)
+	private val permissionViewModelFactory by lazy {
+		PermissionViewModelFactory(krateModule.store)
+	}
+
+	private val googlePlayServicesViewModelFactory by lazy {
+		GooglePlayServicesViewModelFactory(krateModule.store)
 	}
 
 	override fun mainViewModel(fragment: Fragment): MainViewModel =
 		fragment.getViewModel(mainViewModelFactory)
 
-	override fun setupViewModel(fragment: Fragment): SetupViewModel =
-		fragment.getViewModel(setupViewModelFactory)
+	override fun permissionViewModel(fragment: Fragment): PermissionViewModel =
+		fragment.getViewModel(permissionViewModelFactory)
+
+	override fun googlePlayServicesViewModel(fragment: Fragment): GooglePlayServicesViewModel =
+		fragment.getViewModel(googlePlayServicesViewModelFactory)
 }

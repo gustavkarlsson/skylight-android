@@ -1,13 +1,13 @@
 package se.gustavkarlsson.skylight.android.di.modules
 
-import se.gustavkarlsson.skylight.android.services.providers.GooglePlayServicesProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.GmsGooglePlayServicesProvider
+import se.gustavkarlsson.skylight.android.services.GooglePlayServicesChecker
+import se.gustavkarlsson.skylight.android.services_impl.GmsGooglePlayServicesChecker
 
 class RealGooglePlayServicesModule(
 	private val contextModule: ContextModule
 ) : GooglePlayServicesModule {
 
-	override val googlePlayServicesProvider: GooglePlayServicesProvider by lazy {
-		GmsGooglePlayServicesProvider(contextModule.context)
+	override val googlePlayServicesChecker: GooglePlayServicesChecker by lazy {
+		GmsGooglePlayServicesChecker(contextModule.context)
 	}
 }

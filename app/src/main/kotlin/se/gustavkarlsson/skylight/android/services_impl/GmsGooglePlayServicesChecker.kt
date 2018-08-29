@@ -1,11 +1,12 @@
-package se.gustavkarlsson.skylight.android.services_impl.providers
+package se.gustavkarlsson.skylight.android.services_impl
 
 import android.content.Context
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import se.gustavkarlsson.skylight.android.services.providers.GooglePlayServicesProvider
+import se.gustavkarlsson.skylight.android.services.GooglePlayServicesChecker
 
-class GmsGooglePlayServicesProvider(private val context: Context) : GooglePlayServicesProvider {
+class GmsGooglePlayServicesChecker(private val context: Context) :
+	GooglePlayServicesChecker {
 
 	override val isAvailable: Boolean
 		get() {

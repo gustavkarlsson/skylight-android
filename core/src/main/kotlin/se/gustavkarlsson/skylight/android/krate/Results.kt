@@ -19,3 +19,5 @@ data class ConnectivityResult(val isConnectedToInternet: Boolean) : SkylightResu
 data class LocationPermissionResult(val isGranted: Boolean) : SkylightResult()
 
 data class GooglePlayServicesResult(val isAvailable: Boolean) : SkylightResult()
+
+data class FirstRunResult(val isFirstRun: Boolean) : SkylightResult()

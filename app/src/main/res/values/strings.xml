@@ -29,14 +29,13 @@
 		\n\nThe app will notify when the chance gets high enough.
 		\n\nBefore that however, we just need to make sure of a few things.
 	</string>
-	<string name="intro_next">Next</string>
+	<string name="intro_got_it">Got it!</string>
 
 	<!-- Setup -->
 	<string name="setup_description">First, we must make sure that you are all set up.</string>
 	<string name="setup_location_permission_granted">Location permission granted</string>
 	<string name="setup_google_play_services_installed">Google Play Services installed</string>
 	<string name="setup_fix">Fix</string>
-	<string name="setup_start">Start</string>
 	<string name="setup_dialog_location_permission_required_title">
 		Location permission required
 	</string>

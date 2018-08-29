@@ -35,7 +35,7 @@
 		style="@style/Widget.AppCompat.Button.Borderless.Colored"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="@string/intro_next"
+		android:text="@string/intro_got_it"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent" />

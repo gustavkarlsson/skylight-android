@@ -5,6 +5,7 @@ import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 
 data class SkylightState(
 	val settings: Settings,
+	val isFirstRun: Boolean? = null,
 	val isLocationPermissionGranted: Boolean? = null,
 	val isGooglePlayServicesAvailable: Boolean? = null,
 	val isRefreshing: Boolean = false,

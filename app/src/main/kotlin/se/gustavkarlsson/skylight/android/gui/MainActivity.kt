@@ -13,31 +13,21 @@ import com.uber.autodispose.kotlin.autoDisposable
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.appComponent
 
-
 class MainActivity : AppCompatActivity(), LifecycleObserver {
 
 	private val store by lazy {
 		appComponent.store
 	}
 
+	private val navController by lazy {
+		findNavController(R.id.mainNavHost)
+	}
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
-		setupActionBarWithNavController(findNavController())
+		setupActionBarWithNavController(navController)
 		lifecycle.addObserver(this)
-	}
-
-	@OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-	private fun handleIntro() {
-		store.states
-			.filter {
-				it.isGooglePlayServicesAvailable == false || it.isLocationPermissionGranted == false
-			}
-			.firstOrError()
-			.autoDisposable(scope(Lifecycle.Event.ON_DESTROY))
-			.subscribe { _ ->
-				findNavController().navigate(R.id.action_start_from_introFragment)
-			}
 	}
 
 	@SuppressLint("MissingSuperCall")
@@ -46,7 +36,37 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 		// Resolves issue with navigation
 	}
 
-	override fun onSupportNavigateUp(): Boolean = findNavController().navigateUp()
+	override fun onSupportNavigateUp(): Boolean = navController.navigateUp()
 
-	private fun findNavController() = findNavController(R.id.mainNavHost)
+	@OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+	private fun handleIntro() {
+		store.states
+			.filter {
+				it.isFirstRun != null
+					&& it.isGooglePlayServicesAvailable != null
+					&& it.isLocationPermissionGranted != null
+			}
+			.distinctUntilChanged { a, b ->
+				a.isFirstRun == b.isFirstRun
+					&& a.isGooglePlayServicesAvailable == b.isGooglePlayServicesAvailable
+					&& a.isLocationPermissionGranted == b.isLocationPermissionGranted
+			}
+			.autoDisposable(scope(Lifecycle.Event.ON_DESTROY))
+			.subscribe {
+				when {
+					it.isGooglePlayServicesAvailable == false -> {
+						navController.navigate(R.id.action_start_from_googlePlayServicesFragment)
+					}
+					it.isFirstRun == true -> {
+						navController.navigate(R.id.action_start_from_introFragment)
+					}
+					it.isLocationPermissionGranted == false -> {
+						navController.navigate(R.id.action_start_from_permissionFragment)
+					}
+					navController.currentDestination?.id != R.id.mainFragment -> {
+						navController.navigate(R.id.action_start_from_mainFragment)
+					}
+				}
+			}
+	}
 }

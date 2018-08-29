@@ -16,20 +16,15 @@
 
 	<fragment
 		android:id="@+id/introFragment"
-		android:name="se.gustavkarlsson.skylight.android.gui.screens.intro.IntroFragment"
-		android:label="IntroFragment">
-		<action
-			android:id="@+id/action_introFragment_to_setupFragment"
-			app:clearTask="true"
-			app:destination="@id/setupFragment"
-			app:enterAnim="@anim/nav_default_enter_anim"
-			app:popEnterAnim="@anim/nav_default_pop_enter_anim" />
-	</fragment>
+		android:name="se.gustavkarlsson.skylight.android.gui.screens.intro.IntroFragment" />
 
 	<fragment
-		android:id="@+id/setupFragment"
-		android:name="se.gustavkarlsson.skylight.android.gui.screens.setup.SetupFragment"
-		android:label="SetupFragment" />
+		android:id="@+id/googlePlayServicesFragment"
+		android:name="se.gustavkarlsson.skylight.android.gui.screens.googleplayservices.GooglePlayServicesFragment" />
+
+	<fragment
+		android:id="@+id/permissionFragment"
+		android:name="se.gustavkarlsson.skylight.android.gui.screens.permission.PermissionFragment" />
 
 	<fragment
 		android:id="@+id/settingsFragment"
@@ -47,6 +42,20 @@
 		android:id="@+id/action_start_from_introFragment"
 		app:clearTask="true"
 		app:destination="@id/introFragment"
+		app:enterAnim="@anim/nav_default_enter_anim"
+		app:popEnterAnim="@anim/nav_default_pop_enter_anim" />
+
+	<action
+		android:id="@+id/action_start_from_googlePlayServicesFragment"
+		app:clearTask="true"
+		app:destination="@id/googlePlayServicesFragment"
+		app:enterAnim="@anim/nav_default_enter_anim"
+		app:popEnterAnim="@anim/nav_default_pop_enter_anim" />
+
+	<action
+		android:id="@+id/action_start_from_permissionFragment"
+		app:clearTask="true"
+		app:destination="@id/permissionFragment"
 		app:enterAnim="@anim/nav_default_enter_anim"
 		app:popEnterAnim="@anim/nav_default_pop_enter_anim" />
 
