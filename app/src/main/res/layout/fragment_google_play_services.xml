@@ -8,45 +8,33 @@
 	tools:context=".gui.MainActivity">
 
 	<TextView
-		android:id="@+id/descriptionTextView"
+		android:id="@+id/titleTextView"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="@string/setup_description"
+		android:text="@string/google_play_services_title"
+		android:textSize="24sp"
+		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
 
-	<ImageView
-		android:id="@+id/googlePlayServicesCheckboxImageView"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:src="@drawable/ic_close_white_24dp"
-		app:layout_constraintBottom_toBottomOf="@+id/googlePlayServicesFixButton"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="@+id/googlePlayServicesFixButton" />
-
 	<TextView
-		android:id="@+id/googlePlayServicesTextView"
+		android:id="@+id/descriptionTextView"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginStart="16dp"
-		android:text="@string/setup_google_play_services_installed"
-		app:layout_constraintBottom_toBottomOf="@+id/googlePlayServicesFixButton"
-		app:layout_constraintStart_toEndOf="@id/googlePlayServicesCheckboxImageView"
-		app:layout_constraintTop_toTopOf="@+id/googlePlayServicesFixButton" />
-
-	<android.support.constraint.Barrier
-		android:id="@+id/setupBarrier"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		app:barrierDirection="end"
-		app:constraint_referenced_ids="googlePlayServicesTextView" />
+		android:layout_marginTop="64dp"
+		android:text="@string/google_play_services_desc"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/titleTextView" />
 
 	<Button
-		android:id="@+id/googlePlayServicesFixButton"
+		android:id="@+id/installButton"
 		style="@style/Widget.AppCompat.Button.Borderless.Colored"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="@string/setup_fix"
+		android:text="@string/google_play_services_install"
+		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/descriptionTextView" />
+		app:layout_constraintStart_toStartOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

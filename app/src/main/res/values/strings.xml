@@ -22,25 +22,24 @@
 	<string name="main_weather_overcast">Overcast</string>
 
 	<!-- Intro -->
-	<string name="intro_welcome">Welcome to Skylight</string>
-	<string name="intro_description">
-		This app helps you figure out when you can see the aurora by
+	<string name="intro_title">Welcome to Skylight</string>
+	<string name="intro_desc">Skylight helps you figure out when you can see the aurora by
 		looking at different factors such as location, weather and time of day.
-		\n\nThe app will notify when the chance gets high enough.
-		\n\nBefore that however, we just need to make sure of a few things.
-	</string>
+		\n\nWe will notify when the chance gets high enough.</string>
 	<string name="intro_got_it">Got it!</string>
 
-	<!-- Setup -->
-	<string name="setup_description">First, we must make sure that you are all set up.</string>
-	<string name="setup_location_permission_granted">Location permission granted</string>
-	<string name="setup_google_play_services_installed">Google Play Services installed</string>
-	<string name="setup_fix">Fix</string>
-	<string name="setup_dialog_location_permission_required_title">
-		Location permission required
+	<!-- Permission -->
+	<string name="permission_title">Access location</string>
+	<string name="permission_desc">Skylight needs access to your location to calculate the
+		chances of seeing the aurora.</string>
+	<string name="permission_grant">Grant</string>
+	<string name="permission_required_title">Location permission required</string>
+	<string name="permission_required_desc">This app needs access to your location to calculate
+		the chances of seeing the aurora.Please allow access to your location.</string>
+
+	<!-- Google Play Services -->
+	<string name="google_play_services_title">Install Google Play Services</string>
+	<string name="google_play_services_desc">Skylight needs Google Play Services to work.
 	</string>
-	<string name="setup_dialog_location_permission_required_desc">
-		This app needs access to your location to calculate the chances of seeing the aurora.
-		Please allow access to your location.
-	</string>
+	<string name="google_play_services_install">Install</string>
 </resources>

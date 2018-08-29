@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.jakewharton.rxbinding2.view.clicks
-import com.jakewharton.rxbinding2.view.visibility
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
@@ -23,6 +22,7 @@ import timber.log.Timber
 
 class PermissionFragment : Fragment(), LifecycleObserver {
 
+	// TODO Inject
 	private val rxPermissions: RxPermissions by lazy {
 		RxPermissions(requireActivity()).apply { setLogging(BuildConfig.DEBUG) }
 	}
@@ -46,28 +46,11 @@ class PermissionFragment : Fragment(), LifecycleObserver {
 
 	@OnLifecycleEvent(Lifecycle.Event.ON_START)
 	private fun bindData() {
-		val scope = scope(Lifecycle.Event.ON_STOP)
-
-		locationPermissionFixButton.clicks()
-			.autoDisposable(scope)
+		grantButton.clicks()
+			.autoDisposable(scope(Lifecycle.Event.ON_STOP))
 			.subscribe {
 				ensureLocationPermission()
 			}
-
-		viewModel.locationPermissionCheckboxChecked
-			.autoDisposable(scope)
-			.subscribe { checked ->
-				val resource = if (checked) {
-					R.drawable.ic_check_white_24dp
-				} else {
-					R.drawable.ic_close_white_24dp
-				}
-				locationPermissionCheckboxImageView.setImageResource(resource)
-			}
-
-		viewModel.locationPermissionFixButtonVisibility
-			.autoDisposable(scope)
-			.subscribe(locationPermissionFixButton.visibility(View.INVISIBLE))
 	}
 
 	private fun ensureLocationPermission() {
@@ -95,8 +78,8 @@ class PermissionFragment : Fragment(), LifecycleObserver {
 	private fun showLocationPermissionRequiredDialog() {
 		AlertDialog.Builder(requireContext())
 			.setIcon(R.drawable.ic_warning_white_24dp)
-			.setTitle(getString(R.string.setup_dialog_location_permission_required_title))
-			.setMessage(R.string.setup_dialog_location_permission_required_desc)
+			.setTitle(getString(R.string.permission_required_title))
+			.setMessage(R.string.permission_required_desc)
 			.setPositiveButton(android.R.string.ok) { dialog, _ -> dialog.dismiss() }
 			.show()
 	}
