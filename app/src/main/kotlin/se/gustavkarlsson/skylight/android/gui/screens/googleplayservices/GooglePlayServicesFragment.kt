@@ -41,7 +41,7 @@ class GooglePlayServicesFragment : Fragment(), LifecycleObserver {
 		installButton.clicks()
 			.autoDisposable(scope(Lifecycle.Event.ON_STOP))
 			.subscribe {
-				// TODO try to add callback and signal success
+				// TODO Wait for https://github.com/ashdavies/rx-tasks/issues/21
 				GoogleApiAvailability.getInstance()
 					.makeGooglePlayServicesAvailable(requireActivity())
 			}
