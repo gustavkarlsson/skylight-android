@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.util
 
 import android.content.Context
-import android.support.v4.app.ActivityCompat
-import android.support.v4.graphics.ColorUtils
+import androidx.core.app.ActivityCompat
+import androidx.core.graphics.ColorUtils
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.Chance
 

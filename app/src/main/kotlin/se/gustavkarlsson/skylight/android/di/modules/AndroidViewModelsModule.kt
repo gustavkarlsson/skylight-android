@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.di.modules
 
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.getViewModel

@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
 import io.reactivex.Single

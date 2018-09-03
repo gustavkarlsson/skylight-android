@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.di.components
 
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import se.gustavkarlsson.skylight.android.background.di.components.BackgroundComponent
 import se.gustavkarlsson.skylight.android.gui.screens.googleplayservices.GooglePlayServicesViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel

@@ -2,10 +2,10 @@ package se.gustavkarlsson.skylight.android.gui.screens.main
 
 import android.animation.ObjectAnimator
 import android.content.res.ColorStateList
-import android.support.v7.widget.CardView
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.widget.text
 import com.uber.autodispose.LifecycleScopeProvider

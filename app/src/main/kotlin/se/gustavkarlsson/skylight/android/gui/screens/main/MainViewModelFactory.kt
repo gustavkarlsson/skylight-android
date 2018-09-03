@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.reactivex.Single
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant

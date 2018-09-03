@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.gui.screens.permission
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 
 class PermissionViewModelFactory(

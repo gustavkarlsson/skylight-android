@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.background.persistence.typeconverters
 
-import android.arch.persistence.room.TypeConverter
-
+import androidx.room.TypeConverter
 import org.threeten.bp.Instant
 
 internal class InstantConverters {

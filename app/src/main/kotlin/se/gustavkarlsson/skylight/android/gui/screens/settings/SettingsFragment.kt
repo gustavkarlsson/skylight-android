@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.gui.screens.settings
 
 import android.os.Bundle
-import android.support.v7.preference.PreferenceFragmentCompat
+import androidx.preference.PreferenceFragmentCompat
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.appCompatActivity
 

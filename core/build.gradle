@@ -12,7 +12,7 @@ android {
 
 	defaultConfig {
 		minSdkVersion project.min_sdk_version
-		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 	}
 }
 
@@ -26,5 +26,5 @@ dependencies {
 	api "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
 
 	androidTestImplementation "com.willowtreeapps.assertk:assertk:$assertk_version", { exclude group: "org.jetbrains.kotlin" }
-	androidTestImplementation "com.android.support.test:runner:$android_support_test_version"
+	androidTestImplementation "androidx.test:runner:$android_support_test_version"
 }

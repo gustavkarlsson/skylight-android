@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.background.persistence.typeconverters
 
-import android.arch.persistence.room.TypeConverter
+import androidx.room.TypeConverter
 import se.gustavkarlsson.skylight.android.entities.Chance
 
 internal class ChanceConverters {

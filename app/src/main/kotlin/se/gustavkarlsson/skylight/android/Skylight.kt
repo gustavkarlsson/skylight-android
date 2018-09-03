@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android
 
-import android.support.multidex.MultiDexApplication
+import androidx.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.squareup.leakcanary.LeakCanary

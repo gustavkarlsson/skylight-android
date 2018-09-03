@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.services_impl
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
 

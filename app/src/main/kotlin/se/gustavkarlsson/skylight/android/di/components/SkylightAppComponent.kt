@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.di.components
 
 import android.app.Application
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import se.gustavkarlsson.skylight.android.background.di.components.BackgroundComponent
 import se.gustavkarlsson.skylight.android.background.di.components.SkylightBackgroundComponent
 import se.gustavkarlsson.skylight.android.di.modules.*

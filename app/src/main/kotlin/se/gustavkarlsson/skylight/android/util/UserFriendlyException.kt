@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.util
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 
 class UserFriendlyException : RuntimeException {
     val stringResourceId: Int

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
-	<android.support.v7.preference.SwitchPreferenceCompat
+	<androidx.preference.SwitchPreferenceCompat
 		android:key="@string/pref_notifications_key"
 		android:title="@string/pref_notifications_name"
 		android:summary="@string/pref_notifications_summary"
 		android:defaultValue="@bool/pref_notifications_default" />
 
-	<android.support.v7.preference.ListPreference
+	<androidx.preference.ListPreference
 		android:dependency="@string/pref_notifications_key"
 		android:key="@string/pref_trigger_level_key"
 		android:title="@string/pref_trigger_level_name"
@@ -17,47 +17,47 @@
 		android:defaultValue="@string/pref_trigger_level_default" />
 
 	<!-- Developer values start here -->
-	<android.support.v7.preference.PreferenceCategory
+	<androidx.preference.PreferenceCategory
 		android:key="@string/pref_category_developer_key"
 		android:title="@string/pref_category_developer_title">
-		<android.support.v7.preference.SwitchPreferenceCompat
+		<androidx.preference.SwitchPreferenceCompat
 			android:key="@string/pref_override_values_key"
 			android:title="@string/pref_override_values_title"
 			android:defaultValue="false" />
-		<android.support.v7.preference.SeekBarPreference
+		<androidx.preference.SeekBarPreference
 			android:dependency="@string/pref_override_values_key"
 			android:key="@string/pref_kp_index_key"
 			android:title="@string/pref_kp_index_title"
 			app:min="0"
 			android:max="9"
 			android:defaultValue="5" />
-		<android.support.v7.preference.SeekBarPreference
+		<androidx.preference.SeekBarPreference
 			android:dependency="@string/pref_override_values_key"
 			android:key="@string/pref_geomag_latitude_key"
 			android:title="@string/pref_geomag_latitude_title"
 			app:min="-90"
 			android:max="90"
 			android:defaultValue="0" />
-		<android.support.v7.preference.SeekBarPreference
+		<androidx.preference.SeekBarPreference
 			android:dependency="@string/pref_override_values_key"
 			android:key="@string/pref_cloud_percentage_key"
 			android:title="@string/pref_cloud_percentage_title"
 			app:min="0"
 			android:max="100"
 			android:defaultValue="50" />
-		<android.support.v7.preference.SeekBarPreference
+		<androidx.preference.SeekBarPreference
 			android:dependency="@string/pref_override_values_key"
 			android:key="@string/pref_sun_position_key"
 			android:title="@string/pref_sun_position_title"
 			app:min="0"
 			android:max="180"
 			android:defaultValue="90" />
-		<android.support.v7.preference.SeekBarPreference
+		<androidx.preference.SeekBarPreference
 			android:dependency="@string/pref_override_values_key"
 			android:key="@string/pref_refresh_duration_seconds_key"
 			android:title="@string/pref_refresh_duration_seconds_title"
 			app:min="0"
 			android:max="20"
 			android:defaultValue="2" />
-	</android.support.v7.preference.PreferenceCategory>
-</android.support.v7.preference.PreferenceScreen>
+	</androidx.preference.PreferenceCategory>
+</androidx.preference.PreferenceScreen>

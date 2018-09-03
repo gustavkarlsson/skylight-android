@@ -1,10 +1,10 @@
 package se.gustavkarlsson.skylight.android.background.persistence
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.Room
-import android.arch.persistence.room.RoomDatabase
-import android.arch.persistence.room.TypeConverters
 import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import se.gustavkarlsson.skylight.android.background.persistence.entities.NotifiedChanceEntity
 import se.gustavkarlsson.skylight.android.background.persistence.typeconverters.ChanceConverters
 import se.gustavkarlsson.skylight.android.background.persistence.typeconverters.InstantConverters

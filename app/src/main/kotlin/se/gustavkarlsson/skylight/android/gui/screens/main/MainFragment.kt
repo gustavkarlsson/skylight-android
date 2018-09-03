@@ -1,14 +1,14 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.OnLifecycleEvent
 import android.os.Bundle
-import android.support.annotation.StringRes
-import android.support.design.widget.Snackbar
-import android.support.v4.app.Fragment
 import android.view.*
+import androidx.annotation.StringRes
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
 import androidx.navigation.findNavController
+import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.visibility
 import com.jakewharton.rxbinding2.widget.text
@@ -21,6 +21,7 @@ import se.gustavkarlsson.skylight.android.extensions.appCompatActivity
 import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
 import se.gustavkarlsson.skylight.android.services.Analytics
 import timber.log.Timber
+
 
 class MainFragment : Fragment(), LifecycleObserver {
 

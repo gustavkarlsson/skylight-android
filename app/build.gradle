@@ -32,7 +32,7 @@ android {
 		targetSdkVersion project.target_sdk_version
 		versionCode 1
 		versionName "1.0"
-		testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 		multiDexEnabled true
 		// TODO https://developer.android.com/studio/build/multidex.html#dev-build
 	}
@@ -98,16 +98,16 @@ dependencies {
 	implementation project(":core")
 	implementation project(":background")
 
-	implementation "com.android.support:multidex:$multidex_version"
+	implementation "androidx.multidex:multidex:$multidex_version"
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-	implementation "com.android.support:appcompat-v7:$android_support_version"
-	implementation "com.android.support:design:$android_support_version"
-	implementation "com.android.support:support-fragment:$android_support_version"
-	implementation "com.android.support:support-annotations:$android_support_version"
-	implementation "com.android.support:preference-v7:$android_support_version"
-	implementation "com.android.support:preference-v14:$android_support_version"
-	implementation "com.android.support:cardview-v7:$android_support_version"
-	implementation "com.android.support.constraint:constraint-layout:$constraint_layout_version"
+	implementation "androidx.appcompat:appcompat:$android_support_version"
+	implementation "com.google.android.material:material:$android_support_version"
+	implementation "androidx.fragment:fragment:$android_support_version"
+	implementation "androidx.annotation:annotation:$android_support_version"
+	implementation "androidx.preference:preference:$android_support_version"
+	implementation "androidx.legacy:legacy-preference-v14:$android_support_version" // TODO Legacy?
+	implementation "androidx.cardview:cardview:$android_support_version"
+	implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
 	implementation "com.google.android.gms:play-services-location:$google_play_services_version"
 	implementation "com.google.android.gms:play-services-gcm:$google_play_services_version"
 
@@ -148,7 +148,7 @@ dependencies {
 	implementation "com.uber.autodispose:autodispose-android-archcomponents-kotlin:$autodispose_version"
 
 	// Lifecycle
-	implementation "android.arch.lifecycle:extensions:$arch_lifecycle_version"
+	implementation "androidx.lifecycle:lifecycle-extensions:$arch_lifecycle_version"
 
 	// Firebase
 	implementation "com.google.firebase:firebase-core:$firebase_version"
@@ -169,10 +169,10 @@ dependencies {
 	testImplementation "com.google.code.gson:gson:$gson_version"
 
 	// Instrumentation testing
-	androidTestImplementation "com.android.support:support-annotations:$android_support_version"
-	androidTestImplementation "com.android.support.test:runner:$android_support_test_version"
-	androidTestImplementation "com.android.support.test:rules:$android_support_test_version"
-	androidTestImplementation "com.android.support.test.espresso:espresso-core:$espresso_version"
+	androidTestImplementation "androidx.annotation:annotation:$android_support_version"
+	androidTestImplementation "androidx.test:runner:$android_support_test_version"
+	androidTestImplementation "androidx.test:rules:$android_support_test_version"
+	androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
 	androidTestImplementation "org.mockito:mockito-android:$mockito_version"
 	androidTestImplementation "com.nhaarman:mockito-kotlin-kt1.1:$mockito_kotlin_version", { exclude group: "org.jetbrains.kotlin" }
 	androidTestImplementation "commons-io:commons-io:$commons_io_version"
