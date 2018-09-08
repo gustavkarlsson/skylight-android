@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
-import android.support.test.filters.LargeTest
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.filters.LargeTest
+import androidx.test.runner.AndroidJUnit4
 import com.agoda.kakao.KView
 import org.junit.Before
 import org.junit.Rule

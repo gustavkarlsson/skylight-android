@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.test
 
 import android.content.Context
-import android.support.test.InstrumentationRegistry
+import androidx.test.InstrumentationRegistry
 import org.apache.commons.io.FileUtils
 
 fun getSharedPreferencesName() = getContext().packageName + "_preferences_test"

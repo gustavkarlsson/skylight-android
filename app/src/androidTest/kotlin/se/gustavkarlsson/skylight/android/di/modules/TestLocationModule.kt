@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.di.modules
 
+import android.Manifest
 import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
 import se.gustavkarlsson.skylight.android.entities.Location
@@ -28,6 +29,8 @@ class TestLocationModule(testLocationProvider: TestLocationProvider) : LocationM
 			.replay(1)
 			.refCount()
 	}
+
+	override val locationPermission = Manifest.permission.ACCESS_COARSE_LOCATION
 
 	companion object {
 		val POLLING_INTERVAL = 15.minutes
