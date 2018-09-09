@@ -6,7 +6,6 @@ import se.gustavkarlsson.skylight.android.di.modules.*
 import se.gustavkarlsson.skylight.android.gui.screens.googleplayservices.GooglePlayServicesViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.permission.PermissionViewModel
-import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.services.Analytics
 
 open class SkylightAppComponent(
@@ -99,7 +98,7 @@ open class SkylightAppComponent(
 	}
 
 	open val permissionModule: PermissionsModule by lazy {
-		RealPermissionModule(contextModule)
+		RealPermissionModule(contextModule, locationModule)
 	}
 
 	open val googlePlayServicesModule: GooglePlayServicesModule by lazy {
@@ -123,10 +122,6 @@ open class SkylightAppComponent(
 
 	final override val analytics: Analytics
 		get() = analyticsModule.analytics
-	final override val store: SkylightStore
-		get() = krateModule.store
-	final override val locationPermission: String
-		get() = locationModule.locationPermission
 
 	final override fun mainViewModel(fragment: Fragment): MainViewModel =
 		viewModelsModule.mainViewModel(fragment)

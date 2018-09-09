@@ -15,6 +15,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_permission.*
+import org.koin.android.ext.android.inject
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.appComponent
@@ -22,6 +23,8 @@ import se.gustavkarlsson.skylight.android.extensions.appCompatActivity
 import timber.log.Timber
 
 class PermissionFragment : Fragment(), LifecycleObserver {
+
+	private val locationPermission: String by inject("locationPermission")
 
 	// TODO Inject
 	private val rxPermissions: RxPermissions by lazy {
@@ -56,7 +59,7 @@ class PermissionFragment : Fragment(), LifecycleObserver {
 
 	private fun ensureLocationPermission() {
 		rxPermissions
-			.requestEach(appComponent.locationPermission)
+			.requestEach(locationPermission)
 			.autoDisposable(scope(Lifecycle.Event.ON_DESTROY))
 			.subscribe {
 				when {

@@ -10,17 +10,22 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.rxkotlin.addTo
 import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
 import se.gustavkarlsson.skylight.android.background.backgroundModule
 import se.gustavkarlsson.skylight.android.krate.BootstrapCommand
 import se.gustavkarlsson.skylight.android.krate.SettingsStreamCommand
+import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.util.CrashlyticsTree
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
 class Skylight : MultiDexApplication() {
+
 	private val disposables = CompositeDisposable()
+
+	private val store: SkylightStore by inject()
 
 	init {
 		instance = this
@@ -51,8 +56,8 @@ class Skylight : MultiDexApplication() {
 			)
 		) // TODO Add Timber logger for Koin
 		setupSettingsAnalytics()
-		appComponent.store.issue(BootstrapCommand)
-		appComponent.store.issue(SettingsStreamCommand(true))
+		store.issue(BootstrapCommand)
+		store.issue(SettingsStreamCommand(true))
 		scheduleBackgroundNotifications()
 	}
 
@@ -96,7 +101,7 @@ class Skylight : MultiDexApplication() {
 	}
 
 	private fun setupSettingsAnalytics() {
-		appComponent.store.states
+		store.states
 			.map { it.settings }
 			.distinctUntilChanged()
 			.subscribe {

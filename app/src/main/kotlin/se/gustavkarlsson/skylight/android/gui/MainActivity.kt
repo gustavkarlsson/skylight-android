@@ -10,14 +10,13 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
+import org.koin.android.ext.android.inject
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.appComponent
+import se.gustavkarlsson.skylight.android.krate.SkylightStore
 
 class MainActivity : AppCompatActivity(), LifecycleObserver {
 
-	private val store by lazy {
-		appComponent.store
-	}
+	private val store: SkylightStore by inject()
 
 	private val navController by lazy {
 		findNavController(R.id.mainNavHost)
