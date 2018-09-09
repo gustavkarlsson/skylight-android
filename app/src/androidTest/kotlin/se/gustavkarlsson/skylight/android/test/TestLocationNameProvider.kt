@@ -9,6 +9,6 @@ class TestLocationNameProvider(
 	var delegate: () -> Optional<String>
 ) : LocationNameProvider {
 	override fun get(location: Single<Optional<Location>>): Single<Optional<String>> {
-		return Single.fromCallable({ delegate() })
+		return Single.fromCallable { delegate() }
 	}
 }

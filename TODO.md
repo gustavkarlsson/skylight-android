@@ -1,14 +1,18 @@
 # TODO
 
 ## Soon
+* Fix bug where entering settings twice crashes
+* Add the thing that clears data between launches (check with Nick)
+* Integrate [EasyLauncher](https://github.com/akaita/easylauncher-gradle-plugin)
 * Make testing use other settings
 * Add instrumentation testing to CI
 * Add more tests
 * Fix notifications
+* TextRef?
+* Better Optional?
 
 ## Some day
-* Add intro screen
-* Add pretties detail screens
+* Add prettier detail screens
 * Add manual clearing of "notification sent"
 * Add more testing options (individual overrides for example)
 * Look into country changes while app running (Locale etc)
@@ -27,4 +31,3 @@
 * Widget
 * Instant app
 * Wear OS App, Tablet, Chrome OS, Leanback apps
-* Onboarding experience

@@ -7,26 +7,23 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.gui.MainActivity
 import se.gustavkarlsson.skylight.android.test.*
-import se.gustavkarlsson.skylight.android.testAppComponent
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class MainScreenTest {
+class MainScreenTest : KoinComponent {
 
 	@Rule
 	@JvmField
-	var testRule = ApplicationComponentActivityTestRule(MainActivity::class)
+	var testRule = ManualLaunchActivityTestRule(MainActivity::class)
 
-	private val testLocationProvider: TestLocationProvider by lazy {
-		testAppComponent.testLocationProvider
-	}
+	private val testLocationProvider: TestLocationProvider by inject()
 
-	private val testLocationNameProvider: TestLocationNameProvider by lazy {
-		testAppComponent.testLocationNameProvider
-	}
+	private val testLocationNameProvider: TestLocationNameProvider by inject()
 
 	private val screen = MainScreen()
 

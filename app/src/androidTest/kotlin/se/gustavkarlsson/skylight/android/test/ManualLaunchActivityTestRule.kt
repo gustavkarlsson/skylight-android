@@ -4,7 +4,7 @@ import android.app.Activity
 import androidx.test.rule.ActivityTestRule
 import kotlin.reflect.KClass
 
-class ApplicationComponentActivityTestRule<T : Activity>(
+class ManualLaunchActivityTestRule<T : Activity>(
     activityClass: KClass<T>,
 	initialTouchMode: Boolean = false,
 	launchActivity: Boolean = false
