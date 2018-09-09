@@ -1,7 +1,7 @@
 # TODO
 
 ## Soon
-* Fix bug where entering settings twice crashes
+* Add test for Koin
 * Add the thing that clears data between launches (check with Nick)
 * Integrate [EasyLauncher](https://github.com/akaita/easylauncher-gradle-plugin)
 * Make testing use other settings
