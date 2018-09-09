@@ -1,29 +1,29 @@
-package se.gustavkarlsson.skylight.android.di.modules
+package se.gustavkarlsson.skylight.android
 
 import io.reactivex.Flowable
+import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
+import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.GeomagLocationProviderImpl
 import se.gustavkarlsson.skylight.android.services_impl.streamables.GeomagLocationProviderStreamable
 
-class RealGeomagLocationModule(locationModule: LocationModule) : GeomagLocationModule {
+val geomagLocationModule = module {
 
-	override val geomagLocationProvider: GeomagLocationProvider by lazy {
+	single<GeomagLocationProvider> {
 		GeomagLocationProviderImpl()
 	}
 
-	private val geomagLocationStreamable: Streamable<GeomagLocation> by lazy {
-		GeomagLocationProviderStreamable(
-			locationModule.locationFlowable,
-			geomagLocationProvider,
-			5.seconds
-		)
+	single<Streamable<GeomagLocation>>("geomagLocation") {
+		val locations = get<Flowable<Location>>("location")
+		GeomagLocationProviderStreamable(locations, get(), 5.seconds)
 	}
 
-	override val geomagLocationFlowable: Flowable<GeomagLocation> by lazy {
-		geomagLocationStreamable.stream
+	single<Flowable<GeomagLocation>>("geomagLocation") {
+		get<Streamable<GeomagLocation>>("geomagLocation")
+			.stream
 			.replay(1)
 			.refCount()
 	}

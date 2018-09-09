@@ -9,7 +9,7 @@ import timber.log.Timber
 
 class RetrofittedKpIndexProvider(
 	private val api: KpIndexApi,
-	private val retryCount: Long = 5
+	private val retryCount: Long
 ) : KpIndexProvider {
 
 	override fun get(): Single<KpIndex> {

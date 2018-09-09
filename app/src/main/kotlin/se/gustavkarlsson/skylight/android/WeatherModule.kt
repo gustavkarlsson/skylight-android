@@ -1,11 +1,12 @@
-package se.gustavkarlsson.skylight.android.di.modules
+package se.gustavkarlsson.skylight.android
 
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
+import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import se.gustavkarlsson.skylight.android.BuildConfig
+import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.create
 import se.gustavkarlsson.skylight.android.extensions.minutes
@@ -16,33 +17,30 @@ import se.gustavkarlsson.skylight.android.services_impl.providers.RetrofittedOpe
 import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapApi
 import se.gustavkarlsson.skylight.android.services_impl.streamables.WeatherProviderStreamable
 
-class OpenWeatherMapWeatherModule(
-	locationModule: LocationModule,
-	apiUrl: String = "http://api.openweathermap.org/data/2.5/",
-	apiKey: String = BuildConfig.OPENWEATHERMAP_API_KEY
-) : WeatherModule {
+val weatherModule = module {
 
-	override val weatherProvider: WeatherProvider by lazy {
-		val api = Retrofit.Builder()
-			.baseUrl(apiUrl)
+	single<OpenWeatherMapApi> {
+		Retrofit.Builder()
+			.baseUrl("http://api.openweathermap.org/data/2.5/")
 			.addConverterFactory(GsonConverterFactory.create())
 			.addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
-			.build().create<OpenWeatherMapApi>()
-		RetrofittedOpenWeatherMapWeatherProvider(api, apiKey, 5)
+			.build().create()
 	}
 
-	private val weatherStreamable: Streamable<Weather> by lazy {
-		WeatherProviderStreamable(
-			locationModule.locationFlowable,
-			weatherProvider,
-			15.minutes,
-			10.seconds
-		)
+	single<WeatherProvider> {
+		RetrofittedOpenWeatherMapWeatherProvider(get(), BuildConfig.OPENWEATHERMAP_API_KEY, 5)
 	}
 
-	override val weatherFlowable: Flowable<Weather> by lazy {
-		weatherStreamable.stream
+	single<Streamable<Weather>>("weather") {
+		val locations = get<Flowable<Location>>("location")
+		WeatherProviderStreamable(locations, get(), 15.minutes, 10.seconds)
+	}
+
+	single<Flowable<Weather>>("weather") {
+		get<Streamable<Weather>>("weather")
+			.stream
 			.replay(1)
 			.refCount()
 	}
+
 }

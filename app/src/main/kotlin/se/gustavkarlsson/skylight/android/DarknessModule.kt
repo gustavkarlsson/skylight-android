@@ -1,7 +1,9 @@
-package se.gustavkarlsson.skylight.android.di.modules
+package se.gustavkarlsson.skylight.android
 
 import io.reactivex.Flowable
+import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.entities.Darkness
+import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.Streamable
@@ -9,25 +11,22 @@ import se.gustavkarlsson.skylight.android.services.providers.DarknessProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.KlausBrunnerDarknessProvider
 import se.gustavkarlsson.skylight.android.services_impl.streamables.DarknessProviderStreamable
 
-class KlausBrunnerDarknessModule(
-	timeModule: TimeModule,
-	locationModule: LocationModule
-) : DarknessModule {
+val darknessModule = module {
 
-	override val darknessProvider: DarknessProvider by lazy { KlausBrunnerDarknessProvider() }
-
-	private val darknessStreamable: Streamable<Darkness> by lazy {
-		DarknessProviderStreamable(
-			locationModule.locationFlowable,
-			darknessProvider,
-			timeModule.timeProvider,
-			1.minutes,
-			5.seconds
-		)
+	single<DarknessProvider> {
+		KlausBrunnerDarknessProvider()
 	}
-	override val darknessFlowable: Flowable<Darkness> by lazy {
-		darknessStreamable.stream
+
+	single<Streamable<Darkness>>("darkness") {
+		val locations = get<Flowable<Location>>("location")
+		DarknessProviderStreamable(locations, get(), get(), 1.minutes, 5.seconds)
+	}
+
+	single<Flowable<Darkness>>("darkness") {
+		get<Streamable<Darkness>>("darkness")
+			.stream
 			.replay(1)
 			.refCount()
 	}
+
 }

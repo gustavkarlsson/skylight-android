@@ -7,8 +7,6 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.delay
-import se.gustavkarlsson.skylight.android.extensions.minutes
-import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.WeatherProvider
 import timber.log.Timber
@@ -16,8 +14,8 @@ import timber.log.Timber
 class WeatherProviderStreamable(
 	locations: Flowable<Location>,
 	weatherProvider: WeatherProvider,
-	pollingInterval: Duration = 15.minutes,
-	retryDelay: Duration = 10.seconds
+	pollingInterval: Duration,
+	retryDelay: Duration
 ) : Streamable<Weather> {
 	override val stream: Flowable<Weather> = locations
 		.switchMap {

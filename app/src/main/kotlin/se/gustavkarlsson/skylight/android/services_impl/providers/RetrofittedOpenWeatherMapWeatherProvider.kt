@@ -9,10 +9,10 @@ import se.gustavkarlsson.skylight.android.services.providers.WeatherProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapApi
 import timber.log.Timber
 
-class RetrofittedOpenWeatherMapWeatherProvider constructor(
+class RetrofittedOpenWeatherMapWeatherProvider(
 	private val api: OpenWeatherMapApi,
 	private val appId: String,
-	private val retryCount: Long = 5
+	private val retryCount: Long
 ) : WeatherProvider {
 
 	override fun get(location: Single<Optional<Location>>): Single<Weather> {

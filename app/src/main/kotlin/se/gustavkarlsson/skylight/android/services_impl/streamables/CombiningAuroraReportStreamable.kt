@@ -15,7 +15,7 @@ class CombiningAuroraReportStreamable(
 	kpIndexes: Flowable<KpIndex>,
 	geomagLocations: Flowable<GeomagLocation>,
 	darknesses: Flowable<Darkness>,
-	visibilities: Flowable<Weather>
+	weathers: Flowable<Weather>
 ) : Streamable<AuroraReport> {
 
 	override val stream: Flowable<AuroraReport> =
@@ -24,7 +24,7 @@ class CombiningAuroraReportStreamable(
 			kpIndexes,
 			geomagLocations,
 			darknesses,
-			visibilities,
+			weathers,
 			Function5 { locationName: Optional<String>,
 						kpIndex: KpIndex,
 						geomagLocation: GeomagLocation,

@@ -2,10 +2,7 @@ package se.gustavkarlsson.skylight.android.di.components
 
 import android.app.Application
 import androidx.fragment.app.Fragment
-import se.gustavkarlsson.skylight.android.background.di.components.BackgroundComponent
-import se.gustavkarlsson.skylight.android.background.di.components.SkylightBackgroundComponent
 import se.gustavkarlsson.skylight.android.di.modules.*
-import se.gustavkarlsson.skylight.android.gui.MainActivity
 import se.gustavkarlsson.skylight.android.gui.screens.googleplayservices.GooglePlayServicesViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.permission.PermissionViewModel
@@ -139,16 +136,5 @@ open class SkylightAppComponent(
 
 	final override fun googlePlayServicesViewModel(fragment: Fragment): GooglePlayServicesViewModel =
 		viewModelsModule.googlePlayServicesViewModel(fragment)
-
-	final override val backgroundComponent: BackgroundComponent by lazy {
-		SkylightBackgroundComponent(
-			contextModule,
-			formattingModule,
-			evaluationModule,
-			krateModule,
-			timeModule,
-			MainActivity::class.java
-		)
-	}
 
 }

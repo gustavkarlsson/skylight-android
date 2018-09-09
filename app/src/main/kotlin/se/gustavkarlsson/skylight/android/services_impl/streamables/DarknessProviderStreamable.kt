@@ -9,21 +9,20 @@ import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.extensions.delay
-import se.gustavkarlsson.skylight.android.extensions.minutes
-import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.DarknessProvider
+import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
 import timber.log.Timber
 
 class DarknessProviderStreamable(
 	locations: Flowable<Location>,
 	darknessProvider: DarknessProvider,
-	now: Single<Instant>,
-	pollingInterval: Duration = 1.minutes,
-	retryDelay: Duration = 5.seconds
+	timeProvider: TimeProvider,
+	pollingInterval: Duration,
+	retryDelay: Duration
 ) : Streamable<Darkness> {
 
-	private val timeUpdates: Flowable<Instant> = now
+	private val timeUpdates: Flowable<Instant> = timeProvider.getTime()
 		.repeatWhen { it.delay(pollingInterval) }
 
 	override val stream: Flowable<Darkness> =
