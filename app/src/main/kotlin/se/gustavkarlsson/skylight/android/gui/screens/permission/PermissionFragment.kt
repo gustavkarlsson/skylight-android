@@ -16,9 +16,9 @@ import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_permission.*
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.extensions.appCompatActivity
 import timber.log.Timber
 
@@ -31,9 +31,7 @@ class PermissionFragment : Fragment(), LifecycleObserver {
 		RxPermissions(requireActivity()).apply { setLogging(BuildConfig.DEBUG) }
 	}
 
-	private val viewModel: PermissionViewModel by lazy {
-		appComponent.permissionViewModel(this)
-	}
+	private val viewModel: PermissionViewModel by viewModel()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)

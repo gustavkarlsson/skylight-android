@@ -15,8 +15,8 @@ import com.jakewharton.rxbinding2.widget.text
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_main.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.extensions.appCompatActivity
 import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
 import se.gustavkarlsson.skylight.android.services.Analytics
@@ -29,9 +29,7 @@ class MainFragment : Fragment(), LifecycleObserver {
 	private var errorSnackbar: Snackbar? = null
 	private var currentBottomSheetTitle: Int? = null
 
-	private val viewModel: MainViewModel by lazy {
-		appComponent.mainViewModel(this)
-	}
+	private val viewModel: MainViewModel by viewModel()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)

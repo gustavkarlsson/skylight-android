@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.gui.screens.main
 import androidx.lifecycle.ViewModel
 import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import org.threeten.bp.Duration
@@ -12,10 +11,14 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.seconds
-import se.gustavkarlsson.skylight.android.krate.*
+import se.gustavkarlsson.skylight.android.krate.AuroraReportStreamCommand
+import se.gustavkarlsson.skylight.android.krate.GetAuroraReportCommand
+import se.gustavkarlsson.skylight.android.krate.SkylightState
+import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
+import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 
 class MainViewModel(
@@ -33,7 +36,7 @@ class MainViewModel(
 	kpIndexFormatter: SingleValueFormatter<KpIndex>,
 	weatherChanceEvaluator: ChanceEvaluator<Weather>,
 	weatherFormatter: SingleValueFormatter<Weather>,
-	now: Single<Instant>,
+	timeProvider: TimeProvider,
 	nowTextThreshold: Duration
 ) : ViewModel() {
 
@@ -96,7 +99,7 @@ class MainViewModel(
 				.observeOn(AndroidSchedulers.mainThread())
 		}
 		.map {
-			relativeTimeFormatter.format(it, now.blockingGet(), nowTextThreshold)
+			relativeTimeFormatter.format(it, timeProvider.getTime().blockingGet(), nowTextThreshold)
 		}
 		.distinctUntilChanged()
 

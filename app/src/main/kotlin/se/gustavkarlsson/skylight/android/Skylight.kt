@@ -12,7 +12,6 @@ import io.reactivex.rxkotlin.addTo
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
-import se.gustavkarlsson.skylight.android.background.backgroundModule
 import se.gustavkarlsson.skylight.android.krate.BootstrapCommand
 import se.gustavkarlsson.skylight.android.krate.SettingsStreamCommand
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
@@ -34,40 +33,17 @@ class Skylight : MultiDexApplication() {
 	override fun onCreate() {
 		super.onCreate()
 		if (LeakCanary.isInAnalyzerProcess(this)) return
-		bootstrap()
-		startKoin(
-			this,
-			listOf(
-				settingsModule,
-				backgroundModule,
-				connectivityModule,
-				krateModule,
-				runVersionsModule,
-				googlePlayServicesModule,
-				permissionsModule,
-				auroraReportModule,
-				timeModule,
-				locationModule,
-				locationNameModule,
-				darknessModule,
-				geomagLocationModule,
-				kpIndexModule,
-				weatherModule
-			)
-		) // TODO Add Timber logger for Koin
+		LeakCanary.install(this)
+		initCrashReporting()
+		initLogging()
+		AndroidThreeTen.init(this)
+		initRxJavaErrorHandling()
+		startKoin(this, modules) // TODO Add Timber logger for Koin
+		initAnalytics()
 		setupSettingsAnalytics()
 		store.issue(BootstrapCommand)
 		store.issue(SettingsStreamCommand(true))
 		scheduleBackgroundNotifications()
-	}
-
-	private fun bootstrap() {
-		LeakCanary.install(this)
-		initCrashReporting()
-		initLogging()
-		initAnalytics()
-		AndroidThreeTen.init(this)
-		initRxJavaErrorHandling()
 	}
 
 	private fun initCrashReporting() {
@@ -85,7 +61,7 @@ class Skylight : MultiDexApplication() {
 	}
 
 	private fun initAnalytics() {
-		Analytics.instance = appComponent.analytics
+		Analytics.instance = get()
 	}
 
 	private fun initRxJavaErrorHandling() {

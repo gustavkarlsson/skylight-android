@@ -13,15 +13,13 @@ import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_google_play_services.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.extensions.appCompatActivity
 
 class GooglePlayServicesFragment : Fragment(), LifecycleObserver {
 
-	private val viewModel: GooglePlayServicesViewModel by lazy {
-		appComponent.googlePlayServicesViewModel(this)
-	}
+	private val viewModel: GooglePlayServicesViewModel by viewModel()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
