@@ -2,15 +2,14 @@ package se.gustavkarlsson.skylight.android.services_impl.streamables
 
 import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
-import io.reactivex.Single
 import io.reactivex.functions.Function5
-import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.services.Streamable
+import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
 import timber.log.Timber
 
 class CombiningAuroraReportStreamable(
-	now: Single<Instant>,
+	timeProvider: TimeProvider,
 	locationNames: Flowable<Optional<String>>,
 	kpIndexes: Flowable<KpIndex>,
 	geomagLocations: Flowable<GeomagLocation>,
@@ -31,7 +30,7 @@ class CombiningAuroraReportStreamable(
 						darkness: Darkness,
 						weather: Weather ->
 				val factors = AuroraFactors(kpIndex, geomagLocation, darkness, weather)
-				AuroraReport(now.blockingGet(), locationName.orNull(), factors)
+				AuroraReport(timeProvider.getTime().blockingGet(), locationName.orNull(), factors)
 			})
 			.doOnNext { Timber.i("Streamed aurora report: %s", it) }
 }

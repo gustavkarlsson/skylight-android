@@ -7,13 +7,13 @@ import se.gustavkarlsson.skylight.android.extensions.until
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
 
 class DateUtilsRelativeTimeFormatter(
-	private val rightNowText: () -> CharSequence
+	private val rightNowText: CharSequence
 ) : RelativeTimeFormatter {
 	override fun format(time: Instant, now: Instant, minResolution: Duration): CharSequence {
 		require(!minResolution.isNegative) { "minResolution is negative: $minResolution" }
 		return when {
 			time.isCloseTo(now, minResolution) -> {
-				rightNowText()
+				rightNowText
 			}
 			else -> {
 				val timeMillis = time.toEpochMilli()

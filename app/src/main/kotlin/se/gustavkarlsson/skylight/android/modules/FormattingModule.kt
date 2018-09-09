@@ -11,7 +11,8 @@ import se.gustavkarlsson.skylight.android.services_impl.formatters.*
 val formattingModule = module {
 
 	single<RelativeTimeFormatter> {
-		DateUtilsRelativeTimeFormatter { get<Context>().getString(R.string.right_now) }
+		val rightNowText = get<Context>().getString(R.string.right_now)
+		DateUtilsRelativeTimeFormatter(rightNowText)
 	}
 
 	single<SingleValueFormatter<Darkness>>("darkness") {

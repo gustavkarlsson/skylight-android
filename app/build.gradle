@@ -2,6 +2,7 @@ apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 apply plugin: "kotlin-android-extensions"
 apply plugin: "io.fabric"
+apply plugin: "com.akaita.android.easylauncher"
 
 android {
 	compileSdkVersion project.compilesdk_version
@@ -77,20 +78,16 @@ android {
 	applicationVariants.all { variant ->
 		def appName = "Skylight"
 
-		if (variant.flavorName != "production") {
-			appName += " ${variant.flavorName.capitalize()}"
-		}
-
-		if (variant.buildType.name != "release") {
-			appName += " (${variant.buildType.name.capitalize()})"
+		if (variant.buildType.name != "release" || variant.flavorName != "production") {
+			appName += " (${variant.flavorName}${variant.buildType.name.capitalize()})"
 		}
 
 		resValue "string", "app_name", appName
 	}
 
-	productFlavors.each { flavor ->
+	applicationVariants.all {
 		def openWeatherMapApiKey = project.findProperty("openweathermap_api_key") ?: "openweathermap_api_key_not_set"
-		flavor.buildConfigField "String", "OPENWEATHERMAP_API_KEY", "\"$openWeatherMapApiKey\""
+		resValue "string", "openweathermap_api_key", openWeatherMapApiKey
 	}
 }
 

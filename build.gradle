@@ -5,7 +5,7 @@ buildscript {
 		target_sdk_version = 28
 		build_tools_version = "28.0.2"
 
-		kotlin_version = "1.2.60"
+		kotlin_version = "1.2.61"
 		krate_version = "1.0.0"
 		retrofit_version = "2.3.0"
 		multidex_version = "2.0.0"
@@ -40,6 +40,7 @@ buildscript {
 		navigation_version = "1.0.0-alpha05"
 		ktx_navigation_ui_version = "1.0.0-alpha05"
 		koin_version = "1.0.0-RC-2"
+		easylauncher_version = "1.2.0"
 		// Test
 		junit_version = "4.12"
 		assertk_version = "0.10"
@@ -62,6 +63,7 @@ buildscript {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 		classpath "com.google.gms:google-services:$google_services_version"
 		classpath "io.fabric.tools:gradle:$fabric_version"
+		classpath "com.akaita.android:easylauncher:$easylauncher_version"
 	}
 }
 

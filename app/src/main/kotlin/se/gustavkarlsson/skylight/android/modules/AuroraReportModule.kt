@@ -28,7 +28,7 @@ val auroraReportModule = module {
 		val darknesses = get<Flowable<Darkness>>("darkness")
 		val weathers = get<Flowable<Weather>>("weather")
 		CombiningAuroraReportStreamable(
-			timeProvider.getTime(),
+			timeProvider,
 			locationNames,
 			kpIndexes,
 			geomagLocations,

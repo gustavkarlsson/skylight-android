@@ -1,9 +1,9 @@
 # TODO
 
 ## Soon
-* Add test for Koin
+* Fix navigation animations
+* Add test to verify Koin setup
 * Add the thing that clears data between launches (check with Nick)
-* Integrate [EasyLauncher](https://github.com/akaita/easylauncher-gradle-plugin)
 * Make testing use other settings
 * Add instrumentation testing to CI
 * Add more tests
