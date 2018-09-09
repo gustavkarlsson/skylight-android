@@ -1,6 +1,7 @@
 # TODO
 
 ## Soon
+* Fix crash when navigating to and from settings twice
 * Fix navigation animations
 * Add test to verify Koin setup
 * Add the thing that clears data between launches (check with Nick)

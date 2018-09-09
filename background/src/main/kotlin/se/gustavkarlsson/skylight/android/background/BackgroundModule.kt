@@ -17,6 +17,7 @@ import se.gustavkarlsson.skylight.android.background.scheduling.UpdateJob
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.krate.SkylightState
+import se.gustavkarlsson.skylight.android.krate.SkylightStore
 
 val backgroundModule = module {
 
@@ -29,7 +30,7 @@ val backgroundModule = module {
 	}
 
 	single<Notifier<AuroraReport>> {
-		AuroraReportNotifier(get(), get(), get(), get(), get())
+		AuroraReportNotifier(get(), get(), get("chanceLevel"), get("auroraReport"), get("activity"))
 	}
 
 	single<AuroraReportNotificationDecider> {
@@ -43,11 +44,17 @@ val backgroundModule = module {
 	}
 
 	single<Completable>("initiateJobManager") {
+		val context = get<Context>()
+		val store = get<SkylightStore>()
+		val decider = get<AuroraReportNotificationDecider>()
+		val notifier = get<Notifier<AuroraReport>>()
 		Completable.fromCallable {
-			JobManager.create(get()).run {
+			JobManager.create(context).run {
 				addJobCreator { tag ->
 					when (tag) {
-						UpdateJob.UPDATE_JOB_TAG -> UpdateJob(get(), get(), get())
+						UpdateJob.UPDATE_JOB_TAG -> {
+							UpdateJob(store, decider, notifier)
+						}
 						else -> null
 					}
 				}
@@ -58,14 +65,15 @@ val backgroundModule = module {
 	single<Scheduler> { GetLatestAuroraReportScheduler(20.minutes, 10.minutes) }
 
 	single<Flowable<*>>("scheduleBasedOnSettings") {
+		val scheduler = get<Scheduler>()
 		get<Flowable<SkylightState>>("state")
 			.map { it.settings.notificationsEnabled }
 			.distinctUntilChanged()
 			.doOnNext { enable ->
 				if (enable) {
-					get<Scheduler>().schedule()
+					scheduler.schedule()
 				} else {
-					get<Scheduler>().unschedule()
+					scheduler.unschedule()
 				}
 			}
 	}

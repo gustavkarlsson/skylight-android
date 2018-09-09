@@ -23,5 +23,6 @@ val modules = listOf(
 	evaluationModule,
 	formattingModule,
 	localizationModule,
-	analyticsModule
+	analyticsModule,
+	activityModule
 ) + extraModules

@@ -23,7 +23,7 @@ val weatherModule = module {
 
 	single<OpenWeatherMapApi> {
 		Retrofit.Builder()
-			.baseUrl("http://api.openweathermap.org/data/2.5/")
+			.baseUrl("https://api.openweathermap.org/data/2.5/")
 			.addConverterFactory(GsonConverterFactory.create())
 			.addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
 			.build().create()
