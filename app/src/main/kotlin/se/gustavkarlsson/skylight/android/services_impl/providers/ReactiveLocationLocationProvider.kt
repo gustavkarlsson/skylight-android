@@ -7,14 +7,13 @@ import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.Duration
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import se.gustavkarlsson.skylight.android.entities.Location
-import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class ReactiveLocationLocationProvider(
 	private val reactiveLocationProvider: ReactiveLocationProvider,
-	private val timeout: Duration = 5.seconds
+	private val timeout: Duration
 ) : LocationProvider {
 
 	@SuppressLint("MissingPermission")

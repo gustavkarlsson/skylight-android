@@ -6,7 +6,6 @@ import io.reactivex.Single
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.extensions.delay
-import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
 import timber.log.Timber
@@ -14,7 +13,7 @@ import timber.log.Timber
 class LocationNameProviderStreamable(
 	locations: Flowable<Location>,
 	locationNameProvider: LocationNameProvider,
-	retryDelay: Duration = 10.seconds
+	retryDelay: Duration
 ) : Streamable<Optional<String>> {
 	override val stream: Flowable<Optional<String>> = locations
 		.switchMap {

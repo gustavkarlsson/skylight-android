@@ -4,6 +4,7 @@ import android.location.Geocoder
 import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
 import org.koin.dsl.module.module
+import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.GeocoderLocationNameProvider
@@ -17,7 +18,7 @@ val locationNameModule = module {
 	}
 
 	single<Streamable<Optional<String>>>("locationName") {
-		LocationNameProviderStreamable(get("location"), get())
+		LocationNameProviderStreamable(get("location"), get(), 10.seconds)
 	}
 
 	single<Flowable<Optional<String>>>("locationName") {

@@ -5,6 +5,8 @@ import io.reactivex.Flowable
 import org.koin.dsl.module.module
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.extensions.minutes
+import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.ReactiveLocationLocationProvider
@@ -17,11 +19,11 @@ val locationModule = module {
 	}
 
 	single<LocationProvider> {
-		ReactiveLocationLocationProvider(get())
+		ReactiveLocationLocationProvider(get(), 5.seconds)
 	}
 
 	single<Streamable<Location>>("location") {
-		ReactiveLocationProviderStreamable(get())
+		ReactiveLocationProviderStreamable(get(), 15.minutes, 1.minutes)
 	}
 
 	single<Flowable<Location>>("location") {

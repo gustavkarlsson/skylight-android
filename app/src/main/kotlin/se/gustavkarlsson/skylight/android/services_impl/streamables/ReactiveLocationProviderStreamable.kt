@@ -10,14 +10,13 @@ import org.threeten.bp.Duration
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.extensions.delay
-import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.services.Streamable
 import timber.log.Timber
 
 class ReactiveLocationProviderStreamable(
 	reactiveLocationProvider: ReactiveLocationProvider,
-	pollingInterval: Duration = 15.minutes,
-	retryDelay: Duration = 1.minutes
+	pollingInterval: Duration,
+	retryDelay: Duration
 ) : Streamable<Location> {
 	private val locationRequest = LocationRequest().apply {
 		priority = PRIORITY_LOW_POWER
