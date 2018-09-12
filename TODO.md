@@ -1,28 +1,28 @@
 # TODO
 
 ## Soon
+* Fix notifications
 * Fix crash when navigating to and from settings twice
 * Fix navigation animations
 * Add test to verify Koin setup
-* Add the thing that clears data between launches (check with Nick)
 * Make testing use other settings
 * Add instrumentation testing to CI
 * Add more tests
-* Fix notifications
 * TextRef?
 * Better Optional?
 
 ## Some day
+* Add the thing that clears data between launches (check with Nick)
 * Add prettier detail screens
-* Add manual clearing of "notification sent"
+* Add more KTX
+* Firebase performance monitoring
+* Add manual clearing of "notification sent" in develop mode
 * Add more testing options (individual overrides for example)
 * Look into country changes while app running (Locale etc)
 * Automate release in CI (Gradle release plugin? Fastlane? Automatic version management?)
 * Additional analytics(Failed remote calls, Notifications on/off, Manually started app, Started app from notification, denied location permission, no Google Play Services installed, first start)
 * Add performance traces
-* Firebase performance monitoring
 * Integrate code coverage (Coveralls or Codecov)
-* Add more KTX
 * Look into using Spek (problems with junit5 and android)
 * Look into replacing evernote-job with WorkManager (difficult since it's hard to post results)
 
