@@ -5,6 +5,7 @@ import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.minutes
+import se.gustavkarlsson.skylight.android.gui.screens.about.AboutViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.googleplayservices.GooglePlayServicesViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.permission.PermissionViewModel
@@ -39,6 +40,10 @@ val viewModelModule = module {
 
 	viewModel {
 		GooglePlayServicesViewModel(get())
+	}
+
+	viewModel {
+		AboutViewModel()
 	}
 
 }

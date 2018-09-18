@@ -7,4 +7,30 @@
 	android:padding="@dimen/screen_margin"
 	tools:context=".gui.MainActivity">
 
+	<TextView
+		android:id="@+id/appByTextView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		tools:text="App By: Gustav Karlsson" />
+
+	<TextView
+		android:id="@+id/versionTextView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/appByTextView"
+		tools:text="Version: x.y.z (2)" />
+
+	<TextView
+		android:id="@+id/branchTextView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/versionTextView"
+		tools:text="Branch: gt4h2389t0g2h8" />
 </androidx.constraintlayout.widget.ConstraintLayout>

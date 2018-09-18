@@ -4,6 +4,7 @@
 	<string name="exit">Exit</string>
 	<string name="main_your_location">Your Location</string>
 	<string name="right_now">Right now</string>
+	<string name="author" translatable="false">Gustav Karlsson</string>
 
 	<!-- Menu -->
 	<string name="menu_settings">Settings</string>
@@ -43,4 +44,9 @@
 	<string name="google_play_services_desc">Skylight needs Google Play Services to work.
 	</string>
 	<string name="google_play_services_install">Install</string>
+
+	<!-- About -->
+	<string name="appBy">App By: %s</string>
+	<string name="branch">Branch: %s</string>
+	<string name="version">Version: %s (%d)</string>
 </resources>

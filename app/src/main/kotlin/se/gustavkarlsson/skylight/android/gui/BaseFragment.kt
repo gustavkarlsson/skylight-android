@@ -29,5 +29,12 @@ abstract class BaseFragment(
 		savedInstanceState: Bundle?
 	): View? = inflater.inflate(layoutId, container, false)
 
-	protected abstract fun bindData(scope: LifecycleScopeProvider<*>)
+	override fun onViewStateRestored(savedInstanceState: Bundle?) {
+		super.onViewStateRestored(savedInstanceState)
+		initView()
+	}
+
+	protected open fun initView() = Unit
+
+	protected open fun bindData(scope: LifecycleScopeProvider<*>) = Unit
 }
