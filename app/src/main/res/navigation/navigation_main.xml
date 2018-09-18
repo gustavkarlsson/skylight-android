@@ -12,11 +12,20 @@
 			app:destination="@id/settingsFragment"
 			app:enterAnim="@anim/nav_default_enter_anim"
 			app:popEnterAnim="@anim/nav_default_pop_enter_anim" />
+		<action
+			android:id="@+id/action_mainFragment_to_aboutFragment"
+			app:destination="@id/aboutFragment"
+			app:enterAnim="@anim/nav_default_enter_anim"
+			app:popEnterAnim="@anim/nav_default_pop_enter_anim" />
 	</fragment>
 
 	<fragment
 		android:id="@+id/introFragment"
 		android:name="se.gustavkarlsson.skylight.android.gui.screens.intro.IntroFragment" />
+
+	<fragment
+		android:id="@+id/aboutFragment"
+		android:name="se.gustavkarlsson.skylight.android.gui.screens.about.AboutFragment" />
 
 	<fragment
 		android:id="@+id/googlePlayServicesFragment"

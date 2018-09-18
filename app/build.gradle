@@ -4,6 +4,9 @@ apply plugin: "kotlin-android-extensions"
 apply plugin: "io.fabric"
 apply plugin: "com.akaita.android.easylauncher"
 
+import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.lib.RepositoryBuilder
+
 android {
 	compileSdkVersion project.compilesdk_version
 	buildToolsVersion project.build_tools_version
@@ -85,9 +88,25 @@ android {
 		resValue "string", "app_name", appName
 	}
 
-	applicationVariants.all {
+	productFlavors.each { flavor ->
+		def repo = new RepositoryBuilder()
+			.setGitDir(new File(project.rootDir, "/.git"))
+			.readEnvironment()
+			.build()
+		def head = repo.getRef("HEAD")
+		def gitBranch = new Git(repo).branchList()
+			.call()
+			.find {
+			it.objectId == head.objectId
+		}?.name?.replaceAll(".*/", "") ?: "None"
+		def gitSha1 = head.objectId.name
+		def buildTime = System.currentTimeMillis()
 		def openWeatherMapApiKey = project.findProperty("openweathermap_api_key") ?: "openweathermap_api_key_not_set"
-		resValue "string", "openweathermap_api_key", openWeatherMapApiKey
+
+		flavor.buildConfigField "String", "GIT_BRANCH", "\"$gitBranch\""
+		flavor.buildConfigField "String", "GIT_SHA1", "\"$gitSha1\""
+		flavor.buildConfigField "long", "BUILD_TIME_MILLIS", "${buildTime}L"
+		flavor.buildConfigField "String", "OPENWEATHERMAP_API_KEY", "\"$openWeatherMapApiKey\""
 	}
 }
 

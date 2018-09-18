@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.gui.screens.intro
+package se.gustavkarlsson.skylight.android.gui.screens.about
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,20 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import com.jakewharton.rxbinding2.view.clicks
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.kotlin.autoDisposable
-import kotlinx.android.synthetic.main.fragment_intro.*
-import org.koin.android.ext.android.inject
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.appCompatActivity
-import se.gustavkarlsson.skylight.android.krate.SignalFirstRunCompleted
-import se.gustavkarlsson.skylight.android.krate.SkylightStore
 
-class IntroFragment : Fragment(), LifecycleObserver {
-
-	// TODO Move to ViewModel
-	private val store: SkylightStore by inject()
+class AboutFragment : Fragment(), LifecycleObserver {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -37,15 +27,11 @@ class IntroFragment : Fragment(), LifecycleObserver {
 		inflater: LayoutInflater,
 		container: ViewGroup?,
 		savedInstanceState: Bundle?
-	): View? = inflater.inflate(R.layout.fragment_intro, container, false)
+	): View? = inflater.inflate(R.layout.fragment_about, container, false)
 
 	@OnLifecycleEvent(Lifecycle.Event.ON_START)
 	private fun bindData() {
-		nextButton.clicks()
-			.autoDisposable(scope(Lifecycle.Event.ON_STOP))
-			.subscribe {
-				store.issue(SignalFirstRunCompleted)
-			}
+
 	}
 
 	override fun onDestroy() {

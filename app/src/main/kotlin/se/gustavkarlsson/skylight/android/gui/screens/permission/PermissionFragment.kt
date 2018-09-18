@@ -35,8 +35,12 @@ class PermissionFragment : Fragment(), LifecycleObserver {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		appCompatActivity!!.supportActionBar!!.hide()
 		lifecycle.addObserver(this)
+	}
+
+	override fun onStart() {
+		super.onStart()
+		appCompatActivity!!.supportActionBar!!.hide()
 	}
 
 	override fun onCreateView(
@@ -97,7 +101,7 @@ class PermissionFragment : Fragment(), LifecycleObserver {
 	}
 
 	override fun onDestroy() {
-		super.onDestroy()
 		lifecycle.removeObserver(this)
+		super.onDestroy()
 	}
 }

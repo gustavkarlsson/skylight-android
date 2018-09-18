@@ -33,9 +33,13 @@ class MainFragment : Fragment(), LifecycleObserver {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		appCompatActivity!!.supportActionBar!!.show()
 		setHasOptionsMenu(true)
 		lifecycle.addObserver(this)
+	}
+
+	override fun onStart() {
+		super.onStart()
+		appCompatActivity!!.supportActionBar!!.show()
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -46,6 +50,10 @@ class MainFragment : Fragment(), LifecycleObserver {
 		return when (item.itemId) {
 			R.id.action_settings -> {
 				view?.findNavController()?.navigate(R.id.action_mainFragment_to_settingsFragment)
+				true
+			}
+			R.id.action_about -> {
+				view?.findNavController()?.navigate(R.id.action_mainFragment_to_aboutFragment)
 				true
 			}
 			else -> super.onOptionsItemSelected(item)
@@ -184,9 +192,9 @@ class MainFragment : Fragment(), LifecycleObserver {
 	}
 
 	override fun onDestroy() {
-		super.onDestroy()
 		connectivitySnackbar?.dismiss()
 		errorSnackbar?.dismiss()
 		lifecycle.removeObserver(this)
+		super.onDestroy()
 	}
 }

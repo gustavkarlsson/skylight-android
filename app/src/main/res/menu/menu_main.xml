@@ -9,4 +9,9 @@
 		android:title="@string/menu_settings"
 		android:icon="@drawable/ic_settings_white_24dp"
 		app:showAsAction="ifRoom"/>
+	<item
+		android:id="@+id/action_about"
+		android:orderInCategory="2"
+		android:title="@string/menu_about"
+		app:showAsAction="never"/>
 </menu>

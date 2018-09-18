@@ -1,13 +1,12 @@
 package se.gustavkarlsson.skylight.android.modules
 
-import android.content.Context
 import io.reactivex.Flowable
 import io.reactivex.schedulers.Schedulers
 import org.koin.dsl.module.module
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.create
@@ -32,7 +31,7 @@ val weatherModule = module {
 	single<WeatherProvider> {
 		RetrofittedOpenWeatherMapWeatherProvider(
 			get(),
-			get<Context>().getString(R.string.openweathermap_api_key),
+			BuildConfig.OPENWEATHERMAP_API_KEY,
 			5
 		)
 	}
