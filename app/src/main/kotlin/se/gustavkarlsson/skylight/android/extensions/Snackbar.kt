@@ -12,6 +12,7 @@ fun showErrorSnackbar(view: View, message: CharSequence, length: Int): Snackbar 
 	return Snackbar.make(view, message, length)
 		.setErrorColor()
 		.disableSwipeToDismiss()
+		.apply { show() }
 }
 
 fun showErrorSnackbar(view: View, @StringRes message: Int, length: Int): Snackbar {

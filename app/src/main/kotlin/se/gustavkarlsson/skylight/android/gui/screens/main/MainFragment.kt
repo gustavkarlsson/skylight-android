@@ -1,29 +1,26 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
 import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.visibility
 import com.jakewharton.rxbinding2.widget.text
-import com.uber.autodispose.android.lifecycle.scope
+import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.extensions.appCompatActivity
 import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
+import se.gustavkarlsson.skylight.android.gui.BaseFragment
 import se.gustavkarlsson.skylight.android.services.Analytics
 import timber.log.Timber
 
-
-class MainFragment : Fragment(), LifecycleObserver {
+class MainFragment : BaseFragment(R.layout.fragment_main, true) {
 
 	private var connectivitySnackbar: Snackbar? = null
 	private var errorSnackbar: Snackbar? = null
@@ -34,12 +31,6 @@ class MainFragment : Fragment(), LifecycleObserver {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setHasOptionsMenu(true)
-		lifecycle.addObserver(this)
-	}
-
-	override fun onStart() {
-		super.onStart()
-		appCompatActivity!!.supportActionBar!!.show()
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -60,15 +51,7 @@ class MainFragment : Fragment(), LifecycleObserver {
 		}
 	}
 
-	override fun onCreateView(
-		inflater: LayoutInflater,
-		container: ViewGroup?,
-		savedInstanceState: Bundle?
-	): View? = inflater.inflate(R.layout.fragment_main, container, false)
-
-	@OnLifecycleEvent(Lifecycle.Event.ON_START)
-	private fun bindData() {
-		val scope = scope(Lifecycle.Event.ON_STOP)
+	override fun bindData(scope: LifecycleScopeProvider<*>) {
 		swipeRefreshLayout.refreshes()
 			.doOnNext {
 				Timber.i("Triggering refresh")
@@ -112,7 +95,7 @@ class MainFragment : Fragment(), LifecycleObserver {
 					Timber.d("Showing connectivity message: %s", it)
 					view?.let { view ->
 						connectivitySnackbar =
-							showErrorSnackbar(view, it, Snackbar.LENGTH_INDEFINITE).apply { show() }
+							showErrorSnackbar(view, it, Snackbar.LENGTH_INDEFINITE)
 					}
 				}
 			}
@@ -163,19 +146,31 @@ class MainFragment : Fragment(), LifecycleObserver {
 	}
 
 	private fun showKpIndexDetails() {
-		showFactorBottomSheetDialogFragment(R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc)
+		showFactorBottomSheetDialogFragment(
+			R.string.factor_kp_index_title_full,
+			R.string.factor_kp_index_desc
+		)
 	}
 
 	private fun showGeomagLocationDetails() {
-		showFactorBottomSheetDialogFragment(R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc)
+		showFactorBottomSheetDialogFragment(
+			R.string.factor_geomag_location_title_full,
+			R.string.factor_geomag_location_desc
+		)
 	}
 
 	private fun showWeatherDetails() {
-		showFactorBottomSheetDialogFragment(R.string.factor_weather_title_full, R.string.factor_weather_desc)
+		showFactorBottomSheetDialogFragment(
+			R.string.factor_weather_title_full,
+			R.string.factor_weather_desc
+		)
 	}
 
 	private fun showDarknessDetails() {
-		showFactorBottomSheetDialogFragment(R.string.factor_darkness_title_full, R.string.factor_darkness_desc)
+		showFactorBottomSheetDialogFragment(
+			R.string.factor_darkness_title_full,
+			R.string.factor_darkness_desc
+		)
 	}
 
 	private fun showFactorBottomSheetDialogFragment(@StringRes title: Int, @StringRes description: Int) {
@@ -194,7 +189,6 @@ class MainFragment : Fragment(), LifecycleObserver {
 	override fun onDestroy() {
 		connectivitySnackbar?.dismiss()
 		errorSnackbar?.dismiss()
-		lifecycle.removeObserver(this)
 		super.onDestroy()
 	}
 }

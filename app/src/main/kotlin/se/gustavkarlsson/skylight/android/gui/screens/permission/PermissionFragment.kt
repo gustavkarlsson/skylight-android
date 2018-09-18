@@ -1,17 +1,11 @@
 package se.gustavkarlsson.skylight.android.gui.screens.permission
 
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
 import com.jakewharton.rxbinding2.view.clicks
 import com.tbruyelle.rxpermissions2.RxPermissions
+import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_permission.*
@@ -19,10 +13,10 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.extensions.appCompatActivity
+import se.gustavkarlsson.skylight.android.gui.BaseFragment
 import timber.log.Timber
 
-class PermissionFragment : Fragment(), LifecycleObserver {
+class PermissionFragment : BaseFragment(R.layout.fragment_permission, false) {
 
 	private val locationPermission: String by inject("locationPermission")
 
@@ -33,27 +27,9 @@ class PermissionFragment : Fragment(), LifecycleObserver {
 
 	private val viewModel: PermissionViewModel by viewModel()
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		lifecycle.addObserver(this)
-	}
-
-	override fun onStart() {
-		super.onStart()
-		appCompatActivity!!.supportActionBar!!.hide()
-	}
-
-	override fun onCreateView(
-		inflater: LayoutInflater,
-		container: ViewGroup?,
-		savedInstanceState: Bundle?
-	): View? = inflater.inflate(R.layout.fragment_permission, container, false)
-
-
-	@OnLifecycleEvent(Lifecycle.Event.ON_START)
-	private fun bindData() {
+	override fun bindData(scope: LifecycleScopeProvider<*>) {
 		grantButton.clicks()
-			.autoDisposable(scope(Lifecycle.Event.ON_STOP))
+			.autoDisposable(scope)
 			.subscribe {
 				ensureLocationPermission()
 			}
@@ -98,10 +74,5 @@ class PermissionFragment : Fragment(), LifecycleObserver {
 			.setPositiveButton(R.string.exit) { _, _ -> System.exit(3) }
 			.setCancelable(false)
 			.show()
-	}
-
-	override fun onDestroy() {
-		lifecycle.removeObserver(this)
-		super.onDestroy()
 	}
 }
