@@ -43,7 +43,7 @@ val viewModelModule = module {
 	}
 
 	viewModel {
-		AboutViewModel()
+		AboutViewModel(get())
 	}
 
 }

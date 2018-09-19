@@ -11,8 +11,10 @@ class AboutFragment : BaseFragment(R.layout.fragment_about, true) {
 
 	override fun initView() {
 		// TODO Replace with TextRef
-		branchTextView.text = getString(R.string.branch, viewModel.branch)
-		versionTextView.text = getString(R.string.version, viewModel.versionName, viewModel.versionCode)
-		appByTextView.text = getString(R.string.appBy, getString(R.string.author))
+		branchTextView.text = getString(R.string.about_branch, viewModel.branch)
+		versionTextView.text = getString(R.string.about_version, viewModel.version)
+		appByTextView.text = getString(R.string.about_app_by, getString(R.string.author))
+		builtTextView.text = getString(R.string.about_built_on, viewModel.buildTime)
+		sha1TextView.text = getString(R.string.about_sha1, viewModel.sha1Compact)
 	}
 }

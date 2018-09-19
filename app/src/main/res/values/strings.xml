@@ -46,7 +46,9 @@
 	<string name="google_play_services_install">Install</string>
 
 	<!-- About -->
-	<string name="appBy">App By: %s</string>
-	<string name="branch">Branch: %s</string>
-	<string name="version">Version: %s (%d)</string>
+	<string name="about_app_by">App by: %s</string>
+	<string name="about_branch">Branch: %s</string>
+	<string name="about_version">Version: %s</string>
+	<string name="about_built_on">Built on: %s</string>
+	<string name="about_sha1">SHA1: %s</string>
 </resources>

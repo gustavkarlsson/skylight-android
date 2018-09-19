@@ -32,5 +32,23 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/versionTextView"
-		tools:text="Branch: gt4h2389t0g2h8" />
+		tools:text="Branch: dev" />
+
+	<TextView
+		android:id="@+id/sha1TextView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/branchTextView"
+		tools:text="SHA1: f9beed4" />
+
+	<TextView
+		android:id="@+id/builtTextView"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/sha1TextView"
+		tools:text="Built on: 2018-09-19T20:55:33.529" />
 </androidx.constraintlayout.widget.ConstraintLayout>
