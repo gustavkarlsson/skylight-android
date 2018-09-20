@@ -7,13 +7,18 @@ import org.threeten.bp.format.DateTimeFormatter
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
 
-class AboutViewModel(timeProvider: TimeProvider) : ViewModel() {
+class AboutViewModel(
+	val isDevelopMode: Boolean,
+	timeProvider: TimeProvider
+) : ViewModel() {
 
 	val branch: String = BuildConfig.GIT_BRANCH
 
 	val sha1Compact: String = BuildConfig.GIT_SHA1.substring(0, 7)
 
-	val version: String = "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})"
+	val versionName: String = BuildConfig.VERSION_NAME
+
+	val versionCode: String = BuildConfig.VERSION_CODE.toString()
 
 	val buildTime: String = let {
 		val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME

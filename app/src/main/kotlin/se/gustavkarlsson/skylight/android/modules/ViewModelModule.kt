@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.modules
 import android.content.Context
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
+import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.gui.screens.about.AboutViewModel
@@ -43,7 +44,8 @@ val viewModelModule = module {
 	}
 
 	viewModel {
-		AboutViewModel(get())
+		val isDevelopMode = BuildConfig.FLAVOR.contains("develop", true)
+		AboutViewModel(isDevelopMode, get())
 	}
 
 }

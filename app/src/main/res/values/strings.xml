@@ -48,7 +48,8 @@
 	<!-- About -->
 	<string name="about_app_by">App by: %s</string>
 	<string name="about_branch">Branch: %s</string>
-	<string name="about_version">Version: %s</string>
+	<string name="about_version_name">Version: %s</string>
+	<string name="about_version_code">Version code: %s</string>
 	<string name="about_built_on">Built on: %s</string>
 	<string name="about_sha1">SHA1: %s</string>
 </resources>
