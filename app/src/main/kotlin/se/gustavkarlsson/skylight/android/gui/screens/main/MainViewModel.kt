@@ -20,6 +20,7 @@ import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormat
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
 import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
 import se.gustavkarlsson.skylight.android.util.UserFriendlyException
+import timber.log.Timber
 
 class MainViewModel(
 	private val store: SkylightStore,
@@ -53,6 +54,7 @@ class MainViewModel(
 		.filter { it.throwable != null }
 		.map {
 			val throwable = it.throwable
+			Timber.e(throwable)
 			if (throwable is UserFriendlyException) {
 				throwable.stringResourceId
 			} else {
