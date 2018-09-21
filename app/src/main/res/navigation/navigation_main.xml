@@ -10,8 +10,10 @@
 		<action
 			android:id="@+id/action_mainFragment_to_settingsFragment"
 			app:destination="@id/settingsFragment"
-			app:enterAnim="@anim/nav_default_enter_anim"
-			app:popEnterAnim="@anim/nav_default_pop_enter_anim" />
+			app:enterAnim="@anim/slide_in_right"
+			app:exitAnim="@anim/slide_out_left"
+			app:popEnterAnim="@anim/slide_in_left"
+			app:popExitAnim="@anim/slide_out_right" />
 	</fragment>
 
 	<fragment
@@ -35,28 +37,28 @@
 		android:id="@+id/action_start_from_mainFragment"
 		app:clearTask="true"
 		app:destination="@id/mainFragment"
-		app:enterAnim="@anim/nav_default_enter_anim"
-		app:popEnterAnim="@anim/nav_default_pop_enter_anim" />
+		app:enterAnim="@anim/slide_in_up"
+		app:exitAnim="@anim/slide_out_down" />
 
 	<action
 		android:id="@+id/action_start_from_introFragment"
 		app:clearTask="true"
 		app:destination="@id/introFragment"
-		app:enterAnim="@anim/nav_default_enter_anim"
-		app:popEnterAnim="@anim/nav_default_pop_enter_anim" />
+		app:enterAnim="@anim/slide_in_down"
+		app:exitAnim="@anim/slide_out_up" />
 
 	<action
 		android:id="@+id/action_start_from_googlePlayServicesFragment"
 		app:clearTask="true"
 		app:destination="@id/googlePlayServicesFragment"
-		app:enterAnim="@anim/nav_default_enter_anim"
-		app:popEnterAnim="@anim/nav_default_pop_enter_anim" />
+		app:enterAnim="@anim/slide_in_down"
+		app:exitAnim="@anim/slide_out_up" />
 
 	<action
 		android:id="@+id/action_start_from_permissionFragment"
 		app:clearTask="true"
 		app:destination="@id/permissionFragment"
-		app:enterAnim="@anim/nav_default_enter_anim"
-		app:popEnterAnim="@anim/nav_default_pop_enter_anim" />
+		app:enterAnim="@anim/slide_in_down"
+		app:exitAnim="@anim/slide_out_up" />
 
 </navigation>

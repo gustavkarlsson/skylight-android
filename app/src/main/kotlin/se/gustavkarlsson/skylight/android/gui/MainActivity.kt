@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 	override fun onSupportNavigateUp(): Boolean = navController.navigateUp()
 
 	@OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-	private fun handleIntro() {
+	private fun handleNavigation() {
 		store.states
 			.filter {
 				it.isFirstRun != null
