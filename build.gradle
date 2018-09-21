@@ -5,7 +5,7 @@ buildscript {
 		target_sdk_version = 28
 		build_tools_version = "28.0.2"
 
-		kotlin_version = "1.2.61"
+		kotlin_version = "1.2.70"
 		krate_version = "1.0.0"
 		retrofit_version = "2.3.0"
 		multidex_version = "2.0.0"
@@ -37,9 +37,9 @@ buildscript {
 		android_gradle_version = "3.2.0-rc03"
 		autodispose_version = "0.8.0"
 		leakcanary_version = "1.6"
-		navigation_version = "1.0.0-alpha05"
-		ktx_navigation_ui_version = "1.0.0-alpha05"
-		koin_version = "1.0.0-RC-2"
+		navigation_version = "1.0.0-alpha06"
+		ktx_navigation_ui_version = "1.0.0-alpha06"
+		koin_version = "1.0.0"
 		easylauncher_version = "1.2.0"
 		// Test
 		junit_version = "4.12"
