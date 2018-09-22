@@ -3,6 +3,8 @@
 ## Release
 * Check why location sometimes turns null
 * Improve layout and texts
+* Proguard google packages?
+* Replace room
 
 ## Soon
 * KtLint
