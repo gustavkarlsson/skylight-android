@@ -1,11 +1,14 @@
 # TODO
 
 ## Release
-* Add test to verify Koin setup
+* Check why location sometimes turns null
+* Improve layout and texts
 
 ## Soon
 * KtLint
+* Improve color system
 * Make testing use other settings
+* Add test to verify Koin setup
 * Add instrumentation testing to CI
 * Add more tests
 * TextRef?

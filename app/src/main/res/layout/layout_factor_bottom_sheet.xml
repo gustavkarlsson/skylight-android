@@ -2,12 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
+	style="@style/AppTheme.BottomSheet"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:paddingStart="@dimen/screen_margin"
-	android:paddingEnd="@dimen/screen_margin"
 	android:paddingBottom="@dimen/screen_margin"
-	android:background="#383838">
+	android:paddingEnd="@dimen/screen_margin"
+	android:paddingStart="@dimen/screen_margin">
 
 	<TextView
 		android:id="@+id/title"
@@ -31,10 +31,10 @@
 		style="@style/AppTheme.BottomSheetDescription"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/titleGuide"
 		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/titleGuide"
 		tools:text="@string/factor_darkness_desc" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

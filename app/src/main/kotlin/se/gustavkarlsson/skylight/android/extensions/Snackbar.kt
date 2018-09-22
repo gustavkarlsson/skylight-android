@@ -4,7 +4,6 @@ import android.view.View
 import android.view.ViewTreeObserver
 import androidx.annotation.StringRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import se.gustavkarlsson.skylight.android.R
 
@@ -22,12 +21,7 @@ fun showErrorSnackbar(view: View, @StringRes message: Int, length: Int): Snackba
 }
 
 private fun Snackbar.setErrorColor(): Snackbar {
-	view.setBackgroundColor(
-		ContextCompat.getColor(
-			view.context,
-			R.color.snackbar_error_background
-		)
-	)
+	view.setBackgroundColor(R.color.snackbar_error_background.toArgb(view.context))
 	return this
 }
 
