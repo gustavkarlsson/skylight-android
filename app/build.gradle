@@ -112,28 +112,30 @@ dependencies {
 	implementation project(":core")
 	implementation project(":background")
 
-	implementation "androidx.multidex:multidex:$multidex_version"
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-	implementation "androidx.appcompat:appcompat:$android_support_version"
 	implementation "com.google.android.material:material:$android_support_version"
+	implementation "androidx.multidex:multidex:$multidex_version"
+	implementation "androidx.appcompat:appcompat:$android_support_version"
 	implementation "androidx.fragment:fragment:$android_support_version"
 	implementation "androidx.annotation:annotation:$android_support_version"
 	implementation "androidx.preference:preference:$android_support_version"
-	implementation "androidx.legacy:legacy-preference-v14:$android_support_version" // TODO Legacy?
 	implementation "androidx.cardview:cardview:$android_support_version"
 	implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
-	implementation "com.google.android.gms:play-services-location:$google_play_services_version"
-	implementation "com.google.android.gms:play-services-gcm:$google_play_services_version"
 
+	// Google Play Services
+	implementation "com.google.android.gms:play-services-gcm:$google_play_services_version"
+	implementation "com.google.android.gms:play-services-location:$google_play_services_version"
+
+	// Misc
 	implementation "com.github.gustavkarlsson:aurora-notifier-common:$aurora_notifier_common_version"
 	implementation "net.e175.klaus:solarpositioning:$solarpositioning_version"
 	implementation "com.jakewharton.threetenabp:threetenabp:$threetenabp_version"
 	implementation "com.hadisatrio:Optional:$optional_version"
 	implementation "com.jakewharton.timber:timber:$timber_version"
+
+	// Navigation
 	implementation "android.arch.navigation:navigation-fragment:$navigation_version"
 	implementation "android.arch.navigation:navigation-ui:$navigation_version"
-
-	// KTX
 	implementation "android.arch.navigation:navigation-ui-ktx:$ktx_navigation_ui_version"
 
 	// Retrofit
