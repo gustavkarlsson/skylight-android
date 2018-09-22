@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.gui
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
@@ -36,12 +35,6 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 		addToKoin(navController)
 		setupActionBarWithNavController(navController)
 		lifecycle.addObserver(this)
-	}
-
-	@SuppressLint("MissingSuperCall")
-	override fun onSaveInstanceState(outState: Bundle) {
-		//super.onSaveInstanceState(outState)
-		// Resolves issue with navigation
 	}
 
 	override fun onSupportNavigateUp(): Boolean = navController.navigateUp()

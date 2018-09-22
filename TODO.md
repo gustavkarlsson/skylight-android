@@ -1,7 +1,6 @@
 # TODO
 
 ## Release
-* Fix notifications
 * Add test to verify Koin setup
 
 ## Soon
