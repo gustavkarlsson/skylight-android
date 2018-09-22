@@ -34,3 +34,4 @@
 * Widget
 * Instant app
 * Wear OS App, Tablet, Chrome OS, Leanback apps
+* Allow reporting of false negatives/positives
