@@ -1,10 +1,12 @@
 # TODO
 
-## Soon
+## Release
 * Fix notifications
 * Fix crash when navigating to and from settings twice
 * Fix navigation animations
 * Add test to verify Koin setup
+
+## Soon
 * Make testing use other settings
 * Add instrumentation testing to CI
 * Add more tests

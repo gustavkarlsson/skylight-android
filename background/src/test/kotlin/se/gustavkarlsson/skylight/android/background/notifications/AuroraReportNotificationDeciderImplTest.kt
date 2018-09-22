@@ -15,9 +15,10 @@ import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.NotifiedChance
+import se.gustavkarlsson.skylight.android.krate.SkylightState
+import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.mockito.any
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.services.Settings
 
 @RunWith(MockitoJUnitRunner::class)
 internal class AuroraReportNotificationDeciderImplTest {
@@ -29,7 +30,13 @@ internal class AuroraReportNotificationDeciderImplTest {
 	lateinit var mockChanceEvaluator: ChanceEvaluator<AuroraReport>
 
 	@Mock
-	lateinit var mockSettings: Settings
+	lateinit var mockSettings: SkylightState.Settings
+
+	@Mock
+	lateinit var mockState: SkylightState
+
+	@Mock
+	lateinit var mockStore: SkylightStore
 
 	@Mock
 	lateinit var mockOutdatedEvaluator: OutdatedEvaluator
@@ -51,6 +58,8 @@ internal class AuroraReportNotificationDeciderImplTest {
 		whenever(mockLastNotifiedChance.timestamp).thenReturn(Instant.ofEpochMilli(50000))
 		whenever(mockNotifiedChanceRepository.get()).thenReturn(mockLastNotifiedChance)
 		whenever(mockSettings.notificationsEnabled).thenReturn(true)
+		whenever(mockStore.currentState).thenReturn(mockState)
+		whenever(mockState.settings).thenReturn(mockSettings)
 		whenever(mockOutdatedEvaluator.isOutdated(any())).thenReturn(false)
 		whenever(mockAppVisibilityEvaluator.isVisible()).thenReturn(false)
 
@@ -58,7 +67,7 @@ internal class AuroraReportNotificationDeciderImplTest {
 			AuroraReportNotificationDeciderImpl(
 				mockNotifiedChanceRepository,
 				mockChanceEvaluator,
-				mockSettings,
+				mockStore,
 				mockOutdatedEvaluator,
 				mockAppVisibilityEvaluator
 			)
