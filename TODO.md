@@ -4,6 +4,7 @@
 * Add test to verify Koin setup
 
 ## Soon
+* KtLint
 * Make testing use other settings
 * Add instrumentation testing to CI
 * Add more tests
