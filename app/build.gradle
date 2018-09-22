@@ -38,7 +38,6 @@ android {
 		versionName "1.0"
 		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 		multiDexEnabled true
-		// TODO https://developer.android.com/studio/build/multidex.html#dev-build
 	}
 
 	signingConfigs {
@@ -52,8 +51,7 @@ android {
 
 	buildTypes {
 		release {
-			minifyEnabled true
-			proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+			minifyEnabled false
 			signingConfig signingConfigs.release
 		}
 
