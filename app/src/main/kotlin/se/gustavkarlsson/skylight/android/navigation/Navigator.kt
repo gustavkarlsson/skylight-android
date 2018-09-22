@@ -7,9 +7,9 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.navOptions
 import se.gustavkarlsson.skylight.android.R
 
-class Navigator {
+class Navigator(private val navController: NavController) {
 
-	fun navigate(navController: NavController, targetScreen: Screen) {
+	fun navigate(targetScreen: Screen) {
 		val currentScreen = navController.currentDestination!!.id.let(Screen.Companion::fromId)
 		if (targetScreen == currentScreen) return
 

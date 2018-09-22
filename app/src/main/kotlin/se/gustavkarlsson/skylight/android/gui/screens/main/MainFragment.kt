@@ -12,10 +12,12 @@ import com.jakewharton.rxbinding2.widget.text
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_main.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
 import se.gustavkarlsson.skylight.android.gui.BaseFragment
+import se.gustavkarlsson.skylight.android.navigation.Navigator
 import se.gustavkarlsson.skylight.android.navigation.Screen
 import se.gustavkarlsson.skylight.android.services.Analytics
 import timber.log.Timber
@@ -27,6 +29,8 @@ class MainFragment : BaseFragment(R.layout.fragment_main, true) {
 	private var currentBottomSheetTitle: Int? = null
 
 	private val viewModel: MainViewModel by viewModel()
+
+	val navigator: Navigator by inject()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -40,11 +44,11 @@ class MainFragment : BaseFragment(R.layout.fragment_main, true) {
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		return when (item.itemId) {
 			R.id.action_settings -> {
-				navigator.navigate(navController, Screen.SETTINGS)
+				navigator.navigate(Screen.SETTINGS)
 				true
 			}
 			R.id.action_about -> {
-				navigator.navigate(navController, Screen.ABOUT)
+				navigator.navigate(Screen.ABOUT)
 				true
 			}
 			else -> super.onOptionsItemSelected(item)

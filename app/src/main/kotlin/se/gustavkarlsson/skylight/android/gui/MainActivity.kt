@@ -11,7 +11,10 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import org.koin.android.ext.android.inject
+import org.koin.androidx.scope.ext.android.bindScope
+import org.koin.androidx.scope.ext.android.createScope
 import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.extensions.addToKoin
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.navigation.Navigator
 import se.gustavkarlsson.skylight.android.navigation.Screen
@@ -20,15 +23,17 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 
 	private val store: SkylightStore by inject()
 
-	val navigator: Navigator by inject()
+	private val navigator: Navigator by inject()
 
-	val navController by lazy {
+	private val navController by lazy {
 		findNavController(R.id.mainNavHost)
 	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
+		bindScope(createScope("activity"))
 		setContentView(R.layout.activity_main)
+		addToKoin(navController)
 		setupActionBarWithNavController(navController)
 		lifecycle.addObserver(this)
 	}
@@ -71,8 +76,6 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 				}
 			}
 			.autoDisposable(scope(Lifecycle.Event.ON_DESTROY))
-			.subscribe {
-				navigator.navigate(navController, it)
-			}
+			.subscribe(navigator::navigate)
 	}
 }

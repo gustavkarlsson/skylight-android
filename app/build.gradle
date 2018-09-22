@@ -177,7 +177,7 @@ dependencies {
 	// Koin
 	implementation "org.koin:koin-android:$koin_version"
 	implementation "org.koin:koin-androidx-viewmodel:$koin_version"
-
+	implementation "org.koin:koin-androidx-scope:$koin_version"
 
 	// Testing
 	testImplementation "org.robolectric:robolectric:$robolectric_version"
