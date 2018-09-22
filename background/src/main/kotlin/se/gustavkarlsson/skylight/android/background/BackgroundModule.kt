@@ -29,8 +29,19 @@ val backgroundModule = module {
 		get<Context>().getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
 	}
 
+	single("auroraNotificationChannelId") {
+		"aurora"
+	}
+
 	single<Notifier<AuroraReport>> {
-		AuroraReportNotifier(get(), get(), get("chanceLevel"), get("auroraReport"), get("activity"))
+		AuroraReportNotifier(
+			get(),
+			get(),
+			get("chanceLevel"),
+			get("auroraReport"),
+			get("activity"),
+			get("auroraNotificationChannelId")
+		)
 	}
 
 	single<AuroraReportNotificationDecider> {
@@ -78,8 +89,18 @@ val backgroundModule = module {
 			}
 	}
 
+	single {
+		NotificationChannelCreator(get(), get(), get("auroraNotificationChannelId"))
+	}
+
+	single<Completable>("createNotificationChannel") {
+		val channelCreator = get<NotificationChannelCreator>()
+		Completable.fromAction { channelCreator.createChannel() }
+	}
+
 	single<Completable>("scheduleBackgroundNotifications") {
-		get<Completable>("initiateJobManager")
+		get<Completable>("createNotificationChannel")
+			.andThen(get<Completable>("initiateJobManager"))
 			.andThen(get<Flowable<*>>("scheduleBasedOnSettings"))
 			.lastOrError()
 			.ignoreElement()
