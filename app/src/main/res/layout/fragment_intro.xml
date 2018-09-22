@@ -9,30 +9,30 @@
 
 	<TextView
 		android:id="@+id/title"
+		style="@style/AppTheme.IntroTitle"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="64dp"
 		android:text="@string/intro_title"
-		android:textSize="32sp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
 
 	<TextView
 		android:id="@+id/description"
+		style="@style/AppTheme.IntroDescription"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="64dp"
 		android:gravity="center"
 		android:text="@string/intro_desc"
-		android:textSize="16sp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/title" />
 
 	<Button
 		android:id="@+id/nextButton"
-		style="@style/Widget.AppCompat.Button.Borderless.Colored"
+		style="@style/Widget.MaterialComponents.Button.TextButton"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="@string/intro_got_it"

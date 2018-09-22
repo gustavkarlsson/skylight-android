@@ -11,10 +11,9 @@
 
 	<TextView
 		android:id="@+id/title"
+		style="@style/AppTheme.BottomSheetTitle"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:textColor="#FFF"
-		android:textSize="20sp"
 		app:layout_constraintBottom_toTopOf="@+id/titleGuide"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
@@ -29,11 +28,9 @@
 
 	<TextView
 		android:id="@+id/description"
+		style="@style/AppTheme.BottomSheetDescription"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:textSize="16sp"
-		android:textColor="#C1C1C1"
-		android:lineSpacingMultiplier="1.2"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/titleGuide"

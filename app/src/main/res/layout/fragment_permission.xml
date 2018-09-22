@@ -9,10 +9,10 @@
 
 	<TextView
 		android:id="@+id/titleTextView"
+		style="@style/AppTheme.Header2"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="@string/permission_title"
-		android:textSize="24sp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +29,7 @@
 
 	<Button
 		android:id="@+id/grantButton"
-		style="@style/Widget.AppCompat.Button.Borderless.Colored"
+		style="@style/Widget.MaterialComponents.Button.TextButton"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="@string/permission_grant"

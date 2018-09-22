@@ -4,26 +4,75 @@
 	<style name="AppTheme" parent="Theme.MaterialComponents">
 		<item name="colorPrimary">@color/primary</item>
 		<item name="colorPrimaryDark">@color/primary_dark</item>
-		<item name="colorAccent">@color/accent</item>
+		<item name="colorSecondary">@color/accent</item>
 		<item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 	</style>
 
-	<style name="AppTheme.FactorCardView">
+	<style name="AppTheme.Header1">
+		<item name="android:textSize">@dimen/text_h1</item>
+	</style>
+
+	<style name="AppTheme.Header2">
+		<item name="android:textSize">@dimen/text_h2</item>
+	</style>
+
+	<style name="AppTheme.BottomSheetTitle">
+		<item name="android:textSize">@dimen/text_h3</item>
+		<item name="android:textColor">#FFF</item>
+	</style>
+
+	<style name="AppTheme.BottomSheetDescription">
+		<item name="android:textSize">@dimen/text_large</item>
+		<item name="android:textColor">#C1C1C1</item>
+		<item name="android:lineSpacingMultiplier">1.2</item>
+	</style>
+
+	<style name="AppTheme.IntroTitle">
+		<item name="android:textSize">@dimen/text_h1</item>
+		<item name="android:textColor">#FFF</item>
+	</style>
+
+	<style name="AppTheme.IntroDescription">
+		<item name="android:textSize">@dimen/text_large</item>
+	</style>
+
+	<style name="AppTheme.Subtitle">
+		<item name="android:textSize">@dimen/text_large</item>
+		<item name="android:textAllCaps">true</item>
+	</style>
+
+	<style name="AppTheme.SmallText">
+		<item name="android:textSize">@dimen/text_small</item>
+	</style>
+
+	<style name="AppTheme.ChanceText">
+		<item name="android:textSize">@dimen/text_h1</item>
+		<item name="android:textStyle">bold</item>
+		<item name="android:textColor">#FFF</item>
+	</style>
+
+	<style name="AppTheme.FactorCardView" parent="Widget.MaterialComponents.CardView">
 		<item name="android:foreground">?attr/selectableItemBackground</item>
-		<item name="cardBackgroundColor">#383838</item>
 	</style>
 
 	<style name="AppTheme.FactorCardItem">
+		<!-- Puts text on top of CardView -->
 		<item name="android:elevation">2dp</item>
 	</style>
 
 	<style name="AppTheme.FactorCardItem.Title">
-		<item name="android:textSize">16sp</item>
+		<item name="android:textSize">@dimen/text_large</item>
 	</style>
 
 	<style name="AppTheme.FactorCardItem.Value">
-		<item name="android:textSize">16sp</item>
+		<item name="android:textSize">@dimen/text_large</item>
 		<item name="android:textColor">#AAA</item>
+	</style>
+
+	<style name="AppTheme.FactorCardItem.ProgressBar" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
+		<!-- Puts text on top of CardView -->
+		<item name="android:elevation">2dp</item>
+		<item name="android:indeterminate">false</item>
 	</style>
 
 </resources>
