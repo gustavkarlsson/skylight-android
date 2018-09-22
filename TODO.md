@@ -14,6 +14,7 @@
 ## Some day
 * Add the thing that clears data between launches (check with Nick)
 * Add prettier detail screens
+* Separate debug menu instead of settings page
 * Add more KTX
 * Firebase performance monitoring
 * Add manual clearing of "notification sent" in develop mode
