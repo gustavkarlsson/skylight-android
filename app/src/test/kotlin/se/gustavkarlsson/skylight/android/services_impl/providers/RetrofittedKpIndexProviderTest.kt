@@ -64,7 +64,7 @@ class RetrofittedKpIndexProviderTest {
 			.addConverterFactory(GsonConverterFactory.create())
 			.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 			.build()
-			.create(KpIndexApi::class.java))
+			.create(KpIndexApi::class.java), 1)
 
 		val kpIndex = service.get().blockingGet().value!!
 
