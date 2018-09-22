@@ -6,22 +6,7 @@
 	<fragment
 		android:id="@+id/mainFragment"
 		android:name="se.gustavkarlsson.skylight.android.gui.screens.main.MainFragment"
-		android:label="@string/app_name">
-		<action
-			android:id="@+id/action_mainFragment_to_settingsFragment"
-			app:destination="@id/settingsFragment"
-			app:enterAnim="@anim/slide_in_right"
-			app:exitAnim="@anim/slide_out_left"
-			app:popEnterAnim="@anim/slide_in_left"
-			app:popExitAnim="@anim/slide_out_right" />
-		<action
-			android:id="@+id/action_mainFragment_to_aboutFragment"
-			app:destination="@id/aboutFragment"
-			app:enterAnim="@anim/slide_in_right"
-			app:exitAnim="@anim/slide_out_left"
-			app:popEnterAnim="@anim/slide_in_left"
-			app:popExitAnim="@anim/slide_out_right" />
-	</fragment>
+		android:label="@string/app_name" />
 
 	<fragment
 		android:id="@+id/introFragment"
@@ -44,33 +29,5 @@
 		android:id="@+id/settingsFragment"
 		android:name="se.gustavkarlsson.skylight.android.gui.screens.settings.SettingsFragment"
 		android:label="@string/menu_settings" />
-
-	<action
-		android:id="@+id/action_start_from_mainFragment"
-		app:clearTask="true"
-		app:destination="@id/mainFragment"
-		app:enterAnim="@anim/slide_in_up"
-		app:exitAnim="@anim/slide_out_down" />
-
-	<action
-		android:id="@+id/action_start_from_introFragment"
-		app:clearTask="true"
-		app:destination="@id/introFragment"
-		app:enterAnim="@anim/slide_in_down"
-		app:exitAnim="@anim/slide_out_up" />
-
-	<action
-		android:id="@+id/action_start_from_googlePlayServicesFragment"
-		app:clearTask="true"
-		app:destination="@id/googlePlayServicesFragment"
-		app:enterAnim="@anim/slide_in_down"
-		app:exitAnim="@anim/slide_out_up" />
-
-	<action
-		android:id="@+id/action_start_from_permissionFragment"
-		app:clearTask="true"
-		app:destination="@id/permissionFragment"
-		app:enterAnim="@anim/slide_in_down"
-		app:exitAnim="@anim/slide_out_up" />
 
 </navigation>

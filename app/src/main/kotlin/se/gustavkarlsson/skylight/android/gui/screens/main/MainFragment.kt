@@ -5,7 +5,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.annotation.StringRes
-import androidx.navigation.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.visibility
@@ -17,6 +16,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
 import se.gustavkarlsson.skylight.android.gui.BaseFragment
+import se.gustavkarlsson.skylight.android.navigation.Screen
 import se.gustavkarlsson.skylight.android.services.Analytics
 import timber.log.Timber
 
@@ -40,11 +40,11 @@ class MainFragment : BaseFragment(R.layout.fragment_main, true) {
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
 		return when (item.itemId) {
 			R.id.action_settings -> {
-				view?.findNavController()?.navigate(R.id.action_mainFragment_to_settingsFragment)
+				navigator.navigate(navController, Screen.SETTINGS)
 				true
 			}
 			R.id.action_about -> {
-				view?.findNavController()?.navigate(R.id.action_mainFragment_to_aboutFragment)
+				navigator.navigate(navController, Screen.ABOUT)
 				true
 			}
 			else -> super.onOptionsItemSelected(item)

@@ -10,7 +10,7 @@ import se.gustavkarlsson.skylight.android.gui.BaseFragment
 import se.gustavkarlsson.skylight.android.krate.SignalFirstRunCompleted
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 
-class IntroFragment : BaseFragment(R.layout.fragment_intro, true) {
+ class IntroFragment : BaseFragment(R.layout.fragment_intro, false) {
 
 	// TODO Move to ViewModel
 	private val store: SkylightStore by inject()

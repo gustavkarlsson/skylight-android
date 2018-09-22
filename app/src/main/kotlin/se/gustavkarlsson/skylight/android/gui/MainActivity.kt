@@ -13,12 +13,16 @@ import com.uber.autodispose.kotlin.autoDisposable
 import org.koin.android.ext.android.inject
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
+import se.gustavkarlsson.skylight.android.navigation.Navigator
+import se.gustavkarlsson.skylight.android.navigation.Screen
 
 class MainActivity : AppCompatActivity(), LifecycleObserver {
 
 	private val store: SkylightStore by inject()
 
-	private val navController by lazy {
+	val navigator: Navigator by inject()
+
+	val navController by lazy {
 		findNavController(R.id.mainNavHost)
 	}
 
@@ -38,7 +42,7 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 	override fun onSupportNavigateUp(): Boolean = navController.navigateUp()
 
 	@OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-	private fun handleNavigation() {
+	private fun handleInitialNavigation() {
 		store.states
 			.filter {
 				it.isFirstRun != null
@@ -50,22 +54,25 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 					&& a.isGooglePlayServicesAvailable == b.isGooglePlayServicesAvailable
 					&& a.isLocationPermissionGranted == b.isLocationPermissionGranted
 			}
-			.autoDisposable(scope(Lifecycle.Event.ON_DESTROY))
-			.subscribe {
+			.map {
 				when {
 					it.isGooglePlayServicesAvailable == false -> {
-						navController.navigate(R.id.action_start_from_googlePlayServicesFragment)
+						Screen.GOOGLE_PLAY_SERVICES
 					}
 					it.isFirstRun == true -> {
-						navController.navigate(R.id.action_start_from_introFragment)
+						Screen.INTRO
 					}
 					it.isLocationPermissionGranted == false -> {
-						navController.navigate(R.id.action_start_from_permissionFragment)
+						Screen.PERMISSION
 					}
-					navController.currentDestination?.id != R.id.mainFragment -> {
-						navController.navigate(R.id.action_start_from_mainFragment)
+					else -> {
+						Screen.MAIN
 					}
 				}
+			}
+			.autoDisposable(scope(Lifecycle.Event.ON_DESTROY))
+			.subscribe {
+				navigator.navigate(navController, it)
 			}
 	}
 }

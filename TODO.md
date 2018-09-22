@@ -2,8 +2,6 @@
 
 ## Release
 * Fix notifications
-* Fix crash when navigating to and from settings twice
-* Fix navigation animations
 * Add test to verify Koin setup
 
 ## Soon
