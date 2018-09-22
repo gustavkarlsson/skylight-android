@@ -17,6 +17,7 @@ import se.gustavkarlsson.skylight.android.krate.SettingsStreamCommand
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.util.CrashlyticsTree
+import se.gustavkarlsson.skylight.android.util.KoinTimberLogger
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
@@ -38,7 +39,7 @@ class Skylight : MultiDexApplication() {
 		initLogging()
 		AndroidThreeTen.init(this)
 		initRxJavaErrorHandling()
-		startKoin(this, modules) // TODO Add Timber logger for Koin
+		startKoin(this, modules, logger = KoinTimberLogger())
 		initAnalytics()
 		setupSettingsAnalytics()
 		store.issue(BootstrapCommand)

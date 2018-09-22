@@ -33,7 +33,6 @@ buildscript {
 		rxpermissions_version = "0.9.5"
 		reactive_location_version = "2.1"
 		solarpositioning_version = "0.0.9"
-		aurora_notifier_common_version = "aurora-notifier-common-1.5.0"
 		android_gradle_version = "3.2.0-rc03"
 		autodispose_version = "0.8.0"
 		leakcanary_version = "1.6"

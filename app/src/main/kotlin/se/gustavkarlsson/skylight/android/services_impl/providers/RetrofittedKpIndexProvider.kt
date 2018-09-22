@@ -15,7 +15,7 @@ class RetrofittedKpIndexProvider(
 	override fun get(): Single<KpIndex> {
 		return api.get()
 			.subscribeOn(Schedulers.io())
-			.map { KpIndex(it.value.toDouble()) }
+			.map { KpIndex(it.value) }
 			.doOnError { Timber.w(it, "Failed to get Kp index from KpIndex API") }
 			.retry(retryCount)
 			.doOnError { Timber.e(it, "Failed to get Kp index from KpIndex API after retrying $retryCount times") }

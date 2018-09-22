@@ -2,9 +2,8 @@ package se.gustavkarlsson.skylight.android.services_impl.providers.kpindex
 
 import io.reactivex.Single
 import retrofit2.http.GET
-import se.gustavkarlsson.aurora_notifier.common.domain.Timestamped
 
-interface KpIndexApi { // TODO resolve conflict with common library service
+interface KpIndexApi {
 	@GET("kp-index")
-	fun get(): Single<Timestamped<Float>>
+	fun get(): Single<DoubleHolder>
 }

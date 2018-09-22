@@ -2,11 +2,9 @@ package se.gustavkarlsson.skylight.android.gui.screens.permission
 
 
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.Lifecycle
 import com.jakewharton.rxbinding2.view.clicks
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.uber.autodispose.LifecycleScopeProvider
-import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_permission.*
 import org.koin.android.ext.android.inject
@@ -31,14 +29,14 @@ class PermissionFragment : BaseFragment(R.layout.fragment_permission, false) {
 		grantButton.clicks()
 			.autoDisposable(scope)
 			.subscribe {
-				ensureLocationPermission()
+				ensureLocationPermission(scope)
 			}
 	}
 
-	private fun ensureLocationPermission() {
+	private fun ensureLocationPermission(scope: LifecycleScopeProvider<*>) {
 		rxPermissions
 			.requestEach(locationPermission)
-			.autoDisposable(scope(Lifecycle.Event.ON_DESTROY))
+			.autoDisposable(scope)
 			.subscribe {
 				when {
 					it.granted -> {
