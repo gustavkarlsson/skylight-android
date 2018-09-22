@@ -27,7 +27,7 @@ val kpIndexModule = module {
 					.writeTimeout(timeout)
 					.build()
 			)
-			.baseUrl("http://api.skylight-app.net")
+			.baseUrl("https://skylight-web-service-1.herokuapp.com/")
 			.addConverterFactory(GsonConverterFactory.create())
 			.addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
 			.build().create()

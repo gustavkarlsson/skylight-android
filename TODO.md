@@ -24,6 +24,7 @@
 * Integrate code coverage (Coveralls or Codecov)
 * Look into using Spek (problems with junit5 and android)
 * Look into replacing evernote-job with WorkManager (difficult since it's hard to post results)
+* Firebase remote config
 
 ## Never?
 * Rename chance to score?
