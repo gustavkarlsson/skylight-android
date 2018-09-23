@@ -1,7 +1,6 @@
 # TODO
 
 ## Release
-* Replace room
 * Improve layout and texts
 
 ## Soon

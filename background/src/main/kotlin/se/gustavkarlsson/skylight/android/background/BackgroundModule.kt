@@ -8,9 +8,8 @@ import io.reactivex.Completable
 import io.reactivex.Flowable
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.background.notifications.*
-import se.gustavkarlsson.skylight.android.background.persistence.BackgroundDatabase
 import se.gustavkarlsson.skylight.android.background.persistence.NotifiedChanceRepository
-import se.gustavkarlsson.skylight.android.background.persistence.RoomNotifiedChanceRepository
+import se.gustavkarlsson.skylight.android.background.persistence.SharedPreferencesNotifiedChanceRepository
 import se.gustavkarlsson.skylight.android.background.scheduling.GetLatestAuroraReportScheduler
 import se.gustavkarlsson.skylight.android.background.scheduling.Scheduler
 import se.gustavkarlsson.skylight.android.background.scheduling.UpdateJob
@@ -108,7 +107,6 @@ val backgroundModule = module {
 	}
 
 	single<NotifiedChanceRepository> {
-		val db = BackgroundDatabase.create(get())
-		RoomNotifiedChanceRepository(db)
+		SharedPreferencesNotifiedChanceRepository(get())
 	}
 }
