@@ -1,19 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<color name="logo_background">#414141</color>
+	<color name="logo_primary">#009587</color>
+	<color name="logo_secondary">#B1DDD9</color>
+
 	<!-- palette from: https://www.materialpalette.com/teal/pink  -->
-	<color name="primary">#009688</color>
-	<color name="primary_dark">#00796B</color>
-	<color name="primary_light">#B2DFDB</color>
-	<color name="accent">#FF4081</color>
-	<color name="primary_text">#212121</color>
-	<color name="secondary_text">#757575</color>
-	<color name="icons">#FFFFFF</color>
-	<color name="divider">#616161</color>
-	<color name="snackbar_error_background">#FF5252</color>
+	<color name="background">#2E2E2E</color>
+	<color name="on_background">#FFFFFF</color>
+	<color name="on_background_weaker">#B4FFFFFF</color>
+	<color name="on_background_weakest">#80FFFFFF</color>
+
+	<color name="surface">@color/logo_background</color>
+	<color name="on_surface">#FFFFFF</color>
+	<color name="on_surface_weaker">#B4FFFFFF</color>
+	<color name="on_surface_weakest">#80FFFFFF</color>
+
+	<color name="primary">@color/logo_primary</color>
+	<color name="primary_variant">#00796B</color>
+	<color name="on_primary">#FFFFFF</color>
+
+	<color name="secondary">#FF4081</color>
+	<color name="on_secondary">#FFFFFF</color>
+
+	<color name="error">#FF5252</color>
+	<color name="on_error">#FFFFFF</color>
 
 	<!-- Custom colors -->
-	<color name="background_darkish">#424242</color>
-	<color name="chance_unknown">#616161</color>
 	<color name="chance_lowest">#F44336</color>
 	<color name="chance_highest">#8BC34A</color>
 </resources>

@@ -2,6 +2,9 @@
 <resources>
 	<dimen name="screen_margin">16dp</dimen>
 
+	<dimen name="card_corner_radius">6dp</dimen>
+	<dimen name="card_elevation">3dp</dimen>
+
 	<dimen name="text_h1">32sp</dimen>
 	<dimen name="text_h2">24sp</dimen>
 	<dimen name="text_h3">20sp</dimen>
