@@ -6,14 +6,13 @@ import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
-import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.CombiningAuroraReportProvider
 import se.gustavkarlsson.skylight.android.services_impl.streamables.CombiningAuroraReportStreamable
 
 val auroraReportModule = module {
 
 	single {
-		CombiningAuroraReportProvider(get(), get(), get(), get(), get(), get(), get())
+		CombiningAuroraReportProvider(get(), get(), get(), get(), get(), get())
 	}
 
 	single<AuroraReportProvider> {
@@ -21,14 +20,12 @@ val auroraReportModule = module {
 	}
 
 	single {
-		val timeProvider = get<TimeProvider>()
 		val locationNames = get<Flowable<Optional<String>>>("locationName")
-		val kpIndexes = get<Flowable<KpIndex>>("kpIndex")
-		val geomagLocations = get<Flowable<GeomagLocation>>("geomagLocation")
-		val darknesses = get<Flowable<Darkness>>("darkness")
-		val weathers = get<Flowable<Weather>>("weather")
+		val kpIndexes = get<Flowable<Report<KpIndex>>>("kpIndex")
+		val geomagLocations = get<Flowable<Report<GeomagLocation>>>("geomagLocation")
+		val darknesses = get<Flowable<Report<Darkness>>>("darkness")
+		val weathers = get<Flowable<Report<Weather>>>("weather")
 		CombiningAuroraReportStreamable(
-			timeProvider,
 			locationNames,
 			kpIndexes,
 			geomagLocations,

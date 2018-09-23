@@ -11,11 +11,14 @@ class AuroraReportEvaluator(
 ) : ChanceEvaluator<AuroraReport> {
 
 	override fun evaluate(value: AuroraReport): Chance {
-		val factors = value.factors
-		val activityChance = kpIndexEvaluator.evaluate(factors.kpIndex)
-		val locationChance = geomagLocationEvaluator.evaluate(factors.geomagLocation)
-		val weatherChance = weatherEvaluator.evaluate(factors.weather)
-		val darknessChance = darknessEvaluator.evaluate(factors.darkness)
+		val activityChance = value.kpIndex.value
+			?.let(kpIndexEvaluator::evaluate) ?: Chance.UNKNOWN
+		val locationChance = value.geomagLocation.value
+			?.let(geomagLocationEvaluator::evaluate) ?: Chance.UNKNOWN
+		val weatherChance = value.weather.value
+			?.let(weatherEvaluator::evaluate) ?: Chance.UNKNOWN
+		val darknessChance = value.darkness.value
+			?.let(darknessEvaluator::evaluate) ?: Chance.UNKNOWN
 
 		val chances = listOf(activityChance, locationChance, weatherChance, darknessChance)
 

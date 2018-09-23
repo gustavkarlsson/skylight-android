@@ -21,20 +21,19 @@ class DevelopAuroraReportStreamable(
 			.switchMap { enabled ->
 				if (enabled) {
 					Single.fromCallable {
-						val auroraFactors = createDebugFactors()
 						val timestamp = timeProvider.getTime().blockingGet()
-						AuroraReport(timestamp, "Fake Location", auroraFactors)
+						developSettings.run {
+							AuroraReport(
+								"Fake Location",
+								Report.success(KpIndex(kpIndex), timestamp),
+								Report.success(GeomagLocation(geomagLatitude), timestamp),
+								Report.success(Darkness(sunZenithAngle), timestamp),
+								Report.success(Weather(cloudPercentage), timestamp)
+							)
+						}
 					}.repeatWhen { it.delay(pollingInterval) }
 				} else {
 					realStreamable.stream
 				}
 			}
-
-	private fun createDebugFactors(): AuroraFactors {
-		val kpIndex = KpIndex(developSettings.kpIndex)
-		val geomagLocation = GeomagLocation(developSettings.geomagLatitude)
-		val darkness = Darkness(developSettings.sunZenithAngle)
-		val weather = Weather(developSettings.cloudPercentage)
-		return AuroraFactors(kpIndex, geomagLocation, darkness, weather)
-	}
 }

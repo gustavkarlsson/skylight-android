@@ -8,6 +8,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import se.gustavkarlsson.skylight.android.entities.KpIndex
+import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.extensions.*
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.KpIndexProvider
@@ -34,15 +35,15 @@ val kpIndexModule = module {
 	}
 
 	single<KpIndexProvider> {
-		RetrofittedKpIndexProvider(get(), 5)
+		RetrofittedKpIndexProvider(get(), 5, get())
 	}
 
-	single<Streamable<KpIndex>>("kpIndex") {
-		KpIndexProviderStreamable(get(), 15.minutes, 10.seconds)
+	single<Streamable<Report<KpIndex>>>("kpIndex") {
+		KpIndexProviderStreamable(get(), 15.minutes)
 	}
 
-	single<Flowable<KpIndex>>("kpIndex") {
-		get<Streamable<KpIndex>>("kpIndex")
+	single<Flowable<Report<KpIndex>>>("kpIndex") {
+		get<Streamable<Report<KpIndex>>>("kpIndex")
 			.stream
 			.replay(1)
 			.refCount()

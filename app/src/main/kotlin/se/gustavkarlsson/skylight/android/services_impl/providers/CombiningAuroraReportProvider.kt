@@ -2,14 +2,12 @@ package se.gustavkarlsson.skylight.android.services_impl.providers
 
 import com.hadisatrio.optional.Optional
 import io.reactivex.Single
-import io.reactivex.functions.Function6
-import org.threeten.bp.Instant
+import io.reactivex.functions.Function5
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.services.providers.*
 import timber.log.Timber
 
 class CombiningAuroraReportProvider(
-	private val timeProvider: TimeProvider,
 	private val locationProvider: LocationProvider,
 	private val locationNameProvider: LocationNameProvider,
 	private val darknessProvider: DarknessProvider,
@@ -20,34 +18,29 @@ class CombiningAuroraReportProvider(
 
 	override fun get(): Single<AuroraReport> {
 		return Single.fromCallable {
-			val time = timeProvider.getTime().cache()
 			val location = locationProvider.get().cache()
-			zipToAuroraReport(time, location)
+			zipToAuroraReport(location)
 		}
 			.flatMap { it }
 			.doOnSuccess { Timber.i("Provided aurora report: %s", it) }
 	}
 
 	private fun zipToAuroraReport(
-		time: Single<Instant>,
 		location: Single<Optional<Location>>
 	): Single<AuroraReport> {
 		return Single.zip(
-			time,
 			locationNameProvider.get(location),
 			kpIndexProvider.get(),
 			geomagLocationProvider.get(location),
-			darknessProvider.get(time, location),
+			darknessProvider.get(location),
 			weatherProvider.get(location),
-			Function6 { theTime: Instant,
-						locationName: Optional<String>,
-						kpIndex: KpIndex,
-						geomagLocation: GeomagLocation,
-						darkness: Darkness,
-						weather: Weather
+			Function5 { locationName: Optional<String>,
+						kpIndex: Report<KpIndex>,
+						geomagLocation: Report<GeomagLocation>,
+						darkness: Report<Darkness>,
+						weather: Report<Weather>
 				->
-				val factors = AuroraFactors(kpIndex, geomagLocation, darkness, weather)
-				AuroraReport(theTime, locationName.orNull(), factors)
+				AuroraReport(locationName.orNull(), kpIndex, geomagLocation, darkness, weather)
 			})
 	}
 }

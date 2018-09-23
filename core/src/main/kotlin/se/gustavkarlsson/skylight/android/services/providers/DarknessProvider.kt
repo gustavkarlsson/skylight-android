@@ -2,11 +2,10 @@ package se.gustavkarlsson.skylight.android.services.providers
 
 import com.hadisatrio.optional.Optional
 import io.reactivex.Single
-import org.threeten.bp.Instant
-
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.entities.Report
 
 interface DarknessProvider {
-	fun get(time: Single<Instant>, location: Single<Optional<Location>>): Single<Darkness>
+	fun get(location: Single<Optional<Location>>): Single<Report<Darkness>>
 }

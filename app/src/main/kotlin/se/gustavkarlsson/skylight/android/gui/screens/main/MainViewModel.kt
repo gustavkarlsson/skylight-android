@@ -43,7 +43,7 @@ class MainViewModel(
 
 	init {
 		store.issue(AuroraReportStreamCommand(true))
-		store.issue(GetAuroraReportCommand)
+		//store.issue(GetAuroraReportCommand)
 	}
 
 	val swipedToRefresh: Consumer<Unit> = Consumer {
@@ -120,8 +120,8 @@ class MainViewModel(
 	val darknessValue: Flowable<CharSequence> = store.states
 		.map {
 			it.auroraReport
-				?.let(AuroraReport::factors)
-				?.let(AuroraFactors::darkness)
+				?.let(AuroraReport::darkness)
+				?.value
 				?.let(darknessFormatter::format)
 				?: "?"
 		}
@@ -130,8 +130,8 @@ class MainViewModel(
 	val darknessChance: Flowable<Chance> = store.states
 		.map {
 			it.auroraReport
-				?.let(AuroraReport::factors)
-				?.let(AuroraFactors::darkness)
+				?.let(AuroraReport::darkness)
+				?.value
 				?.let(darknessChanceEvaluator::evaluate)
 				?: Chance.UNKNOWN
 		}
@@ -140,8 +140,8 @@ class MainViewModel(
 	val geomagLocationValue: Flowable<CharSequence> = store.states
 		.map {
 			it.auroraReport
-				?.let(AuroraReport::factors)
-				?.let(AuroraFactors::geomagLocation)
+				?.let(AuroraReport::geomagLocation)
+				?.value
 				?.let(geomagLocationFormatter::format)
 				?: "?"
 		}
@@ -150,8 +150,8 @@ class MainViewModel(
 	val geomagLocationChance: Flowable<Chance> = store.states
 		.map {
 			it.auroraReport
-				?.let(AuroraReport::factors)
-				?.let(AuroraFactors::geomagLocation)
+				?.let(AuroraReport::geomagLocation)
+				?.value
 				?.let(geomagLocationChanceEvaluator::evaluate)
 				?: Chance.UNKNOWN
 		}
@@ -160,8 +160,8 @@ class MainViewModel(
 	val kpIndexValue: Flowable<CharSequence> = store.states
 		.map {
 			it.auroraReport
-				?.let(AuroraReport::factors)
-				?.let(AuroraFactors::kpIndex)
+				?.let(AuroraReport::kpIndex)
+				?.value
 				?.let(kpIndexFormatter::format)
 				?: "?"
 		}
@@ -170,8 +170,8 @@ class MainViewModel(
 	val kpIndexChance: Flowable<Chance> = store.states
 		.map {
 			it.auroraReport
-				?.let(AuroraReport::factors)
-				?.let(AuroraFactors::kpIndex)
+				?.let(AuroraReport::kpIndex)
+				?.value
 				?.let(kpIndexChanceEvaluator::evaluate)
 				?: Chance.UNKNOWN
 		}
@@ -180,8 +180,8 @@ class MainViewModel(
 	val weatherValue: Flowable<CharSequence> = store.states
 		.map {
 			it.auroraReport
-				?.let(AuroraReport::factors)
-				?.let(AuroraFactors::weather)
+				?.let(AuroraReport::weather)
+				?.value
 				?.let(weatherFormatter::format)
 				?: "?"
 		}
@@ -190,8 +190,8 @@ class MainViewModel(
 	val weatherChance: Flowable<Chance> = store.states
 		.map {
 			it.auroraReport
-				?.let(AuroraReport::factors)
-				?.let(AuroraFactors::weather)
+				?.let(AuroraReport::weather)
+				?.value
 				?.let(weatherChanceEvaluator::evaluate)
 				?: Chance.UNKNOWN
 		}

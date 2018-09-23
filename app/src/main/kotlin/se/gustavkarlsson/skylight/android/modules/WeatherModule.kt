@@ -8,10 +8,10 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.create
 import se.gustavkarlsson.skylight.android.extensions.minutes
-import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.WeatherProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.RetrofittedOpenWeatherMapWeatherProvider
@@ -32,17 +32,18 @@ val weatherModule = module {
 		RetrofittedOpenWeatherMapWeatherProvider(
 			get(),
 			BuildConfig.OPENWEATHERMAP_API_KEY,
-			5
+			5,
+			get()
 		)
 	}
 
-	single<Streamable<Weather>>("weather") {
+	single<Streamable<Report<Weather>>>("weather") {
 		val locations = get<Flowable<Location>>("location")
-		WeatherProviderStreamable(locations, get(), 15.minutes, 10.seconds)
+		WeatherProviderStreamable(locations, get(), 15.minutes)
 	}
 
-	single<Flowable<Weather>>("weather") {
-		get<Streamable<Weather>>("weather")
+	single<Flowable<Report<Weather>>>("weather") {
+		get<Streamable<Report<Weather>>>("weather")
 			.stream
 			.replay(1)
 			.refCount()

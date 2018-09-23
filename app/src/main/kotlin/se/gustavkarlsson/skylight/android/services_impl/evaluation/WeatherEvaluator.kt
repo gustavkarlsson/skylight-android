@@ -8,7 +8,7 @@ import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 class WeatherEvaluator : ChanceEvaluator<Weather> {
 
     override fun evaluate(value: Weather): Chance {
-        val clouds = value.cloudPercentage ?: return UNKNOWN
+        val clouds = value.cloudPercentage
 		if (clouds < 0 || clouds > 100) {
 			return UNKNOWN
         }

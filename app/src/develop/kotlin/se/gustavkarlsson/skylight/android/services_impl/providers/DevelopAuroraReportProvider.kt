@@ -16,23 +16,21 @@ class DevelopAuroraReportProvider(
 	override fun get(): Single<AuroraReport> {
 		return Single.fromCallable {
 			if (developSettings.overrideValues) {
-				val auroraFactors = createDebugFactors()
-				val locationName = "Fake Location"
 				val timestamp = timeProvider.getTime().blockingGet()
-				Single.just(AuroraReport(timestamp, locationName, auroraFactors))
-					.delay(developSettings.refreshDuration)
+				val auroraReport = developSettings.run {
+					AuroraReport(
+						"Fake Location",
+						Report.success(KpIndex(kpIndex), timestamp),
+						Report.success(GeomagLocation(geomagLatitude), timestamp),
+						Report.success(Darkness(sunZenithAngle), timestamp),
+						Report.success(Weather(cloudPercentage), timestamp)
+					)
+				}
+				Single.just(auroraReport).delay(developSettings.refreshDuration)
 			} else {
 				realProvider.get()
 			}
 		}.flatMap { it }
 
-	}
-
-	private fun createDebugFactors(): AuroraFactors {
-		val kpIndex = KpIndex(developSettings.kpIndex)
-		val geomagLocation = GeomagLocation(developSettings.geomagLatitude)
-		val darkness = Darkness(developSettings.sunZenithAngle)
-		val weather = Weather(developSettings.cloudPercentage)
-		return AuroraFactors(kpIndex, geomagLocation, darkness, weather)
 	}
 }

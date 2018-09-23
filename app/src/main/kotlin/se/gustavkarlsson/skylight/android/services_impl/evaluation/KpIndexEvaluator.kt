@@ -9,7 +9,7 @@ import kotlin.math.pow
 class KpIndexEvaluator : ChanceEvaluator<KpIndex> {
 
     override fun evaluate(value: KpIndex): Chance {
-        val kpIndex = value.value ?: return UNKNOWN
+        val kpIndex = value.value
 		if (kpIndex < WORST || kpIndex > BEST) {
 			return UNKNOWN
         }

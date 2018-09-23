@@ -29,7 +29,7 @@ val locationModule = module {
 	}
 
 	single<Streamable<Location>>("location") {
-		ReactiveLocationProviderStreamable(get(), 15.minutes, 1.minutes)
+		ReactiveLocationProviderStreamable(get(), 30.seconds, 15.minutes, 1.minutes)
 	}
 
 	single<Flowable<Location>>("location") {
@@ -40,7 +40,7 @@ val locationModule = module {
 	}
 
 	single("locationPermission") {
-		Manifest.permission.ACCESS_FINE_LOCATION
+		Manifest.permission.ACCESS_COARSE_LOCATION
 	}
 
 }

@@ -3,6 +3,8 @@
 	<string name="error_no_internet">No internet connection</string>
 
 	<string name="error_unknown_update_error">An unknown error occurred while updating</string>
+	<string name="error_no_location">Could not determine location</string>
+	<string name="error_no_internet_maybe">No internet connection?</string>
 
 	<string name="error_location_permission_denied_title">Location permission denied</string>
 	<string name="error_location_permission_denied_desc">
