@@ -22,13 +22,13 @@ class ReactiveLocationProviderStreamable(
 	retryDelay: Duration
 ) : Streamable<Location> {
 
-	private val firstLocationRequest = LocationRequest().apply {
+	private val forcedLocationRequest = LocationRequest().apply {
 		priority = PRIORITY_HIGH_ACCURACY
 		interval = firstPollingInterval.toMillis()
 		numUpdates = 1
 	}
 
-	private val locationRequest = LocationRequest().apply {
+	private val pollingLocationRequest = LocationRequest().apply {
 		priority = PRIORITY_HIGH_ACCURACY
 		interval = restPollingInterval.toMillis()
 	}
@@ -41,13 +41,13 @@ class ReactiveLocationProviderStreamable(
 
 	@SuppressLint("MissingPermission")
 	private val forcedLocation = reactiveLocationProvider
-		.getUpdatedLocation(firstLocationRequest)
+		.getUpdatedLocation(forcedLocationRequest)
 		.firstOrError()
 		.doOnSuccess { Timber.d("Forced location: $it") }
 
 	@SuppressLint("MissingPermission")
 	private val pollingLocations = reactiveLocationProvider
-		.getUpdatedLocation(locationRequest)
+		.getUpdatedLocation(pollingLocationRequest)
 		.toFlowable(BackpressureStrategy.LATEST)
 
 	private val locations = lastLocation
@@ -55,7 +55,6 @@ class ReactiveLocationProviderStreamable(
 		.toFlowable()
 		.concatWith(pollingLocations)
 
-	@SuppressLint("MissingPermission")
 	override val stream: Flowable<Location> = locations
 		.distinctUntilChanged()
 		.subscribeOn(Schedulers.io())

@@ -3,11 +3,10 @@
 ## Release
 * Replace room
 * Improve layout and texts
-* Look into replacing manual refresh with only stream (but show initial load indicator)
-* Look into replacing manual refresh for UpdateJob
 
 ## Soon
-* Obfuscate only some large packages (https://stackoverflow.com/a/4545534)
+* Look into replacing manual refresh with only stream (but show initial load indicator)
+* Look into replacing manual refresh for UpdateJob
 * KtLint
 * Improve color system
 * Make testing use other settings
