@@ -34,7 +34,7 @@ val locationModule = module {
 	}
 
 	single("locationPermission") {
-		Manifest.permission.ACCESS_COARSE_LOCATION
+		Manifest.permission.ACCESS_FINE_LOCATION
 	}
 
 }
