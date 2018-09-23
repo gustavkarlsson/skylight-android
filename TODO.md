@@ -3,10 +3,10 @@
 ## Release
 * Check why location sometimes turns null
 * Improve layout and texts
-* Proguard google packages?
 * Replace room
 
 ## Soon
+* Obfuscate only some large packages (https://stackoverflow.com/a/4545534)
 * KtLint
 * Improve color system
 * Make testing use other settings
