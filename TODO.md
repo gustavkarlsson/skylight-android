@@ -1,9 +1,10 @@
 # TODO
 
 ## Release
-* Check why location sometimes turns null
-* Improve layout and texts
 * Replace room
+* Improve layout and texts
+* Look into replacing manual refresh with only stream (but show initial load indicator)
+* Look into replacing manual refresh for UpdateJob
 
 ## Soon
 * Obfuscate only some large packages (https://stackoverflow.com/a/4545534)
