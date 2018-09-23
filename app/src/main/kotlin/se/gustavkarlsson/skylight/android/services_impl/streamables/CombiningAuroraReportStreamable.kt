@@ -29,5 +29,6 @@ class CombiningAuroraReportStreamable(
 						weather: Report<Weather> ->
 				AuroraReport(locationName.orNull(), kpIndex, geomagLocation, darkness, weather)
 			})
+			.distinctUntilChanged()
 			.doOnNext { Timber.i("Streamed aurora report: %s", it) }
 }

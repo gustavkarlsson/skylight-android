@@ -43,7 +43,7 @@ class MainViewModel(
 
 	init {
 		store.issue(AuroraReportStreamCommand(true))
-		//store.issue(GetAuroraReportCommand)
+		store.issue(GetAuroraReportCommand)
 	}
 
 	val swipedToRefresh: Consumer<Unit> = Consumer {

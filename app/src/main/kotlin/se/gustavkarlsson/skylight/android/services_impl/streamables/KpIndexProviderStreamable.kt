@@ -15,5 +15,6 @@ class KpIndexProviderStreamable(
 ) : Streamable<Report<KpIndex>> {
 	override val stream: Flowable<Report<KpIndex>> = kpIndexProvider.get()
 		.repeatWhen { it.delay(pollingInterval) }
+		.distinctUntilChanged()
 		.doOnNext { Timber.i("Streamed Kp index: %s", it) }
 }

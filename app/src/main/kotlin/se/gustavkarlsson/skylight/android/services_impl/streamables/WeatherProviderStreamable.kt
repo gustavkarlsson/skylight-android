@@ -23,5 +23,6 @@ class WeatherProviderStreamable(
 			weatherProvider.get(maybeLocation)
 				.repeatWhen { it.delay(pollingInterval) }
 		}
+		.distinctUntilChanged()
 		.doOnNext { Timber.i("Streamed weather: %s", it) }
 }

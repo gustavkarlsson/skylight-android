@@ -21,5 +21,6 @@ class LocationNameProviderStreamable(
 				.retryWhen { it.delay(retryDelay) }
 				.toFlowable()
 		}
+		.distinctUntilChanged()
 		.doOnNext { Timber.i("Streamed location name: %s", it.orNull()) }
 }

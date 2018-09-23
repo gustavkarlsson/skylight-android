@@ -23,6 +23,7 @@ class DarknessProviderStreamable(
 			darknessProvider.get(Single.just(Optional.of(location)))
 				.repeatWhen { it.delay(pollingInterval) }
 		}
+		.distinctUntilChanged()
 		.doOnNext { Timber.i("Streamed darkness: %s", it) }
 
 }

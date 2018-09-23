@@ -18,5 +18,6 @@ class GeomagLocationProviderStreamable(
 		.switchMapSingle {
 			geomagLocationProvider.get(Single.just(Optional.of(it)))
 		}
+		.distinctUntilChanged()
 		.doOnNext { Timber.i("Streamed geomag location: %s", it) }
 }
