@@ -6,6 +6,7 @@
 ## Soon
 * Look into replacing manual refresh with only stream (but show initial load indicator)
 * Look into replacing manual refresh for UpdateJob
+* Replaced complicated rx functions with rxkotlin
 * KtLint
 * Improve color system
 * Make testing use other settings
