@@ -9,9 +9,11 @@
 
 	<TextView
 		android:id="@+id/titleTextView"
-		style="@style/AppTheme.Header2"
+		style="@style/AppTheme.Header1"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_marginTop="64dp"
+		android:gravity="center"
 		android:text="@string/google_play_services_title"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +23,8 @@
 		android:id="@+id/descriptionTextView"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="64dp"
+		android:layout_marginTop="24dp"
+		android:gravity="center"
 		android:text="@string/google_play_services_desc"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"

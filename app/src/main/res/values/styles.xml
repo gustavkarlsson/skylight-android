@@ -20,7 +20,7 @@
 	</style>
 
 	<style name="AppTheme.BottomSheetTitle">
-		<item name="android:textSize">@dimen/text_h3</item>
+		<item name="android:textSize">@dimen/text_h2</item>
 	</style>
 
 	<style name="AppTheme.BottomSheetDescription">
@@ -30,24 +30,27 @@
 	</style>
 
 	<style name="AppTheme.IntroTitle">
-		<item name="android:textSize">@dimen/text_h1</item>
+		<item name="android:textSize">@dimen/text_title</item>
 	</style>
 
 	<style name="AppTheme.IntroDescription">
 		<item name="android:textSize">@dimen/text_large</item>
+		<item name="android:textColor">@color/on_background_weaker</item>
 	</style>
 
 	<style name="AppTheme.Subtitle">
 		<item name="android:textSize">@dimen/text_large</item>
 		<item name="android:textAllCaps">true</item>
+		<item name="android:textColor">@color/on_background_weaker</item>
 	</style>
 
 	<style name="AppTheme.SmallText">
 		<item name="android:textSize">@dimen/text_small</item>
+		<item name="android:textColor">@color/on_background_weaker</item>
 	</style>
 
 	<style name="AppTheme.ChanceText">
-		<item name="android:textSize">@dimen/text_h1</item>
+		<item name="android:textSize">@dimen/text_title</item>
 		<item name="android:textStyle">bold</item>
 	</style>
 
