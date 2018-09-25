@@ -8,8 +8,8 @@ import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.RepositoryBuilder
 
 android {
-	compileSdkVersion project.compilesdk_version
-	buildToolsVersion project.build_tools_version
+	compileSdkVersion rootProject.ext.compilesdk_version
+	buildToolsVersion rootProject.ext.build_tools_version
 
 	sourceSets {
 		main.java.srcDirs += "src/main/kotlin"
