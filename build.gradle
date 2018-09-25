@@ -3,14 +3,14 @@ buildscript {
 		compilesdk_version = 28
 		min_sdk_version = 21
 		target_sdk_version = 28
-		build_tools_version = "28.0.2"
+		build_tools_version = "28.0.3"
 
-		kotlin_version = "1.2.70"
+		kotlin_version = "1.2.71"
 		krate_version = "1.0.0"
 		retrofit_version = "2.3.0"
 		multidex_version = "2.0.0"
 		google_play_services_version = "15.0.1"
-		android_support_version = "1.0.0-rc02"
+		android_support_version = "1.0.0"
 		rxbinding_version = "2.1.1"
 		threetenabp_version = "1.1.0"
 		rxjava_version = "2.1.12"
@@ -22,7 +22,7 @@ buildscript {
 		firebase_version = "16.0.3"
 		fabric_version = "1.25.4"
 		crashlytics_version = "2.9.5"
-		arch_lifecycle_version = "2.0.0-rc01"
+		arch_lifecycle_version = "2.0.0"
 		reactivenetwork_version = "2.1.0"
 		rxpreferences_version = "2.0.0-RC3"
 		rxrelay_version = "2.0.0"
@@ -32,7 +32,7 @@ buildscript {
 		rxpermissions_version = "0.9.5"
 		reactive_location_version = "2.1"
 		solarpositioning_version = "0.0.9"
-		android_gradle_version = "3.2.0-rc03"
+		android_gradle_version = "3.2.0"
 		autodispose_version = "0.8.0"
 		leakcanary_version = "1.6"
 		navigation_version = "1.0.0-alpha06"
