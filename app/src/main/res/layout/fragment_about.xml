@@ -21,7 +21,7 @@
 
 	<TextView
 		android:id="@+id/appNameTextView"
-		style="@style/AppTheme.Header1"
+		style="@style/AppTheme.HeadingText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="32dp"
@@ -32,6 +32,7 @@
 
 	<TextView
 		android:id="@+id/versionNameTextView"
+		style="@style/AppTheme.BodyText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="24dp"
@@ -42,6 +43,7 @@
 
 	<TextView
 		android:id="@+id/appByTextView"
+		style="@style/AppTheme.BodyText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="4dp"
@@ -52,6 +54,7 @@
 
 	<TextView
 		android:id="@+id/versionCodeTextView"
+		style="@style/AppTheme.BodyText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="4dp"
@@ -62,6 +65,7 @@
 
 	<TextView
 		android:id="@+id/builtTextView"
+		style="@style/AppTheme.BodyText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="4dp"
@@ -72,6 +76,7 @@
 
 	<TextView
 		android:id="@+id/branchTextView"
+		style="@style/AppTheme.BodyText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="4dp"
@@ -82,6 +87,7 @@
 
 	<TextView
 		android:id="@+id/sha1TextView"
+		style="@style/AppTheme.BodyText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="4dp"

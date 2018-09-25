@@ -21,7 +21,7 @@
 
 	<TextView
 		android:id="@+id/titleTextView"
-		style="@style/AppTheme.Header1"
+		style="@style/AppTheme.HeadingText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="32dp"
@@ -33,6 +33,7 @@
 
 	<TextView
 		android:id="@+id/descriptionTextView"
+		style="@style/AppTheme.BodyText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="24dp"
