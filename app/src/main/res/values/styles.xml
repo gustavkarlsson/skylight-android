@@ -86,12 +86,12 @@
 	<!-- Bottom sheet -->
 
 	<style name="AppTheme.BottomSheet">
-		<item name="android:background">@color/surface</item>
+		<item name="android:background">@color/background</item>
 	</style>
 
 	<style name="AppTheme.BottomSheet.DescriptionText">
 		<item name="android:textSize">@dimen/text_large</item>
-		<item name="android:textColor">@color/on_surface_weaker</item>
+		<item name="android:textColor">@color/on_background_weaker</item>
 		<item name="android:lineSpacingMultiplier">1.1</item>
 	</style>
 
