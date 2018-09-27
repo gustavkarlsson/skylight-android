@@ -2,6 +2,7 @@
 
 ## Release
 * Improve layout and texts
+* Start updating/do initial update whenever conditions are met (not on viewmodel init)
 
 ## Soon
 * Look into replacing manual refresh with only stream (but show initial load indicator)
