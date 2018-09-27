@@ -21,7 +21,7 @@ fun showErrorSnackbar(view: View, @StringRes message: Int, length: Int): Snackba
 }
 
 private fun Snackbar.setErrorColor(): Snackbar {
-	view.setBackgroundColor(R.color.snackbar_error_background.toArgb(view.context))
+	view.setBackgroundColor(R.color.error.toArgb(view.context))
 	return this
 }
 

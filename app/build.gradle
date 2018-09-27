@@ -83,7 +83,7 @@ android {
 			appName += " (${variant.flavorName}${variant.buildType.name.capitalize()})"
 		}
 
-		resValue "string", "app_name", appName
+		resValue "string", "app_name_variant", appName
 	}
 
 	productFlavors.each { flavor ->

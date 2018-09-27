@@ -11,6 +11,7 @@
 		android:id="@+id/portraitImageView"
 		android:layout_width="160dp"
 		android:layout_height="wrap_content"
+		android:layout_marginTop="64dp"
 		android:adjustViewBounds="true"
 		android:src="@drawable/about_logo"
 		app:layout_constraintEnd_toEndOf="parent"
@@ -20,45 +21,54 @@
 
 	<TextView
 		android:id="@+id/appNameTextView"
-		style="@style/AppTheme.Header2"
+		style="@style/AppTheme.HeadingText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_marginTop="32dp"
 		android:text="@string/app_name"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/portraitImageView" />
 
 	<TextView
-		android:id="@+id/appByTextView"
+		android:id="@+id/versionNameTextView"
+		style="@style/AppTheme.BodyText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_marginTop="24dp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/appNameTextView"
-		tools:text="App By: Gustav Karlsson" />
-
-	<TextView
-		android:id="@+id/versionNameTextView"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/appByTextView"
 		tools:text="Version: x.y.z" />
 
 	<TextView
-		android:id="@+id/versionCodeTextView"
+		android:id="@+id/appByTextView"
+		style="@style/AppTheme.BodyText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_marginTop="4dp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/versionNameTextView"
+		tools:text="App By: Gustav Karlsson" />
+
+	<TextView
+		android:id="@+id/versionCodeTextView"
+		style="@style/AppTheme.BodyText"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="4dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/appByTextView"
 		tools:text="Version code: 12345" />
 
 	<TextView
 		android:id="@+id/builtTextView"
+		style="@style/AppTheme.BodyText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_marginTop="4dp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/versionCodeTextView"
@@ -66,8 +76,10 @@
 
 	<TextView
 		android:id="@+id/branchTextView"
+		style="@style/AppTheme.BodyText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_marginTop="4dp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/builtTextView"
@@ -75,8 +87,10 @@
 
 	<TextView
 		android:id="@+id/sha1TextView"
+		style="@style/AppTheme.BodyText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:layout_marginTop="4dp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/branchTextView"

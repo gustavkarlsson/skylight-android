@@ -11,7 +11,7 @@
 
 	<TextView
 		android:id="@+id/title"
-		style="@style/AppTheme.BottomSheetTitle"
+		style="@style/AppTheme.BottomSheet.TitleText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		app:layout_constraintBottom_toTopOf="@+id/titleGuide"
@@ -28,7 +28,7 @@
 
 	<TextView
 		android:id="@+id/description"
-		style="@style/AppTheme.BottomSheetDescription"
+		style="@style/AppTheme.BottomSheet.DescriptionText"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		app:layout_constraintBottom_toBottomOf="parent"

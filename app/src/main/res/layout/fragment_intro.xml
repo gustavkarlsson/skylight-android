@@ -4,15 +4,16 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:padding="@dimen/screen_margin"
+	android:padding="@dimen/screen_margin_tighter"
 	tools:context=".gui.MainActivity">
 
 	<TextView
 		android:id="@+id/title"
-		style="@style/AppTheme.IntroTitle"
+		style="@style/AppTheme.IntroTitleText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="64dp"
+		android:gravity="center"
 		android:text="@string/intro_title"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
@@ -20,10 +21,10 @@
 
 	<TextView
 		android:id="@+id/description"
-		style="@style/AppTheme.IntroDescription"
+		style="@style/AppTheme.IntroDescriptionText"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="64dp"
+		android:layout_marginTop="24dp"
 		android:gravity="center"
 		android:text="@string/intro_desc"
 		app:layout_constraintEnd_toEndOf="parent"

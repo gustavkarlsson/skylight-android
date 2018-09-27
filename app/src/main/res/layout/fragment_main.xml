@@ -26,7 +26,7 @@
 
 			<TextView
 				android:id="@+id/locationName"
-				style="@style/AppTheme.Subtitle"
+				style="@style/AppTheme.LocationNameNext"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				app:layout_constraintBottom_toTopOf="@+id/chance"
@@ -48,7 +48,7 @@
 
 			<TextView
 				android:id="@+id/timeSinceUpdate"
-				style="@style/AppTheme.SmallText"
+				style="@style/AppTheme.TimeSinceText"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				app:layout_constraintBottom_toTopOf="@+id/secondSpace"
@@ -69,8 +69,8 @@
 				android:id="@+id/kpIndexCard"
 				style="@style/AppTheme.FactorCardView"
 				android:layout_width="0dp"
-				android:layout_height="64dp"
-				android:layout_marginBottom="16dp"
+				android:layout_height="56dp"
+				android:layout_marginBottom="@dimen/gutter"
 				app:layout_constraintBottom_toTopOf="@+id/geomagLocationCard"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintStart_toStartOf="parent"
@@ -78,7 +78,7 @@
 
 			<TextView
 				android:id="@+id/kpIndexTitle"
-				style="@style/AppTheme.FactorCardItem.Title"
+				style="@style/AppTheme.FactorCardItemText.Title"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginStart="16dp"
@@ -89,7 +89,7 @@
 
 			<TextView
 				android:id="@+id/kpIndexValue"
-				style="@style/AppTheme.FactorCardItem.Value"
+				style="@style/AppTheme.FactorCardItemText.Value"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginStart="16dp"
@@ -103,7 +103,7 @@
 				style="@style/AppTheme.FactorCardItem.ProgressBar"
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"
-				android:layout_marginEnd="8dp"
+				android:layout_marginEnd="16dp"
 				android:layout_marginStart="16dp"
 				android:max="1000"
 				app:layout_constraintBottom_toBottomOf="@id/kpIndexCard"
@@ -117,8 +117,8 @@
 				android:id="@+id/geomagLocationCard"
 				style="@style/AppTheme.FactorCardView"
 				android:layout_width="0dp"
-				android:layout_height="64dp"
-				android:layout_marginBottom="16dp"
+				android:layout_height="56dp"
+				android:layout_marginBottom="@dimen/gutter"
 				app:layout_constraintBottom_toTopOf="@+id/weatherCard"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintStart_toStartOf="parent"
@@ -126,7 +126,7 @@
 
 			<TextView
 				android:id="@+id/geomagLocationTitle"
-				style="@style/AppTheme.FactorCardItem.Title"
+				style="@style/AppTheme.FactorCardItemText.Title"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginStart="16dp"
@@ -137,7 +137,7 @@
 
 			<TextView
 				android:id="@+id/geomagLocationValue"
-				style="@style/AppTheme.FactorCardItem.Value"
+				style="@style/AppTheme.FactorCardItemText.Value"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginStart="16dp"
@@ -151,7 +151,7 @@
 				style="@style/AppTheme.FactorCardItem.ProgressBar"
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"
-				android:layout_marginEnd="8dp"
+				android:layout_marginEnd="16dp"
 				android:layout_marginStart="16dp"
 				android:max="1000"
 				app:layout_constraintBottom_toBottomOf="@id/geomagLocationCard"
@@ -165,8 +165,8 @@
 				android:id="@+id/weatherCard"
 				style="@style/AppTheme.FactorCardView"
 				android:layout_width="0dp"
-				android:layout_height="64dp"
-				android:layout_marginBottom="16dp"
+				android:layout_height="56dp"
+				android:layout_marginBottom="@dimen/gutter"
 				app:layout_constraintBottom_toTopOf="@+id/darknessCard"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintStart_toStartOf="parent"
@@ -174,7 +174,7 @@
 
 			<TextView
 				android:id="@+id/weatherTitle"
-				style="@style/AppTheme.FactorCardItem.Title"
+				style="@style/AppTheme.FactorCardItemText.Title"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginStart="16dp"
@@ -185,7 +185,7 @@
 
 			<TextView
 				android:id="@+id/weatherValue"
-				style="@style/AppTheme.FactorCardItem.Value"
+				style="@style/AppTheme.FactorCardItemText.Value"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginStart="16dp"
@@ -199,7 +199,7 @@
 				style="@style/AppTheme.FactorCardItem.ProgressBar"
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"
-				android:layout_marginEnd="8dp"
+				android:layout_marginEnd="16dp"
 				android:layout_marginStart="16dp"
 				android:max="1000"
 				app:layout_constraintBottom_toBottomOf="@id/weatherCard"
@@ -213,7 +213,7 @@
 				android:id="@+id/darknessCard"
 				style="@style/AppTheme.FactorCardView"
 				android:layout_width="0dp"
-				android:layout_height="64dp"
+				android:layout_height="56dp"
 				app:layout_constraintBottom_toBottomOf="parent"
 				app:layout_constraintEnd_toEndOf="parent"
 				app:layout_constraintStart_toStartOf="parent"
@@ -221,7 +221,7 @@
 
 			<TextView
 				android:id="@+id/darknessTitle"
-				style="@style/AppTheme.FactorCardItem.Title"
+				style="@style/AppTheme.FactorCardItemText.Title"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginStart="16dp"
@@ -232,7 +232,7 @@
 
 			<TextView
 				android:id="@+id/darknessValue"
-				style="@style/AppTheme.FactorCardItem.Value"
+				style="@style/AppTheme.FactorCardItemText.Value"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginStart="16dp"
@@ -246,7 +246,7 @@
 				style="@style/AppTheme.FactorCardItem.ProgressBar"
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"
-				android:layout_marginEnd="8dp"
+				android:layout_marginEnd="16dp"
 				android:layout_marginStart="16dp"
 				android:max="1000"
 				app:layout_constraintBottom_toBottomOf="@id/darknessCard"

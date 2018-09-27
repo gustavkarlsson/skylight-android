@@ -3,80 +3,100 @@
 
 	<style name="AppTheme" parent="Theme.MaterialComponents">
 		<item name="colorPrimary">@color/primary</item>
-		<item name="colorPrimaryDark">@color/primary_dark</item>
-		<item name="colorSecondary">@color/accent</item>
+		<item name="colorPrimaryDark">@color/primary_variant</item>
+		<item name="colorSecondary">@color/secondary</item>
+		<item name="colorError">@color/error</item>
+		<item name="android:textColor">@color/on_background</item>
+		<item name="android:windowBackground">@color/background</item>
 		<item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 	</style>
 
-	<style name="AppTheme.Header1">
+
+	<!-- Typography -->
+	<style name="AppTheme.HeadingText">
 		<item name="android:textSize">@dimen/text_h1</item>
 	</style>
 
-	<style name="AppTheme.Header2">
-		<item name="android:textSize">@dimen/text_h2</item>
+	<style name="AppTheme.BodyText">
+		<item name="android:textColor">@color/on_background_weaker</item>
 	</style>
 
-	<style name="AppTheme.BottomSheetTitle">
-		<item name="android:textSize">@dimen/text_h3</item>
-		<item name="android:textColor">#FFF</item>
+
+	<!-- Intro -->
+
+	<style name="AppTheme.IntroTitleText">
+		<item name="android:textSize">@dimen/text_title</item>
 	</style>
 
-	<style name="AppTheme.BottomSheetDescription">
+	<style name="AppTheme.IntroDescriptionText">
 		<item name="android:textSize">@dimen/text_large</item>
-		<item name="android:textColor">#C1C1C1</item>
-		<item name="android:lineSpacingMultiplier">1.2</item>
+		<item name="android:textColor">@color/on_background_weaker</item>
 	</style>
 
-	<style name="AppTheme.IntroTitle">
-		<item name="android:textSize">@dimen/text_h1</item>
-		<item name="android:textColor">#FFF</item>
-	</style>
 
-	<style name="AppTheme.IntroDescription">
-		<item name="android:textSize">@dimen/text_large</item>
-	</style>
+	<!-- Main -->
 
-	<style name="AppTheme.Subtitle">
+	<style name="AppTheme.LocationNameNext">
 		<item name="android:textSize">@dimen/text_large</item>
 		<item name="android:textAllCaps">true</item>
-	</style>
-
-	<style name="AppTheme.SmallText">
-		<item name="android:textSize">@dimen/text_small</item>
+		<item name="android:textColor">@color/on_background_weaker</item>
 	</style>
 
 	<style name="AppTheme.ChanceText">
-		<item name="android:textSize">@dimen/text_h1</item>
+		<item name="android:textSize">@dimen/text_title</item>
 		<item name="android:textStyle">bold</item>
-		<item name="android:textColor">#FFF</item>
 	</style>
+
+	<style name="AppTheme.TimeSinceText">
+		<item name="android:textSize">@dimen/text_small</item>
+		<item name="android:textColor">@color/on_background_weaker</item>
+	</style>
+
+
+	<!-- Factor card -->
 
 	<style name="AppTheme.FactorCardView" parent="Widget.MaterialComponents.CardView">
 		<item name="android:foreground">?attr/selectableItemBackground</item>
+		<item name="cardBackgroundColor">@color/surface</item>
+		<item name="cardCornerRadius">@dimen/card_corner_radius</item>
+		<item name="cardElevation">@dimen/card_elevation</item>
 	</style>
 
-	<style name="AppTheme.FactorCardItem">
+	<style name="AppTheme.FactorCardItemText">
 		<!-- Puts text on top of CardView -->
-		<item name="android:elevation">2dp</item>
+		<item name="android:elevation">@dimen/card_elevation</item>
 	</style>
 
-	<style name="AppTheme.FactorCardItem.Title">
+	<style name="AppTheme.FactorCardItemText.Title">
 		<item name="android:textSize">@dimen/text_large</item>
 	</style>
 
-	<style name="AppTheme.FactorCardItem.Value">
+	<style name="AppTheme.FactorCardItemText.Value">
 		<item name="android:textSize">@dimen/text_large</item>
-		<item name="android:textColor">#AAA</item>
+		<item name="android:textColor">@color/on_surface_weaker</item>
 	</style>
 
 	<style name="AppTheme.FactorCardItem.ProgressBar" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
 		<!-- Puts text on top of CardView -->
-		<item name="android:elevation">2dp</item>
+		<item name="android:elevation">@dimen/card_elevation</item>
 		<item name="android:indeterminate">false</item>
 	</style>
 
+
+	<!-- Bottom sheet -->
+
 	<style name="AppTheme.BottomSheet">
-		<item name="android:background">#383838</item>
+		<item name="android:background">@color/background</item>
+	</style>
+
+	<style name="AppTheme.BottomSheet.DescriptionText">
+		<item name="android:textSize">@dimen/text_large</item>
+		<item name="android:textColor">@color/on_background_weaker</item>
+		<item name="android:lineSpacingMultiplier">1.1</item>
+	</style>
+
+	<style name="AppTheme.BottomSheet.TitleText">
+		<item name="android:textSize">@dimen/text_h2</item>
 	</style>
 
 </resources>
