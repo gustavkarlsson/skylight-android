@@ -2,11 +2,11 @@
 
 ## Release
 * Improve layout and texts
-* Start updating/do initial update whenever conditions are met (not on viewmodel init)
 
 ## Soon
 * Look into replacing manual refresh with only stream (but show initial load indicator)
 * Look into replacing manual refresh for UpdateJob
+* Rework API responses.
 * Replaced complicated rx functions with rxkotlin
 * KtLint
 * Improve color system

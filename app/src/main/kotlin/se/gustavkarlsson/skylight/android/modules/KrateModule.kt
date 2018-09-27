@@ -92,8 +92,11 @@ val krateModule = module {
 					}
 				}
 				transform<AuroraReportStreamCommand> { commands ->
-					commands.switchMap { command ->
-						if (command.stream) {
+					commands
+						.map(AuroraReportStreamCommand::stream)
+						.distinctUntilChanged()
+						.switchMap { stream ->
+						if (stream) {
 							auroraReports
 								.map { AuroraReportResult.Success(it) as AuroraReportResult }
 								.onErrorReturn { AuroraReportResult.Failure(it) }

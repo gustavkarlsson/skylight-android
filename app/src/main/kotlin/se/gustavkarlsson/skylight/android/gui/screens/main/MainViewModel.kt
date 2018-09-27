@@ -43,7 +43,9 @@ class MainViewModel(
 
 	init {
 		store.issue(AuroraReportStreamCommand(true))
-		store.issue(GetAuroraReportCommand)
+		if (store.currentState.auroraReport == null) {
+			store.issue(GetAuroraReportCommand)
+		}
 	}
 
 	val swipedToRefresh: Consumer<Unit> = Consumer {
