@@ -1,6 +1,7 @@
 # TODO
 
 ## Release
+* Upgrade LeakCanary to something released after Aug 7 to see if crashes disappear
 * Improve layout and texts
 
 ## Soon
