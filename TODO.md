@@ -4,7 +4,7 @@
 * Improve layout and texts
 
 ## Soon
-* Generate png:s from master vector files
+* Generate png:s from master vector files (https://github.com/avianey/androidsvgdrawable-plugin)
 * Consolidate color use in logo and app (not all logo variants are the same color)
 * Look into replacing manual refresh with only stream (but show initial load indicator)
 * Look into replacing manual refresh for UpdateJob
