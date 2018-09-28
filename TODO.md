@@ -1,7 +1,6 @@
 # TODO
 
 ## Release
-* Handle HTTP 500 errors in API:s
 * Improve layout and texts
 
 ## Soon
