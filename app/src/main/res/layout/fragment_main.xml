@@ -40,6 +40,7 @@
 				android:layout_height="wrap_content"
 				app:layout_constraintBottom_toTopOf="@+id/chance"
 				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintHorizontal_bias="0"
 				app:layout_constraintStart_toStartOf="parent"
 				app:layout_constraintTop_toBottomOf="@id/firstSpace"
 				tools:text="Strycksele" />
@@ -51,6 +52,7 @@
 				android:layout_height="wrap_content"
 				app:layout_constraintBottom_toTopOf="@+id/timeSinceUpdate"
 				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintHorizontal_bias="0"
 				app:layout_constraintStart_toStartOf="parent"
 				app:layout_constraintTop_toBottomOf="@id/locationName"
 				tools:text="High Chance" />
@@ -62,6 +64,7 @@
 				android:layout_height="wrap_content"
 				app:layout_constraintBottom_toTopOf="@+id/secondSpace"
 				app:layout_constraintEnd_toEndOf="parent"
+				app:layout_constraintHorizontal_bias="0"
 				app:layout_constraintStart_toStartOf="parent"
 				app:layout_constraintTop_toBottomOf="@+id/chance"
 				tools:text="3 minutes ago" />

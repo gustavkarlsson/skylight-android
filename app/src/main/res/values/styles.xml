@@ -48,7 +48,8 @@
 	</style>
 
 	<style name="AppTheme.ChanceText">
-		<item name="android:textSize">@dimen/text_title</item>
+		<item name="android:fontFamily">@font/open_sans_condensed_light</item>
+		<item name="android:textSize">@dimen/text_chance</item>
 		<item name="android:textStyle">bold</item>
 	</style>
 
