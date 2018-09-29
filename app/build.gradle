@@ -5,9 +5,9 @@ apply plugin: "io.fabric"
 apply plugin: "com.akaita.android.easylauncher"
 apply plugin: "pl.allegro.tech.build.axion-release"
 
+
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.RepositoryBuilder
-import pl.allegro.tech.build.axion.release.ReleaseTask
 
 scmVersion {
 	tag {
@@ -210,24 +210,6 @@ dependencies {
 	}
 	androidTestImplementation "commons-io:commons-io:$commons_io_version"
 	androidTestImplementation "com.agoda.kakao:kakao:$kakao_version"
-}
-
-task releasePatch(type: ReleaseTask) {
-	doFirst {
-		scmVersion.versionIncrementer "incrementPatch"
-	}
-}
-
-task releaseMinor(type: ReleaseTask) {
-	doFirst {
-		scmVersion.versionIncrementer "incrementMinor"
-	}
-}
-
-task releaseMajor(type: ReleaseTask) {
-	doFirst {
-		scmVersion.versionIncrementer "incrementMajor"
-	}
 }
 
 /**
