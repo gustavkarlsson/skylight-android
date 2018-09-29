@@ -9,6 +9,7 @@ import se.gustavkarlsson.skylight.android.extensions.toArgb
 
 class ChanceToColorConverter(context: Context) {
 	private val lowestColor = R.color.chance_lowest.toArgb(context)
+	private val middleColor = R.color.chance_middle.toArgb(context)
 	private val highestColor = R.color.chance_highest.toArgb(context)
 
 	fun convert(chance: Chance): Int {
@@ -16,6 +17,8 @@ class ChanceToColorConverter(context: Context) {
             return Color.TRANSPARENT
         }
 
-		return ColorUtils.blendARGB(lowestColor, highestColor, chance.value!!.toFloat())
+		val firstColor = if (chance.value!! < 0.5) lowestColor else middleColor
+		val lastColor = if (chance.value!! < 0.5) middleColor else highestColor
+		return ColorUtils.blendARGB(firstColor, lastColor, chance.value!!.toFloat())
     }
 }
