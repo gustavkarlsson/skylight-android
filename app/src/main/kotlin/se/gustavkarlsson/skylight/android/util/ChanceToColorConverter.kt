@@ -17,8 +17,17 @@ class ChanceToColorConverter(context: Context) {
             return Color.TRANSPARENT
         }
 
-		val firstColor = if (chance.value!! < 0.5) lowestColor else middleColor
-		val lastColor = if (chance.value!! < 0.5) middleColor else highestColor
-		return ColorUtils.blendARGB(firstColor, lastColor, chance.value!!.toFloat())
+		val value = chance.value!!.toFloat()
+		return if (value < MIDDLE_COLOR_CHANCE) {
+			val blendAmount = value / MIDDLE_COLOR_CHANCE
+			ColorUtils.blendARGB(lowestColor, middleColor, blendAmount)
+		} else {
+			val blendAmount = (value - MIDDLE_COLOR_CHANCE) / MIDDLE_COLOR_CHANCE
+			ColorUtils.blendARGB(middleColor, highestColor, blendAmount)
+		}
     }
+
+	private companion object {
+		const val MIDDLE_COLOR_CHANCE = 0.5F
+	}
 }
