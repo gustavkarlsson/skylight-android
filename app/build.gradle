@@ -3,9 +3,16 @@ apply plugin: "kotlin-android"
 apply plugin: "kotlin-android-extensions"
 apply plugin: "io.fabric"
 apply plugin: "com.akaita.android.easylauncher"
+apply plugin: "pl.allegro.tech.build.axion-release"
 
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.RepositoryBuilder
+
+scmVersion {
+	tag {
+		prefix = ""
+	}
+}
 
 android {
 	compileSdkVersion rootProject.ext.compilesdk_version
@@ -34,8 +41,8 @@ android {
 		applicationId "se.gustavkarlsson.skylight.android"
 		minSdkVersion project.min_sdk_version
 		targetSdkVersion project.target_sdk_version
-		versionCode 1
-		versionName "1.0"
+		versionCode generateVersionCode(scmVersion.version)
+		versionName scmVersion.version
 		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 		multiDexEnabled true
 	}
@@ -202,6 +209,36 @@ dependencies {
 	}
 	androidTestImplementation "commons-io:commons-io:$commons_io_version"
 	androidTestImplementation "com.agoda.kakao:kakao:$kakao_version"
+}
+
+/**
+ * Calculates an Android version code from a version number string.<br>
+ * <br>
+ * Note that versions containing the string "snapshot" (case insensitive) will get a lower
+ * version code than a release version, since release versions come after snapshot versions.<br>
+ * <br>
+ * Examples:
+ * <ul>
+ *     <li>"0.0.1-SNAPSHOT" => 100</li><
+ *     <li>"1.2.3-SNAPSHOT" => 1020300</li>
+ *     <li>"11.22.33" => 11223301</li>
+ * </ul>
+ * @param version A version number following "semantic versioning"
+ * @return A version code
+ */
+static int generateVersionCode(String version) {
+	def type = version.toLowerCase().contains("snapshot") ? 0 : 1
+	def (major, minor, patch) = version
+		.tokenize('.')
+		.collect { it.replaceAll("\\D", "") }
+		.collect { it.toInteger() }
+	def versionCode = (major * 1000000) + (minor * 10000) + (patch * 100) + type
+	assert major in 0..2000
+	assert minor in 0..99
+	assert patch in 0..99
+	assert type in 0..99
+	assert versionCode in 1..2100000000
+	return versionCode
 }
 
 // Recommended to be applied at bottom
