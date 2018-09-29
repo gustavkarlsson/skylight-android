@@ -9,7 +9,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.gui.BaseFragment
 
-class GooglePlayServicesFragment : BaseFragment(R.layout.fragment_google_play_services, false) {
+class GooglePlayServicesFragment : BaseFragment(R.layout.fragment_google_play_services) {
 
 	private val viewModel: GooglePlayServicesViewModel by viewModel()
 

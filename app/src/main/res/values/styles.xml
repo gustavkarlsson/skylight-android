@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<style name="AppTheme" parent="Theme.MaterialComponents">
+	<style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
 		<item name="colorPrimary">@color/primary</item>
 		<item name="colorPrimaryDark">@color/primary_variant</item>
 		<item name="colorSecondary">@color/secondary</item>
@@ -13,6 +13,11 @@
 
 
 	<!-- Typography -->
+
+	<style name="AppTheme.TitleTopText">
+		<item name="android:textSize">@dimen/text_title_top</item>
+	</style>
+
 	<style name="AppTheme.HeadingText">
 		<item name="android:textSize">@dimen/text_h1</item>
 	</style>
@@ -28,7 +33,7 @@
 		<item name="android:textSize">@dimen/text_title</item>
 	</style>
 
-	<style name="AppTheme.IntroDescriptionText">
+	<style name="AppTheme.IntroBodyText">
 		<item name="android:textSize">@dimen/text_large</item>
 		<item name="android:textColor">@color/on_background_weaker</item>
 	</style>
@@ -67,7 +72,7 @@
 		<item name="android:elevation">@dimen/card_elevation</item>
 	</style>
 
-	<style name="AppTheme.FactorCardItemText.Title">
+	<style name="AppTheme.FactorCardItemText.Name">
 		<item name="android:textSize">@dimen/text_large</item>
 	</style>
 
@@ -89,14 +94,23 @@
 		<item name="android:background">@color/background</item>
 	</style>
 
-	<style name="AppTheme.BottomSheet.DescriptionText">
+	<style name="AppTheme.BottomSheet.BodyText">
 		<item name="android:textSize">@dimen/text_large</item>
 		<item name="android:textColor">@color/on_background_weaker</item>
 		<item name="android:lineSpacingMultiplier">1.1</item>
 	</style>
 
-	<style name="AppTheme.BottomSheet.TitleText">
+	<style name="AppTheme.BottomSheet.HeadingText">
 		<item name="android:textSize">@dimen/text_h2</item>
+	</style>
+
+
+	<!-- Misc -->
+
+	<style name="AppTheme.ClickableIcon">
+		<item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+		<item name="android:clickable">true</item>
+		<item name="android:focusable">true</item>
 	</style>
 
 </resources>

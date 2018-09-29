@@ -12,12 +12,10 @@ import com.uber.autodispose.android.lifecycle.scope
 import se.gustavkarlsson.skylight.android.extensions.doOnEvery
 
 abstract class BaseFragment(
-	@LayoutRes private val layoutId: Int,
-	appBarEnabled: Boolean
+	@LayoutRes private val layoutId: Int
 ) : Fragment() {
 
 	init {
-		configureAppBar(appBarEnabled)
 		@Suppress("LeakingThis")
 		doOnEvery(this, Lifecycle.Event.ON_START) {
 			bindData(scope(Lifecycle.Event.ON_STOP))

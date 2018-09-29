@@ -1,14 +1,21 @@
 package se.gustavkarlsson.skylight.android.gui.screens.about
 
 import android.view.View
+import com.jakewharton.rxbinding2.view.clicks
+import com.uber.autodispose.LifecycleScopeProvider
+import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_about.*
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.gui.BaseFragment
+import se.gustavkarlsson.skylight.android.navigation.Navigator
 
-class AboutFragment : BaseFragment(R.layout.fragment_about, true) {
+class AboutFragment : BaseFragment(R.layout.fragment_about) {
 
 	private val viewModel: AboutViewModel by viewModel()
+
+	val navigator: Navigator by inject()
 
 	override fun initView() {
 		// TODO Replace with TextRef
@@ -24,5 +31,11 @@ class AboutFragment : BaseFragment(R.layout.fragment_about, true) {
 		builtTextView.visibility = developVisibility
 		branchTextView.visibility = developVisibility
 		sha1TextView.visibility = developVisibility
+	}
+
+	override fun bindData(scope: LifecycleScopeProvider<*>) {
+		backButton.clicks()
+			.autoDisposable(scope)
+			.subscribe { navigator.goBack() }
 	}
 }

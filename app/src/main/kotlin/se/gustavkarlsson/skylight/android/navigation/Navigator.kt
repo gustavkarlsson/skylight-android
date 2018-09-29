@@ -47,6 +47,10 @@ class Navigator(private val navController: NavController) {
 		}
 	}
 
+	fun goBack() {
+		navController.popBackStack()
+	}
+
 	private enum class AnimationDirection(
 		@AnimRes val enterAnim: Int,
 		@AnimRes val exitAnim: Int,

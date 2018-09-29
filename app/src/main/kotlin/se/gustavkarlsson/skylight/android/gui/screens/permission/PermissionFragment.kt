@@ -16,7 +16,7 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.gui.BaseFragment
 import timber.log.Timber
 
-class PermissionFragment : BaseFragment(R.layout.fragment_permission, false) {
+class PermissionFragment : BaseFragment(R.layout.fragment_permission) {
 
 	private val locationPermission: String by inject("locationPermission")
 

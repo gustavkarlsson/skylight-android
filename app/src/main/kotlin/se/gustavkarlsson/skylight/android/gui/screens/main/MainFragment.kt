@@ -1,12 +1,11 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import androidx.annotation.StringRes
+import androidx.appcompat.widget.PopupMenu
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
+import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.visibility
 import com.jakewharton.rxbinding2.widget.text
 import com.uber.autodispose.LifecycleScopeProvider
@@ -22,11 +21,12 @@ import se.gustavkarlsson.skylight.android.navigation.Screen
 import se.gustavkarlsson.skylight.android.services.Analytics
 import timber.log.Timber
 
-class MainFragment : BaseFragment(R.layout.fragment_main, true) {
+class MainFragment : BaseFragment(R.layout.fragment_main) {
 
 	private var connectivitySnackbar: Snackbar? = null
 	private var errorSnackbar: Snackbar? = null
 	private var currentBottomSheetTitle: Int? = null
+	private lateinit var menu: PopupMenu
 
 	private val viewModel: MainViewModel by viewModel()
 
@@ -37,21 +37,22 @@ class MainFragment : BaseFragment(R.layout.fragment_main, true) {
 		setHasOptionsMenu(true)
 	}
 
-	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-		inflater.inflate(R.menu.menu_main, menu)
-	}
-
-	override fun onOptionsItemSelected(item: MenuItem): Boolean {
-		return when (item.itemId) {
-			R.id.action_settings -> {
-				navigator.navigate(Screen.SETTINGS)
-				true
+	override fun initView() {
+		menu = PopupMenu(requireContext(), menuButton).apply {
+			inflate(R.menu.menu_main)
+			setOnMenuItemClickListener { item ->
+				when (item.itemId) {
+					R.id.action_settings -> {
+						navigator.navigate(Screen.SETTINGS)
+						true
+					}
+					R.id.action_about -> {
+						navigator.navigate(Screen.ABOUT)
+						true
+					}
+					else -> false
+				}
 			}
-			R.id.action_about -> {
-				navigator.navigate(Screen.ABOUT)
-				true
-			}
-			else -> super.onOptionsItemSelected(item)
 		}
 	}
 
@@ -63,6 +64,12 @@ class MainFragment : BaseFragment(R.layout.fragment_main, true) {
 			}
 			.autoDisposable(scope)
 			.subscribe(viewModel.swipedToRefresh)
+
+		menuButton.clicks()
+			.autoDisposable(scope)
+			.subscribe {
+				menu.show()
+			}
 
 		viewModel.locationName
 			.doOnNext { Timber.d("Updating locationName view: %s", it) }

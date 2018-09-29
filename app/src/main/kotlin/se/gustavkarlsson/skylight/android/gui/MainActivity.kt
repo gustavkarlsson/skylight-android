@@ -6,7 +6,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.navigation.findNavController
-import androidx.navigation.ui.setupActionBarWithNavController
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import org.koin.android.ext.android.inject
@@ -33,11 +32,8 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 		bindScope(createScope("activity"))
 		setContentView(R.layout.activity_main)
 		addToKoin(navController)
-		setupActionBarWithNavController(navController)
 		lifecycle.addObserver(this)
 	}
-
-	override fun onSupportNavigateUp(): Boolean = navController.navigateUp()
 
 	@OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
 	private fun handleInitialNavigation() {

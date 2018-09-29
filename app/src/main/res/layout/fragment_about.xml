@@ -7,6 +7,27 @@
 	android:padding="@dimen/screen_margin"
 	tools:context=".gui.MainActivity">
 
+	<androidx.appcompat.widget.AppCompatImageView
+		android:id="@+id/backButton"
+		style="@style/AppTheme.ClickableIcon"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/ic_arrow_back_white_24dp"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintBottom_toTopOf="@id/portraitImageView" />
+
+	<TextView
+		android:id="@+id/titleTextView"
+		style="@style/AppTheme.TitleTopText"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/menu_about"
+		android:layout_marginStart="@dimen/content_margin_start"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintBottom_toTopOf="@id/innerFragment" />
+
 	<ImageView
 		android:id="@+id/portraitImageView"
 		android:layout_width="160dp"
@@ -16,7 +37,7 @@
 		android:src="@drawable/about_logo"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/backButton"
 		tools:ignore="ContentDescription" />
 
 	<TextView
