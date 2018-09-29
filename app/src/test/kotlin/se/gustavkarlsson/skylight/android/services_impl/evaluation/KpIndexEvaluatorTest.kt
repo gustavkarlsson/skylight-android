@@ -21,13 +21,6 @@ class KpIndexEvaluatorTest {
     }
 
     @Test
-    fun nullKpIndexEvaluatesToUnknown() {
-        val chance = impl.evaluate(KpIndex(null))
-
-        assert(chance).isEqualTo(UNKNOWN)
-    }
-
-    @Test
     fun _0KpIndexEvaluatesToImpossible() {
         val chance = impl.evaluate(KpIndex(0.0))
 

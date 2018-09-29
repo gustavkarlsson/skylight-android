@@ -21,13 +21,6 @@ class WeatherEvaluatorTest {
     }
 
     @Test
-    fun nullCloudPercentageEvaluatesToUnknown() {
-        val chance = impl.evaluate(Weather(null))
-
-        assert(chance).isEqualTo(UNKNOWN)
-    }
-
-    @Test
     fun _0CloudPercentageEvaluatesToMax() {
         val chance = impl.evaluate(Weather(0))
 

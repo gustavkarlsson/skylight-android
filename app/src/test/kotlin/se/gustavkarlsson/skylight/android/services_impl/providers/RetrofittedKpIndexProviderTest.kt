@@ -4,6 +4,7 @@ import assertk.assert
 import assertk.assertions.isBetween
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
+import io.reactivex.Single
 import okhttp3.*
 import org.apache.commons.io.IOUtils
 import org.junit.Before
@@ -11,18 +12,24 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.robolectric.RobolectricTestRunner
+import org.threeten.bp.Instant
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
+import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.kpindex.KpIndexApi
 
 @RunWith(RobolectricTestRunner::class)
 class RetrofittedKpIndexProviderTest {
 	lateinit var mockedClient: OkHttpClient
+	lateinit var mockedTimeProvider: TimeProvider
 
 	@Before
 	fun setUp() {
 		mockedClient = mockClient(200, "fixtures/kp_index_report.json", "application/json")
+		mockedTimeProvider = mock {
+			on(it.getTime()).thenReturn(Single.just(Instant.EPOCH))
+		}
 	}
 
 	private fun mockClient(statusCode: Int, bodyResourcePath: String, mediaType: String): OkHttpClient {
@@ -64,10 +71,10 @@ class RetrofittedKpIndexProviderTest {
 			.addConverterFactory(GsonConverterFactory.create())
 			.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 			.build()
-			.create(KpIndexApi::class.java), 1)
+			.create(KpIndexApi::class.java), 1, mockedTimeProvider)
 
 		val kpIndex = service.get().blockingGet().value!!
 
-		assert(kpIndex).isBetween(1.32, 1.34)
+		assert(kpIndex.value).isBetween(1.32, 1.34)
 	}
 }

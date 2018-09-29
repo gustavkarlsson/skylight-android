@@ -3,13 +3,13 @@ package se.gustavkarlsson.skylight.android.services_impl.evaluation
 import assertk.assert
 import assertk.assertions.isBetween
 import assertk.assertions.isEqualTo
-import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
+import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.*
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.IMPOSSIBLE
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.UNKNOWN
@@ -37,11 +37,14 @@ class AuroraReportEvaluatorTest {
 
     @Before
     fun setUp() {
+		whenever(mockAuroraReport.kpIndex).thenReturn(Report.success(KpIndex(7.0), Instant.EPOCH))
+		whenever(mockAuroraReport.weather).thenReturn(Report.success(Weather(50), Instant.EPOCH))
+		whenever(mockAuroraReport.geomagLocation).thenReturn(Report.success(GeomagLocation(50.0), Instant.EPOCH))
+		whenever(mockAuroraReport.darkness).thenReturn(Report.success(Darkness(140.0), Instant.EPOCH))
 		whenever(mockKpIndexEvaluator.evaluate(any())).thenReturn(Chance(0.5))
         whenever(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(Chance(0.5))
         whenever(mockWeatherEvaluator.evaluate(any())).thenReturn(Chance(0.5))
         whenever(mockDarknessEvaluator.evaluate(any())).thenReturn(Chance(0.5))
-		whenever(mockAuroraReport.factors).thenReturn(mock())
         impl = AuroraReportEvaluator(mockKpIndexEvaluator, mockGeomagLocationEvaluator, mockWeatherEvaluator, mockDarknessEvaluator)
     }
 

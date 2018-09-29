@@ -8,7 +8,6 @@ import org.junit.Test
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.IMPOSSIBLE
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.MAX
-import se.gustavkarlsson.skylight.android.entities.Chance.Companion.UNKNOWN
 import se.gustavkarlsson.skylight.android.entities.Darkness
 
 class DarknessEvaluatorTest {
@@ -18,13 +17,6 @@ class DarknessEvaluatorTest {
 	@Before
 	fun setUp() {
 		impl = DarknessEvaluator()
-	}
-
-	@Test
-	fun nullZenithAngleEvaluatesToUnknown() {
-		val chance = impl.evaluate(Darkness(null))
-
-		assert(chance).isEqualTo(UNKNOWN)
 	}
 
 	@Test
