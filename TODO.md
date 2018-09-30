@@ -5,6 +5,7 @@
 * Upgrade LeakCanary to something released after Aug 7 to see if crashes disappear
 * Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
 * Improve layout and texts
+* Kill connectivity checker (it's too buggy)
 
 ## Soon
 * Generate png:s from master vector files (https://github.com/avianey/androidsvgdrawable-plugin)
