@@ -42,6 +42,7 @@ buildscript {
 		easylauncher_version = "1.2.0"
 		jgit_version = "4.1.1.201511131810-r"
 		axion_release_version = "1.8.1"
+		play_publisher_version = "1.2.2"
 		// Test
 		junit_version = "4.12"
 		assertk_version = "0.10"
@@ -67,6 +68,7 @@ buildscript {
 		classpath "com.akaita.android:easylauncher:$easylauncher_version"
 		classpath "org.eclipse.jgit:org.eclipse.jgit:$jgit_version"
 		classpath "pl.allegro.tech.build:axion-release-plugin:$axion_release_version"
+		classpath "com.github.triplet.gradle:play-publisher:$play_publisher_version"
 	}
 }
 

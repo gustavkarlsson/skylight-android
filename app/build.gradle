@@ -4,6 +4,7 @@ apply plugin: "kotlin-android-extensions"
 apply plugin: "io.fabric"
 apply plugin: "com.akaita.android.easylauncher"
 apply plugin: "pl.allegro.tech.build.axion-release"
+apply plugin: "com.github.triplet.play"
 
 
 import org.eclipse.jgit.api.Git
@@ -13,6 +14,11 @@ scmVersion {
 	tag {
 		prefix = ""
 	}
+}
+
+play {
+	jsonFile = file("play-service-account.json")
+	track = "alpha"
 }
 
 android {
