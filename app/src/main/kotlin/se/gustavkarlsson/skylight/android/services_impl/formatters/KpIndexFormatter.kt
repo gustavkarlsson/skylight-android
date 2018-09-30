@@ -5,7 +5,7 @@ import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatt
 
 class KpIndexFormatter : SingleValueFormatter<KpIndex> {
 	override fun format(value: KpIndex): CharSequence {
-		val kpIndex = value.value ?: return "?"
+		val kpIndex = value.value
 		val whole = kpIndex.toInt()
 		val part = kpIndex - whole
 		val partString = parsePart(part)

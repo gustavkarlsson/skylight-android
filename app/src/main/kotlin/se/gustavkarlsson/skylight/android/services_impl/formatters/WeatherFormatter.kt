@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatt
 
 class WeatherFormatter(private val context: Context) : SingleValueFormatter<Weather> {
 	override fun format(value: Weather): CharSequence {
-		val clouds = value.cloudPercentage ?: return "?"
+		val clouds = value.cloudPercentage
 		return when {
 			clouds < 10 -> context.getString(R.string.main_weather_clear)
 			clouds < 30 -> context.getString(R.string.main_weather_some_clouds)

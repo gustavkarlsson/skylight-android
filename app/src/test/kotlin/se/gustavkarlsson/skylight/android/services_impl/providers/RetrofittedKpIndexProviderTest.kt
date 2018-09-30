@@ -5,7 +5,13 @@ import assertk.assertions.isBetween
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
-import okhttp3.*
+import okhttp3.Call
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.Protocol
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.ResponseBody
 import org.apache.commons.io.IOUtils
 import org.junit.Before
 import org.junit.Test
@@ -59,7 +65,7 @@ class RetrofittedKpIndexProviderTest {
 	}
 
 	private fun readResourceToByteArray(resourcePath: String): ByteArray {
-		val classLoader = javaClass.classLoader
+		val classLoader = javaClass.classLoader!!
 		return IOUtils.toByteArray(classLoader.getResource(resourcePath).openStream())
 	}
 

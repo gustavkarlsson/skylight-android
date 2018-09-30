@@ -8,7 +8,7 @@ import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatt
  */
 class DarknessFormatter : SingleValueFormatter<Darkness> {
 	override fun format(value: Darkness): CharSequence {
-		val zenithAngle = value.sunZenithAngle ?: return "?"
+		val zenithAngle = value.sunZenithAngle
 		val darknessFactor = 1.0 / 18.0 * zenithAngle - 5.0
 		var darknessPercentage = Math.round(darknessFactor * 100.0)
 		darknessPercentage = Math.max(0, darknessPercentage)
