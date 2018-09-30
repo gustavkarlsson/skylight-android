@@ -38,7 +38,7 @@ buildscript {
 		navigation_version = "1.0.0-alpha06"
 		ktx_navigation_ui_version = "1.0.0-alpha06"
 		ktx_core_version = "1.0.0"
-		koin_version = "1.0.0"
+		koin_version = "1.0.1"
 		easylauncher_version = "1.2.0"
 		jgit_version = "4.1.1.201511131810-r"
 		axion_release_version = "1.8.1"
@@ -46,8 +46,8 @@ buildscript {
 		// Test
 		junit_version = "4.12"
 		assertk_version = "0.10"
-		mockito_version = "2.10.0"
-		mockito_kotlin_version = "1.5.0"
+		mockito_version = "2.22.0"
+		mockito_kotlin_version = "1.6.0"
 		commons_io_version = "2.4" // Don't upgrade
 		robolectric_version = "3.4.2"
 		android_support_test_version = "1.1.0-alpha4"
