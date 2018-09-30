@@ -22,8 +22,8 @@ play {
 }
 
 android {
-	compileSdkVersion rootProject.ext.compilesdk_version
-	buildToolsVersion rootProject.ext.build_tools_version
+	compileSdkVersion compilesdk_version
+	buildToolsVersion build_tools_version
 
 	sourceSets {
 		main.java.srcDirs += "src/main/kotlin"
@@ -102,7 +102,7 @@ android {
 
 	productFlavors.each { flavor ->
 		def repo = new RepositoryBuilder()
-			.setGitDir(new File(rootProject.rootDir, "/.git"))
+			.setGitDir(new File(rootDir, "/.git"))
 			.readEnvironment()
 			.build()
 		def head = repo.exactRef("HEAD")
@@ -114,7 +114,7 @@ android {
 		def gitSha1 = head.objectId.name
 		def buildTime = System.currentTimeMillis()
 		def openWeatherMapApiKey =
-			rootProject.findProperty("openweathermap_api_key") ?: "openweathermap_api_key_not_set"
+			findProperty("openweathermap_api_key") ?: "openweathermap_api_key_not_set"
 
 		flavor.buildConfigField "String", "GIT_BRANCH", "\"$gitBranch\""
 		flavor.buildConfigField "String", "GIT_SHA1", "\"$gitSha1\""

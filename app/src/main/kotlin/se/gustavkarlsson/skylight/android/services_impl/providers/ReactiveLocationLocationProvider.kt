@@ -8,9 +8,9 @@ import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.Duration
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.extensions.timeout
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 class ReactiveLocationLocationProvider(
 	private val reactiveLocationProvider: ReactiveLocationProvider,
@@ -30,7 +30,7 @@ class ReactiveLocationLocationProvider(
 			.subscribeOn(Schedulers.io())
 			.firstOrError()
 			.map { Optional.of(Location(it.latitude, it.longitude)) }
-			.timeout(timeout.toMillis(), TimeUnit.MILLISECONDS)
+			.timeout(timeout)
 			.doOnError { Timber.w(it, "Failed to get location") }
 			.onErrorReturnItem(Optional.absent())
 			.doOnSuccess { Timber.i("Provided location: %s", it) }

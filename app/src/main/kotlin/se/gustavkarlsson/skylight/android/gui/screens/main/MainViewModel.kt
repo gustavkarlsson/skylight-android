@@ -26,7 +26,6 @@ import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
 import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
-import se.gustavkarlsson.skylight.android.util.UserFriendlyException
 import timber.log.Timber
 
 class MainViewModel(
@@ -65,11 +64,7 @@ class MainViewModel(
 		.map {
 			val throwable = it.throwable
 			Timber.e(throwable)
-			if (throwable is UserFriendlyException) {
-				throwable.stringResourceId
-			} else {
-				R.string.error_unknown_update_error
-			}
+			R.string.error_unknown_update_error
 		}
 
 	val connectivityMessages: Flowable<Optional<CharSequence>> = store.states
