@@ -10,7 +10,23 @@ import com.jakewharton.rxbinding2.view.visibility
 import com.jakewharton.rxbinding2.widget.text
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
-import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_main.chance
+import kotlinx.android.synthetic.main.fragment_main.darknessBar
+import kotlinx.android.synthetic.main.fragment_main.darknessCard
+import kotlinx.android.synthetic.main.fragment_main.darknessValue
+import kotlinx.android.synthetic.main.fragment_main.geomagLocationBar
+import kotlinx.android.synthetic.main.fragment_main.geomagLocationCard
+import kotlinx.android.synthetic.main.fragment_main.geomagLocationValue
+import kotlinx.android.synthetic.main.fragment_main.kpIndexBar
+import kotlinx.android.synthetic.main.fragment_main.kpIndexCard
+import kotlinx.android.synthetic.main.fragment_main.kpIndexValue
+import kotlinx.android.synthetic.main.fragment_main.locationName
+import kotlinx.android.synthetic.main.fragment_main.menuButton
+import kotlinx.android.synthetic.main.fragment_main.swipeRefreshLayout
+import kotlinx.android.synthetic.main.fragment_main.timeSinceUpdate
+import kotlinx.android.synthetic.main.fragment_main.weatherBar
+import kotlinx.android.synthetic.main.fragment_main.weatherCard
+import kotlinx.android.synthetic.main.fragment_main.weatherValue
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
@@ -30,7 +46,9 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
 	private val viewModel: MainViewModel by viewModel()
 
-	val navigator: Navigator by inject()
+	private val navigator: Navigator by inject()
+
+	private val analytics: Analytics by inject()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -60,7 +78,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 		swipeRefreshLayout.refreshes()
 			.doOnNext {
 				Timber.i("Triggering refresh")
-				Analytics.logManualRefresh()
+				analytics.logManualRefresh()
 			}
 			.autoDisposable(scope)
 			.subscribe(viewModel.swipedToRefresh)

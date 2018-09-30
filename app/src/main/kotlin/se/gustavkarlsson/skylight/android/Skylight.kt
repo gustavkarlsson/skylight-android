@@ -27,6 +27,8 @@ class Skylight : MultiDexApplication() {
 
 	private val store: SkylightStore by inject()
 
+	private val analytics: Analytics by inject()
+
 	init {
 		instance = this
 	}
@@ -40,7 +42,6 @@ class Skylight : MultiDexApplication() {
 		AndroidThreeTen.init(this)
 		initRxJavaErrorHandling()
 		startKoin(this, modules, logger = KoinTimberLogger())
-		initAnalytics()
 		setupSettingsAnalytics()
 		store.issue(BootstrapCommand)
 		store.issue(SettingsStreamCommand(true))
@@ -61,10 +62,6 @@ class Skylight : MultiDexApplication() {
 		}
 	}
 
-	private fun initAnalytics() {
-		Analytics.instance = get()
-	}
-
 	private fun initRxJavaErrorHandling() {
 		RxJavaPlugins.setErrorHandler {
 			Timber.e(it, "Unhandled RxJava error")
@@ -82,8 +79,8 @@ class Skylight : MultiDexApplication() {
 			.map { it.settings }
 			.distinctUntilChanged()
 			.subscribe {
-				Analytics.setNotificationsEnabled(it.notificationsEnabled)
-				Analytics.setNotifyTriggerLevel(it.triggerLevel)
+				analytics.setNotificationsEnabled(it.notificationsEnabled)
+				analytics.setNotifyTriggerLevel(it.triggerLevel)
 			}
 			.addTo(disposables)
 	}

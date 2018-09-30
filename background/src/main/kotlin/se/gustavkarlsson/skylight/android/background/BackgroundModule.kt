@@ -7,7 +7,13 @@ import com.evernote.android.job.JobManager
 import io.reactivex.Completable
 import io.reactivex.Flowable
 import org.koin.dsl.module.module
-import se.gustavkarlsson.skylight.android.background.notifications.*
+import se.gustavkarlsson.skylight.android.background.notifications.AppVisibilityEvaluator
+import se.gustavkarlsson.skylight.android.background.notifications.AuroraReportNotificationDecider
+import se.gustavkarlsson.skylight.android.background.notifications.AuroraReportNotificationDeciderImpl
+import se.gustavkarlsson.skylight.android.background.notifications.AuroraReportNotifier
+import se.gustavkarlsson.skylight.android.background.notifications.NotificationChannelCreator
+import se.gustavkarlsson.skylight.android.background.notifications.Notifier
+import se.gustavkarlsson.skylight.android.background.notifications.OutdatedEvaluator
 import se.gustavkarlsson.skylight.android.background.persistence.NotifiedChanceRepository
 import se.gustavkarlsson.skylight.android.background.persistence.SharedPreferencesNotifiedChanceRepository
 import se.gustavkarlsson.skylight.android.background.scheduling.GetLatestAuroraReportScheduler
@@ -39,7 +45,8 @@ val backgroundModule = module {
 			get("chanceLevel"),
 			get("auroraReport"),
 			get("activity"),
-			get("auroraNotificationChannelId")
+			get("auroraNotificationChannelId"),
+			get()
 		)
 	}
 

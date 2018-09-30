@@ -20,7 +20,8 @@ internal class AuroraReportNotifier(
 	private val chanceLevelFormatter: SingleValueFormatter<ChanceLevel>,
 	private val chanceEvaluator: ChanceEvaluator<AuroraReport>,
 	private val activityClass: Class<out Activity>,
-	private val channelId: String
+	private val channelId: String,
+	private val analytics: Analytics
 ) : Notifier<AuroraReport> {
 
 	override fun notify(value: AuroraReport) {
@@ -49,7 +50,7 @@ internal class AuroraReportNotifier(
 		}
 
 		notificationManager.notify(1, notification)
-		Analytics.logNotificationSent(chance)
+		analytics.logNotificationSent(chance)
 	}
 
 	private fun createActivityPendingIntent(): PendingIntent {

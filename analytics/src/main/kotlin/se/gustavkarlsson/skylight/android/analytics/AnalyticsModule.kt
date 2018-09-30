@@ -1,13 +1,16 @@
-package se.gustavkarlsson.skylight.android.modules
+package se.gustavkarlsson.skylight.android.analytics
 
+import com.google.firebase.analytics.FirebaseAnalytics
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.services.Analytics
-import se.gustavkarlsson.skylight.android.services_impl.FirebasedAnalytics
 
 val analyticsModule = module {
+
+	single {
+		FirebaseAnalytics.getInstance(get())
+	}
 
 	single<Analytics> {
 		FirebasedAnalytics(get())
 	}
-
 }

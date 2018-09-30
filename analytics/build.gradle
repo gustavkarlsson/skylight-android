@@ -18,10 +18,8 @@ android {
 
 dependencies {
 	implementation project(":core")
-	implementation project(":analytics")
 
-	implementation "com.evernote:android-job:$android_job_version"
-	implementation "androidx.core:core-ktx:$ktx_core_version"
+	implementation "com.google.firebase:firebase-core:$firebase_version"
 
 	// Koin
 	implementation "org.koin:koin-android:$koin_version"

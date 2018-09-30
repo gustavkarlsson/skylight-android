@@ -102,10 +102,10 @@ android {
 
 	productFlavors.each { flavor ->
 		def repo = new RepositoryBuilder()
-			.setGitDir(new File(project.rootDir, "/.git"))
+			.setGitDir(new File(rootProject.rootDir, "/.git"))
 			.readEnvironment()
 			.build()
-		def head = repo.getRef("HEAD")
+		def head = repo.exactRef("HEAD")
 		def gitBranch = new Git(repo).branchList()
 			.call()
 			.find {
@@ -113,7 +113,8 @@ android {
 		}?.name?.replaceAll(".*/", "") ?: "None"
 		def gitSha1 = head.objectId.name
 		def buildTime = System.currentTimeMillis()
-		def openWeatherMapApiKey = project.findProperty("openweathermap_api_key") ?: "openweathermap_api_key_not_set"
+		def openWeatherMapApiKey =
+			rootProject.findProperty("openweathermap_api_key") ?: "openweathermap_api_key_not_set"
 
 		flavor.buildConfigField "String", "GIT_BRANCH", "\"$gitBranch\""
 		flavor.buildConfigField "String", "GIT_SHA1", "\"$gitSha1\""
@@ -125,6 +126,7 @@ android {
 dependencies {
 	implementation project(":core")
 	implementation project(":background")
+	implementation project(":analytics")
 
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 	implementation "com.google.android.material:material:$android_support_version"
@@ -179,8 +181,7 @@ dependencies {
 	// Lifecycle
 	implementation "androidx.lifecycle:lifecycle-extensions:$arch_lifecycle_version"
 
-	// Firebase
-	implementation "com.google.firebase:firebase-core:$firebase_version"
+	// Crashlytics
 	implementation "com.crashlytics.sdk.android:crashlytics:$crashlytics_version"
 
 	// Leakcanary
