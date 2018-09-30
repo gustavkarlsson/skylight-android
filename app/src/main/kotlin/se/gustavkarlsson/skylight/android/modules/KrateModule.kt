@@ -8,7 +8,22 @@ import se.gustavkarlsson.krate.core.dsl.buildStore
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
-import se.gustavkarlsson.skylight.android.krate.*
+import se.gustavkarlsson.skylight.android.krate.AuroraReportResult
+import se.gustavkarlsson.skylight.android.krate.AuroraReportStreamCommand
+import se.gustavkarlsson.skylight.android.krate.BootstrapCommand
+import se.gustavkarlsson.skylight.android.krate.FirstRunResult
+import se.gustavkarlsson.skylight.android.krate.GetAuroraReportCommand
+import se.gustavkarlsson.skylight.android.krate.GooglePlayServicesResult
+import se.gustavkarlsson.skylight.android.krate.LocationPermissionResult
+import se.gustavkarlsson.skylight.android.krate.SettingsResult
+import se.gustavkarlsson.skylight.android.krate.SettingsStreamCommand
+import se.gustavkarlsson.skylight.android.krate.SignalFirstRunCompleted
+import se.gustavkarlsson.skylight.android.krate.SignalGooglePlayServicesInstalled
+import se.gustavkarlsson.skylight.android.krate.SignalLocationPermissionGranted
+import se.gustavkarlsson.skylight.android.krate.SkylightCommand
+import se.gustavkarlsson.skylight.android.krate.SkylightResult
+import se.gustavkarlsson.skylight.android.krate.SkylightState
+import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.services.GooglePlayServicesChecker
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import se.gustavkarlsson.skylight.android.services.RunVersionManager
@@ -20,7 +35,6 @@ val krateModule = module {
 
 	single { _ ->
 		val settings = get<Settings>()
-		val connectivity = get<Flowable<Boolean>>("connectivity")
 		val runVersionManager = get<RunVersionManager>()
 		val googlePlayServicesChecker = get<GooglePlayServicesChecker>()
 		val permissionChecker = get<PermissionChecker>()
@@ -105,16 +119,6 @@ val krateModule = module {
 						}
 					}
 				}
-				transform<ConnectivityStreamCommand> { commands ->
-					commands.switchMap { command ->
-						if (command.stream) {
-							connectivity
-								.map(::ConnectivityResult)
-						} else {
-							Flowable.empty()
-						}
-					}
-				}
 				transform<SettingsStreamCommand> { commands ->
 					commands.switchMap { command ->
 						if (command.stream) {
@@ -176,9 +180,6 @@ val krateModule = module {
 				}
 				reduce<AuroraReportResult.Failure> { state, result ->
 					state.copy(isRefreshing = false, throwable = result.throwable)
-				}
-				reduce<ConnectivityResult> { state, result ->
-					state.copy(isConnectedToInternet = result.isConnectedToInternet)
 				}
 				reduce<SettingsResult> { state, result ->
 					state.copy(settings = result.settings)

@@ -14,8 +14,6 @@ sealed class AuroraReportResult : SkylightResult() {
 
 data class SettingsResult(val settings: SkylightState.Settings) : SkylightResult()
 
-data class ConnectivityResult(val isConnectedToInternet: Boolean) : SkylightResult()
-
 data class LocationPermissionResult(val isGranted: Boolean) : SkylightResult()
 
 data class GooglePlayServicesResult(val isAvailable: Boolean) : SkylightResult()

@@ -5,7 +5,6 @@ import se.gustavkarlsson.skylight.android.background.backgroundModule
 import se.gustavkarlsson.skylight.android.location.locationModule
 import se.gustavkarlsson.skylight.android.modules.activityModule
 import se.gustavkarlsson.skylight.android.modules.auroraReportModule
-import se.gustavkarlsson.skylight.android.modules.connectivityModule
 import se.gustavkarlsson.skylight.android.modules.darknessModule
 import se.gustavkarlsson.skylight.android.modules.evaluationModule
 import se.gustavkarlsson.skylight.android.modules.formattingModule
@@ -26,7 +25,6 @@ import se.gustavkarlsson.skylight.android.weather.weatherModule
 val modules = listOf(
 	settingsModule,
 	backgroundModule,
-	connectivityModule,
 	krateModule,
 	runVersionsModule,
 	googlePlayServicesModule,

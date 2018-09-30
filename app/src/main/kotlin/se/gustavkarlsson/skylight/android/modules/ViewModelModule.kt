@@ -18,7 +18,6 @@ val viewModelModule = module {
 		MainViewModel(
 			get(),
 			context.getString(R.string.main_your_location),
-			context.getString(R.string.error_no_internet),
 			get("auroraReport"),
 			get(),
 			get("chanceLevel"),

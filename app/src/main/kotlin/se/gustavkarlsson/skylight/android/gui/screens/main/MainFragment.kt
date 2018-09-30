@@ -39,7 +39,6 @@ import timber.log.Timber
 
 class MainFragment : BaseFragment(R.layout.fragment_main) {
 
-	private var connectivitySnackbar: Snackbar? = null
 	private var errorSnackbar: Snackbar? = null
 	private var currentBottomSheetTitle: Int? = null
 	private lateinit var menu: PopupMenu
@@ -110,22 +109,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 				view?.let { view ->
 					errorSnackbar =
 						showErrorSnackbar(view, it, Snackbar.LENGTH_LONG).apply { show() }
-				}
-			}
-
-		viewModel.connectivityMessages
-			.autoDisposable(scope)
-			.subscribe {
-				connectivitySnackbar?.run {
-					Timber.d("Hiding previous connectivity message")
-					dismiss()
-				}
-				it.ifPresent {
-					Timber.d("Showing connectivity message: %s", it)
-					view?.let { view ->
-						connectivitySnackbar =
-							showErrorSnackbar(view, it, Snackbar.LENGTH_INDEFINITE)
-					}
 				}
 			}
 
@@ -216,7 +199,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 	}
 
 	override fun onDestroy() {
-		connectivitySnackbar?.dismiss()
 		errorSnackbar?.dismiss()
 		super.onDestroy()
 	}

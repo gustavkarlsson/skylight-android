@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
 import androidx.lifecycle.ViewModel
-import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
@@ -18,7 +17,6 @@ import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.krate.AuroraReportStreamCommand
-import se.gustavkarlsson.skylight.android.krate.ConnectivityStreamCommand
 import se.gustavkarlsson.skylight.android.krate.GetAuroraReportCommand
 import se.gustavkarlsson.skylight.android.krate.SkylightState
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
@@ -31,7 +29,6 @@ import timber.log.Timber
 class MainViewModel(
 	private val store: SkylightStore,
 	defaultLocationName: CharSequence,
-	notConnectedToInternetMessage: CharSequence,
 	auroraChanceEvaluator: ChanceEvaluator<AuroraReport>,
 	relativeTimeFormatter: RelativeTimeFormatter,
 	chanceLevelFormatter: SingleValueFormatter<ChanceLevel>,
@@ -49,7 +46,6 @@ class MainViewModel(
 
 	init {
 		store.issue(AuroraReportStreamCommand(true))
-		store.issue(ConnectivityStreamCommand(true))
 		if (store.currentState.auroraReport == null) {
 			store.issue(GetAuroraReportCommand)
 		}
@@ -66,17 +62,6 @@ class MainViewModel(
 			Timber.e(throwable)
 			R.string.error_unknown_update_error
 		}
-
-	val connectivityMessages: Flowable<Optional<CharSequence>> = store.states
-		.map(SkylightState::isConnectedToInternet)
-		.map { connected ->
-			if (connected) {
-				Optional.absent()
-			} else {
-				Optional.of(notConnectedToInternetMessage)
-			}
-		}
-		.distinctUntilChanged()
 
 	val locationName: Flowable<CharSequence> = store.states
 		.map {
@@ -203,7 +188,6 @@ class MainViewModel(
 		.distinctUntilChanged()
 
 	override fun onCleared() {
-		store.issue(ConnectivityStreamCommand(false))
 		store.issue(AuroraReportStreamCommand(false))
 	}
 }

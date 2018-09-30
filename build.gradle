@@ -23,7 +23,6 @@ buildscript {
 		fabric_version = "1.25.4"
 		crashlytics_version = "2.9.5"
 		arch_lifecycle_version = "2.0.0"
-		reactivenetwork_version = "2.1.0"
 		rxpreferences_version = "2.0.0-RC3"
 		rxrelay_version = "2.0.0"
 		android_job_version = "1.2.0"

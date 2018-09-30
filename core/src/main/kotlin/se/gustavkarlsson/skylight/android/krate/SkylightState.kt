@@ -10,7 +10,6 @@ data class SkylightState(
 	val isGooglePlayServicesAvailable: Boolean? = null,
 	val isRefreshing: Boolean = false,
 	val justFinishedRefreshing: Boolean = false,
-	val isConnectedToInternet: Boolean = true,
 	val auroraReport: AuroraReport? = null,
 	val newAuroraReport: AuroraReport? = null,
 	val throwable: Throwable? = null
