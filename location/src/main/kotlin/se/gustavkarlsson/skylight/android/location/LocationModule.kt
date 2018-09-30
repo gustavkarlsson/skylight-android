@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.modules
+package se.gustavkarlsson.skylight.android.location
 
 import android.Manifest
 import io.reactivex.Flowable
@@ -9,8 +9,6 @@ import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.ReactiveLocationLocationProvider
-import se.gustavkarlsson.skylight.android.services_impl.streamables.ReactiveLocationProviderStreamable
 
 val locationModule = module {
 

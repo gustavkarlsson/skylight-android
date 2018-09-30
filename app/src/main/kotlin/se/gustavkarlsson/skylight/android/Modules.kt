@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android
 
 import se.gustavkarlsson.skylight.android.analytics.analyticsModule
 import se.gustavkarlsson.skylight.android.background.backgroundModule
+import se.gustavkarlsson.skylight.android.location.locationModule
 import se.gustavkarlsson.skylight.android.modules.activityModule
 import se.gustavkarlsson.skylight.android.modules.auroraReportModule
 import se.gustavkarlsson.skylight.android.modules.connectivityModule
@@ -13,7 +14,6 @@ import se.gustavkarlsson.skylight.android.modules.googlePlayServicesModule
 import se.gustavkarlsson.skylight.android.modules.kpIndexModule
 import se.gustavkarlsson.skylight.android.modules.krateModule
 import se.gustavkarlsson.skylight.android.modules.localizationModule
-import se.gustavkarlsson.skylight.android.modules.locationModule
 import se.gustavkarlsson.skylight.android.modules.locationNameModule
 import se.gustavkarlsson.skylight.android.modules.navigationModule
 import se.gustavkarlsson.skylight.android.modules.permissionsModule

@@ -127,8 +127,8 @@ dependencies {
 	implementation project(":core")
 	implementation project(":background")
 	implementation project(":analytics")
+	implementation project(":location")
 
-	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 	implementation "com.google.android.material:material:$android_support_version"
 	implementation "androidx.multidex:multidex:$multidex_version"
 	implementation "androidx.appcompat:appcompat:$android_support_version"
@@ -140,13 +140,9 @@ dependencies {
 
 	// Google Play Services
 	implementation "com.google.android.gms:play-services-gcm:$google_play_services_version"
-	implementation "com.google.android.gms:play-services-location:$google_play_services_version"
 
 	// Misc
 	implementation "net.e175.klaus:solarpositioning:$solarpositioning_version"
-	implementation "com.jakewharton.threetenabp:threetenabp:$threetenabp_version"
-	implementation "com.hadisatrio:Optional:$optional_version"
-	implementation "com.jakewharton.timber:timber:$timber_version"
 
 	// Navigation
 	implementation "android.arch.navigation:navigation-fragment:$navigation_version"
@@ -162,7 +158,6 @@ dependencies {
 	implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
 	implementation "com.jakewharton.rxrelay2:rxrelay:$rxrelay_version"
 	implementation "com.tbruyelle.rxpermissions2:rxpermissions:${rxpermissions_version}@aar"
-	implementation "pl.charmas.android:android-reactive-location2:${reactive_location_version}@aar"
 	implementation "com.f2prateek.rx.preferences2:rx-preferences:$rxpreferences_version"
 	implementation "com.github.pwittchen:reactivenetwork-rx2:$reactivenetwork_version"
 
@@ -189,7 +184,6 @@ dependencies {
 	releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanary_version"
 
 	// Koin
-	implementation "org.koin:koin-android:$koin_version"
 	implementation "org.koin:koin-androidx-viewmodel:$koin_version"
 	implementation "org.koin:koin-androidx-scope:$koin_version"
 

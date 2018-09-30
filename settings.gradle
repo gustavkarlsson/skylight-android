@@ -1,4 +1,5 @@
 include ":core"
 include ":background"
 include ":analytics"
+include ":location"
 include ":app"

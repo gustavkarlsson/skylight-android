@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services_impl.providers
+package se.gustavkarlsson.skylight.android.location
 
 import android.annotation.SuppressLint
 import com.google.android.gms.location.LocationRequest
@@ -12,7 +12,7 @@ import se.gustavkarlsson.skylight.android.extensions.timeout
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 import timber.log.Timber
 
-class ReactiveLocationLocationProvider(
+internal class ReactiveLocationLocationProvider(
 	private val reactiveLocationProvider: ReactiveLocationProvider,
 	private val timeout: Duration
 ) : LocationProvider {

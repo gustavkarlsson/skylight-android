@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services_impl.streamables
+package se.gustavkarlsson.skylight.android.location
 
 import android.annotation.SuppressLint
 import com.google.android.gms.location.LocationRequest
@@ -14,7 +14,7 @@ import se.gustavkarlsson.skylight.android.services.Streamable
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
-class ReactiveLocationProviderStreamable(
+internal class ReactiveLocationProviderStreamable(
 	reactiveLocationProvider: ReactiveLocationProvider,
 	throttleDuration: Duration,
 	firstPollingInterval: Duration,
