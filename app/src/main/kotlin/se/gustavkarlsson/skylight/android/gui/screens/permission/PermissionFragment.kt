@@ -8,7 +8,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
-import kotlinx.android.synthetic.main.fragment_permission.*
+import kotlinx.android.synthetic.main.fragment_permission.grantButton
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.BuildConfig
@@ -69,8 +69,8 @@ class PermissionFragment : BaseFragment(R.layout.fragment_permission) {
 	private fun showLocationPermissionDeniedDialog() {
 		AlertDialog.Builder(requireContext())
 			.setIcon(R.drawable.ic_warning_white_24dp)
-			.setTitle(getString(R.string.error_location_permission_denied_title))
-			.setMessage(R.string.error_location_permission_denied_desc)
+			.setTitle(getString(R.string.permission_denied_title))
+			.setMessage(R.string.permission_denied_desc)
 			.setPositiveButton(R.string.exit) { _, _ -> System.exit(3) }
 			.setCancelable(false)
 			.show()

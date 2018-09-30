@@ -6,7 +6,7 @@
 	<bool name="pref_notifications_default">true</bool>
 
 	<string name="pref_trigger_level_key" translatable="false">pref_trigger_level</string>
-	<string name="pref_trigger_level_name">Trigger level</string>
+	<string name="pref_trigger_level_name">When to notify</string>
 	<string name="pref_trigger_level_summary">Notify at: %s</string>
 	<string-array name="pref_trigger_level_entries">
 		<item>@string/aurora_chance_high</item>
@@ -14,7 +14,7 @@
 		<item>@string/aurora_chance_low</item>
 	</string-array>
 	<string-array name="pref_trigger_level_values">
-		<!-- These values relate directly to se.gustavkarlsson.skylight.android.entities.ChanceLeve -->
+		<!-- These values relate directly to se.gustavkarlsson.skylight.android.entities.ChanceLevel -->
 		<item>4</item>
 		<item>3</item>
 		<item>2</item>
