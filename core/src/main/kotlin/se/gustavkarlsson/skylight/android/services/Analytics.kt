@@ -9,21 +9,4 @@ interface Analytics {
 
 	fun setNotificationsEnabled(enabled: Boolean)
 	fun setNotifyTriggerLevel(triggerLevel: ChanceLevel)
-
-	companion object : Analytics {
-
-		var instance: Analytics = NullAnalytics()
-
-		override fun logNotificationSent(chance: Chance) = instance.logNotificationSent(chance)
-		override fun logManualRefresh() = instance.logManualRefresh()
-		override fun setNotificationsEnabled(enabled: Boolean) = instance.setNotificationsEnabled(enabled)
-		override fun setNotifyTriggerLevel(triggerLevel: ChanceLevel) = instance.setNotifyTriggerLevel(triggerLevel)
-	}
-
-	class NullAnalytics : Analytics {
-		override fun logNotificationSent(chance: Chance) = Unit
-		override fun logManualRefresh() = Unit
-		override fun setNotificationsEnabled(enabled: Boolean) = Unit
-		override fun setNotifyTriggerLevel(triggerLevel: ChanceLevel) = Unit
-	}
 }

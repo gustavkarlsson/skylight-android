@@ -1,6 +1,7 @@
 # Gradle
 /.gradle/
 /build/
+/*/build/
 /*/gradle.properties
 
 # Eclipse
