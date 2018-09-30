@@ -1,15 +1,21 @@
 package se.gustavkarlsson.skylight.android.gui.screens.about
 
-import android.text.Html
-import android.text.method.LinkMovementMethod
 import android.view.View
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
-import kotlinx.android.synthetic.main.fragment_about.*
+import kotlinx.android.synthetic.main.fragment_about.appByTextView
+import kotlinx.android.synthetic.main.fragment_about.backButton
+import kotlinx.android.synthetic.main.fragment_about.branchTextView
+import kotlinx.android.synthetic.main.fragment_about.builtTextView
+import kotlinx.android.synthetic.main.fragment_about.privacyPolicyLink
+import kotlinx.android.synthetic.main.fragment_about.sha1TextView
+import kotlinx.android.synthetic.main.fragment_about.versionCodeTextView
+import kotlinx.android.synthetic.main.fragment_about.versionNameTextView
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.extensions.setHtml
 import se.gustavkarlsson.skylight.android.gui.BaseFragment
 import se.gustavkarlsson.skylight.android.navigation.Navigator
 
@@ -28,10 +34,8 @@ class AboutFragment : BaseFragment(R.layout.fragment_about) {
 		branchTextView.text = getString(R.string.about_branch, viewModel.branch)
 		sha1TextView.text = getString(R.string.about_sha1, viewModel.sha1Compact)
 
-		val html = requireContext().getString(R.string.html_privacy_policy_link, getString(R.string.privacy_policy))
-		val spannedHtml = Html.fromHtml(html)
-		privacyPolicyLink.text = spannedHtml
-		privacyPolicyLink.movementMethod = LinkMovementMethod.getInstance()
+		val html = getString(R.string.html_privacy_policy_link, getString(R.string.privacy_policy))
+		privacyPolicyLink.setHtml(html)
 
 		val developVisibility = if (viewModel.isDevelopMode) View.VISIBLE else View.INVISIBLE
 		versionCodeTextView.visibility = developVisibility
