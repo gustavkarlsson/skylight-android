@@ -1,9 +1,9 @@
 # TODO
 
 ## Release
-* Fix release workflow on bitrise
 * Create new screenshots on Google Play
 * Upgrade LeakCanary to something released after Aug 7 to see if crashes disappear
+* Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
 * Improve layout and texts
 
 ## Soon
