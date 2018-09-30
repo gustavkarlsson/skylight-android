@@ -18,7 +18,7 @@ buildscript {
 		rxkotlin_version = "2.2.0"
 		optional_version = "v1.0.1"
 		gson_version = "2.8.2"
-		google_services_version = "3.2.1"
+		google_services_version = "4.1.0"
 		firebase_version = "16.0.3"
 		fabric_version = "1.25.4"
 		crashlytics_version = "2.9.5"
