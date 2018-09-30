@@ -6,11 +6,11 @@
 	<item
 		android:id="@+id/action_settings"
 		android:orderInCategory="1"
-		android:title="@string/menu_settings"
+		android:title="@string/settings"
 		app:showAsAction="never"/>
 	<item
 		android:id="@+id/action_about"
 		android:orderInCategory="2"
-		android:title="@string/menu_about"
+		android:title="@string/about"
 		app:showAsAction="never"/>
 </menu>

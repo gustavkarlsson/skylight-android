@@ -1,6 +1,8 @@
 # TODO
 
 ## Release
+* Fix release workflow on bitrise
+* Create new screenshots on Google Play
 * Upgrade LeakCanary to something released after Aug 7 to see if crashes disappear
 * Improve layout and texts
 

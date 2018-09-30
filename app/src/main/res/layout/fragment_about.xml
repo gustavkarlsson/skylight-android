@@ -13,20 +13,19 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:src="@drawable/ic_arrow_back_white_24dp"
+		app:layout_constraintBottom_toTopOf="@id/portraitImageView"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintBottom_toTopOf="@id/portraitImageView" />
+		app:layout_constraintTop_toTopOf="parent" />
 
 	<TextView
 		android:id="@+id/titleTextView"
 		style="@style/AppTheme.TitleTopText"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="@string/menu_about"
-		android:layout_marginStart="@dimen/content_margin_start"
+		android:layout_marginStart="@dimen/content_margin_start_minus_padding"
+		android:text="@string/about"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintBottom_toTopOf="@id/innerFragment" />
+		app:layout_constraintTop_toTopOf="parent" />
 
 	<ImageView
 		android:id="@+id/portraitImageView"
@@ -74,6 +73,16 @@
 		tools:text="App By: Gustav Karlsson" />
 
 	<TextView
+		android:id="@+id/privacyPolicyLink"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="4dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/appByTextView"
+		tools:text="@string/privacy_policy" />
+
+	<TextView
 		android:id="@+id/versionCodeTextView"
 		style="@style/AppTheme.BodyText"
 		android:layout_width="wrap_content"
@@ -81,7 +90,7 @@
 		android:layout_marginTop="4dp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/appByTextView"
+		app:layout_constraintTop_toBottomOf="@id/privacyPolicyLink"
 		tools:text="Version code: 12345" />
 
 	<TextView

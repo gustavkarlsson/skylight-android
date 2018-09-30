@@ -5,11 +5,12 @@
 	<string name="app_name">Skylight</string>
 	<string name="main_your_location">Your Location</string>
 	<string name="right_now">Right now</string>
+	<string name="privacy_policy">Privacy Policy</string>
 	<string name="author" translatable="false">Gustav Karlsson</string>
 
-	<!-- Menu -->
-	<string name="menu_settings">Settings</string>
-	<string name="menu_about">About</string>
+	<!-- Screen titles -->
+	<string name="settings">Settings</string>
+	<string name="about">About</string>
 
 	<!-- Aurora chance -->
 	<string name="aurora_chance_none">No Chance</string>
@@ -53,4 +54,9 @@
 	<string name="about_version_code">Version code: %s</string>
 	<string name="about_built_on">Built on: %s</string>
 	<string name="about_sha1">SHA1: %s</string>
+
+	<!-- HTML -->
+	<string name="html_privacy_policy_link" translatable="false" formatted="true">
+		&lt;a href="https://github.com/gustavkarlsson/skylight-android/blob/master/PRIVACY_POLICY.md"&gt;%s&lt;/a&gt;
+	</string>
 </resources>
