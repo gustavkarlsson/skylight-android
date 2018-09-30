@@ -14,8 +14,7 @@
 
 	<fragment
 		android:id="@+id/aboutFragment"
-		android:name="se.gustavkarlsson.skylight.android.gui.screens.about.AboutFragment"
-		android:label="@string/menu_about" />
+		android:name="se.gustavkarlsson.skylight.android.gui.screens.about.AboutFragment" />
 
 	<fragment
 		android:id="@+id/googlePlayServicesFragment"
@@ -27,7 +26,6 @@
 
 	<fragment
 		android:id="@+id/settingsFragment"
-		android:name="se.gustavkarlsson.skylight.android.gui.screens.settings.SettingsFragment"
-		android:label="@string/menu_settings" />
+		android:name="se.gustavkarlsson.skylight.android.gui.screens.settings.SettingsFragment" />
 
 </navigation>

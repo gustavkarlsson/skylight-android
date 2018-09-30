@@ -4,6 +4,7 @@
 	<dimen name="screen_margin_tighter">24dp</dimen>
 	<dimen name="gutter">16dp</dimen>
 	<dimen name="content_margin_start">72dp</dimen>
+	<dimen name="content_margin_start_minus_padding">54dp</dimen>
 
 	<dimen name="card_corner_radius">6dp</dimen>
 	<dimen name="card_elevation">3dp</dimen>

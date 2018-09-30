@@ -1,5 +1,7 @@
 package se.gustavkarlsson.skylight.android.gui.screens.about
 
+import android.text.Html
+import android.text.method.LinkMovementMethod
 import android.view.View
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.LifecycleScopeProvider
@@ -25,6 +27,11 @@ class AboutFragment : BaseFragment(R.layout.fragment_about) {
 		builtTextView.text = getString(R.string.about_built_on, viewModel.buildTime)
 		branchTextView.text = getString(R.string.about_branch, viewModel.branch)
 		sha1TextView.text = getString(R.string.about_sha1, viewModel.sha1Compact)
+
+		val html = requireContext().getString(R.string.html_privacy_policy_link, getString(R.string.privacy_policy))
+		val spannedHtml = Html.fromHtml(html)
+		privacyPolicyLink.text = spannedHtml
+		privacyPolicyLink.movementMethod = LinkMovementMethod.getInstance()
 
 		val developVisibility = if (viewModel.isDevelopMode) View.VISIBLE else View.INVISIBLE
 		versionCodeTextView.visibility = developVisibility
