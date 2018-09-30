@@ -1,3 +1,6 @@
+import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.lib.RepositoryBuilder
+
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
 apply plugin: "kotlin-android-extensions"
@@ -5,10 +8,6 @@ apply plugin: "io.fabric"
 apply plugin: "com.akaita.android.easylauncher"
 apply plugin: "pl.allegro.tech.build.axion-release"
 apply plugin: "com.github.triplet.play"
-
-
-import org.eclipse.jgit.api.Git
-import org.eclipse.jgit.lib.RepositoryBuilder
 
 scmVersion {
 	tag {
@@ -52,6 +51,23 @@ android {
 		versionName scmVersion.version
 		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 		multiDexEnabled true
+
+		def repo = new RepositoryBuilder()
+			.setGitDir(new File(rootDir, "/.git"))
+			.readEnvironment()
+			.build()
+		def head = repo.exactRef("HEAD")
+		def gitBranch = new Git(repo).branchList()
+			.call()
+			.find {
+			it.objectId == head.objectId
+		}?.name?.replaceAll(".*/", "") ?: "None"
+		def gitSha1 = head.objectId.name
+		def buildTime = System.currentTimeMillis()
+
+		buildConfigField "String", "GIT_BRANCH", "\"$gitBranch\""
+		buildConfigField "String", "GIT_SHA1", "\"$gitSha1\""
+		buildConfigField "long", "BUILD_TIME_MILLIS", "${buildTime}L"
 	}
 
 	signingConfigs {
@@ -99,28 +115,6 @@ android {
 
 		resValue "string", "app_name_variant", appName
 	}
-
-	productFlavors.each { flavor ->
-		def repo = new RepositoryBuilder()
-			.setGitDir(new File(rootDir, "/.git"))
-			.readEnvironment()
-			.build()
-		def head = repo.exactRef("HEAD")
-		def gitBranch = new Git(repo).branchList()
-			.call()
-			.find {
-			it.objectId == head.objectId
-		}?.name?.replaceAll(".*/", "") ?: "None"
-		def gitSha1 = head.objectId.name
-		def buildTime = System.currentTimeMillis()
-		def openWeatherMapApiKey =
-			findProperty("openweathermap_api_key") ?: "openweathermap_api_key_not_set"
-
-		flavor.buildConfigField "String", "GIT_BRANCH", "\"$gitBranch\""
-		flavor.buildConfigField "String", "GIT_SHA1", "\"$gitSha1\""
-		flavor.buildConfigField "long", "BUILD_TIME_MILLIS", "${buildTime}L"
-		flavor.buildConfigField "String", "OPENWEATHERMAP_API_KEY", "\"$openWeatherMapApiKey\""
-	}
 }
 
 dependencies {
@@ -128,6 +122,7 @@ dependencies {
 	implementation project(":background")
 	implementation project(":analytics")
 	implementation project(":location")
+	implementation project(":weather")
 
 	implementation "com.google.android.material:material:$android_support_version"
 	implementation "androidx.multidex:multidex:$multidex_version"

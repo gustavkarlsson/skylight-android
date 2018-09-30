@@ -1,18 +1,16 @@
-package se.gustavkarlsson.skylight.android.services_impl.providers
+package se.gustavkarlsson.skylight.android.weather
 
 import com.hadisatrio.optional.Optional
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
 import se.gustavkarlsson.skylight.android.services.providers.WeatherProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap.OpenWeatherMapApi
 import timber.log.Timber
 
-class RetrofittedOpenWeatherMapWeatherProvider(
+internal class RetrofittedOpenWeatherMapWeatherProvider(
 	private val api: OpenWeatherMapApi,
 	private val appId: String,
 	private val retryCount: Long,

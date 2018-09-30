@@ -21,7 +21,7 @@ import se.gustavkarlsson.skylight.android.modules.runVersionsModule
 import se.gustavkarlsson.skylight.android.modules.settingsModule
 import se.gustavkarlsson.skylight.android.modules.timeModule
 import se.gustavkarlsson.skylight.android.modules.viewModelModule
-import se.gustavkarlsson.skylight.android.modules.weatherModule
+import se.gustavkarlsson.skylight.android.weather.weatherModule
 
 val modules = listOf(
 	settingsModule,

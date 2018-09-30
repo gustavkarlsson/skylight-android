@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services_impl.streamables
+package se.gustavkarlsson.skylight.android.weather
 
 import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
@@ -12,7 +12,7 @@ import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.WeatherProvider
 import timber.log.Timber
 
-class WeatherProviderStreamable(
+internal class WeatherProviderStreamable(
 	locations: Flowable<Location>,
 	weatherProvider: WeatherProvider,
 	pollingInterval: Duration

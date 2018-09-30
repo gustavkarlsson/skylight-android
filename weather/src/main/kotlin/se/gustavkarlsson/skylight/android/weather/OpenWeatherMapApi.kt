@@ -1,10 +1,10 @@
-package se.gustavkarlsson.skylight.android.services_impl.providers.openweathermap
+package se.gustavkarlsson.skylight.android.weather
 
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface OpenWeatherMapApi {
+internal interface OpenWeatherMapApi {
 	@GET("weather")
 	fun get(
 		@Query("lat") latitude: Double,
