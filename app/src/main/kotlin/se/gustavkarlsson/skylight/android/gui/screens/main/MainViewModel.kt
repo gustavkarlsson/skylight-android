@@ -8,10 +8,17 @@ import io.reactivex.functions.Consumer
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.entities.*
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.Chance
+import se.gustavkarlsson.skylight.android.entities.ChanceLevel
+import se.gustavkarlsson.skylight.android.entities.Darkness
+import se.gustavkarlsson.skylight.android.entities.GeomagLocation
+import se.gustavkarlsson.skylight.android.entities.KpIndex
+import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.krate.AuroraReportStreamCommand
+import se.gustavkarlsson.skylight.android.krate.ConnectivityStreamCommand
 import se.gustavkarlsson.skylight.android.krate.GetAuroraReportCommand
 import se.gustavkarlsson.skylight.android.krate.SkylightState
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
@@ -43,6 +50,7 @@ class MainViewModel(
 
 	init {
 		store.issue(AuroraReportStreamCommand(true))
+		store.issue(ConnectivityStreamCommand(true))
 		if (store.currentState.auroraReport == null) {
 			store.issue(GetAuroraReportCommand)
 		}
@@ -200,6 +208,7 @@ class MainViewModel(
 		.distinctUntilChanged()
 
 	override fun onCleared() {
+		store.issue(ConnectivityStreamCommand(false))
 		store.issue(AuroraReportStreamCommand(false))
 	}
 }
