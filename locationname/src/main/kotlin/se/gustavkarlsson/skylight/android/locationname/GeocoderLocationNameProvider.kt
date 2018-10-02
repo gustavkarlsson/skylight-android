@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services_impl.providers
+package se.gustavkarlsson.skylight.android.locationname
 
 import android.location.Geocoder
 import com.hadisatrio.optional.Optional
@@ -8,7 +8,7 @@ import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
 import timber.log.Timber
 
-class GeocoderLocationNameProvider(
+internal class GeocoderLocationNameProvider(
 	private val geocoder: Geocoder
 ) : LocationNameProvider {
 

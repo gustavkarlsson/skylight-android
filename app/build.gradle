@@ -126,6 +126,7 @@ dependencies {
 	implementation project(":darkness")
 	implementation project(":kpindex")
 	implementation project(":geomaglocation")
+	implementation project(":locationname")
 
 	implementation "com.google.android.material:material:$android_support_version"
 	implementation "androidx.multidex:multidex:$multidex_version"

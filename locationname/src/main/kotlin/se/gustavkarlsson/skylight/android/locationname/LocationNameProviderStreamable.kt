@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services_impl.streamables
+package se.gustavkarlsson.skylight.android.locationname
 
 import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
@@ -10,7 +10,7 @@ import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
 import timber.log.Timber
 
-class LocationNameProviderStreamable(
+internal class LocationNameProviderStreamable(
 	locations: Flowable<Location>,
 	locationNameProvider: LocationNameProvider,
 	retryDelay: Duration
