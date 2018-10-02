@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.modules
+package se.gustavkarlsson.skylight.android.geomaglocation
 
 import io.reactivex.Flowable
 import org.koin.dsl.module.module
@@ -7,8 +7,6 @@ import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.GeomagLocationProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.GeomagLocationProviderImpl
-import se.gustavkarlsson.skylight.android.services_impl.streamables.GeomagLocationProviderStreamable
 
 val geomagLocationModule = module {
 

@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services_impl.streamables
+package se.gustavkarlsson.skylight.android.geomaglocation
 
 import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
@@ -10,7 +10,7 @@ import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.GeomagLocationProvider
 import timber.log.Timber
 
-class GeomagLocationProviderStreamable(
+internal class GeomagLocationProviderStreamable(
 	locations: Flowable<Location>,
 	geomagLocationProvider: GeomagLocationProvider
 ) : Streamable<Report<GeomagLocation>> {
