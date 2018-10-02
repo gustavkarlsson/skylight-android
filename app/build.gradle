@@ -123,6 +123,7 @@ dependencies {
 	implementation project(":analytics")
 	implementation project(":location")
 	implementation project(":weather")
+	implementation project(":kpindex")
 
 	implementation "com.google.android.material:material:$android_support_version"
 	implementation "androidx.multidex:multidex:$multidex_version"
@@ -143,11 +144,6 @@ dependencies {
 	implementation "android.arch.navigation:navigation-fragment:$navigation_version"
 	implementation "android.arch.navigation:navigation-ui:$navigation_version"
 	implementation "android.arch.navigation:navigation-ui-ktx:$ktx_navigation_ui_version"
-
-	// Retrofit
-	implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-	implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-	implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
 
 	// Rx misc
 	implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"

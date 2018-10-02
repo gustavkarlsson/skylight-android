@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services_impl.streamables
+package se.gustavkarlsson.skylight.android.kpindex
 
 import io.reactivex.Flowable
 import org.threeten.bp.Duration

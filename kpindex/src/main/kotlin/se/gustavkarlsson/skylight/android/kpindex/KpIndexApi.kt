@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services_impl.providers.kpindex
+package se.gustavkarlsson.skylight.android.kpindex
 
 import io.reactivex.Single
 import retrofit2.http.GET
