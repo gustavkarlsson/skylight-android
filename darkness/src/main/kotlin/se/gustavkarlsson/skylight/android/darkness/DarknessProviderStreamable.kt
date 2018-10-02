@@ -12,7 +12,7 @@ import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.DarknessProvider
 import timber.log.Timber
 
-class DarknessProviderStreamable(
+internal class DarknessProviderStreamable(
 	locations: Flowable<Location>,
 	darknessProvider: DarknessProvider,
 	pollingInterval: Duration

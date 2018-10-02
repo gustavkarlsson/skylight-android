@@ -13,7 +13,9 @@ import se.gustavkarlsson.skylight.android.services.providers.DarknessProvider
 import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
 import timber.log.Timber
 
-class KlausBrunnerDarknessProvider(private val timeProvider: TimeProvider) : DarknessProvider {
+internal class KlausBrunnerDarknessProvider(
+	private val timeProvider: TimeProvider
+) : DarknessProvider {
 
 	override fun get(location: Single<Optional<Location>>): Single<Report<Darkness>> {
 		return Single.zip(timeProvider.getTime(), location,
