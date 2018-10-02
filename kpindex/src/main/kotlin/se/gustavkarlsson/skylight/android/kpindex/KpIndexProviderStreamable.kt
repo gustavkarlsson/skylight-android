@@ -9,7 +9,7 @@ import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.KpIndexProvider
 import timber.log.Timber
 
-class KpIndexProviderStreamable(
+internal class KpIndexProviderStreamable(
 	kpIndexProvider: KpIndexProvider,
 	pollingInterval: Duration
 ) : Streamable<Report<KpIndex>> {

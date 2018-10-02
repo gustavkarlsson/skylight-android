@@ -8,7 +8,7 @@ import se.gustavkarlsson.skylight.android.services.providers.KpIndexProvider
 import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
 import timber.log.Timber
 
-class RetrofittedKpIndexProvider(
+internal class RetrofittedKpIndexProvider(
 	private val api: KpIndexApi,
 	private val retryCount: Long,
 	private val timeProvider: TimeProvider
