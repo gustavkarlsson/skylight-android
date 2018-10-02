@@ -1,16 +1,14 @@
-package se.gustavkarlsson.skylight.android.services_impl.providers
+package se.gustavkarlsson.skylight.android.kpindex
 
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.services.providers.KpIndexProvider
 import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.kpindex.KpIndexApi
 import timber.log.Timber
 
-class RetrofittedKpIndexProvider(
+internal class RetrofittedKpIndexProvider(
 	private val api: KpIndexApi,
 	private val retryCount: Long,
 	private val timeProvider: TimeProvider

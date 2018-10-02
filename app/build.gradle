@@ -124,6 +124,7 @@ dependencies {
 	implementation project(":location")
 	implementation project(":weather")
 	implementation project(":darkness")
+	implementation project(":kpindex")
 
 	implementation "com.google.android.material:material:$android_support_version"
 	implementation "androidx.multidex:multidex:$multidex_version"
@@ -141,11 +142,6 @@ dependencies {
 	implementation "android.arch.navigation:navigation-fragment:$navigation_version"
 	implementation "android.arch.navigation:navigation-ui:$navigation_version"
 	implementation "android.arch.navigation:navigation-ui-ktx:$ktx_navigation_ui_version"
-
-	// Retrofit
-	implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-	implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-	implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
 
 	// Rx misc
 	implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"
@@ -180,17 +176,14 @@ dependencies {
 	implementation "org.koin:koin-androidx-scope:$koin_version"
 
 	// Testing
-	testImplementation "org.robolectric:robolectric:$robolectric_version"
 	testImplementation "junit:junit:$junit_version"
 	testImplementation "org.mockito:mockito-inline:$mockito_version"
 	testImplementation "com.nhaarman:mockito-kotlin-kt1.1:$mockito_kotlin_version", {
 		exclude group: "org.jetbrains.kotlin"
 	}
-	testImplementation "commons-io:commons-io:$commons_io_version"
 	testImplementation "com.willowtreeapps.assertk:assertk:$assertk_version", {
 		exclude group: "org.jetbrains.kotlin"
 	}
-	testImplementation "com.google.code.gson:gson:$gson_version"
 
 	// Instrumentation testing
 	androidTestImplementation "androidx.annotation:annotation:$android_support_version"

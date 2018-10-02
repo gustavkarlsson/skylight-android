@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services_impl.providers
+package se.gustavkarlsson.skylight.android.kpindex
 
 import assertk.assert
 import assertk.assertions.isBetween
@@ -23,7 +23,6 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.kpindex.KpIndexApi
 
 @RunWith(RobolectricTestRunner::class)
 class RetrofittedKpIndexProviderTest {
