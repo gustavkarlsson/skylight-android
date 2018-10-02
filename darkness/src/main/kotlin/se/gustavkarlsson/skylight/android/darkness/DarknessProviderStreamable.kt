@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services_impl.streamables
+package se.gustavkarlsson.skylight.android.darkness
 
 import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
@@ -12,7 +12,7 @@ import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.DarknessProvider
 import timber.log.Timber
 
-class DarknessProviderStreamable(
+internal class DarknessProviderStreamable(
 	locations: Flowable<Location>,
 	darknessProvider: DarknessProvider,
 	pollingInterval: Duration

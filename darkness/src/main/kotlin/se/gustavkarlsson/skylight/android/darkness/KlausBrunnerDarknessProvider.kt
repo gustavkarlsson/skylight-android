@@ -1,11 +1,10 @@
-package se.gustavkarlsson.skylight.android.services_impl.providers
+package se.gustavkarlsson.skylight.android.darkness
 
 import com.hadisatrio.optional.Optional
 import io.reactivex.Single
 import io.reactivex.functions.BiFunction
 import net.e175.klaus.solarpositioning.Grena3
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Report
@@ -14,7 +13,9 @@ import se.gustavkarlsson.skylight.android.services.providers.DarknessProvider
 import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
 import timber.log.Timber
 
-class KlausBrunnerDarknessProvider(private val timeProvider: TimeProvider) : DarknessProvider {
+internal class KlausBrunnerDarknessProvider(
+	private val timeProvider: TimeProvider
+) : DarknessProvider {
 
 	override fun get(location: Single<Optional<Location>>): Single<Report<Darkness>> {
 		return Single.zip(timeProvider.getTime(), location,
