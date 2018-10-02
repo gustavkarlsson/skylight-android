@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.modules
+package se.gustavkarlsson.skylight.android.darkness
 
 import io.reactivex.Flowable
 import org.koin.dsl.module.module
@@ -8,8 +8,6 @@ import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.DarknessProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.KlausBrunnerDarknessProvider
-import se.gustavkarlsson.skylight.android.services_impl.streamables.DarknessProviderStreamable
 
 val darknessModule = module {
 

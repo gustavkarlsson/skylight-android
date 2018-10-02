@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services_impl.streamables
+package se.gustavkarlsson.skylight.android.darkness
 
 import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable

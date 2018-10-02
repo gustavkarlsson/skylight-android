@@ -123,6 +123,7 @@ dependencies {
 	implementation project(":analytics")
 	implementation project(":location")
 	implementation project(":weather")
+	implementation project(":darkness")
 
 	implementation "com.google.android.material:material:$android_support_version"
 	implementation "androidx.multidex:multidex:$multidex_version"
@@ -135,9 +136,6 @@ dependencies {
 
 	// Google Play Services
 	implementation "com.google.android.gms:play-services-gcm:$google_play_services_version"
-
-	// Misc
-	implementation "net.e175.klaus:solarpositioning:$solarpositioning_version"
 
 	// Navigation
 	implementation "android.arch.navigation:navigation-fragment:$navigation_version"

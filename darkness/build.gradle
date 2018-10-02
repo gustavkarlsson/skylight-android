@@ -1,0 +1,23 @@
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+android {
+	compileSdkVersion project.compilesdk_version
+
+	sourceSets {
+		main.java.srcDirs += "src/main/kotlin"
+		test.java.srcDirs += "src/test/kotlin"
+		androidTest.java.srcDirs += "src/androidTest/kotlin"
+	}
+
+	defaultConfig {
+		minSdkVersion project.min_sdk_version
+		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+	}
+}
+
+dependencies {
+	implementation project(":core")
+
+	implementation "net.e175.klaus:solarpositioning:$solarpositioning_version"
+}
