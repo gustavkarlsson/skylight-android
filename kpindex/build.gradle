@@ -1,0 +1,38 @@
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+android {
+	compileSdkVersion project.compilesdk_version
+
+	sourceSets {
+		main.java.srcDirs += "src/main/kotlin"
+		test.java.srcDirs += "src/test/kotlin"
+		androidTest.java.srcDirs += "src/androidTest/kotlin"
+	}
+
+	defaultConfig {
+		minSdkVersion project.min_sdk_version
+		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+	}
+}
+
+dependencies {
+	implementation project(":core")
+
+	// Retrofit
+	implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+	implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+	implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+
+	// Testing
+	testImplementation "junit:junit:$junit_version"
+	testImplementation "org.robolectric:robolectric:$robolectric_version"
+	testImplementation "org.mockito:mockito-inline:$mockito_version"
+	testImplementation "com.nhaarman:mockito-kotlin-kt1.1:$mockito_kotlin_version", {
+		exclude group: "org.jetbrains.kotlin"
+	}
+	testImplementation "commons-io:commons-io:$commons_io_version"
+	testImplementation "com.willowtreeapps.assertk:assertk:$assertk_version", {
+		exclude group: "org.jetbrains.kotlin"
+	}
+}
