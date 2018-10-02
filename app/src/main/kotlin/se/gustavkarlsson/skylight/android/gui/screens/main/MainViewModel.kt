@@ -23,7 +23,7 @@ import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
-import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
+import se.gustavkarlsson.skylight.android.services.providers.Time
 import timber.log.Timber
 
 class MainViewModel(
@@ -40,7 +40,7 @@ class MainViewModel(
 	kpIndexFormatter: SingleValueFormatter<KpIndex>,
 	weatherChanceEvaluator: ChanceEvaluator<Weather>,
 	weatherFormatter: SingleValueFormatter<Weather>,
-	timeProvider: TimeProvider,
+	time: Time,
 	nowTextThreshold: Duration
 ) : ViewModel() {
 
@@ -92,7 +92,7 @@ class MainViewModel(
 				.observeOn(AndroidSchedulers.mainThread())
 		}
 		.map {
-			relativeTimeFormatter.format(it, timeProvider.getTime().blockingGet(), nowTextThreshold)
+			relativeTimeFormatter.format(it, time.now().blockingGet(), nowTextThreshold)
 		}
 		.distinctUntilChanged()
 

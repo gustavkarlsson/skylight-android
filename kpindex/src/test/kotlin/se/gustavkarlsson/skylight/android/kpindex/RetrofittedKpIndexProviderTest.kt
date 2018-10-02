@@ -22,18 +22,18 @@ import org.threeten.bp.Instant
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
+import se.gustavkarlsson.skylight.android.services.providers.Time
 
 @RunWith(RobolectricTestRunner::class)
 class RetrofittedKpIndexProviderTest {
 	lateinit var mockedClient: OkHttpClient
-	lateinit var mockedTimeProvider: TimeProvider
+	lateinit var mockedTime: Time
 
 	@Before
 	fun setUp() {
 		mockedClient = mockClient(200, "fixtures/kp_index_report.json", "application/json")
-		mockedTimeProvider = mock {
-			on(it.getTime()).thenReturn(Single.just(Instant.EPOCH))
+		mockedTime = mock {
+			on(it.now()).thenReturn(Single.just(Instant.EPOCH))
 		}
 	}
 
@@ -76,7 +76,7 @@ class RetrofittedKpIndexProviderTest {
 			.addConverterFactory(GsonConverterFactory.create())
 			.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 			.build()
-			.create(KpIndexApi::class.java), 1, mockedTimeProvider)
+			.create(KpIndexApi::class.java), 1, mockedTime)
 
 		val kpIndex = service.get().blockingGet().value!!
 

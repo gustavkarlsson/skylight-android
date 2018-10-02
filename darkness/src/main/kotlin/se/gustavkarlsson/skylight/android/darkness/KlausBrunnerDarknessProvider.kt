@@ -10,15 +10,15 @@ import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.extensions.toGregorianCalendar
 import se.gustavkarlsson.skylight.android.services.providers.DarknessProvider
-import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
+import se.gustavkarlsson.skylight.android.services.providers.Time
 import timber.log.Timber
 
 internal class KlausBrunnerDarknessProvider(
-	private val timeProvider: TimeProvider
+	private val time: Time
 ) : DarknessProvider {
 
 	override fun get(location: Single<Optional<Location>>): Single<Report<Darkness>> {
-		return Single.zip(timeProvider.getTime(), location,
+		return Single.zip(time.now(), location,
 			BiFunction<Instant, Optional<Location>, Report<Darkness>> { timeValue, maybeLocation ->
 				maybeLocation.orNull()?.let {
 					val date = timeValue.toGregorianCalendar()

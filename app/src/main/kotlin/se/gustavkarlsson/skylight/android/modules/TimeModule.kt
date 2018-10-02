@@ -2,13 +2,13 @@ package se.gustavkarlsson.skylight.android.modules
 
 import org.koin.dsl.module.module
 import org.threeten.bp.ZoneId
-import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
-import se.gustavkarlsson.skylight.android.services_impl.providers.SystemTimeWithFixedZoneIdProvider
+import se.gustavkarlsson.skylight.android.services.providers.Time
+import se.gustavkarlsson.skylight.android.services_impl.providers.SystemTimeWithFixedZoneId
 
 val timeModule = module {
 
-	single<TimeProvider> {
-		SystemTimeWithFixedZoneIdProvider(ZoneId.systemDefault())
+	single<Time> {
+		SystemTimeWithFixedZoneId(ZoneId.systemDefault())
 	}
 
 }

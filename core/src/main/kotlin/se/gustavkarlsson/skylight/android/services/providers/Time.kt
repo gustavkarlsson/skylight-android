@@ -5,8 +5,8 @@ import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
 import org.threeten.bp.ZoneId
 
-interface TimeProvider {
-	fun getTime(): Single<Instant>
-	fun getZoneId(): Single<ZoneId>
-	fun getLocalDate(): Single<LocalDate>
+interface Time {
+	fun now(): Single<Instant>
+	fun zoneId(): Single<ZoneId>
+	fun localDate(): Single<LocalDate>
 }

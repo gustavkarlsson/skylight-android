@@ -6,7 +6,7 @@ import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.services.providers.GeomagLocationProvider
-import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
+import se.gustavkarlsson.skylight.android.services.providers.Time
 import timber.log.Timber
 import java.lang.Math.PI
 import java.lang.Math.atan2
@@ -18,7 +18,7 @@ import java.lang.Math.toDegrees
 import java.lang.Math.toRadians
 
 internal class GeomagLocationProviderImpl(
-	private val timeProvider: TimeProvider
+	private val time: Time
 ) : GeomagLocationProvider {
 
 	override fun get(location: Single<Optional<Location>>): Single<Report<GeomagLocation>> {
@@ -33,9 +33,9 @@ internal class GeomagLocationProviderImpl(
 					)
 					Report.success(
 						GeomagLocation(geomagneticLatitude),
-						timeProvider.getTime().blockingGet()
+						time.now().blockingGet()
 					)
-				} ?: Report.error(R.string.error_no_location, timeProvider.getTime().blockingGet())
+				} ?: Report.error(R.string.error_no_location, time.now().blockingGet())
 			}
 			.doOnSuccess { Timber.i("Provided geomagnetic location: %s", it) }
 	}

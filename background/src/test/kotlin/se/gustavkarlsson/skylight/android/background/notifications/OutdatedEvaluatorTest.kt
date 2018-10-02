@@ -15,21 +15,21 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.temporal.ChronoUnit.DAYS
 import org.threeten.bp.temporal.ChronoUnit.HOURS
-import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
+import se.gustavkarlsson.skylight.android.services.providers.Time
 
 @RunWith(MockitoJUnitRunner::class)
 internal class OutdatedEvaluatorTest {
 
 	@Mock
-	lateinit var mockTimeProvider: TimeProvider
+	lateinit var mockTime: Time
 
 	lateinit var impl: OutdatedEvaluator
 
 	@Before
 	fun setUp() {
-		whenever(mockTimeProvider.getZoneId()).thenReturn(Single.just(ZONE_OFFSET))
+		whenever(mockTime.zoneId()).thenReturn(Single.just(ZONE_OFFSET))
 		impl = OutdatedEvaluator(
-			mockTimeProvider
+			mockTime
 		)
 	}
 
@@ -49,8 +49,8 @@ internal class OutdatedEvaluatorTest {
 			.row(AFTER_NOON.minus(1, DAYS), BEFORE_NOON, true)
 			.row(AFTER_NOON.minus(1, DAYS), AFTER_NOON, true)
 			.forAll { time, now, expected ->
-				whenever(mockTimeProvider.getTime()).thenReturn(Single.just(now))
-				whenever(mockTimeProvider.getLocalDate()).thenReturn(
+				whenever(mockTime.now()).thenReturn(Single.just(now))
+				whenever(mockTime.localDate()).thenReturn(
 					Single.just(LocalDateTime.ofInstant(now, ZONE_OFFSET).toLocalDate())
 				)
 
