@@ -1,17 +1,25 @@
-package se.gustavkarlsson.skylight.android.services_impl.providers
+package se.gustavkarlsson.skylight.android.geomaglocation
 
 import com.hadisatrio.optional.Optional
 import io.reactivex.Single
-import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.services.providers.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.services.providers.TimeProvider
 import timber.log.Timber
-import java.lang.Math.*
+import java.lang.Math.PI
+import java.lang.Math.atan2
+import java.lang.Math.cos
+import java.lang.Math.pow
+import java.lang.Math.sin
+import java.lang.Math.sqrt
+import java.lang.Math.toDegrees
+import java.lang.Math.toRadians
 
-class GeomagLocationProviderImpl(private val timeProvider: TimeProvider) : GeomagLocationProvider {
+internal class GeomagLocationProviderImpl(
+	private val timeProvider: TimeProvider
+) : GeomagLocationProvider {
 
 	override fun get(location: Single<Optional<Location>>): Single<Report<GeomagLocation>> {
 		return location
@@ -23,7 +31,10 @@ class GeomagLocationProviderImpl(private val timeProvider: TimeProvider) : Geoma
 						MAGNETIC_NORTH_POLE_LATITUDE,
 						MAGNETIC_NORTH_POLE_LONGITUDE
 					)
-					Report.success(GeomagLocation(geomagneticLatitude), timeProvider.getTime().blockingGet())
+					Report.success(
+						GeomagLocation(geomagneticLatitude),
+						timeProvider.getTime().blockingGet()
+					)
 				} ?: Report.error(R.string.error_no_location, timeProvider.getTime().blockingGet())
 			}
 			.doOnSuccess { Timber.i("Provided geomagnetic location: %s", it) }
