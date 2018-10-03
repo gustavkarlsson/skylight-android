@@ -2,9 +2,16 @@ package se.gustavkarlsson.skylight.android.services_impl.providers
 
 import com.hadisatrio.optional.Optional
 import io.reactivex.Single
-import io.reactivex.functions.Function5
-import se.gustavkarlsson.skylight.android.entities.*
-import se.gustavkarlsson.skylight.android.services.providers.*
+import io.reactivex.rxkotlin.Singles
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
+import se.gustavkarlsson.skylight.android.services.providers.DarknessProvider
+import se.gustavkarlsson.skylight.android.services.providers.GeomagLocationProvider
+import se.gustavkarlsson.skylight.android.services.providers.KpIndexProvider
+import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
+import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
+import se.gustavkarlsson.skylight.android.services.providers.WeatherProvider
 import timber.log.Timber
 
 class CombiningAuroraReportProvider(
@@ -28,19 +35,14 @@ class CombiningAuroraReportProvider(
 	private fun zipToAuroraReport(
 		location: Single<Optional<Location>>
 	): Single<AuroraReport> {
-		return Single.zip(
+		return Singles.zip(
 			locationNameProvider.get(location),
 			kpIndexProvider.get(),
 			geomagLocationProvider.get(location),
 			darknessProvider.get(location),
-			weatherProvider.get(location),
-			Function5 { locationName: Optional<String>,
-						kpIndex: Report<KpIndex>,
-						geomagLocation: Report<GeomagLocation>,
-						darkness: Report<Darkness>,
-						weather: Report<Weather>
-				->
-				AuroraReport(locationName.orNull(), kpIndex, geomagLocation, darkness, weather)
-			})
+			weatherProvider.get(location)
+		) { locationName, kpIndex, geomagLocation, darkness, weather ->
+			AuroraReport(locationName.orNull(), kpIndex, geomagLocation, darkness, weather)
+		}
 	}
 }

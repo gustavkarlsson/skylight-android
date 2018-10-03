@@ -2,12 +2,11 @@ package se.gustavkarlsson.skylight.android.modules
 
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.BiFunction
+import io.reactivex.rxkotlin.Flowables
 import org.koin.dsl.module.module
 import se.gustavkarlsson.krate.core.dsl.buildStore
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.krate.AuroraReportResult
 import se.gustavkarlsson.skylight.android.krate.AuroraReportStreamCommand
 import se.gustavkarlsson.skylight.android.krate.BootstrapCommand
@@ -122,18 +121,14 @@ val krateModule = module {
 				transform<SettingsStreamCommand> { commands ->
 					commands.switchMap { command ->
 						if (command.stream) {
-							Flowable.combineLatest(
+							Flowables.combineLatest(
 								settings.notificationsEnabledChanges,
-								settings.triggerLevelChanges,
-								BiFunction { notificationsEnabled: Boolean, triggerLevel: ChanceLevel ->
-									SettingsResult(
-										SkylightState.Settings(
-											notificationsEnabled,
-											triggerLevel
-										)
-									)
-								}
-							)
+								settings.triggerLevelChanges
+							) { notificationsEnabled, triggerLevel ->
+								SettingsResult(
+									SkylightState.Settings(notificationsEnabled, triggerLevel)
+								)
+							}
 						} else {
 							Flowable.empty()
 						}

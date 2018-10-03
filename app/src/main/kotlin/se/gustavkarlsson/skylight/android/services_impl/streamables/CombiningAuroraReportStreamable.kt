@@ -2,8 +2,13 @@ package se.gustavkarlsson.skylight.android.services_impl.streamables
 
 import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
-import io.reactivex.functions.Function5
-import se.gustavkarlsson.skylight.android.entities.*
+import io.reactivex.rxkotlin.Flowables
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.Darkness
+import se.gustavkarlsson.skylight.android.entities.GeomagLocation
+import se.gustavkarlsson.skylight.android.entities.KpIndex
+import se.gustavkarlsson.skylight.android.entities.Report
+import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.services.Streamable
 import timber.log.Timber
 
@@ -16,19 +21,15 @@ class CombiningAuroraReportStreamable(
 ) : Streamable<AuroraReport> {
 
 	override val stream: Flowable<AuroraReport> =
-		Flowable.combineLatest(
+		Flowables.combineLatest(
 			locationNames,
 			kpIndexes,
 			geomagLocations,
 			darknesses,
-			weathers,
-			Function5 { locationName: Optional<String>,
-						kpIndex: Report<KpIndex>,
-						geomagLocation: Report<GeomagLocation>,
-						darkness: Report<Darkness>,
-						weather: Report<Weather> ->
-				AuroraReport(locationName.orNull(), kpIndex, geomagLocation, darkness, weather)
-			})
+			weathers
+		) { locationName, kpIndex, geomagLocation, darkness, weather ->
+			AuroraReport(locationName.orNull(), kpIndex, geomagLocation, darkness, weather)
+		}
 			.distinctUntilChanged()
 			.doOnNext { Timber.i("Streamed aurora report: %s", it) }
 }
