@@ -1,9 +1,10 @@
 package se.gustavkarlsson.skylight.android.locationname
 
-import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
 import io.reactivex.Single
 import org.threeten.bp.Duration
+import se.gustavkarlsson.koptional.Optional
+import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.services.Streamable
@@ -17,10 +18,10 @@ internal class LocationNameProviderStreamable(
 ) : Streamable<Optional<String>> {
 	override val stream: Flowable<Optional<String>> = locations
 		.switchMap {
-			locationNameProvider.get(Single.just(Optional.of(it)))
+			locationNameProvider.get(Single.just(optionalOf(it)))
 				.retryWhen { it.delay(retryDelay) }
 				.toFlowable()
 		}
 		.distinctUntilChanged()
-		.doOnNext { Timber.i("Streamed location name: %s", it.orNull()) }
+		.doOnNext { Timber.i("Streamed location name: %s", it.value) }
 }

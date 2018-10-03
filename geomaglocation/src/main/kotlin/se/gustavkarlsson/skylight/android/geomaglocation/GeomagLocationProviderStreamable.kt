@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.geomaglocation
 
-import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
 import io.reactivex.Single
+import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Report
@@ -16,7 +16,7 @@ internal class GeomagLocationProviderStreamable(
 ) : Streamable<Report<GeomagLocation>> {
 	override val stream: Flowable<Report<GeomagLocation>> = locations
 		.switchMapSingle {
-			geomagLocationProvider.get(Single.just(Optional.of(it)))
+			geomagLocationProvider.get(Single.just(optionalOf(it)))
 		}
 		.distinctUntilChanged()
 		.doOnNext { Timber.i("Streamed geomag location: %s", it) }

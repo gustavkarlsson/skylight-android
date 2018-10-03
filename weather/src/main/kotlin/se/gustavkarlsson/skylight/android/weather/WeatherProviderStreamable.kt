@@ -1,9 +1,9 @@
 package se.gustavkarlsson.skylight.android.weather
 
-import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
 import io.reactivex.Single
 import org.threeten.bp.Duration
+import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.entities.Weather
@@ -19,7 +19,7 @@ internal class WeatherProviderStreamable(
 ) : Streamable<Report<Weather>> {
 	override val stream: Flowable<Report<Weather>> = locations
 		.switchMap { location ->
-			val maybeLocation = Single.just(Optional.of(location))
+			val maybeLocation = Single.just(optionalOf(location))
 			weatherProvider.get(maybeLocation)
 				.repeatWhen { it.delay(pollingInterval) }
 		}

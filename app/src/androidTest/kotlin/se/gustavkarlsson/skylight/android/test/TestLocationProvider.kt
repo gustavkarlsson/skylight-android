@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.test
 
-import com.hadisatrio.optional.Optional
 import io.reactivex.Single
+import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 

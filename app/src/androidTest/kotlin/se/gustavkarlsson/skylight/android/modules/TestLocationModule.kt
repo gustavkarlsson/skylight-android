@@ -1,8 +1,9 @@
 package se.gustavkarlsson.skylight.android.modules
 
-import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
 import org.koin.dsl.module.module
+import se.gustavkarlsson.koptional.Optional
+import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.minutes
@@ -13,7 +14,7 @@ import se.gustavkarlsson.skylight.android.test.TestLocationProvider
 val testLocationModule = module {
 
 	single {
-		TestLocationProvider { Optional.of(Location(0.0, 0.0)) }
+		TestLocationProvider { optionalOf(Location(0.0, 0.0)) }
 	}
 
 	single<LocationProvider>(override = true) {
@@ -27,7 +28,7 @@ val testLocationModule = module {
 				get() = locationProvider.get()
 					.repeatWhen { it.delay(15.minutes) }
 					.filter(Optional<Location>::isPresent)
-					.map(Optional<Location>::get)
+					.map(Optional<Location>::unsafeValue)
 		}
 	}
 

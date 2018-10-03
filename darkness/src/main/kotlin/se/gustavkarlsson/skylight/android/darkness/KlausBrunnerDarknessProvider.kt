@@ -1,9 +1,9 @@
 package se.gustavkarlsson.skylight.android.darkness
 
-import com.hadisatrio.optional.Optional
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Singles
 import net.e175.klaus.solarpositioning.Grena3
+import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Report
@@ -18,7 +18,7 @@ internal class KlausBrunnerDarknessProvider(
 
 	override fun get(location: Single<Optional<Location>>): Single<Report<Darkness>> {
 		return Singles.zip(time.now(), location) { timeValue, maybeLocation ->
-			maybeLocation.orNull()?.let {
+			maybeLocation.value?.let {
 				val date = timeValue.toGregorianCalendar()
 				val azimuthZenithAngle = Grena3.calculateSolarPosition(
 					date,
