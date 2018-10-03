@@ -20,7 +20,6 @@
 * Add instrumentation testing to CI
 * Add more tests
 * TextRef?
-* Better Optional?
 
 ## Some day
 * Migrate CardView to MaterialCardView when they fixed the ripple effect bug (ripple not working)

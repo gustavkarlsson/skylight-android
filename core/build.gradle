@@ -21,7 +21,7 @@ dependencies {
 	api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 	api "com.jakewharton.threetenabp:threetenabp:$threetenabp_version"
 	api "com.jakewharton.timber:timber:$timber_version"
-	api "com.hadisatrio:Optional:$optional_version"
+	api "com.github.gustavkarlsson:koptional:$koptional_version"
 	api "io.reactivex.rxjava2:rxjava:$rxjava_version"
 	api "io.reactivex.rxjava2:rxkotlin:$rxkotlin_version"
 	api "org.koin:koin-android:$koin_version"

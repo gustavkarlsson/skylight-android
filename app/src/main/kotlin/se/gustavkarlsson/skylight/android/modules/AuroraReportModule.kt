@@ -1,9 +1,14 @@
 package se.gustavkarlsson.skylight.android.modules
 
-import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
 import org.koin.dsl.module.module
-import se.gustavkarlsson.skylight.android.entities.*
+import se.gustavkarlsson.koptional.Optional
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.Darkness
+import se.gustavkarlsson.skylight.android.entities.GeomagLocation
+import se.gustavkarlsson.skylight.android.entities.KpIndex
+import se.gustavkarlsson.skylight.android.entities.Report
+import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services_impl.providers.CombiningAuroraReportProvider

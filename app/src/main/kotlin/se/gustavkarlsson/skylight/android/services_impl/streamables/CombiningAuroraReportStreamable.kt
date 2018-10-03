@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.services_impl.streamables
 
-import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
 import io.reactivex.rxkotlin.Flowables
+import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
@@ -28,7 +28,7 @@ class CombiningAuroraReportStreamable(
 			darknesses,
 			weathers
 		) { locationName, kpIndex, geomagLocation, darkness, weather ->
-			AuroraReport(locationName.orNull(), kpIndex, geomagLocation, darkness, weather)
+			AuroraReport(locationName.value, kpIndex, geomagLocation, darkness, weather)
 		}
 			.distinctUntilChanged()
 			.doOnNext { Timber.i("Streamed aurora report: %s", it) }

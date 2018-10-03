@@ -1,9 +1,9 @@
 package se.gustavkarlsson.skylight.android.locationname
 
 import android.location.Geocoder
-import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
 import org.koin.dsl.module.module
+import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.Streamable
 import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
