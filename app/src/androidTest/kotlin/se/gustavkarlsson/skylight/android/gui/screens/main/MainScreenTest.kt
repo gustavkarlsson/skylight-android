@@ -38,7 +38,7 @@ class MainScreenTest : KoinComponent {
 	@Test
 	fun locationTextShowsActualLocation() {
 		screen {
-			locationName.hasText(testLocationNameProvider.delegate().get())
+			locationName.hasText(testLocationNameProvider.delegate().unsafeValue)
 		}
 	}
 
