@@ -11,7 +11,10 @@ import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.gui.MainActivity
-import se.gustavkarlsson.skylight.android.test.*
+import se.gustavkarlsson.skylight.android.test.ManualLaunchActivityTestRule
+import se.gustavkarlsson.skylight.android.test.TestLocationNameProvider
+import se.gustavkarlsson.skylight.android.test.clearCache
+import se.gustavkarlsson.skylight.android.test.clearSharedPreferences
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -20,8 +23,6 @@ class MainScreenTest : KoinComponent {
 	@Rule
 	@JvmField
 	var testRule = ManualLaunchActivityTestRule(MainActivity::class)
-
-	private val testLocationProvider: TestLocationProvider by inject()
 
 	private val testLocationNameProvider: TestLocationNameProvider by inject()
 
@@ -35,21 +36,8 @@ class MainScreenTest : KoinComponent {
 	}
 
 	@Test
-	fun unknownErrorWhenRefreshingShowsError() {
-		testLocationProvider.delegate = { throw RuntimeException("ERROR!") }
-
-		screen {
-			swipeRefreshLayout.swipeDown()
-			snackbar {
-				text.hasText(R.string.error_unknown_update_error)
-			}
-		}
-	}
-
-	@Test
 	fun locationTextShowsActualLocation() {
 		screen {
-			swipeRefreshLayout.swipeDown()
 			locationName.hasText(testLocationNameProvider.delegate().get())
 		}
 	}

@@ -43,7 +43,6 @@ internal class UpdateJob(
 					Single.error(it.throwable)
 				}
 			}
-			.filter { it.justFinishedRefreshing }
 			.flatMapSingle {
 				val auroraReport = it.auroraReport
 				if (auroraReport != null) {

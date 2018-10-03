@@ -1,289 +1,276 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:clipToPadding="false"
+	android:padding="@dimen/screen_margin"
 	tools:context=".gui.MainActivity">
 
-	<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-		android:id="@+id/swipeRefreshLayout"
+	<androidx.appcompat.widget.AppCompatImageView
+		android:id="@+id/menuButton"
+		style="@style/AppTheme.ClickableIcon"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:src="@drawable/ic_more_vert_white_24dp"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toTopOf="parent" />
+
+	<Space
+		android:id="@+id/firstSpace"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_height="0dp"
+		app:layout_constraintBottom_toTopOf="@+id/locationName"
+		app:layout_constraintTop_toTopOf="parent" />
 
-		<androidx.constraintlayout.widget.ConstraintLayout
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:clipToPadding="false"
-			android:padding="@dimen/screen_margin">
+	<TextView
+		android:id="@+id/locationName"
+		style="@style/AppTheme.LocationNameNext"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:layout_constraintBottom_toTopOf="@+id/chance"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/firstSpace"
+		tools:text="Strycksele" />
 
-			<androidx.appcompat.widget.AppCompatImageView
-				android:id="@+id/menuButton"
-				style="@style/AppTheme.ClickableIcon"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:src="@drawable/ic_more_vert_white_24dp"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintTop_toTopOf="parent" />
+	<TextView
+		android:id="@+id/chance"
+		style="@style/AppTheme.ChanceText"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:layout_constraintBottom_toTopOf="@+id/timeSinceUpdate"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/locationName"
+		tools:text="High Chance" />
 
-			<Space
-				android:id="@+id/firstSpace"
-				android:layout_width="match_parent"
-				android:layout_height="0dp"
-				app:layout_constraintBottom_toTopOf="@+id/locationName"
-				app:layout_constraintTop_toTopOf="parent" />
+	<TextView
+		android:id="@+id/timeSinceUpdate"
+		style="@style/AppTheme.TimeSinceText"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:layout_constraintBottom_toTopOf="@+id/secondSpace"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/chance"
+		tools:text="3 minutes ago" />
 
-			<TextView
-				android:id="@+id/locationName"
-				style="@style/AppTheme.LocationNameNext"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				app:layout_constraintBottom_toTopOf="@+id/chance"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintHorizontal_bias="0"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@id/firstSpace"
-				tools:text="Strycksele" />
-
-			<TextView
-				android:id="@+id/chance"
-				style="@style/AppTheme.ChanceText"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				app:layout_constraintBottom_toTopOf="@+id/timeSinceUpdate"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintHorizontal_bias="0"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@id/locationName"
-				tools:text="High Chance" />
-
-			<TextView
-				android:id="@+id/timeSinceUpdate"
-				style="@style/AppTheme.TimeSinceText"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				app:layout_constraintBottom_toTopOf="@+id/secondSpace"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintHorizontal_bias="0"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@+id/chance"
-				tools:text="3 minutes ago" />
-
-			<Space
-				android:id="@+id/secondSpace"
-				android:layout_width="match_parent"
-				android:layout_height="0dp"
-				app:layout_constraintBottom_toTopOf="@+id/kpIndexCard"
-				app:layout_constraintTop_toBottomOf="@+id/timeSinceUpdate" />
+	<Space
+		android:id="@+id/secondSpace"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		app:layout_constraintBottom_toTopOf="@+id/kpIndexCard"
+		app:layout_constraintTop_toBottomOf="@+id/timeSinceUpdate" />
 
 
-			<androidx.cardview.widget.CardView
-				android:id="@+id/kpIndexCard"
-				style="@style/AppTheme.FactorCardView"
-				android:layout_width="0dp"
-				android:layout_height="56dp"
-				android:layout_marginBottom="@dimen/gutter"
-				app:layout_constraintBottom_toTopOf="@+id/geomagLocationCard"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@+id/secondSpace" />
+	<androidx.cardview.widget.CardView
+		android:id="@+id/kpIndexCard"
+		style="@style/AppTheme.FactorCardView"
+		android:layout_width="0dp"
+		android:layout_height="56dp"
+		android:layout_marginBottom="@dimen/gutter"
+		app:layout_constraintBottom_toTopOf="@+id/geomagLocationCard"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/secondSpace" />
 
-			<TextView
-				android:id="@+id/kpIndexName"
-				style="@style/AppTheme.FactorCardItemText.Name"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginStart="16dp"
-				android:text="@string/factor_kp_index_title_compact"
-				app:layout_constraintBottom_toBottomOf="@id/kpIndexCard"
-				app:layout_constraintStart_toStartOf="@id/kpIndexCard"
-				app:layout_constraintTop_toTopOf="@id/kpIndexCard" />
+	<TextView
+		android:id="@+id/kpIndexName"
+		style="@style/AppTheme.FactorCardItemText.Name"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:text="@string/factor_kp_index_title_compact"
+		app:layout_constraintBottom_toBottomOf="@id/kpIndexCard"
+		app:layout_constraintStart_toStartOf="@id/kpIndexCard"
+		app:layout_constraintTop_toTopOf="@id/kpIndexCard" />
 
-			<TextView
-				android:id="@+id/kpIndexValue"
-				style="@style/AppTheme.FactorCardItemText.Value"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginStart="16dp"
-				app:layout_constraintBottom_toBottomOf="@id/kpIndexCard"
-				app:layout_constraintStart_toStartOf="@id/factorTitlesBarrier"
-				app:layout_constraintTop_toTopOf="@id/kpIndexCard"
-				tools:text="3+" />
+	<TextView
+		android:id="@+id/kpIndexValue"
+		style="@style/AppTheme.FactorCardItemText.Value"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		app:layout_constraintBottom_toBottomOf="@id/kpIndexCard"
+		app:layout_constraintStart_toStartOf="@id/factorTitlesBarrier"
+		app:layout_constraintTop_toTopOf="@id/kpIndexCard"
+		tools:text="3+" />
 
-			<ProgressBar
-				android:id="@+id/kpIndexBar"
-				style="@style/AppTheme.FactorCardItem.ProgressBar"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_marginEnd="16dp"
-				android:layout_marginStart="16dp"
-				android:max="1000"
-				app:layout_constraintBottom_toBottomOf="@id/kpIndexCard"
-				app:layout_constraintEnd_toEndOf="@id/kpIndexCard"
-				app:layout_constraintStart_toStartOf="@id/factorValuesBarrier"
-				app:layout_constraintTop_toTopOf="@id/kpIndexCard"
-				tools:progress="37" />
-
-
-			<androidx.cardview.widget.CardView
-				android:id="@+id/geomagLocationCard"
-				style="@style/AppTheme.FactorCardView"
-				android:layout_width="0dp"
-				android:layout_height="56dp"
-				android:layout_marginBottom="@dimen/gutter"
-				app:layout_constraintBottom_toTopOf="@+id/weatherCard"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@+id/kpIndexCard" />
-
-			<TextView
-				android:id="@+id/geomagLocationName"
-				style="@style/AppTheme.FactorCardItemText.Name"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginStart="16dp"
-				android:text="@string/factor_geomag_location_title_compact"
-				app:layout_constraintBottom_toBottomOf="@id/geomagLocationCard"
-				app:layout_constraintStart_toStartOf="@id/geomagLocationCard"
-				app:layout_constraintTop_toTopOf="@id/geomagLocationCard" />
-
-			<TextView
-				android:id="@+id/geomagLocationValue"
-				style="@style/AppTheme.FactorCardItemText.Value"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginStart="16dp"
-				app:layout_constraintBottom_toBottomOf="@id/geomagLocationCard"
-				app:layout_constraintStart_toStartOf="@id/factorTitlesBarrier"
-				app:layout_constraintTop_toTopOf="@id/geomagLocationCard"
-				tools:text="51°" />
-
-			<ProgressBar
-				android:id="@+id/geomagLocationBar"
-				style="@style/AppTheme.FactorCardItem.ProgressBar"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_marginEnd="16dp"
-				android:layout_marginStart="16dp"
-				android:max="1000"
-				app:layout_constraintBottom_toBottomOf="@id/geomagLocationCard"
-				app:layout_constraintEnd_toEndOf="@id/geomagLocationCard"
-				app:layout_constraintStart_toStartOf="@id/factorValuesBarrier"
-				app:layout_constraintTop_toTopOf="@id/geomagLocationCard"
-				tools:progress="20" />
+	<ProgressBar
+		android:id="@+id/kpIndexBar"
+		style="@style/AppTheme.FactorCardItem.ProgressBar"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="16dp"
+		android:layout_marginStart="16dp"
+		android:max="1000"
+		app:layout_constraintBottom_toBottomOf="@id/kpIndexCard"
+		app:layout_constraintEnd_toEndOf="@id/kpIndexCard"
+		app:layout_constraintStart_toStartOf="@id/factorValuesBarrier"
+		app:layout_constraintTop_toTopOf="@id/kpIndexCard"
+		tools:progress="37" />
 
 
-			<androidx.cardview.widget.CardView
-				android:id="@+id/weatherCard"
-				style="@style/AppTheme.FactorCardView"
-				android:layout_width="0dp"
-				android:layout_height="56dp"
-				android:layout_marginBottom="@dimen/gutter"
-				app:layout_constraintBottom_toTopOf="@+id/darknessCard"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@+id/geomagLocationCard" />
+	<androidx.cardview.widget.CardView
+		android:id="@+id/geomagLocationCard"
+		style="@style/AppTheme.FactorCardView"
+		android:layout_width="0dp"
+		android:layout_height="56dp"
+		android:layout_marginBottom="@dimen/gutter"
+		app:layout_constraintBottom_toTopOf="@+id/weatherCard"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/kpIndexCard" />
 
-			<TextView
-				android:id="@+id/weatherName"
-				style="@style/AppTheme.FactorCardItemText.Name"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginStart="16dp"
-				android:text="@string/factor_weather_title_compact"
-				app:layout_constraintBottom_toBottomOf="@id/weatherCard"
-				app:layout_constraintStart_toStartOf="@id/weatherCard"
-				app:layout_constraintTop_toTopOf="@id/weatherCard" />
+	<TextView
+		android:id="@+id/geomagLocationName"
+		style="@style/AppTheme.FactorCardItemText.Name"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:text="@string/factor_geomag_location_title_compact"
+		app:layout_constraintBottom_toBottomOf="@id/geomagLocationCard"
+		app:layout_constraintStart_toStartOf="@id/geomagLocationCard"
+		app:layout_constraintTop_toTopOf="@id/geomagLocationCard" />
 
-			<TextView
-				android:id="@+id/weatherValue"
-				style="@style/AppTheme.FactorCardItemText.Value"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginStart="16dp"
-				app:layout_constraintBottom_toBottomOf="@id/weatherCard"
-				app:layout_constraintStart_toStartOf="@id/factorTitlesBarrier"
-				app:layout_constraintTop_toTopOf="@id/weatherCard"
-				tools:text="Clear" />
+	<TextView
+		android:id="@+id/geomagLocationValue"
+		style="@style/AppTheme.FactorCardItemText.Value"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		app:layout_constraintBottom_toBottomOf="@id/geomagLocationCard"
+		app:layout_constraintStart_toStartOf="@id/factorTitlesBarrier"
+		app:layout_constraintTop_toTopOf="@id/geomagLocationCard"
+		tools:text="51°" />
 
-			<ProgressBar
-				android:id="@+id/weatherBar"
-				style="@style/AppTheme.FactorCardItem.ProgressBar"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_marginEnd="16dp"
-				android:layout_marginStart="16dp"
-				android:max="1000"
-				app:layout_constraintBottom_toBottomOf="@id/weatherCard"
-				app:layout_constraintEnd_toEndOf="@id/weatherCard"
-				app:layout_constraintStart_toStartOf="@id/factorValuesBarrier"
-				app:layout_constraintTop_toTopOf="@id/weatherCard"
-				tools:progress="100" />
-
-
-			<androidx.cardview.widget.CardView
-				android:id="@+id/darknessCard"
-				style="@style/AppTheme.FactorCardView"
-				android:layout_width="0dp"
-				android:layout_height="56dp"
-				app:layout_constraintBottom_toBottomOf="parent"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@+id/weatherCard" />
-
-			<TextView
-				android:id="@+id/darknessName"
-				style="@style/AppTheme.FactorCardItemText.Name"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginStart="16dp"
-				android:text="@string/factor_darkness_title_compact"
-				app:layout_constraintBottom_toBottomOf="@id/darknessCard"
-				app:layout_constraintStart_toStartOf="@id/darknessCard"
-				app:layout_constraintTop_toTopOf="@id/darknessCard" />
-
-			<TextView
-				android:id="@+id/darknessValue"
-				style="@style/AppTheme.FactorCardItemText.Value"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:layout_marginStart="16dp"
-				app:layout_constraintBottom_toBottomOf="@id/darknessCard"
-				app:layout_constraintStart_toStartOf="@id/factorTitlesBarrier"
-				app:layout_constraintTop_toTopOf="@id/darknessCard"
-				tools:text="60%" />
-
-			<ProgressBar
-				android:id="@+id/darknessBar"
-				style="@style/AppTheme.FactorCardItem.ProgressBar"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_marginEnd="16dp"
-				android:layout_marginStart="16dp"
-				android:max="1000"
-				app:layout_constraintBottom_toBottomOf="@id/darknessCard"
-				app:layout_constraintEnd_toEndOf="@id/darknessCard"
-				app:layout_constraintStart_toStartOf="@id/factorValuesBarrier"
-				app:layout_constraintTop_toTopOf="@id/darknessCard"
-				tools:progress="60" />
+	<ProgressBar
+		android:id="@+id/geomagLocationBar"
+		style="@style/AppTheme.FactorCardItem.ProgressBar"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="16dp"
+		android:layout_marginStart="16dp"
+		android:max="1000"
+		app:layout_constraintBottom_toBottomOf="@id/geomagLocationCard"
+		app:layout_constraintEnd_toEndOf="@id/geomagLocationCard"
+		app:layout_constraintStart_toStartOf="@id/factorValuesBarrier"
+		app:layout_constraintTop_toTopOf="@id/geomagLocationCard"
+		tools:progress="20" />
 
 
-			<androidx.constraintlayout.widget.Barrier
-				android:id="@+id/factorTitlesBarrier"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				app:barrierDirection="end"
-				app:constraint_referenced_ids="kpIndexName,geomagLocationName,weatherName,darknessName" />
+	<androidx.cardview.widget.CardView
+		android:id="@+id/weatherCard"
+		style="@style/AppTheme.FactorCardView"
+		android:layout_width="0dp"
+		android:layout_height="56dp"
+		android:layout_marginBottom="@dimen/gutter"
+		app:layout_constraintBottom_toTopOf="@+id/darknessCard"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/geomagLocationCard" />
 
-			<androidx.constraintlayout.widget.Barrier
-				android:id="@+id/factorValuesBarrier"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				app:barrierDirection="end"
-				app:constraint_referenced_ids="kpIndexValue,geomagLocationValue,weatherValue,darknessValue" />
+	<TextView
+		android:id="@+id/weatherName"
+		style="@style/AppTheme.FactorCardItemText.Name"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:text="@string/factor_weather_title_compact"
+		app:layout_constraintBottom_toBottomOf="@id/weatherCard"
+		app:layout_constraintStart_toStartOf="@id/weatherCard"
+		app:layout_constraintTop_toTopOf="@id/weatherCard" />
 
-		</androidx.constraintlayout.widget.ConstraintLayout>
+	<TextView
+		android:id="@+id/weatherValue"
+		style="@style/AppTheme.FactorCardItemText.Value"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		app:layout_constraintBottom_toBottomOf="@id/weatherCard"
+		app:layout_constraintStart_toStartOf="@id/factorTitlesBarrier"
+		app:layout_constraintTop_toTopOf="@id/weatherCard"
+		tools:text="Clear" />
 
-	</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+	<ProgressBar
+		android:id="@+id/weatherBar"
+		style="@style/AppTheme.FactorCardItem.ProgressBar"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="16dp"
+		android:layout_marginStart="16dp"
+		android:max="1000"
+		app:layout_constraintBottom_toBottomOf="@id/weatherCard"
+		app:layout_constraintEnd_toEndOf="@id/weatherCard"
+		app:layout_constraintStart_toStartOf="@id/factorValuesBarrier"
+		app:layout_constraintTop_toTopOf="@id/weatherCard"
+		tools:progress="100" />
 
-</FrameLayout>
+
+	<androidx.cardview.widget.CardView
+		android:id="@+id/darknessCard"
+		style="@style/AppTheme.FactorCardView"
+		android:layout_width="0dp"
+		android:layout_height="56dp"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/weatherCard" />
+
+	<TextView
+		android:id="@+id/darknessName"
+		style="@style/AppTheme.FactorCardItemText.Name"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		android:text="@string/factor_darkness_title_compact"
+		app:layout_constraintBottom_toBottomOf="@id/darknessCard"
+		app:layout_constraintStart_toStartOf="@id/darknessCard"
+		app:layout_constraintTop_toTopOf="@id/darknessCard" />
+
+	<TextView
+		android:id="@+id/darknessValue"
+		style="@style/AppTheme.FactorCardItemText.Value"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="16dp"
+		app:layout_constraintBottom_toBottomOf="@id/darknessCard"
+		app:layout_constraintStart_toStartOf="@id/factorTitlesBarrier"
+		app:layout_constraintTop_toTopOf="@id/darknessCard"
+		tools:text="60%" />
+
+	<ProgressBar
+		android:id="@+id/darknessBar"
+		style="@style/AppTheme.FactorCardItem.ProgressBar"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginEnd="16dp"
+		android:layout_marginStart="16dp"
+		android:max="1000"
+		app:layout_constraintBottom_toBottomOf="@id/darknessCard"
+		app:layout_constraintEnd_toEndOf="@id/darknessCard"
+		app:layout_constraintStart_toStartOf="@id/factorValuesBarrier"
+		app:layout_constraintTop_toTopOf="@id/darknessCard"
+		tools:progress="60" />
+
+
+	<androidx.constraintlayout.widget.Barrier
+		android:id="@+id/factorTitlesBarrier"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:barrierDirection="end"
+		app:constraint_referenced_ids="kpIndexName,geomagLocationName,weatherName,darknessName" />
+
+	<androidx.constraintlayout.widget.Barrier
+		android:id="@+id/factorValuesBarrier"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:barrierDirection="end"
+		app:constraint_referenced_ids="kpIndexValue,geomagLocationValue,weatherValue,darknessValue" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.gui.screens.main
 import androidx.lifecycle.ViewModel
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.R
@@ -17,8 +16,6 @@ import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.krate.AuroraReportStreamCommand
-import se.gustavkarlsson.skylight.android.krate.GetAuroraReportCommand
-import se.gustavkarlsson.skylight.android.krate.SkylightState
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
@@ -46,13 +43,6 @@ class MainViewModel(
 
 	init {
 		store.issue(AuroraReportStreamCommand(true))
-		if (store.currentState.auroraReport == null) {
-			store.issue(GetAuroraReportCommand)
-		}
-	}
-
-	val swipedToRefresh: Consumer<Unit> = Consumer {
-		store.issue(GetAuroraReportCommand)
 	}
 
 	val errorMessages: Flowable<Int> = store.states
@@ -69,10 +59,6 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val isRefreshing: Flowable<Boolean> = store.states
-		.map(SkylightState::isRefreshing)
-		.distinctUntilChanged()
-
 	val chanceLevel: Flowable<CharSequence> = store.states
 		.map {
 			it.auroraReport
@@ -86,8 +72,8 @@ class MainViewModel(
 	val timeSinceUpdate: Flowable<CharSequence> = store.states
 		.filter { it.auroraReport != null }
 		.map { it.auroraReport!!.timestamp }
-		.switchMap {
-			Flowable.just(it)
+		.switchMap { time ->
+			Flowable.just(time)
 				.repeatWhen { it.delay(1.seconds) }
 				.observeOn(AndroidSchedulers.mainThread())
 		}

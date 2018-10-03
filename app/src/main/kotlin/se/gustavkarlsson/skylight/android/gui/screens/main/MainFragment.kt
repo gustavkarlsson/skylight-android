@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.PopupMenu
 import com.google.android.material.snackbar.Snackbar
-import com.jakewharton.rxbinding2.support.v4.widget.refreshes
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.visibility
 import com.jakewharton.rxbinding2.widget.text
@@ -22,7 +21,6 @@ import kotlinx.android.synthetic.main.fragment_main.kpIndexCard
 import kotlinx.android.synthetic.main.fragment_main.kpIndexValue
 import kotlinx.android.synthetic.main.fragment_main.locationName
 import kotlinx.android.synthetic.main.fragment_main.menuButton
-import kotlinx.android.synthetic.main.fragment_main.swipeRefreshLayout
 import kotlinx.android.synthetic.main.fragment_main.timeSinceUpdate
 import kotlinx.android.synthetic.main.fragment_main.weatherBar
 import kotlinx.android.synthetic.main.fragment_main.weatherCard
@@ -34,7 +32,6 @@ import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
 import se.gustavkarlsson.skylight.android.gui.BaseFragment
 import se.gustavkarlsson.skylight.android.navigation.Navigator
 import se.gustavkarlsson.skylight.android.navigation.Screen
-import se.gustavkarlsson.skylight.android.services.Analytics
 import timber.log.Timber
 
 class MainFragment : BaseFragment(R.layout.fragment_main) {
@@ -46,8 +43,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 	private val viewModel: MainViewModel by viewModel()
 
 	private val navigator: Navigator by inject()
-
-	private val analytics: Analytics by inject()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -74,14 +69,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 	}
 
 	override fun bindData(scope: LifecycleScopeProvider<*>) {
-		swipeRefreshLayout.refreshes()
-			.doOnNext {
-				Timber.i("Triggering refresh")
-				analytics.logManualRefresh()
-			}
-			.autoDisposable(scope)
-			.subscribe(viewModel.swipedToRefresh)
-
 		menuButton.clicks()
 			.autoDisposable(scope)
 			.subscribe {
@@ -92,11 +79,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 			.doOnNext { Timber.d("Updating locationName view: %s", it) }
 			.autoDisposable(scope)
 			.subscribe(locationName.text())
-
-		viewModel.isRefreshing
-			.doOnNext { Timber.i("Refreshing: $it") }
-			.autoDisposable(scope)
-			.subscribe(swipeRefreshLayout::setRefreshing)
 
 		viewModel.errorMessages
 			.doOnNext { Timber.d("Showing error message") }
