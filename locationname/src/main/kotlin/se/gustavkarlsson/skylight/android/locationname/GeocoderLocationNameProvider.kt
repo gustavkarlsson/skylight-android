@@ -1,9 +1,11 @@
 package se.gustavkarlsson.skylight.android.locationname
 
 import android.location.Geocoder
-import com.hadisatrio.optional.Optional
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import se.gustavkarlsson.koptional.Absent
+import se.gustavkarlsson.koptional.Optional
+import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
 import timber.log.Timber
@@ -16,16 +18,16 @@ internal class GeocoderLocationNameProvider(
 		return location
 			.observeOn(Schedulers.io())
 			.map {
-				it.orNull()?.let {
+				it.value?.let {
 					try {
 						val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-						Optional.ofNullable<String>(addresses.firstOrNull()?.locality)
+						optionalOf(addresses.firstOrNull()?.locality)
 					} catch (e: Throwable) {
 						Timber.w(e, "Failed to perform reverse geocoding")
-						Optional.absent<String>()
+						Absent
 					}
-				} ?: Optional.absent()
+				} ?: Absent
 			}
-			.doOnSuccess { Timber.i("Provided location name: %s", it.orNull()) }
+			.doOnSuccess { Timber.i("Provided location name: %s", it.value) }
 	}
 }

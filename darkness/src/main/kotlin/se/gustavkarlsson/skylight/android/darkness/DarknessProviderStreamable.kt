@@ -1,9 +1,9 @@
 package se.gustavkarlsson.skylight.android.darkness
 
-import com.hadisatrio.optional.Optional
 import io.reactivex.Flowable
 import io.reactivex.Single
 import org.threeten.bp.Duration
+import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Report
@@ -20,7 +20,7 @@ internal class DarknessProviderStreamable(
 
 	override val stream: Flowable<Report<Darkness>> = locations
 		.switchMap { location ->
-			darknessProvider.get(Single.just(Optional.of(location)))
+			darknessProvider.get(Single.just(optionalOf(location)))
 				.repeatWhen { it.delay(pollingInterval) }
 		}
 		.distinctUntilChanged()

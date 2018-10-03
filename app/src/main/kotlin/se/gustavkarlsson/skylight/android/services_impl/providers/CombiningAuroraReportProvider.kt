@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.services_impl.providers
 
-import com.hadisatrio.optional.Optional
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Singles
+import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
@@ -42,7 +42,7 @@ class CombiningAuroraReportProvider(
 			darknessProvider.get(location),
 			weatherProvider.get(location)
 		) { locationName, kpIndex, geomagLocation, darkness, weather ->
-			AuroraReport(locationName.orNull(), kpIndex, geomagLocation, darkness, weather)
+			AuroraReport(locationName.value, kpIndex, geomagLocation, darkness, weather)
 		}
 	}
 }

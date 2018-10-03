@@ -2,11 +2,13 @@ package se.gustavkarlsson.skylight.android.location
 
 import android.annotation.SuppressLint
 import com.google.android.gms.location.LocationRequest
-import com.hadisatrio.optional.Optional
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.Duration
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
+import se.gustavkarlsson.koptional.Absent
+import se.gustavkarlsson.koptional.Optional
+import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.extensions.timeout
 import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
@@ -29,10 +31,10 @@ internal class ReactiveLocationLocationProvider(
 			.getUpdatedLocation(locationRequest)
 			.subscribeOn(Schedulers.io())
 			.firstOrError()
-			.map { Optional.of(Location(it.latitude, it.longitude)) }
+			.map { optionalOf(Location(it.latitude, it.longitude)) }
 			.timeout(timeout)
 			.doOnError { Timber.w(it, "Failed to get location") }
-			.onErrorReturnItem(Optional.absent())
+			.onErrorReturnItem(Absent)
 			.doOnSuccess { Timber.i("Provided location: %s", it) }
 	}
 }

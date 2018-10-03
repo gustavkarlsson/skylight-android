@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.geomaglocation
 
-import com.hadisatrio.optional.Optional
 import io.reactivex.Single
+import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Report
@@ -24,7 +24,7 @@ internal class GeomagLocationProviderImpl(
 	override fun get(location: Single<Optional<Location>>): Single<Report<GeomagLocation>> {
 		return location
 			.map { maybeLocation ->
-				maybeLocation.orNull()?.let {
+				maybeLocation.value?.let {
 					val geomagneticLatitude = calculateGeomagneticLatitude(
 						it.latitude,
 						it.longitude,

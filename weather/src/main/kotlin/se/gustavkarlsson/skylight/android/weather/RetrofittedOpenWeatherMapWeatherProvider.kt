@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.weather
 
-import com.hadisatrio.optional.Optional
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.entities.Weather
@@ -20,7 +20,7 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
 	override fun get(location: Single<Optional<Location>>): Single<Report<Weather>> {
 		return location
 			.flatMap { maybeLocation ->
-				maybeLocation.orNull()?.let {
+				maybeLocation.value?.let {
 					api.get(it.latitude, it.longitude, "json", appId)
 						.subscribeOn(Schedulers.io())
 						.map { Report.success(Weather(it.clouds.percentage), time.now().blockingGet()) }
