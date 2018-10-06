@@ -13,8 +13,6 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.gui.MainActivity
 import se.gustavkarlsson.skylight.android.test.ManualLaunchActivityTestRule
 import se.gustavkarlsson.skylight.android.test.TestLocationNameProvider
-import se.gustavkarlsson.skylight.android.test.clearCache
-import se.gustavkarlsson.skylight.android.test.clearSharedPreferences
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -30,8 +28,6 @@ class MainScreenTest : KoinComponent {
 
 	@Before
 	fun setUp() {
-		clearCache()
-		clearSharedPreferences()
 		testRule.launchActivity()
 	}
 
