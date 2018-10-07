@@ -1,12 +1,14 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
-import com.agoda.kakao.*
+import com.agoda.kakao.KSnackbar
+import com.agoda.kakao.KTextView
+import com.agoda.kakao.KView
+import com.agoda.kakao.Screen
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.test.KBottomSheetDialogFragment
 import se.gustavkarlsson.skylight.android.test.KOutsideBottomSheetDialogFragment
 
 class MainScreen : Screen<MainScreen>() {
-	val swipeRefreshLayout = KSwipeRefreshLayout { withId(R.id.swipeRefreshLayout) }
 	val locationName = KTextView { withId(R.id.locationName) }
 	val chance = KTextView { withId(R.id.chance) }
 	val timeSinceUpdate = KTextView { withId(R.id.timeSinceUpdate) }

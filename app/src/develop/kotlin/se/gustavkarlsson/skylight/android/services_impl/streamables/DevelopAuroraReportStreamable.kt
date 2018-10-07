@@ -17,7 +17,7 @@ import se.gustavkarlsson.skylight.android.services.providers.Time
 class DevelopAuroraReportStreamable(
 	private val realStreamable: Streamable<AuroraReport>,
 	private val developSettings: DevelopSettings,
-	private val timeProvider: Time,
+	private val time: Time,
 	private val pollingInterval: Duration
 ) : Streamable<AuroraReport> {
 
@@ -26,7 +26,7 @@ class DevelopAuroraReportStreamable(
 			.switchMap { enabled ->
 				if (enabled) {
 					Single.fromCallable {
-						val timestamp = timeProvider.now().blockingGet()
+						val timestamp = time.now().blockingGet()
 						developSettings.run {
 							AuroraReport(
 								"Fake Location",

@@ -95,13 +95,6 @@ val krateModule = module {
 							.map<AuroraReportResult> { AuroraReportResult.Success(it) }
 							.onErrorReturn { AuroraReportResult.Failure(it) }
 							.toFlowable()
-							.startWith(AuroraReportResult.InFlight)
-							.concatWith(
-								Flowable.just(
-									AuroraReportResult.JustFinished,
-									AuroraReportResult.Idle
-								)
-							)
 					}
 				}
 				transform<AuroraReportStreamCommand> { commands ->
@@ -114,7 +107,7 @@ val krateModule = module {
 								.map { AuroraReportResult.Success(it) as AuroraReportResult }
 								.onErrorReturn { AuroraReportResult.Failure(it) }
 						} else {
-							Flowable.just(AuroraReportResult.Idle)
+							Flowable.empty()
 						}
 					}
 				}
@@ -149,32 +142,14 @@ val krateModule = module {
 				reduce<FirstRunResult> { state, result ->
 					state.copy(isFirstRun = result.isFirstRun)
 				}
-				reduce<AuroraReportResult.JustFinished> { state, _ ->
-					state.copy(
-						isRefreshing = false,
-						throwable = null,
-						justFinishedRefreshing = true
-					)
-				}
-				reduce<AuroraReportResult.Idle> { state, _ ->
-					state.copy(
-						isRefreshing = false,
-						throwable = null,
-						justFinishedRefreshing = false
-					)
-				}
-				reduce<AuroraReportResult.InFlight> { state, _ ->
-					state.copy(isRefreshing = true, throwable = null)
-				}
 				reduce<AuroraReportResult.Success> { state, result ->
 					state.copy(
-						isRefreshing = false,
 						throwable = null,
 						auroraReport = result.auroraReport
 					)
 				}
 				reduce<AuroraReportResult.Failure> { state, result ->
-					state.copy(isRefreshing = false, throwable = result.throwable)
+					state.copy(throwable = result.throwable)
 				}
 				reduce<SettingsResult> { state, result ->
 					state.copy(settings = result.settings)
