@@ -1,20 +1,18 @@
 package se.gustavkarlsson.skylight.android.gui.screens.about
 
 import android.view.View
-import com.jakewharton.rxbinding2.view.clicks
-import com.uber.autodispose.LifecycleScopeProvider
-import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_about.appByTextView
-import kotlinx.android.synthetic.main.fragment_about.backButton
 import kotlinx.android.synthetic.main.fragment_about.branchTextView
 import kotlinx.android.synthetic.main.fragment_about.builtTextView
 import kotlinx.android.synthetic.main.fragment_about.privacyPolicyLink
 import kotlinx.android.synthetic.main.fragment_about.sha1TextView
+import kotlinx.android.synthetic.main.fragment_about.toolbar
 import kotlinx.android.synthetic.main.fragment_about.versionCodeTextView
 import kotlinx.android.synthetic.main.fragment_about.versionNameTextView
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.extensions.enableBackNavigation
 import se.gustavkarlsson.skylight.android.extensions.setHtml
 import se.gustavkarlsson.skylight.android.gui.BaseFragment
 import se.gustavkarlsson.skylight.android.navigation.Navigator
@@ -42,11 +40,8 @@ class AboutFragment : BaseFragment(R.layout.fragment_about) {
 		builtTextView.visibility = developVisibility
 		branchTextView.visibility = developVisibility
 		sha1TextView.visibility = developVisibility
-	}
 
-	override fun bindData(scope: LifecycleScopeProvider<*>) {
-		backButton.clicks()
-			.autoDisposable(scope)
-			.subscribe { navigator.goBack() }
+		toolbar.setTitle(R.string.about)
+		toolbar.enableBackNavigation(navigator)
 	}
 }
