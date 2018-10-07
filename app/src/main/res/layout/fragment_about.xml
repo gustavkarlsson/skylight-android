@@ -1,113 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:orientation="vertical"
 	tools:context=".gui.MainActivity">
 
 	<androidx.appcompat.widget.Toolbar
 		android:id="@+id/toolbar"
 		android:layout_width="match_parent"
-		android:layout_height="?attr/actionBarSize"
-		app:layout_constraintTop_toTopOf="parent" />
+		android:layout_height="?attr/actionBarSize" />
 
-	<ImageView
-		android:id="@+id/portraitImageView"
-		android:layout_width="160dp"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="64dp"
-		android:adjustViewBounds="true"
-		android:src="@drawable/about_logo"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/toolbar"
-		tools:ignore="ContentDescription" />
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:padding="@dimen/screen_margin">
 
-	<TextView
-		android:id="@+id/appNameTextView"
-		style="@style/AppTheme.HeadingText"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="32dp"
-		android:text="@string/app_name"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/portraitImageView" />
+		<ImageView
+			android:id="@+id/portraitImageView"
+			android:layout_width="160dp"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="32dp"
+			android:adjustViewBounds="true"
+			android:src="@drawable/about_logo"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			tools:ignore="ContentDescription" />
 
-	<TextView
-		android:id="@+id/versionNameTextView"
-		style="@style/AppTheme.BodyText"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="24dp"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/appNameTextView"
-		tools:text="Version: x.y.z" />
+		<TextView
+			android:id="@+id/appNameTextView"
+			style="@style/AppTheme.HeadingText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="32dp"
+			android:text="@string/app_name"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/portraitImageView" />
 
-	<TextView
-		android:id="@+id/appByTextView"
-		style="@style/AppTheme.BodyText"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="4dp"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/versionNameTextView"
-		tools:text="App By: Gustav Karlsson" />
+		<TextView
+			android:id="@+id/versionNameTextView"
+			style="@style/AppTheme.BodyText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="24dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/appNameTextView"
+			tools:text="Version: x.y.z" />
 
-	<TextView
-		android:id="@+id/privacyPolicyLink"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="4dp"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/appByTextView"
-		tools:text="@string/privacy_policy" />
+		<TextView
+			android:id="@+id/appByTextView"
+			style="@style/AppTheme.BodyText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="4dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/versionNameTextView"
+			tools:text="App By: Gustav Karlsson" />
 
-	<TextView
-		android:id="@+id/versionCodeTextView"
-		style="@style/AppTheme.BodyText"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="4dp"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/privacyPolicyLink"
-		tools:text="Version code: 12345" />
+		<TextView
+			android:id="@+id/privacyPolicyLink"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="4dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/appByTextView"
+			tools:text="@string/privacy_policy" />
 
-	<TextView
-		android:id="@+id/builtTextView"
-		style="@style/AppTheme.BodyText"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="4dp"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/versionCodeTextView"
-		tools:text="Built on: 2018-09-19T20:55:33.529" />
+		<TextView
+			android:id="@+id/versionCodeTextView"
+			style="@style/AppTheme.BodyText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="4dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/privacyPolicyLink"
+			tools:text="Version code: 12345" />
 
-	<TextView
-		android:id="@+id/branchTextView"
-		style="@style/AppTheme.BodyText"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="4dp"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/builtTextView"
-		tools:text="Branch: dev" />
+		<TextView
+			android:id="@+id/builtTextView"
+			style="@style/AppTheme.BodyText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="4dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/versionCodeTextView"
+			tools:text="Built on: 2018-09-19T20:55:33.529" />
 
-	<TextView
-		android:id="@+id/sha1TextView"
-		style="@style/AppTheme.BodyText"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="4dp"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/branchTextView"
-		tools:text="SHA1: f9beed4" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+		<TextView
+			android:id="@+id/branchTextView"
+			style="@style/AppTheme.BodyText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="4dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/builtTextView"
+			tools:text="Branch: dev" />
+
+		<TextView
+			android:id="@+id/sha1TextView"
+			style="@style/AppTheme.BodyText"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="4dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/branchTextView"
+			tools:text="SHA1: f9beed4" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
