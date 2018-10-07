@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	style="@style/AppTheme.FactorCardView"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="@dimen/screen_margin">
+
+		<TextView
+			android:id="@+id/title"
+			style="@style/AppTheme.FactorCardText.Name"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			tools:text="Weather" />
+
+		<TextView
+			android:id="@+id/value"
+			style="@style/AppTheme.FactorCardText.Value"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="16dp"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toEndOf="@id/title"
+			app:layout_constraintTop_toTopOf="parent"
+			tools:text="Slightly cloudy" />
+
+		<ProgressBar
+			android:id="@+id/progressBar"
+			style="@style/AppTheme.FactorCardProgressBar"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="8dp"
+			android:max="1000"
+			android:progress="0"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@id/title"
+			tools:progress="37" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

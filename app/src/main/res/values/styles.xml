@@ -37,12 +37,6 @@
 
 	<!-- Main -->
 
-	<style name="AppTheme.LocationNameNext">
-		<item name="android:textSize">@dimen/text_large</item>
-		<item name="android:textAllCaps">true</item>
-		<item name="android:textColor">@color/on_background_weaker</item>
-	</style>
-
 	<style name="AppTheme.ChanceText">
 		<item name="android:fontFamily">@font/open_sans_condensed_light</item>
 		<item name="android:textSize">@dimen/text_chance</item>
@@ -68,23 +62,17 @@
 		<item name="cardElevation">@dimen/card_elevation</item>
 	</style>
 
-	<style name="AppTheme.FactorCardItemText">
-		<!-- Puts text on top of CardView -->
-		<item name="android:elevation">@dimen/card_elevation</item>
-	</style>
-
-	<style name="AppTheme.FactorCardItemText.Name">
+	<style name="AppTheme.FactorCardText">
 		<item name="android:textSize">@dimen/text_large</item>
 	</style>
 
-	<style name="AppTheme.FactorCardItemText.Value">
-		<item name="android:textSize">@dimen/text_large</item>
+	<style name="AppTheme.FactorCardText.Name" />
+
+	<style name="AppTheme.FactorCardText.Value">
 		<item name="android:textColor">@color/on_surface_weaker</item>
 	</style>
 
-	<style name="AppTheme.FactorCardItem.ProgressBar" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
-		<!-- Puts text on top of CardView -->
-		<item name="android:elevation">@dimen/card_elevation</item>
+	<style name="AppTheme.FactorCardProgressBar" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
 		<item name="android:indeterminate">false</item>
 	</style>
 

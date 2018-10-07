@@ -1,15 +1,15 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
-import com.agoda.kakao.KSnackbar
 import com.agoda.kakao.KTextView
 import com.agoda.kakao.KView
 import com.agoda.kakao.Screen
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.test.KBottomSheetDialogFragment
 import se.gustavkarlsson.skylight.android.test.KOutsideBottomSheetDialogFragment
+import se.gustavkarlsson.skylight.android.test.KToolbar
 
 class MainScreen : Screen<MainScreen>() {
-	val locationName = KTextView { withId(R.id.locationName) }
+	val toolbar = KToolbar { withId(R.id.toolbar) }
 	val chance = KTextView { withId(R.id.chance) }
 	val timeSinceUpdate = KTextView { withId(R.id.timeSinceUpdate) }
 
@@ -20,5 +20,4 @@ class MainScreen : Screen<MainScreen>() {
 
 	val detailView = KBottomSheetDialogFragment()
 	val outsideDetailView = KOutsideBottomSheetDialogFragment()
-	val snackbar = KSnackbar()
 }
