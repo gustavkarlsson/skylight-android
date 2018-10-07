@@ -2,10 +2,9 @@ package se.gustavkarlsson.skylight.android.gui.screens.main
 
 import android.os.Bundle
 import androidx.annotation.StringRes
-import androidx.appcompat.widget.PopupMenu
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.support.v4.widget.refreshes
-import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding2.view.visibility
 import com.jakewharton.rxbinding2.widget.text
 import com.uber.autodispose.LifecycleScopeProvider
@@ -21,9 +20,9 @@ import kotlinx.android.synthetic.main.fragment_main.kpIndexBar
 import kotlinx.android.synthetic.main.fragment_main.kpIndexCard
 import kotlinx.android.synthetic.main.fragment_main.kpIndexValue
 import kotlinx.android.synthetic.main.fragment_main.locationName
-import kotlinx.android.synthetic.main.fragment_main.menuButton
 import kotlinx.android.synthetic.main.fragment_main.swipeRefreshLayout
 import kotlinx.android.synthetic.main.fragment_main.timeSinceUpdate
+import kotlinx.android.synthetic.main.fragment_main.toolbar
 import kotlinx.android.synthetic.main.fragment_main.weatherBar
 import kotlinx.android.synthetic.main.fragment_main.weatherCard
 import kotlinx.android.synthetic.main.fragment_main.weatherValue
@@ -41,7 +40,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
 	private var errorSnackbar: Snackbar? = null
 	private var currentBottomSheetTitle: Int? = null
-	private lateinit var menu: PopupMenu
 
 	private val viewModel: MainViewModel by viewModel()
 
@@ -55,22 +53,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 	}
 
 	override fun initView() {
-		menu = PopupMenu(requireContext(), menuButton).apply {
-			inflate(R.menu.menu_main)
-			setOnMenuItemClickListener { item ->
-				when (item.itemId) {
-					R.id.action_settings -> {
-						navigator.navigate(Screen.SETTINGS)
-						true
-					}
-					R.id.action_about -> {
-						navigator.navigate(Screen.ABOUT)
-						true
-					}
-					else -> false
-				}
-			}
-		}
+		toolbar.inflateMenu(R.menu.menu_main)
 	}
 
 	override fun bindData(scope: LifecycleScopeProvider<*>) {
@@ -82,10 +65,13 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 			.autoDisposable(scope)
 			.subscribe(viewModel.swipedToRefresh)
 
-		menuButton.clicks()
+		toolbar.itemClicks()
 			.autoDisposable(scope)
-			.subscribe {
-				menu.show()
+			.subscribe { item ->
+				when (item.itemId) {
+					R.id.action_settings -> navigator.navigate(Screen.SETTINGS)
+					R.id.action_about -> navigator.navigate(Screen.ABOUT)
+				}
 			}
 
 		viewModel.locationName
