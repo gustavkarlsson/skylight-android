@@ -4,18 +4,12 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:clipToPadding="false"
-	android:padding="@dimen/screen_margin"
 	tools:context=".gui.MainActivity">
 
-	<androidx.appcompat.widget.AppCompatImageView
-		android:id="@+id/menuButton"
-		style="@style/AppTheme.ClickableIcon"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:src="@drawable/ic_more_vert_white_24dp"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toTopOf="parent" />
+	<androidx.appcompat.widget.Toolbar
+		android:id="@+id/toolbar"
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize" />
 
 	<Space
 		android:id="@+id/firstSpace"

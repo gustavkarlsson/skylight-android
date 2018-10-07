@@ -14,10 +14,6 @@
 
 	<!-- Typography -->
 
-	<style name="AppTheme.TitleTopText">
-		<item name="android:textSize">@dimen/text_title_top</item>
-	</style>
-
 	<style name="AppTheme.HeadingText">
 		<item name="android:textSize">@dimen/text_h1</item>
 	</style>

@@ -6,27 +6,11 @@
 	android:layout_height="match_parent"
 	tools:context=".gui.MainActivity">
 
-	<androidx.appcompat.widget.AppCompatImageView
-		android:id="@+id/backButton"
-		style="@style/AppTheme.ClickableIcon"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:src="@drawable/ic_arrow_back_white_24dp"
-		android:layout_margin="@dimen/screen_margin"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintBottom_toTopOf="@id/innerFragment" />
-
-	<TextView
-		android:id="@+id/titleTextView"
-		style="@style/AppTheme.TitleTopText"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="@string/settings"
-		android:layout_marginStart="@dimen/content_margin_start"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintBottom_toTopOf="@id/innerFragment" />
+	<androidx.appcompat.widget.Toolbar
+		android:id="@+id/toolbar"
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		app:layout_constraintTop_toTopOf="parent" />
 
 	<fragment
 		android:id="@+id/innerFragment"
@@ -36,6 +20,6 @@
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/backButton" />
+		app:layout_constraintTop_toBottomOf="@id/toolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
