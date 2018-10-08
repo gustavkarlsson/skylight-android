@@ -4,17 +4,21 @@ import com.evernote.android.job.Job
 import com.evernote.android.job.Job.Result.FAILURE
 import com.evernote.android.job.Job.Result.SUCCESS
 import io.reactivex.Single
+import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.background.notifications.AuroraReportNotificationDecider
 import se.gustavkarlsson.skylight.android.background.notifications.Notifier
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.extensions.mapNotNull
 import se.gustavkarlsson.skylight.android.krate.GetAuroraReportCommand
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 internal class UpdateJob(
 	private val store: SkylightStore,
 	private val decider: AuroraReportNotificationDecider,
-	private val notifier: Notifier<AuroraReport>
+	private val notifier: Notifier<AuroraReport>,
+	private val timeout: Duration
 ) : Job() {
 
 	override fun onRunJob(params: Job.Params): Job.Result {
@@ -43,14 +47,8 @@ internal class UpdateJob(
 					Single.error(it.throwable)
 				}
 			}
-			.flatMapSingle {
-				val auroraReport = it.auroraReport
-				if (auroraReport != null) {
-					Single.just(auroraReport)
-				} else {
-					Single.error(Exception("No aurora report after refreshing"))
-				}
-			}
+			.mapNotNull { it.auroraReport }
+			.timeout(timeout.toMillis(), TimeUnit.MILLISECONDS)
 			.firstOrError()
 	}
 

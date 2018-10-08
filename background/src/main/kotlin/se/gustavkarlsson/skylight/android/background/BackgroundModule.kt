@@ -21,6 +21,7 @@ import se.gustavkarlsson.skylight.android.background.scheduling.Scheduler
 import se.gustavkarlsson.skylight.android.background.scheduling.UpdateJob
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.minutes
+import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.krate.SkylightState
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 
@@ -70,7 +71,7 @@ val backgroundModule = module {
 				addJobCreator { tag ->
 					when (tag) {
 						UpdateJob.UPDATE_JOB_TAG -> {
-							UpdateJob(store, decider, notifier)
+							UpdateJob(store, decider, notifier, 60.seconds)
 						}
 						else -> null
 					}
