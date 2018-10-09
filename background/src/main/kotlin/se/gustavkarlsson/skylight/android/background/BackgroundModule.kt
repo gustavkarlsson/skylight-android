@@ -66,12 +66,13 @@ val backgroundModule = module {
 		val store = get<SkylightStore>()
 		val decider = get<AuroraReportNotificationDecider>()
 		val notifier = get<Notifier<AuroraReport>>()
+		val outdatedEvaluator = get<OutdatedEvaluator>()
 		Completable.fromCallable {
 			JobManager.create(context).run {
 				addJobCreator { tag ->
 					when (tag) {
 						UpdateJob.UPDATE_JOB_TAG -> {
-							UpdateJob(store, decider, notifier, 60.seconds)
+							UpdateJob(store, decider, notifier, outdatedEvaluator, 60.seconds)
 						}
 						else -> null
 					}

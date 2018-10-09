@@ -5,8 +5,11 @@ import com.evernote.android.job.Job.Result.FAILURE
 import com.evernote.android.job.Job.Result.SUCCESS
 import io.reactivex.Single
 import org.threeten.bp.Duration
+import se.gustavkarlsson.koptional.Absent
+import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.background.notifications.AuroraReportNotificationDecider
 import se.gustavkarlsson.skylight.android.background.notifications.Notifier
+import se.gustavkarlsson.skylight.android.background.notifications.OutdatedEvaluator
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.mapNotNull
 import se.gustavkarlsson.skylight.android.krate.GetAuroraReportCommand
@@ -18,18 +21,17 @@ internal class UpdateJob(
 	private val store: SkylightStore,
 	private val decider: AuroraReportNotificationDecider,
 	private val notifier: Notifier<AuroraReport>,
+	private val outdatedEvaluator: OutdatedEvaluator,
 	private val timeout: Duration
 ) : Job() {
 
 	override fun onRunJob(params: Job.Params): Job.Result {
 		return try {
-			getAuroraReport()
-				.blockingGet().let {
-					if (decider.shouldNotify(it)) {
-						notifier.notify(it)
-						decider.onNotified(it)
-					}
-				}
+			val auroraReport = getAuroraReport()
+			if (decider.shouldNotify(auroraReport)) {
+				notifier.notify(auroraReport)
+				decider.onNotified(auroraReport)
+			}
 			SUCCESS
 		} catch (e: Exception) {
 			Timber.e(e, "Failed to run job")
@@ -37,9 +39,18 @@ internal class UpdateJob(
 		}
 	}
 
-	private fun getAuroraReport(): Single<AuroraReport> {
+	private fun getAuroraReport(): AuroraReport {
+		var bestReport = store.currentState.auroraReport
+		if (bestReport?.isRecent == true) {
+			return bestReport
+		}
+		store.issue(GetAuroraReportCommand)
+		bestReport = awaitAuroraReport() ?: bestReport
+		return bestReport ?: throw Exception("Failed to get best aurora report")
+	}
+
+	private fun awaitAuroraReport(): AuroraReport? {
 		return store.states
-			.doOnSubscribe { store.issue(GetAuroraReportCommand) }
 			.flatMapSingle {
 				if (it.throwable == null) {
 					Single.just(it)
@@ -48,9 +59,17 @@ internal class UpdateJob(
 				}
 			}
 			.mapNotNull { it.auroraReport }
+			.map { optionalOf(it) }
 			.timeout(timeout.toMillis(), TimeUnit.MILLISECONDS)
 			.firstOrError()
+			.doOnError { Timber.w(it, "Failed to get aurora report") }
+			.onErrorReturnItem(Absent)
+			.blockingGet()
+			.value
 	}
+
+	private val AuroraReport.isRecent: Boolean
+		get() = !outdatedEvaluator.isOutdated(timestamp)
 
 	companion object {
 		const val UPDATE_JOB_TAG = "UPDATE_JOB"
