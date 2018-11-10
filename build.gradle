@@ -38,7 +38,7 @@ buildscript {
 		solarpositioning_version = "0.0.9"
 		android_gradle_version = "3.2.1"
 		autodispose_version = "0.8.0"
-		leakcanary_version = "1.6"
+		leakcanary_version = "1.6.2"
 		navigation_version = "1.0.0-alpha07"
 		ktx_navigation_ui_version = "1.0.0-alpha07"
 		ktx_core_version = "1.0.1"
