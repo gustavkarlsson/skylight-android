@@ -51,12 +51,16 @@ val backgroundModule = module {
 		)
 	}
 
+	single {
+		OutdatedEvaluator(get())
+	}
+
 	single<AuroraReportNotificationDecider> {
 		AuroraReportNotificationDeciderImpl(
 			get(),
 			get("auroraReport"),
 			get(),
-			OutdatedEvaluator(get()),
+			get(),
 			AppVisibilityEvaluator(get())
 		)
 	}
