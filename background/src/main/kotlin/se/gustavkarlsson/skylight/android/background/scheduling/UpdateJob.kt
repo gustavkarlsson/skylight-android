@@ -44,12 +44,12 @@ internal class UpdateJob(
 		if (bestReport?.isRecent == true) {
 			return bestReport
 		}
-		store.issue(GetAuroraReportCommand)
-		bestReport = awaitAuroraReport() ?: bestReport
+		bestReport = awaitBetterReport(bestReport) ?: bestReport
 		return bestReport ?: throw Exception("Failed to get best aurora report")
 	}
 
-	private fun awaitAuroraReport(): AuroraReport? {
+	private fun awaitBetterReport(currentReport: AuroraReport?): AuroraReport? {
+		store.issue(GetAuroraReportCommand)
 		return store.states
 			.flatMapSingle {
 				if (it.throwable == null) {
@@ -59,6 +59,7 @@ internal class UpdateJob(
 				}
 			}
 			.mapNotNull { it.auroraReport }
+			.filter { it != currentReport }
 			.map { optionalOf(it) }
 			.timeout(timeout.toMillis(), TimeUnit.MILLISECONDS)
 			.firstOrError()
