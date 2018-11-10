@@ -130,13 +130,13 @@ dependencies {
 	implementation project(":geomaglocation")
 	implementation project(":locationname")
 
-	implementation "com.google.android.material:material:$android_support_version"
+	implementation "com.google.android.material:material:$android_material_version"
 	implementation "androidx.multidex:multidex:$multidex_version"
-	implementation "androidx.appcompat:appcompat:$android_support_version"
-	implementation "androidx.fragment:fragment:$android_support_version"
-	implementation "androidx.annotation:annotation:$android_support_version"
-	implementation "androidx.preference:preference:$android_support_version"
-	implementation "androidx.cardview:cardview:$android_support_version"
+	implementation "androidx.appcompat:appcompat:$android_appcompat_version"
+	implementation "androidx.fragment:fragment:$android_fragment_version"
+	implementation "androidx.annotation:annotation:$android_annotation_version"
+	implementation "androidx.preference:preference:$android_preference_version"
+	implementation "androidx.cardview:cardview:$android_cardview_version"
 	implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
 
 	// Google Play Services
@@ -190,7 +190,7 @@ dependencies {
 	}
 
 	// Instrumentation testing
-	androidTestImplementation "androidx.annotation:annotation:$android_support_version"
+	androidTestImplementation "androidx.annotation:annotation:$android_annotation_version"
 	androidTestImplementation "androidx.test:runner:$android_support_test_version"
 	androidTestImplementation "androidx.test:rules:$android_support_test_version"
 	androidTestUtil "androidx.test:orchestrator:$android_support_test_version"
