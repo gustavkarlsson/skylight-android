@@ -14,6 +14,7 @@ import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.delay
+import se.gustavkarlsson.skylight.android.extensions.mapNotNull
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.krate.AuroraReportStreamCommand
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
@@ -70,8 +71,7 @@ class MainViewModel(
 		.distinctUntilChanged()
 
 	val timeSinceUpdate: Flowable<CharSequence> = store.states
-		.filter { it.auroraReport != null }
-		.map { it.auroraReport!!.timestamp }
+		.mapNotNull { it.auroraReport?.timestamp }
 		.switchMap { time ->
 			Flowable.just(time)
 				.repeatWhen { it.delay(1.seconds) }
@@ -83,8 +83,7 @@ class MainViewModel(
 		.distinctUntilChanged()
 
 	val timeSinceUpdateVisibility: Flowable<Boolean> = store.states
-		.filter { it.auroraReport != null }
-		.map { it.auroraReport!!.timestamp }
+		.mapNotNull { it.auroraReport?.timestamp }
 		.map {
 			when {
 				it <= Instant.EPOCH -> false
