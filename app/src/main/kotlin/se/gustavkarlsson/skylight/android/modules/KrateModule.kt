@@ -133,26 +133,32 @@ val krateModule = module {
 			}
 
 			results {
-				reduce<LocationPermissionResult> { state, result ->
-					state.copy(isLocationPermissionGranted = result.isGranted)
-				}
-				reduce<GooglePlayServicesResult> { state, result ->
-					state.copy(isGooglePlayServicesAvailable = result.isAvailable)
-				}
-				reduce<FirstRunResult> { state, result ->
-					state.copy(isFirstRun = result.isFirstRun)
-				}
-				reduce<AuroraReportResult.Success> { state, result ->
-					state.copy(
-						throwable = null,
-						auroraReport = result.auroraReport
-					)
-				}
-				reduce<AuroraReportResult.Failure> { state, result ->
-					state.copy(throwable = result.throwable)
-				}
-				reduce<SettingsResult> { state, result ->
-					state.copy(settings = result.settings)
+
+				reduce { state, result ->
+					when (result) {
+						is LocationPermissionResult -> {
+							state.copy(isLocationPermissionGranted = result.isGranted)
+						}
+						is GooglePlayServicesResult -> {
+							state.copy(isGooglePlayServicesAvailable = result.isAvailable)
+						}
+						is FirstRunResult -> {
+							state.copy(isFirstRun = result.isFirstRun)
+						}
+						is AuroraReportResult.Success -> {
+							state.copy(
+								throwable = null,
+								auroraReport = result.auroraReport
+							)
+						}
+						is AuroraReportResult.Failure -> {
+							state.copy(throwable = result.throwable)
+						}
+						is SettingsResult -> {
+							state.copy(settings = result.settings)
+						}
+					}
+
 				}
 				if (BuildConfig.DEBUG) {
 					watch<SkylightResult> { Timber.d("Got result: $it") }
