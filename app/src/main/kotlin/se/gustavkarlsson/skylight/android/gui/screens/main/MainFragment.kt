@@ -9,21 +9,12 @@ import com.jakewharton.rxbinding2.widget.text
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_main.chance
-import kotlinx.android.synthetic.main.fragment_main.darknessBar
 import kotlinx.android.synthetic.main.fragment_main.darknessCard
-import kotlinx.android.synthetic.main.fragment_main.darknessValue
-import kotlinx.android.synthetic.main.fragment_main.geomagLocationBar
 import kotlinx.android.synthetic.main.fragment_main.geomagLocationCard
-import kotlinx.android.synthetic.main.fragment_main.geomagLocationValue
-import kotlinx.android.synthetic.main.fragment_main.kpIndexBar
 import kotlinx.android.synthetic.main.fragment_main.kpIndexCard
-import kotlinx.android.synthetic.main.fragment_main.kpIndexValue
-import kotlinx.android.synthetic.main.fragment_main.locationName
 import kotlinx.android.synthetic.main.fragment_main.timeSinceUpdate
 import kotlinx.android.synthetic.main.fragment_main.toolbar
-import kotlinx.android.synthetic.main.fragment_main.weatherBar
 import kotlinx.android.synthetic.main.fragment_main.weatherCard
-import kotlinx.android.synthetic.main.fragment_main.weatherValue
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
@@ -64,7 +55,9 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 		viewModel.locationName
 			.doOnNext { Timber.d("Updating locationName view: %s", it) }
 			.autoDisposable(scope)
-			.subscribe(locationName.text())
+			.subscribe {
+				toolbar.title = it
+			}
 
 		viewModel.errorMessages
 			.doOnNext { Timber.d("Showing error message") }
@@ -97,28 +90,28 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
 		FactorPresenter(
 			viewModel.darknessValue, viewModel.darknessChance,
-			darknessValue, darknessBar, darknessCard,
+			darknessCard,
 			::showDarknessDetails,
 			scope,
 			"darkness"
 		).present()
 		FactorPresenter(
 			viewModel.geomagLocationValue, viewModel.geomagLocationChance,
-			geomagLocationValue, geomagLocationBar, geomagLocationCard,
+			geomagLocationCard,
 			::showGeomagLocationDetails,
 			scope,
 			"geomagLocation"
 		).present()
 		FactorPresenter(
 			viewModel.kpIndexValue, viewModel.kpIndexChance,
-			kpIndexValue, kpIndexBar, kpIndexCard,
+			kpIndexCard,
 			::showKpIndexDetails,
 			scope,
 			"kpIndex"
 		).present()
 		FactorPresenter(
 			viewModel.weatherValue, viewModel.weatherChance,
-			weatherValue, weatherBar, weatherCard,
+			weatherCard,
 			::showWeatherDetails,
 			scope,
 			"weather"
