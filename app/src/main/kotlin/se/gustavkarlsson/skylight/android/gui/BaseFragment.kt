@@ -14,12 +14,15 @@ import com.uber.autodispose.android.lifecycle.scope
 import org.koin.android.ext.android.inject
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.doOnEvery
+import se.gustavkarlsson.skylight.android.services.Analytics
 
 abstract class BaseFragment(
 	@LayoutRes private val layoutId: Int
 ) : Fragment() {
 
 	private val navController: NavController by inject()
+
+	private val analytics: Analytics by inject()
 
 	init {
 		@Suppress("LeakingThis")
@@ -42,6 +45,11 @@ abstract class BaseFragment(
 				enableBackNavigation()
 			}
 		}
+	}
+
+	override fun onStart() {
+		super.onStart()
+		analytics.logScreen(requireActivity(), this::class.java.simpleName)
 	}
 
 	private fun hasBackStackEntries() = requireFragmentManager().backStackEntryCount > 0
