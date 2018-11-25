@@ -14,10 +14,6 @@ internal class FirebasedAnalytics(private val firebaseAnalytics: FirebaseAnalyti
 		})
 	}
 
-	override fun logManualRefresh() {
-		firebaseAnalytics.logEvent("manual_refresh", Bundle())
-	}
-
 	override fun setNotificationsEnabled(enabled: Boolean) {
 		firebaseAnalytics.setUserProperty("notifications_enabled", enabled.toString())
 	}

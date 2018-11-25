@@ -4,6 +4,7 @@
 * Create new screenshots on Google Play
 
 ## Soon
+* Consider refresh after changing debug options
 * Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
 * Generate png:s from master vector files (https://github.com/avianey/androidsvgdrawable-plugin)
 * Consolidate color use in logo and app (not all logo variants are the same color)

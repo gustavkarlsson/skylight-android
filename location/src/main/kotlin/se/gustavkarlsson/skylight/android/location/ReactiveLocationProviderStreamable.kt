@@ -37,13 +37,13 @@ internal class ReactiveLocationProviderStreamable(
 	private val lastLocation = reactiveLocationProvider
 		.lastKnownLocation
 		.singleElement()
-		.doOnSuccess { Timber.d("Last location: $it") }
+		.doOnSuccess { Timber.d("Last location: %s", it) }
 
 	@SuppressLint("MissingPermission")
 	private val forcedLocation = reactiveLocationProvider
 		.getUpdatedLocation(forcedLocationRequest)
 		.firstOrError()
-		.doOnSuccess { Timber.d("Forced location: $it") }
+		.doOnSuccess { Timber.d("Forced location: %s", it) }
 
 	@SuppressLint("MissingPermission")
 	private val pollingLocations = reactiveLocationProvider

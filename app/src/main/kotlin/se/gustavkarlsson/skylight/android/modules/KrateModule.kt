@@ -128,7 +128,7 @@ val krateModule = module {
 					}
 				}
 				if (BuildConfig.DEBUG) {
-					watch<SkylightCommand> { Timber.d("Got command: $it") }
+					watch<SkylightCommand> { Timber.d("Got command: %s", it) }
 				}
 			}
 
@@ -161,7 +161,7 @@ val krateModule = module {
 
 				}
 				if (BuildConfig.DEBUG) {
-					watch<SkylightResult> { Timber.d("Got result: $it") }
+					watch<SkylightResult> { Timber.d("Got result: %s", it) }
 				}
 			}
 
@@ -174,7 +174,7 @@ val krateModule = module {
 				)
 				observeScheduler = AndroidSchedulers.mainThread()
 				if (BuildConfig.DEBUG) {
-					watchAll { Timber.d("Got state: $it") }
+					watchAll { Timber.d("Got state: %s", it) }
 				}
 			}
 		}

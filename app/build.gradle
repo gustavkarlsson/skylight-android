@@ -88,9 +88,6 @@ android {
 		}
 
 		debug {
-			versionNameSuffix "-debug"
-			applicationIdSuffix ".debug"
-			ext.enableCrashlytics = false
 		}
 	}
 
@@ -169,6 +166,7 @@ dependencies {
 	implementation "androidx.lifecycle:lifecycle-extensions:$arch_lifecycle_version"
 
 	// Crashlytics
+	implementation "com.google.firebase:firebase-core:$firebase_version"
 	implementation "com.crashlytics.sdk.android:crashlytics:$crashlytics_version"
 
 	// Leakcanary
@@ -235,10 +233,3 @@ static int generateVersionCode(String version) {
 
 // Recommended to be applied at bottom
 apply plugin: "com.google.gms.google-services"
-
-// Disable Google Services for specific variants
-android.applicationVariants.all { variant ->
-	if (variant.buildType.name == "debug") {
-		project.tasks.getByName("process${variant.name.capitalize()}GoogleServices").enabled = false
-	}
-}

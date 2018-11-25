@@ -4,7 +4,6 @@ import androidx.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.squareup.leakcanary.LeakCanary
-import io.fabric.sdk.android.Fabric
 import io.reactivex.Completable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.plugins.RxJavaPlugins
@@ -37,7 +36,6 @@ class Skylight : MultiDexApplication() {
 		super.onCreate()
 		if (LeakCanary.isInAnalyzerProcess(this)) return
 		LeakCanary.install(this)
-		initCrashReporting()
 		initLogging()
 		AndroidThreeTen.init(this)
 		initRxJavaErrorHandling()
@@ -48,18 +46,11 @@ class Skylight : MultiDexApplication() {
 		scheduleBackgroundNotifications()
 	}
 
-	private fun initCrashReporting() {
-		if (!BuildConfig.DEBUG) {
-			Fabric.with(this, Crashlytics())
-		}
-	}
-
 	private fun initLogging() {
 		if (BuildConfig.DEBUG) {
 			Timber.plant(DebugTree())
-		} else {
-			Timber.plant(CrashlyticsTree(Crashlytics.getInstance().core))
 		}
+		Timber.plant(CrashlyticsTree(Crashlytics.getInstance().core))
 	}
 
 	private fun initRxJavaErrorHandling() {

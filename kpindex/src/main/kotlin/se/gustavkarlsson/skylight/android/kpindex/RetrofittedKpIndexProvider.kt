@@ -20,7 +20,7 @@ internal class RetrofittedKpIndexProvider(
 			.map { Report.success(KpIndex(it.value), time.now().blockingGet()) }
 			.doOnError { Timber.w(it, "Failed to get Kp index from KpIndex API") }
 			.retry(retryCount)
-			.doOnError { Timber.e(it, "Failed to get Kp index from KpIndex API after retrying $retryCount times") }
+			.doOnError { Timber.e(it, "Failed to get Kp index from KpIndex API after retrying %d times", retryCount) }
 			.onErrorReturnItem(Report.error(R.string.error_no_internet_maybe, time.now().blockingGet()))
 			.doOnSuccess { Timber.i("Provided Kp index: %s", it) }
 	}

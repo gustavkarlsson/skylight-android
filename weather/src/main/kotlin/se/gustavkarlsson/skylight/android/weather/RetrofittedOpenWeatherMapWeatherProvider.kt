@@ -26,7 +26,7 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
 						.map { Report.success(Weather(it.clouds.percentage), time.now().blockingGet()) }
 						.doOnError { Timber.w(it, "Failed to get Weather from OpenWeatherMap API") }
 						.retry(retryCount)
-						.doOnError { Timber.e(it, "Failed to get Weather from OpenWeatherMap API after retrying $retryCount times") }
+						.doOnError { Timber.e(it, "Failed to get Weather from OpenWeatherMap API after retrying %d times", retryCount) }
 						.onErrorReturnItem(Report.error(R.string.error_no_internet_maybe, time.now().blockingGet()))
 				} ?: Single.just(Report.error(R.string.error_no_location, time.now().blockingGet()))
 			}
