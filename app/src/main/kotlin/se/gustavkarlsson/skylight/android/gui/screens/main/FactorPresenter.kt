@@ -37,7 +37,8 @@ class FactorPresenter(
 
 	private fun presentChances() {
 		val chanceToColorConverter = ChanceToColorConverter(cardView.context)
-		val maxProgress = cardView.progressView.max
+		val maxProgress = (cardView.progressView.max * 0.95).roundToInt()
+		val minProgress = (cardView.progressView.max - maxProgress)
 		chances
 			.doOnNext { Timber.d("Updating %s chance view: %s", factorDebugName, it) }
 			.autoDisposable(scope)
@@ -45,13 +46,15 @@ class FactorPresenter(
 				val color = chanceToColorConverter.convert(chance)
 				cardView.progressView.progressTintList = ColorStateList.valueOf(color)
 
-				val progress = chance.value?.let {
-					(it * maxProgress).roundToInt()
-				} ?: 0
-
+				val progress = getProgress(chance, minProgress, maxProgress)
 				cardView.progressView.progress = progress
 			}
 	}
+
+	private fun getProgress(chance: Chance, minProgress: Int, maxProgress: Int) =
+		chance.value?.let { chanceValue ->
+			(chanceValue * maxProgress).roundToInt() + minProgress
+		} ?: 0
 
 	private fun presentCardClicks() {
 		cardView.clicks()

@@ -18,6 +18,8 @@
 			android:layout_height="wrap_content"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintWidth_default="percent"
+			app:layout_constraintWidth_percent=".25"
 			tools:text="Weather" />
 
 		<TextView
@@ -25,8 +27,10 @@
 			style="@style/AppTheme.FactorCardText.Value"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
+			android:layout_marginEnd="16dp"
 			android:layout_marginStart="16dp"
-			app:layout_constraintEnd_toEndOf="parent"
+			android:textAlignment="center"
+			app:layout_constraintEnd_toStartOf="@id/progressBar"
 			app:layout_constraintStart_toEndOf="@id/title"
 			app:layout_constraintTop_toTopOf="parent"
 			tools:text="Slightly cloudy" />
@@ -36,12 +40,12 @@
 			style="@style/AppTheme.FactorCardProgressBar"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="4dp"
 			android:max="1000"
 			android:progress="0"
+			app:layout_constraintBottom_toBottomOf="@id/value"
 			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/title"
+			app:layout_constraintWidth_default="percent"
+			app:layout_constraintWidth_percent=".25"
 			tools:progress="37" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
