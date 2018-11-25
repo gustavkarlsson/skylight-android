@@ -58,7 +58,7 @@ internal class ReactiveLocationProviderStreamable(
 	override val stream: Flowable<Location> = locations
 		.distinctUntilChanged()
 		.subscribeOn(Schedulers.io())
-		.doOnError { Timber.e(it) }
+		.doOnError { Timber.w(it) }
 		.retryWhen { it.delay(retryDelay) }
 		.map { Location(it.latitude, it.longitude) }
 		.distinctUntilChanged()
