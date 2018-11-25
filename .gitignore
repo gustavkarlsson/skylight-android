@@ -3,6 +3,7 @@
 /build/
 /*/build/
 /*/gradle.properties
+gradle.deps
 
 # Eclipse
 /.classpath
