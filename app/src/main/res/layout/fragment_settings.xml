@@ -6,11 +6,6 @@
 	android:orientation="vertical"
 	tools:context=".gui.MainActivity">
 
-	<androidx.appcompat.widget.Toolbar
-		android:id="@+id/toolbar"
-		android:layout_width="match_parent"
-		android:layout_height="?attr/actionBarSize" />
-
 	<fragment
 		android:id="@+id/innerFragment"
 		android:name="se.gustavkarlsson.skylight.android.gui.screens.settings.InnerSettingsFragment"

@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.gui.screens.main
 import android.os.Bundle
 import androidx.annotation.StringRes
 import com.google.android.material.snackbar.Snackbar
-import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding2.view.visibility
 import com.jakewharton.rxbinding2.widget.text
 import com.uber.autodispose.LifecycleScopeProvider
@@ -13,50 +12,32 @@ import kotlinx.android.synthetic.main.fragment_main.darknessCard
 import kotlinx.android.synthetic.main.fragment_main.geomagLocationCard
 import kotlinx.android.synthetic.main.fragment_main.kpIndexCard
 import kotlinx.android.synthetic.main.fragment_main.timeSinceUpdate
-import kotlinx.android.synthetic.main.fragment_main.toolbar
 import kotlinx.android.synthetic.main.fragment_main.weatherCard
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
 import se.gustavkarlsson.skylight.android.gui.BaseFragment
-import se.gustavkarlsson.skylight.android.navigation.Navigator
-import se.gustavkarlsson.skylight.android.navigation.Screen
 import timber.log.Timber
 
-class MainFragment : BaseFragment(R.layout.fragment_main) {
+class MainFragment : BaseFragment(R.layout.fragment_main, ToolbarConfig(null, R.menu.menu_main)) {
 
 	private var errorSnackbar: Snackbar? = null
 	private var currentBottomSheetTitle: Int? = null
 
 	private val viewModel: MainViewModel by viewModel()
 
-	private val navigator: Navigator by inject()
-
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setHasOptionsMenu(true)
 	}
 
-	override fun initView() {
-		toolbar.inflateMenu(R.menu.menu_main)
-	}
-
 	override fun bindData(scope: LifecycleScopeProvider<*>) {
-		toolbar.itemClicks()
-			.autoDisposable(scope)
-			.subscribe { item ->
-				when (item.itemId) {
-					R.id.action_settings -> navigator.navigate(Screen.SETTINGS)
-					R.id.action_about -> navigator.navigate(Screen.ABOUT)
-				}
-			}
 
 		viewModel.locationName
 			.doOnNext { Timber.d("Updating locationName view: %s", it) }
 			.autoDisposable(scope)
 			.subscribe {
-				toolbar.title = it
+				activityToolbar.title = it
 			}
 
 		viewModel.errorMessages
