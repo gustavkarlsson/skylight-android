@@ -16,24 +16,27 @@
 			style="@style/AppTheme.FactorCardText.Name"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
+			android:ellipsize="end"
+			android:maxLines="1"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent"
 			app:layout_constraintWidth_default="percent"
 			app:layout_constraintWidth_percent=".25"
-			tools:text="Weather" />
+			tools:text="Current Weather" />
 
 		<TextView
 			android:id="@+id/value"
 			style="@style/AppTheme.FactorCardText.Value"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:layout_marginEnd="16dp"
-			android:layout_marginStart="16dp"
-			android:textAlignment="center"
+			android:layout_marginEnd="8dp"
+			android:layout_marginStart="8dp"
+			android:ellipsize="end"
+			android:maxLines="1"
 			app:layout_constraintEnd_toStartOf="@id/progressBar"
 			app:layout_constraintStart_toEndOf="@id/title"
 			app:layout_constraintTop_toTopOf="parent"
-			tools:text="Slightly cloudy" />
+			tools:text="Slightly cloudier than normal" />
 
 		<ProgressBar
 			android:id="@+id/progressBar"
