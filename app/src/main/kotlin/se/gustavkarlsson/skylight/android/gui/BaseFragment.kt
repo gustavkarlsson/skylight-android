@@ -5,23 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
-import androidx.annotation.MenuRes
-import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.android.lifecycle.scope
-import kotlinx.android.synthetic.main.activity_main.toolbar
+import org.koin.android.ext.android.inject
 import se.gustavkarlsson.skylight.android.extensions.doOnEvery
 
 abstract class BaseFragment(
-	@LayoutRes private val layoutId: Int,
-	private val toolbarConfig: ToolbarConfig? = null
+	@LayoutRes private val layoutId: Int
 ) : Fragment() {
 
-	protected val activityToolbar: Toolbar
-		get() = (activity as MainActivity).toolbar
+	private val navController: NavController by inject()
+
+	private val appBarConfiguration: AppBarConfiguration by inject()
 
 	init {
 		@Suppress("LeakingThis")
@@ -43,25 +44,12 @@ abstract class BaseFragment(
 
 	override fun onActivityCreated(savedInstanceState: Bundle?) {
 		super.onActivityCreated(savedInstanceState)
-		setupToolbar(toolbarConfig)
+		setupToolbar()?.setupWithNavController(navController, appBarConfiguration)
 	}
 
-	private fun setupToolbar(toolbarConfig: ToolbarConfig?) {
-		if (toolbarConfig != null) {
-			activityToolbar.visibility = View.VISIBLE
-			activityToolbar.menu.clear()
-			toolbarConfig.menu?.let(activityToolbar::inflateMenu)
-
-			activityToolbar.title = ""
-			toolbarConfig.title?.let(activityToolbar::setTitle)
-		} else {
-			activityToolbar.visibility = View.GONE
-		}
-	}
+	protected open fun setupToolbar(): Toolbar? = null
 
 	protected open fun initView() = Unit
 
 	protected open fun bindData(scope: LifecycleScopeProvider<*>) = Unit
-
-	data class ToolbarConfig(@StringRes val title: Int?, @MenuRes val menu: Int?)
 }

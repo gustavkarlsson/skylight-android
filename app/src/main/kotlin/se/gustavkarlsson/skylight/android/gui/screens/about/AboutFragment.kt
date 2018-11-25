@@ -1,11 +1,13 @@
 package se.gustavkarlsson.skylight.android.gui.screens.about
 
 import android.view.View
+import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.fragment_about.appByTextView
 import kotlinx.android.synthetic.main.fragment_about.branchTextView
 import kotlinx.android.synthetic.main.fragment_about.builtTextView
 import kotlinx.android.synthetic.main.fragment_about.privacyPolicyLink
 import kotlinx.android.synthetic.main.fragment_about.sha1TextView
+import kotlinx.android.synthetic.main.fragment_about.toolbar
 import kotlinx.android.synthetic.main.fragment_about.versionCodeTextView
 import kotlinx.android.synthetic.main.fragment_about.versionNameTextView
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -16,6 +18,8 @@ import se.gustavkarlsson.skylight.android.gui.BaseFragment
 class AboutFragment : BaseFragment(R.layout.fragment_about) {
 
 	private val viewModel: AboutViewModel by viewModel()
+
+	override fun setupToolbar(): Toolbar? = toolbar
 
 	override fun initView() {
 		// TODO Replace with TextRef
