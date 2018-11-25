@@ -9,11 +9,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupWithNavController
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.android.lifecycle.scope
 import org.koin.android.ext.android.inject
+import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.doOnEvery
 
 abstract class BaseFragment(
@@ -21,8 +20,6 @@ abstract class BaseFragment(
 ) : Fragment() {
 
 	private val navController: NavController by inject()
-
-	private val appBarConfiguration: AppBarConfiguration by inject()
 
 	init {
 		@Suppress("LeakingThis")
@@ -40,14 +37,23 @@ abstract class BaseFragment(
 	override fun onViewStateRestored(savedInstanceState: Bundle?) {
 		super.onViewStateRestored(savedInstanceState)
 		initView()
+		getToolbar()?.run {
+			if (hasBackStackEntries()) {
+				enableBackNavigation()
+			}
+		}
 	}
 
-	override fun onActivityCreated(savedInstanceState: Bundle?) {
-		super.onActivityCreated(savedInstanceState)
-		setupToolbar()?.setupWithNavController(navController, appBarConfiguration)
+	private fun hasBackStackEntries() = requireFragmentManager().backStackEntryCount > 0
+
+	private fun Toolbar.enableBackNavigation() {
+		setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+		setNavigationOnClickListener {
+			navController.popBackStack()
+		}
 	}
 
-	protected open fun setupToolbar(): Toolbar? = null
+	protected open fun getToolbar(): Toolbar? = null
 
 	protected open fun initView() = Unit
 

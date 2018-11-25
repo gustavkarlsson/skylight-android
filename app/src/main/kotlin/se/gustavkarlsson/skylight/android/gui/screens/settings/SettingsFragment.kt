@@ -7,5 +7,5 @@ import se.gustavkarlsson.skylight.android.gui.BaseFragment
 
 class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
 
-	override fun setupToolbar(): Toolbar? = toolbar
+	override fun getToolbar(): Toolbar? = toolbar
 }

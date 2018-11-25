@@ -19,7 +19,7 @@ class AboutFragment : BaseFragment(R.layout.fragment_about) {
 
 	private val viewModel: AboutViewModel by viewModel()
 
-	override fun setupToolbar(): Toolbar? = toolbar
+	override fun getToolbar(): Toolbar? = toolbar
 
 	override fun initView() {
 		// TODO Replace with TextRef

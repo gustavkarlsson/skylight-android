@@ -32,7 +32,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 	private val viewModel: MainViewModel by viewModel()
 	private val navigator: Navigator by inject()
 
-	override fun setupToolbar(): Toolbar? {
+	override fun getToolbar(): Toolbar? {
 		return toolbar.apply {
 			inflateMenu(R.menu.menu_main)
 		}

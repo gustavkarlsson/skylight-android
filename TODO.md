@@ -2,24 +2,19 @@
 
 ## Release
 * Create new screenshots on Google Play
-* Upgrade LeakCanary to something released after Aug 7 to see if crashes disappear
-* Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
-* Improve layout and texts
 
 ## Soon
+* Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
 * Generate png:s from master vector files (https://github.com/avianey/androidsvgdrawable-plugin)
 * Consolidate color use in logo and app (not all logo variants are the same color)
-* Look into replacing manual refresh with only stream (but show initial load indicator)
-* Look into replacing manual refresh for UpdateJob
 * Rework API responses.
-* Replaced complicated rx functions with rxkotlin
 * KtLint
 * Improve color system
 * Make testing use other settings
 * Add test to verify Koin setup
 * Add instrumentation testing to CI
 * Add more tests
-* TextRef?
+* TextRef
 
 ## Some day
 * Migrate CardView to MaterialCardView when they fixed the ripple effect bug (ripple not working)
