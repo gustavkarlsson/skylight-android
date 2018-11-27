@@ -1,6 +1,7 @@
 # TODO
 
 ## Release
+* Translate app to Swedish
 * Create new screenshots on Google Play
 
 ## Soon
