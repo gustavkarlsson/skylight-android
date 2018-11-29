@@ -16,7 +16,7 @@ internal class FirebasedAnalytics(private val firebaseAnalytics: FirebaseAnalyti
 	}
 
 	override fun logScreen(activity: Activity, name: String) {
-		firebaseAnalytics.setCurrentScreen(activity, name, null)
+		firebaseAnalytics.setCurrentScreen(activity, name, name)
 	}
 
 	override fun setNotificationsEnabled(enabled: Boolean) {
