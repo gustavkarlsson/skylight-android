@@ -6,8 +6,8 @@
 	<bool name="pref_notifications_default">true</bool>
 
 	<string name="pref_trigger_level_key" translatable="false">pref_trigger_level</string>
-	<string name="pref_trigger_level_name">Notify</string>
-	<string name="pref_trigger_level_summary">at: %s</string>
+	<string name="pref_trigger_level_name">Notify at</string>
+	<string name="pref_trigger_level_summary">%s</string>
 	<string-array name="pref_trigger_level_entries">
 		<item>@string/aurora_chance_high</item>
 		<item>@string/aurora_chance_medium</item>

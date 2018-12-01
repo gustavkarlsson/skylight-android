@@ -11,7 +11,7 @@
 	<string name="factor_kp_index_desc">Grundorsaken till norrsken
 		kommer från interaktionen mellan solarvindar och jordens magnetosfär.
 		Detta kan representeras som ett värde på Kp index-skalan som går
-		från<u>0&#160;till&#160;9</u>. Högre värde betyder högre chans att se norrsken.
+		från <u>0&#160;till&#160;9</u>. Högre värde betyder högre chans att se norrsken.
 		\n\nLäs mer på <a href="https://en.wikipedia.org/wiki/K-index">Wikipedia</a> (eng)</string>
 	<string name="factor_weather_title_full">Väderförhållanden</string>
 	<string name="factor_weather_title_compact">Väder</string>
