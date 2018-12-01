@@ -18,6 +18,7 @@ scmVersion {
 play {
 	jsonFile = file("play-service-account.json")
 	track = "alpha"
+	uploadImages = true
 }
 
 android {
