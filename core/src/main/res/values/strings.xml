@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<!-- General -->
-	<string name="exit">Exit</string>
 	<string name="app_name" translatable="false">Skylight</string>
+	<string name="author" translatable="false">Gustav Karlsson</string>
+	<string name="exit">Exit</string>
 	<string name="main_your_location">Your Location</string>
 	<string name="right_now">Right now</string>
 	<string name="privacy_policy">Privacy Policy</string>
-	<string name="author" translatable="false">Gustav Karlsson</string>
 
 	<!-- Errors -->
 	<string name="error_unknown_update_error">An unknown error occurred while updating</string>
@@ -34,7 +34,7 @@
 	<string name="intro_title">Welcome to Skylight</string>
 	<string name="intro_desc">Skylight helps you find out if you can see the aurora by
 		looking at different factors such as location, weather and time of day.
-		\n\nThe app will notify you when the chance gets high enough.</string>
+		\n\nSkylight will notify you when the chance gets high enough.</string>
 	<string name="intro_got_it">Got it!</string>
 
 	<!-- Permission -->
@@ -43,11 +43,11 @@
 		chances of seeing the aurora.</string>
 	<string name="permission_grant">Grant</string>
 	<string name="permission_required_title">Location permission required</string>
-	<string name="permission_required_desc">The app uses your location to determine
+	<string name="permission_required_desc">Skylight uses your location to determine
 		closeness to the aurora, weather conditions, and how dark it is outside.
-		Please grant the permission to use the app.</string>
+		Please grant the permission to use Skylight.</string>
 	<string name="permission_denied_title">Location permission denied</string>
-	<string name="permission_denied_desc">This app needs access to your location to calculate the
+	<string name="permission_denied_desc">Skylight needs access to your location to calculate the
 		chances of seeing the aurora but the permission could not be acquired.</string>
 
 	<!-- Google Play Services -->
@@ -56,13 +56,13 @@
 	<string name="google_play_services_install">Install</string>
 	<string name="google_play_services_is_not_available_title">Google Play Services
 		is not available</string>
-	<string name="google_play_services_is_not_available_desc">This app needs Google Play Services
+	<string name="google_play_services_is_not_available_desc">Skylight needs Google Play Services
 		to determine the chances of seeing the aurora
 		but Google Play Services is not installed on your device.</string>
 
 	<!-- About -->
 	<string name="about_app_by">App by: %s</string>
-	<string name="about_branch">Branch: %s</string>
+	<string name="about_branch" translatable="false">Branch: %s</string>
 	<string name="about_version_name">Version: %s</string>
 	<string name="about_version_code">Version code: %s</string>
 	<string name="about_built_on">Built on: %s</string>
