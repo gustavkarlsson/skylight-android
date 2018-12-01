@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="pref_notifications_name">Aviseringar</string>
+	<string name="pref_notifications_summary">Meddela mig när förhållandena för norrsken är bra
+	</string>
+
+	<string name="pref_trigger_level_name">Meddela</string>
+	<string name="pref_trigger_level_summary">vid: %s</string>
+</resources>

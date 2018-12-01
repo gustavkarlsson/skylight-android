@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- General -->
+	<string name="exit">Stäng</string>
+	<string name="main_your_location">Din Plats</string>
+	<string name="right_now">Just nu</string>
+	<string name="privacy_policy">Integritetspolicy (eng)</string>
+
+	<!-- Errors -->
+	<string name="error_unknown_update_error">Ett oväntat fel inträffade vid uppdatering</string>
+	<string name="error_no_location">Kunde inte hitta plats</string>
+	<string name="error_no_internet_maybe">Ingen internetanslutning?</string>
+
+	<!-- Screen titles -->
+	<string name="settings">Inställningar</string>
+	<string name="about">Om</string>
+
+	<!-- Aurora chance -->
+	<string name="aurora_chance_none">Ingen Chans</string>
+	<string name="aurora_chance_low">Låg Chans</string>
+	<string name="aurora_chance_medium">Medium Chans</string>
+	<string name="aurora_chance_high">Hög Chans</string>
+	<string name="aurora_chance_unknown">Okänd Chans</string>
+
+	<!-- Weather -->
+	<string name="main_weather_clear">Klart</string>
+	<string name="main_weather_some_clouds">Spridda moln</string>
+	<string name="main_weather_cloudy">Molnigt</string>
+	<string name="main_weather_overcast">Mulet</string>
+
+	<!-- Intro -->
+	<string name="intro_title">Välkommen till Skylight</string>
+	<string name="intro_desc">Skylight hjälper dig att upptäcka norrsken genom att
+		titta på olika faktorer som plats, väder och tid på dygnet.
+		\n\nSkylight meddelar dig när chansen blir tillräkligt hög.</string>
+	<string name="intro_got_it">Okej!</string>
+
+	<!-- Permission -->
+	<string name="permission_title">Åtkomst till plats</string>
+	<string name="permission_desc">Skylight behöver åtkomst till din plats för att beräkna chansen
+		att se norrsken.</string>
+	<string name="permission_grant">Tillåt</string>
+	<string name="permission_required_title">Åtkomst till plats krävs</string>
+	<string name="permission_required_desc">Skylight använder din plats för att beräkna
+		avståndet till norrsken, väder, och hur mörkt det är ute.
+		Var vänlig ge Skylight åtkomst till din plats.</string>
+	<string name="permission_denied_title">Åtkomst nekades</string>
+	<string name="permission_denied_desc">Skylight behöver åtkomst till din plats för att
+		beräkna chansen att se norrsken men åtkomst nekades.</string>
+
+	<!-- Google Play Services -->
+	<string name="google_play_services_title">Installera Google Play-tjänster</string>
+	<string name="google_play_services_desc">Skylight behöver Google Play-tjänster för att fungera.
+	</string>
+	<string name="google_play_services_install">Installera</string>
+	<string name="google_play_services_is_not_available_title">Google Play-tjänster
+		är inte tillgängligt</string>
+	<string name="google_play_services_is_not_available_desc">Skylight behöver Google Play-tjänster
+		för att beräkna dina chanser att se norrsken men Google Play-tjänster är inte illgängligt
+		på din enhet.</string>
+
+	<!-- About -->
+	<string name="about_app_by">App av: %s</string>
+	<string name="about_version_name">Version: %s</string>
+	<string name="about_version_code">Versionskod: %s</string>
+	<string name="about_built_on">Byggt: %s</string>
+</resources>

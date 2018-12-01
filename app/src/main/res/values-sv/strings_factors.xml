@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="factor_geomag_location_title_full">Geomagnetisk plats</string>
+	<string name="factor_geomag_location_title_compact">Plats</string>
+	<string name="factor_geomag_location_desc">Norrsken är bara synligt nära
+		de <i>geomagnetiska</i> polerna belägna nära de <i>magnetiska</i> nord och syd-polerna.
+		Det här värdet visar din geomagnetiska latitud.
+		Bäst förhållanden hittas kring <u>67°&#160;och&#160;-67°</u>.</string>
+	<string name="factor_kp_index_title_full">Kp index</string>
+	<string name="factor_kp_index_title_compact">Kp</string>
+	<string name="factor_kp_index_desc">Grundorsaken till norrsken
+		kommer från interaktionen mellan solarvindar och jordens magnetosfär.
+		Detta kan representeras som ett värde på Kp index-skalan som går
+		från<u>0&#160;till&#160;9</u>. Högre värde betyder högre chans att se norrsken.
+		\n\nLäs mer på <a href="https://en.wikipedia.org/wiki/K-index">Wikipedia</a> (eng)</string>
+	<string name="factor_weather_title_full">Väderförhållanden</string>
+	<string name="factor_weather_title_compact">Väder</string>
+	<string name="factor_weather_desc">Dåligt väder kan blockera sikten och göra det svårt att se
+		norrsken. Det här värdet indikerar nuvarande väderförhållanden.
+		<u>Klar himmel</u> innebär god sikt.</string>
+	<string name="factor_darkness_title_full">Utomhusmörker</string>
+	<string name="factor_darkness_title_compact">Mörker</string>
+	<string name="factor_darkness_desc">Eftersom norrsken bara syns i mörker är solens position
+		på himmelen viktig.
+		Det här värdet visar hur mörkt det är ute på nuvarande plats baserat på solens position.
+		<u>100% mörker är perfekt</u> för att se norrsken.</string>
+</resources>
