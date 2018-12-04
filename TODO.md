@@ -1,10 +1,7 @@
 # TODO
 
-## Release
-* Translate app to Swedish
-* Create new screenshots on Google Play
-
 ## Soon
+* App bundles
 * Consider refresh after changing debug options
 * Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
 * Generate png:s from master vector files (https://github.com/avianey/androidsvgdrawable-plugin)
