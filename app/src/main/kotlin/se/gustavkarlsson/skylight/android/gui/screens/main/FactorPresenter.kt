@@ -30,9 +30,7 @@ class FactorPresenter(
 		values
 			.doOnNext { Timber.d("Updating %s value view: %s", factorDebugName, it) }
 			.autoDisposable(scope)
-			.subscribe {
-				cardView.valueView.text = it
-			}
+			.subscribe { cardView.valueView.text = it }
 	}
 
 	private fun presentChances() {

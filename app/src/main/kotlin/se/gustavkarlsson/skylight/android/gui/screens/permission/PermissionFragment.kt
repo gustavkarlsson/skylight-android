@@ -24,9 +24,7 @@ class PermissionFragment : BaseFragment(R.layout.fragment_permission) {
 	override fun bindData(scope: LifecycleScopeProvider<*>) {
 		grantButton.clicks()
 			.autoDisposable(scope)
-			.subscribe {
-				ensureLocationPermission()
-			}
+			.subscribe { ensureLocationPermission() }
 	}
 
 	private fun ensureLocationPermission() {

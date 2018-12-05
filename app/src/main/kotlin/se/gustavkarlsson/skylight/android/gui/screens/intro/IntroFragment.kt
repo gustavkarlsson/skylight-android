@@ -5,17 +5,14 @@ import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_intro.nextButton
 import kotlinx.android.synthetic.main.fragment_intro.privacyPolicyLink
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.setHtml
 import se.gustavkarlsson.skylight.android.gui.BaseFragment
-import se.gustavkarlsson.skylight.android.krate.SignalFirstRunCompleted
-import se.gustavkarlsson.skylight.android.krate.SkylightStore
 
 class IntroFragment : BaseFragment(R.layout.fragment_intro) {
 
-	// TODO Move to ViewModel
-	private val store: SkylightStore by inject()
+	private val viewModel: IntroViewModel by viewModel()
 
 	override fun initView() {
 		val html = getString(R.string.html_privacy_policy_link, getString(R.string.privacy_policy))
@@ -25,8 +22,6 @@ class IntroFragment : BaseFragment(R.layout.fragment_intro) {
 	override fun bindData(scope: LifecycleScopeProvider<*>) {
 		nextButton.clicks()
 			.autoDisposable(scope)
-			.subscribe {
-				store.issue(SignalFirstRunCompleted)
-			}
+			.subscribe { viewModel.signalFirstRunCompleted() }
 	}
 }

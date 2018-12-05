@@ -51,9 +51,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 		viewModel.locationName
 			.doOnNext { Timber.d("Updating locationName view: %s", it) }
 			.autoDisposable(scope)
-			.subscribe {
-				toolbar.title = it
-			}
+			.subscribe { toolbar.title = it }
 
 		viewModel.errorMessages
 			.doOnNext { Timber.d("Showing error message") }

@@ -8,6 +8,7 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.gui.screens.about.AboutViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.googleplayservices.GooglePlayServicesViewModel
+import se.gustavkarlsson.skylight.android.gui.screens.intro.IntroViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.permission.PermissionViewModel
 
@@ -45,6 +46,10 @@ val viewModelModule = module {
 	viewModel {
 		val isDevelopMode = BuildConfig.FLAVOR.contains("develop", true)
 		AboutViewModel(isDevelopMode, get())
+	}
+
+	viewModel {
+		IntroViewModel(get())
 	}
 
 }
