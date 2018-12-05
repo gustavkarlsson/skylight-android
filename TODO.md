@@ -23,7 +23,6 @@
 * Add manual clearing of "notification sent" in develop mode
 * Add more testing options (individual overrides for example)
 * Look into country changes while app running (Locale etc)
-* Automate release in CI (Gradle release plugin? Fastlane? Automatic version management?)
 * Additional analytics(Failed remote calls, Notifications on/off, Manually started app, Started app from notification, denied location permission, no Google Play Services installed, first start)
 * Add performance traces
 * Integrate code coverage (Coveralls or Codecov)
