@@ -21,7 +21,6 @@ abstract class BaseFragment(
 ) : Fragment() {
 
 	private val navController: NavController by inject()
-
 	private val analytics: Analytics by inject()
 
 	init {

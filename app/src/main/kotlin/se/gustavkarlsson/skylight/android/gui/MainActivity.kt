@@ -1,11 +1,11 @@
 package se.gustavkarlsson.skylight.android.gui
 
+import android.app.Activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import androidx.navigation.findNavController
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import org.koin.android.ext.android.inject
@@ -27,8 +27,8 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		bindScope(createScope("activity"))
+		addToKoin<Activity>(this)
 		setContentView(R.layout.activity_main)
-		addToKoin(findNavController(R.id.mainNavHost))
 		lifecycle.addObserver(this)
 	}
 

@@ -11,21 +11,15 @@ import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_permission.grantButton
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.gui.BaseFragment
 import timber.log.Timber
 
 class PermissionFragment : BaseFragment(R.layout.fragment_permission) {
 
-	private val locationPermission: String by inject("locationPermission")
-
-	// TODO Inject
-	private val rxPermissions: RxPermissions by lazy {
-		RxPermissions(requireActivity()).apply { setLogging(BuildConfig.DEBUG) }
-	}
-
 	private val viewModel: PermissionViewModel by viewModel()
+	private val locationPermission: String by inject("locationPermission")
+	private val rxPermissions: RxPermissions by inject()
 
 	override fun bindData(scope: LifecycleScopeProvider<*>) {
 		grantButton.clicks()
