@@ -4,7 +4,6 @@
 * App bundles
 * Consider refresh after changing debug options
 * Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
-* Consolidate color use in logo and app (not all logo variants are the same color)
 * Rework API responses.
 * KtLint
 * Improve color system
