@@ -11,7 +11,6 @@
 * Add test to verify Koin setup
 * Add instrumentation testing to CI
 * Add more tests
-* TextRef
 
 ## Some day
 * Migrate CardView to MaterialCardView when they fixed the ripple effect bug (ripple not working)
