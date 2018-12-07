@@ -27,7 +27,7 @@ internal class AuroraReportNotifier(
 	override fun notify(value: AuroraReport) {
 		val chance = chanceEvaluator.evaluate(value)
 		val chanceLevel = ChanceLevel.fromChance(chance)
-		val text = chanceLevelFormatter.format(chanceLevel)
+		val text = chanceLevelFormatter.format(chanceLevel).resolve(context)
 		val pendingIntent = createActivityPendingIntent()
 
 		val tintColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

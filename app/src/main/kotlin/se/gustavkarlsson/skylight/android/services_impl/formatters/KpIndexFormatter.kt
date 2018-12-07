@@ -1,16 +1,17 @@
 package se.gustavkarlsson.skylight.android.services_impl.formatters
 
+import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
 
-class KpIndexFormatter : SingleValueFormatter<KpIndex> {
-	override fun format(value: KpIndex): CharSequence {
+object KpIndexFormatter : SingleValueFormatter<KpIndex> {
+	override fun format(value: KpIndex): TextRef {
 		val kpIndex = value.value
 		val whole = kpIndex.toInt()
 		val part = kpIndex - whole
 		val partString = parsePart(part)
 		val wholeString = parseWhole(whole, partString)
-		return wholeString + partString
+		return TextRef(wholeString + partString)
 	}
 
 	private fun parsePart(part: Double): String {

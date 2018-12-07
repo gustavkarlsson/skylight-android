@@ -102,7 +102,12 @@ val backgroundModule = module {
 	}
 
 	single {
-		NotificationChannelCreator(get(), get(), get("auroraNotificationChannelId"))
+		val context = get<Context>()
+		NotificationChannelCreator(
+			get(),
+			get("auroraNotificationChannelId"),
+			context.getString(R.string.aurora_alerts_channel_name)
+		)
 	}
 
 	single<Completable>("createNotificationChannel") {
