@@ -69,6 +69,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 
 		viewModel.chanceLevel
 			.doOnNext { Timber.d("Updating chanceLevel view: %s", it) }
+			.map { it.resolve(requireContext()) }
 			.autoDisposable(scope)
 			.subscribe(chance.text())
 

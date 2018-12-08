@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
 import android.content.res.ColorStateList
+import com.ioki.textref.TextRef
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
@@ -13,7 +14,7 @@ import kotlin.math.roundToInt
 
 
 class FactorPresenter(
-	private val values: Flowable<CharSequence>,
+	private val values: Flowable<TextRef>,
 	private val chances: Flowable<Chance>,
 	private val cardView: FactorCard,
 	private val showDialog: () -> Unit,
@@ -30,7 +31,7 @@ class FactorPresenter(
 		values
 			.doOnNext { Timber.d("Updating %s value view: %s", factorDebugName, it) }
 			.autoDisposable(scope)
-			.subscribe { cardView.valueView.text = it }
+			.subscribe { cardView.valueView.text = it.resolve(cardView.context) }
 	}
 
 	private fun presentChances() {

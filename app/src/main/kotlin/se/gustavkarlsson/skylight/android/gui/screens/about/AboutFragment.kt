@@ -22,16 +22,14 @@ class AboutFragment : BaseFragment(R.layout.fragment_about) {
 	override fun getToolbar(): Toolbar? = toolbar
 
 	override fun initView() {
-		// TODO Replace with TextRef
-		appByTextView.text = getString(R.string.about_app_by, getString(R.string.author))
-		versionNameTextView.text = getString(R.string.about_version_name, viewModel.versionName)
-		versionCodeTextView.text = getString(R.string.about_version_code, viewModel.versionCode)
-		builtTextView.text = getString(R.string.about_built_on, viewModel.buildTime)
-		branchTextView.text = getString(R.string.about_branch, viewModel.branch)
-		sha1TextView.text = getString(R.string.about_sha1, viewModel.sha1Compact)
-
-		val html = getString(R.string.html_privacy_policy_link, getString(R.string.privacy_policy))
-		privacyPolicyLink.setHtml(html)
+		val context = requireContext()
+		appByTextView.text = viewModel.author.resolve(context)
+		versionNameTextView.text = viewModel.versionName.resolve(context)
+		versionCodeTextView.text = viewModel.versionCode.resolve(context)
+		builtTextView.text = viewModel.buildTime.resolve(context)
+		branchTextView.text = viewModel.branch.resolve(context)
+		sha1TextView.text = viewModel.sha1Compact.resolve(context)
+		privacyPolicyLink.setHtml(viewModel.privacyPolicyLink.resolve(context))
 
 		val developVisibility = if (viewModel.isDevelopMode) View.VISIBLE else View.INVISIBLE
 		versionCodeTextView.visibility = developVisibility

@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
 import androidx.lifecycle.ViewModel
+import com.ioki.textref.TextRef
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.threeten.bp.Duration
@@ -60,7 +61,7 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val chanceLevel: Flowable<CharSequence> = store.states
+	val chanceLevel: Flowable<TextRef> = store.states
 		.map {
 			it.auroraReport
 				?.let(auroraChanceEvaluator::evaluate)
@@ -92,13 +93,13 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val darknessValue: Flowable<CharSequence> = store.states
+	val darknessValue: Flowable<TextRef> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::darkness)
 				?.value
 				?.let(darknessFormatter::format)
-				?: "?"
+				?: TextRef("?")
 		}
 		.distinctUntilChanged()
 
@@ -112,13 +113,13 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val geomagLocationValue: Flowable<CharSequence> = store.states
+	val geomagLocationValue: Flowable<TextRef> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::geomagLocation)
 				?.value
 				?.let(geomagLocationFormatter::format)
-				?: "?"
+				?: TextRef("?")
 		}
 		.distinctUntilChanged()
 
@@ -132,13 +133,13 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val kpIndexValue: Flowable<CharSequence> = store.states
+	val kpIndexValue: Flowable<TextRef> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::kpIndex)
 				?.value
 				?.let(kpIndexFormatter::format)
-				?: "?"
+				?: TextRef("?")
 		}
 		.distinctUntilChanged()
 
@@ -152,13 +153,13 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val weatherValue: Flowable<CharSequence> = store.states
+	val weatherValue: Flowable<TextRef> = store.states
 		.map {
 			it.auroraReport
 				?.let(AuroraReport::weather)
 				?.value
 				?.let(weatherFormatter::format)
-				?: "?"
+				?: TextRef("?")
 		}
 		.distinctUntilChanged()
 

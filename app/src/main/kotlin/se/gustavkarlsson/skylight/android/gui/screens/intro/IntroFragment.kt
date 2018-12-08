@@ -15,8 +15,7 @@ class IntroFragment : BaseFragment(R.layout.fragment_intro) {
 	private val viewModel: IntroViewModel by viewModel()
 
 	override fun initView() {
-		val html = getString(R.string.html_privacy_policy_link, getString(R.string.privacy_policy))
-		privacyPolicyLink.setHtml(html)
+		privacyPolicyLink.setHtml(viewModel.privacyPolicyHtml.resolve(requireContext()))
 	}
 
 	override fun bindData(scope: LifecycleScopeProvider<*>) {
