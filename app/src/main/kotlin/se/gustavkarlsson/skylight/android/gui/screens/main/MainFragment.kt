@@ -62,8 +62,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 					dismiss()
 				}
 				view?.let { view ->
-					errorSnackbar =
-						showErrorSnackbar(view, it, Snackbar.LENGTH_LONG).apply { show() }
+					errorSnackbar = showErrorSnackbar(view, it, Snackbar.LENGTH_LONG)
 				}
 			}
 
