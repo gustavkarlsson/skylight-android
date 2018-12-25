@@ -7,7 +7,7 @@
 
 	<!-- Material color system  -->
 	<color name="background">#2E2E2E</color>
-	<color name="on_background">#FFFFFF</color>
+	<color name="on_background">#E8FFFFFF</color>
 	<color name="on_background_weaker">#B4FFFFFF</color>
 
 	<color name="surface">@color/logo_background</color>

@@ -20,30 +20,17 @@
 		<item name="colorSecondaryVariant">@color/secondary_variant</item>
 		<item name="colorOnSecondary">@color/on_secondary</item>
 
+		<item name="android:textColorPrimary">@color/on_background_weaker</item>
+		<item name="android:textColorSecondary">@color/on_background</item>
 		<item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 	</style>
 
 
-	<!-- Typography -->
+	<!-- Toolbar -->
 
-	<style name="AppTheme.HeadingText">
-		<item name="android:textSize">@dimen/text_h1</item>
-	</style>
-
-	<style name="AppTheme.BodyText">
-		<item name="android:textColor">@color/on_background_weaker</item>
-	</style>
-
-
-	<!-- Intro -->
-
-	<style name="AppTheme.IntroTitleText">
-		<item name="android:textSize">@dimen/text_title</item>
-	</style>
-
-	<style name="AppTheme.IntroBodyText">
-		<item name="android:textSize">@dimen/text_large</item>
-		<item name="android:textColor">@color/on_background_weaker</item>
+	<style name="AppTheme.Toolbar">
+		<item name="android:textColorPrimary">@color/on_background</item>
+		<item name="android:textColorSecondary">@color/on_background</item>
 	</style>
 
 
@@ -51,7 +38,7 @@
 
 	<style name="AppTheme.ChanceText">
 		<item name="android:fontFamily">@font/open_sans_condensed_light</item>
-		<item name="android:textSize">@dimen/text_chance</item>
+		<item name="android:textSize">48sp</item>
 		<item name="android:textStyle">bold</item>
 		<item name="android:shadowColor">@color/on_background</item>
 		<item name="android:shadowDx">0</item>
@@ -59,27 +46,18 @@
 		<item name="android:shadowRadius">4</item>
 	</style>
 
-	<style name="AppTheme.TimeSinceText">
-		<item name="android:textSize">@dimen/text_small</item>
-		<item name="android:textColor">@color/on_background_weaker</item>
-	</style>
-
 
 	<!-- Factor card -->
 
 	<style name="AppTheme.FactorCardView" parent="Widget.MaterialComponents.CardView">
 		<item name="cardBackgroundColor">@color/surface</item>
-		<item name="cardElevation">@dimen/card_elevation</item>
+		<item name="cardElevation">2dp</item>
 	</style>
 
-	<style name="AppTheme.FactorCardText">
-		<item name="android:textSize">@dimen/text_large</item>
-	</style>
+	<style name="AppTheme.FactorCardText" parent="@style/TextAppearance.MaterialComponents.Body1" />
 
-	<style name="AppTheme.FactorCardText.Name" />
-
-	<style name="AppTheme.FactorCardText.Value">
-		<item name="android:textColor">@color/on_surface_weaker</item>
+	<style name="AppTheme.FactorCardText.Title" parent="@style/TextAppearance.MaterialComponents.Body1">
+		<item name="android:textColor">@color/on_surface</item>
 	</style>
 
 	<style name="AppTheme.FactorCardProgressBar" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
@@ -92,17 +70,6 @@
 	<style name="AppTheme.BottomSheet">
 		<item name="android:background">@color/background</item>
 	</style>
-
-	<style name="AppTheme.BottomSheet.BodyText">
-		<item name="android:textSize">@dimen/text_large</item>
-		<item name="android:textColor">@color/on_background_weaker</item>
-		<item name="android:lineSpacingMultiplier">1.1</item>
-	</style>
-
-	<style name="AppTheme.BottomSheet.HeadingText">
-		<item name="android:textSize">@dimen/text_h2</item>
-	</style>
-
 
 	<!-- Misc -->
 

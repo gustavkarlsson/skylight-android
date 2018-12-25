@@ -11,6 +11,7 @@
 		android:id="@+id/toolbar"
 		android:layout_width="match_parent"
 		android:layout_height="?attr/actionBarSize"
+		app:theme="@style/AppTheme.Toolbar"
 		app:title="@string/main_your_location" />
 
 	<androidx.constraintlayout.widget.ConstraintLayout
@@ -42,7 +43,7 @@
 
 		<TextView
 			android:id="@+id/timeSinceUpdate"
-			style="@style/AppTheme.TimeSinceText"
+			style="@style/TextAppearance.MaterialComponents.Caption"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			app:layout_constraintBottom_toTopOf="@+id/secondSpace"

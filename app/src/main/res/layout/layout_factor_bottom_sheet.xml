@@ -2,16 +2,16 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
-	style="@style/AppTheme.BottomSheet"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:paddingBottom="@dimen/screen_margin"
 	android:paddingEnd="@dimen/screen_margin"
-	android:paddingStart="@dimen/screen_margin">
+	android:paddingStart="@dimen/screen_margin"
+	android:theme="@style/AppTheme.BottomSheet">
 
 	<TextView
 		android:id="@+id/title"
-		style="@style/AppTheme.BottomSheet.HeadingText"
+		style="@style/TextAppearance.MaterialComponents.Headline6"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		app:layout_constraintBottom_toTopOf="@+id/titleGuide"
@@ -28,7 +28,7 @@
 
 	<TextView
 		android:id="@+id/description"
-		style="@style/AppTheme.BottomSheet.BodyText"
+		style="@style/TextAppearance.MaterialComponents.Body1"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		app:layout_constraintBottom_toBottomOf="parent"

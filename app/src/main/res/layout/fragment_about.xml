@@ -11,6 +11,7 @@
 		android:id="@+id/toolbar"
 		android:layout_width="match_parent"
 		android:layout_height="?attr/actionBarSize"
+		app:theme="@style/AppTheme.Toolbar"
 		app:title="@string/about" />
 
 	<androidx.constraintlayout.widget.ConstraintLayout
@@ -33,7 +34,7 @@
 
 		<TextView
 			android:id="@+id/appNameTextView"
-			style="@style/AppTheme.HeadingText"
+			style="@style/TextAppearance.MaterialComponents.Headline4"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="32dp"
@@ -44,7 +45,7 @@
 
 		<TextView
 			android:id="@+id/versionNameTextView"
-			style="@style/AppTheme.BodyText"
+			style="@style/TextAppearance.MaterialComponents.Body1"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="24dp"
@@ -55,7 +56,7 @@
 
 		<TextView
 			android:id="@+id/appByTextView"
-			style="@style/AppTheme.BodyText"
+			style="@style/TextAppearance.MaterialComponents.Body1"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="4dp"
@@ -76,7 +77,7 @@
 
 		<TextView
 			android:id="@+id/versionCodeTextView"
-			style="@style/AppTheme.BodyText"
+			style="@style/TextAppearance.MaterialComponents.Body1"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="4dp"
@@ -87,7 +88,7 @@
 
 		<TextView
 			android:id="@+id/builtTextView"
-			style="@style/AppTheme.BodyText"
+			style="@style/TextAppearance.MaterialComponents.Body1"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="4dp"
@@ -98,7 +99,7 @@
 
 		<TextView
 			android:id="@+id/branchTextView"
-			style="@style/AppTheme.BodyText"
+			style="@style/TextAppearance.MaterialComponents.Body1"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="4dp"
@@ -109,7 +110,7 @@
 
 		<TextView
 			android:id="@+id/sha1TextView"
-			style="@style/AppTheme.BodyText"
+			style="@style/TextAppearance.MaterialComponents.Body1"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="4dp"
