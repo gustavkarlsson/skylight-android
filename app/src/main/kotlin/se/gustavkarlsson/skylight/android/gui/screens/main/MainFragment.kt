@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.gui.screens.main
 
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Lifecycle
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding2.view.visibility
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_main.weatherCard
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.extensions.doOnNext
 import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
 import se.gustavkarlsson.skylight.android.gui.BaseFragment
 import se.gustavkarlsson.skylight.android.navigation.Navigator
@@ -26,7 +28,6 @@ import timber.log.Timber
 
 class MainFragment : BaseFragment(R.layout.fragment_main) {
 
-	private var errorSnackbar: Snackbar? = null
 	private var currentBottomSheetTitle: Int? = null
 
 	private val viewModel: MainViewModel by viewModel()
@@ -57,13 +58,11 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 			.doOnNext { Timber.d("Showing error message") }
 			.autoDisposable(scope)
 			.subscribe {
-				errorSnackbar?.run {
-					Timber.d("Hiding previous error message")
-					dismiss()
-				}
 				view?.let { view ->
-					errorSnackbar =
-						showErrorSnackbar(view, it, Snackbar.LENGTH_LONG).apply { show() }
+					showErrorSnackbar(view, it, Snackbar.LENGTH_LONG)
+						.doOnNext(this, Lifecycle.Event.ON_DESTROY) { snackbar ->
+							snackbar.dismiss()
+						}
 				}
 			}
 
@@ -152,10 +151,5 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 				}
 			currentBottomSheetTitle = title
 		}
-	}
-
-	override fun onDestroy() {
-		errorSnackbar?.dismiss()
-		super.onDestroy()
 	}
 }
