@@ -150,6 +150,7 @@ dependencies {
 	implementation "com.jakewharton.rxrelay2:rxrelay:$rxrelay_version"
 	implementation "com.tbruyelle.rxpermissions2:rxpermissions:${rxpermissions_version}@aar"
 	implementation "com.f2prateek.rx.preferences2:rx-preferences:$rxpreferences_version"
+	implementation "io.ashdavies.rx.rxtasks:rx-tasks:$rxtasks_version"
 
 	// RxBinding
 	implementation "com.jakewharton.rxbinding2:rxbinding-kotlin:$rxbinding_version"
