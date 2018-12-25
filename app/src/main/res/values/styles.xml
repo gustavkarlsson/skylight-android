@@ -112,4 +112,12 @@
 		<item name="android:focusable">true</item>
 	</style>
 
+	<!-- TODO Replace with material extended FAB when available -->
+	<style name="AppTheme.ExtendedFab" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+		<item name="backgroundTint">@color/secondary</item>
+		<item name="android:textColor">@color/on_secondary</item>
+		<item name="android:height">56dp</item>
+		<item name="cornerRadius">28dp</item>
+	</style>
+
 </resources>

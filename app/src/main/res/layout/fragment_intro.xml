@@ -41,7 +41,7 @@
 
 	<com.google.android.material.button.MaterialButton
 		android:id="@+id/nextButton"
-		style="@style/Widget.MaterialComponents.Button.TextButton"
+		style="@style/AppTheme.ExtendedFab"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="@string/intro_got_it"
