@@ -26,6 +26,23 @@
 	</style>
 
 
+	<!-- Typography -->
+
+	<style name="AppTheme.TextTitleLarge" parent="TextAppearance.MaterialComponents.Headline4">
+		<item name="android:textColor">@color/on_background</item>
+		<item name="autoSizeTextType">uniform</item>
+		<item name="autoSizeMaxTextSize">40sp</item>
+		<item name="android:lines">1</item>
+	</style>
+
+	<style name="AppTheme.TextTitleSmall" parent="TextAppearance.MaterialComponents.Headline5">
+		<item name="android:textColor">@color/on_background</item>
+		<item name="autoSizeTextType">uniform</item>
+		<item name="autoSizeMaxTextSize">28sp</item>
+		<item name="android:lines">1</item>
+	</style>
+
+
 	<!-- Toolbar -->
 
 	<style name="AppTheme.Toolbar">
@@ -38,9 +55,11 @@
 
 	<style name="AppTheme.ChanceText">
 		<item name="android:fontFamily">@font/open_sans_condensed_light</item>
-		<item name="android:textSize">48sp</item>
 		<item name="android:textStyle">bold</item>
 		<item name="android:shadowColor">@color/on_background</item>
+		<item name="autoSizeTextType">uniform</item>
+		<item name="autoSizeMaxTextSize">48sp</item>
+		<item name="android:gravity">bottom</item>
 		<item name="android:shadowDx">0</item>
 		<item name="android:shadowDy">0</item>
 		<item name="android:shadowRadius">4</item>
@@ -54,9 +73,12 @@
 		<item name="cardElevation">2dp</item>
 	</style>
 
-	<style name="AppTheme.FactorCardText" parent="@style/TextAppearance.MaterialComponents.Body1" />
+	<style name="AppTheme.FactorCardText" parent="@style/TextAppearance.MaterialComponents.Body1">
+		<item name="android:ellipsize">end</item>
+		<item name="android:lines">1</item>
+	</style>
 
-	<style name="AppTheme.FactorCardText.Title" parent="@style/TextAppearance.MaterialComponents.Body1">
+	<style name="AppTheme.FactorCardText.Title">
 		<item name="android:textColor">@color/on_surface</item>
 	</style>
 
@@ -71,20 +93,15 @@
 		<item name="android:background">@color/background</item>
 	</style>
 
-	<!-- Misc -->
 
-	<style name="AppTheme.ClickableIcon">
-		<item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
-		<item name="android:clickable">true</item>
-		<item name="android:focusable">true</item>
-	</style>
+	<!-- Extended FAB -->
 
 	<!-- TODO Replace with material extended FAB when available -->
 	<style name="AppTheme.ExtendedFab" parent="Widget.MaterialComponents.Button.UnelevatedButton">
 		<item name="backgroundTint">@color/secondary</item>
 		<item name="android:textColor">@color/on_secondary</item>
 		<item name="android:height">56dp</item>
-		<item name="cornerRadius">28dp</item>
+		<item name="cornerRadius">56dp</item>
 	</style>
 
 </resources>

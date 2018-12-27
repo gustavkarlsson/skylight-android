@@ -11,9 +11,9 @@
 
 	<TextView
 		android:id="@+id/title"
-		style="@style/TextAppearance.MaterialComponents.Headline6"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
+		style="@style/AppTheme.TextTitleSmall"
+		android:layout_width="0dp"
+		android:layout_height="40dp"
 		app:layout_constraintBottom_toTopOf="@+id/titleGuide"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"

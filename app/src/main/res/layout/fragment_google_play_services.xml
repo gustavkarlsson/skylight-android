@@ -21,9 +21,9 @@
 
 	<TextView
 		android:id="@+id/titleTextView"
-		style="@style/TextAppearance.MaterialComponents.Headline5"
+		style="@style/AppTheme.TextTitleSmall"
 		android:layout_width="0dp"
-		android:layout_height="wrap_content"
+		android:layout_height="40dp"
 		android:layout_marginTop="32dp"
 		android:text="@string/google_play_services_title"
 		app:layout_constraintEnd_toEndOf="parent"
