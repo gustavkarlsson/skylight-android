@@ -11,6 +11,7 @@
 		android:id="@+id/toolbar"
 		android:layout_width="match_parent"
 		android:layout_height="?attr/actionBarSize"
+		app:theme="@style/AppTheme.Toolbar"
 		app:title="@string/about" />
 
 	<androidx.constraintlayout.widget.ConstraintLayout
@@ -33,10 +34,11 @@
 
 		<TextView
 			android:id="@+id/appNameTextView"
-			style="@style/AppTheme.HeadingText"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
+			style="@style/AppTheme.TextTitleLarge"
+			android:layout_width="0dp"
+			android:layout_height="64dp"
 			android:layout_marginTop="32dp"
+			android:gravity="center"
 			android:text="@string/app_name"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +46,7 @@
 
 		<TextView
 			android:id="@+id/versionNameTextView"
-			style="@style/AppTheme.BodyText"
+			style="@style/AppTheme.TextBody1"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="24dp"
@@ -55,7 +57,7 @@
 
 		<TextView
 			android:id="@+id/appByTextView"
-			style="@style/AppTheme.BodyText"
+			style="@style/AppTheme.TextBody1"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="4dp"
@@ -76,7 +78,7 @@
 
 		<TextView
 			android:id="@+id/versionCodeTextView"
-			style="@style/AppTheme.BodyText"
+			style="@style/AppTheme.TextBody1"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="4dp"
@@ -87,7 +89,7 @@
 
 		<TextView
 			android:id="@+id/builtTextView"
-			style="@style/AppTheme.BodyText"
+			style="@style/AppTheme.TextBody1"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="4dp"
@@ -98,7 +100,7 @@
 
 		<TextView
 			android:id="@+id/branchTextView"
-			style="@style/AppTheme.BodyText"
+			style="@style/AppTheme.TextBody1"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="4dp"
@@ -109,7 +111,7 @@
 
 		<TextView
 			android:id="@+id/sha1TextView"
-			style="@style/AppTheme.BodyText"
+			style="@style/AppTheme.TextBody1"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="4dp"

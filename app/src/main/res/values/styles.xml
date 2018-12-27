@@ -2,74 +2,85 @@
 <resources>
 
 	<style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
-		<item name="colorPrimary">@color/primary</item>
-		<item name="colorPrimaryDark">@color/primary_variant</item>
-		<item name="colorSecondary">@color/secondary</item>
+ 		<item name="android:colorBackground">@color/background</item>
+		<item name="colorOnBackground">@color/on_background</item>
+
+		<item name="colorSurface">@color/surface</item>
+		<item name="colorOnSurface">@color/on_surface</item>
+
 		<item name="colorError">@color/error</item>
-		<item name="android:textColor">@color/on_background</item>
-		<item name="android:windowBackground">@color/background</item>
+		<item name="colorOnError">@color/error</item>
+
+		<item name="colorPrimary">@color/primary</item>
+		<item name="colorPrimaryVariant">@color/primary_variant</item>
+		<item name="colorPrimaryDark">@color/primary_variant</item>
+		<item name="colorOnPrimary">@color/on_primary</item>
+
+		<item name="colorSecondary">@color/secondary</item>
+		<item name="colorSecondaryVariant">@color/secondary_variant</item>
+		<item name="colorOnSecondary">@color/on_secondary</item>
+
+		<item name="android:textColorPrimary">@color/on_background_weaker</item>
+		<item name="android:textColorSecondary">@color/on_background</item>
 		<item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 	</style>
 
 
 	<!-- Typography -->
 
-	<style name="AppTheme.HeadingText">
-		<item name="android:textSize">@dimen/text_h1</item>
+	<style name="AppTheme.TextTitleLarge" parent="TextAppearance.MaterialComponents.Headline4">
+		<item name="android:textColor">@color/on_background</item>
+		<item name="autoSizeTextType">uniform</item>
+		<item name="autoSizeMaxTextSize">40sp</item>
+		<item name="android:lines">1</item>
 	</style>
 
-	<style name="AppTheme.BodyText">
-		<item name="android:textColor">@color/on_background_weaker</item>
+	<style name="AppTheme.TextTitleSmall" parent="TextAppearance.MaterialComponents.Headline5">
+		<item name="android:textColor">@color/on_background</item>
+		<item name="autoSizeTextType">uniform</item>
+		<item name="autoSizeMaxTextSize">28sp</item>
+		<item name="android:lines">1</item>
 	</style>
 
+	<style name="AppTheme.TextBody1" parent="TextAppearance.MaterialComponents.Body1" />
 
-	<!-- Intro -->
-
-	<style name="AppTheme.IntroTitleText">
-		<item name="android:textSize">@dimen/text_title</item>
-	</style>
-
-	<style name="AppTheme.IntroBodyText">
-		<item name="android:textSize">@dimen/text_large</item>
-		<item name="android:textColor">@color/on_background_weaker</item>
-	</style>
-
-
-	<!-- Main -->
+	<style name="AppTheme.TextBody2" parent="TextAppearance.MaterialComponents.Body2" />
 
 	<style name="AppTheme.ChanceText">
 		<item name="android:fontFamily">@font/open_sans_condensed_light</item>
-		<item name="android:textSize">@dimen/text_chance</item>
 		<item name="android:textStyle">bold</item>
 		<item name="android:shadowColor">@color/on_background</item>
+		<item name="autoSizeTextType">uniform</item>
+		<item name="autoSizeMaxTextSize">48sp</item>
+		<item name="android:gravity">bottom</item>
 		<item name="android:shadowDx">0</item>
 		<item name="android:shadowDy">0</item>
 		<item name="android:shadowRadius">4</item>
 	</style>
 
-	<style name="AppTheme.TimeSinceText">
-		<item name="android:textSize">@dimen/text_small</item>
-		<item name="android:textColor">@color/on_background_weaker</item>
+
+	<!-- Toolbar -->
+
+	<style name="AppTheme.Toolbar">
+		<item name="android:textColorPrimary">@color/on_background</item>
+		<item name="android:textColorSecondary">@color/on_background</item>
 	</style>
 
 
 	<!-- Factor card -->
 
 	<style name="AppTheme.FactorCardView" parent="Widget.MaterialComponents.CardView">
-		<item name="android:foreground">?attr/selectableItemBackground</item>
 		<item name="cardBackgroundColor">@color/surface</item>
-		<item name="cardCornerRadius">@dimen/card_corner_radius</item>
-		<item name="cardElevation">@dimen/card_elevation</item>
+		<item name="cardElevation">2dp</item>
 	</style>
 
-	<style name="AppTheme.FactorCardText">
-		<item name="android:textSize">@dimen/text_large</item>
+	<style name="AppTheme.FactorCardText" parent="@style/AppTheme.TextBody1">
+		<item name="android:ellipsize">end</item>
+		<item name="android:lines">1</item>
 	</style>
 
-	<style name="AppTheme.FactorCardText.Name" />
-
-	<style name="AppTheme.FactorCardText.Value">
-		<item name="android:textColor">@color/on_surface_weaker</item>
+	<style name="AppTheme.FactorCardText.Title">
+		<item name="android:textColor">@color/on_surface</item>
 	</style>
 
 	<style name="AppTheme.FactorCardProgressBar" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
@@ -83,23 +94,15 @@
 		<item name="android:background">@color/background</item>
 	</style>
 
-	<style name="AppTheme.BottomSheet.BodyText">
-		<item name="android:textSize">@dimen/text_large</item>
-		<item name="android:textColor">@color/on_background_weaker</item>
-		<item name="android:lineSpacingMultiplier">1.1</item>
-	</style>
 
-	<style name="AppTheme.BottomSheet.HeadingText">
-		<item name="android:textSize">@dimen/text_h2</item>
-	</style>
+	<!-- Extended FAB -->
 
-
-	<!-- Misc -->
-
-	<style name="AppTheme.ClickableIcon">
-		<item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
-		<item name="android:clickable">true</item>
-		<item name="android:focusable">true</item>
+	<!-- TODO Replace with material extended FAB when available -->
+	<style name="AppTheme.ExtendedFab" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+		<item name="backgroundTint">@color/secondary</item>
+		<item name="android:textColor">@color/on_secondary</item>
+		<item name="android:height">56dp</item>
+		<item name="cornerRadius">56dp</item>
 	</style>
 
 </resources>

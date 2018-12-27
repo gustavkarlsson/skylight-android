@@ -14,7 +14,7 @@ buildscript {
 		android_fragment_version = "1.0.0"
 		android_annotation_version = "1.0.0"
 		android_preference_version = "1.0.0"
-		android_material_version = "1.0.0"
+		android_material_version = "1.1.0-alpha02"
 		android_cardview_version = "1.0.0"
 		android_annotation_version = "1.0.0"
 		rxbinding_version = "2.1.1"

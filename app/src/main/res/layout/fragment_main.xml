@@ -11,6 +11,7 @@
 		android:id="@+id/toolbar"
 		android:layout_width="match_parent"
 		android:layout_height="?attr/actionBarSize"
+		app:theme="@style/AppTheme.Toolbar"
 		app:title="@string/main_your_location" />
 
 	<androidx.constraintlayout.widget.ConstraintLayout
@@ -31,8 +32,8 @@
 		<TextView
 			android:id="@+id/chance"
 			style="@style/AppTheme.ChanceText"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
+			android:layout_width="0dp"
+			android:layout_height="72dp"
 			app:layout_constraintBottom_toTopOf="@+id/timeSinceUpdate"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintHorizontal_bias="0"
@@ -42,7 +43,7 @@
 
 		<TextView
 			android:id="@+id/timeSinceUpdate"
-			style="@style/AppTheme.TimeSinceText"
+			style="@style/AppTheme.TextBody2"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			app:layout_constraintBottom_toTopOf="@+id/secondSpace"

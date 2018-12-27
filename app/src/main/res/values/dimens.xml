@@ -3,14 +3,4 @@
 	<dimen name="screen_margin">16dp</dimen>
 	<dimen name="screen_margin_tighter">24dp</dimen>
 	<dimen name="gutter">16dp</dimen>
-
-	<dimen name="card_corner_radius">6dp</dimen>
-	<dimen name="card_elevation">2dp</dimen>
-
-	<dimen name="text_title">32sp</dimen>
-	<dimen name="text_chance">48sp</dimen>
-	<dimen name="text_h1">24sp</dimen>
-	<dimen name="text_h2">20sp</dimen>
-	<dimen name="text_large">16sp</dimen>
-	<dimen name="text_small">12sp</dimen>
 </resources>

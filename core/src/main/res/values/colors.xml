@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<!-- Logo colors -->
 	<color name="logo_background">#434343</color>
 	<color name="logo_primary">#0F9386</color>
 	<color name="logo_secondary">#B0DCD8</color>
 
-	<!-- palette from: https://www.materialpalette.com/teal/pink  -->
+	<!-- Material color system  -->
 	<color name="background">#2E2E2E</color>
-	<color name="on_background">#FFFFFF</color>
+	<color name="on_background">#E8FFFFFF</color>
 	<color name="on_background_weaker">#B4FFFFFF</color>
-	<color name="on_background_weakest">#80FFFFFF</color>
 
-	<color name="surface">@color/logo_background</color>
+	<color name="surface">#383838</color>
 	<color name="on_surface">#FFFFFF</color>
 	<color name="on_surface_weaker">#B4FFFFFF</color>
-	<color name="on_surface_weakest">#80FFFFFF</color>
+
+	<color name="error">#FF5252</color>
+	<color name="on_error">#FFFFFF</color>
 
 	<color name="primary">@color/logo_primary</color>
 	<color name="primary_variant">#0C766B</color>
 	<color name="on_primary">#FFFFFF</color>
 
 	<color name="secondary">#FF4081</color>
+	<color name="secondary_variant">#C60055</color>
 	<color name="on_secondary">#FFFFFF</color>
-
-	<color name="error">#FF5252</color>
-	<color name="on_error">#FFFFFF</color>
 
 	<!-- Custom colors -->
 	<color name="chance_lowest">#F44336</color>

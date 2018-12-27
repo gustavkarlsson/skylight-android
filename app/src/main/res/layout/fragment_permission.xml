@@ -21,9 +21,9 @@
 
 	<TextView
 		android:id="@+id/titleTextView"
-		style="@style/AppTheme.HeadingText"
+		style="@style/AppTheme.TextTitleSmall"
 		android:layout_width="0dp"
-		android:layout_height="wrap_content"
+		android:layout_height="40dp"
 		android:layout_marginTop="32dp"
 		android:text="@string/permission_title"
 		app:layout_constraintEnd_toEndOf="parent"
@@ -32,7 +32,7 @@
 
 	<TextView
 		android:id="@+id/descriptionTextView"
-		style="@style/AppTheme.BodyText"
+		style="@style/AppTheme.TextBody1"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="24dp"
@@ -43,7 +43,7 @@
 
 	<com.google.android.material.button.MaterialButton
 		android:id="@+id/grantButton"
-		style="@style/Widget.MaterialComponents.Button.TextButton"
+		style="@style/AppTheme.ExtendedFab"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="@string/permission_grant"
