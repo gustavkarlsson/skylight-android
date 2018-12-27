@@ -46,19 +46,6 @@
 
 	<style name="AppTheme.TextBody2" parent="TextAppearance.MaterialComponents.Body2" />
 
-	<style name="AppTheme.TextCaption" parent="TextAppearance.MaterialComponents.Caption" />
-
-
-	<!-- Toolbar -->
-
-	<style name="AppTheme.Toolbar">
-		<item name="android:textColorPrimary">@color/on_background</item>
-		<item name="android:textColorSecondary">@color/on_background</item>
-	</style>
-
-
-	<!-- Main -->
-
 	<style name="AppTheme.ChanceText">
 		<item name="android:fontFamily">@font/open_sans_condensed_light</item>
 		<item name="android:textStyle">bold</item>
@@ -69,6 +56,14 @@
 		<item name="android:shadowDx">0</item>
 		<item name="android:shadowDy">0</item>
 		<item name="android:shadowRadius">4</item>
+	</style>
+
+
+	<!-- Toolbar -->
+
+	<style name="AppTheme.Toolbar">
+		<item name="android:textColorPrimary">@color/on_background</item>
+		<item name="android:textColorSecondary">@color/on_background</item>
 	</style>
 
 

@@ -43,7 +43,7 @@
 
 		<TextView
 			android:id="@+id/timeSinceUpdate"
-			style="@style/AppTheme.TextCaption"
+			style="@style/AppTheme.TextBody2"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			app:layout_constraintBottom_toTopOf="@+id/secondSpace"
