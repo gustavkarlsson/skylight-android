@@ -42,6 +42,12 @@
 		<item name="android:lines">1</item>
 	</style>
 
+	<style name="AppTheme.TextBody1" parent="TextAppearance.MaterialComponents.Body1" />
+
+	<style name="AppTheme.TextBody2" parent="TextAppearance.MaterialComponents.Body2" />
+
+	<style name="AppTheme.TextCaption" parent="TextAppearance.MaterialComponents.Caption" />
+
 
 	<!-- Toolbar -->
 
@@ -73,7 +79,7 @@
 		<item name="cardElevation">2dp</item>
 	</style>
 
-	<style name="AppTheme.FactorCardText" parent="@style/TextAppearance.MaterialComponents.Body1">
+	<style name="AppTheme.FactorCardText" parent="@style/AppTheme.TextBody1">
 		<item name="android:ellipsize">end</item>
 		<item name="android:lines">1</item>
 	</style>
