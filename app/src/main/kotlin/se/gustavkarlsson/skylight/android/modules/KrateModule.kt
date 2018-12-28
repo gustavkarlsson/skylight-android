@@ -16,6 +16,8 @@ import se.gustavkarlsson.skylight.android.krate.FirstRunResult
 import se.gustavkarlsson.skylight.android.krate.GetAuroraReportCommand
 import se.gustavkarlsson.skylight.android.krate.GooglePlayServicesResult
 import se.gustavkarlsson.skylight.android.krate.LocationPermissionResult
+import se.gustavkarlsson.skylight.android.krate.PlaceSelectedResult
+import se.gustavkarlsson.skylight.android.krate.SelectPlaceCommand
 import se.gustavkarlsson.skylight.android.krate.SettingsResult
 import se.gustavkarlsson.skylight.android.krate.SettingsStreamCommand
 import se.gustavkarlsson.skylight.android.krate.SignalFirstRunCompleted
@@ -129,6 +131,9 @@ val krateModule = module {
 						}
 					}
 				}
+				transform<SelectPlaceCommand> { commands ->
+					commands.map { PlaceSelectedResult(it.place) }
+				}
 				if (BuildConfig.DEBUG) {
 					watch<SkylightCommand> { Timber.d("Got command: %s", it) }
 				}
@@ -158,6 +163,9 @@ val krateModule = module {
 						}
 						is SettingsResult -> {
 							state.copy(settings = result.settings)
+						}
+						is PlaceSelectedResult -> {
+							state.copy(selectedPlace = result.place)
 						}
 					}
 

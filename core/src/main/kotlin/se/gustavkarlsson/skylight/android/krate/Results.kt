@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.krate
 
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.Place
 
 sealed class SkylightResult
 
@@ -16,3 +17,5 @@ data class LocationPermissionResult(val isGranted: Boolean) : SkylightResult()
 data class GooglePlayServicesResult(val isAvailable: Boolean) : SkylightResult()
 
 data class FirstRunResult(val isFirstRun: Boolean) : SkylightResult()
+
+data class PlaceSelectedResult(val place: Place?) : SkylightResult()

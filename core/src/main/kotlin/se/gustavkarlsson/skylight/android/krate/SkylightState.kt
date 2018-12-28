@@ -10,6 +10,7 @@ data class SkylightState(
 	val isLocationPermissionGranted: Boolean? = null,
 	val isGooglePlayServicesAvailable: Boolean? = null,
 	val currentLocationAuroraReport: AuroraReport? = null,
+	val selectedPlace: Place? = null,
 	val customPlaces: List<Place> = emptyList(),
 	val throwable: Throwable? = null
 ) {

@@ -6,18 +6,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.entities.Place
 
 class PlacesAdapter : RecyclerView.Adapter<PlacesAdapter.ViewHolder>() {
 
-	var items: List<Place> = emptyList()
+	var items: List<PlaceItem> = emptyList()
 		set(value) {
 			val diff = DiffUtil.calculateDiff(DiffCallback(items, value))
 			field = value
 			diff.dispatchUpdatesTo(this)
 		}
 
-	override fun getItemCount() = items.size + 1
+	override fun getItemCount() = items.size
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 		val view = LayoutInflater.from(parent.context).inflate(
@@ -29,36 +28,32 @@ class PlacesAdapter : RecyclerView.Adapter<PlacesAdapter.ViewHolder>() {
 	}
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-		val text = if (position == 0) {
-			"Current location" // FIXME string resource
-		} else {
-			items[position - 1].name
-		}
-		holder.view.text = text
+		val view = holder.view
+		val context = view.context
+		val item = items[position]
+		view.text = item.name.resolve(context)
+		view.isSelected = item.isActive
+		view.setOnClickListener { item.onClick() }
 	}
 
 	class DiffCallback(
-		private val oldItems: List<Place>,
-		private val newItems: List<Place>
+		private val oldItems: List<PlaceItem>,
+		private val newItems: List<PlaceItem>
 	) : DiffUtil.Callback() {
 
-		override fun getOldListSize() = oldItems.size + 1
+		override fun getOldListSize() = oldItems.size
 
-		override fun getNewListSize() = newItems.size + 1
+		override fun getNewListSize() = newItems.size
 
 		override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-			if (oldItemPosition == 0 && newItemPosition == 0) return true
-			if (oldItemPosition == 0 || newItemPosition == 0) return false
-			val oldLocation = oldItems[oldItemPosition - 1].location
-			val newLocation = newItems[newItemPosition - 1].location
+			val oldLocation = oldItems[oldItemPosition].name
+			val newLocation = newItems[newItemPosition].name
 			return oldLocation == newLocation
 		}
 
 		override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-			if (oldItemPosition == 0 && newItemPosition == 0) return true
-			if (oldItemPosition == 0 || newItemPosition == 0) return false
-			val oldPlace = oldItems[oldItemPosition - 1]
-			val newPlace = newItems[newItemPosition - 1]
+			val oldPlace = oldItems[oldItemPosition]
+			val newPlace = newItems[newItemPosition]
 			return oldPlace == newPlace
 		}
 
