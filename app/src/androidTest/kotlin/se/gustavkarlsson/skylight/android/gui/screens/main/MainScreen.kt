@@ -9,7 +9,7 @@ import se.gustavkarlsson.skylight.android.test.KOutsideBottomSheetDialogFragment
 import se.gustavkarlsson.skylight.android.test.KToolbar
 
 class MainScreen : Screen<MainScreen>() {
-	val toolbar = KToolbar { withId(R.id.toolbar) }
+	val toolbar = KToolbar { withId(R.id.toolbarView) }
 	val chance = KTextView { withId(R.id.chance) }
 	val timeSinceUpdate = KTextView { withId(R.id.timeSinceUpdate) }
 

@@ -39,7 +39,7 @@ abstract class BaseFragment(
 	override fun onViewStateRestored(savedInstanceState: Bundle?) {
 		super.onViewStateRestored(savedInstanceState)
 		initView()
-		getToolbar()?.run {
+		toolbar?.run {
 			if (hasBackStackEntries()) {
 				enableBackNavigation()
 			}
@@ -60,7 +60,7 @@ abstract class BaseFragment(
 		}
 	}
 
-	protected open fun getToolbar(): Toolbar? = null
+	protected open val toolbar: Toolbar? = null
 
 	protected open fun initView() = Unit
 

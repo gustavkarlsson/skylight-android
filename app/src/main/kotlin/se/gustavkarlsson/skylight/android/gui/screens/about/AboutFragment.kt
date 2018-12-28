@@ -7,7 +7,7 @@ import kotlinx.android.synthetic.main.fragment_about.branchTextView
 import kotlinx.android.synthetic.main.fragment_about.builtTextView
 import kotlinx.android.synthetic.main.fragment_about.privacyPolicyLink
 import kotlinx.android.synthetic.main.fragment_about.sha1TextView
-import kotlinx.android.synthetic.main.fragment_about.toolbar
+import kotlinx.android.synthetic.main.fragment_about.toolbarView
 import kotlinx.android.synthetic.main.fragment_about.versionCodeTextView
 import kotlinx.android.synthetic.main.fragment_about.versionNameTextView
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -19,7 +19,8 @@ class AboutFragment : BaseFragment(R.layout.fragment_about) {
 
 	private val viewModel: AboutViewModel by viewModel()
 
-	override fun getToolbar(): Toolbar? = toolbar
+	override val toolbar: Toolbar?
+		get() = toolbarView
 
 	override fun initView() {
 		val context = requireContext()

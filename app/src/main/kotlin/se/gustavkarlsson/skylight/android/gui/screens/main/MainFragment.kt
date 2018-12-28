@@ -11,36 +11,60 @@ import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_main.chance
 import kotlinx.android.synthetic.main.fragment_main.darknessCard
+import kotlinx.android.synthetic.main.fragment_main.drawerLayout
 import kotlinx.android.synthetic.main.fragment_main.geomagLocationCard
 import kotlinx.android.synthetic.main.fragment_main.kpIndexCard
+import kotlinx.android.synthetic.main.fragment_main.nav_view
 import kotlinx.android.synthetic.main.fragment_main.timeSinceUpdate
-import kotlinx.android.synthetic.main.fragment_main.toolbar
+import kotlinx.android.synthetic.main.fragment_main.toolbarView
 import kotlinx.android.synthetic.main.fragment_main.weatherCard
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.doOnNext
 import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
+import se.gustavkarlsson.skylight.android.gui.BackButtonHandler
 import se.gustavkarlsson.skylight.android.gui.BaseFragment
 import se.gustavkarlsson.skylight.android.navigation.Navigator
 import se.gustavkarlsson.skylight.android.navigation.Screen
 import timber.log.Timber
 
-class MainFragment : BaseFragment(R.layout.fragment_main) {
+class MainFragment : BaseFragment(R.layout.fragment_main), BackButtonHandler {
 
 	private var currentBottomSheetTitle: Int? = null
 
 	private val viewModel: MainViewModel by viewModel()
 	private val navigator: Navigator by inject()
 
-	override fun getToolbar(): Toolbar? {
-		return toolbar.apply {
-			inflateMenu(R.menu.menu_main)
+	override val toolbar: Toolbar?
+		get() = toolbarView.apply {
+			if (menu.size() == 0) {
+				inflateMenu(R.menu.menu_main)
+			}
+		}
+
+	override fun initView() {
+		toolbarView.enableNavigationDrawer()
+	}
+
+	private fun Toolbar.enableNavigationDrawer() {
+		setNavigationIcon(R.drawable.ic_menu_white_24dp)
+		setNavigationOnClickListener {
+			drawerLayout.openDrawer(nav_view)
+		}
+	}
+
+	override fun onBackPressed(): Boolean {
+		return if (drawerLayout.isDrawerOpen(nav_view)) {
+			drawerLayout.closeDrawer(nav_view)
+			true
+		} else {
+			false
 		}
 	}
 
 	override fun bindData(scope: LifecycleScopeProvider<*>) {
-		toolbar.itemClicks()
+		toolbarView.itemClicks()
 			.autoDisposable(scope)
 			.subscribe { item ->
 				when (item.itemId) {
@@ -52,7 +76,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 		viewModel.locationName
 			.doOnNext { Timber.d("Updating locationName view: %s", it) }
 			.autoDisposable(scope)
-			.subscribe { toolbar.title = it }
+			.subscribe { toolbarView.title = it }
 
 		viewModel.errorMessages
 			.doOnNext { Timber.d("Showing error message") }

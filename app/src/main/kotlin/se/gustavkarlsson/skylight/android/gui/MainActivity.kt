@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
+import kotlinx.android.synthetic.main.activity_main.mainNavHost
 import org.koin.android.ext.android.inject
 import org.koin.androidx.scope.ext.android.bindScope
 import org.koin.androidx.scope.ext.android.createScope
@@ -30,6 +31,12 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 		addToKoin<Activity>(this)
 		setContentView(R.layout.activity_main)
 		lifecycle.addObserver(this)
+	}
+
+	override fun onBackPressed() {
+		val topFragment = mainNavHost.childFragmentManager.fragments.lastOrNull()
+		if (topFragment is BackButtonHandler && topFragment.onBackPressed()) return
+		super.onBackPressed()
 	}
 
 	@OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
