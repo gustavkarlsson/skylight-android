@@ -10,6 +10,7 @@ import se.gustavkarlsson.skylight.android.gui.screens.about.AboutViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.googleplayservices.GooglePlayServicesViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.intro.IntroViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
+import se.gustavkarlsson.skylight.android.gui.screens.main.drawer.DrawerViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.permission.PermissionViewModel
 
 val viewModelModule = module {
@@ -50,6 +51,10 @@ val viewModelModule = module {
 
 	viewModel {
 		IntroViewModel(get())
+	}
+
+	viewModel {
+		DrawerViewModel(get())
 	}
 
 }

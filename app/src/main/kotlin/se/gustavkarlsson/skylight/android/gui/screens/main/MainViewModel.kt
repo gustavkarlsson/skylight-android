@@ -57,13 +57,13 @@ class MainViewModel(
 
 	val locationName: Flowable<CharSequence> = store.states
 		.map {
-			it.auroraReport?.locationName ?: defaultLocationName
+			it.currentLocationAuroraReport?.locationName ?: defaultLocationName
 		}
 		.distinctUntilChanged()
 
 	val chanceLevel: Flowable<TextRef> = store.states
 		.map {
-			it.auroraReport
+			it.currentLocationAuroraReport
 				?.let(auroraChanceEvaluator::evaluate)
 				?: Chance.UNKNOWN
 		}
@@ -72,7 +72,7 @@ class MainViewModel(
 		.distinctUntilChanged()
 
 	val timeSinceUpdate: Flowable<CharSequence> = store.states
-		.mapNotNull { it.auroraReport?.timestamp }
+		.mapNotNull { it.currentLocationAuroraReport?.timestamp }
 		.switchMap { time ->
 			Flowable.just(time)
 				.repeatWhen { it.delay(1.seconds) }
@@ -84,7 +84,7 @@ class MainViewModel(
 		.distinctUntilChanged()
 
 	val timeSinceUpdateVisibility: Flowable<Boolean> = store.states
-		.mapNotNull { it.auroraReport?.timestamp }
+		.mapNotNull { it.currentLocationAuroraReport?.timestamp }
 		.map {
 			when {
 				it <= Instant.EPOCH -> false
@@ -95,7 +95,7 @@ class MainViewModel(
 
 	val darknessValue: Flowable<TextRef> = store.states
 		.map {
-			it.auroraReport
+			it.currentLocationAuroraReport
 				?.let(AuroraReport::darkness)
 				?.value
 				?.let(darknessFormatter::format)
@@ -105,7 +105,7 @@ class MainViewModel(
 
 	val darknessChance: Flowable<Chance> = store.states
 		.map {
-			it.auroraReport
+			it.currentLocationAuroraReport
 				?.let(AuroraReport::darkness)
 				?.value
 				?.let(darknessChanceEvaluator::evaluate)
@@ -115,7 +115,7 @@ class MainViewModel(
 
 	val geomagLocationValue: Flowable<TextRef> = store.states
 		.map {
-			it.auroraReport
+			it.currentLocationAuroraReport
 				?.let(AuroraReport::geomagLocation)
 				?.value
 				?.let(geomagLocationFormatter::format)
@@ -125,7 +125,7 @@ class MainViewModel(
 
 	val geomagLocationChance: Flowable<Chance> = store.states
 		.map {
-			it.auroraReport
+			it.currentLocationAuroraReport
 				?.let(AuroraReport::geomagLocation)
 				?.value
 				?.let(geomagLocationChanceEvaluator::evaluate)
@@ -135,7 +135,7 @@ class MainViewModel(
 
 	val kpIndexValue: Flowable<TextRef> = store.states
 		.map {
-			it.auroraReport
+			it.currentLocationAuroraReport
 				?.let(AuroraReport::kpIndex)
 				?.value
 				?.let(kpIndexFormatter::format)
@@ -145,7 +145,7 @@ class MainViewModel(
 
 	val kpIndexChance: Flowable<Chance> = store.states
 		.map {
-			it.auroraReport
+			it.currentLocationAuroraReport
 				?.let(AuroraReport::kpIndex)
 				?.value
 				?.let(kpIndexChanceEvaluator::evaluate)
@@ -155,7 +155,7 @@ class MainViewModel(
 
 	val weatherValue: Flowable<TextRef> = store.states
 		.map {
-			it.auroraReport
+			it.currentLocationAuroraReport
 				?.let(AuroraReport::weather)
 				?.value
 				?.let(weatherFormatter::format)
@@ -165,7 +165,7 @@ class MainViewModel(
 
 	val weatherChance: Flowable<Chance> = store.states
 		.map {
-			it.auroraReport
+			it.currentLocationAuroraReport
 				?.let(AuroraReport::weather)
 				?.value
 				?.let(weatherChanceEvaluator::evaluate)

@@ -40,7 +40,7 @@ internal class UpdateJob(
 	}
 
 	private fun getAuroraReport(): AuroraReport {
-		var bestReport = store.currentState.auroraReport
+		var bestReport = store.currentState.currentLocationAuroraReport
 		if (bestReport?.isRecent == true) {
 			return bestReport
 		}
@@ -58,7 +58,7 @@ internal class UpdateJob(
 					Single.error(it.throwable)
 				}
 			}
-			.mapNotNull { it.auroraReport }
+			.mapNotNull { it.currentLocationAuroraReport }
 			.filter { it != currentReport }
 			.map { optionalOf(it) }
 			.timeout(timeout.toMillis(), TimeUnit.MILLISECONDS)

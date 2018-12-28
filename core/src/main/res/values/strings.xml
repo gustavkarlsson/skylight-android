@@ -7,6 +7,7 @@
 	<string name="main_your_location">Your Location</string>
 	<string name="right_now">Right now</string>
 	<string name="privacy_policy">Privacy Policy</string>
+	<string name="places">Places</string>
 
 	<!-- Errors -->
 	<string name="error_unknown_update_error">An unknown error occurred while updating</string>

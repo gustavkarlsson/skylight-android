@@ -5,6 +5,7 @@
 	<string name="main_your_location">Din Plats</string>
 	<string name="right_now">Just nu</string>
 	<string name="privacy_policy">Integritetspolicy (eng)</string>
+	<string name="places">Platser</string>
 
 	<!-- Errors -->
 	<string name="error_unknown_update_error">Ett oväntat fel inträffade vid uppdatering</string>

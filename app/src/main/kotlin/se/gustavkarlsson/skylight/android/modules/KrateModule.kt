@@ -7,6 +7,8 @@ import org.koin.dsl.module.module
 import se.gustavkarlsson.krate.core.dsl.buildStore
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.krate.AuroraReportResult
 import se.gustavkarlsson.skylight.android.krate.AuroraReportStreamCommand
 import se.gustavkarlsson.skylight.android.krate.BootstrapCommand
@@ -148,7 +150,7 @@ val krateModule = module {
 						is AuroraReportResult.Success -> {
 							state.copy(
 								throwable = null,
-								auroraReport = result.auroraReport
+								currentLocationAuroraReport = result.auroraReport
 							)
 						}
 						is AuroraReportResult.Failure -> {
@@ -170,7 +172,8 @@ val krateModule = module {
 					SkylightState.Settings(
 						settings.notificationsEnabled,
 						settings.triggerLevel
-					)
+					),
+					customPlaces = listOf(Place(1, "Made-up", Location(1.0, 2.0))) // FIXME Remove
 				)
 				observeScheduler = AndroidSchedulers.mainThread()
 				if (BuildConfig.DEBUG) {

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:background="@color/surface"
+	tools:context=".gui.MainActivity">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingBottom="@dimen/screen_margin"
+		android:paddingTop="@dimen/screen_margin">
+
+		<TextView
+			android:id="@+id/titleTextView"
+			style="@style/AppTheme.TextTitleSmall"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:paddingEnd="@dimen/screen_margin"
+			android:paddingStart="@dimen/screen_margin"
+			android:text="@string/places"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toTopOf="parent" />
+
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/placesRecyclerView"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/screen_margin"
+			android:nestedScrollingEnabled="false"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
