@@ -1,4 +1,5 @@
 # TODO
+* Make sure layout ID survives lifecycle changes
 
 ## Soon
 * App bundles
