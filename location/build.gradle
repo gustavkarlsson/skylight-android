@@ -25,8 +25,8 @@ dependencies {
 	implementation project(":core")
 
 	// Google Play Services
-	implementation "com.google.android.gms:play-services-gcm:$google_play_services_version"
-	implementation "com.google.android.gms:play-services-location:$google_play_services_version"
+	implementation "com.google.android.gms:play-services-gcm:$google_play_services_gcm_version"
+	implementation "com.google.android.gms:play-services-location:$google_play_services_location_version"
 
 	// Reactive Location
 	implementation "pl.charmas.android:android-reactive-location2:${reactive_location_version}@aar"

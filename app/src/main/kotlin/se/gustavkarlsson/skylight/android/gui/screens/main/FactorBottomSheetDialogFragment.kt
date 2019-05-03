@@ -30,7 +30,7 @@ class FactorBottomSheetDialogFragment : BottomSheetDialogFragment() {
 		}
 	}
 
-	override fun onCancel(dialog: DialogInterface?) {
+	override fun onCancel(dialog: DialogInterface) {
 		onCancelListener?.invoke()
 		super.onCancel(dialog)
 	}

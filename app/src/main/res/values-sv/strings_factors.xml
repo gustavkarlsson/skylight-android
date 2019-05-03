@@ -21,7 +21,7 @@
 	<string name="factor_darkness_title_full">Utomhusmörker</string>
 	<string name="factor_darkness_title_compact">Mörker</string>
 	<string name="factor_darkness_desc">Eftersom norrsken bara syns i mörker är solens position
-		på himmelen viktig.
+		på himlen viktig.
 		Det här värdet visar hur mörkt det är ute på nuvarande plats baserat på solens position.
-		<u>100% mörker är perfekt</u> för att se norrsken.</string>
+		<u>100\% mörker är perfekt</u> för att se norrsken.</string>
 </resources>

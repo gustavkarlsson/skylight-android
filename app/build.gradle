@@ -25,6 +25,11 @@ android {
 	compileSdkVersion compilesdk_version
 	buildToolsVersion build_tools_version
 
+	compileOptions {
+		sourceCompatibility 1.8
+		targetCompatibility 1.8
+	}
+
 	sourceSets {
 		main.java.srcDirs += "src/main/kotlin"
 		production.java.srcDirs += "src/production/kotlin"
@@ -138,12 +143,12 @@ dependencies {
 	implementation "androidx.constraintlayout:constraintlayout:$constraint_layout_version"
 
 	// Google Play Services
-	implementation "com.google.android.gms:play-services-gcm:$google_play_services_version"
+	implementation "com.google.android.gms:play-services-gcm:$google_play_services_gcm_version"
 
 	// Navigation
 	implementation "android.arch.navigation:navigation-fragment:$navigation_version"
 	implementation "android.arch.navigation:navigation-ui:$navigation_version"
-	implementation "android.arch.navigation:navigation-ui-ktx:$ktx_navigation_ui_version"
+	implementation "android.arch.navigation:navigation-ui-ktx:$navigation_version"
 
 	// Rx misc
 	implementation "io.reactivex.rxjava2:rxandroid:$rxandroid_version"

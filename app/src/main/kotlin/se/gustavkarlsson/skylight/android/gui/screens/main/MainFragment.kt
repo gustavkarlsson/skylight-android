@@ -6,7 +6,6 @@ import androidx.lifecycle.Lifecycle
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding2.view.visibility
-import com.jakewharton.rxbinding2.widget.text
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_main.chance
@@ -70,12 +69,12 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 			.doOnNext { Timber.d("Updating chanceLevel view: %s", it) }
 			.map { it.resolve(requireContext()) }
 			.autoDisposable(scope)
-			.subscribe(chance.text())
+			.subscribe(chance::setText)
 
 		viewModel.timeSinceUpdate
 			.doOnNext { Timber.d("Updating timeSinceUpdate view: %s", it) }
 			.autoDisposable(scope)
-			.subscribe(timeSinceUpdate.text())
+			.subscribe(timeSinceUpdate::setText)
 
 		viewModel.timeSinceUpdateVisibility
 			.doOnNext { Timber.d("Updating timeSinceUpdate weather: %s", it) }
