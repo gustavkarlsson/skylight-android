@@ -1,5 +1,4 @@
 import org.gradle.api.JavaVersion
-import org.gradle.api.Project
 
 object Versions {
 	// Config
@@ -13,7 +12,7 @@ object Versions {
 	val easylauncher = "1.2.0"
 	val jgit = "4.1.1.201511131810-r"
 	val axionRelease = "1.8.1"
-	val play_publisher = "1.2.2"
+	val playPublisher = "1.2.2"
 
 	// Dependencies
 	val krate = "1.2.0"
@@ -37,7 +36,7 @@ object Versions {
 	val firebase = "16.0.8"
 	val fabric = "1.25.4"
 	val crashlytics = "2.10.0"
-	val arch_lifecycle = "2.0.0"
+	val archLifecycle = "2.0.0"
 	val rxpreferences = "2.0.0-RC3"
 	val rxrelay = "2.1.0"
 	val androidjob = "1.2.0"
@@ -67,4 +66,4 @@ object Versions {
 	val rxtasks = "2.1.2"
 }
 
-val Project.versions get() = Versions
+val versions = Versions
