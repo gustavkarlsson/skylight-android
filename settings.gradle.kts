@@ -1,0 +1,12 @@
+include(
+	":core",
+	":background",
+	":analytics",
+	":location",
+	":weather",
+	":darkness",
+	":kpindex",
+	":geomaglocation",
+	":locationname",
+	":app"
+)

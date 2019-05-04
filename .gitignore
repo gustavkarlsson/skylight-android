@@ -1,9 +1,9 @@
 # Gradle
 /.gradle/
+/*/.gradle/
 /build/
 /*/build/
 /*/gradle.properties
-gradle.deps
 
 # Eclipse
 /.classpath
