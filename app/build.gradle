@@ -80,10 +80,10 @@ android {
 
 	signingConfigs {
 		release {
-			storeFile file(project.findProperty("android_store_file") ?: "android_store_file_not_set")
-			storePassword project.findProperty("android_store_password") ?: "android_store_password_not_set"
-			keyAlias project.findProperty("android_key_alias") ?: "android_key_alias_not_set"
-			keyPassword project.findProperty("android_key_password") ?: "android_key_password_not_set"
+			storeFile file(project.findProperty("android_store_file") ?: "dummy-keystore.jks")
+			storePassword project.findProperty("android_store_password") ?: "password"
+			keyAlias project.findProperty("android_key_alias") ?: "dummy"
+			keyPassword project.findProperty("android_key_password") ?: "password"
 		}
 	}
 

@@ -19,8 +19,11 @@ android {
 		minSdkVersion project.min_sdk_version
 		testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-		def openWeatherMapApiKey =
-			findProperty("openweathermap_api_key") ?: "openweathermap_api_key_not_set"
+		def openWeatherMapApiKey = findProperty("openweathermap_api_key")
+		if (openWeatherMapApiKey == null) {
+			logger.error("WARNING: openweathermap_api_key not set")
+			openWeatherMapApiKey = "openweathermap_api_key_not_set"
+		}
 		buildConfigField "String", "OPENWEATHERMAP_API_KEY", "\"$openWeatherMapApiKey\""
 	}
 }
