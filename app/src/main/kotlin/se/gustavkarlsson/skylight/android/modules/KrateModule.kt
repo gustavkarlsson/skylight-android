@@ -49,48 +49,20 @@ val krateModule = module {
 			commands {
 				transform<BootstrapCommand> { commands ->
 					commands.firstOrError()
-						.map<SkylightResult> {
-							LocationPermissionResult(permissionChecker.isLocationGranted)
-						}
-						.toFlowable()
+						.flatMapPublisher { permissionChecker.isLocationGranted }
+						.map(::LocationPermissionResult)
 				}
 
 				transform<BootstrapCommand> { commands ->
 					commands.firstOrError()
-						.map<SkylightResult> {
-							GooglePlayServicesResult(googlePlayServicesChecker.isAvailable)
-						}
-						.toFlowable()
+						.flatMapPublisher { googlePlayServicesChecker.isAvailable }
+						.map(::GooglePlayServicesResult)
 				}
 
 				transform<BootstrapCommand> { commands ->
 					commands.firstOrError()
-						.map<SkylightResult> {
-							FirstRunResult(runVersionManager.isFirstRun)
-						}
-						.toFlowable()
-				}
-
-				transform<SignalFirstRunCompleted> { commands ->
-					commands
-						.doOnNext {
-							runVersionManager.signalFirstRunCompleted()
-						}
-						.map {
-							FirstRunResult(false)
-						}
-				}
-
-				transform<SignalLocationPermissionGranted> { commands ->
-					commands.map {
-						LocationPermissionResult(true)
-					}
-				}
-
-				transform<SignalGooglePlayServicesInstalled> { commands ->
-					commands.map {
-						GooglePlayServicesResult(true)
-					}
+						.flatMapPublisher { runVersionManager.isFirstRun }
+						.map(::FirstRunResult)
 				}
 
 				transform<GetAuroraReportCommand> { commands ->
@@ -136,6 +108,18 @@ val krateModule = module {
 				}
 				if (BuildConfig.DEBUG) {
 					watch<SkylightCommand> { Timber.d("Got command: %s", it) }
+				}
+
+				watch<SignalLocationPermissionGranted> {
+					permissionChecker.signalPermissionGranted()
+				}
+
+				watch<SignalFirstRunCompleted> {
+					runVersionManager.signalFirstRunCompleted()
+				}
+
+				watch<SignalGooglePlayServicesInstalled> {
+					googlePlayServicesChecker.signalInstalled()
 				}
 			}
 

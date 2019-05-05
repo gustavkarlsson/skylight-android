@@ -23,5 +23,5 @@
 	<string name="factor_darkness_desc">Since the aurora is only visible in the dark
 		the position of the sun is important.
 		This value shows how dark your current location is based on the sun\'s position.
-		<u>100% darkness is perfect</u> for aurora sightings.</string>
+		<u>100\% darkness is perfect</u> for aurora sightings.</string>
 </resources>

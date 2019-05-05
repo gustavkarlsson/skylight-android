@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.background.notifications
 import android.app.Activity
 import android.app.NotificationManager
 import android.content.Context
+import com.ioki.textref.TextRef
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
@@ -42,13 +43,17 @@ internal class AuroraReportNotifierTest {
     @Before
     fun setUp() {
         context = RuntimeEnvironment.application
+		val chance = Chance(0.5)
+		val chanceLevel = ChanceLevel.fromChance(chance)
 		mockNotificationManager = mock()
 		mockChanceEvaluator = mock()
-		mockChanceLevelFormatter = mock()
+		mockChanceLevelFormatter = mock {
+			whenever(it.format(chanceLevel)).thenReturn(TextRef("some chance"))
+		}
         mockAuroraReport = mock()
 		mockAnalytics = mock()
 		activityClass = Activity::class.java
-        whenever(mockChanceEvaluator.evaluate(any())).thenReturn(Chance(0.5))
+		whenever(mockChanceEvaluator.evaluate(any())).thenReturn(chance)
         impl = AuroraReportNotifier(
 			context,
 			mockNotificationManager,

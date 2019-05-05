@@ -6,6 +6,8 @@ import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
+import se.gustavkarlsson.koptional.Optional
+import se.gustavkarlsson.koptional.toOptional
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.Chance
@@ -13,16 +15,19 @@ import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
+import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.mapNotNull
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.krate.AuroraReportStreamCommand
+import se.gustavkarlsson.skylight.android.krate.SkylightState
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
 import se.gustavkarlsson.skylight.android.services.providers.Time
+import se.gustavkarlsson.skylight.android.util.ChanceToColorConverter
 import timber.log.Timber
 
 class MainViewModel(
@@ -39,6 +44,7 @@ class MainViewModel(
 	kpIndexFormatter: SingleValueFormatter<KpIndex>,
 	weatherChanceEvaluator: ChanceEvaluator<Weather>,
 	weatherFormatter: SingleValueFormatter<Weather>,
+	private val chanceToColorConverter: ChanceToColorConverter,
 	time: Time,
 	nowTextThreshold: Duration
 ) : ViewModel() {
@@ -48,9 +54,8 @@ class MainViewModel(
 	}
 
 	val errorMessages: Flowable<Int> = store.states
-		.filter { it.throwable != null }
-		.map {
-			val throwable = it.throwable
+		.mapNotNull { it.throwable }
+		.map { throwable ->
 			Timber.e(throwable)
 			R.string.error_unknown_update_error
 		}
@@ -93,87 +98,75 @@ class MainViewModel(
 		}
 		.distinctUntilChanged()
 
-	val darknessValue: Flowable<TextRef> = store.states
-		.map {
-			it.currentLocationAuroraReport
-				?.let(AuroraReport::darkness)
-				?.value
-				?.let(darknessFormatter::format)
-				?: TextRef("?")
-		}
-		.distinctUntilChanged()
+	val darkness: Flowable<FactorItem> = store.states
+		.toFactorItems(
+			AuroraReport::darkness,
+			darknessChanceEvaluator::evaluate,
+			darknessFormatter::format
+		)
 
-	val darknessChance: Flowable<Chance> = store.states
-		.map {
-			it.currentLocationAuroraReport
-				?.let(AuroraReport::darkness)
-				?.value
-				?.let(darknessChanceEvaluator::evaluate)
-				?: Chance.UNKNOWN
-		}
-		.distinctUntilChanged()
+	val geomagLocation: Flowable<FactorItem> = store.states
+		.toFactorItems(
+			AuroraReport::geomagLocation,
+			geomagLocationChanceEvaluator::evaluate,
+			geomagLocationFormatter::format
+		)
 
-	val geomagLocationValue: Flowable<TextRef> = store.states
-		.map {
-			it.currentLocationAuroraReport
-				?.let(AuroraReport::geomagLocation)
-				?.value
-				?.let(geomagLocationFormatter::format)
-				?: TextRef("?")
-		}
-		.distinctUntilChanged()
+	val kpIndex: Flowable<FactorItem> = store.states
+		.toFactorItems(
+			AuroraReport::kpIndex,
+			kpIndexChanceEvaluator::evaluate,
+			kpIndexFormatter::format
+		)
 
-	val geomagLocationChance: Flowable<Chance> = store.states
-		.map {
-			it.currentLocationAuroraReport
-				?.let(AuroraReport::geomagLocation)
-				?.value
-				?.let(geomagLocationChanceEvaluator::evaluate)
-				?: Chance.UNKNOWN
-		}
-		.distinctUntilChanged()
+	val weather: Flowable<FactorItem> = store.states
+		.toFactorItems(
+			AuroraReport::weather,
+			weatherChanceEvaluator::evaluate,
+			weatherFormatter::format
+		)
 
-	val kpIndexValue: Flowable<TextRef> = store.states
-		.map {
-			it.currentLocationAuroraReport
-				?.let(AuroraReport::kpIndex)
-				?.value
-				?.let(kpIndexFormatter::format)
-				?: TextRef("?")
-		}
-		.distinctUntilChanged()
+	private fun <T : Any> Flowable<SkylightState>.toFactorItems(
+		selectFactor: AuroraReport.() -> Report<T>,
+		evaluate: (T) -> Chance,
+		format: (T) -> TextRef
+	): Flowable<FactorItem> =
+		map { it.currentLocationAuroraReport?.selectFactor()?.value.toOptional() }
+			.distinctUntilChanged()
+			.map { it.toFactorItem(evaluate, format) }
 
-	val kpIndexChance: Flowable<Chance> = store.states
-		.map {
-			it.currentLocationAuroraReport
-				?.let(AuroraReport::kpIndex)
-				?.value
-				?.let(kpIndexChanceEvaluator::evaluate)
-				?: Chance.UNKNOWN
+	private fun <T : Any> Optional<T>.toFactorItem(
+		evaluate: (T) -> Chance,
+		format: (T) -> TextRef
+	): FactorItem {
+		val factor = value
+		return if (factor == null) {
+			FactorItem.EMPTY
+		} else {
+			val chance = evaluate(factor).value
+			FactorItem(
+				valueText = format(factor),
+				progress = chance,
+				progressColor = chanceToColorConverter.convert(chance)
+			)
 		}
-		.distinctUntilChanged()
-
-	val weatherValue: Flowable<TextRef> = store.states
-		.map {
-			it.currentLocationAuroraReport
-				?.let(AuroraReport::weather)
-				?.value
-				?.let(weatherFormatter::format)
-				?: TextRef("?")
-		}
-		.distinctUntilChanged()
-
-	val weatherChance: Flowable<Chance> = store.states
-		.map {
-			it.currentLocationAuroraReport
-				?.let(AuroraReport::weather)
-				?.value
-				?.let(weatherChanceEvaluator::evaluate)
-				?: Chance.UNKNOWN
-		}
-		.distinctUntilChanged()
+	}
 
 	override fun onCleared() {
 		store.issue(AuroraReportStreamCommand(false))
+	}
+}
+
+data class FactorItem(
+	val valueText: TextRef,
+	val progress: Double?,
+	val progressColor: Int
+) {
+	companion object {
+		val EMPTY = FactorItem(
+			valueText = TextRef("?"),
+			progress = null,
+			progressColor = ChanceToColorConverter.UNKNOWN_COLOR
+		)
 	}
 }

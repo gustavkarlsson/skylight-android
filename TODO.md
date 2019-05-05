@@ -1,6 +1,8 @@
 # TODO
+* Make sure layout ID survives lifecycle changes
 
 ## Soon
+* Show banner when no location or network
 * App bundles
 * Consider refresh after changing debug options
 * Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
@@ -27,7 +29,7 @@
 * Integrate code coverage (Coveralls or Codecov)
 * Look into using Spek (problems with junit5 and android)
 * Look into replacing evernote-job with WorkManager (difficult since it's hard to post results)
-* Firebase remote config
+* Firebase remote config, or move more stuff to backend?
 
 ## Never?
 * Rename chance to score?

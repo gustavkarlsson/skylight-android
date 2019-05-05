@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.test
+package se.gustavkarlsson.skylight.android.gui.kakao
 
 import androidx.appcompat.widget.Toolbar
 import androidx.test.espresso.assertion.ViewAssertions.matches
