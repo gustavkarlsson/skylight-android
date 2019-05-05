@@ -51,6 +51,7 @@ object Versions {
 	val ktxCore = "1.0.1"
 	val koin = "1.0.1"
 	val koptional = "0.2.0"
+	val uiAutomator = "2.2.0"
 
 	// Test
 	val junit = "4.12"
@@ -59,8 +60,9 @@ object Versions {
 	val mockitoKotlin = "1.6.0"
 	val commonsIo = "2.4"
 	val robolectric = "3.4.2"
-	val androidSupportTest = "1.1.0-alpha4"
-	val espresso = "3.1.0-alpha4"
+	val androidSupportTest = "1.1.0"
+	val espresso = "3.1.0"
+	val espressoIntents = "3.1.1"
 	val kakao = "1.3.0"
 	val textref = "1.2.0"
 	val rxtasks = "2.1.2"

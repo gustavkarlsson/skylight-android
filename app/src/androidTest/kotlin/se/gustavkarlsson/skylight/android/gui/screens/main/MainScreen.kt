@@ -4,11 +4,11 @@ import com.agoda.kakao.KTextView
 import com.agoda.kakao.KView
 import com.agoda.kakao.Screen
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.test.KBottomSheetDialogFragment
-import se.gustavkarlsson.skylight.android.test.KOutsideBottomSheetDialogFragment
-import se.gustavkarlsson.skylight.android.test.KToolbar
+import se.gustavkarlsson.skylight.android.gui.kakao.KBottomSheetDialogFragment
+import se.gustavkarlsson.skylight.android.gui.kakao.KOutsideBottomSheetDialogFragment
+import se.gustavkarlsson.skylight.android.gui.kakao.KToolbar
 
-class MainScreen : Screen<MainScreen>() {
+object MainScreen : Screen<MainScreen>() {
 	val toolbar = KToolbar { withId(R.id.toolbar) }
 	val chance = KTextView { withId(R.id.chance) }
 	val timeSinceUpdate = KTextView { withId(R.id.timeSinceUpdate) }
@@ -19,5 +19,11 @@ class MainScreen : Screen<MainScreen>() {
 	val weatherCard = KView { withId(R.id.weatherCard) }
 
 	val detailView = KBottomSheetDialogFragment()
-	val outsideDetailView = KOutsideBottomSheetDialogFragment()
+	val outsideDetailView =
+		KOutsideBottomSheetDialogFragment()
+
+	fun isDisplayed() {
+		chance.isDisplayed()
+		kpIndexCard.isDisplayed()
+	}
 }
