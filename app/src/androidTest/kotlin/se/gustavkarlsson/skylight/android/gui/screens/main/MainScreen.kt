@@ -24,7 +24,6 @@ object MainScreen : Screen<MainScreen>() {
 
 	fun isDisplayed() {
 		chance.isDisplayed()
-		timeSinceUpdate.isDisplayed()
 		kpIndexCard.isDisplayed()
 	}
 }

@@ -3,7 +3,8 @@ package se.gustavkarlsson.skylight.android.navigation
 import androidx.annotation.IdRes
 import se.gustavkarlsson.skylight.android.R
 
-enum class Screen(@IdRes val id: Int, val alwaysOnTop: Boolean) {
+enum class Screen(@IdRes val id: Int, val popOnLeave: Boolean) {
+	START(R.id.startFragment, true),
 	MAIN(R.id.mainFragment, false),
 	SETTINGS(R.id.settingsFragment, false),
 	ABOUT(R.id.aboutFragment, false),
@@ -13,7 +14,7 @@ enum class Screen(@IdRes val id: Int, val alwaysOnTop: Boolean) {
 
 	companion object {
 		fun fromId(@IdRes id: Int): Screen {
-			return Screen.values().find { it.id == id }
+			return values().find { it.id == id }
 				?: throw IllegalArgumentException("No screen with id $id found")
 		}
 	}
