@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Build
 import io.reactivex.Single
 import org.koin.dsl.module.module
-import java.util.*
+import java.util.Locale
 
 val localizationModule = module {
 

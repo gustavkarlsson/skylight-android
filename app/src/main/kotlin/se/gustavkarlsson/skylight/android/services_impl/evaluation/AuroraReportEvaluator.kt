@@ -1,6 +1,11 @@
 package se.gustavkarlsson.skylight.android.services_impl.evaluation
 
-import se.gustavkarlsson.skylight.android.entities.*
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.Chance
+import se.gustavkarlsson.skylight.android.entities.Darkness
+import se.gustavkarlsson.skylight.android.entities.GeomagLocation
+import se.gustavkarlsson.skylight.android.entities.KpIndex
+import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 
 class AuroraReportEvaluator(

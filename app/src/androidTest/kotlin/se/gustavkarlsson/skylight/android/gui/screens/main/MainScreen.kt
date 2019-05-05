@@ -18,9 +18,8 @@ object MainScreen : Screen<MainScreen>() {
 	val geomagLocationCard = KView { withId(R.id.geomagLocationCard) }
 	val weatherCard = KView { withId(R.id.weatherCard) }
 
-	val detailView = KBottomSheetDialogFragment()
-	val outsideDetailView =
-		KOutsideBottomSheetDialogFragment()
+	val detailView = KBottomSheetDialogFragment
+	val outsideDetailView = KOutsideBottomSheetDialogFragment
 
 	fun isDisplayed() {
 		chance.isDisplayed()

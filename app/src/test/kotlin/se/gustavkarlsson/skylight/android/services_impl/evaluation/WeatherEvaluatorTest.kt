@@ -13,12 +13,7 @@ import se.gustavkarlsson.skylight.android.entities.Weather
 
 class WeatherEvaluatorTest {
 
-    lateinit var impl: WeatherEvaluator
-
-    @Before
-    fun setUp() {
-        impl = WeatherEvaluator()
-    }
+    private val impl = WeatherEvaluator
 
     @Test
     fun _0CloudPercentageEvaluatesToMax() {

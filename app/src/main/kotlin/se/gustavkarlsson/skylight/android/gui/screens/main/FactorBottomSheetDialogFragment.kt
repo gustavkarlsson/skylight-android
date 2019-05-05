@@ -8,7 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.layout_factor_bottom_sheet.*
+import kotlinx.android.synthetic.main.layout_factor_bottom_sheet.description
+import kotlinx.android.synthetic.main.layout_factor_bottom_sheet.title
 import se.gustavkarlsson.skylight.android.R
 
 class FactorBottomSheetDialogFragment : BottomSheetDialogFragment() {

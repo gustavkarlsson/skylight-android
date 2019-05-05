@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.services_impl.evaluation
 import assertk.assert
 import assertk.assertions.isBetween
 import assertk.assertions.isEqualTo
-import org.junit.Before
 import org.junit.Test
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.IMPOSSIBLE
@@ -12,12 +11,7 @@ import se.gustavkarlsson.skylight.android.entities.Darkness
 
 class DarknessEvaluatorTest {
 
-	lateinit var impl: DarknessEvaluator
-
-	@Before
-	fun setUp() {
-		impl = DarknessEvaluator()
-	}
+	private val impl = DarknessEvaluator
 
 	@Test
 	fun _0ZenithAngleEvaluatesToImpossible() {

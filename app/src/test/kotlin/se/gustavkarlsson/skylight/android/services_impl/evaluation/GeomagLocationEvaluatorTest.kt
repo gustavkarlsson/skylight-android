@@ -3,22 +3,16 @@ package se.gustavkarlsson.skylight.android.services_impl.evaluation
 import assertk.assert
 import assertk.assertions.isBetween
 import assertk.assertions.isEqualTo
-import org.junit.Before
 import org.junit.Test
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.IMPOSSIBLE
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.MAX
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
-import se.gustavkarlsson.skylight.android.services_impl.evaluation.GeomagLocationEvaluator.Companion.BEST
+import se.gustavkarlsson.skylight.android.services_impl.evaluation.GeomagLocationEvaluator.BEST
 
 class GeomagLocationEvaluatorTest {
 
-    lateinit var impl: GeomagLocationEvaluator
-
-    @Before
-    fun setUp() {
-        impl = GeomagLocationEvaluator()
-    }
+    private val impl = GeomagLocationEvaluator
 
     @Test
     fun _0LatitudeEvaluatesToImpossible() {

@@ -4,4 +4,4 @@ import com.agoda.kakao.KBaseView
 import com.agoda.kakao.KView
 import se.gustavkarlsson.skylight.android.R
 
-class KBottomSheetDialogFragment : KBaseView<KView>({ withId(R.id.design_bottom_sheet) })
+object KBottomSheetDialogFragment : KBaseView<KView>({ withId(R.id.design_bottom_sheet) })

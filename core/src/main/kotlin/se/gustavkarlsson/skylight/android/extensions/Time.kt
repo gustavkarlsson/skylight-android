@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.extensions
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import org.threeten.bp.temporal.Temporal
-import java.util.*
+import java.util.GregorianCalendar
 
 infix fun Temporal.until(other: Temporal): Duration = Duration.between(this, other)
 

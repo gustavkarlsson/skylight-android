@@ -39,7 +39,7 @@ class Skylight : MultiDexApplication() {
 		initLogging()
 		AndroidThreeTen.init(this)
 		initRxJavaErrorHandling()
-		startKoin(this, modules, logger = KoinTimberLogger())
+		startKoin(this, modules, logger = KoinTimberLogger)
 		setupSettingsAnalytics()
 		store.issue(BootstrapCommand)
 		store.issue(SettingsStreamCommand(true))

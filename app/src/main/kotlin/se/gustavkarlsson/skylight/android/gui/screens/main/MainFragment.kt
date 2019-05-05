@@ -10,6 +10,7 @@ import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.visibility
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
+import io.reactivex.Flowable
 import kotlinx.android.synthetic.main.fragment_main.chance
 import kotlinx.android.synthetic.main.fragment_main.darknessCard
 import kotlinx.android.synthetic.main.fragment_main.drawerLayout

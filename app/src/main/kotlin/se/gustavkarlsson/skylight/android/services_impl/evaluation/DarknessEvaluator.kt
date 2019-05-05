@@ -4,7 +4,7 @@ import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 
-class DarknessEvaluator : ChanceEvaluator<Darkness> {
+object DarknessEvaluator : ChanceEvaluator<Darkness> {
 
 	// Technique explained here: https://stackoverflow.com/a/7869457/940731
     override fun evaluate(value: Darkness): Chance {

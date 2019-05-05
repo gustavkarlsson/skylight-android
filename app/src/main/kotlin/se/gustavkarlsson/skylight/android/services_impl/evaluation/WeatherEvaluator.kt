@@ -5,7 +5,7 @@ import se.gustavkarlsson.skylight.android.entities.Chance.Companion.UNKNOWN
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 
-class WeatherEvaluator : ChanceEvaluator<Weather> {
+object WeatherEvaluator : ChanceEvaluator<Weather> {
 
     override fun evaluate(value: Weather): Chance {
         val clouds = value.cloudPercentage

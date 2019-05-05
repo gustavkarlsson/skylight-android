@@ -56,7 +56,7 @@ abstract class BaseFragment(
 		analytics.logScreen(requireActivity(), this::class.java.simpleName)
 	}
 
-	protected open fun getToolbar(): Toolbar? = null
+	protected open val toolbar: Toolbar? = null
 
 	protected open fun initView() = Unit
 
