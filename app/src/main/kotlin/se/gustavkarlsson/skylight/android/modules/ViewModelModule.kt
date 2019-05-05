@@ -11,27 +11,33 @@ import se.gustavkarlsson.skylight.android.gui.screens.googleplayservices.GoogleP
 import se.gustavkarlsson.skylight.android.gui.screens.intro.IntroViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.permission.PermissionViewModel
+import se.gustavkarlsson.skylight.android.util.ChanceToColorConverter
 
 val viewModelModule = module {
+
+	single {
+		ChanceToColorConverter(get())
+	}
 
 	viewModel {
 		val context = get<Context>()
 		MainViewModel(
-			get(),
-			context.getString(R.string.main_your_location),
-			get("auroraReport"),
-			get(),
-			get("chanceLevel"),
-			get("darkness"),
-			get("darkness"),
-			get("geomagLocation"),
-			get("geomagLocation"),
-			get("kpIndex"),
-			get("kpIndex"),
-			get("weather"),
-			get("weather"),
-			get(),
-			1.minutes
+			store = get(),
+			defaultLocationName = context.getString(R.string.main_your_location),
+			auroraChanceEvaluator = get("auroraReport"),
+			relativeTimeFormatter = get(),
+			chanceLevelFormatter = get("chanceLevel"),
+			darknessChanceEvaluator = get("darkness"),
+			darknessFormatter = get("darkness"),
+			geomagLocationChanceEvaluator = get("geomagLocation"),
+			geomagLocationFormatter = get("geomagLocation"),
+			kpIndexChanceEvaluator = get("kpIndex"),
+			kpIndexFormatter = get("kpIndex"),
+			weatherChanceEvaluator = get("weather"),
+			weatherFormatter = get("weather"),
+			chanceToColorConverter = get(),
+			time = get(),
+			nowTextThreshold = 1.minutes
 		)
 	}
 

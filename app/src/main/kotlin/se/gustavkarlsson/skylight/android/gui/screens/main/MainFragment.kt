@@ -1,29 +1,28 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
+import android.content.res.ColorStateList
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Lifecycle
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
+import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.visibility
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
-import kotlinx.android.synthetic.main.fragment_main.chance
-import kotlinx.android.synthetic.main.fragment_main.darknessCard
-import kotlinx.android.synthetic.main.fragment_main.geomagLocationCard
-import kotlinx.android.synthetic.main.fragment_main.kpIndexCard
-import kotlinx.android.synthetic.main.fragment_main.timeSinceUpdate
-import kotlinx.android.synthetic.main.fragment_main.toolbar
-import kotlinx.android.synthetic.main.fragment_main.weatherCard
+import io.reactivex.Flowable
+import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.doOnNext
 import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
 import se.gustavkarlsson.skylight.android.gui.BaseFragment
+import se.gustavkarlsson.skylight.android.gui.views.FactorCard
 import se.gustavkarlsson.skylight.android.navigation.Navigator
 import se.gustavkarlsson.skylight.android.navigation.Screen
 import timber.log.Timber
+import kotlin.math.roundToInt
 
 class MainFragment : BaseFragment(R.layout.fragment_main) {
 
@@ -81,34 +80,30 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 			.autoDisposable(scope)
 			.subscribe(timeSinceUpdate.visibility())
 
-		FactorPresenter(
-			viewModel.darknessValue, viewModel.darknessChance,
+		viewModel.darkness.present(
 			darknessCard,
 			::showDarknessDetails,
 			scope,
 			"darkness"
-		).present()
-		FactorPresenter(
-			viewModel.geomagLocationValue, viewModel.geomagLocationChance,
+		)
+		viewModel.geomagLocation.present(
 			geomagLocationCard,
 			::showGeomagLocationDetails,
 			scope,
 			"geomagLocation"
-		).present()
-		FactorPresenter(
-			viewModel.kpIndexValue, viewModel.kpIndexChance,
+		)
+		viewModel.kpIndex.present(
 			kpIndexCard,
 			::showKpIndexDetails,
 			scope,
 			"kpIndex"
-		).present()
-		FactorPresenter(
-			viewModel.weatherValue, viewModel.weatherChance,
+		)
+		viewModel.weather.present(
 			weatherCard,
 			::showWeatherDetails,
 			scope,
 			"weather"
-		).present()
+		)
 	}
 
 	private fun showKpIndexDetails() {
@@ -150,5 +145,29 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
 				}
 			currentBottomSheetTitle = title
 		}
+	}
+
+	private fun Flowable<FactorItem>.present(
+		cardView: FactorCard,
+		onCardClick: () -> Unit,
+		scope: LifecycleScopeProvider<*>,
+		factorDebugName: String
+	) {
+		val maxProgress = (cardView.progressView.max * 0.97).roundToInt()
+		val minProgress = (cardView.progressView.max - maxProgress)
+
+		doOnNext { Timber.d("Updating %s factor card: %s", factorDebugName, it) }
+			.autoDisposable(scope)
+			.subscribe { item ->
+				cardView.valueView.text = item.valueText.resolve(cardView.context)
+				cardView.progressView.progressTintList = ColorStateList.valueOf(item.progressColor)
+				cardView.progressView.progress = item.progress?.let { progressPercent ->
+					(progressPercent * maxProgress).roundToInt() + minProgress
+				} ?: 0
+			}
+
+		cardView.clicks()
+			.autoDisposable(scope)
+			.subscribe { onCardClick() }
 	}
 }
