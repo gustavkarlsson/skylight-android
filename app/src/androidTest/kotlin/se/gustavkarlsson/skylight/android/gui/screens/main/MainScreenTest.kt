@@ -1,9 +1,8 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.Espresso.*
+import androidx.test.espresso.Espresso.pressBackUnconditionally
 import androidx.test.filters.LargeTest
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.agoda.kakao.KView
 import org.junit.Before
 import org.junit.Rule

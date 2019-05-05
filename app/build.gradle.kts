@@ -198,6 +198,7 @@ dependencies {
 	}
 	androidTestImplementation("androidx.annotation:annotation:${versions.androidAnnotation}")
 	androidTestImplementation("androidx.test:runner:${versions.androidSupportTest}")
+	androidTestImplementation("androidx.test.ext:junit:${versions.androidSupportTest}")
 	androidTestImplementation("androidx.test:rules:${versions.androidSupportTest}")
 	androidTestUtil("androidx.test:orchestrator:${versions.androidSupportTest}")
 	androidTestImplementation("androidx.test.espresso:espresso-core:${versions.espresso}")

@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.gui.screens.intro
 
 import androidx.test.espresso.Espresso.pressBackUnconditionally
 import androidx.test.filters.LargeTest
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

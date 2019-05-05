@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.gui.screens.permission
 
 import androidx.test.espresso.Espresso.pressBackUnconditionally
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import androidx.test.runner.AndroidJUnit4
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -11,7 +11,11 @@ import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 import se.gustavkarlsson.skylight.android.gui.MainActivity
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainScreen
-import se.gustavkarlsson.skylight.android.gui.utils.*
+import se.gustavkarlsson.skylight.android.gui.utils.ManualLaunchActivityTestRule
+import se.gustavkarlsson.skylight.android.gui.utils.allowPermission
+import se.gustavkarlsson.skylight.android.gui.utils.denyPermission
+import se.gustavkarlsson.skylight.android.gui.utils.denyPermissionForever
+import se.gustavkarlsson.skylight.android.gui.utils.verifyIsFinishing
 import se.gustavkarlsson.skylight.android.modules.TestPermissionChecker
 
 @RunWith(AndroidJUnit4::class)
