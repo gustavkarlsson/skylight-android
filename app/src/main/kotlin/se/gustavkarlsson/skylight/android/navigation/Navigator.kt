@@ -18,39 +18,31 @@ class Navigator(private val navController: NavController) {
 
 	private fun getNavOptions(currentScreen: Screen, targetScreen: Screen): NavOptions {
 		return navOptions {
-			popIfOnTop(currentScreen)
-			setAnimation(getAnimationDirection(currentScreen, targetScreen))
-		}
-	}
-
-	private fun NavOptionsBuilder.popIfOnTop(screen: Screen) {
-		if (screen.alwaysOnTop) {
-			popUpTo(screen.id) { inclusive = true }
-		}
-	}
-
-	private fun getAnimationDirection(
-		currentScreen: Screen,
-		targetScreen: Screen
-	): AnimationDirection {
-		return when {
-			!currentScreen.alwaysOnTop && targetScreen.alwaysOnTop -> {
-				AnimationDirection.VERTICAL
+			setPopUpTo(currentScreen, targetScreen)
+			val direction = when {
+				!currentScreen.alwaysOnTop && targetScreen.alwaysOnTop -> {
+					AnimationDirection.VERTICAL
+				}
+				currentScreen.alwaysOnTop && !targetScreen.alwaysOnTop -> {
+					AnimationDirection.VERTICAL_INVERSE
+				}
+				else -> AnimationDirection.HORIZONTAL
 			}
-			currentScreen.alwaysOnTop && !targetScreen.alwaysOnTop -> {
-				AnimationDirection.VERTICAL_INVERSE
+			anim {
+				direction.run {
+					enter = enterAnim
+					exit = exitAnim
+					popEnter = popEnterAnim
+					popExit = popExitAnim
+				}
 			}
-			else -> AnimationDirection.HORIZONTAL
 		}
 	}
 
-	private fun NavOptionsBuilder.setAnimation(direction: AnimationDirection) {
-		anim {
-			direction.let {
-				enter = it.enterAnim
-				exit = it.exitAnim
-				popEnter = it.popEnterAnim
-				popExit = it.popExitAnim
+	private fun NavOptionsBuilder.setPopUpTo(currentScreen: Screen, targetScreen: Screen) {
+		if (currentScreen.alwaysOnTop || targetScreen.alwaysOnTop) {
+			popUpTo(currentScreen.id) {
+				inclusive = true
 			}
 		}
 	}

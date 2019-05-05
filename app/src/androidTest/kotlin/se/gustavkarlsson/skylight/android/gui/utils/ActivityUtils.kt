@@ -1,9 +1,8 @@
 package se.gustavkarlsson.skylight.android.gui.utils
 
-import androidx.fragment.app.FragmentActivity
-import assertk.assert
-import assertk.assertions.isEqualTo
+import android.app.Activity
+import assertk.assertions.isTrue
 
-fun FragmentActivity.assertBackStackCount(expected: Int) {
-	assert(supportFragmentManager.backStackEntryCount).isEqualTo(expected)
+fun Activity.verifyIsFinishing() {
+	assertk.assert(isFinishing, "activity is finishing").isTrue()
 }

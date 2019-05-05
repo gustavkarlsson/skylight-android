@@ -13,7 +13,6 @@ import se.gustavkarlsson.skylight.android.gui.MainActivity
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainScreen
 import se.gustavkarlsson.skylight.android.gui.utils.ManualLaunchActivityTestRule
 import se.gustavkarlsson.skylight.android.gui.utils.allowPermission
-import se.gustavkarlsson.skylight.android.gui.utils.assertBackStackCount
 import se.gustavkarlsson.skylight.android.gui.utils.denyPermission
 import se.gustavkarlsson.skylight.android.gui.utils.denyPermissionForever
 import se.gustavkarlsson.skylight.android.gui.utils.verifyIsFinishing
@@ -36,8 +35,9 @@ class PermissionScreenTest : KoinComponent {
 	}
 
 	@Test
-	fun isTopOfBackStack() {
-		testRule.activity.assertBackStackCount(0)
+	fun clickingBackFinishesActivity() {
+		pressBackUnconditionally()
+		testRule.activity.verifyIsFinishing()
 	}
 
 	@Test
