@@ -33,9 +33,7 @@ class MainScreenTest : KoinComponent {
 
 	@Test
 	fun locationTextShowsActualLocation() {
-		screen {
-			toolbar.hasTitle(testLocationNameProvider.delegate().unsafeValue)
-		}
+		screen.toolbar.hasTitle(testLocationNameProvider.delegate().unsafeValue)
 	}
 
 	@Test
@@ -53,10 +51,26 @@ class MainScreenTest : KoinComponent {
 	@Test
 	fun openAndCloseAllDetailViews() {
 		screen {
-			verifyFactorClickOpensDetailView(kpIndexCard, R.string.factor_kp_index_title_full, R.string.factor_kp_index_desc)
-			verifyFactorClickOpensDetailView(darknessCard, R.string.factor_darkness_title_full, R.string.factor_darkness_desc)
-			verifyFactorClickOpensDetailView(geomagLocationCard, R.string.factor_geomag_location_title_full, R.string.factor_geomag_location_desc)
-			verifyFactorClickOpensDetailView(weatherCard, R.string.factor_weather_title_full, R.string.factor_weather_desc)
+			verifyFactorClickOpensDetailView(
+				kpIndexCard,
+				R.string.factor_kp_index_title_full,
+				R.string.factor_kp_index_desc
+			)
+			verifyFactorClickOpensDetailView(
+				darknessCard,
+				R.string.factor_darkness_title_full,
+				R.string.factor_darkness_desc
+			)
+			verifyFactorClickOpensDetailView(
+				geomagLocationCard,
+				R.string.factor_geomag_location_title_full,
+				R.string.factor_geomag_location_desc
+			)
+			verifyFactorClickOpensDetailView(
+				weatherCard,
+				R.string.factor_weather_title_full,
+				R.string.factor_weather_desc
+			)
 		}
 	}
 

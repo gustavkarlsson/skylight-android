@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.test.TestRunVersionManager
 val testRunVersionsModule = module {
 
 	single {
-		TestRunVersionManager { false }
+		TestRunVersionManager(false)
 	}
 
 	single<RunVersionManager>(override = true) {

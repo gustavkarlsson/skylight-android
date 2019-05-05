@@ -1,14 +1,19 @@
 package se.gustavkarlsson.skylight.android.test
 
+import com.jakewharton.rxrelay2.BehaviorRelay
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
 import se.gustavkarlsson.skylight.android.services.RunVersionManager
 
 class TestRunVersionManager(
-	var delegateIsFirstRun: () -> Boolean
+	initialIsFirstRun: Boolean
 ) : RunVersionManager {
 
-	override val isFirstRun: Boolean
-		get() = delegateIsFirstRun()
+	val isFirstRunRelay = BehaviorRelay.createDefault(initialIsFirstRun)
 
-	override fun signalFirstRunCompleted() = Unit
+	override val isFirstRun: Flowable<Boolean> =
+		isFirstRunRelay.toFlowable(BackpressureStrategy.LATEST)
+
+	override fun signalFirstRunCompleted() = isFirstRunRelay.accept(false)
 
 }

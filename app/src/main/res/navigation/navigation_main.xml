@@ -5,8 +5,7 @@
 
 	<fragment
 		android:id="@+id/mainFragment"
-		android:name="se.gustavkarlsson.skylight.android.gui.screens.main.MainFragment"
-		android:label="@string/app_name" />
+		android:name="se.gustavkarlsson.skylight.android.gui.screens.main.MainFragment" />
 
 	<fragment
 		android:id="@+id/introFragment"

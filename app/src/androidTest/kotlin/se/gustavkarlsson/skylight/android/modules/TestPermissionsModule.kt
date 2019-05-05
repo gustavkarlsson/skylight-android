@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.test.TestPermissionChecker
 val testPermissionsModule = module {
 
 	single {
-		TestPermissionChecker { true }
+		TestPermissionChecker(true)
 	}
 
 	single<PermissionChecker>(override = true) {

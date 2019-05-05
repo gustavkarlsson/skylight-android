@@ -20,4 +20,10 @@ class MainScreen : Screen<MainScreen>() {
 
 	val detailView = KBottomSheetDialogFragment()
 	val outsideDetailView = KOutsideBottomSheetDialogFragment()
+
+	fun isDisplayed() {
+		chance.isDisplayed()
+		timeSinceUpdate.isDisplayed()
+		kpIndexCard.isDisplayed()
+	}
 }

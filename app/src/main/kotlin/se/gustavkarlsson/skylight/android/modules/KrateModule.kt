@@ -7,22 +7,7 @@ import org.koin.dsl.module.module
 import se.gustavkarlsson.krate.core.dsl.buildStore
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.krate.AuroraReportResult
-import se.gustavkarlsson.skylight.android.krate.AuroraReportStreamCommand
-import se.gustavkarlsson.skylight.android.krate.BootstrapCommand
-import se.gustavkarlsson.skylight.android.krate.FirstRunResult
-import se.gustavkarlsson.skylight.android.krate.GetAuroraReportCommand
-import se.gustavkarlsson.skylight.android.krate.GooglePlayServicesResult
-import se.gustavkarlsson.skylight.android.krate.LocationPermissionResult
-import se.gustavkarlsson.skylight.android.krate.SettingsResult
-import se.gustavkarlsson.skylight.android.krate.SettingsStreamCommand
-import se.gustavkarlsson.skylight.android.krate.SignalFirstRunCompleted
-import se.gustavkarlsson.skylight.android.krate.SignalGooglePlayServicesInstalled
-import se.gustavkarlsson.skylight.android.krate.SignalLocationPermissionGranted
-import se.gustavkarlsson.skylight.android.krate.SkylightCommand
-import se.gustavkarlsson.skylight.android.krate.SkylightResult
-import se.gustavkarlsson.skylight.android.krate.SkylightState
-import se.gustavkarlsson.skylight.android.krate.SkylightStore
+import se.gustavkarlsson.skylight.android.krate.*
 import se.gustavkarlsson.skylight.android.services.GooglePlayServicesChecker
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import se.gustavkarlsson.skylight.android.services.RunVersionManager
@@ -45,10 +30,8 @@ val krateModule = module {
 			commands {
 				transform<BootstrapCommand> { commands ->
 					commands.firstOrError()
-						.map<SkylightResult> {
-							LocationPermissionResult(permissionChecker.isLocationGranted)
-						}
-						.toFlowable()
+						.flatMapPublisher { permissionChecker.isLocationGranted }
+						.map(::LocationPermissionResult)
 				}
 
 				transform<BootstrapCommand> { commands ->
@@ -61,26 +44,8 @@ val krateModule = module {
 
 				transform<BootstrapCommand> { commands ->
 					commands.firstOrError()
-						.map<SkylightResult> {
-							FirstRunResult(runVersionManager.isFirstRun)
-						}
-						.toFlowable()
-				}
-
-				transform<SignalFirstRunCompleted> { commands ->
-					commands
-						.doOnNext {
-							runVersionManager.signalFirstRunCompleted()
-						}
-						.map {
-							FirstRunResult(false)
-						}
-				}
-
-				transform<SignalLocationPermissionGranted> { commands ->
-					commands.map {
-						LocationPermissionResult(true)
-					}
+						.flatMapPublisher { runVersionManager.isFirstRun }
+						.map(::FirstRunResult)
 				}
 
 				transform<SignalGooglePlayServicesInstalled> { commands ->
@@ -129,6 +94,14 @@ val krateModule = module {
 				}
 				if (BuildConfig.DEBUG) {
 					watch<SkylightCommand> { Timber.d("Got command: %s", it) }
+				}
+
+				watch<SignalLocationPermissionGranted> {
+					permissionChecker.signalPermissionGranted()
+				}
+
+				watch<SignalFirstRunCompleted> {
+					runVersionManager.signalFirstRunCompleted()
 				}
 			}
 
