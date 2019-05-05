@@ -13,7 +13,7 @@ enum class Screen(@IdRes val id: Int, val alwaysOnTop: Boolean) {
 
 	companion object {
 		fun fromId(@IdRes id: Int): Screen {
-			return Screen.values().find { it.id == id }
+			return values().find { it.id == id }
 				?: throw IllegalArgumentException("No screen with id $id found")
 		}
 	}

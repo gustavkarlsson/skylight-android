@@ -13,6 +13,7 @@ import org.koin.standalone.inject
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.gui.MainActivity
 import se.gustavkarlsson.skylight.android.gui.utils.ManualLaunchActivityTestRule
+import se.gustavkarlsson.skylight.android.gui.utils.assertBackStackCount
 import se.gustavkarlsson.skylight.android.gui.utils.verifyIsFinishing
 import se.gustavkarlsson.skylight.android.modules.TestLocationNameProvider
 
@@ -75,9 +76,8 @@ class MainScreenTest : KoinComponent {
 	}
 
 	@Test
-	fun clickingBackFinishesActivity() {
-		pressBackUnconditionally()
-		testRule.activity.verifyIsFinishing()
+	fun isTopOfBackStack() {
+		testRule.activity.assertBackStackCount(0)
 	}
 
 	private fun verifyFactorClickOpensDetailView(cardView: KView, title: Int, description: Int) {

@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.gui.screens.googleplayservices
 
-import androidx.test.espresso.Espresso.pressBackUnconditionally
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import org.junit.Before
@@ -11,7 +10,7 @@ import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 import se.gustavkarlsson.skylight.android.gui.MainActivity
 import se.gustavkarlsson.skylight.android.gui.utils.ManualLaunchActivityTestRule
-import se.gustavkarlsson.skylight.android.gui.utils.verifyIsFinishing
+import se.gustavkarlsson.skylight.android.gui.utils.assertBackStackCount
 import se.gustavkarlsson.skylight.android.modules.TestGooglePlayServicesChecker
 
 @RunWith(AndroidJUnit4::class)
@@ -31,9 +30,8 @@ class GooglePlayServicesTest : KoinComponent {
 	}
 
 	@Test
-	fun clickingBackFinishesActivity() {
-		pressBackUnconditionally()
-		testRule.activity.verifyIsFinishing()
+	fun isTopOfBackStack() {
+		testRule.activity.assertBackStackCount(0)
 	}
 
 	// TODO Add tests simulating installing Google Play Services
