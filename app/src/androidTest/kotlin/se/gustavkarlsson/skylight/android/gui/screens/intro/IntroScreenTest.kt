@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.gui.screens.intro
 
 import androidx.test.espresso.Espresso.pressBackUnconditionally
-import androidx.test.filters.LargeTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.LargeTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -24,8 +24,7 @@ class IntroScreenTest : KoinComponent {
 
 	@Rule
 	@JvmField
-	var testRule =
-		ManualLaunchActivityTestRule(MainActivity::class)
+	var testRule = ManualLaunchActivityTestRule(MainActivity::class)
 
 	private val testRunVersionManager: TestRunVersionManager by inject()
 	private val testTestPermissionChecker: TestPermissionChecker by inject()

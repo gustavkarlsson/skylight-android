@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
 import androidx.test.espresso.Espresso.pressBackUnconditionally
-import androidx.test.filters.LargeTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.LargeTest
 import com.agoda.kakao.KView
 import org.junit.Before
 import org.junit.Rule
@@ -22,8 +22,7 @@ class MainScreenTest : KoinComponent {
 
 	@Rule
 	@JvmField
-	var testRule =
-		ManualLaunchActivityTestRule(MainActivity::class)
+	var testRule = ManualLaunchActivityTestRule(MainActivity::class)
 
 	private val testLocationNameProvider: TestLocationNameProvider by inject()
 

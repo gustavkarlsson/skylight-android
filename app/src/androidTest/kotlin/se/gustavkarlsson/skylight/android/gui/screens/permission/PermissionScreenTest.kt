@@ -24,8 +24,7 @@ class PermissionScreenTest : KoinComponent {
 
 	@Rule
 	@JvmField
-	var testRule =
-		ManualLaunchActivityTestRule(MainActivity::class)
+	var testRule = ManualLaunchActivityTestRule(MainActivity::class)
 
 	private val testTestPermissionChecker: TestPermissionChecker by inject()
 

@@ -36,22 +36,14 @@ val krateModule = module {
 
 				transform<BootstrapCommand> { commands ->
 					commands.firstOrError()
-						.map<SkylightResult> {
-							GooglePlayServicesResult(googlePlayServicesChecker.isAvailable)
-						}
-						.toFlowable()
+						.flatMapPublisher { googlePlayServicesChecker.isAvailable }
+						.map(::GooglePlayServicesResult)
 				}
 
 				transform<BootstrapCommand> { commands ->
 					commands.firstOrError()
 						.flatMapPublisher { runVersionManager.isFirstRun }
 						.map(::FirstRunResult)
-				}
-
-				transform<SignalGooglePlayServicesInstalled> { commands ->
-					commands.map {
-						GooglePlayServicesResult(true)
-					}
 				}
 
 				transform<GetAuroraReportCommand> { commands ->
@@ -102,6 +94,10 @@ val krateModule = module {
 
 				watch<SignalFirstRunCompleted> {
 					runVersionManager.signalFirstRunCompleted()
+				}
+
+				watch<SignalGooglePlayServicesInstalled> {
+					googlePlayServicesChecker.signalInstalled()
 				}
 			}
 
