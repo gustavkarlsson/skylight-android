@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.test
+package se.gustavkarlsson.skylight.android.gui.kakao
 
 import com.agoda.kakao.KBaseView
 import com.agoda.kakao.KView

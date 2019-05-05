@@ -208,6 +208,7 @@ dependencies {
 	}
 	androidTestImplementation("commons-io:commons-io:${versions.commonsIo}")
 	androidTestImplementation("com.agoda.kakao:kakao:${versions.kakao}")
+	androidTestImplementation("androidx.test.uiautomator:uiautomator:${versions.uiAutomator}")
 }
 
 /**

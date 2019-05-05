@@ -5,7 +5,7 @@ import com.agoda.kakao.KTextView
 import com.agoda.kakao.Screen
 import se.gustavkarlsson.skylight.android.R
 
-class IntroScreen : Screen<IntroScreen>() {
+object IntroScreen : Screen<IntroScreen>() {
 	val privacyPolicyLink = KTextView { withId(R.id.privacyPolicyLink) }
 	val nextButton = KButton { withId(R.id.nextButton) }
 }

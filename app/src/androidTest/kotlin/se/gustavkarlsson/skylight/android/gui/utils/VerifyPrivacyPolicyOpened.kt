@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.test
+package se.gustavkarlsson.skylight.android.gui.utils
 
 import android.content.Intent
 import androidx.test.espresso.intent.Intents.intended

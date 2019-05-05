@@ -1,5 +1,7 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
+import androidx.test.espresso.Espresso
+import androidx.test.espresso.Espresso.*
 import androidx.test.filters.LargeTest
 import androidx.test.runner.AndroidJUnit4
 import com.agoda.kakao.KView
@@ -11,8 +13,9 @@ import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.gui.MainActivity
-import se.gustavkarlsson.skylight.android.test.ManualLaunchActivityTestRule
-import se.gustavkarlsson.skylight.android.test.TestLocationNameProvider
+import se.gustavkarlsson.skylight.android.gui.utils.ManualLaunchActivityTestRule
+import se.gustavkarlsson.skylight.android.gui.utils.verifyIsFinishing
+import se.gustavkarlsson.skylight.android.modules.TestLocationNameProvider
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
@@ -20,11 +23,10 @@ class MainScreenTest : KoinComponent {
 
 	@Rule
 	@JvmField
-	var testRule = ManualLaunchActivityTestRule(MainActivity::class)
+	var testRule =
+		ManualLaunchActivityTestRule(MainActivity::class)
 
 	private val testLocationNameProvider: TestLocationNameProvider by inject()
-
-	private val screen = MainScreen()
 
 	@Before
 	fun setUp() {
@@ -33,12 +35,12 @@ class MainScreenTest : KoinComponent {
 
 	@Test
 	fun locationTextShowsActualLocation() {
-		screen.toolbar.hasTitle(testLocationNameProvider.delegate().unsafeValue)
+		MainScreen.toolbar.hasTitle(testLocationNameProvider.delegate().unsafeValue)
 	}
 
 	@Test
 	fun everythingIsDisplayed() {
-		screen {
+		MainScreen {
 			chance.isDisplayed()
 			timeSinceUpdate.isDisplayed()
 			kpIndexCard.isDisplayed()
@@ -50,7 +52,7 @@ class MainScreenTest : KoinComponent {
 
 	@Test
 	fun openAndCloseAllDetailViews() {
-		screen {
+		MainScreen {
 			verifyFactorClickOpensDetailView(
 				kpIndexCard,
 				R.string.factor_kp_index_title_full,
@@ -74,9 +76,15 @@ class MainScreenTest : KoinComponent {
 		}
 	}
 
+	@Test
+	fun clickingBackFinishesActivity() {
+		pressBackUnconditionally()
+		testRule.activity.verifyIsFinishing()
+	}
+
 	private fun verifyFactorClickOpensDetailView(cardView: KView, title: Int, description: Int) {
 		cardView.click()
-		screen {
+		MainScreen {
 			detailView.isDisplayed()
 			detailView.hasDescendant { withText(title) }
 			detailView.hasDescendant { withText(description) }

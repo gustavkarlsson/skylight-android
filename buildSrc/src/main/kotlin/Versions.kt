@@ -51,6 +51,7 @@ object Versions {
 	val ktxCore = "1.0.1"
 	val koin = "1.0.1"
 	val koptional = "0.2.0"
+	val uiAutomator = "2.2.0"
 
 	// Test
 	val junit = "4.12"
