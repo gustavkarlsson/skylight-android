@@ -39,9 +39,14 @@ abstract class BaseFragment(
 	override fun onViewStateRestored(savedInstanceState: Bundle?) {
 		super.onViewStateRestored(savedInstanceState)
 		initView()
-		getToolbar()?.run {
-			if (hasBackStackEntries()) {
-				enableBackNavigation()
+		getToolbar()?.let(::setupBackNavigation)
+	}
+
+	private fun setupBackNavigation(toolbar: Toolbar) {
+		if (requireFragmentManager().backStackEntryCount > 0) {
+			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+			toolbar.setNavigationOnClickListener {
+				navController.popBackStack()
 			}
 		}
 	}
@@ -49,15 +54,6 @@ abstract class BaseFragment(
 	override fun onStart() {
 		super.onStart()
 		analytics.logScreen(requireActivity(), this::class.java.simpleName)
-	}
-
-	private fun hasBackStackEntries() = requireFragmentManager().backStackEntryCount > 0
-
-	private fun Toolbar.enableBackNavigation() {
-		setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-		setNavigationOnClickListener {
-			navController.popBackStack()
-		}
 	}
 
 	protected open fun getToolbar(): Toolbar? = null
