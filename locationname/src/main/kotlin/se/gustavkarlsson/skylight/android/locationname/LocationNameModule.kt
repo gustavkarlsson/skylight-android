@@ -12,7 +12,7 @@ val locationNameModule = module {
 
 	single<LocationNameProvider> {
 		val geocoder = Geocoder(get())
-		GeocoderLocationNameProvider(geocoder)
+		GeocoderLocationNameProvider(geocoder, 10.seconds)
 	}
 
 	single<Streamable<Optional<String>>>("locationName") {

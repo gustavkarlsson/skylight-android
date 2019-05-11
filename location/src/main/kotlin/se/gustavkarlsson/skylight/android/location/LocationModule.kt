@@ -17,7 +17,7 @@ val locationModule = module {
 	}
 
 	single<LocationProvider> {
-		ReactiveLocationLocationProvider(get(), 30.seconds)
+		ReactiveLocationLocationProvider(get(), 30.seconds, 1.minutes, 10.seconds, 10.minutes, 1.minutes)
 	}
 
 	single<Streamable<Location>>("location") {

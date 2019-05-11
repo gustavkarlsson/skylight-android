@@ -36,7 +36,7 @@ val kpIndexModule = module {
 	}
 
 	single<KpIndexProvider> {
-		RetrofittedKpIndexProvider(get(), 5, get())
+		RetrofittedKpIndexProvider(get(), 5, 15.minutes, get())
 	}
 
 	single<Streamable<Report<KpIndex>>>("kpIndex") {

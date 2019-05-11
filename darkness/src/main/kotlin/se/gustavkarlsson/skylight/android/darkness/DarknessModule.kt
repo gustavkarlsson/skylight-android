@@ -12,7 +12,7 @@ import se.gustavkarlsson.skylight.android.services.providers.DarknessProvider
 val darknessModule = module {
 
 	single<DarknessProvider> {
-		KlausBrunnerDarknessProvider(get())
+		KlausBrunnerDarknessProvider(get(), 1.minutes)
 	}
 
 	single<Streamable<Report<Darkness>>>("darkness") {

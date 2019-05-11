@@ -15,14 +15,15 @@ import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
+import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.mapNotNull
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.krate.Command
-import se.gustavkarlsson.skylight.android.krate.State
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
+import se.gustavkarlsson.skylight.android.krate.State
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
@@ -50,7 +51,11 @@ class MainViewModel(
 ) : ViewModel() {
 
 	init {
-		store.issue(Command.AuroraReportStream(true))
+		store.issue(Command.SelectPlace(Place.Current.ID))
+	}
+
+	override fun onCleared() {
+		store.issue(Command.SelectPlace(null))
 	}
 
 	val errorMessages: Flowable<Int> = store.states
@@ -62,13 +67,13 @@ class MainViewModel(
 
 	val locationName: Flowable<CharSequence> = store.states
 		.map {
-			it.currentPlace.auroraReport?.locationName ?: defaultLocationName
+			it.selectedPlace?.auroraReport?.locationName ?: defaultLocationName
 		}
 		.distinctUntilChanged()
 
 	val chanceLevel: Flowable<TextRef> = store.states
 		.map {
-			it.currentPlace.auroraReport
+			it.selectedPlace?.auroraReport
 				?.let(auroraChanceEvaluator::evaluate)
 				?: Chance.UNKNOWN
 		}
@@ -77,7 +82,7 @@ class MainViewModel(
 		.distinctUntilChanged()
 
 	val timeSinceUpdate: Flowable<CharSequence> = store.states
-		.mapNotNull { it.currentPlace.auroraReport?.timestamp }
+		.mapNotNull { it.selectedPlace?.auroraReport?.timestamp }
 		.switchMap { time ->
 			Flowable.just(time)
 				.repeatWhen { it.delay(1.seconds) }
@@ -89,7 +94,7 @@ class MainViewModel(
 		.distinctUntilChanged()
 
 	val timeSinceUpdateVisibility: Flowable<Boolean> = store.states
-		.mapNotNull { it.currentPlace.auroraReport?.timestamp }
+		.mapNotNull { it.selectedPlace?.auroraReport?.timestamp }
 		.map {
 			when {
 				it <= Instant.EPOCH -> false
@@ -131,7 +136,7 @@ class MainViewModel(
 		evaluate: (T) -> Chance,
 		format: (T) -> TextRef
 	): Flowable<FactorItem> =
-		map { it.currentPlace.auroraReport?.selectFactor()?.value.toOptional() }
+		map { it.selectedPlace?.auroraReport?.selectFactor()?.value.toOptional() }
 			.distinctUntilChanged()
 			.map { it.toFactorItem(evaluate, format) }
 
@@ -150,10 +155,6 @@ class MainViewModel(
 				progressColor = chanceToColorConverter.convert(chance)
 			)
 		}
-	}
-
-	override fun onCleared() {
-		store.issue(Command.AuroraReportStream(false))
 	}
 }
 

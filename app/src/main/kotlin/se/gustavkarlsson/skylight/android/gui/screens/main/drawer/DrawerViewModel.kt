@@ -15,11 +15,10 @@ class DrawerViewModel(
 			.distinctUntilChanged()
 
 	private fun createPlaceItems(state: State): List<PlaceItem> {
-		val selectedId = state.selectedPlace.id
 		return state.allPlaces.map {
-			val isActive = it.id == selectedId
+			val isActive = it.id == state.selectedPlaceId
 			PlaceItem(isActive, it.name) {
-				store.issue(Command.SelectPlace(it))
+				store.issue(Command.SelectPlace(it.id))
 			}
 		}
 	}

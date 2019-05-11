@@ -49,7 +49,7 @@ internal class UpdateJob(
 	}
 
 	private fun awaitBetterReport(currentReport: AuroraReport?): AuroraReport? {
-		store.issue(Command.GetAuroraReport)
+		store.issue(Command.RefreshAll)
 		return store.states
 			.flatMapSingle {
 				if (it.throwable == null) {

@@ -29,6 +29,7 @@ val weatherModule = module {
 			get(),
 			BuildConfig.OPENWEATHERMAP_API_KEY,
 			5,
+			15.minutes,
 			get()
 		)
 	}

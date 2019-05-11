@@ -20,7 +20,7 @@ val developAuroraReportModule = module {
 
 	single<AuroraReportProvider>(override = true) {
 		val realProvider = get<CombiningAuroraReportProvider>()
-		DevelopAuroraReportProvider(realProvider, get(), get())
+		DevelopAuroraReportProvider(realProvider, get(), get(), 1.minutes)
 	}
 
 	single<Streamable<AuroraReport>>("auroraReport", override = true) {

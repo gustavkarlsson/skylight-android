@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.geomaglocation
 
+import io.reactivex.Flowable
 import io.reactivex.Single
 import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
@@ -39,6 +40,14 @@ internal class GeomagLocationProviderImpl(
 			}
 			.doOnSuccess { Timber.i("Provided geomagnetic location: %s", it) }
 	}
+
+	override fun stream(locations: Flowable<Optional<Location>>): Flowable<Report<GeomagLocation>> =
+		locations
+			.switchMapSingle { get(Single.just(it)) }
+			.distinctUntilChanged()
+			.doOnNext { Timber.i("Streamed geomag location: %s", it) }
+			.replay(1)
+			.refCount()
 
 	// http://stackoverflow.com/a/7949249/940731
 	private fun calculateGeomagneticLatitude(
