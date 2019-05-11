@@ -12,7 +12,6 @@ import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
 import se.gustavkarlsson.skylight.android.krate.BootstrapCommand
-import se.gustavkarlsson.skylight.android.krate.SettingsStreamCommand
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.util.CrashlyticsTree
@@ -42,7 +41,7 @@ class Skylight : MultiDexApplication() {
 		startKoin(this, modules, logger = KoinTimberLogger)
 		setupSettingsAnalytics()
 		store.issue(BootstrapCommand)
-		store.issue(SettingsStreamCommand(true))
+		// FIXME store.issue(SettingsStreamCommand(true))
 		scheduleBackgroundNotifications()
 	}
 
@@ -66,6 +65,8 @@ class Skylight : MultiDexApplication() {
 	}
 
 	private fun setupSettingsAnalytics() {
+		/*
+		FIXME
 		store.states
 			.map { it.settings }
 			.distinctUntilChanged()
@@ -74,6 +75,7 @@ class Skylight : MultiDexApplication() {
 				analytics.setNotifyTriggerLevel(it.triggerLevel)
 			}
 			.addTo(disposables)
+		*/
 	}
 
 	companion object {

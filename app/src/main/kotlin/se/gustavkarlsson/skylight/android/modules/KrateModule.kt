@@ -1,14 +1,14 @@
 package se.gustavkarlsson.skylight.android.modules
 
+import com.ioki.textref.TextRef
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.rxkotlin.Flowables
 import org.koin.dsl.module.module
 import se.gustavkarlsson.krate.core.dsl.buildStore
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.CustomPlace
 import se.gustavkarlsson.skylight.android.entities.Location
-import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.krate.AuroraReportResult
 import se.gustavkarlsson.skylight.android.krate.AuroraReportStreamCommand
 import se.gustavkarlsson.skylight.android.krate.BootstrapCommand
@@ -18,8 +18,6 @@ import se.gustavkarlsson.skylight.android.krate.GooglePlayServicesResult
 import se.gustavkarlsson.skylight.android.krate.LocationPermissionResult
 import se.gustavkarlsson.skylight.android.krate.PlaceSelectedResult
 import se.gustavkarlsson.skylight.android.krate.SelectPlaceCommand
-import se.gustavkarlsson.skylight.android.krate.SettingsResult
-import se.gustavkarlsson.skylight.android.krate.SettingsStreamCommand
 import se.gustavkarlsson.skylight.android.krate.SignalFirstRunCompleted
 import se.gustavkarlsson.skylight.android.krate.SignalGooglePlayServicesInstalled
 import se.gustavkarlsson.skylight.android.krate.SignalLocationPermissionGranted
@@ -30,14 +28,12 @@ import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.services.GooglePlayServicesChecker
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import se.gustavkarlsson.skylight.android.services.RunVersionManager
-import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
 import timber.log.Timber
 
 val krateModule = module {
 
 	single { _ ->
-		val settings = get<Settings>()
 		val runVersionManager = get<RunVersionManager>()
 		val googlePlayServicesChecker = get<GooglePlayServicesChecker>()
 		val permissionChecker = get<PermissionChecker>()
@@ -78,15 +74,17 @@ val krateModule = module {
 						.map(AuroraReportStreamCommand::stream)
 						.distinctUntilChanged()
 						.switchMap { stream ->
-						if (stream) {
-							auroraReports
-								.map { AuroraReportResult.Success(it) as AuroraReportResult }
-								.onErrorReturn { AuroraReportResult.Failure(it) }
-						} else {
-							Flowable.empty()
+							if (stream) {
+								auroraReports
+									.map { AuroraReportResult.Success(it) as AuroraReportResult }
+									.onErrorReturn { AuroraReportResult.Failure(it) }
+							} else {
+								Flowable.empty()
+							}
 						}
-					}
 				}
+				/*
+				FIXME handle settings commands
 				transform<SettingsStreamCommand> { commands ->
 					commands.switchMap { command ->
 						if (command.stream) {
@@ -103,6 +101,7 @@ val krateModule = module {
 						}
 					}
 				}
+				*/
 				transform<SelectPlaceCommand> { commands ->
 					commands.map { PlaceSelectedResult(it.place) }
 				}
@@ -139,15 +138,18 @@ val krateModule = module {
 						is AuroraReportResult.Success -> {
 							state.copy(
 								throwable = null,
-								currentLocationAuroraReport = result.auroraReport
+								currentPlace = state.currentPlace.copy(auroraReport = result.auroraReport)
 							)
 						}
 						is AuroraReportResult.Failure -> {
 							state.copy(throwable = result.throwable)
 						}
+						/*
+						FIXME Handle settings results
 						is SettingsResult -> {
 							state.copy(settings = result.settings)
 						}
+						*/
 						is PlaceSelectedResult -> {
 							state.copy(selectedPlace = result.place)
 						}
@@ -160,12 +162,15 @@ val krateModule = module {
 			}
 
 			states {
+				// FIXME Initialize from settings
 				initial = SkylightState(
-					SkylightState.Settings(
-						settings.notificationsEnabled,
-						settings.triggerLevel
-					),
-					customPlaces = listOf(Place(1, "Made-up", Location(1.0, 2.0))) // FIXME Remove
+					customPlaces = listOf(
+						CustomPlace(
+							1,
+							TextRef("Made-up"),
+							Location(1.0, 2.0)
+						)
+					) // FIXME Remove
 				)
 				observeScheduler = AndroidSchedulers.mainThread()
 				if (BuildConfig.DEBUG) {

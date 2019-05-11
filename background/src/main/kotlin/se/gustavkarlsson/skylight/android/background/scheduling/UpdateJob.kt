@@ -25,7 +25,7 @@ internal class UpdateJob(
 	private val timeout: Duration
 ) : Job() {
 
-	override fun onRunJob(params: Job.Params): Job.Result {
+	override fun onRunJob(params: Params): Result {
 		return try {
 			val auroraReport = getAuroraReport()
 			if (decider.shouldNotify(auroraReport)) {
@@ -40,7 +40,7 @@ internal class UpdateJob(
 	}
 
 	private fun getAuroraReport(): AuroraReport {
-		var bestReport = store.currentState.currentLocationAuroraReport
+		var bestReport = store.currentState.currentPlace.auroraReport
 		if (bestReport?.isRecent == true) {
 			return bestReport
 		}
@@ -58,7 +58,7 @@ internal class UpdateJob(
 					Single.error(it.throwable)
 				}
 			}
-			.mapNotNull { it.currentLocationAuroraReport }
+			.mapNotNull { it.currentPlace.auroraReport }
 			.filter { it != currentReport }
 			.map { optionalOf(it) }
 			.timeout(timeout.toMillis(), TimeUnit.MILLISECONDS)

@@ -16,11 +16,12 @@ internal class AuroraReportNotificationDeciderImpl(
 ) : AuroraReportNotificationDecider {
 
 	override fun shouldNotify(newReport: AuroraReport): Boolean {
-		val settings = store.currentState.settings
-		if (!settings.notificationsEnabled) return false
+		val notificationsEnabled = true // FIXME get from settings
+		val triggerLevel = ChanceLevel.MEDIUM // FIXME get from settings
+		if (!notificationsEnabled) return false
 		if (appVisibilityEvaluator.isVisible()) return false
 		val newChanceLevel = newReport.chanceLevel
-		if (newChanceLevel < settings.triggerLevel) return false
+		if (newChanceLevel < triggerLevel) return false
 		val lastNotified = notifiedChanceRepository.get()
 		if (lastNotified.outdated) return true
 		val lastChanceLevel = lastNotified.chanceLevel

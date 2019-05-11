@@ -62,13 +62,13 @@ class MainViewModel(
 
 	val locationName: Flowable<CharSequence> = store.states
 		.map {
-			it.currentLocationAuroraReport?.locationName ?: defaultLocationName
+			it.currentPlace.auroraReport?.locationName ?: defaultLocationName
 		}
 		.distinctUntilChanged()
 
 	val chanceLevel: Flowable<TextRef> = store.states
 		.map {
-			it.currentLocationAuroraReport
+			it.currentPlace.auroraReport
 				?.let(auroraChanceEvaluator::evaluate)
 				?: Chance.UNKNOWN
 		}
@@ -77,7 +77,7 @@ class MainViewModel(
 		.distinctUntilChanged()
 
 	val timeSinceUpdate: Flowable<CharSequence> = store.states
-		.mapNotNull { it.currentLocationAuroraReport?.timestamp }
+		.mapNotNull { it.currentPlace.auroraReport?.timestamp }
 		.switchMap { time ->
 			Flowable.just(time)
 				.repeatWhen { it.delay(1.seconds) }
@@ -89,7 +89,7 @@ class MainViewModel(
 		.distinctUntilChanged()
 
 	val timeSinceUpdateVisibility: Flowable<Boolean> = store.states
-		.mapNotNull { it.currentLocationAuroraReport?.timestamp }
+		.mapNotNull { it.currentPlace.auroraReport?.timestamp }
 		.map {
 			when {
 				it <= Instant.EPOCH -> false
@@ -131,7 +131,7 @@ class MainViewModel(
 		evaluate: (T) -> Chance,
 		format: (T) -> TextRef
 	): Flowable<FactorItem> =
-		map { it.currentLocationAuroraReport?.selectFactor()?.value.toOptional() }
+		map { it.currentPlace.auroraReport?.selectFactor()?.value.toOptional() }
 			.distinctUntilChanged()
 			.map { it.toFactorItem(evaluate, format) }
 

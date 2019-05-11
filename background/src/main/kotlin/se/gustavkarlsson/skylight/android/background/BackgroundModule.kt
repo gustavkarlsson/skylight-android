@@ -90,7 +90,10 @@ val backgroundModule = module {
 	single<Flowable<*>>("scheduleBasedOnSettings") {
 		val scheduler = get<Scheduler>()
 		get<Flowable<SkylightState>>("state")
-			.map { it.settings.notificationsEnabled }
+			.map {
+				val notificationsEnabled = true
+				notificationsEnabled // FIXME set based on settings
+			}
 			.distinctUntilChanged()
 			.doOnNext { enable ->
 				if (enable) {
