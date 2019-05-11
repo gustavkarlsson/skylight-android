@@ -58,6 +58,7 @@ internal class UpdateJob(
 					Single.error(it.throwable)
 				}
 			}
+			// FIXME fix notifications
 			.mapNotNull { it.currentPlace.auroraReport }
 			.filter { it != currentReport }
 			.map { optionalOf(it) }

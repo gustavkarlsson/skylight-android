@@ -11,6 +11,6 @@ val analyticsModule = module {
 	}
 
 	single<Analytics> {
-		FirebasedAnalytics(get())
+		FirebasedAnalytics(firebaseAnalytics = get())
 	}
 }

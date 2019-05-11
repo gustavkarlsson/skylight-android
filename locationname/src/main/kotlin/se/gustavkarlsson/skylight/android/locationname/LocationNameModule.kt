@@ -9,7 +9,7 @@ val locationNameModule = module {
 
 	single<LocationNameProvider> {
 		val geocoder = Geocoder(get())
-		GeocoderLocationNameProvider(geocoder, 10.seconds)
+		GeocoderLocationNameProvider(geocoder = geocoder, retryDelay = 10.seconds)
 	}
 
 }

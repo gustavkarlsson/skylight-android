@@ -7,5 +7,5 @@ import se.gustavkarlsson.skylight.android.entities.Report
 
 interface KpIndexProvider {
 	fun get(): Single<Report<KpIndex>>
-	val stream: Flowable<Report<KpIndex>>
+	fun stream(): Flowable<Report<KpIndex>>
 }

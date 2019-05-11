@@ -41,27 +41,27 @@ val backgroundModule = module {
 
 	single<Notifier<AuroraReport>> {
 		AuroraReportNotifier(
-			get(),
-			get(),
-			get("chanceLevel"),
-			get("auroraReport"),
-			get("activity"),
-			get("auroraNotificationChannelId"),
-			get()
+			context = get(),
+			notificationManager = get(),
+			chanceLevelFormatter = get("chanceLevel"),
+			chanceEvaluator = get("auroraReport"),
+			activityClass = get("activity"),
+			channelId = get("auroraNotificationChannelId"),
+			analytics = get()
 		)
 	}
 
 	single {
-		OutdatedEvaluator(get())
+		OutdatedEvaluator(time = get())
 	}
 
 	single<AuroraReportNotificationDecider> {
 		AuroraReportNotificationDeciderImpl(
-			get(),
-			get("auroraReport"),
-			get(),
-			get(),
-			AppVisibilityEvaluator(get())
+			notifiedChanceRepository = get(),
+			chanceEvaluator = get("auroraReport"),
+			store = get(),
+			outdatedEvaluator = get(),
+			appVisibilityEvaluator = AppVisibilityEvaluator(get())
 		)
 	}
 
@@ -107,9 +107,9 @@ val backgroundModule = module {
 	single {
 		val context = get<Context>()
 		NotificationChannelCreator(
-			get(),
-			get("auroraNotificationChannelId"),
-			context.getString(R.string.aurora_alerts_channel_name)
+			notificationManager = get(),
+			id = get("auroraNotificationChannelId"),
+			name = context.getString(R.string.aurora_alerts_channel_name)
 		)
 	}
 
@@ -128,6 +128,6 @@ val backgroundModule = module {
 	}
 
 	single<NotifiedChanceRepository> {
-		SharedPreferencesNotifiedChanceRepository(get())
+		SharedPreferencesNotifiedChanceRepository(context = get())
 	}
 }

@@ -32,11 +32,17 @@ val kpIndexModule = module {
 	}
 
 	single<KpIndexProvider> {
-		RetrofittedKpIndexProvider(get(), 5, 15.minutes, get())
+		RetrofittedKpIndexProvider(
+			api = get(),
+			time = get(),
+			retryDelay = 15.seconds,
+			pollingInterval = 15.minutes
+		)
 	}
 
 }
 
+// TODO Extract this and OkHttpClient to separate module
 private fun OkHttpClient.Builder.connectTimeout(timeout: Duration): OkHttpClient.Builder =
 	this.connectTimeout(timeout.toMillis(), TimeUnit.MILLISECONDS)
 

@@ -23,9 +23,9 @@ internal class ReactiveLocationLocationProvider(
 	private val reactiveLocationProvider: ReactiveLocationProvider,
 	private val timeout: Duration,
 	throttleDuration: Duration,
-	private val firstPollingInterval: Duration,
-	private val restPollingInterval: Duration,
-	private val retryDelay: Duration
+	firstPollingInterval: Duration,
+	restPollingInterval: Duration,
+	retryDelay: Duration
 ) : LocationProvider {
 
 	private val locationRequest = LocationRequest().apply {

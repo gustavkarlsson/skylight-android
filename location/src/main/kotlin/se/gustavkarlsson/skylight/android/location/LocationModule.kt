@@ -14,7 +14,14 @@ val locationModule = module {
 	}
 
 	single<LocationProvider> {
-		ReactiveLocationLocationProvider(get(), 30.seconds, 1.minutes, 10.seconds, 10.minutes, 1.minutes)
+		ReactiveLocationLocationProvider(
+			reactiveLocationProvider = get(),
+			timeout = 30.seconds,
+			throttleDuration = 1.minutes,
+			firstPollingInterval = 10.seconds,
+			restPollingInterval = 10.minutes,
+			retryDelay = 1.minutes
+		)
 	}
 
 	single("locationPermission") {
