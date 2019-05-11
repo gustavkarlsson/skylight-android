@@ -34,7 +34,6 @@ class TestLocationProvider(
 		return Single.fromCallable { delegate() }
 	}
 
-	override fun stream(): Flowable<Optional<Location>> {
+	override val stream: Flowable<Optional<Location>> =
 		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-	}
 }
