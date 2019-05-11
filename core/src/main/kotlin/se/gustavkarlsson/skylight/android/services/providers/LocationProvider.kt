@@ -7,5 +7,5 @@ import se.gustavkarlsson.skylight.android.entities.Location
 
 interface LocationProvider {
 	fun get(): Single<Optional<Location>>
-	fun stream(): Flowable<Optional<Location>>
+	val stream: Flowable<Optional<Location>>
 }

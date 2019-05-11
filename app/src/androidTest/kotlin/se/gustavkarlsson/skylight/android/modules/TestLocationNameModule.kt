@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.modules
 
+import io.reactivex.Flowable
 import io.reactivex.Single
 import org.koin.dsl.module.module
 import se.gustavkarlsson.koptional.Optional
@@ -22,7 +23,12 @@ val testLocationNameModule = module {
 class TestLocationNameProvider(
 	var delegate: () -> Optional<String>
 ) : LocationNameProvider {
+
 	override fun get(location: Single<Optional<Location>>): Single<Optional<String>> {
 		return Single.fromCallable { delegate() }
+	}
+
+	override fun stream(locations: Flowable<Optional<Location>>): Flowable<Optional<String>> {
+		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
 	}
 }

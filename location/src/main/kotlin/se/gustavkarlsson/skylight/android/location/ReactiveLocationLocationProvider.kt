@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit
 internal class ReactiveLocationLocationProvider(
 	private val reactiveLocationProvider: ReactiveLocationProvider,
 	private val timeout: Duration,
-	private val throttleDuration: Duration,
+	throttleDuration: Duration,
 	private val firstPollingInterval: Duration,
 	private val restPollingInterval: Duration,
 	private val retryDelay: Duration
@@ -80,7 +80,7 @@ internal class ReactiveLocationLocationProvider(
 		.toFlowable()
 		.concatWith(pollingLocations)
 
-	override fun stream(): Flowable<Optional<Location>> = locations
+	override val stream: Flowable<Optional<Location>> = locations
 		.distinctUntilChanged()
 		.subscribeOn(Schedulers.io())
 		.doOnError { Timber.w(it) }
@@ -89,4 +89,6 @@ internal class ReactiveLocationLocationProvider(
 		.distinctUntilChanged()
 		.throttleLatest(throttleDuration.toMillis(), TimeUnit.MILLISECONDS)
 		.doOnNext { Timber.i("Streamed location: %s", it) }
+		.replay(1)
+		.refCount()
 }

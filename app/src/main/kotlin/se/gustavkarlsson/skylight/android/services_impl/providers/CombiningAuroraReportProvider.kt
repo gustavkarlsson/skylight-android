@@ -34,11 +34,11 @@ class CombiningAuroraReportProvider(
 
 	override fun stream(location: Location?): Flowable<AuroraReport> {
 		val locationFlowable = location?.let { Flowable.just(it.toOptional()) }
-			?: locationProvider.stream()
+			?: locationProvider.stream
 		return Flowables
 			.combineLatest(
 				locationNameProvider.stream(locationFlowable),
-				kpIndexProvider.stream(),
+				kpIndexProvider.stream,
 				geomagLocationProvider.stream(locationFlowable),
 				darknessProvider.stream(locationFlowable),
 				weatherProvider.stream(locationFlowable)

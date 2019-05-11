@@ -28,7 +28,7 @@ internal class RetrofittedKpIndexProvider(
 			.onErrorReturnItem(Report.error(R.string.error_no_internet_maybe, time.now().blockingGet()))
 			.doOnSuccess { Timber.i("Provided Kp index: %s", it) }
 
-	override fun stream(): Flowable<Report<KpIndex>> =
+	override val stream: Flowable<Report<KpIndex>> =
 		get()
 			.repeatWhen { it.delay(pollingInterval) }
 			.distinctUntilChanged()
