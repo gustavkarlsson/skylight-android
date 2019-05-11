@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_main.drawerLayout
 import kotlinx.android.synthetic.main.fragment_main.geomagLocationCard
 import kotlinx.android.synthetic.main.fragment_main.kpIndexCard
 import kotlinx.android.synthetic.main.fragment_main.nav_view
-import kotlinx.android.synthetic.main.fragment_main.timeSinceUpdate
+import kotlinx.android.synthetic.main.fragment_main.chanceSubtitle
 import kotlinx.android.synthetic.main.fragment_main.toolbarView
 import kotlinx.android.synthetic.main.fragment_main.weatherCard
 import org.koin.android.ext.android.inject
@@ -77,10 +77,10 @@ class MainFragment : BaseFragment(R.layout.fragment_main), BackButtonHandler {
 				}
 			}
 
-		viewModel.locationName
-			.doOnNext { Timber.d("Updating locationName view: %s", it) }
+		viewModel.toolbarTitleText
+			.doOnNext { Timber.d("Updating toolbarTitle view: %s", it) }
 			.autoDisposable(scope)
-			.subscribe { toolbarView.title = it }
+			.subscribe { toolbarView.title = it.resolve(requireContext()) }
 
 		viewModel.errorMessages
 			.doOnNext { Timber.d("Showing error message") }
@@ -94,21 +94,21 @@ class MainFragment : BaseFragment(R.layout.fragment_main), BackButtonHandler {
 				}
 			}
 
-		viewModel.chanceLevel
+		viewModel.chanceLevelText
 			.doOnNext { Timber.d("Updating chanceLevel view: %s", it) }
 			.map { it.resolve(requireContext()) }
 			.autoDisposable(scope)
 			.subscribe(chance::setText)
 
-		viewModel.timeSinceUpdate
-			.doOnNext { Timber.d("Updating timeSinceUpdate view: %s", it) }
+		viewModel.chanceSubtitleText
+			.doOnNext { Timber.d("Updating chanceSubtitle view: %s", it) }
 			.autoDisposable(scope)
-			.subscribe(timeSinceUpdate::setText)
+			.subscribe { chanceSubtitle.text = it.resolve(requireContext()) }
 
-		viewModel.timeSinceUpdateVisibility
+		viewModel.chanceSubtitleVisibility
 			.doOnNext { Timber.d("Updating timeSinceUpdate weather: %s", it) }
 			.autoDisposable(scope)
-			.subscribe(timeSinceUpdate.visibility())
+			.subscribe(chanceSubtitle.visibility())
 
 		viewModel.darkness.present(
 			darknessCard,

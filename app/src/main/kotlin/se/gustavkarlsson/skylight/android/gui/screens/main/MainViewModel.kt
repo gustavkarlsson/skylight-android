@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.ioki.textref.TextRef
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.Flowables
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.koptional.Optional
@@ -33,7 +34,6 @@ import timber.log.Timber
 
 class MainViewModel(
 	private val store: SkylightStore,
-	defaultLocationName: CharSequence,
 	auroraChanceEvaluator: ChanceEvaluator<AuroraReport>,
 	relativeTimeFormatter: RelativeTimeFormatter,
 	chanceLevelFormatter: SingleValueFormatter<ChanceLevel>,
@@ -65,13 +65,13 @@ class MainViewModel(
 			R.string.error_unknown_update_error
 		}
 
-	val locationName: Flowable<CharSequence> = store.states
-		.map {
-			it.selectedPlace?.auroraReport?.locationName ?: defaultLocationName
+	val toolbarTitleText: Flowable<TextRef> = store.states
+		.mapNotNull {
+			it.selectedPlace?.name
 		}
 		.distinctUntilChanged()
 
-	val chanceLevel: Flowable<TextRef> = store.states
+	val chanceLevelText: Flowable<TextRef> = store.states
 		.map {
 			it.selectedPlace?.auroraReport
 				?.let(auroraChanceEvaluator::evaluate)
@@ -80,8 +80,9 @@ class MainViewModel(
 		.map(ChanceLevel.Companion::fromChance)
 		.map(chanceLevelFormatter::format)
 		.distinctUntilChanged()
+		.distinctUntilChanged()
 
-	val timeSinceUpdate: Flowable<CharSequence> = store.states
+	private val timeSinceUpdate: Flowable<String> = store.states
 		.mapNotNull { it.selectedPlace?.auroraReport?.timestamp }
 		.switchMap { time ->
 			Flowable.just(time)
@@ -89,11 +90,22 @@ class MainViewModel(
 				.observeOn(AndroidSchedulers.mainThread())
 		}
 		.map {
-			relativeTimeFormatter.format(it, time.now().blockingGet(), nowTextThreshold)
+			relativeTimeFormatter.format(it, time.now().blockingGet(), nowTextThreshold).toString()
 		}
 		.distinctUntilChanged()
 
-	val timeSinceUpdateVisibility: Flowable<Boolean> = store.states
+	private val locationName: Flowable<Optional<String>> = store.states
+		.map { it.selectedPlace?.auroraReport?.locationName.toOptional() }
+
+	val chanceSubtitleText: Flowable<TextRef> = Flowables
+		.combineLatest(timeSinceUpdate, locationName) { time, (name) ->
+			if (name == null)
+				TextRef(time)
+			else
+				TextRef(R.string.time_in_location, time, name)
+		}
+
+	val chanceSubtitleVisibility: Flowable<Boolean> = store.states
 		.mapNotNull { it.selectedPlace?.auroraReport?.timestamp }
 		.map {
 			when {

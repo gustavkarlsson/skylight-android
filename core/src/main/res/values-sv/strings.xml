@@ -4,6 +4,7 @@
 	<string name="exit">Stäng</string>
 	<string name="main_your_location">Din Plats</string>
 	<string name="right_now">Just nu</string>
+	<string name="time_in_location">%1$s i %2$s</string>
 	<string name="privacy_policy">Integritetspolicy (eng)</string>
 	<string name="places">Platser</string>
 

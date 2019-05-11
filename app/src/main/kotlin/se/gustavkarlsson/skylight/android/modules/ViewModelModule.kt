@@ -24,7 +24,6 @@ val viewModelModule = module {
 		val context = get<Context>()
 		MainViewModel(
 			store = get(),
-			defaultLocationName = context.getString(R.string.main_your_location),
 			auroraChanceEvaluator = get("auroraReport"),
 			relativeTimeFormatter = get(),
 			chanceLevelFormatter = get("chanceLevel"),

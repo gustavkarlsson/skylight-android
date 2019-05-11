@@ -11,7 +11,7 @@ import se.gustavkarlsson.skylight.android.gui.kakao.KToolbar
 object MainScreen : Screen<MainScreen>() {
 	val toolbar = KToolbar { withId(R.id.toolbarView) }
 	val chance = KTextView { withId(R.id.chance) }
-	val timeSinceUpdate = KTextView { withId(R.id.timeSinceUpdate) }
+	val timeSinceUpdate = KTextView { withId(R.id.chanceSubtitle) }
 
 	val kpIndexCard = KView { withId(R.id.kpIndexCard) }
 	val darknessCard = KView { withId(R.id.darknessCard) }

@@ -6,6 +6,7 @@
 	<string name="exit">Exit</string>
 	<string name="main_your_location">Your Location</string>
 	<string name="right_now">Right now</string>
+	<string name="time_in_location">%1$s in %2$s</string>
 	<string name="privacy_policy">Privacy Policy</string>
 	<string name="places">Places</string>
 

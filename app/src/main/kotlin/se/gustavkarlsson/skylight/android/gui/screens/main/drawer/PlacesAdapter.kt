@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import se.gustavkarlsson.skylight.android.R
 
-class PlacesAdapter : RecyclerView.Adapter<PlacesAdapter.ViewHolder>() {
+class PlacesAdapter(
+	private val closeDrawer: () -> Unit
+) : RecyclerView.Adapter<PlacesAdapter.ViewHolder>() {
 
 	var items: List<PlaceItem> = emptyList()
 		set(value) {
@@ -33,7 +35,10 @@ class PlacesAdapter : RecyclerView.Adapter<PlacesAdapter.ViewHolder>() {
 		val item = items[position]
 		view.text = item.name.resolve(context)
 		view.isSelected = item.isActive
-		view.setOnClickListener { item.onClick() }
+		view.setOnClickListener {
+			item.onClick()
+			closeDrawer()
+		}
 	}
 
 	class DiffCallback(
