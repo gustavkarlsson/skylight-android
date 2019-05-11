@@ -38,7 +38,7 @@ class CombiningAuroraReportProvider(
 		return Flowables
 			.combineLatest(
 				locationNameProvider.stream(locationFlowable),
-				kpIndexProvider.stream(),
+				kpIndexProvider.stream,
 				geomagLocationProvider.stream(locationFlowable),
 				darknessProvider.stream(locationFlowable),
 				weatherProvider.stream(locationFlowable)

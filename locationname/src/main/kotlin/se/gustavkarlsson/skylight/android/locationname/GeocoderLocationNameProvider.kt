@@ -18,29 +18,36 @@ internal class GeocoderLocationNameProvider(
 	private val retryDelay: Duration
 ) : LocationNameProvider {
 
-	override fun get(location: Single<Optional<Location>>): Single<Optional<String>> {
-		return location
+	private fun getSingleName(location: Single<Optional<Location>>): Single<Optional<String>> =
+		location
 			.observeOn(Schedulers.io())
-			.map {
-				it.value?.let {
+			.flatMap { (location) ->
+				location?.let {
 					try {
 						val addresses = geocoder.getFromLocation(it.latitude, it.longitude, 1)
-						optionalOf(addresses.firstOrNull()?.locality)
+						Single.just(optionalOf(addresses.firstOrNull()?.locality))
 					} catch (e: Throwable) {
-						Timber.w(e, "Failed to perform reverse geocoding")
-						Absent
+						Single.error<Optional<String>>(e)
 					}
-				} ?: Absent
+				} ?: Single.just(Absent)
 			}
+			.doOnError { Timber.w(it, "Failed to perform reverse geocoding") }
+
+	override fun get(location: Single<Optional<Location>>): Single<Optional<String>> =
+		getSingleName(location)
+			.onErrorReturnItem(Absent)
 			.doOnSuccess { Timber.i("Provided location name: %s", it.value) }
-	}
 
 	override fun stream(locations: Flowable<Optional<Location>>): Flowable<Optional<String>> =
 		locations
-			.switchMap {
-				get(Single.just(it))
-					.retryWhen { it.delay(retryDelay) }
+			.switchMap { location ->
+				getSingleName(Single.just(location))
 					.toFlowable()
+					.onErrorResumeNext { it: Throwable ->
+						Flowable.error<Optional<String>>(it)
+							.startWith(Absent)
+					}
+					.retryWhen { it.delay(retryDelay) }
 			}
 			.distinctUntilChanged()
 			.doOnNext { Timber.i("Streamed location name: %s", it.value) }
