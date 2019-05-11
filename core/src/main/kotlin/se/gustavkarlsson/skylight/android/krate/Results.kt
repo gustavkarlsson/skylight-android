@@ -1,20 +1,16 @@
 package se.gustavkarlsson.skylight.android.krate
 
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.Place
+import se.gustavkarlsson.skylight.android.entities.AuroraReport as AuroraReportEntity
 
-sealed class SkylightResult
+sealed class Result {
+	sealed class AuroraReport : Result() {
+		data class Success(val auroraReport: AuroraReportEntity) : Result()
+		data class Failure(val throwable: Throwable) : Result()
+	}
 
-sealed class AuroraReportResult : SkylightResult() {
-	data class Success(val auroraReport: AuroraReport) : AuroraReportResult()
-	data class Failure(val throwable: Throwable) : AuroraReportResult()
+	data class LocationPermission(val isGranted: Boolean) : Result()
+	data class GooglePlayServices(val isAvailable: Boolean) : Result()
+	data class FirstRun(val isFirstRun: Boolean) : Result()
+	data class PlaceSelected(val place: Place) : Result()
 }
-
-data class LocationPermissionResult(val isGranted: Boolean) : SkylightResult()
-
-data class GooglePlayServicesResult(val isAvailable: Boolean) : SkylightResult()
-
-data class FirstRunResult(val isFirstRun: Boolean) : SkylightResult()
-
-data class PlaceSelectedResult(val place: Place) : SkylightResult()

@@ -22,7 +22,7 @@ import se.gustavkarlsson.skylight.android.background.scheduling.UpdateJob
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.extensions.seconds
-import se.gustavkarlsson.skylight.android.krate.SkylightState
+import se.gustavkarlsson.skylight.android.krate.State
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 
 val backgroundModule = module {
@@ -89,7 +89,7 @@ val backgroundModule = module {
 
 	single<Flowable<*>>("scheduleBasedOnSettings") {
 		val scheduler = get<Scheduler>()
-		get<Flowable<SkylightState>>("state")
+		get<Flowable<State>>("state")
 			.map {
 				val notificationsEnabled = true
 				notificationsEnabled // FIXME set based on settings

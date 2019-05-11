@@ -17,7 +17,7 @@ import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.NotifiedChance
-import se.gustavkarlsson.skylight.android.krate.SkylightState
+import se.gustavkarlsson.skylight.android.krate.State
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.mockito.any
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
@@ -32,10 +32,10 @@ internal class AuroraReportNotificationDeciderImplTest {
 	lateinit var mockChanceEvaluator: ChanceEvaluator<AuroraReport>
 
 	@Mock
-	lateinit var mockSettings: SkylightState.Settings
+	lateinit var mockSettings: State.Settings
 
 	@Mock
-	lateinit var mockState: SkylightState
+	lateinit var mockState: State
 
 	@Mock
 	lateinit var mockStore: SkylightStore

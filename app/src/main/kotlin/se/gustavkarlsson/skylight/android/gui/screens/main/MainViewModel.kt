@@ -20,8 +20,8 @@ import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.mapNotNull
 import se.gustavkarlsson.skylight.android.extensions.seconds
-import se.gustavkarlsson.skylight.android.krate.AuroraReportStreamCommand
-import se.gustavkarlsson.skylight.android.krate.SkylightState
+import se.gustavkarlsson.skylight.android.krate.Command
+import se.gustavkarlsson.skylight.android.krate.State
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
@@ -50,7 +50,7 @@ class MainViewModel(
 ) : ViewModel() {
 
 	init {
-		store.issue(AuroraReportStreamCommand(true))
+		store.issue(Command.AuroraReportStream(true))
 	}
 
 	val errorMessages: Flowable<Int> = store.states
@@ -126,7 +126,7 @@ class MainViewModel(
 			weatherFormatter::format
 		)
 
-	private fun <T : Any> Flowable<SkylightState>.toFactorItems(
+	private fun <T : Any> Flowable<State>.toFactorItems(
 		selectFactor: AuroraReport.() -> Report<T>,
 		evaluate: (T) -> Chance,
 		format: (T) -> TextRef
@@ -153,7 +153,7 @@ class MainViewModel(
 	}
 
 	override fun onCleared() {
-		store.issue(AuroraReportStreamCommand(false))
+		store.issue(Command.AuroraReportStream(false))
 	}
 }
 

@@ -11,7 +11,7 @@ import io.reactivex.rxkotlin.addTo
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
-import se.gustavkarlsson.skylight.android.krate.BootstrapCommand
+import se.gustavkarlsson.skylight.android.krate.Command
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.util.CrashlyticsTree
@@ -40,7 +40,7 @@ class Skylight : MultiDexApplication() {
 		initRxJavaErrorHandling()
 		startKoin(this, modules, logger = KoinTimberLogger)
 		setupSettingsAnalytics()
-		store.issue(BootstrapCommand)
+		store.issue(Command.Bootstrap)
 		// FIXME store.issue(SettingsStreamCommand(true))
 		scheduleBackgroundNotifications()
 	}

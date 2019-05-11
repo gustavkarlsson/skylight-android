@@ -12,7 +12,7 @@ import se.gustavkarlsson.skylight.android.background.notifications.Notifier
 import se.gustavkarlsson.skylight.android.background.notifications.OutdatedEvaluator
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.extensions.mapNotNull
-import se.gustavkarlsson.skylight.android.krate.GetAuroraReportCommand
+import se.gustavkarlsson.skylight.android.krate.Command
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -49,7 +49,7 @@ internal class UpdateJob(
 	}
 
 	private fun awaitBetterReport(currentReport: AuroraReport?): AuroraReport? {
-		store.issue(GetAuroraReportCommand)
+		store.issue(Command.GetAuroraReport)
 		return store.states
 			.flatMapSingle {
 				if (it.throwable == null) {

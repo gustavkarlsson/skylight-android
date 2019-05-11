@@ -4,7 +4,7 @@ import se.gustavkarlsson.skylight.android.entities.CurrentPlace
 import se.gustavkarlsson.skylight.android.entities.CustomPlace
 import se.gustavkarlsson.skylight.android.entities.Place
 
-data class SkylightState(
+data class State(
 	val isFirstRun: Boolean? = null,
 	val isLocationPermissionGranted: Boolean? = null,
 	val isGooglePlayServicesAvailable: Boolean? = null,

@@ -2,18 +2,13 @@ package se.gustavkarlsson.skylight.android.krate
 
 import se.gustavkarlsson.skylight.android.entities.Place
 
-sealed class SkylightCommand
+sealed class Command {
+	object GetAuroraReport : Command()
+	data class AuroraReportStream(val stream: Boolean) : Command()
+	object Bootstrap : Command()
+	object SignalLocationPermissionGranted : Command()
+	object SignalGooglePlayServicesInstalled : Command()
+	object SignalFirstRunCompleted : Command()
+	data class SelectPlace(val place: Place) : Command()
+}
 
-object GetAuroraReportCommand : SkylightCommand()
-
-data class AuroraReportStreamCommand(val stream: Boolean) : SkylightCommand()
-
-object BootstrapCommand : SkylightCommand()
-
-object SignalLocationPermissionGranted : SkylightCommand()
-
-object SignalGooglePlayServicesInstalled : SkylightCommand()
-
-object SignalFirstRunCompleted : SkylightCommand()
-
-data class SelectPlaceCommand(val place: Place) : SkylightCommand()

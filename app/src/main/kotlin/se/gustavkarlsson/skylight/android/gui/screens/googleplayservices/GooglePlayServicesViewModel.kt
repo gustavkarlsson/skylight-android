@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.google.android.gms.common.GoogleApiAvailability
 import io.ashdavies.rx.rxtasks.toCompletable
 import io.reactivex.Completable
-import se.gustavkarlsson.skylight.android.krate.SignalGooglePlayServicesInstalled
+import se.gustavkarlsson.skylight.android.krate.Command
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 
 class GooglePlayServicesViewModel(
@@ -15,5 +15,5 @@ class GooglePlayServicesViewModel(
 		GoogleApiAvailability.getInstance()
 			.makeGooglePlayServicesAvailable(activity).toCompletable()
 
-	fun signalGooglePlayServicesInstalled() = store.issue(SignalGooglePlayServicesInstalled)
+	fun signalGooglePlayServicesInstalled() = store.issue(Command.SignalGooglePlayServicesInstalled)
 }

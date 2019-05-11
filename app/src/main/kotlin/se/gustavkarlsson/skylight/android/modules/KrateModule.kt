@@ -9,21 +9,9 @@ import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.CustomPlace
 import se.gustavkarlsson.skylight.android.entities.Location
-import se.gustavkarlsson.skylight.android.krate.AuroraReportResult
-import se.gustavkarlsson.skylight.android.krate.AuroraReportStreamCommand
-import se.gustavkarlsson.skylight.android.krate.BootstrapCommand
-import se.gustavkarlsson.skylight.android.krate.FirstRunResult
-import se.gustavkarlsson.skylight.android.krate.GetAuroraReportCommand
-import se.gustavkarlsson.skylight.android.krate.GooglePlayServicesResult
-import se.gustavkarlsson.skylight.android.krate.LocationPermissionResult
-import se.gustavkarlsson.skylight.android.krate.PlaceSelectedResult
-import se.gustavkarlsson.skylight.android.krate.SelectPlaceCommand
-import se.gustavkarlsson.skylight.android.krate.SignalFirstRunCompleted
-import se.gustavkarlsson.skylight.android.krate.SignalGooglePlayServicesInstalled
-import se.gustavkarlsson.skylight.android.krate.SignalLocationPermissionGranted
-import se.gustavkarlsson.skylight.android.krate.SkylightCommand
-import se.gustavkarlsson.skylight.android.krate.SkylightResult
-import se.gustavkarlsson.skylight.android.krate.SkylightState
+import se.gustavkarlsson.skylight.android.krate.Command
+import se.gustavkarlsson.skylight.android.krate.Result
+import se.gustavkarlsson.skylight.android.krate.State
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.services.GooglePlayServicesChecker
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
@@ -40,44 +28,44 @@ val krateModule = module {
 		val auroraReportProvider = get<AuroraReportProvider>()
 		val auroraReports = get<Flowable<AuroraReport>>("auroraReport")
 
-		buildStore<SkylightState, SkylightCommand, SkylightResult> {
+		buildStore<State, Command, Result> {
 
 			commands {
-				transform<BootstrapCommand> { commands ->
+				transform<Command.Bootstrap> { commands ->
 					commands.firstOrError()
 						.flatMapPublisher { permissionChecker.isLocationGranted }
-						.map(::LocationPermissionResult)
+						.map(Result::LocationPermission)
 				}
 
-				transform<BootstrapCommand> { commands ->
+				transform<Command.Bootstrap> { commands ->
 					commands.firstOrError()
 						.flatMapPublisher { googlePlayServicesChecker.isAvailable }
-						.map(::GooglePlayServicesResult)
+						.map(Result::GooglePlayServices)
 				}
 
-				transform<BootstrapCommand> { commands ->
+				transform<Command.Bootstrap> { commands ->
 					commands.firstOrError()
 						.flatMapPublisher { runVersionManager.isFirstRun }
-						.map(::FirstRunResult)
+						.map(Result::FirstRun)
 				}
 
-				transform<GetAuroraReportCommand> { commands ->
+				transform<Command.GetAuroraReport> { commands ->
 					commands.switchMap { _ ->
 						auroraReportProvider.get()
-							.map<AuroraReportResult> { AuroraReportResult.Success(it) }
-							.onErrorReturn { AuroraReportResult.Failure(it) }
+							.map<Result> { Result.AuroraReport.Success(it) }
+							.onErrorReturn { Result.AuroraReport.Failure(it) }
 							.toFlowable()
 					}
 				}
-				transform<AuroraReportStreamCommand> { commands ->
+				transform<Command.AuroraReportStream> { commands ->
 					commands
-						.map(AuroraReportStreamCommand::stream)
+						.map(Command.AuroraReportStream::stream)
 						.distinctUntilChanged()
 						.switchMap { stream ->
 							if (stream) {
 								auroraReports
-									.map { AuroraReportResult.Success(it) as AuroraReportResult }
-									.onErrorReturn { AuroraReportResult.Failure(it) }
+									.map<Result> { Result.AuroraReport.Success(it) }
+									.onErrorReturn { Result.AuroraReport.Failure(it) }
 							} else {
 								Flowable.empty()
 							}
@@ -93,7 +81,7 @@ val krateModule = module {
 								settings.triggerLevelChanges
 							) { notificationsEnabled, triggerLevel ->
 								SettingsResult(
-									SkylightState.Settings(notificationsEnabled, triggerLevel)
+									State.Settings(notificationsEnabled, triggerLevel)
 								)
 							}
 						} else {
@@ -102,22 +90,22 @@ val krateModule = module {
 					}
 				}
 				*/
-				transform<SelectPlaceCommand> { commands ->
-					commands.map { PlaceSelectedResult(it.place) }
+				transform<Command.SelectPlace> { commands ->
+					commands.map { Result.PlaceSelected(it.place) }
 				}
 				if (BuildConfig.DEBUG) {
-					watch<SkylightCommand> { Timber.d("Got command: %s", it) }
+					watch<Command> { Timber.d("Got command: %s", it) }
 				}
 
-				watch<SignalLocationPermissionGranted> {
+				watch<Command.SignalLocationPermissionGranted> {
 					permissionChecker.signalPermissionGranted()
 				}
 
-				watch<SignalFirstRunCompleted> {
+				watch<Command.SignalFirstRunCompleted> {
 					runVersionManager.signalFirstRunCompleted()
 				}
 
-				watch<SignalGooglePlayServicesInstalled> {
+				watch<Command.SignalGooglePlayServicesInstalled> {
 					googlePlayServicesChecker.signalInstalled()
 				}
 			}
@@ -126,22 +114,22 @@ val krateModule = module {
 
 				reduce { state, result ->
 					when (result) {
-						is LocationPermissionResult -> {
+						is Result.LocationPermission -> {
 							state.copy(isLocationPermissionGranted = result.isGranted)
 						}
-						is GooglePlayServicesResult -> {
+						is Result.GooglePlayServices -> {
 							state.copy(isGooglePlayServicesAvailable = result.isAvailable)
 						}
-						is FirstRunResult -> {
+						is Result.FirstRun -> {
 							state.copy(isFirstRun = result.isFirstRun)
 						}
-						is AuroraReportResult.Success -> {
+						is Result.AuroraReport.Success -> {
 							state.copy(
 								throwable = null,
 								currentPlace = state.currentPlace.copy(auroraReport = result.auroraReport)
 							)
 						}
-						is AuroraReportResult.Failure -> {
+						is Result.AuroraReport.Failure -> {
 							state.copy(throwable = result.throwable)
 						}
 						/*
@@ -150,20 +138,20 @@ val krateModule = module {
 							state.copy(settings = result.settings)
 						}
 						*/
-						is PlaceSelectedResult -> {
+						is Result.PlaceSelected -> {
 							state.copy(selectedPlace = result.place)
 						}
 					}
 
 				}
 				if (BuildConfig.DEBUG) {
-					watch<SkylightResult> { Timber.d("Got result: %s", it) }
+					watch<Result> { Timber.d("Got result: %s", it) }
 				}
 			}
 
 			states {
 				// FIXME Initialize from settings
-				initial = SkylightState(
+				initial = State(
 					customPlaces = listOf(
 						CustomPlace(
 							1,
