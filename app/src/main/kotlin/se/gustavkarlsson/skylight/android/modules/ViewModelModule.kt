@@ -1,10 +1,8 @@
 package se.gustavkarlsson.skylight.android.modules
 
-import android.content.Context
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.BuildConfig
-import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.gui.screens.about.AboutViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.googleplayservices.GooglePlayServicesViewModel
@@ -17,11 +15,10 @@ import se.gustavkarlsson.skylight.android.util.ChanceToColorConverter
 val viewModelModule = module {
 
 	single {
-		ChanceToColorConverter(get())
+		ChanceToColorConverter(context = get())
 	}
 
 	viewModel {
-		val context = get<Context>()
 		MainViewModel(
 			store = get(),
 			auroraChanceEvaluator = get("auroraReport"),
@@ -42,24 +39,24 @@ val viewModelModule = module {
 	}
 
 	viewModel {
-		PermissionViewModel(get())
+		PermissionViewModel(store = get())
 	}
 
 	viewModel {
-		GooglePlayServicesViewModel(get())
+		GooglePlayServicesViewModel(store = get())
 	}
 
 	viewModel {
 		val isDevelopMode = BuildConfig.FLAVOR.contains("develop", true)
-		AboutViewModel(isDevelopMode, get())
+		AboutViewModel(isDevelopMode = isDevelopMode, time = get())
 	}
 
 	viewModel {
-		IntroViewModel(get())
+		IntroViewModel(store = get())
 	}
 
 	viewModel {
-		DrawerViewModel(get())
+		DrawerViewModel(store = get())
 	}
 
 }

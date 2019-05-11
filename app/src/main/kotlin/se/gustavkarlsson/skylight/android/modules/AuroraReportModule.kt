@@ -6,7 +6,18 @@ import se.gustavkarlsson.skylight.android.services_impl.providers.CombiningAuror
 
 val auroraReportModule = module {
 
+	single {
+		CombiningAuroraReportProvider(
+			locationProvider = get(),
+			locationNameProvider = get(),
+			darknessProvider = get(),
+			geomagLocationProvider = get(),
+			kpIndexProvider = get(),
+			weatherProvider = get()
+		)
+	}
+
 	single<AuroraReportProvider> {
-		CombiningAuroraReportProvider(get(), get(), get(), get(), get(), get())
+		get<CombiningAuroraReportProvider>()
 	}
 }

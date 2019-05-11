@@ -44,6 +44,5 @@ class DevelopAuroraReportProvider(
 	}
 
 	override fun stream(location: Location?): Flowable<AuroraReport> =
-		get(location)
-			.repeatWhen { it.delay(pollingInterval) }
+		realProvider.stream(location) // FIXME Honor develop settings
 }

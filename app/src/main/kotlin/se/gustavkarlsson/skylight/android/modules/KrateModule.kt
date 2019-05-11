@@ -165,8 +165,9 @@ val krateModule = module {
 				initial = State(
 					customPlaces = listOf(
 						Place.Custom(1, TextRef("Home"), Location(64.3753, 19.4007)),
-						Place.Custom(2, TextRef("Spain"), Location(40.4168, -3.7038)),
-						Place.Custom(3, TextRef("The Big Apple"), Location(40.7128, -74.0060))
+						Place.Custom(2, TextRef("Stockholm"), Location(59.3293, 18.0686)),
+						Place.Custom(3, TextRef("Spain"), Location(40.4168, -3.7038)),
+						Place.Custom(4, TextRef("The Big Apple"), Location(40.7128, -74.0060))
 					) // FIXME Remove
 				)
 				observeScheduler = AndroidSchedulers.mainThread()

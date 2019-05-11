@@ -7,6 +7,6 @@ import se.gustavkarlsson.skylight.android.services_impl.GmsGooglePlayServicesChe
 val googlePlayServicesModule = module {
 
 	single<GooglePlayServicesChecker> {
-		GmsGooglePlayServicesChecker(get())
+		GmsGooglePlayServicesChecker(context = get())
 	}
 }

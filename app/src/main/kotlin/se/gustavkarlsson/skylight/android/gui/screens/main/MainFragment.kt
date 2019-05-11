@@ -78,7 +78,7 @@ class MainFragment : BaseFragment(R.layout.fragment_main), BackButtonHandler {
 			}
 
 		viewModel.toolbarTitleText
-			.doOnNext { Timber.d("Updating toolbarTitle view: %s", it) }
+			.doOnNext { Timber.d("Updating toolbar title: %s", it) }
 			.autoDisposable(scope)
 			.subscribe { toolbarView.title = it.resolve(requireContext()) }
 
@@ -95,18 +95,18 @@ class MainFragment : BaseFragment(R.layout.fragment_main), BackButtonHandler {
 			}
 
 		viewModel.chanceLevelText
-			.doOnNext { Timber.d("Updating chanceLevel view: %s", it) }
+			.doOnNext { Timber.d("Updating chanceLevel text: %s", it) }
 			.map { it.resolve(requireContext()) }
 			.autoDisposable(scope)
 			.subscribe(chance::setText)
 
 		viewModel.chanceSubtitleText
-			.doOnNext { Timber.d("Updating chanceSubtitle view: %s", it) }
+			.doOnNext { Timber.d("Updating chanceSubtitle text: %s", it) }
 			.autoDisposable(scope)
 			.subscribe { chanceSubtitle.text = it.resolve(requireContext()) }
 
 		viewModel.chanceSubtitleVisibility
-			.doOnNext { Timber.d("Updating timeSinceUpdate weather: %s", it) }
+			.doOnNext { Timber.d("Updating chanceSubtitle visibility: %s", it) }
 			.autoDisposable(scope)
 			.subscribe(chanceSubtitle.visibility())
 

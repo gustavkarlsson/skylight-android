@@ -11,14 +11,7 @@ import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
 val testLocationModule = module {
 
 	single {
-		TestLocationProvider {
-			optionalOf(
-				Location(
-					0.0,
-					0.0
-				)
-			)
-		}
+		TestLocationProvider { optionalOf(Location(0.0, 0.0)) }
 	}
 
 	single<LocationProvider>(override = true) {

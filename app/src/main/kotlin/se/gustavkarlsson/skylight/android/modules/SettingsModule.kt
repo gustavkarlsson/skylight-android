@@ -17,7 +17,10 @@ val settingsModule = module {
 	}
 
 	single<Settings> {
-		RxPreferencesSettings(get(), get())
+		RxPreferencesSettings(
+			context = get(),
+			rxSharedPreferences = get()
+		)
 	}
 
 }

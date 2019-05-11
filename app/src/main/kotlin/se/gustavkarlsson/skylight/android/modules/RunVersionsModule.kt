@@ -7,7 +7,6 @@ import se.gustavkarlsson.skylight.android.services_impl.SharedPreferencesRunVers
 val runVersionsModule = module {
 
 	single<RunVersionManager> {
-		SharedPreferencesRunVersionManager(get())
+		SharedPreferencesRunVersionManager(context = get())
 	}
-
 }

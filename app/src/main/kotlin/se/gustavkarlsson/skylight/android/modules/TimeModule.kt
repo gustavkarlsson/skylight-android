@@ -10,5 +10,4 @@ val timeModule = module {
 	single<Time> {
 		SystemTimeWithFixedZoneId(ZoneId.systemDefault())
 	}
-
 }

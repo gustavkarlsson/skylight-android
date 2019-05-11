@@ -33,10 +33,10 @@ val evaluationModule = module {
 
 	single<ChanceEvaluator<AuroraReport>>("auroraReport") {
 		AuroraReportEvaluator(
-			get("kpIndex"),
-			get("geomagLocation"),
-			get("weather"),
-			get("darkness")
+			kpIndexEvaluator = get("kpIndex"),
+			geomagLocationEvaluator = get("geomagLocation"),
+			weatherEvaluator = get("weather"),
+			darknessEvaluator = get("darkness")
 		)
 	}
 

@@ -82,15 +82,17 @@ class MainViewModel(
 		.distinctUntilChanged()
 		.distinctUntilChanged()
 
-	private val timeSinceUpdate: Flowable<String> = store.states
-		.mapNotNull { it.selectedPlace?.auroraReport?.timestamp }
+	private val timeSinceUpdate: Flowable<Optional<String>> = store.states
+		.map { it.selectedPlace?.auroraReport?.timestamp.toOptional() }
 		.switchMap { time ->
 			Flowable.just(time)
 				.repeatWhen { it.delay(1.seconds) }
 				.observeOn(AndroidSchedulers.mainThread())
 		}
 		.map {
-			relativeTimeFormatter.format(it, time.now().blockingGet(), nowTextThreshold).toString()
+			it.map { timeSince ->
+				relativeTimeFormatter.format(timeSince, time.now().blockingGet(), nowTextThreshold).toString()
+			}
 		}
 		.distinctUntilChanged()
 
@@ -98,18 +100,20 @@ class MainViewModel(
 		.map { it.selectedPlace?.auroraReport?.locationName.toOptional() }
 
 	val chanceSubtitleText: Flowable<TextRef> = Flowables
-		.combineLatest(timeSinceUpdate, locationName) { time, (name) ->
-			if (name == null)
-				TextRef(time)
-			else
-				TextRef(R.string.time_in_location, time, name)
+		.combineLatest(timeSinceUpdate, locationName) { (time), (name) ->
+			when {
+				time == null -> TextRef.EMPTY
+				name == null -> TextRef(time)
+				else -> TextRef(R.string.time_in_location, time, name)
+			}
 		}
 
 	val chanceSubtitleVisibility: Flowable<Boolean> = store.states
-		.mapNotNull { it.selectedPlace?.auroraReport?.timestamp }
 		.map {
+			val timestamp = it.selectedPlace?.auroraReport?.timestamp ?: Instant.MIN
 			when {
-				it <= Instant.EPOCH -> false
+				timestamp == null -> false
+				timestamp <= Instant.EPOCH -> false
 				else -> true
 			}
 		}

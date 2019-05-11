@@ -13,7 +13,7 @@ val navigationModule = module {
 	}
 
 	scope("activity") {
-		Navigator(get())
+		Navigator(navController = get())
 	}
 
 }

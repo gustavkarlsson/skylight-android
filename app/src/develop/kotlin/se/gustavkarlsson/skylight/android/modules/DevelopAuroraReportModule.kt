@@ -11,11 +11,18 @@ import se.gustavkarlsson.skylight.android.services_impl.providers.DevelopAuroraR
 val developAuroraReportModule = module {
 
 	single<DevelopSettings> {
-		RxPreferencesDevelopSettings(get(), get())
+		RxPreferencesDevelopSettings(
+			context = get(),
+			rxSharedPreferences = get()
+		)
 	}
 
 	single<AuroraReportProvider>(override = true) {
-		val realProvider = get<CombiningAuroraReportProvider>()
-		DevelopAuroraReportProvider(realProvider, get(), get(), 1.minutes)
+		DevelopAuroraReportProvider(
+			realProvider = get<CombiningAuroraReportProvider>(),
+			developSettings = get(),
+			time = get(),
+			pollingInterval = 1.minutes
+		)
 	}
 }

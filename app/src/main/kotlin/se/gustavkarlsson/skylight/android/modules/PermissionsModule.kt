@@ -9,7 +9,10 @@ import se.gustavkarlsson.skylight.android.services_impl.AndroidPermissionChecker
 val permissionsModule = module {
 
 	single<PermissionChecker> {
-		AndroidPermissionChecker(get(), get("locationPermission"))
+		AndroidPermissionChecker(
+			context = get(),
+			locationPermission = get("locationPermission")
+		)
 	}
 
 	scope("activity") {
