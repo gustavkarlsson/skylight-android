@@ -3,14 +3,12 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	style="@style/TextAppearance.MaterialComponents.Subtitle2"
 	android:layout_width="match_parent"
-	android:layout_height="@dimen/rhythmTripleAndAHalf"
-	android:background="@drawable/drawer_item_background_selector"
+	android:layout_height="@dimen/rhythmTriple"
+	android:background="?attr/selectableItemBackground"
 	android:clickable="true"
-	android:drawablePadding="@dimen/rhythm"
 	android:ellipsize="end"
 	android:focusable="true"
 	android:gravity="center_vertical"
 	android:paddingStart="@dimen/rhythm"
 	android:paddingEnd="@dimen/rhythm"
-	tools:drawableStart="@drawable/ic_map_white_24dp"
-	tools:text="Current Location" />
+	tools:text="Some Place, Some City, Some Country" />

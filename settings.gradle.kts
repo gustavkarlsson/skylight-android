@@ -9,6 +9,6 @@ include(
 	":lib-locationname",
 	":feature-base",
 	":feature-background",
-	":feature-placepicker",
+	":feature-addplace",
 	":app"
 )

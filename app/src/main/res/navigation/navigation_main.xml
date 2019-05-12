@@ -33,6 +33,6 @@
 
 	<fragment
 		android:id="@+id/placePickerFragment"
-		android:name="se.gustavkarlsson.skylight.android.feature.placepicker.PlacePickerFragment" />
+		android:name="se.gustavkarlsson.skylight.android.feature.addplace.AddPlaceFragment" />
 
 </navigation>

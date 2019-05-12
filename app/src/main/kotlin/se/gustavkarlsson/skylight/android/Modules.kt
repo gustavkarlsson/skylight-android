@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android
 
+import se.gustavkarlsson.skylight.android.feature.addplace.addPlaceModule
 import se.gustavkarlsson.skylight.android.lib.analytics.analyticsModule
 import se.gustavkarlsson.skylight.android.feature.background.backgroundModule
 import se.gustavkarlsson.skylight.android.lib.darkness.darknessModule
@@ -21,7 +22,6 @@ import se.gustavkarlsson.skylight.android.modules.settingsModule
 import se.gustavkarlsson.skylight.android.modules.timeModule
 import se.gustavkarlsson.skylight.android.modules.viewModelModule
 import se.gustavkarlsson.skylight.android.lib.weather.weatherModule
-import se.gustavkarlsson.skylight.android.feature.placepicker.placePickerModule
 
 val modules = listOf(
 	settingsModule,
@@ -45,5 +45,5 @@ val modules = listOf(
 	analyticsModule,
 	activityModule,
 	navigationModule,
-	placePickerModule
+	addPlaceModule
 ) + extraModules

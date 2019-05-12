@@ -131,33 +131,21 @@ dependencies {
 	implementation(project(":lib-locationname"))
 	implementation(project(":feature-base"))
 	implementation(project(":feature-background"))
-	implementation(project(":feature-placepicker"))
+	implementation(project(":feature-addplace"))
 
-	implementation("com.google.android.material:material:${versions.androidMaterial}")
 	implementation("androidx.multidex:multidex:${versions.multidex}")
 	implementation("androidx.appcompat:appcompat:${versions.androidAppcompat}")
-	implementation("androidx.fragment:fragment:${versions.androidFragment}")
 	implementation("androidx.annotation:annotation:${versions.androidAnnotation}")
 	implementation("androidx.preference:preference:${versions.androidPreference}")
 	implementation("androidx.cardview:cardview:${versions.androidCardview}")
-	implementation("androidx.constraintlayout:constraintlayout:${versions.constraintLayout}")
 
 	// Google Play Services
 	implementation("com.google.android.gms:play-services-gcm:${versions.playServicesGcm}")
 
 	// Rx misc
-	implementation("io.reactivex.rxjava2:rxandroid:${versions.rxandroid}")
-	implementation("com.jakewharton.rxrelay2:rxrelay:${versions.rxrelay}")
 	implementation("com.tbruyelle.rxpermissions2:rxpermissions:${versions.rxpermissions}@aar")
 	implementation("com.f2prateek.rx.preferences2:rx-preferences:${versions.rxpreferences}")
 	implementation("io.ashdavies.rx.rxtasks:rx-tasks:${versions.rxtasks}")
-
-	// RxBinding
-	implementation("com.jakewharton.rxbinding2:rxbinding-kotlin:${versions.rxbinding}")
-	implementation("com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:${versions.rxbinding}")
-	implementation("com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:${versions.rxbinding}")
-	implementation("com.jakewharton.rxbinding2:rxbinding-design-kotlin:${versions.rxbinding}")
-	implementation("com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:${versions.rxbinding}")
 
 	// Lifecycle
 	implementation("androidx.lifecycle:lifecycle-extensions:${versions.archLifecycle}")
@@ -169,10 +157,6 @@ dependencies {
 	// Leakcanary
 	debugImplementation("com.squareup.leakcanary:leakcanary-android:${versions.leakcanary}")
 	releaseImplementation("com.squareup.leakcanary:leakcanary-android-no-op:${versions.leakcanary}")
-
-	// Koin
-	implementation("org.koin:koin-androidx-viewmodel:${versions.koin}")
-	implementation("org.koin:koin-androidx-scope:${versions.koin}")
 
 	// Testing
 	testImplementation("junit:junit:${versions.junit}")

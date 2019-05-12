@@ -26,8 +26,9 @@ android {
 dependencies {
 	api(project(":core"))
 
-	// Android
+	api("com.google.android.material:material:${versions.androidMaterial}")
 	api("androidx.fragment:fragment:${versions.androidFragment}")
+	api("androidx.constraintlayout:constraintlayout:${versions.constraintLayout}")
 
 	// Navigation
 	api("android.arch.navigation:navigation-ui-ktx:${versions.navigation}")
@@ -38,4 +39,19 @@ dependencies {
 	api("com.uber.autodispose:autodispose-kotlin:${versions.autodispose}")
 	api("com.uber.autodispose:autodispose-android-kotlin:${versions.autodispose}")
 	api("com.uber.autodispose:autodispose-android-archcomponents-kotlin:${versions.autodispose}")
+
+	// Koin
+	api("org.koin:koin-androidx-viewmodel:${versions.koin}")
+	api("org.koin:koin-androidx-scope:${versions.koin}")
+
+	// Rx misc
+	api("io.reactivex.rxjava2:rxandroid:${versions.rxandroid}")
+	api("com.jakewharton.rxrelay2:rxrelay:${versions.rxrelay}")
+
+	// RxBinding
+	api("com.jakewharton.rxbinding2:rxbinding-kotlin:${versions.rxbinding}")
+	api("com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:${versions.rxbinding}")
+	api("com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:${versions.rxbinding}")
+	api("com.jakewharton.rxbinding2:rxbinding-design-kotlin:${versions.rxbinding}")
+	api("com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:${versions.rxbinding}")
 }
