@@ -44,7 +44,8 @@ class AddPlaceFragment : BaseFragment(R.layout.fragment_add_place) {
 		viewModel.openSaveDialog
 			.autoDisposable(scope)
 			.subscribe {
-				Toast.makeText(requireContext(), "Show dialog to save (FIXME)", Toast.LENGTH_LONG).show()
+				// FIXME show dialog
+				Toast.makeText(requireContext(), "Showing dialog to save ${it.first}", Toast.LENGTH_LONG).show()
 			}
 	}
 }
