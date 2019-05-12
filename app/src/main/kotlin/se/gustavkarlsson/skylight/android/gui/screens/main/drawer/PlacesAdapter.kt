@@ -33,6 +33,7 @@ class PlacesAdapter(
 		val view = holder.view
 		val context = view.context
 		val item = items[position]
+		view.setCompoundDrawablesRelativeWithIntrinsicBounds(item.icon, 0, 0, 0)
 		view.text = item.name.resolve(context)
 		view.isSelected = item.isActive
 		view.setOnClickListener {

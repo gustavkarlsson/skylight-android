@@ -1,7 +1,10 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main.drawer
 
 import androidx.lifecycle.ViewModel
+import com.ioki.textref.TextRef
 import io.reactivex.Flowable
+import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.krate.Command
 import se.gustavkarlsson.skylight.android.krate.State
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
@@ -17,9 +20,15 @@ class DrawerViewModel(
 	private fun createPlaceItems(state: State): List<PlaceItem> {
 		return state.allPlaces.map {
 			val isActive = it.id == state.selectedPlaceId
-			PlaceItem(isActive, it.name) {
+			val icon = when (it) {
+				is Place.Current -> R.drawable.ic_location_on_white_24dp
+				is Place.Custom -> R.drawable.ic_map_white_24dp
+			}
+			PlaceItem(isActive, icon, it.name) {
 				store.issue(Command.SelectPlace(it.id))
 			}
+		} + PlaceItem(false, R.drawable.ic_add_white_24dp, TextRef("Add Place")) { // FIXME don't hardcode
+			// FIXME navigate to Add Place
 		}
 	}
 }
