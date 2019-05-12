@@ -25,7 +25,7 @@ android {
 
 dependencies {
 	implementation(project(":core"))
-	implementation(project(":analytics"))
+	implementation(project(":lib-analytics"))
 
 	// Firebase
 	implementation("com.google.firebase:firebase-core:${versions.firebase}")

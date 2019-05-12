@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.fragment_permission.grantButton
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.features.base.BaseFragment
+import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
 import timber.log.Timber
 
 class PermissionFragment : BaseFragment(R.layout.fragment_permission) {

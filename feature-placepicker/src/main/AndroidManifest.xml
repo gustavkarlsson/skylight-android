@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="se.gustavkarlsson.skylight.android.features.placepicker" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="se.gustavkarlsson.skylight.android.feature.placepicker">
+
+	<uses-permission android:name="android.permission.INTERNET" />
+</manifest>

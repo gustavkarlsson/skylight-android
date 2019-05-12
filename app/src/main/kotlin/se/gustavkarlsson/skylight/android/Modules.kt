@@ -1,12 +1,12 @@
 package se.gustavkarlsson.skylight.android
 
-import se.gustavkarlsson.skylight.android.analytics.analyticsModule
+import se.gustavkarlsson.skylight.android.lib.analytics.analyticsModule
 import se.gustavkarlsson.skylight.android.background.backgroundModule
-import se.gustavkarlsson.skylight.android.darkness.darknessModule
-import se.gustavkarlsson.skylight.android.geomaglocation.geomagLocationModule
-import se.gustavkarlsson.skylight.android.kpindex.kpIndexModule
-import se.gustavkarlsson.skylight.android.location.locationModule
-import se.gustavkarlsson.skylight.android.locationname.locationNameModule
+import se.gustavkarlsson.skylight.android.lib.darkness.darknessModule
+import se.gustavkarlsson.skylight.android.lib.geomaglocation.geomagLocationModule
+import se.gustavkarlsson.skylight.android.lib.kpindex.kpIndexModule
+import se.gustavkarlsson.skylight.android.lib.location.locationModule
+import se.gustavkarlsson.skylight.android.lib.locationname.locationNameModule
 import se.gustavkarlsson.skylight.android.modules.activityModule
 import se.gustavkarlsson.skylight.android.modules.auroraReportModule
 import se.gustavkarlsson.skylight.android.modules.evaluationModule
@@ -20,8 +20,8 @@ import se.gustavkarlsson.skylight.android.modules.runVersionsModule
 import se.gustavkarlsson.skylight.android.modules.settingsModule
 import se.gustavkarlsson.skylight.android.modules.timeModule
 import se.gustavkarlsson.skylight.android.modules.viewModelModule
-import se.gustavkarlsson.skylight.android.weather.weatherModule
-import se.gustavkarlsson.skylight.android.features.placepicker.placePickerModule
+import se.gustavkarlsson.skylight.android.lib.weather.weatherModule
+import se.gustavkarlsson.skylight.android.feature.placepicker.placePickerModule
 
 val modules = listOf(
 	settingsModule,

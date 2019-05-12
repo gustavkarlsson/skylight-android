@@ -14,7 +14,7 @@ import org.koin.androidx.scope.ext.android.bindScope
 import org.koin.androidx.scope.ext.android.createScope
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.addToKoin
-import se.gustavkarlsson.skylight.android.features.base.BackButtonHandler
+import se.gustavkarlsson.skylight.android.feature.base.BackButtonHandler
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.navigation.Navigator
 import se.gustavkarlsson.skylight.android.navigation.Screen

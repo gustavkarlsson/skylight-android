@@ -9,8 +9,8 @@ import kotlinx.android.synthetic.main.fragment_google_play_services.installButto
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
-import se.gustavkarlsson.skylight.android.features.base.BaseFragment
-import se.gustavkarlsson.skylight.android.features.base.doOnNext
+import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
+import se.gustavkarlsson.skylight.android.feature.base.doOnNext
 import timber.log.Timber
 
 class GooglePlayServicesFragment : BaseFragment(R.layout.fragment_google_play_services) {
