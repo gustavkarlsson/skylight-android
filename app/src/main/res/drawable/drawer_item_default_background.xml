@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:drawable="?selectableItemBackground" />
+	<item android:right="@dimen/rhythmHalf">
+		<ripple android:color="@color/ripple">
+			<item>
+				<shape>
+					<solid android:color="@color/surface" />
+					<corners
+						android:bottomRightRadius="@dimen/rhythmTriple"
+						android:topRightRadius="@dimen/rhythmTriple" />
+				</shape>
+			</item>
+		</ripple>
+	</item>
 </layer-list>

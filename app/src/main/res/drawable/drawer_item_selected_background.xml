@@ -8,4 +8,16 @@
 				android:topRightRadius="@dimen/rhythmTriple" />
 		</shape>
 	</item>
+	<item android:right="@dimen/rhythmHalf">
+		<ripple android:color="@color/ripple">
+			<item>
+				<shape>
+					<solid android:color="@color/secondary_transparent" />
+					<corners
+						android:bottomRightRadius="@dimen/rhythmTriple"
+						android:topRightRadius="@dimen/rhythmTriple" />
+				</shape>
+			</item>
+		</ripple>
+	</item>
 </layer-list>
