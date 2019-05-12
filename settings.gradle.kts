@@ -1,6 +1,5 @@
 include(
 	":core",
-	":background",
 	":lib-analytics",
 	":lib-location",
 	":lib-weather",
@@ -9,6 +8,7 @@ include(
 	":lib-geomaglocation",
 	":lib-locationname",
 	":feature-base",
+	":feature-background",
 	":feature-placepicker",
 	":app"
 )

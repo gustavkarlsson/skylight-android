@@ -122,7 +122,6 @@ android {
 
 dependencies {
 	implementation(project(":core"))
-	implementation(project(":background"))
 	implementation(project(":lib-analytics"))
 	implementation(project(":lib-location"))
 	implementation(project(":lib-weather"))
@@ -131,6 +130,7 @@ dependencies {
 	implementation(project(":lib-geomaglocation"))
 	implementation(project(":lib-locationname"))
 	implementation(project(":feature-base"))
+	implementation(project(":feature-background"))
 	implementation(project(":feature-placepicker"))
 
 	implementation("com.google.android.material:material:${versions.androidMaterial}")

@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android
 
 import se.gustavkarlsson.skylight.android.lib.analytics.analyticsModule
-import se.gustavkarlsson.skylight.android.background.backgroundModule
+import se.gustavkarlsson.skylight.android.feature.background.backgroundModule
 import se.gustavkarlsson.skylight.android.lib.darkness.darknessModule
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.geomagLocationModule
 import se.gustavkarlsson.skylight.android.lib.kpindex.kpIndexModule
