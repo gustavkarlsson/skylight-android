@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit
 internal class ReactiveLocationLocationProvider(
 	private val reactiveLocationProvider: ReactiveLocationProvider,
 	private val timeout: Duration,
+	requestAccuracy: Int,
 	throttleDuration: Duration,
 	firstPollingInterval: Duration,
 	restPollingInterval: Duration,
@@ -29,7 +30,7 @@ internal class ReactiveLocationLocationProvider(
 ) : LocationProvider {
 
 	private val locationRequest = LocationRequest().apply {
-		priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+		priority = requestAccuracy
 		interval = timeout.toMillis() / 2
 		numUpdates = 1
 	}
@@ -48,13 +49,13 @@ internal class ReactiveLocationLocationProvider(
 	}
 
 	private val forcedLocationRequest = LocationRequest().apply {
-		priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+		priority = requestAccuracy
 		interval = firstPollingInterval.toMillis()
 		numUpdates = 1
 	}
 
 	private val pollingLocationRequest = LocationRequest().apply {
-		priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+		priority = requestAccuracy
 		interval = restPollingInterval.toMillis()
 	}
 
