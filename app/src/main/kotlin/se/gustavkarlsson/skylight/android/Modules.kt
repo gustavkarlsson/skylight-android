@@ -21,6 +21,7 @@ import se.gustavkarlsson.skylight.android.modules.settingsModule
 import se.gustavkarlsson.skylight.android.modules.timeModule
 import se.gustavkarlsson.skylight.android.modules.viewModelModule
 import se.gustavkarlsson.skylight.android.weather.weatherModule
+import se.gustavkarlsson.skylight.android.features.placepicker.placePickerModule
 
 val modules = listOf(
 	settingsModule,
@@ -43,5 +44,6 @@ val modules = listOf(
 	localizationModule,
 	analyticsModule,
 	activityModule,
-	navigationModule
+	navigationModule,
+	placePickerModule
 ) + extraModules

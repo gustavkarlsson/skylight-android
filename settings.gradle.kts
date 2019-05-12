@@ -8,5 +8,7 @@ include(
 	":kpindex",
 	":geomaglocation",
 	":locationname",
+	":feature-base",
+	":feature-placepicker",
 	":app"
 )

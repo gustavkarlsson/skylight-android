@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.extensions
+package se.gustavkarlsson.skylight.android.features.base
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Lifecycle.Event.ON_ANY
@@ -99,7 +99,7 @@ fun doOnEvery(owner: LifecycleOwner, event: Lifecycle.Event, block: () -> Unit):
 }
 
 fun <T> T.doOnEvery(owner: LifecycleOwner, event: Lifecycle.Event, block: (T) -> Unit): LifecycleAction =
-	se.gustavkarlsson.skylight.android.extensions.doOnEvery(owner, event) { block(this) }
+	doOnEvery(owner, event) { -> block(this) }
 
 fun doOnNext(owner: LifecycleOwner, event: Lifecycle.Event, block: () -> Unit) {
 	val lifecycle = owner.lifecycle
@@ -116,4 +116,4 @@ fun doOnNext(owner: LifecycleOwner, event: Lifecycle.Event, block: () -> Unit) {
 }
 
 fun <T> T.doOnNext(owner: LifecycleOwner, event: Lifecycle.Event, block: (T) -> Unit) =
-	se.gustavkarlsson.skylight.android.extensions.doOnNext(owner, event) { block(this) }
+	doOnNext(owner, event) { -> block(this) }

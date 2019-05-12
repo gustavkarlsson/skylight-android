@@ -12,28 +12,29 @@ import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Flowable
 import kotlinx.android.synthetic.main.fragment_main.chance
+import kotlinx.android.synthetic.main.fragment_main.chanceSubtitle
 import kotlinx.android.synthetic.main.fragment_main.darknessCard
 import kotlinx.android.synthetic.main.fragment_main.drawerLayout
 import kotlinx.android.synthetic.main.fragment_main.geomagLocationCard
 import kotlinx.android.synthetic.main.fragment_main.kpIndexCard
 import kotlinx.android.synthetic.main.fragment_main.nav_view
-import kotlinx.android.synthetic.main.fragment_main.chanceSubtitle
 import kotlinx.android.synthetic.main.fragment_main.toolbarView
 import kotlinx.android.synthetic.main.fragment_main.weatherCard
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.extensions.doOnNext
 import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
-import se.gustavkarlsson.skylight.android.gui.BackButtonHandler
-import se.gustavkarlsson.skylight.android.gui.BaseFragment
+import se.gustavkarlsson.skylight.android.features.base.BaseFragment
+import se.gustavkarlsson.skylight.android.features.base.doOnNext
+import se.gustavkarlsson.skylight.android.features.base.BackButtonHandler
 import se.gustavkarlsson.skylight.android.gui.views.FactorCard
 import se.gustavkarlsson.skylight.android.navigation.Navigator
 import se.gustavkarlsson.skylight.android.navigation.Screen
 import timber.log.Timber
 import kotlin.math.roundToInt
 
-class MainFragment : BaseFragment(R.layout.fragment_main), BackButtonHandler {
+class MainFragment : BaseFragment(R.layout.fragment_main),
+	BackButtonHandler {
 
 	private var currentBottomSheetTitle: Int? = null
 

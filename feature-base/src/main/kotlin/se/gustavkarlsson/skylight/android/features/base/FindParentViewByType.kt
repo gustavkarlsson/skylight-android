@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.gui
+package se.gustavkarlsson.skylight.android.features.base
 
 import android.view.View
 import android.view.ViewParent

@@ -130,6 +130,8 @@ dependencies {
 	implementation(project(":kpindex"))
 	implementation(project(":geomaglocation"))
 	implementation(project(":locationname"))
+	implementation(project(":feature-base"))
+	implementation(project(":feature-placepicker"))
 
 	implementation("com.google.android.material:material:${versions.androidMaterial}")
 	implementation("androidx.multidex:multidex:${versions.multidex}")
@@ -142,11 +144,6 @@ dependencies {
 
 	// Google Play Services
 	implementation("com.google.android.gms:play-services-gcm:${versions.playServicesGcm}")
-
-	// Navigation
-	implementation("android.arch.navigation:navigation-fragment:${versions.navigation}")
-	implementation("android.arch.navigation:navigation-ui:${versions.navigation}")
-	implementation("android.arch.navigation:navigation-ui-ktx:${versions.navigation}")
 
 	// Rx misc
 	implementation("io.reactivex.rxjava2:rxandroid:${versions.rxandroid}")
@@ -161,11 +158,6 @@ dependencies {
 	implementation("com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:${versions.rxbinding}")
 	implementation("com.jakewharton.rxbinding2:rxbinding-design-kotlin:${versions.rxbinding}")
 	implementation("com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:${versions.rxbinding}")
-
-	// AutoDispose
-	implementation("com.uber.autodispose:autodispose-kotlin:${versions.autodispose}")
-	implementation("com.uber.autodispose:autodispose-android-kotlin:${versions.autodispose}")
-	implementation("com.uber.autodispose:autodispose-android-archcomponents-kotlin:${versions.autodispose}")
 
 	// Lifecycle
 	implementation("androidx.lifecycle:lifecycle-extensions:${versions.archLifecycle}")

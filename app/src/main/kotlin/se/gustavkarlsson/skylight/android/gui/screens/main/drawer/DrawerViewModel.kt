@@ -9,6 +9,7 @@ import se.gustavkarlsson.skylight.android.krate.Command
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.krate.State
 import se.gustavkarlsson.skylight.android.navigation.Navigator
+import se.gustavkarlsson.skylight.android.navigation.Screen
 
 class DrawerViewModel(
 	private val store: SkylightStore,
@@ -30,7 +31,7 @@ class DrawerViewModel(
 				store.issue(Command.SelectPlace(it.id))
 			}
 		} + PlaceItem(false, R.drawable.ic_add_white_24dp, TextRef(R.string.add_place)) {
-			// FIXME navigate to Add Place
+			navigator.navigate(Screen.PICK_PLACE)
 		}
 	}
 }

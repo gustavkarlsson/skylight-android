@@ -8,8 +8,8 @@ import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_main_drawer.placesRecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.gui.BaseFragment
-import se.gustavkarlsson.skylight.android.gui.findParentViewByType
+import se.gustavkarlsson.skylight.android.features.base.BaseFragment
+import se.gustavkarlsson.skylight.android.features.base.findParentViewByType
 
 class DrawerFragment : BaseFragment(R.layout.fragment_main_drawer) {
 

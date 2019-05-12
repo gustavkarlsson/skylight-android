@@ -10,7 +10,8 @@ enum class Screen(@IdRes val id: Int, val popOnLeave: Boolean) {
 	ABOUT(R.id.aboutFragment, false),
 	INTRO(R.id.introFragment, true),
 	GOOGLE_PLAY_SERVICES(R.id.googlePlayServicesFragment, true),
-	PERMISSION(R.id.permissionFragment, true);
+	PERMISSION(R.id.permissionFragment, true),
+	PICK_PLACE(R.id.placePickerFragment, false);
 
 	companion object {
 		fun fromId(@IdRes id: Int): Screen {

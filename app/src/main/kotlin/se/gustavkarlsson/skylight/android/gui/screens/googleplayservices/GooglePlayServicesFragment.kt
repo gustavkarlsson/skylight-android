@@ -8,9 +8,9 @@ import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_google_play_services.installButton
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.extensions.doOnNext
 import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
-import se.gustavkarlsson.skylight.android.gui.BaseFragment
+import se.gustavkarlsson.skylight.android.features.base.BaseFragment
+import se.gustavkarlsson.skylight.android.features.base.doOnNext
 import timber.log.Timber
 
 class GooglePlayServicesFragment : BaseFragment(R.layout.fragment_google_play_services) {

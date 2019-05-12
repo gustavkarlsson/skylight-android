@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.gui
+package se.gustavkarlsson.skylight.android.features.base
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,8 +12,6 @@ import androidx.navigation.NavController
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.android.lifecycle.scope
 import org.koin.android.ext.android.inject
-import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.extensions.doOnEvery
 import se.gustavkarlsson.skylight.android.services.Analytics
 
 abstract class BaseFragment(

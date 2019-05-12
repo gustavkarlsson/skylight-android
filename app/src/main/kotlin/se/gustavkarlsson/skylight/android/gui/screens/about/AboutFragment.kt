@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.fragment_about.versionNameTextView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.setHtml
-import se.gustavkarlsson.skylight.android.gui.BaseFragment
+import se.gustavkarlsson.skylight.android.features.base.BaseFragment
 
 class AboutFragment : BaseFragment(R.layout.fragment_about) {
 
