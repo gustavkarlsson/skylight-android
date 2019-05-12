@@ -4,11 +4,12 @@
 	<string name="app_name" translatable="false">Skylight</string>
 	<string name="author" translatable="false">Gustav Karlsson</string>
 	<string name="exit">Exit</string>
-	<string name="main_your_location">Your Location</string>
+	<string name="main_your_location">Your location</string>
 	<string name="right_now">Right now</string>
 	<string name="time_in_location">%1$s in %2$s</string>
-	<string name="privacy_policy">Privacy Policy</string>
+	<string name="privacy_policy">Privacy policy</string>
 	<string name="places">Places</string>
+	<string name="add_place">Add place</string>
 
 	<!-- Errors -->
 	<string name="error_unknown_update_error">An unknown error occurred while updating</string>
@@ -20,11 +21,11 @@
 	<string name="about">About</string>
 
 	<!-- Aurora chance -->
-	<string name="aurora_chance_none">No Chance</string>
-	<string name="aurora_chance_low">Low Chance</string>
-	<string name="aurora_chance_medium">Medium Chance</string>
-	<string name="aurora_chance_high">High Chance</string>
-	<string name="aurora_chance_unknown">Unknown Chance</string>
+	<string name="aurora_chance_none">No chance</string>
+	<string name="aurora_chance_low">Low chance</string>
+	<string name="aurora_chance_medium">Medium chance</string>
+	<string name="aurora_chance_high">High chance</string>
+	<string name="aurora_chance_unknown">Unknown chance</string>
 
 	<!-- Weather -->
 	<string name="main_weather_clear">Clear</string>

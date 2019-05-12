@@ -6,11 +6,13 @@ import io.reactivex.Flowable
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.krate.Command
-import se.gustavkarlsson.skylight.android.krate.State
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
+import se.gustavkarlsson.skylight.android.krate.State
+import se.gustavkarlsson.skylight.android.navigation.Navigator
 
 class DrawerViewModel(
-	private val store: SkylightStore
+	private val store: SkylightStore,
+	private val navigator: Navigator
 ) : ViewModel() {
 	val places: Flowable<List<PlaceItem>> =
 		store.states
@@ -27,7 +29,7 @@ class DrawerViewModel(
 			PlaceItem(isActive, icon, it.name) {
 				store.issue(Command.SelectPlace(it.id))
 			}
-		} + PlaceItem(false, R.drawable.ic_add_white_24dp, TextRef("Add Place")) { // FIXME don't hardcode
+		} + PlaceItem(false, R.drawable.ic_add_white_24dp, TextRef(R.string.add_place)) {
 			// FIXME navigate to Add Place
 		}
 	}

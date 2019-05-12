@@ -56,7 +56,7 @@ val viewModelModule = module {
 	}
 
 	viewModel {
-		DrawerViewModel(store = get())
+		DrawerViewModel(store = get(), navigator = get())
 	}
 
 }
