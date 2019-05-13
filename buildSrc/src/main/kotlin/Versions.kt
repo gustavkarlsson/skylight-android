@@ -52,6 +52,7 @@ object Versions {
 	val koin = "1.0.1"
 	val koptional = "0.2.0"
 	val uiAutomator = "2.2.0"
+	val mapboxService = "4.7.0"
 
 	// Test
 	val junit = "4.12"

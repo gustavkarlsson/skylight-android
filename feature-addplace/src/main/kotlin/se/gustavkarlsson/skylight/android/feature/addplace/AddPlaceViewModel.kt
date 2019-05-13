@@ -6,13 +6,20 @@ import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.extensions.delay
+import se.gustavkarlsson.skylight.android.extensions.sample
 import se.gustavkarlsson.skylight.android.services.Geocoder
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 // FIXME create store for this feature, and handle loading, reverse geocoding, and so on.
-internal class AddPlaceViewModel(geocoder: Geocoder) : ViewModel() {
+internal class AddPlaceViewModel(
+	geocoder: Geocoder,
+	sampleDuration: Duration,
+	retryDelay: Duration
+) : ViewModel() {
 
 	private val searchStringRelay = BehaviorRelay.create<String>()
 
@@ -22,9 +29,10 @@ internal class AddPlaceViewModel(geocoder: Geocoder) : ViewModel() {
 
 	val searchResultItems: Flowable<List<SearchResultItem>> =
 		searchStringRelay
-			.debounce(1, TimeUnit.SECONDS)
 			.toFlowable(BackpressureStrategy.LATEST)
-			.flatMapSingle(geocoder::geocode)
+			.sample(sampleDuration)
+			.concatMapEager { geocoder.geocode(it).toFlowable() }
+			.retryWhen { it.delay(retryDelay) }
 			.map { suggestions ->
 				suggestions.map {
 					SearchResultItem(it.fullName) {

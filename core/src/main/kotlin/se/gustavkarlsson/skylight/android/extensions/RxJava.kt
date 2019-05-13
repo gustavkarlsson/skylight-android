@@ -19,6 +19,9 @@ fun <T : Any> Observable<T>.delay(delay: Duration): Observable<T> =
 fun <T : Any> Single<T>.timeout(timeout: Duration): Single<T> =
 	this.timeout(timeout.toMillis(), TimeUnit.MILLISECONDS)
 
+fun <T : Any> Flowable<T>.sample(interval: Duration): Flowable<T> =
+	this.sample(interval.toMillis(), TimeUnit.MILLISECONDS)
+
 fun <T : Any, R : Any> Flowable<T>.mapNotNull(mapper: (T) -> R?): Flowable<R> =
 	this.flatMapMaybe {
 		val returned = mapper(it)
