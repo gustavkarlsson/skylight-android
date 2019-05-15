@@ -1,12 +1,14 @@
 package se.gustavkarlsson.skylight.android.feature.addplace
 
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ioki.textref.TextRef
+import com.jakewharton.rxbinding2.view.visibility
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
+import kotlinx.android.synthetic.main.fragment_add_place.progressBar
 import kotlinx.android.synthetic.main.fragment_add_place.searchResultRecyclerView
 import kotlinx.android.synthetic.main.fragment_add_place.toolbarView
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -40,6 +42,10 @@ class AddPlaceFragment : BaseFragment(R.layout.fragment_add_place) {
 		viewModel.searchResultItems
 			.autoDisposable(scope)
 			.subscribe { adapter.items = it }
+
+		viewModel.isLoading
+			.autoDisposable(scope)
+			.subscribe(progressBar.visibility(View.INVISIBLE))
 
 		viewModel.openSaveDialog
 			.autoDisposable(scope)

@@ -10,9 +10,8 @@ internal class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.Vi
 
 	var items: List<SearchResultItem> = emptyList()
 		set(value) {
-			val diff = DiffUtil.calculateDiff(DiffCallback(items, value))
 			field = value
-			diff.dispatchUpdatesTo(this)
+			notifyDataSetChanged()
 		}
 
 	override fun getItemCount() = items.size
@@ -33,27 +32,5 @@ internal class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.Vi
 		view.setOnClickListener { item.onClick() }
 	}
 
-	class DiffCallback(
-		private val oldItems: List<SearchResultItem>,
-		private val newItems: List<SearchResultItem>
-	) : DiffUtil.Callback() {
-
-		override fun getOldListSize() = oldItems.size
-
-		override fun getNewListSize() = newItems.size
-
-		override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-			val oldItem = oldItems[oldItemPosition]
-			val newItem = newItems[newItemPosition]
-			return oldItem.text == newItem.text
-		}
-
-		override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-			areItemsTheSame(oldItemPosition, newItemPosition)
-
-	}
-
 	class ViewHolder(val view: TextView) : RecyclerView.ViewHolder(view)
-
-
 }
