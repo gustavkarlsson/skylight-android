@@ -23,6 +23,7 @@
 		<item name="android:textColorPrimary">@color/on_background_weaker</item>
 		<item name="android:textColorSecondary">@color/on_background</item>
 		<item name="android:statusBarColor">#000000</item>
+		<item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.Surface</item>
 		<item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 	</style>
 
