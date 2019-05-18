@@ -59,7 +59,7 @@ val backgroundModule = module {
 		AuroraReportNotificationDeciderImpl(
 			notifiedChanceRepository = get(),
 			chanceEvaluator = get("auroraReport"),
-			store = get(),
+			store = get("main"),
 			outdatedEvaluator = get(),
 			appVisibilityEvaluator = AppVisibilityEvaluator(get())
 		)
@@ -67,7 +67,7 @@ val backgroundModule = module {
 
 	single<Completable>("initiateJobManager") {
 		val context = get<Context>()
-		val store = get<SkylightStore>()
+		val store = get<SkylightStore>("main")
 		val decider = get<AuroraReportNotificationDecider>()
 		val notifier = get<Notifier<AuroraReport>>()
 		val outdatedEvaluator = get<OutdatedEvaluator>()

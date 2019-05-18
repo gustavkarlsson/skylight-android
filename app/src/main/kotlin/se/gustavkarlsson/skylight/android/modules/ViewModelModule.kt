@@ -20,7 +20,7 @@ val viewModelModule = module {
 
 	viewModel {
 		MainViewModel(
-			store = get(),
+			store = get("main"),
 			auroraChanceEvaluator = get("auroraReport"),
 			relativeTimeFormatter = get(),
 			chanceLevelFormatter = get("chanceLevel"),
@@ -39,11 +39,11 @@ val viewModelModule = module {
 	}
 
 	viewModel {
-		PermissionViewModel(store = get())
+		PermissionViewModel(store = get("main"))
 	}
 
 	viewModel {
-		GooglePlayServicesViewModel(store = get())
+		GooglePlayServicesViewModel(store = get("main"))
 	}
 
 	viewModel {
@@ -52,11 +52,11 @@ val viewModelModule = module {
 	}
 
 	viewModel {
-		IntroViewModel(store = get())
+		IntroViewModel(store = get("main"))
 	}
 
 	viewModel {
-		DrawerViewModel(store = get(), navigator = get())
+		DrawerViewModel(store = get("main"), navigator = get())
 	}
 
 }

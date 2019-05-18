@@ -53,6 +53,10 @@ class AddPlaceFragment : BaseFragment(R.layout.fragment_add_place) {
 		viewModel.openSaveDialog
 			.autoDisposable(scope)
 			.subscribe(::openSaveDialog)
+
+		viewModel.goBack
+			.autoDisposable(scope)
+			.subscribe { fragmentManager?.popBackStack() }
 	}
 
 	private fun openSaveDialog(dialogData: SaveDialogData) {
@@ -64,7 +68,6 @@ class AddPlaceFragment : BaseFragment(R.layout.fragment_add_place) {
 			setNegativeButton(R.string.cancel) { _, _ -> }
 			setPositiveButton(R.string.save) { _, _ ->
 				dialogData.onSave(editText.text.toString())
-				fragmentManager?.popBackStack() // FIXME move to viewModel
 			}
 			editText.setText(dialogData.suggestedName)
 			editText.setSelection(dialogData.suggestedName.length)

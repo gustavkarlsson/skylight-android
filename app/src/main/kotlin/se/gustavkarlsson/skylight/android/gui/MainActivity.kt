@@ -22,7 +22,7 @@ import se.gustavkarlsson.skylight.android.navigation.Screen
 
 class MainActivity : AppCompatActivity(), LifecycleObserver {
 
-	private val store: SkylightStore by inject()
+	private val store: SkylightStore by inject("main")
 
 	private val navigator: Navigator by inject()
 

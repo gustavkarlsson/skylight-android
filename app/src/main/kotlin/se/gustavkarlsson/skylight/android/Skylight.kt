@@ -23,7 +23,7 @@ class Skylight : MultiDexApplication() {
 
 	private val disposables = CompositeDisposable()
 
-	private val store: SkylightStore by inject()
+	private val store: SkylightStore by inject("main")
 
 	private val analytics: Analytics by inject()
 

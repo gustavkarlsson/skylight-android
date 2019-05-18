@@ -21,7 +21,7 @@ import timber.log.Timber
 
 val krateModule = module {
 
-	single { _ ->
+	single("main") { _ ->
 		val runVersionManager = get<RunVersionManager>()
 		val googlePlayServicesChecker = get<GooglePlayServicesChecker>()
 		val permissionChecker = get<PermissionChecker>()
@@ -187,7 +187,7 @@ val krateModule = module {
 	}
 
 	single("state") {
-		get<SkylightStore>().states
+		get<SkylightStore>("main").states
 	}
 
 }

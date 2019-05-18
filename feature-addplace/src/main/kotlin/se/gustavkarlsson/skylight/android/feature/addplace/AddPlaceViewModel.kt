@@ -1,71 +1,45 @@
 package se.gustavkarlsson.skylight.android.feature.addplace
 
 import androidx.lifecycle.ViewModel
-import com.jakewharton.rxrelay2.BehaviorRelay
 import com.jakewharton.rxrelay2.PublishRelay
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import org.threeten.bp.Duration
-import se.gustavkarlsson.skylight.android.entities.Location
-import se.gustavkarlsson.skylight.android.extensions.debounce
-import se.gustavkarlsson.skylight.android.extensions.delay
-import se.gustavkarlsson.skylight.android.krate.Command
+import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
-import se.gustavkarlsson.skylight.android.services.Geocoder
-import se.gustavkarlsson.skylight.android.services.PlacesRepository
+import se.gustavkarlsson.skylight.android.krate.Command as MainCommand
 
 internal class AddPlaceViewModel(
-	geocoder: Geocoder,
-	private val store: SkylightStore,
-	debounceDelay: Duration,
-	retryDelay: Duration
+	private val mainStore: SkylightStore,
+	private val addPlaceStore: AddPlaceStore
 ) : ViewModel() {
 
-	private val searchStringRelay = BehaviorRelay.create<String>()
-	private val loadingRelay = BehaviorRelay.createDefault(false)
-	private val dialogRelay = PublishRelay.create<SaveDialogData>()
+	private val openSaveDialogRelay = PublishRelay.create<SaveDialogData>()
+	val openSaveDialog: Observable<SaveDialogData> = openSaveDialogRelay
 
-	private var searchCount = 0L
+	private val goBackRelay = PublishRelay.create<Unit>()
+	val goBack: Observable<Unit> = goBackRelay
 
-	fun onSearchTextChanged(newText: String) = searchStringRelay.accept(newText)
+	fun onSearchTextChanged(newText: String) = addPlaceStore.issue(Command.Search(newText))
 
-	val searchResultItems: Flowable<List<SearchResultItem>> =
-		searchStringRelay
-			.map {
-				loadingRelay.accept(true)
-				++searchCount to it
+	val searchResultItems: Flowable<List<SearchResultItem>> = addPlaceStore.states
+		.map(State::suggestions)
+		.distinctUntilChanged()
+		.map { suggestions ->
+			suggestions.map { it.toSearchResultItem() }
+		}
+
+	private fun PlaceSuggestion.toSearchResultItem() =
+		SearchResultItem(fullName) {
+			val dialogData = SaveDialogData(simpleName, location) { finalName ->
+				mainStore.issue(MainCommand.AddPlace(finalName, location))
+				goBackRelay.accept(Unit)
 			}
-			.toFlowable(BackpressureStrategy.LATEST)
-			.debounce(debounceDelay)
-			.switchMapSingle { (searchNumber, text) ->
-				geocoder.geocode(text)
-					.doOnSuccess {
-						if (searchCount == searchNumber) {
-							loadingRelay.accept(false)
-						}
-					}
-			}
-			.retryWhen { it.delay(retryDelay) }
-			.map { suggestions ->
-				suggestions.map { suggestion ->
-					SearchResultItem(suggestion.fullName) {
-						val dialogData = SaveDialogData(suggestion.simpleName, suggestion.location) {
-							store.issue(Command.AddPlace(it, suggestion.location))
-						}
-						dialogRelay.accept(dialogData)
-					}
-				}
-			}
-			.observeOn(AndroidSchedulers.mainThread())
+			openSaveDialogRelay.accept(dialogData)
+		}
 
-	val isLoading: Observable<Boolean> =
-		loadingRelay
-			.observeOn(AndroidSchedulers.mainThread())
+	val isLoading: Flowable<Boolean> = addPlaceStore.states
+		.map(State::searching)
+		.distinctUntilChanged()
 
-	val openSaveDialog: Flowable<SaveDialogData> =
-		dialogRelay
-			.toFlowable(BackpressureStrategy.LATEST)
-			.observeOn(AndroidSchedulers.mainThread())
+
 }

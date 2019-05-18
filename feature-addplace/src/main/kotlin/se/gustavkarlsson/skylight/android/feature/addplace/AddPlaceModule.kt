@@ -14,9 +14,15 @@ val addPlaceModule = module {
 
 	viewModel {
 		AddPlaceViewModel(
+			mainStore  = get("main"),
+			addPlaceStore = get("addplace")
+		)
+	}
+
+	factory("addplace") {
+		createStore(
 			geocoder = get(),
-			store  = get(),
-			debounceDelay = 1.seconds,
+			searchDebounceDelay = 1.seconds,
 			retryDelay = 2.seconds
 		)
 	}
