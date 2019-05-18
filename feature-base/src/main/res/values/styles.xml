@@ -62,15 +62,8 @@
 	<!-- Toolbar -->
 
 	<style name="AppTheme.Toolbar">
-		<item name="android:textColorPrimary">@color/on_background</item>
-		<item name="android:textColorSecondary">@color/on_background</item>
-	</style>
-
-
-	<!-- Bottom sheet -->
-
-	<style name="AppTheme.BottomSheet">
-		<item name="android:background">@color/background</item>
+		<item name="android:textColorPrimary">@color/on_surface</item>
+		<item name="android:textColorSecondary">@color/on_surface</item>
 	</style>
 
 
@@ -83,6 +76,7 @@
 		<item name="android:height">56dp</item>
 		<item name="cornerRadius">56dp</item>
 	</style>
+
 
 	<!-- Misc -->
 

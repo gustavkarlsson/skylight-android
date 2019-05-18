@@ -4,10 +4,9 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:paddingBottom="@dimen/screen_margin"
-	android:paddingEnd="@dimen/screen_margin"
 	android:paddingStart="@dimen/screen_margin"
-	android:theme="@style/AppTheme.BottomSheet">
+	android:paddingEnd="@dimen/screen_margin"
+	android:paddingBottom="@dimen/screen_margin">
 
 	<TextView
 		android:id="@+id/title"
