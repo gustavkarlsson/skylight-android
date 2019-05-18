@@ -1,13 +1,15 @@
 package se.gustavkarlsson.skylight.android
 
 import se.gustavkarlsson.skylight.android.feature.addplace.addPlaceModule
-import se.gustavkarlsson.skylight.android.lib.analytics.analyticsModule
 import se.gustavkarlsson.skylight.android.feature.background.backgroundModule
+import se.gustavkarlsson.skylight.android.lib.analytics.analyticsModule
 import se.gustavkarlsson.skylight.android.lib.darkness.darknessModule
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.geomagLocationModule
 import se.gustavkarlsson.skylight.android.lib.kpindex.kpIndexModule
 import se.gustavkarlsson.skylight.android.lib.location.locationModule
 import se.gustavkarlsson.skylight.android.lib.locationname.locationNameModule
+import se.gustavkarlsson.skylight.android.lib.places.placesModule
+import se.gustavkarlsson.skylight.android.lib.weather.weatherModule
 import se.gustavkarlsson.skylight.android.modules.activityModule
 import se.gustavkarlsson.skylight.android.modules.auroraReportModule
 import se.gustavkarlsson.skylight.android.modules.evaluationModule
@@ -21,7 +23,6 @@ import se.gustavkarlsson.skylight.android.modules.runVersionsModule
 import se.gustavkarlsson.skylight.android.modules.settingsModule
 import se.gustavkarlsson.skylight.android.modules.timeModule
 import se.gustavkarlsson.skylight.android.modules.viewModelModule
-import se.gustavkarlsson.skylight.android.lib.weather.weatherModule
 
 val modules = listOf(
 	settingsModule,
@@ -45,5 +46,6 @@ val modules = listOf(
 	analyticsModule,
 	activityModule,
 	navigationModule,
-	addPlaceModule
+	addPlaceModule,
+	placesModule
 ) + extraModules

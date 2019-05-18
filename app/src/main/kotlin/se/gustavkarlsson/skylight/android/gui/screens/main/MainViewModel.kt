@@ -51,7 +51,7 @@ class MainViewModel(
 ) : ViewModel() {
 
 	init {
-		store.issue(Command.SelectPlace(Place.Current.ID))
+		store.issue(Command.SelectPlace(Place.Current))
 	}
 
 	override fun onCleared() {
@@ -73,7 +73,7 @@ class MainViewModel(
 
 	val chanceLevelText: Flowable<TextRef> = store.states
 		.map {
-			it.selectedPlace?.auroraReport
+			it.selectedAuroraReport
 				?.let(auroraChanceEvaluator::evaluate)
 				?: Chance.UNKNOWN
 		}
@@ -83,7 +83,7 @@ class MainViewModel(
 		.distinctUntilChanged()
 
 	private val timeSinceUpdate: Flowable<Optional<String>> = store.states
-		.map { it.selectedPlace?.auroraReport?.timestamp.toOptional() }
+		.map { it.selectedAuroraReport?.timestamp.toOptional() }
 		.switchMap { time ->
 			Flowable.just(time)
 				.repeatWhen { it.delay(1.seconds) }
@@ -97,7 +97,7 @@ class MainViewModel(
 		.distinctUntilChanged()
 
 	private val locationName: Flowable<Optional<String>> = store.states
-		.map { it.selectedPlace?.auroraReport?.locationName.toOptional() }
+		.map { it.selectedAuroraReport?.locationName.toOptional() }
 
 	val chanceSubtitleText: Flowable<TextRef> = Flowables
 		.combineLatest(timeSinceUpdate, locationName) { (time), (name) ->
@@ -110,7 +110,7 @@ class MainViewModel(
 
 	val chanceSubtitleVisibility: Flowable<Boolean> = store.states
 		.map {
-			val timestamp = it.selectedPlace?.auroraReport?.timestamp ?: Instant.MIN
+			val timestamp = it.selectedAuroraReport?.timestamp ?: Instant.MIN
 			when {
 				timestamp == null -> false
 				timestamp <= Instant.EPOCH -> false
@@ -152,7 +152,7 @@ class MainViewModel(
 		evaluate: (T) -> Chance,
 		format: (T) -> TextRef
 	): Flowable<FactorItem> =
-		map { it.selectedPlace?.auroraReport?.selectFactor()?.value.toOptional() }
+		map { it.selectedAuroraReport?.selectFactor()?.value.toOptional() }
 			.distinctUntilChanged()
 			.map { it.toFactorItem(evaluate, format) }
 

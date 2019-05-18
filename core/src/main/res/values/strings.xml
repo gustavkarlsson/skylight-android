@@ -10,7 +10,11 @@
 	<string name="privacy_policy">Privacy policy</string>
 	<string name="places">Places</string>
 	<string name="add_place">Add place</string>
+	<string name="save_place">Save place</string>
 	<string name="search_for_place">Search for place</string>
+	<string name="place_name">Place name</string>
+	<string name="cancel">Cancel</string>
+	<string name="save">Save</string>
 
 	<!-- Errors -->
 	<string name="error_unknown_update_error">An unknown error occurred while updating</string>

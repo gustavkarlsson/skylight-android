@@ -11,6 +11,7 @@ import se.gustavkarlsson.skylight.android.feature.background.notifications.Auror
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notifier
 import se.gustavkarlsson.skylight.android.feature.background.notifications.OutdatedEvaluator
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.extensions.mapNotNull
 import se.gustavkarlsson.skylight.android.krate.Command
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
@@ -40,7 +41,7 @@ internal class UpdateJob(
 	}
 
 	private fun getAuroraReport(): AuroraReport {
-		var bestReport = store.currentState.currentPlace.auroraReport
+		var bestReport = store.currentState.auroraReports[Place.Current]
 		if (bestReport?.isRecent == true) {
 			return bestReport
 		}
@@ -59,7 +60,7 @@ internal class UpdateJob(
 				}
 			}
 			// FIXME fix notifications
-			.mapNotNull { it.currentPlace.auroraReport }
+			.mapNotNull { it.auroraReports[Place.Current] }
 			.filter { it != currentReport }
 			.map { optionalOf(it) }
 			.timeout(timeout.toMillis(), TimeUnit.MILLISECONDS)

@@ -1,16 +1,18 @@
 package se.gustavkarlsson.skylight.android.feature.addplace
 
 import android.view.View
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakewharton.rxbinding2.view.visibility
+import com.jakewharton.rxbinding2.widget.textChanges
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_add_place.progressBar
 import kotlinx.android.synthetic.main.fragment_add_place.searchResultRecyclerView
 import kotlinx.android.synthetic.main.fragment_add_place.toolbarView
+import kotlinx.android.synthetic.main.layout_save_dialog.view.placeNameEditText
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
 import se.gustavkarlsson.skylight.android.feature.base.showKeyboard
@@ -49,10 +51,32 @@ class AddPlaceFragment : BaseFragment(R.layout.fragment_add_place) {
 
 		viewModel.openSaveDialog
 			.autoDisposable(scope)
-			.subscribe {
-				// FIXME show dialog
-				Toast.makeText(requireContext(), "Showing dialog to save ${it.first}", Toast.LENGTH_LONG).show()
+			.subscribe(::openSaveDialog)
+	}
+
+	private fun openSaveDialog(dialogData: SaveDialogData) {
+		val customView = layoutInflater.inflate(R.layout.layout_save_dialog, null)
+		val editText = customView.placeNameEditText
+		AlertDialog.Builder(requireContext()).apply {
+			setView(customView)
+			setTitle(R.string.save_place)
+			setNegativeButton(R.string.cancel) { _, _ -> }
+			setPositiveButton(R.string.save) { _, _ ->
+				dialogData.onSave(editText.text.toString())
+				fragmentManager?.popBackStack()
 			}
+			editText.setText(dialogData.suggestedName)
+			editText.setSelection(dialogData.suggestedName.length)
+		}.create().run {
+			show()
+			val positiveButton = getButton(AlertDialog.BUTTON_POSITIVE)
+			val textChangeDisposable = editText.textChanges()
+				.map(CharSequence::isNotBlank)
+				.subscribe {
+					positiveButton.isEnabled = it
+				}
+			setOnDismissListener { textChangeDisposable.dispose() }
+		}
 	}
 }
 

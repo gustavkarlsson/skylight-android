@@ -129,6 +129,7 @@ dependencies {
 	implementation(project(":lib-kpindex"))
 	implementation(project(":lib-geomaglocation"))
 	implementation(project(":lib-locationname"))
+	implementation(project(":lib-places"))
 	implementation(project(":feature-base"))
 	implementation(project(":feature-background"))
 	implementation(project(":feature-addplace"))

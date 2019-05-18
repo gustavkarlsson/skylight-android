@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.modules
 
-import com.ioki.textref.TextRef
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -8,7 +7,6 @@ import org.koin.dsl.module.module
 import se.gustavkarlsson.krate.core.dsl.buildStore
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.krate.Command
 import se.gustavkarlsson.skylight.android.krate.Result
@@ -16,6 +14,7 @@ import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.krate.State
 import se.gustavkarlsson.skylight.android.services.GooglePlayServicesChecker
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
+import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.RunVersionManager
 import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
 import timber.log.Timber
@@ -27,6 +26,7 @@ val krateModule = module {
 		val googlePlayServicesChecker = get<GooglePlayServicesChecker>()
 		val permissionChecker = get<PermissionChecker>()
 		val auroraReportProvider = get<AuroraReportProvider>()
+		val placesRepo = get<PlacesRepository>()
 
 		buildStore<State, Command, Result> {
 
@@ -49,18 +49,24 @@ val krateModule = module {
 						.map(Result::FirstRun)
 				}
 
+				transform<Command.Bootstrap> { commands ->
+					commands.firstOrError()
+						.flatMapPublisher { placesRepo.all() }
+						.map(Result::Places)
+				}
+
 				transformWithState<Command.RefreshAll> { commands, getState ->
 					commands.switchMapSingle { _ ->
-						val reportSingles = getState().allPlaces.map { place ->
+						val reportSingles = getState().places.map { place ->
 							when (place) {
 								is Place.Current -> auroraReportProvider.get(null)
 								is Place.Custom -> auroraReportProvider.get(place.location)
-							}.map { place.id to it }
+							}.map { place to it }
 						}
 						Single
 							.zip(reportSingles) { reportsArray ->
 								val reports = reportsArray
-									.asList() as List<Pair<Int, AuroraReport>>
+									.asList() as List<Pair<Place, AuroraReport>>
 								Result.AuroraReport.Success(reports.toMap()) as Result
 							}
 							.onErrorReturn { Result.AuroraReport.Failure(it) }
@@ -85,21 +91,19 @@ val krateModule = module {
 					}
 				}
 				*/
-				transformWithState<Command.SelectPlace> { commands, getState ->
+				transform<Command.SelectPlace> { commands ->
 					commands
 						.distinctUntilChanged()
-						.switchMap { (placeId) ->
-							if (placeId == null) {
-								Flowable.just(Result.PlaceSelected(placeId))
+						.switchMap { (place) ->
+							if (place == null) {
+								Flowable.just(Result.PlaceSelected(null))
 							} else {
-								val place = getState().allPlaces.find { it.id == placeId }
-									?: throw IllegalStateException("No place in state with id=$placeId")
 								val location = (place as? Place.Custom)?.location
 								auroraReportProvider.stream(location)
 									.map<Result> { result ->
-										Result.AuroraReport.Success(mapOf(placeId to result))
+										Result.AuroraReport.Success(mapOf(place to result))
 									}
-									.startWith(Result.PlaceSelected(placeId))
+									.startWith(Result.PlaceSelected(place))
 							}
 						}
 				}
@@ -135,9 +139,9 @@ val krateModule = module {
 						}
 						is Result.AuroraReport.Success -> {
 							val stateWithoutThrowable = state.copy(throwable = null)
-							result.placeIdsToAuroraReports.entries
-								.fold(stateWithoutThrowable) { currentState, (placeId, report) ->
-									currentState.updateReport(placeId, report)
+							result.placesToAuroraReports.entries
+								.fold(stateWithoutThrowable) { currentState, (place, report) ->
+									currentState.updateReport(place, report)
 								}
 						}
 						is Result.AuroraReport.Failure -> {
@@ -150,7 +154,10 @@ val krateModule = module {
 						}
 						*/
 						is Result.PlaceSelected -> {
-							state.copy(selectedPlaceId = result.placeId)
+							state.copy(selectedPlace = result.place)
+						}
+						is Result.Places -> {
+							state.copy(places = result.places)
 						}
 					}
 
@@ -162,14 +169,7 @@ val krateModule = module {
 
 			states {
 				// FIXME Initialize from settings
-				initial = State(
-					customPlaces = listOf(
-						Place.Custom(1, TextRef("Home"), Location(64.3753, 19.4007)),
-						Place.Custom(2, TextRef("Stockholm"), Location(59.3293, 18.0686)),
-						Place.Custom(3, TextRef("Spain"), Location(40.4168, -3.7038)),
-						Place.Custom(4, TextRef("The Big Apple"), Location(40.7128, -74.0060))
-					) // FIXME Remove
-				)
+				initial = State()
 				observeScheduler = AndroidSchedulers.mainThread()
 				if (BuildConfig.DEBUG) {
 					watchAll { Timber.d("Got state: %s", it) }
@@ -184,15 +184,10 @@ val krateModule = module {
 
 }
 
-private fun State.updateReport(placeId: Int, report: AuroraReport?): State {
-	return if (placeId == Place.Current.ID) {
-		copy(currentPlace = currentPlace.copy(auroraReport = report))
+private fun State.updateReport(place: Place, report: AuroraReport?): State {
+	return if (report == null) {
+		copy(auroraReports = auroraReports - place)
 	} else {
-		val newPlaces = customPlaces.map {
-			if (placeId == it.id)
-				it.copy(auroraReport = report)
-			else it
-		}
-		copy(customPlaces = newPlaces)
+		copy(auroraReports = auroraReports + (place to report))
 	}
 }

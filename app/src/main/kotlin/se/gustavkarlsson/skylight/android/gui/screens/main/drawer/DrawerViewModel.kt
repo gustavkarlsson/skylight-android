@@ -21,14 +21,14 @@ class DrawerViewModel(
 			.distinctUntilChanged()
 
 	private fun createPlaceItems(state: State): List<PlaceItem> {
-		return state.allPlaces.map {
-			val isActive = it.id == state.selectedPlaceId
-			val icon = when (it) {
+		return state.places.map { place ->
+			val isActive = place == state.selectedPlace
+			val icon = when (place) {
 				is Place.Current -> R.drawable.ic_location_on_white_24dp
 				is Place.Custom -> R.drawable.ic_map_white_24dp
 			}
-			PlaceItem(isActive, icon, it.name) {
-				store.issue(Command.SelectPlace(it.id))
+			PlaceItem(isActive, icon, place.name) {
+				store.issue(Command.SelectPlace(place))
 			}
 		} + PlaceItem(false, R.drawable.ic_add_white_24dp, TextRef(R.string.add_place)) {
 			navigator.navigate(Screen.PICK_PLACE)

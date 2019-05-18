@@ -7,6 +7,7 @@ include(
 	":lib-kpindex",
 	":lib-geomaglocation",
 	":lib-locationname",
+	":lib-places",
 	":feature-base",
 	":feature-background",
 	":feature-addplace",

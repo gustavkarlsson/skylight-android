@@ -16,6 +16,7 @@ buildscript {
 		classpath("org.eclipse.jgit:org.eclipse.jgit:${versions.jgit}")
 		classpath("pl.allegro.tech.build:axion-release-plugin:${versions.axionRelease}")
 		classpath("com.github.triplet.gradle:play-publisher:${versions.playPublisher}")
+		classpath("com.squareup.sqldelight:gradle-plugin:${versions.sqldelight}")
 	}
 }
 

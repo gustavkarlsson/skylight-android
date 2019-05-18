@@ -53,6 +53,7 @@ object Versions {
 	val koptional = "0.2.0"
 	val uiAutomator = "2.2.0"
 	val mapboxService = "4.7.0"
+	val sqldelight = "1.1.3"
 
 	// Test
 	val junit = "4.12"

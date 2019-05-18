@@ -12,16 +12,18 @@ import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.extensions.debounce
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.services.Geocoder
+import se.gustavkarlsson.skylight.android.services.PlacesRepository
 
 internal class AddPlaceViewModel(
 	geocoder: Geocoder,
+	private val placesRepository: PlacesRepository,
 	debounceDelay: Duration,
 	retryDelay: Duration
 ) : ViewModel() {
 
 	private val searchStringRelay = BehaviorRelay.create<String>()
 	private val loadingRelay = BehaviorRelay.createDefault(false)
-	private val dialogRelay = PublishRelay.create<Pair<String, Location>>()
+	private val dialogRelay = PublishRelay.create<SaveDialogData>()
 
 	private var searchCount = 0L
 
@@ -45,19 +47,26 @@ internal class AddPlaceViewModel(
 			}
 			.retryWhen { it.delay(retryDelay) }
 			.map { suggestions ->
-				suggestions.map {
-					SearchResultItem(it.fullName) {
-						dialogRelay.accept(it.simpleName to it.location)
+				suggestions.map { suggestion ->
+					SearchResultItem(suggestion.fullName) {
+						val dialogData = SaveDialogData(suggestion.simpleName, suggestion.location) {
+							saveLocationAndGoBack(it, suggestion.location)
+						}
+						dialogRelay.accept(dialogData)
 					}
 				}
 			}
 			.observeOn(AndroidSchedulers.mainThread())
 
+	private fun saveLocationAndGoBack(name: String, location: Location) {
+		placesRepository.add(name.trim(), location)
+	}
+
 	val isLoading: Observable<Boolean> =
 		loadingRelay
 			.observeOn(AndroidSchedulers.mainThread())
 
-	val openSaveDialog: Flowable<Pair<String, Location>> =
+	val openSaveDialog: Flowable<SaveDialogData> =
 		dialogRelay
 			.toFlowable(BackpressureStrategy.LATEST)
 			.observeOn(AndroidSchedulers.mainThread())
