@@ -61,16 +61,15 @@ class AddPlaceFragment : BaseFragment(R.layout.fragment_add_place) {
 
 	private fun openSaveDialog(dialogData: SaveDialogData) {
 		val customView = layoutInflater.inflate(R.layout.layout_save_dialog, null)
-		val editText = customView.placeNameEditText
+		val editText = customView.placeNameEditText.apply {
+			setText(dialogData.suggestedName)
+			setSelection(dialogData.suggestedName.length)
+		}
 		MaterialAlertDialogBuilder(requireContext()).apply {
 			setView(customView)
 			setTitle(R.string.save_place)
-			setNegativeButton(R.string.cancel) { _, _ -> }
-			setPositiveButton(R.string.save) { _, _ ->
-				dialogData.onSave(editText.text.toString())
-			}
-			editText.setText(dialogData.suggestedName)
-			editText.setSelection(dialogData.suggestedName.length)
+			setNegativeButton(R.string.cancel, null)
+			setPositiveButton(R.string.save) { _, _ -> dialogData.onSave(editText.text.toString()) }
 		}.create().run {
 			show()
 			val positiveButton = getButton(AlertDialog.BUTTON_POSITIVE)

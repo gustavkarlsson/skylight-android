@@ -28,8 +28,8 @@ class DrawerViewModel(
 	private val openRemoveLocationDialogRelay = PublishRelay.create<RemoveLocationDialogData>()
 	val openRemoveLocationDialog: Observable<RemoveLocationDialogData> = openRemoveLocationDialogRelay
 
-	private fun createPlaceItems(state: State): List<PlaceItem> {
-		return state.places.map { place ->
+	private fun createPlaceItems(state: State): List<PlaceItem> =
+		state.places.map { place ->
 			val isActive = place == state.selectedPlace
 			val icon = when (place) {
 				is Place.Current -> R.drawable.ic_location_on_white_24dp
@@ -51,10 +51,12 @@ class DrawerViewModel(
 			}
 			PlaceItem(isActive, icon, place.name, onClick, onLongClick)
 		} + createAddPlaceItem()
-	}
 
 	private fun createAddPlaceItem(): PlaceItem {
-		val onClick = { navigator.navigate(Screen.PICK_PLACE) }
+		val onClick = {
+			closeDrawerRelay.accept(Unit)
+			navigator.navigate(Screen.PICK_PLACE)
+		}
 		val onLongClick = {}
 		return PlaceItem(false, R.drawable.ic_add_white_24dp, TextRef(R.string.add_place), onClick, onLongClick)
 	}

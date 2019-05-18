@@ -44,10 +44,8 @@ class DrawerFragment : BaseFragment(R.layout.fragment_main_drawer) {
 				val context = requireContext()
 				MaterialAlertDialogBuilder(context)
 					.setTitle(it.title.resolve(context))
-					.setPositiveButton(R.string.remove) { _, _ ->
-						it.onConfirm()
-					}
-					.setNegativeButton(R.string.cancel) { _, _ -> }
+					.setPositiveButton(R.string.remove) { _, _ -> it.onConfirm() }
+					.setNegativeButton(R.string.cancel, null)
 					.show()
 			}
 	}
