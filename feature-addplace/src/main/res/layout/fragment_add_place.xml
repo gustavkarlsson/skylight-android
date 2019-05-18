@@ -4,14 +4,14 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<androidx.appcompat.widget.Toolbar
+	<com.google.android.material.appbar.MaterialToolbar
 		android:id="@+id/toolbarView"
+		style="@style/Widget.MaterialComponents.Toolbar.Surface"
 		android:layout_width="match_parent"
 		android:layout_height="?attr/actionBarSize"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
-		app:theme="@style/AppTheme.Toolbar" />
+		app:layout_constraintTop_toTopOf="parent" />
 
 	<ProgressBar
 		android:id="@+id/progressBar"

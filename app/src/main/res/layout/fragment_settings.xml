@@ -7,11 +7,11 @@
 	android:orientation="vertical"
 	tools:context=".gui.MainActivity">
 
-	<androidx.appcompat.widget.Toolbar
+	<com.google.android.material.appbar.MaterialToolbar
 		android:id="@+id/toolbarView"
+		style="@style/Widget.MaterialComponents.Toolbar.Surface"
 		android:layout_width="match_parent"
 		android:layout_height="?attr/actionBarSize"
-		app:theme="@style/AppTheme.Toolbar"
 		app:title="@string/settings" />
 
 	<fragment
