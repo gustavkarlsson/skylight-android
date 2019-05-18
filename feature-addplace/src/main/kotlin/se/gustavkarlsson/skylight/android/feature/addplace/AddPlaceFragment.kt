@@ -1,16 +1,13 @@
 package se.gustavkarlsson.skylight.android.feature.addplace
 
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.jakewharton.rxbinding2.view.visibility
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
-import kotlinx.android.synthetic.main.fragment_add_place.progressBar
 import kotlinx.android.synthetic.main.fragment_add_place.searchResultRecyclerView
 import kotlinx.android.synthetic.main.fragment_add_place.toolbarView
 import kotlinx.android.synthetic.main.layout_save_dialog.view.placeNameEditText
@@ -48,7 +45,10 @@ class AddPlaceFragment : BaseFragment(R.layout.fragment_add_place) {
 
 		viewModel.isLoading
 			.autoDisposable(scope)
-			.subscribe(progressBar.visibility(View.INVISIBLE))
+			.subscribe {
+				// TODO no progress indicator yet.
+				//  https://material.io/design/components/progress-indicators.html#implementation
+			}
 
 		viewModel.openSaveDialog
 			.autoDisposable(scope)

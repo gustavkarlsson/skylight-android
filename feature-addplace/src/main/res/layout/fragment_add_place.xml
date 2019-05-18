@@ -13,16 +13,10 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
 
-	<ProgressBar
-		android:id="@+id/progressBar"
-		style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:indeterminate="true"
-		android:visibility="invisible"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/toolbarView" />
+	<!--
+	TODO Add material progress indicator when available
+	 https://material.io/design/components/progress-indicators.html#implementation
+	-->
 
 	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/searchResultRecyclerView"
@@ -31,6 +25,6 @@
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/progressBar" />
+		app:layout_constraintTop_toBottomOf="@id/toolbarView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
