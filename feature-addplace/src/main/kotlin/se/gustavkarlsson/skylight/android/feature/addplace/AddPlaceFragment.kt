@@ -44,7 +44,7 @@ class AddPlaceFragment : BaseFragment(R.layout.fragment_add_place) {
 
 		viewModel.searchResultItems
 			.autoDisposable(scope)
-			.subscribe { adapter.items = it }
+			.subscribe(adapter::setItems)
 
 		viewModel.isLoading
 			.autoDisposable(scope)
@@ -64,7 +64,7 @@ class AddPlaceFragment : BaseFragment(R.layout.fragment_add_place) {
 			setNegativeButton(R.string.cancel) { _, _ -> }
 			setPositiveButton(R.string.save) { _, _ ->
 				dialogData.onSave(editText.text.toString())
-				fragmentManager?.popBackStack()
+				fragmentManager?.popBackStack() // FIXME move to viewModel
 			}
 			editText.setText(dialogData.suggestedName)
 			editText.setSelection(dialogData.suggestedName.length)

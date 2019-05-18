@@ -7,16 +7,15 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import se.gustavkarlsson.skylight.android.R
 
-class PlacesAdapter(
-	private val closeDrawer: () -> Unit
-) : RecyclerView.Adapter<PlacesAdapter.ViewHolder>() {
+class PlacesAdapter : RecyclerView.Adapter<PlacesAdapter.ViewHolder>() {
 
-	var items: List<PlaceItem> = emptyList()
-		set(value) {
-			val diff = DiffUtil.calculateDiff(DiffCallback(items, value))
-			field = value
-			diff.dispatchUpdatesTo(this)
-		}
+	private var items: List<PlaceItem> = emptyList()
+
+	fun setItems(items: List<PlaceItem>) {
+		val diff = DiffUtil.calculateDiff(DiffCallback(this.items, items))
+		this.items = items
+		diff.dispatchUpdatesTo(this)
+	}
 
 	override fun getItemCount() = items.size
 
@@ -38,7 +37,10 @@ class PlacesAdapter(
 		view.isSelected = item.isActive
 		view.setOnClickListener {
 			item.onClick()
-			closeDrawer()
+		}
+		view.setOnLongClickListener {
+			item.onLongClick()
+			true
 		}
 	}
 

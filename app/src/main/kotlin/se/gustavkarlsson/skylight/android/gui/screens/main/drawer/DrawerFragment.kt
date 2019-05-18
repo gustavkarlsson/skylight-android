@@ -13,7 +13,9 @@ import se.gustavkarlsson.skylight.android.feature.base.findParentViewByType
 
 class DrawerFragment : BaseFragment(R.layout.fragment_main_drawer) {
 
-	private val adapter = PlacesAdapter {
+	private val adapter = PlacesAdapter()
+
+	private fun closeDrawer() {
 		view?.findParentViewByType<NavigationView>()?.let { navView ->
 			view?.findParentViewByType<DrawerLayout>()?.closeDrawer(navView)
 		}
@@ -29,8 +31,10 @@ class DrawerFragment : BaseFragment(R.layout.fragment_main_drawer) {
 	override fun bindData(scope: LifecycleScopeProvider<*>) {
 		viewModel.places
 			.autoDisposable(scope)
-			.subscribe {
-				adapter.items = it
-			}
+			.subscribe(adapter::setItems)
+
+		viewModel.closeDrawer
+			.autoDisposable(scope)
+			.subscribe { closeDrawer() }
 	}
 }

@@ -111,6 +111,14 @@ val krateModule = module {
 					watch<Command> { Timber.d("Got command: %s", it) }
 				}
 
+				watch<Command.AddPlace> {
+					placesRepo.add(it.name, it.location)
+				}
+
+				watch<Command.RemovePlace> {
+					placesRepo.remove(it.placeId)
+				}
+
 				watch<Command.SignalLocationPermissionGranted> {
 					permissionChecker.signalPermissionGranted()
 				}

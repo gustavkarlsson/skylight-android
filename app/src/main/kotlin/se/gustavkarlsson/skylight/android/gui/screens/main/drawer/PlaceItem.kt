@@ -7,5 +7,6 @@ data class PlaceItem(
 	val isActive: Boolean,
 	@DrawableRes val icon: Int,
 	val name: TextRef,
-	val onClick: () -> Unit
+	val onClick: () -> Unit,
+	val onLongClick: () -> Unit
 )

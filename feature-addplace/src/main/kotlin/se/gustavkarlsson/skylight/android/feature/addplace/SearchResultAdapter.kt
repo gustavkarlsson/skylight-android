@@ -3,16 +3,16 @@ package se.gustavkarlsson.skylight.android.feature.addplace
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
 internal class SearchResultAdapter : RecyclerView.Adapter<SearchResultAdapter.ViewHolder>() {
 
-	var items: List<SearchResultItem> = emptyList()
-		set(value) {
-			field = value
-			notifyDataSetChanged()
-		}
+	private var items: List<SearchResultItem> = emptyList()
+
+	fun setItems(items: List<SearchResultItem>) {
+		this.items = items
+		notifyDataSetChanged()
+	}
 
 	override fun getItemCount() = items.size
 

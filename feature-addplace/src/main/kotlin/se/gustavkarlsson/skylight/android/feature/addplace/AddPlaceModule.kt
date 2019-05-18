@@ -15,7 +15,7 @@ val addPlaceModule = module {
 	viewModel {
 		AddPlaceViewModel(
 			geocoder = get(),
-			placesRepository = get(),
+			store  = get(),
 			debounceDelay = 1.seconds,
 			retryDelay = 2.seconds
 		)

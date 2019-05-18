@@ -11,12 +11,14 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.extensions.debounce
 import se.gustavkarlsson.skylight.android.extensions.delay
+import se.gustavkarlsson.skylight.android.krate.Command
+import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.services.Geocoder
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
 
 internal class AddPlaceViewModel(
 	geocoder: Geocoder,
-	private val placesRepository: PlacesRepository,
+	private val store: SkylightStore,
 	debounceDelay: Duration,
 	retryDelay: Duration
 ) : ViewModel() {
@@ -50,17 +52,13 @@ internal class AddPlaceViewModel(
 				suggestions.map { suggestion ->
 					SearchResultItem(suggestion.fullName) {
 						val dialogData = SaveDialogData(suggestion.simpleName, suggestion.location) {
-							saveLocationAndGoBack(it, suggestion.location)
+							store.issue(Command.AddPlace(it, suggestion.location))
 						}
 						dialogRelay.accept(dialogData)
 					}
 				}
 			}
 			.observeOn(AndroidSchedulers.mainThread())
-
-	private fun saveLocationAndGoBack(name: String, location: Location) {
-		placesRepository.add(name.trim(), location)
-	}
 
 	val isLoading: Observable<Boolean> =
 		loadingRelay
