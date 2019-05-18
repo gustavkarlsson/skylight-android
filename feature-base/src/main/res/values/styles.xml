@@ -67,27 +67,6 @@
 	</style>
 
 
-	<!-- Factor card -->
-
-	<style name="AppTheme.FactorCardView" parent="Widget.MaterialComponents.CardView">
-		<item name="cardBackgroundColor">@color/surface</item>
-		<item name="cardElevation">2dp</item>
-	</style>
-
-	<style name="AppTheme.FactorCardText" parent="@style/AppTheme.TextBody1">
-		<item name="android:ellipsize">end</item>
-		<item name="android:lines">1</item>
-	</style>
-
-	<style name="AppTheme.FactorCardText.Title">
-		<item name="android:textColor">@color/on_surface</item>
-	</style>
-
-	<style name="AppTheme.FactorCardProgressBar" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
-		<item name="android:indeterminate">false</item>
-	</style>
-
-
 	<!-- Bottom sheet -->
 
 	<style name="AppTheme.BottomSheet">

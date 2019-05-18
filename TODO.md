@@ -15,7 +15,6 @@
 * Add more tests
 
 ## Some day
-* Migrate CardView to MaterialCardView when they fixed the ripple effect bug (ripple not working)
 * Add the thing that clears data between launches (check with Nick)
 * Add prettier detail screens
 * Separate debug menu instead of settings page
