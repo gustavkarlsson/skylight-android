@@ -3,8 +3,8 @@ package se.gustavkarlsson.skylight.android.gui.screens.main.drawer
 import androidx.lifecycle.ViewModel
 import com.ioki.textref.TextRef
 import com.jakewharton.rxrelay2.PublishRelay
-import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.krate.Command
@@ -23,8 +23,10 @@ class DrawerViewModel(
 			.distinctUntilChanged()
 
 	private val closeDrawerRelay = PublishRelay.create<Unit>()
-	val closeDrawer: Flowable<Unit> =
-		closeDrawerRelay.toFlowable(BackpressureStrategy.MISSING)
+	val closeDrawer: Observable<Unit> = closeDrawerRelay
+
+	private val openRemoveLocationDialogRelay = PublishRelay.create<RemoveLocationDialogData>()
+	val openRemoveLocationDialog: Observable<RemoveLocationDialogData> = openRemoveLocationDialogRelay
 
 	private fun createPlaceItems(state: State): List<PlaceItem> {
 		return state.places.map { place ->
@@ -38,8 +40,15 @@ class DrawerViewModel(
 				closeDrawerRelay.accept(Unit)
 			}
 			val onLongClick: () -> Unit = if (place is Place.Custom) {
-				{ store.issue(Command.RemovePlace(place.id)) }// FIXME show dialog instead
-			} else { {} }
+				{
+					val dialogData = RemoveLocationDialogData(TextRef(R.string.remove_thing, place.name)) {
+						store.issue(Command.RemovePlace(place.id))
+					}
+					openRemoveLocationDialogRelay.accept(dialogData)
+				}
+			} else {
+				{}
+			}
 			PlaceItem(isActive, icon, place.name, onClick, onLongClick)
 		} + createAddPlaceItem()
 	}
@@ -50,3 +59,8 @@ class DrawerViewModel(
 		return PlaceItem(false, R.drawable.ic_add_white_24dp, TextRef(R.string.add_place), onClick, onLongClick)
 	}
 }
+
+data class RemoveLocationDialogData(
+	val title: TextRef,
+	val onConfirm: () -> Unit
+)

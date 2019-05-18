@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.gui.screens.main.drawer
 
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
@@ -36,5 +37,18 @@ class DrawerFragment : BaseFragment(R.layout.fragment_main_drawer) {
 		viewModel.closeDrawer
 			.autoDisposable(scope)
 			.subscribe { closeDrawer() }
+
+		viewModel.openRemoveLocationDialog
+			.autoDisposable(scope)
+			.subscribe {
+				val context = requireContext()
+				MaterialAlertDialogBuilder(context)
+					.setTitle(it.title.resolve(context))
+					.setPositiveButton(R.string.remove) { _, _ ->
+						it.onConfirm()
+					}
+					.setNegativeButton(R.string.cancel) { _, _ -> }
+					.show()
+			}
 	}
 }

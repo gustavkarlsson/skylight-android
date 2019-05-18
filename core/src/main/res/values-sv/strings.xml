@@ -13,6 +13,8 @@
 	<string name="place_name">Platsnamn</string>
 	<string name="cancel">Avbryt</string>
 	<string name="save">Spara</string>
+	<string name="remove">Ta bort</string>
+	<string name="remove_thing">Ta bort %s?</string>
 
 	<!-- Errors -->
 	<string name="error_unknown_update_error">Ett oväntat fel inträffade vid uppdatering</string>
