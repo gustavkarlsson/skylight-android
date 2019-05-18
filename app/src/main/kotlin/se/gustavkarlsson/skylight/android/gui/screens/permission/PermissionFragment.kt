@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.gui.screens.permission
 
 
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Lifecycle
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding2.view.clicks
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.uber.autodispose.LifecycleScopeProvider
@@ -50,7 +50,7 @@ class PermissionFragment : BaseFragment(R.layout.fragment_permission) {
 	}
 
 	private fun showLocationPermissionRequiredDialog() {
-		AlertDialog.Builder(requireContext())
+		MaterialAlertDialogBuilder(requireContext())
 			.setIcon(R.drawable.ic_warning_white_24dp)
 			.setTitle(getString(R.string.permission_required_title))
 			.setMessage(R.string.permission_required_desc)
@@ -59,7 +59,7 @@ class PermissionFragment : BaseFragment(R.layout.fragment_permission) {
 	}
 
 	private fun showLocationPermissionDeniedDialog() {
-		AlertDialog.Builder(requireContext())
+		MaterialAlertDialogBuilder(requireContext())
 			.setIcon(R.drawable.ic_warning_white_24dp)
 			.setTitle(getString(R.string.permission_denied_title))
 			.setMessage(R.string.permission_denied_desc)

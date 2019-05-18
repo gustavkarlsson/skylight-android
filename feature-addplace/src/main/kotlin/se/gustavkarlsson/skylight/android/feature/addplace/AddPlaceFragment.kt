@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding2.view.visibility
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.uber.autodispose.LifecycleScopeProvider
@@ -57,7 +58,7 @@ class AddPlaceFragment : BaseFragment(R.layout.fragment_add_place) {
 	private fun openSaveDialog(dialogData: SaveDialogData) {
 		val customView = layoutInflater.inflate(R.layout.layout_save_dialog, null)
 		val editText = customView.placeNameEditText
-		AlertDialog.Builder(requireContext()).apply {
+		MaterialAlertDialogBuilder(requireContext()).apply {
 			setView(customView)
 			setTitle(R.string.save_place)
 			setNegativeButton(R.string.cancel) { _, _ -> }
