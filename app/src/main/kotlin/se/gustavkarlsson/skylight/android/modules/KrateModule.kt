@@ -33,8 +33,9 @@ val krateModule = module {
 			commands {
 				transform<Command.Bootstrap> { commands ->
 					commands.firstOrError()
-						.flatMapPublisher { permissionChecker.isLocationGranted }
+						.flatMapPublisher { permissionChecker.permission }
 						.map(Result::LocationPermission)
+					// FIXME Can we refresh location when this happens?
 				}
 
 				transform<Command.Bootstrap> { commands ->
@@ -119,8 +120,8 @@ val krateModule = module {
 					placesRepo.remove(it.placeId)
 				}
 
-				watch<Command.SignalLocationPermissionGranted> {
-					permissionChecker.signalPermissionGranted()
+				watch<Command.SignalLocationPermissionDeniedForever> {
+					permissionChecker.signalDeniedForever()
 				}
 
 				watch<Command.SignalFirstRunCompleted> {
@@ -130,6 +131,10 @@ val krateModule = module {
 				watch<Command.SignalGooglePlayServicesInstalled> {
 					googlePlayServicesChecker.signalInstalled()
 				}
+
+				watch<Command.RefreshLocationPermission> {
+					permissionChecker.refresh()
+				}
 			}
 
 			results {
@@ -137,7 +142,7 @@ val krateModule = module {
 				reduce { state, result ->
 					when (result) {
 						is Result.LocationPermission -> {
-							state.copy(isLocationPermissionGranted = result.isGranted)
+							state.copy(locationPermission = result.permission)
 						}
 						is Result.GooglePlayServices -> {
 							state.copy(isGooglePlayServicesAvailable = result.isAvailable)

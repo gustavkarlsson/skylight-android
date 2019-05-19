@@ -14,16 +14,27 @@
 			android:id="@+id/toolbarView"
 			android:layout_width="match_parent"
 			android:layout_height="?attr/actionBarSize"
-			app:layout_constraintBottom_toTopOf="@+id/firstSpace"
+			android:elevation="1dp"
+			app:layout_constraintBottom_toTopOf="@+id/errorBanner"
 			app:layout_constraintTop_toTopOf="parent"
 			app:title="@string/main_your_location" />
+
+		<com.sergivonavi.materialbanner.Banner
+			android:id="@+id/errorBanner"
+			style="@style/AppTheme.BannerError"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:visibility="gone"
+			app:layout_constraintBottom_toTopOf="@+id/firstSpace"
+			app:layout_constraintTop_toBottomOf="@+id/toolbarView"
+			tools:visibility="visible" />
 
 		<Space
 			android:id="@+id/firstSpace"
 			android:layout_width="match_parent"
 			android:layout_height="0dp"
 			app:layout_constraintBottom_toTopOf="@+id/chance"
-			app:layout_constraintTop_toBottomOf="@+id/toolbarView" />
+			app:layout_constraintTop_toBottomOf="@+id/errorBanner" />
 
 		<TextView
 			android:id="@+id/chance"
@@ -94,9 +105,9 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="@dimen/gutter"
+			android:layout_marginBottom="@dimen/screen_margin"
 			android:paddingStart="@dimen/screen_margin"
 			android:paddingEnd="@dimen/screen_margin"
-			android:paddingBottom="@dimen/screen_margin"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintTop_toBottomOf="@+id/weatherCard"
 			app:title="@string/factor_darkness_title_compact" />

@@ -1,12 +1,15 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
+import androidx.annotation.DrawableRes
 import androidx.lifecycle.ViewModel
 import com.ioki.textref.TextRef
+import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Flowables
 import org.threeten.bp.Duration
-import org.threeten.bp.Instant
+import se.gustavkarlsson.koptional.Absent
 import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.koptional.toOptional
 import se.gustavkarlsson.skylight.android.R
@@ -23,6 +26,7 @@ import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.mapNotNull
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.krate.Command
+import se.gustavkarlsson.skylight.android.entities.Permission
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.krate.State
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
@@ -87,7 +91,6 @@ class MainViewModel(
 		.switchMap { time ->
 			Flowable.just(time)
 				.repeatWhen { it.delay(1.seconds) }
-				.observeOn(AndroidSchedulers.mainThread())
 		}
 		.map {
 			it.map { timeSince ->
@@ -95,6 +98,7 @@ class MainViewModel(
 			}
 		}
 		.distinctUntilChanged()
+		.observeOn(AndroidSchedulers.mainThread())
 
 	private val locationName: Flowable<Optional<String>> = store.states
 		.map { it.selectedAuroraReport?.locationName.toOptional() }
@@ -107,17 +111,6 @@ class MainViewModel(
 				else -> TextRef(R.string.time_in_location, time, name)
 			}
 		}
-
-	val chanceSubtitleVisibility: Flowable<Boolean> = store.states
-		.map {
-			val timestamp = it.selectedAuroraReport?.timestamp ?: Instant.MIN
-			when {
-				timestamp == null -> false
-				timestamp <= Instant.EPOCH -> false
-				else -> true
-			}
-		}
-		.distinctUntilChanged()
 
 	val darkness: Flowable<FactorItem> = store.states
 		.toFactorItems(
@@ -147,6 +140,40 @@ class MainViewModel(
 			weatherFormatter::format
 		)
 
+	val errorBannerData: Flowable<Optional<BannerData>> = store.states
+		.map {
+			when {
+				it.selectedPlace != Place.Current -> Absent
+				it.locationPermission == Permission.Denied -> {
+					BannerData(
+						TextRef(R.string.location_permission_denied_message),
+						TextRef(R.string.fix),
+						{ requestLocationPermissionRelay.accept(Unit) },
+						R.drawable.ic_location_on_white_24dp
+					).toOptional()
+				}
+				it.locationPermission == Permission.DeniedForever -> {
+					BannerData(
+						TextRef(R.string.location_permission_denied_forever_message),
+						TextRef(R.string.fix),
+						{ openAppDetailsRelay.accept(Unit) },
+						R.drawable.ic_warning_white_24dp
+					).toOptional()
+				}
+				else -> Absent
+			}
+		}
+		.distinctUntilChanged { a, b ->
+			a.value?.message == b.value?.message &&
+				a.value?.buttonText == b.value?.buttonText
+		}
+
+	private val requestLocationPermissionRelay = PublishRelay.create<Unit>()
+	val requestLocationPermission: Observable<Unit> = requestLocationPermissionRelay
+
+	private val openAppDetailsRelay = PublishRelay.create<Unit>()
+	val openAppDetails: Observable<Unit> = openAppDetailsRelay
+
 	private fun <T : Any> Flowable<State>.toFactorItems(
 		selectFactor: AuroraReport.() -> Report<T>,
 		evaluate: (T) -> Chance,
@@ -172,6 +199,12 @@ class MainViewModel(
 			)
 		}
 	}
+
+	fun refreshLocationPermission() =
+		store.issue(Command.RefreshLocationPermission)
+
+	fun signalLocationPermissionDeniedForever() =
+		store.issue(Command.SignalLocationPermissionDeniedForever)
 }
 
 data class FactorItem(
@@ -187,3 +220,10 @@ data class FactorItem(
 		)
 	}
 }
+
+data class BannerData(
+	val message: TextRef,
+	val buttonText: TextRef,
+	val buttonAction: () -> Unit,
+	@DrawableRes val icon: Int
+)

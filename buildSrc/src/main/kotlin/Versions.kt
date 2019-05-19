@@ -54,6 +54,7 @@ object Versions {
 	val uiAutomator = "2.2.0"
 	val mapboxService = "4.7.0"
 	val sqldelight = "1.1.3"
+	val banner = "1.2.0"
 
 	// Test
 	val junit = "4.12"

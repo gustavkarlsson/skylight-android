@@ -11,7 +11,7 @@ val permissionsModule = module {
 	single<PermissionChecker> {
 		AndroidPermissionChecker(
 			context = get(),
-			locationPermission = get("locationPermission")
+			permissionKey = get("locationPermission")
 		)
 	}
 

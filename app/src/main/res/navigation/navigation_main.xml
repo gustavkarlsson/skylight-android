@@ -24,10 +24,6 @@
 		android:name="se.gustavkarlsson.skylight.android.gui.screens.googleplayservices.GooglePlayServicesFragment" />
 
 	<fragment
-		android:id="@+id/permissionFragment"
-		android:name="se.gustavkarlsson.skylight.android.gui.screens.permission.PermissionFragment" />
-
-	<fragment
 		android:id="@+id/settingsFragment"
 		android:name="se.gustavkarlsson.skylight.android.gui.screens.settings.SettingsFragment" />
 

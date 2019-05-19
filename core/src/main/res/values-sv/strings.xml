@@ -14,6 +14,7 @@
 	<string name="save">Spara</string>
 	<string name="remove">Ta bort</string>
 	<string name="remove_thing">Ta bort %s?</string>
+	<string name="fix">Fixa</string>
 
 	<!-- Errors -->
 	<string name="error_unknown_update_error">Ett oväntat fel inträffade vid uppdatering</string>
@@ -44,18 +45,10 @@
 		\n\nSkylight meddelar dig när chansen blir tillräkligt hög.</string>
 	<string name="intro_got_it">Okej!</string>
 
-	<!-- Permission -->
-	<string name="permission_title">Åtkomst till plats</string>
-	<string name="permission_desc">Skylight behöver åtkomst till din plats för att beräkna chansen
-		att se norrsken.</string>
-	<string name="permission_grant">Tillåt</string>
-	<string name="permission_required_title">Åtkomst till plats krävs</string>
-	<string name="permission_required_desc">Skylight använder din plats för att beräkna
-		avståndet till norrsken, väder, och hur mörkt det är ute.
-		Var vänlig ge Skylight åtkomst till din plats.</string>
-	<string name="permission_denied_title">Åtkomst nekades</string>
-	<string name="permission_denied_desc">Skylight behöver åtkomst till din plats för att
-		beräkna chansen att se norrsken men åtkomst nekades.</string>
+	<!-- Location permission -->
+	<string name="location_permission_denied_message">För att beräkna chansen att se norrsken för din nuvarande plats,
+		var vänlig ge Skylight åtkomst till den.</string>
+	<string name="location_permission_denied_forever_message">Åtkomst till din plats är nekad permanent.</string>
 
 	<!-- Google Play Services -->
 	<string name="google_play_services_title">Installera Google Play-tjänster</string>

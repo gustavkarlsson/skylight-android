@@ -16,6 +16,7 @@
 	<string name="save">Save</string>
 	<string name="remove">Remove</string>
 	<string name="remove_thing">Remove %s?</string>
+	<string name="fix">Fix</string>
 
 	<!-- Errors -->
 	<string name="error_unknown_update_error">An unknown error occurred while updating</string>
@@ -46,18 +47,10 @@
 		\n\nSkylight will notify you when the chance gets high enough.</string>
 	<string name="intro_got_it">Got it!</string>
 
-	<!-- Permission -->
-	<string name="permission_title">Access location</string>
-	<string name="permission_desc">Skylight needs access to your location to calculate the
-		chances of seeing the aurora.</string>
-	<string name="permission_grant">Grant</string>
-	<string name="permission_required_title">Location permission required</string>
-	<string name="permission_required_desc">Skylight uses your location to determine
-		closeness to the aurora, weather conditions, and how dark it is outside.
-		Please grant the permission to use Skylight.</string>
-	<string name="permission_denied_title">Location permission denied</string>
-	<string name="permission_denied_desc">Skylight needs access to your location to calculate the
-		chances of seeing the aurora but the permission could not be acquired.</string>
+	<!-- Location permission -->
+	<string name="location_permission_denied_message">To determine aurora chances for your current location, please
+		allow Skylight to access it.</string>
+	<string name="location_permission_denied_forever_message">Location access is permanently denied.</string>
 
 	<!-- Google Play Services -->
 	<string name="google_play_services_title">Install Google Play Services</string>

@@ -1,6 +1,10 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main
 
+import android.content.Intent
 import android.content.res.ColorStateList
+import android.net.Uri
+import android.provider.Settings
+import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Lifecycle
@@ -8,13 +12,16 @@ import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding2.view.clicks
 import com.jakewharton.rxbinding2.view.visibility
+import com.tbruyelle.rxpermissions2.RxPermissions
 import com.uber.autodispose.LifecycleScopeProvider
+import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Flowable
 import kotlinx.android.synthetic.main.fragment_main.chance
 import kotlinx.android.synthetic.main.fragment_main.chanceSubtitle
 import kotlinx.android.synthetic.main.fragment_main.darknessCard
 import kotlinx.android.synthetic.main.fragment_main.drawerLayout
+import kotlinx.android.synthetic.main.fragment_main.errorBanner
 import kotlinx.android.synthetic.main.fragment_main.geomagLocationCard
 import kotlinx.android.synthetic.main.fragment_main.kpIndexCard
 import kotlinx.android.synthetic.main.fragment_main.nav_view
@@ -22,16 +29,18 @@ import kotlinx.android.synthetic.main.fragment_main.toolbarView
 import kotlinx.android.synthetic.main.fragment_main.weatherCard
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
+import se.gustavkarlsson.skylight.android.feature.base.BackButtonHandler
 import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
 import se.gustavkarlsson.skylight.android.feature.base.doOnNext
-import se.gustavkarlsson.skylight.android.feature.base.BackButtonHandler
 import se.gustavkarlsson.skylight.android.gui.views.FactorCard
 import se.gustavkarlsson.skylight.android.navigation.Navigator
 import se.gustavkarlsson.skylight.android.navigation.Screen
 import timber.log.Timber
 import kotlin.math.roundToInt
+
 
 class MainFragment : BaseFragment(R.layout.fragment_main),
 	BackButtonHandler {
@@ -40,6 +49,8 @@ class MainFragment : BaseFragment(R.layout.fragment_main),
 
 	private val viewModel: MainViewModel by viewModel()
 	private val navigator: Navigator by inject()
+	private val locationPermission: String by inject("locationPermission")
+	private val rxPermissions: RxPermissions by inject()
 
 	override val toolbar: Toolbar?
 		get() = toolbarView.apply {
@@ -47,6 +58,11 @@ class MainFragment : BaseFragment(R.layout.fragment_main),
 				inflateMenu(R.menu.menu_main)
 			}
 		}
+
+	override fun onStart() {
+		super.onStart()
+		viewModel.refreshLocationPermission()
+	}
 
 	override fun initView() {
 		toolbarView.enableNavigationDrawer()
@@ -106,11 +122,6 @@ class MainFragment : BaseFragment(R.layout.fragment_main),
 			.autoDisposable(scope)
 			.subscribe { chanceSubtitle.text = it.resolve(requireContext()) }
 
-		viewModel.chanceSubtitleVisibility
-			.doOnNext { Timber.d("Updating chanceSubtitle visibility: %s", it) }
-			.autoDisposable(scope)
-			.subscribe(chanceSubtitle.visibility())
-
 		viewModel.darkness.present(
 			darknessCard,
 			::showDarknessDetails,
@@ -135,6 +146,60 @@ class MainFragment : BaseFragment(R.layout.fragment_main),
 			scope,
 			"weather"
 		)
+
+		viewModel.errorBannerData
+			.autoDisposable(scope)
+			.subscribe { updateBanner(it.value) }
+
+		viewModel.requestLocationPermission
+			.autoDisposable(scope)
+			.subscribe { requestLocationPermission() }
+
+		viewModel.openAppDetails
+			.autoDisposable(scope)
+			.subscribe { openAppDetails() }
+	}
+
+	private fun updateBanner(data: BannerData?) {
+		errorBanner.run {
+			if (data != null) {
+				setMessage(data.message.resolve(requireContext()))
+				setRightButton(data.buttonText.resolve(requireContext())) { data.buttonAction() }
+			}
+			val isVisible = visibility == View.VISIBLE
+			val shouldShow = data != null
+			if (!isVisible && shouldShow)
+				show()
+			else if (isVisible && !shouldShow)
+				dismiss()
+		}
+	}
+
+	private fun requestLocationPermission() {
+		rxPermissions
+			.requestEach(locationPermission)
+			.autoDisposable(scope(Lifecycle.Event.ON_DESTROY)) // Required to not dispose for dialog
+			.subscribe {
+				when {
+					it.granted -> {
+						Timber.i("Permission is granted")
+						viewModel.refreshLocationPermission()
+					}
+					it.shouldShowRequestPermissionRationale -> {
+						Timber.i("Permission is denied")
+					}
+					else -> {
+						Timber.i("Permission is denied forever")
+						viewModel.signalLocationPermissionDeniedForever()
+					}
+				}
+			}
+	}
+
+	private fun openAppDetails() {
+		val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+		intent.data = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
+		startActivity(intent)
 	}
 
 	private fun showKpIndexDetails() {

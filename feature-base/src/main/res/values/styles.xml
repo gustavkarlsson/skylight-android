@@ -2,7 +2,7 @@
 <resources>
 
 	<style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
- 		<item name="android:colorBackground">@color/background</item>
+		<item name="android:colorBackground">@color/background</item>
 		<item name="colorOnBackground">@color/on_background</item>
 
 		<item name="colorSurface">@color/surface</item>
@@ -58,6 +58,16 @@
 		<item name="android:shadowDx">0</item>
 		<item name="android:shadowDy">0</item>
 		<item name="android:shadowRadius">4</item>
+	</style>
+
+	<!-- Banner -->
+
+	<style name="AppTheme.BannerError">
+		<item name="backgroundColor">@color/error</item>
+		<item name="buttonsTextColor">@color/on_error</item>
+		<item name="messageTextColor">@color/on_error</item>
+		<item name="iconTint">@color/on_error</item>
+		<item name="buttonsRippleColor">@color/ripple</item>
 	</style>
 
 

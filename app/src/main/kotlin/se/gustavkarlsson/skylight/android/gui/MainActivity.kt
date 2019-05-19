@@ -46,12 +46,10 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 			.filter {
 				it.isFirstRun != null
 					&& it.isGooglePlayServicesAvailable != null
-					&& it.isLocationPermissionGranted != null
 			}
 			.distinctUntilChanged { a, b ->
 				a.isFirstRun == b.isFirstRun
 					&& a.isGooglePlayServicesAvailable == b.isGooglePlayServicesAvailable
-					&& a.isLocationPermissionGranted == b.isLocationPermissionGranted
 			}
 			.map {
 				when {
@@ -60,9 +58,6 @@ class MainActivity : AppCompatActivity(), LifecycleObserver {
 					}
 					it.isFirstRun == true -> {
 						Screen.INTRO
-					}
-					it.isLocationPermissionGranted == false -> {
-						Screen.PERMISSION
 					}
 					else -> {
 						Screen.MAIN

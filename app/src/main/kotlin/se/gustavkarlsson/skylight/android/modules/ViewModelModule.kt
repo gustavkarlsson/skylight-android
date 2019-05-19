@@ -9,7 +9,6 @@ import se.gustavkarlsson.skylight.android.gui.screens.googleplayservices.GoogleP
 import se.gustavkarlsson.skylight.android.gui.screens.intro.IntroViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainViewModel
 import se.gustavkarlsson.skylight.android.gui.screens.main.drawer.DrawerViewModel
-import se.gustavkarlsson.skylight.android.gui.screens.permission.PermissionViewModel
 import se.gustavkarlsson.skylight.android.util.ChanceToColorConverter
 
 val viewModelModule = module {
@@ -36,10 +35,6 @@ val viewModelModule = module {
 			time = get(),
 			nowTextThreshold = 1.minutes
 		)
-	}
-
-	viewModel {
-		PermissionViewModel(store = get("main"))
 	}
 
 	viewModel {

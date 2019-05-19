@@ -6,7 +6,8 @@ import se.gustavkarlsson.skylight.android.entities.Place
 sealed class Command {
 	object RefreshAll : Command()
 	object Bootstrap : Command()
-	object SignalLocationPermissionGranted : Command()
+	object RefreshLocationPermission : Command()
+	object SignalLocationPermissionDeniedForever : Command()
 	object SignalGooglePlayServicesInstalled : Command()
 	object SignalFirstRunCompleted : Command()
 	data class SelectPlace(val place: Place?) : Command()

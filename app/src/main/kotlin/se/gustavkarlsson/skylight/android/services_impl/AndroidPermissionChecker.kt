@@ -6,28 +6,42 @@ import androidx.core.content.ContextCompat
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import se.gustavkarlsson.skylight.android.entities.Permission
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import timber.log.Timber
 
 class AndroidPermissionChecker(
 	private val context: Context,
-	private val locationPermission: String
+	private val permissionKey: String
 ) : PermissionChecker {
 
-	private val isLocationGrantedRelay = BehaviorRelay.createDefault(isLocationGranted())
+	private val permissionRelay = BehaviorRelay.createDefault(checkSystemPermission())
 
-	private fun isLocationGranted(): Boolean {
-		val result = ContextCompat.checkSelfPermission(context, locationPermission)
-		val granted = result == PackageManager.PERMISSION_GRANTED
-		Timber.d("$locationPermission granted=$granted")
-		return granted
+	private fun checkSystemPermission(): Permission {
+		val result = ContextCompat.checkSelfPermission(context, permissionKey)
+		val permission = if (result == PackageManager.PERMISSION_GRANTED)
+			Permission.Granted
+		else
+			Permission.Denied
+		Timber.d("$permissionKey = $permission")
+		return permission
 	}
 
-	override val isLocationGranted: Flowable<Boolean> =
-		isLocationGrantedRelay.toFlowable(BackpressureStrategy.LATEST)
+	override val permission: Flowable<Permission> =
+		permissionRelay
+			.distinctUntilChanged()
+			.toFlowable(BackpressureStrategy.LATEST)
 
-	override fun signalPermissionGranted() {
-		Timber.d("Signalled $locationPermission granted")
-		isLocationGrantedRelay.accept(true)
+	override fun signalDeniedForever() {
+		permissionRelay.accept(Permission.DeniedForever)
+	}
+
+	override fun refresh() {
+		val systemPermission = checkSystemPermission()
+		if (systemPermission == Permission.Denied && permissionRelay.value == Permission.DeniedForever) {
+			Timber.d("Won't change from ${Permission.DeniedForever} to ${Permission.Denied}")
+			return
+		}
+		permissionRelay.accept(systemPermission)
 	}
 }

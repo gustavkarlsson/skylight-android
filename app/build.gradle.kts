@@ -159,6 +159,10 @@ dependencies {
 	debugImplementation("com.squareup.leakcanary:leakcanary-android:${versions.leakcanary}")
 	releaseImplementation("com.squareup.leakcanary:leakcanary-android-no-op:${versions.leakcanary}")
 
+	// Banner
+	// FIXME replace with google material banner when available
+	implementation("com.sergivonavi:materialbanner:${versions.banner}")
+
 	// Testing
 	testImplementation("junit:junit:${versions.junit}")
 	testImplementation("org.mockito:mockito-inline:${versions.mockito}")
