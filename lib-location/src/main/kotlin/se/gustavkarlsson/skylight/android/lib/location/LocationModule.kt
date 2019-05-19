@@ -22,7 +22,7 @@ val locationModule = module {
 			throttleDuration = 1.minutes,
 			firstPollingInterval = 10.seconds,
 			restPollingInterval = 10.minutes,
-			retryDelay = 1.minutes
+			retryDelay = 30.seconds
 		)
 	}
 
