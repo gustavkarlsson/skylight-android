@@ -12,11 +12,11 @@ import se.gustavkarlsson.skylight.android.krate.Command
 import se.gustavkarlsson.skylight.android.krate.Result
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.krate.State
+import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.GooglePlayServicesChecker
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.RunVersionManager
-import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import timber.log.Timber
 
 val krateModule = module {
@@ -171,7 +171,14 @@ val krateModule = module {
 							state.copy(selectedPlace = result.place)
 						}
 						is Result.Places -> {
-							state.copy(places = result.places)
+							val oldPlaces = state.places
+							val newPlaces = result.places
+							val newSelection = state.selectedPlace?.let { selected ->
+								findNewPlace(oldPlaces, newPlaces)
+									?: findSamePlace(selected, newPlaces)
+									?: Place.Current
+							}
+							state.copy(places = newPlaces, selectedPlace = newSelection)
 						}
 					}
 
@@ -197,6 +204,12 @@ val krateModule = module {
 	}
 
 }
+
+fun findNewPlace(oldPlaces: List<Place>, newPlaces: List<Place>): Place? =
+	newPlaces.firstOrNull { it !in oldPlaces }
+
+fun findSamePlace(selectedPlace: Place?, newPlaces: List<Place>): Place? =
+	selectedPlace?.takeIf { it in newPlaces }
 
 private fun State.updateReport(place: Place, report: AuroraReport?): State {
 	return if (report == null) {
