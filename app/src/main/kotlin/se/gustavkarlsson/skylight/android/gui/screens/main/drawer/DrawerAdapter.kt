@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import se.gustavkarlsson.skylight.android.R
 
-class PlacesAdapter : RecyclerView.Adapter<PlacesAdapter.ViewHolder>() {
+class DrawerAdapter : RecyclerView.Adapter<DrawerAdapter.ViewHolder>() {
 
-	private var items: List<PlaceItem> = emptyList()
+	private var items: List<DrawerItem> = emptyList()
 
-	fun setItems(items: List<PlaceItem>) {
+	fun setItems(items: List<DrawerItem>) {
 		val diff = DiffUtil.calculateDiff(DiffCallback(this.items, items))
 		this.items = items
 		diff.dispatchUpdatesTo(this)
@@ -21,7 +21,7 @@ class PlacesAdapter : RecyclerView.Adapter<PlacesAdapter.ViewHolder>() {
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 		val view = LayoutInflater.from(parent.context).inflate(
-			R.layout.layout_place_item,
+			R.layout.layout_drawer_item,
 			parent,
 			false
 		) as TextView
@@ -45,8 +45,8 @@ class PlacesAdapter : RecyclerView.Adapter<PlacesAdapter.ViewHolder>() {
 	}
 
 	class DiffCallback(
-		private val oldItems: List<PlaceItem>,
-		private val newItems: List<PlaceItem>
+		private val oldItems: List<DrawerItem>,
+		private val newItems: List<DrawerItem>
 	) : DiffUtil.Callback() {
 
 		override fun getOldListSize() = oldItems.size

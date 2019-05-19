@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 	<item android:right="@dimen/rhythmHalf">
 		<shape>
-			<solid android:color="@color/secondary_transparent" />
+			<solid android:color="@color/primary_variant" />
 			<corners
 				android:bottomRightRadius="@dimen/rhythmTriple"
 				android:topRightRadius="@dimen/rhythmTriple" />
@@ -12,7 +12,7 @@
 		<ripple android:color="@color/ripple">
 			<item>
 				<shape>
-					<solid android:color="@color/secondary_transparent" />
+					<solid android:color="@color/primary_variant" />
 					<corners
 						android:bottomRightRadius="@dimen/rhythmTriple"
 						android:topRightRadius="@dimen/rhythmTriple" />

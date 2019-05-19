@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.gui.screens.main.drawer
 
+import androidx.annotation.DrawableRes
 import androidx.lifecycle.ViewModel
 import com.ioki.textref.TextRef
 import com.jakewharton.rxrelay2.PublishRelay
@@ -17,7 +18,7 @@ class DrawerViewModel(
 	private val store: SkylightStore,
 	private val navigator: Navigator
 ) : ViewModel() {
-	val places: Flowable<List<PlaceItem>> =
+	val places: Flowable<List<DrawerItem>> =
 		store.states
 			.map(::createPlaceItems)
 			.distinctUntilChanged()
@@ -28,7 +29,7 @@ class DrawerViewModel(
 	private val openRemoveLocationDialogRelay = PublishRelay.create<RemoveLocationDialogData>()
 	val openRemoveLocationDialog: Observable<RemoveLocationDialogData> = openRemoveLocationDialogRelay
 
-	private fun createPlaceItems(state: State): List<PlaceItem> =
+	private fun createPlaceItems(state: State): List<DrawerItem> =
 		state.places.map { place ->
 			val isActive = place == state.selectedPlace
 			val icon = when (place) {
@@ -49,20 +50,28 @@ class DrawerViewModel(
 			} else {
 				{}
 			}
-			PlaceItem(isActive, icon, place.name, onClick, onLongClick)
+			DrawerItem(isActive, icon, place.name, onClick, onLongClick)
 		} + createAddPlaceItem()
 
-	private fun createAddPlaceItem(): PlaceItem {
+	private fun createAddPlaceItem(): DrawerItem {
 		val onClick = {
 			closeDrawerRelay.accept(Unit)
 			navigator.navigate(Screen.PICK_PLACE)
 		}
 		val onLongClick = {}
-		return PlaceItem(false, R.drawable.ic_add_white_24dp, TextRef(R.string.add_place), onClick, onLongClick)
+		return DrawerItem(false, R.drawable.ic_add_white_24dp, TextRef(R.string.add_place), onClick, onLongClick)
 	}
 }
 
 data class RemoveLocationDialogData(
 	val title: TextRef,
 	val onConfirm: () -> Unit
+)
+
+data class DrawerItem(
+	val isActive: Boolean,
+	@DrawableRes val icon: Int,
+	val name: TextRef,
+	val onClick: () -> Unit,
+	val onLongClick: () -> Unit
 )
