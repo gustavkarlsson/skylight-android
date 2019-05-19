@@ -54,11 +54,7 @@ class MainFragment : BaseFragment(), BackButtonHandler {
 	private val rxPermissions: RxPermissions by inject()
 
 	override val toolbar: Toolbar?
-		get() = toolbarView.apply {
-			if (menu.size() == 0) {
-				inflateMenu(R.menu.menu_main)
-			}
-		}
+		get() = toolbarView
 
 	override fun onStart() {
 		super.onStart()
@@ -67,6 +63,7 @@ class MainFragment : BaseFragment(), BackButtonHandler {
 
 	override fun initView() {
 		toolbarView.enableNavigationDrawer()
+		toolbarView.inflateMenu(R.menu.menu_main)
 	}
 
 	private fun Toolbar.enableNavigationDrawer() {
