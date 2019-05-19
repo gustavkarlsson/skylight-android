@@ -128,6 +128,7 @@ dependencies {
 	implementation(project(":lib-darkness"))
 	implementation(project(":lib-kpindex"))
 	implementation(project(":lib-geomaglocation"))
+	implementation(project(":lib-geocoder"))
 	implementation(project(":lib-reversegeocoder"))
 	implementation(project(":lib-places"))
 	implementation(project(":feature-base"))

@@ -8,10 +8,6 @@ import android.location.Geocoder as BuiltInGeocoder
 
 val addPlaceModule = module {
 
-	single<Geocoder> {
-		MapboxGeocoder(BuildConfig.MAPBOX_API_KEY)
-	}
-
 	viewModel {
 		AddPlaceViewModel(
 			mainStore  = get("main"),

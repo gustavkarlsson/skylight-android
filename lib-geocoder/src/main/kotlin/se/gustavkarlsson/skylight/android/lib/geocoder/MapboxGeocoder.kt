@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.addplace
+package se.gustavkarlsson.skylight.android.lib.geocoder
 
 import com.mapbox.api.geocoding.v5.MapboxGeocoding
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse

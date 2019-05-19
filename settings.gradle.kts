@@ -1,15 +1,16 @@
 include(
 	":core",
 	":lib-analytics",
-	":lib-location",
-	":lib-weather",
 	":lib-darkness",
-	":lib-kpindex",
+	":lib-geocoder",
 	":lib-geomaglocation",
-	":lib-reversegeocoder",
+	":lib-kpindex",
+	":lib-location",
 	":lib-places",
+	":lib-reversegeocoder",
+	":lib-weather",
 	":feature-base",
-	":feature-background",
 	":feature-addplace",
+	":feature-background",
 	":app"
 )
