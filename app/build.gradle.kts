@@ -33,12 +33,6 @@ android {
 		targetCompatibility = versions.java
 	}
 
-	sourceSets {
-		getByName("main").java.setSrcDirs(listOf("src/main/kotlin"))
-		getByName("test").java.setSrcDirs(listOf("src/test/kotlin"))
-		getByName("androidTest").java.setSrcDirs(listOf("src/androidTest/kotlin"))
-	}
-
 	packagingOptions {
 		exclude("META-INF/LICENSE")
 		exclude("META-INF/NOTICE")
