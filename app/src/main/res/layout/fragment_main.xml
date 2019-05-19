@@ -4,113 +4,104 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/drawerLayout"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	tools:context=".gui.MainActivity">
+	android:layout_height="match_parent">
 
-	<LinearLayout
+	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:orientation="vertical">
+		android:layout_height="match_parent">
 
 		<com.google.android.material.appbar.MaterialToolbar
 			android:id="@+id/toolbarView"
 			android:layout_width="match_parent"
 			android:layout_height="?attr/actionBarSize"
+			app:layout_constraintBottom_toTopOf="@+id/firstSpace"
+			app:layout_constraintTop_toTopOf="parent"
 			app:title="@string/main_your_location" />
 
-		<androidx.constraintlayout.widget.ConstraintLayout
+		<Space
+			android:id="@+id/firstSpace"
 			android:layout_width="match_parent"
 			android:layout_height="0dp"
-			android:layout_weight="1"
-			android:clipChildren="false"
-			android:clipToPadding="false"
-			android:padding="@dimen/screen_margin">
+			app:layout_constraintBottom_toTopOf="@+id/chance"
+			app:layout_constraintTop_toBottomOf="@+id/toolbarView" />
 
-			<Space
-				android:id="@+id/firstSpace"
-				android:layout_width="match_parent"
-				android:layout_height="0dp"
-				app:layout_constraintBottom_toTopOf="@+id/chance"
-				app:layout_constraintTop_toTopOf="parent" />
+		<TextView
+			android:id="@+id/chance"
+			style="@style/AppTheme.ChanceText"
+			android:layout_width="match_parent"
+			android:layout_height="72dp"
+			android:paddingStart="@dimen/screen_margin"
+			android:paddingEnd="@dimen/screen_margin"
+			app:layout_constraintBottom_toTopOf="@+id/chanceSubtitle"
+			app:layout_constraintHorizontal_bias="0"
+			app:layout_constraintTop_toBottomOf="@id/firstSpace"
+			tools:text="High Chance" />
 
-			<TextView
-				android:id="@+id/chance"
-				style="@style/AppTheme.ChanceText"
-				android:layout_width="0dp"
-				android:layout_height="72dp"
-				app:layout_constraintBottom_toTopOf="@+id/chanceSubtitle"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintHorizontal_bias="0"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@id/firstSpace"
-				tools:text="High Chance" />
+		<TextView
+			android:id="@+id/chanceSubtitle"
+			style="@style/AppTheme.TextBody2"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingStart="@dimen/screen_margin"
+			android:paddingEnd="@dimen/screen_margin"
+			app:layout_constraintBottom_toTopOf="@+id/secondSpace"
+			app:layout_constraintHorizontal_bias="0"
+			app:layout_constraintTop_toBottomOf="@+id/chance"
+			tools:text="3 minutes ago" />
 
-			<TextView
-				android:id="@+id/chanceSubtitle"
-				style="@style/AppTheme.TextBody2"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				app:layout_constraintBottom_toTopOf="@+id/secondSpace"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintHorizontal_bias="0"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@+id/chance"
-				tools:text="3 minutes ago" />
+		<Space
+			android:id="@+id/secondSpace"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			app:layout_constraintBottom_toTopOf="@+id/kpIndexCard"
+			app:layout_constraintTop_toBottomOf="@+id/chanceSubtitle" />
 
-			<Space
-				android:id="@+id/secondSpace"
-				android:layout_width="match_parent"
-				android:layout_height="0dp"
-				app:layout_constraintBottom_toTopOf="@+id/kpIndexCard"
-				app:layout_constraintTop_toBottomOf="@+id/chanceSubtitle" />
+		<se.gustavkarlsson.skylight.android.gui.views.FactorCard
+			android:id="@+id/kpIndexCard"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/gutter"
+			android:paddingStart="@dimen/screen_margin"
+			android:paddingEnd="@dimen/screen_margin"
+			app:layout_constraintBottom_toTopOf="@+id/geomagLocationCard"
+			app:layout_constraintTop_toBottomOf="@+id/secondSpace"
+			app:title="@string/factor_kp_index_title_compact" />
 
-			<se.gustavkarlsson.skylight.android.gui.views.FactorCard
-				android:id="@+id/kpIndexCard"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="@dimen/gutter"
-				app:layout_constraintBottom_toTopOf="@+id/geomagLocationCard"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@+id/secondSpace"
-				app:title="@string/factor_kp_index_title_compact" />
+		<se.gustavkarlsson.skylight.android.gui.views.FactorCard
+			android:id="@+id/geomagLocationCard"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/gutter"
+			android:paddingStart="@dimen/screen_margin"
+			android:paddingEnd="@dimen/screen_margin"
+			app:layout_constraintBottom_toTopOf="@+id/weatherCard"
+			app:layout_constraintTop_toBottomOf="@+id/kpIndexCard"
+			app:title="@string/factor_geomag_location_title_compact" />
 
-			<se.gustavkarlsson.skylight.android.gui.views.FactorCard
-				android:id="@+id/geomagLocationCard"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="@dimen/gutter"
-				app:layout_constraintBottom_toTopOf="@+id/weatherCard"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@+id/kpIndexCard"
-				app:title="@string/factor_geomag_location_title_compact" />
+		<se.gustavkarlsson.skylight.android.gui.views.FactorCard
+			android:id="@+id/weatherCard"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/gutter"
+			android:paddingStart="@dimen/screen_margin"
+			android:paddingEnd="@dimen/screen_margin"
+			app:layout_constraintBottom_toTopOf="@+id/darknessCard"
+			app:layout_constraintTop_toBottomOf="@+id/geomagLocationCard"
+			app:title="@string/factor_weather_title_compact" />
 
-			<se.gustavkarlsson.skylight.android.gui.views.FactorCard
-				android:id="@+id/weatherCard"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="@dimen/gutter"
-				app:layout_constraintBottom_toTopOf="@+id/darknessCard"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@+id/geomagLocationCard"
-				app:title="@string/factor_weather_title_compact" />
+		<se.gustavkarlsson.skylight.android.gui.views.FactorCard
+			android:id="@+id/darknessCard"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/gutter"
+			android:paddingStart="@dimen/screen_margin"
+			android:paddingEnd="@dimen/screen_margin"
+			android:paddingBottom="@dimen/screen_margin"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintTop_toBottomOf="@+id/weatherCard"
+			app:title="@string/factor_darkness_title_compact" />
 
-			<se.gustavkarlsson.skylight.android.gui.views.FactorCard
-				android:id="@+id/darknessCard"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="@dimen/gutter"
-				app:layout_constraintBottom_toBottomOf="parent"
-				app:layout_constraintEnd_toEndOf="parent"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintTop_toBottomOf="@+id/weatherCard"
-				app:title="@string/factor_darkness_title_compact" />
-
-		</androidx.constraintlayout.widget.ConstraintLayout>
-
-	</LinearLayout>
+	</androidx.constraintlayout.widget.ConstraintLayout>
 
 	<com.google.android.material.navigation.NavigationView
 		android:id="@+id/nav_view"
