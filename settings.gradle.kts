@@ -6,7 +6,7 @@ include(
 	":lib-darkness",
 	":lib-kpindex",
 	":lib-geomaglocation",
-	":lib-locationname",
+	":lib-reversegeocoder",
 	":lib-places",
 	":feature-base",
 	":feature-background",

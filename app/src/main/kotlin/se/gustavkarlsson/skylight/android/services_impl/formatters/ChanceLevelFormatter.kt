@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.services_impl.formatters
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
-import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
+import se.gustavkarlsson.skylight.android.formatters.SingleValueFormatter
 
 object ChanceLevelFormatter : SingleValueFormatter<ChanceLevel> {
 	override fun format(value: ChanceLevel): TextRef {

@@ -8,18 +8,18 @@ import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.koptional.toOptional
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.Location
-import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
-import se.gustavkarlsson.skylight.android.services.providers.DarknessProvider
-import se.gustavkarlsson.skylight.android.services.providers.GeomagLocationProvider
-import se.gustavkarlsson.skylight.android.services.providers.KpIndexProvider
-import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
-import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
-import se.gustavkarlsson.skylight.android.services.providers.WeatherProvider
+import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
+import se.gustavkarlsson.skylight.android.services.DarknessProvider
+import se.gustavkarlsson.skylight.android.services.GeomagLocationProvider
+import se.gustavkarlsson.skylight.android.services.KpIndexProvider
+import se.gustavkarlsson.skylight.android.services.ReverseGeocoder
+import se.gustavkarlsson.skylight.android.services.LocationProvider
+import se.gustavkarlsson.skylight.android.services.WeatherProvider
 import timber.log.Timber
 
 class CombiningAuroraReportProvider(
 	private val locationProvider: LocationProvider,
-	private val locationNameProvider: LocationNameProvider,
+	private val reverseGeocoder: ReverseGeocoder,
 	private val darknessProvider: DarknessProvider,
 	private val geomagLocationProvider: GeomagLocationProvider,
 	private val kpIndexProvider: KpIndexProvider,
@@ -37,7 +37,7 @@ class CombiningAuroraReportProvider(
 			?: locationProvider.stream
 		return Flowables
 			.combineLatest(
-				locationNameProvider.stream(locationFlowable),
+				reverseGeocoder.stream(locationFlowable),
 				kpIndexProvider.stream,
 				geomagLocationProvider.stream(locationFlowable),
 				darknessProvider.stream(locationFlowable),
@@ -57,7 +57,7 @@ class CombiningAuroraReportProvider(
 		val cachedLocation = location.cache()
 		return Singles
 			.zip(
-				locationNameProvider.get(cachedLocation),
+				reverseGeocoder.get(cachedLocation),
 				kpIndexProvider.get(),
 				geomagLocationProvider.get(cachedLocation),
 				darknessProvider.get(cachedLocation),

@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services.providers
+package se.gustavkarlsson.skylight.android.services
 
 import io.reactivex.Single
 import org.threeten.bp.Instant

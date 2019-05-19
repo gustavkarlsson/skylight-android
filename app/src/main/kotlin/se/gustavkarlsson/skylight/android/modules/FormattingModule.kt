@@ -8,8 +8,8 @@ import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Weather
-import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
-import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
+import se.gustavkarlsson.skylight.android.formatters.RelativeTimeFormatter
+import se.gustavkarlsson.skylight.android.formatters.SingleValueFormatter
 import se.gustavkarlsson.skylight.android.services_impl.formatters.ChanceLevelFormatter
 import se.gustavkarlsson.skylight.android.services_impl.formatters.DarknessFormatter
 import se.gustavkarlsson.skylight.android.services_impl.formatters.DateUtilsRelativeTimeFormatter

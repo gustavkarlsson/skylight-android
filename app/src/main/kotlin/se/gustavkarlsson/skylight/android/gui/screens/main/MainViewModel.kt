@@ -30,9 +30,9 @@ import se.gustavkarlsson.skylight.android.entities.Permission
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.krate.State
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.services.formatters.RelativeTimeFormatter
-import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
-import se.gustavkarlsson.skylight.android.services.providers.Time
+import se.gustavkarlsson.skylight.android.formatters.RelativeTimeFormatter
+import se.gustavkarlsson.skylight.android.formatters.SingleValueFormatter
+import se.gustavkarlsson.skylight.android.services.Time
 import se.gustavkarlsson.skylight.android.util.ChanceToColorConverter
 import timber.log.Timber
 

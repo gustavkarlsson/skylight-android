@@ -12,7 +12,7 @@ import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
+import se.gustavkarlsson.skylight.android.formatters.SingleValueFormatter
 
 internal class AuroraReportNotifier(
 	private val context: Context,

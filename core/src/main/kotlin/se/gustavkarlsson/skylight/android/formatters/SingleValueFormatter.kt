@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services.formatters
+package se.gustavkarlsson.skylight.android.formatters
 
 import com.ioki.textref.TextRef
 

@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.lib.darkness.darknessModule
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.geomagLocationModule
 import se.gustavkarlsson.skylight.android.lib.kpindex.kpIndexModule
 import se.gustavkarlsson.skylight.android.lib.location.locationModule
-import se.gustavkarlsson.skylight.android.lib.locationname.locationNameModule
+import se.gustavkarlsson.skylight.android.lib.reversegeocoder.reverseGeocoderModule
 import se.gustavkarlsson.skylight.android.lib.places.placesModule
 import se.gustavkarlsson.skylight.android.lib.weather.weatherModule
 import se.gustavkarlsson.skylight.android.modules.activityModule
@@ -34,7 +34,7 @@ val modules = listOf(
 	auroraReportModule,
 	timeModule,
 	locationModule,
-	locationNameModule,
+	reverseGeocoderModule,
 	darknessModule,
 	geomagLocationModule,
 	kpIndexModule,

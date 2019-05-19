@@ -9,7 +9,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.extensions.seconds
-import se.gustavkarlsson.skylight.android.services.providers.WeatherProvider
+import se.gustavkarlsson.skylight.android.services.WeatherProvider
 import java.util.concurrent.TimeUnit
 
 val weatherModule = module {

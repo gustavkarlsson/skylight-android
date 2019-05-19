@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.services_impl.formatters
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.Weather
-import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
+import se.gustavkarlsson.skylight.android.formatters.SingleValueFormatter
 
 object WeatherFormatter : SingleValueFormatter<Weather> {
 	override fun format(value: Weather): TextRef {

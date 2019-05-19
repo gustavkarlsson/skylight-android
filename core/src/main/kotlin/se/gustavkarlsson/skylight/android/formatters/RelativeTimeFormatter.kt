@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services.formatters
+package se.gustavkarlsson.skylight.android.formatters
 
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant

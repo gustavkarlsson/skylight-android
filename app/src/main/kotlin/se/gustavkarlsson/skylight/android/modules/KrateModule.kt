@@ -16,7 +16,7 @@ import se.gustavkarlsson.skylight.android.services.GooglePlayServicesChecker
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.RunVersionManager
-import se.gustavkarlsson.skylight.android.services.providers.AuroraReportProvider
+import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import timber.log.Timber
 
 val krateModule = module {
@@ -66,6 +66,7 @@ val krateModule = module {
 						}
 						Single
 							.zip(reportSingles) { reportsArray ->
+								@Suppress("UNCHECKED_CAST")
 								val reports = reportsArray
 									.asList() as List<Pair<Place, AuroraReport>>
 								Result.AuroraReport.Success(reports.toMap()) as Result

@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.lib.locationname
+package se.gustavkarlsson.skylight.android.lib.reversegeocoder
 
 import android.location.Geocoder
 import io.reactivex.Flowable
@@ -10,13 +10,13 @@ import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.extensions.delay
-import se.gustavkarlsson.skylight.android.services.providers.LocationNameProvider
+import se.gustavkarlsson.skylight.android.services.ReverseGeocoder
 import timber.log.Timber
 
-internal class GeocoderLocationNameProvider(
+internal class AndroidReverseGeocoder(
 	private val geocoder: Geocoder,
 	private val retryDelay: Duration
-) : LocationNameProvider {
+) : ReverseGeocoder {
 
 	private fun getSingleName(location: Single<Optional<Location>>): Single<Optional<String>> =
 		location

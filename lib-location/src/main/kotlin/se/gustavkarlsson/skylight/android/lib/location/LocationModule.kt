@@ -6,7 +6,7 @@ import org.koin.dsl.module.module
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.extensions.seconds
-import se.gustavkarlsson.skylight.android.services.providers.LocationProvider
+import se.gustavkarlsson.skylight.android.services.LocationProvider
 
 val locationModule = module {
 

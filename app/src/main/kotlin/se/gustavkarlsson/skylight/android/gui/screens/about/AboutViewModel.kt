@@ -7,7 +7,7 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.services.providers.Time
+import se.gustavkarlsson.skylight.android.services.Time
 
 class AboutViewModel(
 	val isDevelopMode: Boolean,
