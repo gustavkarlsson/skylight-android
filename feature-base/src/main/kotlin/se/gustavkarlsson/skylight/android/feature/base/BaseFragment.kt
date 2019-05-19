@@ -14,9 +14,7 @@ import com.uber.autodispose.android.lifecycle.scope
 import org.koin.android.ext.android.inject
 import se.gustavkarlsson.skylight.android.services.Analytics
 
-abstract class BaseFragment(
-	@LayoutRes private val layoutId: Int
-) : Fragment() {
+abstract class BaseFragment : Fragment() {
 
 	private val navController: NavController by inject()
 	private val analytics: Analytics by inject()
@@ -54,6 +52,9 @@ abstract class BaseFragment(
 		super.onStart()
 		analytics.logScreen(requireActivity(), this::class.java.simpleName)
 	}
+
+	@get:LayoutRes
+	protected abstract val layoutId: Int
 
 	protected open val toolbar: Toolbar? = null
 

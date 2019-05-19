@@ -10,7 +10,9 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.setHtml
 import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
 
-class IntroFragment : BaseFragment(R.layout.fragment_intro) {
+class IntroFragment : BaseFragment() {
+
+	override val layoutId: Int = R.layout.fragment_intro
 
 	private val viewModel: IntroViewModel by viewModel()
 

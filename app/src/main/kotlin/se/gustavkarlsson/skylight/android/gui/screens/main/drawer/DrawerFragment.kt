@@ -12,7 +12,9 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
 import se.gustavkarlsson.skylight.android.feature.base.findParentViewByType
 
-class DrawerFragment : BaseFragment(R.layout.fragment_main_drawer) {
+class DrawerFragment : BaseFragment() {
+
+	override val layoutId: Int = R.layout.fragment_main_drawer
 
 	private val adapter = PlacesAdapter()
 

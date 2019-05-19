@@ -42,8 +42,9 @@ import timber.log.Timber
 import kotlin.math.roundToInt
 
 
-class MainFragment : BaseFragment(R.layout.fragment_main),
-	BackButtonHandler {
+class MainFragment : BaseFragment(), BackButtonHandler {
+
+	override val layoutId: Int = R.layout.fragment_main
 
 	private var currentBottomSheetTitle: Int? = null
 

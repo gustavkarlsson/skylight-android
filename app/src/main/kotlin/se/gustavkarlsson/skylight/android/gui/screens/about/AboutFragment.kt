@@ -15,7 +15,9 @@ import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.setHtml
 import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
 
-class AboutFragment : BaseFragment(R.layout.fragment_about) {
+class AboutFragment : BaseFragment() {
+
+	override val layoutId: Int = R.layout.fragment_about
 
 	private val viewModel: AboutViewModel by viewModel()
 

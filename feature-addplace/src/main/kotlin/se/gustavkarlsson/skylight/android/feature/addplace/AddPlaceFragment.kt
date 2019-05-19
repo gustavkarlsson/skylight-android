@@ -15,7 +15,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
 import se.gustavkarlsson.skylight.android.feature.base.showKeyboard
 
-class AddPlaceFragment : BaseFragment(R.layout.fragment_add_place) {
+class AddPlaceFragment : BaseFragment() {
+
+	override val layoutId: Int = R.layout.fragment_add_place
 
 	private val viewModel: AddPlaceViewModel by viewModel()
 

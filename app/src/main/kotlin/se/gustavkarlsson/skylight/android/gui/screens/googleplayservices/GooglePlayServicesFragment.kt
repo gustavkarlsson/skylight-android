@@ -13,7 +13,9 @@ import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
 import se.gustavkarlsson.skylight.android.feature.base.doOnNext
 import timber.log.Timber
 
-class GooglePlayServicesFragment : BaseFragment(R.layout.fragment_google_play_services) {
+class GooglePlayServicesFragment : BaseFragment() {
+
+	override val layoutId: Int = R.layout.fragment_google_play_services
 
 	private val viewModel: GooglePlayServicesViewModel by viewModel()
 

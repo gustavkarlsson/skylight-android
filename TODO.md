@@ -1,6 +1,3 @@
-# TODO
-* Make sure layout ID survives lifecycle changes
-
 ## Soon
 * Show banner when no location or network
 * App bundles
@@ -8,7 +5,6 @@
 * Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
 * Rework API responses.
 * KtLint
-* Improve color system
 * Make testing use other settings
 * Add test to verify Koin setup
 * Add instrumentation testing to CI

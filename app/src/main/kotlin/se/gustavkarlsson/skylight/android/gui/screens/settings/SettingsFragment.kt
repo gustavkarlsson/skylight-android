@@ -5,7 +5,9 @@ import kotlinx.android.synthetic.main.fragment_settings.toolbarView
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
 
-class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
+class SettingsFragment : BaseFragment() {
+
+	override val layoutId: Int = R.layout.fragment_settings
 
 	override val toolbar: Toolbar?
 		get() = toolbarView
