@@ -178,6 +178,8 @@ val krateModule = module {
 									?: findSamePlace(selected, newPlaces)
 									?: Place.Current
 							}
+							// FIXME changing selection doesn't start streaming,
+							//  and the distinctUntilChanged in SelectPlaceCommand prevents other selections
 							state.copy(places = newPlaces, selectedPlace = newSelection)
 						}
 					}
