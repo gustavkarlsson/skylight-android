@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.services.PlacesRepository
 val placesModule = module {
 
 	single<PlacesRepository> {
-		val driver = AndroidSqliteDriver(Database.Schema, get(), "test.db")
+		val driver = AndroidSqliteDriver(Database.Schema, get(), "places.db")
 		val database = Database(driver)
 		SqlDelightPlacesRepository(database.dbPlaceQueries)
 	}
