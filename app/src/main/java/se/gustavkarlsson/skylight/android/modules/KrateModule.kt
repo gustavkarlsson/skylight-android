@@ -50,10 +50,20 @@ val krateModule = module {
 						.map(Result::FirstRun)
 				}
 
-				transform<Command.Bootstrap> { commands ->
+				transformWithState<Command.Bootstrap> { commands, getState ->
 					commands.firstOrError()
 						.flatMapPublisher { placesRepo.all() }
-						.map(Result::Places)
+						.flatMap { places ->
+							val state = getState()
+							val oldPlaces = state.places
+							val newSelection = state.selectedPlace?.let { selected ->
+								findNewPlace(oldPlaces, places)
+									?: findSamePlace(selected, places)
+									?: Place.Current
+							}
+							selectPlace(newSelection, auroraReportProvider)
+								.startWith(Result.Places(places))
+						}
 				}
 
 				transformWithState<Command.RefreshAll> { commands, getState ->
@@ -94,20 +104,9 @@ val krateModule = module {
 				}
 				*/
 				transform<Command.SelectPlace> { commands ->
-					commands
-						.distinctUntilChanged()
-						.switchMap { (place) ->
-							if (place == null) {
-								Flowable.just(Result.PlaceSelected(null))
-							} else {
-								val location = (place as? Place.Custom)?.location
-								auroraReportProvider.stream(location)
-									.map<Result> { result ->
-										Result.AuroraReport.Success(mapOf(place to result))
-									}
-									.startWith(Result.PlaceSelected(place))
-							}
-						}
+					commands.switchMap { (place) ->
+						selectPlace(place, auroraReportProvider)
+					}
 				}
 				if (BuildConfig.DEBUG) {
 					watch<Command> { Timber.d("Got command: %s", it) }
@@ -171,16 +170,7 @@ val krateModule = module {
 							state.copy(selectedPlace = result.place)
 						}
 						is Result.Places -> {
-							val oldPlaces = state.places
-							val newPlaces = result.places
-							val newSelection = state.selectedPlace?.let { selected ->
-								findNewPlace(oldPlaces, newPlaces)
-									?: findSamePlace(selected, newPlaces)
-									?: Place.Current
-							}
-							// FIXME changing selection doesn't start streaming,
-							//  and the distinctUntilChanged in SelectPlaceCommand prevents other selections
-							state.copy(places = newPlaces, selectedPlace = newSelection)
+							state.copy(places = result.places)
 						}
 					}
 
@@ -207,10 +197,26 @@ val krateModule = module {
 
 }
 
-fun findNewPlace(oldPlaces: List<Place>, newPlaces: List<Place>): Place? =
+private fun selectPlace(
+	place: Place?,
+	auroraReportProvider: AuroraReportProvider
+): Flowable<Result> {
+	return if (place == null) {
+		Flowable.just(Result.PlaceSelected(null))
+	} else {
+		val location = (place as? Place.Custom)?.location
+		auroraReportProvider.stream(location)
+			.map<Result> { result ->
+				Result.AuroraReport.Success(mapOf(place to result))
+			}
+			.startWith(Result.PlaceSelected(place))
+	}
+}
+
+private fun findNewPlace(oldPlaces: List<Place>, newPlaces: List<Place>): Place? =
 	newPlaces.firstOrNull { it !in oldPlaces }
 
-fun findSamePlace(selectedPlace: Place?, newPlaces: List<Place>): Place? =
+private fun findSamePlace(selectedPlace: Place?, newPlaces: List<Place>): Place? =
 	selectedPlace?.takeIf { it in newPlaces }
 
 private fun State.updateReport(place: Place, report: AuroraReport?): State {
