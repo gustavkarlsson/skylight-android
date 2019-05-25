@@ -12,6 +12,7 @@ include(
 	":feature-base",
 	":feature-googleplayservices",
 	":feature-addplace",
+	":feature-about",
 	":feature-background",
 	":app"
 )

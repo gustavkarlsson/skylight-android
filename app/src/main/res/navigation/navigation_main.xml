@@ -17,7 +17,7 @@
 
 	<fragment
 		android:id="@+id/aboutFragment"
-		android:name="se.gustavkarlsson.skylight.android.gui.screens.about.AboutFragment" />
+		android:name="se.gustavkarlsson.skylight.android.feature.about.AboutFragment" />
 
 	<fragment
 		android:id="@+id/googlePlayServicesFragment"

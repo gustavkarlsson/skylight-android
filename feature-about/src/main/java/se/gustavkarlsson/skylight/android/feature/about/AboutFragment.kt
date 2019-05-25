@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.gui.screens.about
+package se.gustavkarlsson.skylight.android.feature.about
 
 import android.view.View
 import androidx.appcompat.widget.Toolbar
@@ -11,7 +11,6 @@ import kotlinx.android.synthetic.main.fragment_about.toolbarView
 import kotlinx.android.synthetic.main.fragment_about.versionCodeTextView
 import kotlinx.android.synthetic.main.fragment_about.versionNameTextView
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.feature.base.extensions.setHtml
 import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
 

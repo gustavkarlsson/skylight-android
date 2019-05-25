@@ -1,5 +1,3 @@
-import org.eclipse.jgit.api.Git
-import org.eclipse.jgit.lib.RepositoryBuilder
 import pl.allegro.tech.build.axion.release.domain.TagNameSerializationConfig
 
 plugins {
@@ -52,23 +50,6 @@ android {
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		testInstrumentationRunnerArgument("clearPackageData", "true")
 		multiDexEnabled = true
-
-		val repo = RepositoryBuilder().run {
-			gitDir = File(rootDir, "/.git")
-			readEnvironment()
-			build()
-		}
-		val head = repo.exactRef("HEAD")
-		val branch = Git(repo).branchList().call()
-			.find { it.objectId == head.objectId }
-			?.name?.replace(".*/".toRegex(), "")
-			?: "None"
-		val sha1 = head.objectId.name
-		val buildTime = System.currentTimeMillis()
-
-		buildConfigField("String", "GIT_BRANCH", "\"$branch\"")
-		buildConfigField("String", "GIT_SHA1", "\"$sha1\"")
-		buildConfigField("long", "BUILD_TIME_MILLIS", "${buildTime}L")
 	}
 
 	signingConfigs {
@@ -127,6 +108,7 @@ dependencies {
 	implementation(project(":lib-places"))
 	implementation(project(":feature-base"))
 	implementation(project(":feature-googleplayservices"))
+	implementation(project(":feature-about"))
 	implementation(project(":feature-background"))
 	implementation(project(":feature-addplace"))
 

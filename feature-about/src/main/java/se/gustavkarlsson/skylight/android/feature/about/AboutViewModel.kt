@@ -1,15 +1,13 @@
-package se.gustavkarlsson.skylight.android.gui.screens.about
+package se.gustavkarlsson.skylight.android.feature.about
 
 import androidx.lifecycle.ViewModel
 import com.ioki.textref.TextRef
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
-import se.gustavkarlsson.skylight.android.BuildConfig
-import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.services.Time
 
-class AboutViewModel(
+internal class AboutViewModel(
 	val isDevelopMode: Boolean,
 	time: Time
 ) : ViewModel() {

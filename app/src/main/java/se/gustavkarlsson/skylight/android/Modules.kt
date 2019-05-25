@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android
 
+import se.gustavkarlsson.skylight.android.feature.about.aboutModule
 import se.gustavkarlsson.skylight.android.feature.addplace.addPlaceModule
 import se.gustavkarlsson.skylight.android.feature.background.backgroundModule
 import se.gustavkarlsson.skylight.android.lib.analytics.analyticsModule
@@ -49,5 +50,6 @@ val modules = listOf(
 	navigationModule,
 	addPlaceModule,
 	placesModule,
-	geocoderModule
+	geocoderModule,
+	aboutModule
 ) + extraModules
