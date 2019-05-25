@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.extensions
+package se.gustavkarlsson.skylight.android.feature.base.extensions
 
 import android.os.Build
 import android.text.Html

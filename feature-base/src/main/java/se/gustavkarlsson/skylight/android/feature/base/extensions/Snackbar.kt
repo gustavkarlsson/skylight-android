@@ -1,11 +1,12 @@
-package se.gustavkarlsson.skylight.android.extensions
+package se.gustavkarlsson.skylight.android.feature.base.extensions
+
 
 import android.view.View
 import android.view.ViewTreeObserver
 import androidx.annotation.StringRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.snackbar.Snackbar
-import se.gustavkarlsson.skylight.android.R
+import se.gustavkarlsson.skylight.android.feature.base.R
 
 fun showErrorSnackbar(view: View, message: CharSequence, length: Int): Snackbar {
 	return Snackbar.make(view, message, length).showErrorSnackbar()

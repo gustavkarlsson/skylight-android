@@ -21,7 +21,7 @@
 
 	<fragment
 		android:id="@+id/googlePlayServicesFragment"
-		android:name="se.gustavkarlsson.skylight.android.gui.screens.googleplayservices.GooglePlayServicesFragment" />
+		android:name="se.gustavkarlsson.skylight.feature.googleplayservices.GooglePlayServicesFragment" />
 
 	<fragment
 		android:id="@+id/settingsFragment"

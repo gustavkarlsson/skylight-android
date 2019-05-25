@@ -8,14 +8,13 @@ import se.gustavkarlsson.skylight.android.lib.geocoder.geocoderModule
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.geomagLocationModule
 import se.gustavkarlsson.skylight.android.lib.kpindex.kpIndexModule
 import se.gustavkarlsson.skylight.android.lib.location.locationModule
-import se.gustavkarlsson.skylight.android.lib.reversegeocoder.reverseGeocoderModule
 import se.gustavkarlsson.skylight.android.lib.places.placesModule
+import se.gustavkarlsson.skylight.android.lib.reversegeocoder.reverseGeocoderModule
 import se.gustavkarlsson.skylight.android.lib.weather.weatherModule
 import se.gustavkarlsson.skylight.android.modules.activityModule
 import se.gustavkarlsson.skylight.android.modules.auroraReportModule
 import se.gustavkarlsson.skylight.android.modules.evaluationModule
 import se.gustavkarlsson.skylight.android.modules.formattingModule
-import se.gustavkarlsson.skylight.android.modules.googlePlayServicesModule
 import se.gustavkarlsson.skylight.android.modules.krateModule
 import se.gustavkarlsson.skylight.android.modules.localizationModule
 import se.gustavkarlsson.skylight.android.modules.navigationModule
@@ -24,6 +23,7 @@ import se.gustavkarlsson.skylight.android.modules.runVersionsModule
 import se.gustavkarlsson.skylight.android.modules.settingsModule
 import se.gustavkarlsson.skylight.android.modules.timeModule
 import se.gustavkarlsson.skylight.android.modules.viewModelModule
+import se.gustavkarlsson.skylight.feature.googleplayservices.googlePlayServicesModule
 
 val modules = listOf(
 	settingsModule,

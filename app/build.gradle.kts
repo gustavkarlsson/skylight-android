@@ -126,6 +126,7 @@ dependencies {
 	implementation(project(":lib-reversegeocoder"))
 	implementation(project(":lib-places"))
 	implementation(project(":feature-base"))
+	implementation(project(":feature-googleplayservices"))
 	implementation(project(":feature-background"))
 	implementation(project(":feature-addplace"))
 
@@ -135,13 +136,9 @@ dependencies {
 	implementation("androidx.preference:preference:${versions.androidPreference}")
 	implementation("androidx.cardview:cardview:${versions.androidCardview}")
 
-	// Google Play Services
-	implementation("com.google.android.gms:play-services-gcm:${versions.playServicesGcm}")
-
 	// Rx misc
 	implementation("com.tbruyelle.rxpermissions2:rxpermissions:${versions.rxpermissions}@aar")
 	implementation("com.f2prateek.rx.preferences2:rx-preferences:${versions.rxpreferences}")
-	implementation("io.ashdavies.rx.rxtasks:rx-tasks:${versions.rxtasks}")
 
 	// Lifecycle
 	implementation("androidx.lifecycle:lifecycle-extensions:${versions.archLifecycle}")

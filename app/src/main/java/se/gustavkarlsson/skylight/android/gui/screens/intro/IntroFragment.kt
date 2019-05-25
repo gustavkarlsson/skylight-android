@@ -7,7 +7,7 @@ import kotlinx.android.synthetic.main.fragment_intro.nextButton
 import kotlinx.android.synthetic.main.fragment_intro.privacyPolicyLink
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.extensions.setHtml
+import se.gustavkarlsson.skylight.android.feature.base.extensions.setHtml
 import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
 
 class IntroFragment : BaseFragment() {

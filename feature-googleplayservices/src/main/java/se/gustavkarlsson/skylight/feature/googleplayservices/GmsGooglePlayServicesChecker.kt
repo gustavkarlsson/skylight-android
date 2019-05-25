@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services_impl
+package se.gustavkarlsson.skylight.feature.googleplayservices
 
 import android.content.Context
 import com.google.android.gms.common.ConnectionResult
@@ -9,7 +9,7 @@ import io.reactivex.Flowable
 import se.gustavkarlsson.skylight.android.services.GooglePlayServicesChecker
 import timber.log.Timber
 
-class GmsGooglePlayServicesChecker(private val context: Context) : GooglePlayServicesChecker {
+internal class GmsGooglePlayServicesChecker(private val context: Context) : GooglePlayServicesChecker {
 
 	private val isAvailableRelay = BehaviorRelay.createDefault(isAvailable())
 

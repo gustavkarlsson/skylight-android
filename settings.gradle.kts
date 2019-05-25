@@ -10,6 +10,7 @@ include(
 	":lib-reversegeocoder",
 	":lib-weather",
 	":feature-base",
+	":feature-googleplayservices",
 	":feature-addplace",
 	":feature-background",
 	":app"

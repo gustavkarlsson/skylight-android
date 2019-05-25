@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.gui.screens.googleplayservices
+package se.gustavkarlsson.skylight.feature.googleplayservices
 
 import android.app.Activity
 import androidx.lifecycle.ViewModel
@@ -8,7 +8,7 @@ import io.reactivex.Completable
 import se.gustavkarlsson.skylight.android.krate.Command
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 
-class GooglePlayServicesViewModel(
+internal class GooglePlayServicesViewModel(
 	private val store: SkylightStore
 ) : ViewModel() {
 	fun makeGooglePlayServicesAvailable(activity: Activity): Completable =

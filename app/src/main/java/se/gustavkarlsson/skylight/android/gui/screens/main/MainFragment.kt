@@ -11,7 +11,6 @@ import androidx.lifecycle.Lifecycle
 import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding2.view.clicks
-import com.jakewharton.rxbinding2.view.visibility
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.android.lifecycle.scope
@@ -31,10 +30,10 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.extensions.showErrorSnackbar
 import se.gustavkarlsson.skylight.android.feature.base.BackButtonHandler
 import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
 import se.gustavkarlsson.skylight.android.feature.base.doOnNext
+import se.gustavkarlsson.skylight.android.feature.base.extensions.showErrorSnackbar
 import se.gustavkarlsson.skylight.android.gui.views.FactorCard
 import se.gustavkarlsson.skylight.android.navigation.Navigator
 import se.gustavkarlsson.skylight.android.navigation.Screen
