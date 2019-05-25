@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.feature.googleplayservices
+package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
 import android.app.Activity
 import androidx.lifecycle.ViewModel

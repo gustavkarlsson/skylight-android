@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android
 import se.gustavkarlsson.skylight.android.feature.about.aboutModule
 import se.gustavkarlsson.skylight.android.feature.addplace.addPlaceModule
 import se.gustavkarlsson.skylight.android.feature.background.backgroundModule
+import se.gustavkarlsson.skylight.android.feature.googleplayservices.googlePlayServicesModule
 import se.gustavkarlsson.skylight.android.lib.analytics.analyticsModule
 import se.gustavkarlsson.skylight.android.lib.darkness.darknessModule
 import se.gustavkarlsson.skylight.android.lib.geocoder.geocoderModule
@@ -24,7 +25,6 @@ import se.gustavkarlsson.skylight.android.modules.runVersionsModule
 import se.gustavkarlsson.skylight.android.modules.settingsModule
 import se.gustavkarlsson.skylight.android.modules.timeModule
 import se.gustavkarlsson.skylight.android.modules.viewModelModule
-import se.gustavkarlsson.skylight.feature.googleplayservices.googlePlayServicesModule
 
 val modules = listOf(
 	settingsModule,

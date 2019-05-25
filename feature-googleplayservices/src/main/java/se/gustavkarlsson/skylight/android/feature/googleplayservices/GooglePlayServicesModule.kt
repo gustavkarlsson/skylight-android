@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.feature.googleplayservices
+package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module

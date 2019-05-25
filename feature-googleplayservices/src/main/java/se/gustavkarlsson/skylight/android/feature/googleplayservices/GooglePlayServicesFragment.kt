@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.feature.googleplayservices
+package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
 import androidx.lifecycle.Lifecycle
 import com.google.android.material.snackbar.Snackbar
@@ -10,7 +10,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
 import se.gustavkarlsson.skylight.android.feature.base.doOnNext
 import se.gustavkarlsson.skylight.android.feature.base.extensions.showErrorSnackbar
-import se.gustavkarlsson.skylight.android.feature.googleplayservices.R
 import timber.log.Timber
 
 class GooglePlayServicesFragment : BaseFragment() {
