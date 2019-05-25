@@ -13,7 +13,7 @@
 
 	<fragment
 		android:id="@+id/introFragment"
-		android:name="se.gustavkarlsson.skylight.android.gui.screens.intro.IntroFragment" />
+		android:name="se.gustavkarlsson.skylight.android.feature.intro.IntroFragment" />
 
 	<fragment
 		android:id="@+id/aboutFragment"

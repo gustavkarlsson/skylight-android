@@ -4,6 +4,7 @@ import se.gustavkarlsson.skylight.android.feature.about.aboutModule
 import se.gustavkarlsson.skylight.android.feature.addplace.addPlaceModule
 import se.gustavkarlsson.skylight.android.feature.background.backgroundModule
 import se.gustavkarlsson.skylight.android.feature.googleplayservices.googlePlayServicesModule
+import se.gustavkarlsson.skylight.android.feature.intro.introModule
 import se.gustavkarlsson.skylight.android.lib.analytics.analyticsModule
 import se.gustavkarlsson.skylight.android.lib.darkness.darknessModule
 import se.gustavkarlsson.skylight.android.lib.geocoder.geocoderModule
@@ -51,5 +52,6 @@ val modules = listOf(
 	addPlaceModule,
 	placesModule,
 	geocoderModule,
-	aboutModule
+	aboutModule,
+	introModule
 ) + extraModules
