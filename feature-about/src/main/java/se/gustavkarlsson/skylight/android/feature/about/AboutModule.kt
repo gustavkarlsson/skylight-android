@@ -10,11 +10,9 @@ import se.gustavkarlsson.skylight.android.feature.base.DestinationRegistry
 val aboutModule = module {
 
 	viewModel {
-		// FIXME make sure this flavor thing works
-		val isDevelopMode = BuildConfig.FLAVOR.contains("develop", true)
 		AboutViewModel(
 			time = get(),
-			isDevelopMode = isDevelopMode,
+			showDevelopData = BuildConfig.DEVELOP,
 			versionCode = get("versionCode"),
 			versionName = get("versionName"),
 			gitBranch = BuildConfig.GIT_BRANCH,

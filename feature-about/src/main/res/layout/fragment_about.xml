@@ -44,80 +44,27 @@
 			app:layout_constraintTop_toBottomOf="@id/portraitImageView" />
 
 		<TextView
-			android:id="@+id/versionNameTextView"
+			android:id="@+id/detailsTextView"
 			style="@style/AppTheme.TextBody1"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="24dp"
+			android:gravity="center_horizontal"
+			android:lineSpacingMultiplier="1.2"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toBottomOf="@id/appNameTextView"
-			tools:text="Version: x.y.z" />
-
-		<TextView
-			android:id="@+id/appByTextView"
-			style="@style/AppTheme.TextBody1"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="4dp"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/versionNameTextView"
-			tools:text="App By: Gustav Karlsson" />
+			tools:text="Version: x.y.z\nApp by: Gustav Karlsson" />
 
 		<TextView
 			android:id="@+id/privacyPolicyLink"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="4dp"
+			android:layout_marginTop="16dp"
 			app:layout_constraintEnd_toEndOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/appByTextView"
+			app:layout_constraintTop_toBottomOf="@id/detailsTextView"
 			tools:text="@string/privacy_policy" />
-
-		<TextView
-			android:id="@+id/versionCodeTextView"
-			style="@style/AppTheme.TextBody1"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="4dp"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/privacyPolicyLink"
-			tools:text="Version code: 12345" />
-
-		<TextView
-			android:id="@+id/builtTextView"
-			style="@style/AppTheme.TextBody1"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="4dp"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/versionCodeTextView"
-			tools:text="Built on: 2018-09-19T20:55:33.529" />
-
-		<TextView
-			android:id="@+id/branchTextView"
-			style="@style/AppTheme.TextBody1"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="4dp"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/builtTextView"
-			tools:text="Branch: dev" />
-
-		<TextView
-			android:id="@+id/sha1TextView"
-			style="@style/AppTheme.TextBody1"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="4dp"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toBottomOf="@id/branchTextView"
-			tools:text="SHA1: f9beed4" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 

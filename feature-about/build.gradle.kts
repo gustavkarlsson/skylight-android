@@ -37,6 +37,20 @@ android {
 		buildConfigField("String", "GIT_SHA1", "\"$sha1\"")
 		buildConfigField("long", "BUILD_TIME_MILLIS", "${buildTime}L")
 	}
+
+	flavorDimensions("environment")
+
+	productFlavors {
+		create("production") {
+			setDimension("environment")
+			buildConfigField("boolean", "DEVELOP", "false" )
+		}
+
+		create("develop") {
+			setDimension("environment")
+			buildConfigField("boolean", "DEVELOP", "true" )
+		}
+	}
 }
 
 dependencies {
