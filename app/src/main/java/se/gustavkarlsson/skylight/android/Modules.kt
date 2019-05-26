@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android
 import se.gustavkarlsson.skylight.android.feature.about.aboutModule
 import se.gustavkarlsson.skylight.android.feature.addplace.addPlaceModule
 import se.gustavkarlsson.skylight.android.feature.background.backgroundModule
+import se.gustavkarlsson.skylight.android.feature.base.baseModule
 import se.gustavkarlsson.skylight.android.feature.googleplayservices.googlePlayServicesModule
 import se.gustavkarlsson.skylight.android.feature.intro.introModule
 import se.gustavkarlsson.skylight.android.lib.analytics.analyticsModule
@@ -15,23 +16,24 @@ import se.gustavkarlsson.skylight.android.lib.places.placesModule
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.reverseGeocoderModule
 import se.gustavkarlsson.skylight.android.lib.weather.weatherModule
 import se.gustavkarlsson.skylight.android.modules.activityModule
+import se.gustavkarlsson.skylight.android.modules.appModule
 import se.gustavkarlsson.skylight.android.modules.auroraReportModule
 import se.gustavkarlsson.skylight.android.modules.evaluationModule
 import se.gustavkarlsson.skylight.android.modules.formattingModule
 import se.gustavkarlsson.skylight.android.modules.krateModule
 import se.gustavkarlsson.skylight.android.modules.localizationModule
+import se.gustavkarlsson.skylight.android.modules.mainModule
 import se.gustavkarlsson.skylight.android.modules.navigationModule
 import se.gustavkarlsson.skylight.android.modules.permissionsModule
-import se.gustavkarlsson.skylight.android.modules.runVersionsModule
 import se.gustavkarlsson.skylight.android.modules.settingsModule
 import se.gustavkarlsson.skylight.android.modules.timeModule
 import se.gustavkarlsson.skylight.android.modules.viewModelModule
 
 val modules = listOf(
+	appModule,
 	settingsModule,
 	backgroundModule,
 	krateModule,
-	runVersionsModule,
 	googlePlayServicesModule,
 	permissionsModule,
 	auroraReportModule,
@@ -53,5 +55,7 @@ val modules = listOf(
 	placesModule,
 	geocoderModule,
 	aboutModule,
-	introModule
+	introModule,
+	baseModule,
+	mainModule
 ) + extraModules

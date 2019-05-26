@@ -8,11 +8,10 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.Place
+import se.gustavkarlsson.skylight.android.feature.base.Navigator
 import se.gustavkarlsson.skylight.android.krate.Command
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.krate.State
-import se.gustavkarlsson.skylight.android.navigation.Navigator
-import se.gustavkarlsson.skylight.android.navigation.Screen
 
 class DrawerViewModel(
 	private val store: SkylightStore,
@@ -56,7 +55,7 @@ class DrawerViewModel(
 	private fun createAddPlaceItem(): DrawerItem {
 		val onClick = {
 			closeDrawerRelay.accept(Unit)
-			navigator.navigate(Screen.PICK_PLACE)
+			navigator.navigate("addplace")
 		}
 		val onLongClick = {}
 		return DrawerItem(false, R.drawable.ic_add_white_24dp, TextRef(R.string.add_place), onClick, onLongClick)

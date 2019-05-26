@@ -11,8 +11,6 @@ sealed class Result {
 	}
 
 	data class LocationPermission(val permission: Permission) : Result()
-	data class GooglePlayServices(val isAvailable: Boolean) : Result()
-	data class FirstRun(val isFirstRun: Boolean) : Result()
 	data class PlaceSelected(val place: Place?) : Result()
 	data class Places(val places: List<Place>) : Result()
 }

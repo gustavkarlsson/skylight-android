@@ -8,7 +8,6 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.NavController
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.android.lifecycle.scope
 import org.koin.android.ext.android.inject
@@ -16,7 +15,6 @@ import se.gustavkarlsson.skylight.android.services.Analytics
 
 abstract class BaseFragment : Fragment() {
 
-	private val navController: NavController by inject()
 	private val analytics: Analytics by inject()
 
 	init {
@@ -42,7 +40,7 @@ abstract class BaseFragment : Fragment() {
 		if (requireFragmentManager().backStackEntryCount > 0) {
 			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
 			toolbar.setNavigationOnClickListener {
-				navController.popBackStack()
+				fragmentManager?.popBackStack() // TODO use navigator instead?
 				hideKeyboard()
 			}
 		}

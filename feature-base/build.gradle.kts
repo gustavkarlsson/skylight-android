@@ -24,11 +24,6 @@ dependencies {
 	api("androidx.fragment:fragment:${versions.androidFragment}")
 	api("androidx.constraintlayout:constraintlayout:${versions.constraintLayout}")
 
-	// Navigation
-	api("android.arch.navigation:navigation-ui-ktx:${versions.navigation}")
-	api("android.arch.navigation:navigation-fragment:${versions.navigation}")
-	api("android.arch.navigation:navigation-ui:${versions.navigation}")
-
 	// AutoDispose
 	api("com.uber.autodispose:autodispose-kotlin:${versions.autodispose}")
 	api("com.uber.autodispose:autodispose-android-kotlin:${versions.autodispose}")

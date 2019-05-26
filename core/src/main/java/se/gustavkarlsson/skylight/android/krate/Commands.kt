@@ -8,8 +8,6 @@ sealed class Command {
 	object Bootstrap : Command()
 	object RefreshLocationPermission : Command()
 	object SignalLocationPermissionDeniedForever : Command()
-	object SignalGooglePlayServicesInstalled : Command()
-	object SignalFirstRunCompleted : Command()
 	data class SelectPlace(val place: Place?) : Command()
 	data class RemovePlace(val placeId: Long) : Command()
 	data class AddPlace(val name: String, val location: Location) : Command()

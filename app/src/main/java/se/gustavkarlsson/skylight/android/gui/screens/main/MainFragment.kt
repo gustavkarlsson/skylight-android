@@ -32,11 +32,10 @@ import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.feature.base.BackButtonHandler
 import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
+import se.gustavkarlsson.skylight.android.feature.base.Navigator
 import se.gustavkarlsson.skylight.android.feature.base.doOnNext
 import se.gustavkarlsson.skylight.android.feature.base.extensions.showErrorSnackbar
 import se.gustavkarlsson.skylight.android.gui.views.FactorCard
-import se.gustavkarlsson.skylight.android.navigation.Navigator
-import se.gustavkarlsson.skylight.android.navigation.Screen
 import timber.log.Timber
 import kotlin.math.roundToInt
 
@@ -86,8 +85,8 @@ class MainFragment : BaseFragment(), BackButtonHandler {
 			.autoDisposable(scope)
 			.subscribe { item ->
 				when (item.itemId) {
-					R.id.action_settings -> navigator.navigate(Screen.SETTINGS)
-					R.id.action_about -> navigator.navigate(Screen.ABOUT)
+					R.id.action_settings -> navigator.navigate("settings")
+					R.id.action_about -> navigator.navigate("about")
 				}
 			}
 

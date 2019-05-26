@@ -16,14 +16,11 @@ import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.GooglePlayServicesChecker
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
-import se.gustavkarlsson.skylight.android.services.RunVersionManager
 import timber.log.Timber
 
 val krateModule = module {
 
 	single("main") { _ ->
-		val runVersionManager = get<RunVersionManager>()
-		val googlePlayServicesChecker = get<GooglePlayServicesChecker>()
 		val permissionChecker = get<PermissionChecker>()
 		val auroraReportProvider = get<AuroraReportProvider>()
 		val placesRepo = get<PlacesRepository>()
@@ -36,18 +33,6 @@ val krateModule = module {
 						.flatMapPublisher { permissionChecker.permission }
 						.map(Result::LocationPermission)
 					// FIXME Can we refresh location when this happens?
-				}
-
-				transform<Command.Bootstrap> { commands ->
-					commands.firstOrError()
-						.flatMapPublisher { googlePlayServicesChecker.isAvailable }
-						.map(Result::GooglePlayServices)
-				}
-
-				transform<Command.Bootstrap> { commands ->
-					commands.firstOrError()
-						.flatMapPublisher { runVersionManager.isFirstRun }
-						.map(Result::FirstRun)
 				}
 
 				transformWithState<Command.Bootstrap> { commands, getState ->
@@ -124,14 +109,6 @@ val krateModule = module {
 					permissionChecker.signalDeniedForever()
 				}
 
-				watch<Command.SignalFirstRunCompleted> {
-					runVersionManager.signalFirstRunCompleted()
-				}
-
-				watch<Command.SignalGooglePlayServicesInstalled> {
-					googlePlayServicesChecker.signalInstalled()
-				}
-
 				watch<Command.RefreshLocationPermission> {
 					permissionChecker.refresh()
 				}
@@ -143,12 +120,6 @@ val krateModule = module {
 					when (result) {
 						is Result.LocationPermission -> {
 							state.copy(locationPermission = result.permission)
-						}
-						is Result.GooglePlayServices -> {
-							state.copy(isGooglePlayServicesAvailable = result.isAvailable)
-						}
-						is Result.FirstRun -> {
-							state.copy(isFirstRun = result.isFirstRun)
 						}
 						is Result.AuroraReport.Success -> {
 							val stateWithoutThrowable = state.copy(throwable = null)

@@ -47,7 +47,6 @@ object Versions {
 	val solarPositioning = "0.0.9"
 	val autodispose = "0.8.0"
 	val leakcanary = "1.6.3"
-	val navigation = "1.0.0"
 	val ktxCore = "1.0.1"
 	val koin = "1.0.1"
 	val koptional = "0.2.0"

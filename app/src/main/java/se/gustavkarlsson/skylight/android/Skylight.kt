@@ -39,6 +39,7 @@ class Skylight : MultiDexApplication() {
 		AndroidThreeTen.init(this)
 		initRxJavaErrorHandling()
 		startKoin(this, modules, logger = KoinTimberLogger)
+		initializeModules()
 		setupSettingsAnalytics()
 		store.issue(Command.Bootstrap)
 		// FIXME store.issue(SettingsStreamCommand(true))
@@ -76,6 +77,15 @@ class Skylight : MultiDexApplication() {
 			}
 			.addTo(disposables)
 		*/
+	}
+
+	private fun initializeModules() {
+		get<ModuleStarter>("intro").start()
+		get<ModuleStarter>("main").start()
+		get<ModuleStarter>("googleplayservices").start()
+		get<ModuleStarter>("about").start()
+		get<ModuleStarter>("addplace").start()
+		get<ModuleStarter>("settings").start()
 	}
 
 	companion object {
