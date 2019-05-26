@@ -14,7 +14,8 @@ val addPlaceModule = module {
 	viewModel {
 		AddPlaceViewModel(
 			mainStore  = get("main"),
-			addPlaceStore = get("addplace")
+			addPlaceStore = get("addplace"),
+			navigator = get()
 		)
 	}
 
@@ -29,7 +30,7 @@ val addPlaceModule = module {
 	single<ModuleStarter>("addplace") {
 		object : ModuleStarter {
 			override fun start() {
-				val destination = Destination("addplace", 0, false) { id ->
+				val destination = Destination("addplace", 0, true) { id ->
 					if (id == "addplace")
 						AddPlaceFragment()
 					else

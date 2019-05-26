@@ -22,13 +22,15 @@ internal class IntroFragment : BaseFragment() {
 
 	override fun initView() {
 		privacyPolicyLink.setHtml(viewModel.privacyPolicyHtml.resolve(requireContext()))
-		viewModel.registerScreenSeen()
 	}
 
 	override fun bindData(scope: LifecycleScopeProvider<*>) {
 		nextButton.clicks()
 			.autoDisposable(scope)
-			.subscribe { viewModel.navigateForward() }
+			.subscribe {
+				viewModel.registerScreenSeen()
+				viewModel.navigateForward()
+			}
 	}
 
 	companion object {

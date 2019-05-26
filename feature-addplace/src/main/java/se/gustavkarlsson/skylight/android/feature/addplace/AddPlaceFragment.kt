@@ -55,10 +55,6 @@ internal class AddPlaceFragment : BaseFragment() {
 		viewModel.openSaveDialog
 			.autoDisposable(scope)
 			.subscribe(::openSaveDialog)
-
-		viewModel.goBack
-			.autoDisposable(scope)
-			.subscribe { fragmentManager?.popBackStack() }
 	}
 
 	private fun openSaveDialog(dialogData: SaveDialogData) {

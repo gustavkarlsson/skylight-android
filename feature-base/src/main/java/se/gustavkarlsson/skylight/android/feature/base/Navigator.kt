@@ -20,16 +20,22 @@ class Navigator(
 		}
 		val currentDestination = fragmentManager.getTopDestination(destinations)
 
-		if (currentDestination.popOnLeave)
-			fragmentManager.popBackStack()
-
 		fragmentManager.beginTransaction().apply {
 			getAnimations(currentDestination, targetDestination).run {
 				setCustomAnimations(enter, exit, popEnter, popExit)
 			}
-			addToBackStack(targetDestination.name)
-			replace(containerId, targetFragment)
+			if (currentDestination.addToBackStack) {
+				addToBackStack(null)
+			}
+			replace(containerId, targetFragment, targetDestination.name)
 		}.commit()
+	}
+
+	fun goBack() = fragmentManager.popBackStack()
+
+	fun onBackPressed(): Boolean {
+		val topFragment = fragmentManager.fragments.lastOrNull()
+		return topFragment is BackButtonHandler && topFragment.onBackPressed()
 	}
 
 	private fun List<Destination>.getTarget(id: String): Pair<Destination, Fragment>? = asSequence()
@@ -39,26 +45,21 @@ class Navigator(
 		.firstOrNull()
 
 	private fun FragmentManager.getTopDestination(destinations: List<Destination>): Destination {
-		val topIndex = backStackEntryCount - 1
-		if (topIndex < 0)
-			return EMPTY_DESTINATION
-		val tag = getBackStackEntryAt(topIndex).name
+		val tag = fragments.lastOrNull()?.tag ?: return EMPTY_DESTINATION
 		return destinations.first { it.name == tag }
 	}
 
 	private fun getAnimations(
 		current: Destination,
 		target: Destination
-	): Animations {
-		return when {
-			!current.popOnLeave && target.popOnLeave -> {
-				Animations.VERTICAL
-			}
-			current.popOnLeave && !target.popOnLeave -> {
-				Animations.VERTICAL_INVERSE
-			}
-			else -> Animations.HORIZONTAL
+	): Animations = when {
+		!current.addToBackStack && target.addToBackStack -> {
+			Animations.VERTICAL
 		}
+		current.addToBackStack && !target.addToBackStack -> {
+			Animations.VERTICAL_INVERSE
+		}
+		else -> Animations.HORIZONTAL
 	}
 
 	private enum class Animations(
@@ -93,5 +94,5 @@ private val EMPTY_DESTINATION =
 	Destination(
 		name = "empty",
 		priority = Int.MIN_VALUE,
-		popOnLeave = false
+		addToBackStack = false
 	) { null }

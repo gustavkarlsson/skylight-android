@@ -17,6 +17,8 @@ abstract class BaseFragment : Fragment() {
 
 	private val analytics: Analytics by inject()
 
+	private val navigator: Navigator by inject()
+
 	init {
 		@Suppress("LeakingThis")
 		doOnEvery(this, Lifecycle.Event.ON_START) {
@@ -40,7 +42,7 @@ abstract class BaseFragment : Fragment() {
 		if (requireFragmentManager().backStackEntryCount > 0) {
 			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
 			toolbar.setNavigationOnClickListener {
-				fragmentManager?.popBackStack() // TODO use navigator instead?
+				navigator.goBack()
 				hideKeyboard()
 			}
 		}

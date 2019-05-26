@@ -28,9 +28,7 @@ class MainActivity : AppCompatActivity() {
 	}
 
 	override fun onBackPressed() {
-		// FIXME Move to navigator?
-		val topFragment = supportFragmentManager.fragments.lastOrNull()
-		if (topFragment is BackButtonHandler && topFragment.onBackPressed()) return
+		if (navigator.onBackPressed()) return
 		super.onBackPressed()
 	}
 }

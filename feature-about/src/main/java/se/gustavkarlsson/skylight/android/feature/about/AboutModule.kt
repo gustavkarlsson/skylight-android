@@ -6,7 +6,6 @@ import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.feature.base.Destination
 import se.gustavkarlsson.skylight.android.feature.base.DestinationRegistry
-import se.gustavkarlsson.skylight.android.services.RunVersionManager
 
 val aboutModule = module {
 
@@ -27,7 +26,7 @@ val aboutModule = module {
 	single<ModuleStarter>("about") {
 		object : ModuleStarter {
 			override fun start() {
-				val destination = Destination("about", 0, false) { id ->
+				val destination = Destination("about", 0, true) { id ->
 					if (id == "about")
 						AboutFragment()
 					else

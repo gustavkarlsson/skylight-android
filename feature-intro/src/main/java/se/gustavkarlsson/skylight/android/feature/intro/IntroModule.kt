@@ -21,7 +21,7 @@ val introModule = module {
 		val runVersionManager = get<RunVersionManager>()
 		object : ModuleStarter {
 			override fun start() {
-				val destination = Destination("intro", 5, true) { id ->
+				val destination = Destination("intro", 5, false) { id ->
 					if (runVersionManager.isFirstRun) {
 						IntroFragment.newInstance(id)
 					} else {

@@ -5,19 +5,18 @@ import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
+import se.gustavkarlsson.skylight.android.feature.base.Navigator
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.krate.Command as MainCommand
 
 internal class AddPlaceViewModel(
 	private val mainStore: SkylightStore,
-	private val addPlaceStore: AddPlaceStore
+	private val addPlaceStore: AddPlaceStore,
+	private val navigator: Navigator
 ) : ViewModel() {
 
 	private val openSaveDialogRelay = PublishRelay.create<SaveDialogData>()
 	val openSaveDialog: Observable<SaveDialogData> = openSaveDialogRelay
-
-	private val goBackRelay = PublishRelay.create<Unit>()
-	val goBack: Observable<Unit> = goBackRelay
 
 	fun onSearchTextChanged(newText: String) = addPlaceStore.issue(Command.Search(newText))
 
@@ -32,7 +31,7 @@ internal class AddPlaceViewModel(
 		SearchResultItem(fullName) {
 			val dialogData = SaveDialogData(simpleName, location) { finalName ->
 				mainStore.issue(MainCommand.AddPlace(finalName, location))
-				goBackRelay.accept(Unit)
+				navigator.goBack()
 			}
 			openSaveDialogRelay.accept(dialogData)
 		}

@@ -12,7 +12,7 @@ val mainModule = module {
 	single<ModuleStarter>("main") {
 		object : ModuleStarter {
 			override fun start() {
-				val destination = Destination("main", 0, false) { id ->
+				val destination = Destination("main", 0, true) { id ->
 					if (id == "main")
 						MainFragment()
 					else
@@ -26,7 +26,7 @@ val mainModule = module {
 	single<ModuleStarter>("settings") {
 		object : ModuleStarter {
 			override fun start() {
-				val destination = Destination("settings", 0, false) { id ->
+				val destination = Destination("settings", 0, true) { id ->
 					if (id == "settings")
 						SettingsFragment()
 					else

@@ -24,7 +24,7 @@ val googlePlayServicesModule = module {
 		val googlePlayServicesChecker = get<GooglePlayServicesChecker>()
 		object : ModuleStarter {
 			override fun start() {
-				val destination = Destination("googleplayservices", 10, true) { id ->
+				val destination = Destination("googleplayservices", 10, false) { id ->
 					if (!googlePlayServicesChecker.isAvailable)
 						GooglePlayServicesFragment.newInstance(id)
 					else
