@@ -9,12 +9,12 @@ fun View.showKeyboard() {
 	ContextCompat.getSystemService(
 		context,
 		InputMethodManager::class.java
-	)?.toggleSoftInputFromWindow(applicationWindowToken, InputMethodManager.SHOW_IMPLICIT, 0)
+	)?.showSoftInput(this, 0)
 }
 
 fun Fragment.hideKeyboard() {
 	ContextCompat.getSystemService(
 		requireContext(),
 		InputMethodManager::class.java
-	)?.toggleSoftInputFromWindow(view!!.applicationWindowToken, 0, InputMethodManager.HIDE_NOT_ALWAYS)
+	)?.hideSoftInputFromWindow(view!!.applicationWindowToken, 0)
 }

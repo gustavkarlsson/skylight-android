@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.fragment_add_place.toolbarView
 import kotlinx.android.synthetic.main.layout_save_dialog.view.placeNameEditText
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
-import se.gustavkarlsson.skylight.android.feature.base.showKeyboard
 
 internal class AddPlaceFragment : BaseFragment() {
 
@@ -35,7 +34,6 @@ internal class AddPlaceFragment : BaseFragment() {
 		searchResultRecyclerView.adapter = adapter
 		searchView.setIconifiedByDefault(false)
 		searchView.queryHint = getString(R.string.search_for_place)
-		searchView.showKeyboard()
 	}
 
 	override fun bindData(scope: LifecycleScopeProvider<*>) {

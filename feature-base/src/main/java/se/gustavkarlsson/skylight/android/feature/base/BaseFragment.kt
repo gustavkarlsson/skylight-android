@@ -41,10 +41,7 @@ abstract class BaseFragment : Fragment() {
 	private fun setupBackNavigation(toolbar: Toolbar) {
 		if (requireFragmentManager().backStackEntryCount > 0) {
 			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-			toolbar.setNavigationOnClickListener {
-				navigator.goBack()
-				hideKeyboard()
-			}
+			toolbar.setNavigationOnClickListener { navigator.goBack() }
 		}
 	}
 
