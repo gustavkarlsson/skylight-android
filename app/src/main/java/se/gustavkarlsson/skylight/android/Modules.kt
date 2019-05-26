@@ -6,6 +6,7 @@ import se.gustavkarlsson.skylight.android.feature.background.backgroundModule
 import se.gustavkarlsson.skylight.android.feature.base.baseModule
 import se.gustavkarlsson.skylight.android.feature.googleplayservices.googlePlayServicesModule
 import se.gustavkarlsson.skylight.android.feature.intro.introModule
+import se.gustavkarlsson.skylight.android.feature.settings.settingsModule
 import se.gustavkarlsson.skylight.android.lib.analytics.analyticsModule
 import se.gustavkarlsson.skylight.android.lib.darkness.darknessModule
 import se.gustavkarlsson.skylight.android.lib.geocoder.geocoderModule
@@ -25,7 +26,6 @@ import se.gustavkarlsson.skylight.android.modules.localizationModule
 import se.gustavkarlsson.skylight.android.modules.mainModule
 import se.gustavkarlsson.skylight.android.modules.navigationModule
 import se.gustavkarlsson.skylight.android.modules.permissionsModule
-import se.gustavkarlsson.skylight.android.modules.settingsModule
 import se.gustavkarlsson.skylight.android.modules.timeModule
 import se.gustavkarlsson.skylight.android.modules.viewModelModule
 
@@ -58,4 +58,4 @@ val modules = listOf(
 	introModule,
 	baseModule,
 	mainModule
-) + extraModules
+)

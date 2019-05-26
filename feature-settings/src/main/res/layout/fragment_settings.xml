@@ -14,7 +14,7 @@
 
 	<fragment
 		android:id="@+id/innerFragment"
-		android:name="se.gustavkarlsson.skylight.android.gui.screens.settings.InnerSettingsFragment"
+		android:name="se.gustavkarlsson.skylight.android.feature.settings.InnerSettingsFragment"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_weight="1" />

@@ -1,15 +1,14 @@
-package se.gustavkarlsson.skylight.android.services_impl
+package se.gustavkarlsson.skylight.android.feature.settings
 
 import android.content.Context
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import org.threeten.bp.Duration
-import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.DevelopSettings
 
-class RxPreferencesDevelopSettings(
+internal class RxPreferencesDevelopSettings(
 	context: Context,
 	rxSharedPreferences: RxSharedPreferences
 ) : DevelopSettings {

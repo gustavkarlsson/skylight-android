@@ -75,10 +75,12 @@ android {
 	productFlavors {
 		create("production") {
 			setDimension("environment")
+			buildConfigField("boolean", "DEVELOP", "false" )
 		}
 
 		create("develop") {
 			setDimension("environment")
+			buildConfigField("boolean", "DEVELOP", "true" )
 			versionNameSuffix = "-develop"
 			applicationIdSuffix = ".develop"
 		}
@@ -110,18 +112,17 @@ dependencies {
 	implementation(project(":feature-googleplayservices"))
 	implementation(project(":feature-about"))
 	implementation(project(":feature-intro"))
+	implementation(project(":feature-settings"))
 	implementation(project(":feature-background"))
 	implementation(project(":feature-addplace"))
 
 	implementation("androidx.multidex:multidex:${versions.multidex}")
 	implementation("androidx.appcompat:appcompat:${versions.androidAppcompat}")
 	implementation("androidx.annotation:annotation:${versions.androidAnnotation}")
-	implementation("androidx.preference:preference:${versions.androidPreference}")
 	implementation("androidx.cardview:cardview:${versions.androidCardview}")
 
 	// Rx misc
 	implementation("com.tbruyelle.rxpermissions2:rxpermissions:${versions.rxpermissions}@aar")
-	implementation("com.f2prateek.rx.preferences2:rx-preferences:${versions.rxpreferences}")
 
 	// Lifecycle
 	implementation("androidx.lifecycle:lifecycle-extensions:${versions.archLifecycle}")

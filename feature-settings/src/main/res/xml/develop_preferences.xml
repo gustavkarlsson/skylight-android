@@ -1,22 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
-	<androidx.preference.SwitchPreferenceCompat
-		android:key="@string/pref_notifications_key"
-		android:title="@string/pref_notifications_name"
-		android:summary="@string/pref_notifications_summary"
-		android:defaultValue="@bool/pref_notifications_default" />
-
-	<androidx.preference.ListPreference
-		android:dependency="@string/pref_notifications_key"
-		android:key="@string/pref_trigger_level_key"
-		android:title="@string/pref_trigger_level_name"
-		android:summary="@string/pref_trigger_level_summary"
-		android:entries="@array/pref_trigger_level_entries"
-		android:entryValues="@array/pref_trigger_level_values"
-		android:defaultValue="@string/pref_trigger_level_default" />
-
-	<!-- Developer values start here -->
 	<androidx.preference.PreferenceCategory
 		android:key="@string/pref_category_developer_key"
 		android:title="@string/pref_category_developer_title">

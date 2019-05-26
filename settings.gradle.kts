@@ -14,6 +14,7 @@ include(
 	":feature-addplace",
 	":feature-about",
 	":feature-intro",
+	":feature-settings",
 	":feature-background",
 	":app"
 )
