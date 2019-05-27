@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android
 import se.gustavkarlsson.skylight.android.feature.about.aboutModule
 import se.gustavkarlsson.skylight.android.feature.addplace.addPlaceModule
 import se.gustavkarlsson.skylight.android.feature.background.backgroundModule
-import se.gustavkarlsson.skylight.android.feature.base.baseModule
 import se.gustavkarlsson.skylight.android.feature.googleplayservices.googlePlayServicesModule
 import se.gustavkarlsson.skylight.android.feature.intro.introModule
 import se.gustavkarlsson.skylight.android.feature.settings.settingsModule
@@ -15,6 +14,7 @@ import se.gustavkarlsson.skylight.android.lib.kpindex.kpIndexModule
 import se.gustavkarlsson.skylight.android.lib.location.locationModule
 import se.gustavkarlsson.skylight.android.lib.places.placesModule
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.reverseGeocoderModule
+import se.gustavkarlsson.skylight.android.lib.ui.uiModule
 import se.gustavkarlsson.skylight.android.lib.weather.weatherModule
 import se.gustavkarlsson.skylight.android.modules.activityModule
 import se.gustavkarlsson.skylight.android.modules.appModule
@@ -37,6 +37,7 @@ val modules = listOf(
 	googlePlayServicesModule,
 	permissionsModule,
 	auroraReportModule,
+	uiModule,
 	timeModule,
 	locationModule,
 	reverseGeocoderModule,
@@ -56,6 +57,5 @@ val modules = listOf(
 	geocoderModule,
 	aboutModule,
 	introModule,
-	baseModule,
 	mainModule
 )

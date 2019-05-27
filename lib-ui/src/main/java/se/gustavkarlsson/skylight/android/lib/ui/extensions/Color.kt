@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.base.extensions
+package se.gustavkarlsson.skylight.android.lib.ui.extensions
 
 import android.content.Context
 import androidx.annotation.ColorInt

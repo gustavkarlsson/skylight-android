@@ -8,8 +8,8 @@ import kotlinx.android.synthetic.main.fragment_intro.nextButton
 import kotlinx.android.synthetic.main.fragment_intro.privacyPolicyLink
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
-import se.gustavkarlsson.skylight.android.feature.base.extensions.setHtml
+import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
+import se.gustavkarlsson.skylight.android.lib.ui.extensions.setHtml
 
 internal class IntroFragment : BaseFragment() {
 

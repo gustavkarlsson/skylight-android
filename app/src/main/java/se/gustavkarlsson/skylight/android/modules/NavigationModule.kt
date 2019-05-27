@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.modules
 
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.feature.base.Navigator
+import se.gustavkarlsson.skylight.android.lib.ui.Navigator
 
 val navigationModule = module {
 

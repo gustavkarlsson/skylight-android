@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.base
+package se.gustavkarlsson.skylight.android.lib.ui
 
 class DestinationRegistry {
 	private val _destinations = mutableListOf<Destination>()

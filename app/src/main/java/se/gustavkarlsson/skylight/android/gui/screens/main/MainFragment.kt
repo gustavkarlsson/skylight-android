@@ -30,11 +30,11 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.BuildConfig
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.feature.base.BackButtonHandler
-import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
-import se.gustavkarlsson.skylight.android.feature.base.Navigator
-import se.gustavkarlsson.skylight.android.feature.base.doOnNext
-import se.gustavkarlsson.skylight.android.feature.base.extensions.showErrorSnackbar
+import se.gustavkarlsson.skylight.android.lib.ui.BackButtonHandler
+import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
+import se.gustavkarlsson.skylight.android.lib.ui.Navigator
+import se.gustavkarlsson.skylight.android.lib.ui.doOnNext
+import se.gustavkarlsson.skylight.android.lib.ui.extensions.showErrorSnackbar
 import se.gustavkarlsson.skylight.android.gui.views.FactorCard
 import timber.log.Timber
 import kotlin.math.roundToInt

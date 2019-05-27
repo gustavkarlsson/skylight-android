@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.base
+package se.gustavkarlsson.skylight.android.lib.ui
 
 import android.view.View
 import android.view.inputmethod.InputMethodManager

@@ -5,8 +5,8 @@ import kotlinx.android.synthetic.main.fragment_about.detailsTextView
 import kotlinx.android.synthetic.main.fragment_about.privacyPolicyLink
 import kotlinx.android.synthetic.main.fragment_about.toolbarView
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
-import se.gustavkarlsson.skylight.android.feature.base.extensions.setHtml
+import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
+import se.gustavkarlsson.skylight.android.lib.ui.extensions.setHtml
 
 internal class AboutFragment : BaseFragment() {
 

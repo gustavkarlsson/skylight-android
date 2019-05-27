@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.fragment_add_place.searchResultRecyclerVie
 import kotlinx.android.synthetic.main.fragment_add_place.toolbarView
 import kotlinx.android.synthetic.main.layout_save_dialog.view.placeNameEditText
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import se.gustavkarlsson.skylight.android.feature.base.BaseFragment
+import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 
 internal class AddPlaceFragment : BaseFragment() {
 

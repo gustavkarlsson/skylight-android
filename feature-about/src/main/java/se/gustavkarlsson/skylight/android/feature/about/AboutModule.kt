@@ -4,8 +4,8 @@ import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.ModuleStarter
-import se.gustavkarlsson.skylight.android.feature.base.Destination
-import se.gustavkarlsson.skylight.android.feature.base.DestinationRegistry
+import se.gustavkarlsson.skylight.android.lib.ui.Destination
+import se.gustavkarlsson.skylight.android.lib.ui.DestinationRegistry
 
 val aboutModule = module {
 

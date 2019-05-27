@@ -5,7 +5,7 @@ import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
-import se.gustavkarlsson.skylight.android.feature.base.Navigator
+import se.gustavkarlsson.skylight.android.lib.ui.Navigator
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.krate.Command as MainCommand
 

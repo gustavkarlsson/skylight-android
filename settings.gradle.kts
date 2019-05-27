@@ -9,7 +9,7 @@ include(
 	":lib-places",
 	":lib-reversegeocoder",
 	":lib-weather",
-	":feature-base",
+	":lib-ui",
 	":feature-googleplayservices",
 	":feature-addplace",
 	":feature-about",

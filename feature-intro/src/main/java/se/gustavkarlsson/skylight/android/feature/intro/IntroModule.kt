@@ -3,8 +3,8 @@ package se.gustavkarlsson.skylight.android.feature.intro
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.ModuleStarter
-import se.gustavkarlsson.skylight.android.feature.base.Destination
-import se.gustavkarlsson.skylight.android.feature.base.DestinationRegistry
+import se.gustavkarlsson.skylight.android.lib.ui.Destination
+import se.gustavkarlsson.skylight.android.lib.ui.DestinationRegistry
 import se.gustavkarlsson.skylight.android.services.RunVersionManager
 
 val introModule = module {

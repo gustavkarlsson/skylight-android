@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.base
+package se.gustavkarlsson.skylight.android.lib.ui
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Lifecycle.Event.ON_ANY

@@ -55,5 +55,5 @@ android {
 
 dependencies {
 	implementation(project(":core"))
-	implementation(project(":feature-base"))
+	implementation(project(":lib-ui"))
 }

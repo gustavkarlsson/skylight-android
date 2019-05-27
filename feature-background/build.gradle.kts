@@ -20,7 +20,7 @@ android {
 dependencies {
 	implementation(project(":core"))
 	implementation(project(":lib-analytics"))
-	implementation(project(":feature-base"))
+	implementation(project(":lib-ui"))
 
 	// Firebase
 	implementation("com.google.firebase:firebase-core:${versions.firebase}")

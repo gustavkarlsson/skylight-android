@@ -8,7 +8,7 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.Place
-import se.gustavkarlsson.skylight.android.feature.base.Navigator
+import se.gustavkarlsson.skylight.android.lib.ui.Navigator
 import se.gustavkarlsson.skylight.android.krate.Command
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.krate.State

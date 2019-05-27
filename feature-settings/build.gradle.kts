@@ -34,7 +34,7 @@ android {
 
 dependencies {
 	implementation(project(":core"))
-	implementation(project(":feature-base"))
+	implementation(project(":lib-ui"))
 
 	implementation("androidx.preference:preference:${versions.androidPreference}")
 	implementation("com.f2prateek.rx.preferences2:rx-preferences:${versions.rxpreferences}")

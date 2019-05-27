@@ -20,7 +20,7 @@ android {
 
 dependencies {
 	implementation(project(":core"))
-	implementation(project(":feature-base"))
+	implementation(project(":lib-ui"))
 
 	implementation("com.google.android.gms:play-services-gcm:${versions.playServicesGcm}")
 	implementation("io.ashdavies.rx.rxtasks:rx-tasks:${versions.rxtasks}")

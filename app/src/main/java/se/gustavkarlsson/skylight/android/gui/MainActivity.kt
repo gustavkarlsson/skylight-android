@@ -10,8 +10,8 @@ import org.koin.androidx.scope.ext.android.bindScope
 import org.koin.androidx.scope.ext.android.createScope
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.extensions.addToKoin
-import se.gustavkarlsson.skylight.android.feature.base.BackButtonHandler
-import se.gustavkarlsson.skylight.android.feature.base.Navigator
+import se.gustavkarlsson.skylight.android.lib.ui.BackButtonHandler
+import se.gustavkarlsson.skylight.android.lib.ui.Navigator
 
 
 class MainActivity : AppCompatActivity() {
