@@ -30,8 +30,8 @@ import se.gustavkarlsson.skylight.android.entities.Permission
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.krate.State
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.formatters.RelativeTimeFormatter
-import se.gustavkarlsson.skylight.android.formatters.SingleValueFormatter
+import se.gustavkarlsson.skylight.android.gui.RelativeTimeFormatter
+import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.Time
 import se.gustavkarlsson.skylight.android.util.ChanceToColorConverter
 import timber.log.Timber
@@ -40,15 +40,15 @@ class MainViewModel(
 	private val store: SkylightStore,
 	auroraChanceEvaluator: ChanceEvaluator<AuroraReport>,
 	relativeTimeFormatter: RelativeTimeFormatter,
-	chanceLevelFormatter: SingleValueFormatter<ChanceLevel>,
+	chanceLevelFormatter: Formatter<ChanceLevel>,
 	darknessChanceEvaluator: ChanceEvaluator<Darkness>,
-	darknessFormatter: SingleValueFormatter<Darkness>,
+	darknessFormatter: Formatter<Darkness>,
 	geomagLocationChanceEvaluator: ChanceEvaluator<GeomagLocation>,
-	geomagLocationFormatter: SingleValueFormatter<GeomagLocation>,
+	geomagLocationFormatter: Formatter<GeomagLocation>,
 	kpIndexChanceEvaluator: ChanceEvaluator<KpIndex>,
-	kpIndexFormatter: SingleValueFormatter<KpIndex>,
+	kpIndexFormatter: Formatter<KpIndex>,
 	weatherChanceEvaluator: ChanceEvaluator<Weather>,
-	weatherFormatter: SingleValueFormatter<Weather>,
+	weatherFormatter: Formatter<Weather>,
 	private val chanceToColorConverter: ChanceToColorConverter,
 	time: Time,
 	nowTextThreshold: Duration

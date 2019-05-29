@@ -3,9 +3,9 @@ package se.gustavkarlsson.skylight.android.services_impl.formatters
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
-import se.gustavkarlsson.skylight.android.formatters.SingleValueFormatter
+import se.gustavkarlsson.skylight.android.services.Formatter
 
-object ChanceLevelFormatter : SingleValueFormatter<ChanceLevel> {
+object ChanceLevelFormatter : Formatter<ChanceLevel> {
 	override fun format(value: ChanceLevel): TextRef {
 		return when (value) {
 			ChanceLevel.UNKNOWN -> TextRef(R.string.aurora_chance_unknown)

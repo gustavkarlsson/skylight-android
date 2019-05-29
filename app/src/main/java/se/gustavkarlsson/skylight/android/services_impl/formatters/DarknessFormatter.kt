@@ -2,12 +2,12 @@ package se.gustavkarlsson.skylight.android.services_impl.formatters
 
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.entities.Darkness
-import se.gustavkarlsson.skylight.android.formatters.SingleValueFormatter
+import se.gustavkarlsson.skylight.android.services.Formatter
 
 /**
  * 0% at 90°. 100% at 108°
  */
-object DarknessFormatter : SingleValueFormatter<Darkness> {
+object DarknessFormatter : Formatter<Darkness> {
 	override fun format(value: Darkness): TextRef {
 		val zenithAngle = value.sunZenithAngle
 		val darknessFactor = 1.0 / 18.0 * zenithAngle - 5.0

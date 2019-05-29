@@ -5,15 +5,16 @@ import io.reactivex.Single
 import io.reactivex.rxkotlin.Singles
 import net.e175.klaus.solarpositioning.Grena3
 import org.threeten.bp.Duration
+import org.threeten.bp.Instant
 import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.extensions.delay
-import se.gustavkarlsson.skylight.android.extensions.toGregorianCalendar
 import se.gustavkarlsson.skylight.android.services.DarknessProvider
 import se.gustavkarlsson.skylight.android.services.Time
 import timber.log.Timber
+import java.util.GregorianCalendar
 
 internal class KlausBrunnerDarknessProvider(
 	private val time: Time,
@@ -47,3 +48,6 @@ internal class KlausBrunnerDarknessProvider(
 			.replay(1)
 			.refCount()
 }
+
+private fun Instant.toGregorianCalendar() =
+	GregorianCalendar().apply { timeInMillis = toEpochMilli() }

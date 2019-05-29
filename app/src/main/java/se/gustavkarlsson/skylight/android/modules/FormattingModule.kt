@@ -8,8 +8,8 @@ import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Weather
-import se.gustavkarlsson.skylight.android.formatters.RelativeTimeFormatter
-import se.gustavkarlsson.skylight.android.formatters.SingleValueFormatter
+import se.gustavkarlsson.skylight.android.gui.RelativeTimeFormatter
+import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services_impl.formatters.ChanceLevelFormatter
 import se.gustavkarlsson.skylight.android.services_impl.formatters.DarknessFormatter
 import se.gustavkarlsson.skylight.android.services_impl.formatters.DateUtilsRelativeTimeFormatter
@@ -24,23 +24,23 @@ val formattingModule = module {
 		DateUtilsRelativeTimeFormatter(rightNowText)
 	}
 
-	single<SingleValueFormatter<Darkness>>("darkness") {
+	single<Formatter<Darkness>>("darkness") {
 		DarknessFormatter
 	}
 
-	single<SingleValueFormatter<GeomagLocation>>("geomagLocation") {
+	single<Formatter<GeomagLocation>>("geomagLocation") {
 		GeomagLocationFormatter(get("locale"))
 	}
 
-	single<SingleValueFormatter<KpIndex>>("kpIndex") {
+	single<Formatter<KpIndex>>("kpIndex") {
 		KpIndexFormatter
 	}
 
-	single<SingleValueFormatter<Weather>>("weather") {
+	single<Formatter<Weather>>("weather") {
 		WeatherFormatter
 	}
 
-	single<SingleValueFormatter<ChanceLevel>>("chanceLevel") {
+	single<Formatter<ChanceLevel>>("chanceLevel") {
 		ChanceLevelFormatter
 	}
 
