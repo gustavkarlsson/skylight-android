@@ -115,14 +115,11 @@ dependencies {
 	implementation(project(":feature-settings"))
 	implementation(project(":feature-background"))
 	implementation(project(":feature-addplace"))
+	implementation(project(":feature-main"))
 
 	implementation("androidx.multidex:multidex:${versions.multidex}")
 	implementation("androidx.appcompat:appcompat:${versions.androidAppcompat}")
 	implementation("androidx.annotation:annotation:${versions.androidAnnotation}")
-	implementation("androidx.cardview:cardview:${versions.androidCardview}")
-
-	// Rx misc
-	implementation("com.tbruyelle.rxpermissions2:rxpermissions:${versions.rxpermissions}@aar")
 
 	// Lifecycle
 	implementation("androidx.lifecycle:lifecycle-extensions:${versions.archLifecycle}")
@@ -134,10 +131,6 @@ dependencies {
 	// Leakcanary
 	debugImplementation("com.squareup.leakcanary:leakcanary-android:${versions.leakcanary}")
 	releaseImplementation("com.squareup.leakcanary:leakcanary-android-no-op:${versions.leakcanary}")
-
-	// Banner
-	// FIXME replace with google material banner when available
-	implementation("com.sergivonavi:materialbanner:${versions.banner}")
 
 	// Testing
 	testImplementation("junit:junit:${versions.junit}")

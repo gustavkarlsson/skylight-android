@@ -14,12 +14,10 @@ import org.koin.android.ext.android.startKoin
 import se.gustavkarlsson.skylight.android.krate.Command
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.services.Analytics
-import se.gustavkarlsson.skylight.android.util.CrashlyticsTree
-import se.gustavkarlsson.skylight.android.util.KoinTimberLogger
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
-class Skylight : MultiDexApplication() {
+internal class Skylight : MultiDexApplication() {
 
 	private val disposables = CompositeDisposable()
 
@@ -86,6 +84,7 @@ class Skylight : MultiDexApplication() {
 		get<ModuleStarter>("about").start()
 		get<ModuleStarter>("addplace").start()
 		get<ModuleStarter>("settings").start()
+		// FIXME start background stuff like this too
 	}
 
 	companion object {

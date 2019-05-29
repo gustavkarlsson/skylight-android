@@ -11,7 +11,7 @@ import org.junit.runner.RunWith
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 import se.gustavkarlsson.skylight.android.R
-import se.gustavkarlsson.skylight.android.gui.MainActivity
+import se.gustavkarlsson.skylight.android.MainActivity
 import se.gustavkarlsson.skylight.android.gui.utils.ManualLaunchActivityTestRule
 import se.gustavkarlsson.skylight.android.gui.utils.verifyIsFinishing
 import se.gustavkarlsson.skylight.android.modules.TestLocationNameProvider

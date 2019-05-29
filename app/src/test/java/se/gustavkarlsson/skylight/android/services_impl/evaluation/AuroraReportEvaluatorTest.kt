@@ -1,8 +1,6 @@
 package se.gustavkarlsson.skylight.android.services_impl.evaluation
 
 import assertk.assert
-import assertk.assertions.isBetween
-import assertk.assertions.isEqualTo
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test

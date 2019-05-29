@@ -19,7 +19,6 @@ android {
 
 dependencies {
 	implementation(project(":core"))
-	implementation(project(":lib-analytics"))
 	implementation(project(":lib-ui"))
 
 	// Firebase

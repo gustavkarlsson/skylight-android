@@ -9,7 +9,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
-import se.gustavkarlsson.skylight.android.gui.MainActivity
+import se.gustavkarlsson.skylight.android.MainActivity
 import se.gustavkarlsson.skylight.android.gui.screens.main.MainScreen
 import se.gustavkarlsson.skylight.android.gui.utils.ManualLaunchActivityTestRule
 import se.gustavkarlsson.skylight.android.gui.utils.allowPermission

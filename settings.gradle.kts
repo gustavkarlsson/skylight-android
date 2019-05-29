@@ -16,5 +16,6 @@ include(
 	":feature-intro",
 	":feature-settings",
 	":feature-background",
+	":feature-main",
 	":app"
 )
