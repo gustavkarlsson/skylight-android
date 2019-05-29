@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="google_play_services_title">Installera Google Play-tjänster</string>
+	<string name="google_play_services_desc">Skylight behöver Google Play-tjänster för att fungera.
+	</string>
+	<string name="google_play_services_install">Installera</string>
+	<string name="google_play_services_install_failed">Google Play-tjänster
+		installerades ej</string>
+</resources>

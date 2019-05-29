@@ -40,32 +40,10 @@
 	<string name="main_weather_cloudy">Cloudy</string>
 	<string name="main_weather_overcast">Overcast</string>
 
-	<!-- Intro -->
-	<string name="intro_title">Welcome to Skylight</string>
-	<string name="intro_desc">Skylight helps you find out if you can see the aurora by
-		looking at different factors such as location, weather and time of day.
-		\n\nSkylight will notify you when the chance gets high enough.</string>
-	<string name="intro_got_it">Got it!</string>
-
 	<!-- Location permission -->
 	<string name="location_permission_denied_message">To determine aurora chances for your current location, please
 		allow Skylight to access it.</string>
 	<string name="location_permission_denied_forever_message">Location access is permanently denied.</string>
-
-	<!-- Google Play Services -->
-	<string name="google_play_services_title">Install Google Play Services</string>
-	<string name="google_play_services_desc">Skylight needs Google Play Services to work.</string>
-	<string name="google_play_services_install">Install</string>
-	<string name="google_play_services_install_failed">Google Play Services
-		was not installed</string>
-
-	<!-- About -->
-	<string name="about_app_by">App by: %s</string>
-	<string name="about_branch" translatable="false">Branch: %s</string>
-	<string name="about_version_name">Version: %s</string>
-	<string name="about_version_code">Version code: %s</string>
-	<string name="about_built_on">Built on: %s</string>
-	<string name="about_sha1" translatable="false">SHA1: %s</string>
 
 	<!-- HTML -->
 	<string name="html_privacy_policy_link" translatable="false">

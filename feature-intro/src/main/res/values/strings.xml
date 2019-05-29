@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="intro_title">Welcome to Skylight</string>
+	<string name="intro_desc">Skylight helps you find out if you can see the aurora by
+		looking at different factors such as location, weather and time of day.
+		\n\nSkylight will notify you when the chance gets high enough.</string>
+	<string name="intro_got_it">Got it!</string>
+</resources>

@@ -38,29 +38,8 @@
 	<string name="main_weather_cloudy">Molnigt</string>
 	<string name="main_weather_overcast">Mulet</string>
 
-	<!-- Intro -->
-	<string name="intro_title">Välkommen till Skylight</string>
-	<string name="intro_desc">Skylight hjälper dig att upptäcka norrsken genom att
-		titta på olika faktorer som plats, väder och tid på dygnet.
-		\n\nSkylight meddelar dig när chansen blir tillräkligt hög.</string>
-	<string name="intro_got_it">Okej!</string>
-
 	<!-- Location permission -->
 	<string name="location_permission_denied_message">För att beräkna chansen att se norrsken för din nuvarande plats,
 		var vänlig ge Skylight åtkomst till den.</string>
 	<string name="location_permission_denied_forever_message">Åtkomst till din plats är nekad permanent.</string>
-
-	<!-- Google Play Services -->
-	<string name="google_play_services_title">Installera Google Play-tjänster</string>
-	<string name="google_play_services_desc">Skylight behöver Google Play-tjänster för att fungera.
-	</string>
-	<string name="google_play_services_install">Installera</string>
-	<string name="google_play_services_install_failed">Google Play-tjänster
-		installerades ej</string>
-
-	<!-- About -->
-	<string name="about_app_by">App av: %s</string>
-	<string name="about_version_name">Version: %s</string>
-	<string name="about_version_code">Versionskod: %s</string>
-	<string name="about_built_on">Byggt: %s</string>
 </resources>

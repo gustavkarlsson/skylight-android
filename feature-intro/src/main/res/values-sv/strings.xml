@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="intro_title">Välkommen till Skylight</string>
+	<string name="intro_desc">Skylight hjälper dig att upptäcka norrsken genom att
+		titta på olika faktorer som plats, väder och tid på dygnet.
+		\n\nSkylight meddelar dig när chansen blir tillräkligt hög.</string>
+	<string name="intro_got_it">Okej!</string>
+</resources>
