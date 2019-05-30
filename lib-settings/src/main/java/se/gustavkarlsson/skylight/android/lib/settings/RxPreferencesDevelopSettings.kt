@@ -13,38 +13,32 @@ internal class RxPreferencesDevelopSettings(
 ) : DevelopSettings {
 	private val overrideValuesPreference by lazy {
 		val key = context.getString(R.string.pref_override_values_key)
-		val preference = rxSharedPreferences.getBoolean(key, false)
-		preference
+		rxSharedPreferences.getBoolean(key, false)
 	}
 
 	private val kpIndexPreference by lazy {
 		val key = context.getString(R.string.pref_kp_index_key)
-		val preference = rxSharedPreferences.getInteger(key, 5)
-		preference
+		rxSharedPreferences.getInteger(key, 5)
 	}
 
 	private val geomagLatitudePreference by lazy {
 		val key = context.getString(R.string.pref_geomag_latitude_key)
-		val preference = rxSharedPreferences.getInteger(key, 0)
-		preference
+		rxSharedPreferences.getInteger(key, 0)
 	}
 
 	private val sunZenithAnglePreference by lazy {
 		val key = context.getString(R.string.pref_sun_position_key)
-		val preference = rxSharedPreferences.getInteger(key, 90)
-		preference
+		rxSharedPreferences.getInteger(key, 90)
 	}
 
 	private val cloudPercentagePreference by lazy {
 		val key = context.getString(R.string.pref_cloud_percentage_key)
-		val preference = rxSharedPreferences.getInteger(key, 50)
-		preference
+		rxSharedPreferences.getInteger(key, 50)
 	}
 
 	private val refreshDurationSecondsPreference by lazy {
 		val key = context.getString(R.string.pref_refresh_duration_seconds_key)
-		val preference = rxSharedPreferences.getInteger(key, 2)
-		preference
+		rxSharedPreferences.getInteger(key, 2)
 	}
 
 	override val overrideValues: Boolean

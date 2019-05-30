@@ -16,13 +16,4 @@
 		<item>3</item>
 		<item>2</item>
 	</string-array>
-
-	<!-- Develop settings -->
-	<string name="pref_category_developer_title" translatable="false">Developer</string>
-	<string name="pref_override_values_title" translatable="false">Override values</string>
-	<string name="pref_kp_index_title" translatable="false">Kp index</string>
-	<string name="pref_geomag_latitude_title" translatable="false">Geomag latitude</string>
-	<string name="pref_cloud_percentage_title" translatable="false">Cloud percentage</string>
-	<string name="pref_sun_position_title" translatable="false">Sun position</string>
-	<string name="pref_refresh_duration_seconds_title" translatable="false">Refresh duration (seconds)</string>
 </resources>

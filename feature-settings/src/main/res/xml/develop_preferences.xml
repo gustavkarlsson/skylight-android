@@ -3,43 +3,43 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 	<androidx.preference.PreferenceCategory
 		android:key="@string/pref_category_developer_key"
-		android:title="@string/pref_category_developer_title">
+		android:title="Developer">
 		<androidx.preference.SwitchPreferenceCompat
 			android:key="@string/pref_override_values_key"
-			android:title="@string/pref_override_values_title"
+			android:title="Override values"
 			android:defaultValue="false" />
 		<androidx.preference.SeekBarPreference
 			android:dependency="@string/pref_override_values_key"
 			android:key="@string/pref_kp_index_key"
-			android:title="@string/pref_kp_index_title"
+			android:title="Kp index"
 			app:min="0"
 			android:max="9"
 			android:defaultValue="5" />
 		<androidx.preference.SeekBarPreference
 			android:dependency="@string/pref_override_values_key"
 			android:key="@string/pref_geomag_latitude_key"
-			android:title="@string/pref_geomag_latitude_title"
+			android:title="Geomag latitude"
 			app:min="-90"
 			android:max="90"
 			android:defaultValue="0" />
 		<androidx.preference.SeekBarPreference
 			android:dependency="@string/pref_override_values_key"
 			android:key="@string/pref_cloud_percentage_key"
-			android:title="@string/pref_cloud_percentage_title"
+			android:title="Cloud percentage"
 			app:min="0"
 			android:max="100"
 			android:defaultValue="50" />
 		<androidx.preference.SeekBarPreference
 			android:dependency="@string/pref_override_values_key"
 			android:key="@string/pref_sun_position_key"
-			android:title="@string/pref_sun_position_title"
+			android:title="Sun position"
 			app:min="0"
 			android:max="180"
 			android:defaultValue="90" />
 		<androidx.preference.SeekBarPreference
 			android:dependency="@string/pref_override_values_key"
 			android:key="@string/pref_refresh_duration_seconds_key"
-			android:title="@string/pref_refresh_duration_seconds_title"
+			android:title="Refresh duration (seconds)"
 			app:min="0"
 			android:max="20"
 			android:defaultValue="2" />

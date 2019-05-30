@@ -14,15 +14,13 @@ internal class RxPreferencesSettings(
 	private val notificationsEnabledPreference by lazy {
 		val key = context.getString(R.string.pref_notifications_key)
 		val default = context.resources.getBoolean(R.bool.pref_notifications_default)
-		val preference = rxSharedPreferences.getBoolean(key, default)
-		preference
+		rxSharedPreferences.getBoolean(key, default)
 	}
 
 	private val triggerLevelPreference by lazy {
 		val key = context.getString(R.string.pref_trigger_level_key)
 		val default = context.getString(R.string.pref_trigger_level_default)
-		val preference = rxSharedPreferences.getString(key, default)
-		preference
+		rxSharedPreferences.getString(key, default)
 	}
 
 	override val notificationsEnabled: Boolean
