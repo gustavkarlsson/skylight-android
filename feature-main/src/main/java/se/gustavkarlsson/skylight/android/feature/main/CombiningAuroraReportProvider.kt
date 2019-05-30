@@ -8,7 +8,6 @@ import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.koptional.toOptional
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.Location
-import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.darkness.DarknessProvider
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexProvider
@@ -20,8 +19,8 @@ import timber.log.Timber
 internal class CombiningAuroraReportProvider(
 	private val locationProvider: LocationProvider,
 	private val reverseGeocoder: ReverseGeocoder,
-	private val darknessProvider: se.gustavkarlsson.skylight.android.lib.darkness.DarknessProvider,
-	private val geomagLocationProvider: se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationProvider,
+	private val darknessProvider: DarknessProvider,
+	private val geomagLocationProvider: GeomagLocationProvider,
 	private val kpIndexProvider: KpIndexProvider,
 	private val weatherProvider: WeatherProvider
 ) : AuroraReportProvider {

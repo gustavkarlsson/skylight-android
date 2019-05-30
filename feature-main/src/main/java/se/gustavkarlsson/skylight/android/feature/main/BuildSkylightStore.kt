@@ -10,7 +10,6 @@ import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.krate.Command
 import se.gustavkarlsson.skylight.android.krate.Result
 import se.gustavkarlsson.skylight.android.krate.State
-import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import timber.log.Timber
 
