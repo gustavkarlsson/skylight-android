@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.feature.intro
 import androidx.lifecycle.ViewModel
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.lib.ui.Navigator
-import se.gustavkarlsson.skylight.android.services.RunVersionManager
 
 internal class IntroViewModel(
 	private val navigator: Navigator,

@@ -6,11 +6,7 @@ import android.os.Build
 import androidx.fragment.app.FragmentManager
 import io.reactivex.Single
 import org.koin.dsl.module.module
-import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.lib.ui.Navigator
-import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
-import se.gustavkarlsson.skylight.android.services.PermissionChecker
-import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import java.util.Locale
 
 internal val appModule = module {
@@ -53,18 +49,6 @@ internal val appModule = module {
 
 	single("versionName") {
 		BuildConfig.VERSION_NAME
-	}
-
-	single("main") { _ ->
-		val permissionChecker = get<PermissionChecker>()
-		val auroraReportProvider = get<AuroraReportProvider>()
-		val placesRepo = get<PlacesRepository>()
-
-		buildSkylightStore(permissionChecker, placesRepo, auroraReportProvider)
-	}
-
-	single("state") {
-		get<SkylightStore>("main").states
 	}
 
 }

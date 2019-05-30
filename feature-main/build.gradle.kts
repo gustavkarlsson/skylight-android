@@ -35,6 +35,13 @@ android {
 dependencies {
 	implementation(project(":core"))
 	implementation(project(":lib-ui"))
+	implementation(project(":lib-weather"))
+	implementation(project(":lib-kpindex"))
+	implementation(project(":lib-darkness"))
+	implementation(project(":lib-geomaglocation"))
+	implementation(project(":lib-reversegeocoder"))
+	implementation(project(":lib-location"))
+	implementation(project(":lib-places"))
 
 	implementation("com.tbruyelle.rxpermissions2:rxpermissions:${versions.rxpermissions}@aar")
 	implementation("androidx.cardview:cardview:${versions.androidCardview}")

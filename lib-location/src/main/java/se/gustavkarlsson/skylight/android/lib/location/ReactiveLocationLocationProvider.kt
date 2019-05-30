@@ -15,7 +15,6 @@ import se.gustavkarlsson.koptional.toOptional
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.timeout
-import se.gustavkarlsson.skylight.android.services.LocationProvider
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 

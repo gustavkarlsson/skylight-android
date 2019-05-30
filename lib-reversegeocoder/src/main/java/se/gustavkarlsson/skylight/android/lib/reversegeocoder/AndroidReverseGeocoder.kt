@@ -10,7 +10,6 @@ import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.extensions.delay
-import se.gustavkarlsson.skylight.android.services.ReverseGeocoder
 import timber.log.Timber
 
 internal class AndroidReverseGeocoder(

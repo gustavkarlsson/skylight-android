@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.lib.darkness
 
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.extensions.minutes
-import se.gustavkarlsson.skylight.android.services.DarknessProvider
 
 val darknessModule = module {
 

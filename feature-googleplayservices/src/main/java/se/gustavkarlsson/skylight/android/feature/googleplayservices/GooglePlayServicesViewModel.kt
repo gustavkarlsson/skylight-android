@@ -6,8 +6,6 @@ import com.google.android.gms.common.GoogleApiAvailability
 import io.ashdavies.rx.rxtasks.toCompletable
 import io.reactivex.Completable
 import se.gustavkarlsson.skylight.android.lib.ui.Navigator
-import se.gustavkarlsson.skylight.android.krate.Command
-import se.gustavkarlsson.skylight.android.krate.SkylightStore
 
 internal class GooglePlayServicesViewModel(
 	private val navigator: Navigator,

@@ -67,7 +67,7 @@
 			app:layout_constraintBottom_toTopOf="@+id/kpIndexCard"
 			app:layout_constraintTop_toBottomOf="@+id/chanceSubtitle" />
 
-		<se.gustavkarlsson.skylight.android.feature.main.FactorCard
+		<se.gustavkarlsson.skylight.android.feature.main.gui.FactorCard
 			android:id="@+id/kpIndexCard"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
 			app:layout_constraintTop_toBottomOf="@+id/secondSpace"
 			app:title="@string/factor_kp_index_title_compact" />
 
-		<se.gustavkarlsson.skylight.android.feature.main.FactorCard
+		<se.gustavkarlsson.skylight.android.feature.main.gui.FactorCard
 			android:id="@+id/geomagLocationCard"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
 			app:layout_constraintTop_toBottomOf="@+id/kpIndexCard"
 			app:title="@string/factor_geomag_location_title_compact" />
 
-		<se.gustavkarlsson.skylight.android.feature.main.FactorCard
+		<se.gustavkarlsson.skylight.android.feature.main.gui.FactorCard
 			android:id="@+id/weatherCard"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
 			app:layout_constraintTop_toBottomOf="@+id/geomagLocationCard"
 			app:title="@string/factor_weather_title_compact" />
 
-		<se.gustavkarlsson.skylight.android.feature.main.FactorCard
+		<se.gustavkarlsson.skylight.android.feature.main.gui.FactorCard
 			android:id="@+id/darknessCard"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
 
 		<fragment
 			android:id="@+id/drawerFragment"
-			android:name="se.gustavkarlsson.skylight.android.feature.main.drawer.DrawerFragment"
+			android:name="se.gustavkarlsson.skylight.android.feature.main.gui.drawer.DrawerFragment"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent" />
 

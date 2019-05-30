@@ -6,7 +6,6 @@ import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.lib.ui.Destination
 import se.gustavkarlsson.skylight.android.lib.ui.DestinationRegistry
-import se.gustavkarlsson.skylight.android.services.Geocoder
 import android.location.Geocoder as BuiltInGeocoder
 
 val addPlaceModule = module {

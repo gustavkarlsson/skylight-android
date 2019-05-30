@@ -7,7 +7,6 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import se.gustavkarlsson.skylight.android.entities.Permission
-import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import timber.log.Timber
 
 internal class AndroidPermissionChecker(

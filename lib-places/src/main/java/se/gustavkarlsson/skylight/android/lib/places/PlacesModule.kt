@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.lib.places
 
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import org.koin.dsl.module.module
-import se.gustavkarlsson.skylight.android.services.PlacesRepository
 
 val placesModule = module {
 

@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main
+package se.gustavkarlsson.skylight.android.feature.main.gui
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -10,6 +10,7 @@ import androidx.annotation.StringRes
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.layout_factor_bottom_sheet.description
 import kotlinx.android.synthetic.main.layout_factor_bottom_sheet.title
+import se.gustavkarlsson.skylight.android.feature.main.R
 
 internal class FactorBottomSheetDialogFragment : BottomSheetDialogFragment() {
 

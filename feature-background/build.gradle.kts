@@ -19,7 +19,8 @@ android {
 
 dependencies {
 	implementation(project(":core"))
-	implementation(project(":lib-ui"))
+	implementation(project(":lib-analytics"))
+	implementation(project(":lib-ui")) //FIXME can we remove this?
 
 	// Firebase
 	implementation("com.google.firebase:firebase-core:${versions.firebase}")

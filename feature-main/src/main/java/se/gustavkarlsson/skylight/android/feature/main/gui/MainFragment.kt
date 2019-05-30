@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main
+package se.gustavkarlsson.skylight.android.feature.main.gui
 
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -28,6 +28,8 @@ import kotlinx.android.synthetic.main.fragment_main.toolbarView
 import kotlinx.android.synthetic.main.fragment_main.weatherCard
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import se.gustavkarlsson.skylight.android.feature.main.BuildConfig
+import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.ui.BackButtonHandler
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.Navigator
@@ -227,8 +229,10 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
 	private fun showFactorBottomSheetDialogFragment(@StringRes title: Int, @StringRes description: Int) {
 		if (currentBottomSheetTitle == title) return
 		fragmentManager?.let {
-			FactorBottomSheetDialogFragment
-				.newInstance(title, description)
+			FactorBottomSheetDialogFragment.newInstance(
+				title,
+				description
+			)
 				.apply {
 					onCancelListener = { currentBottomSheetTitle = null }
 					show(it, javaClass.simpleName)

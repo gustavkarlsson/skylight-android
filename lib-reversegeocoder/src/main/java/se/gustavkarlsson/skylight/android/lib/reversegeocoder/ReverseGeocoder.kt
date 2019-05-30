@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services
+package se.gustavkarlsson.skylight.android.lib.reversegeocoder
 
 import io.reactivex.Flowable
 import io.reactivex.Single

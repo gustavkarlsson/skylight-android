@@ -6,7 +6,6 @@ import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Report
-import se.gustavkarlsson.skylight.android.services.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.services.Time
 import timber.log.Timber
 import java.lang.Math.PI

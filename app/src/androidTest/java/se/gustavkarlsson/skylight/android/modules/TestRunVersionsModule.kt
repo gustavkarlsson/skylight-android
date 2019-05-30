@@ -4,7 +4,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import org.koin.dsl.module.module
-import se.gustavkarlsson.skylight.android.services.RunVersionManager
+import se.gustavkarlsson.skylight.android.feature.intro.RunVersionManager
 
 val testRunVersionsModule = module {
 

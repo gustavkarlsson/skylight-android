@@ -4,7 +4,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import org.koin.dsl.module.module
-import se.gustavkarlsson.skylight.android.services.GooglePlayServicesChecker
+import se.gustavkarlsson.skylight.android.feature.googleplayservices.GooglePlayServicesChecker
 
 val testGooglePlayServicesModule = module {
 
@@ -18,7 +18,8 @@ val testGooglePlayServicesModule = module {
 
 }
 
-class TestGooglePlayServicesChecker(initialIsAvailable: Boolean) : GooglePlayServicesChecker {
+class TestGooglePlayServicesChecker(initialIsAvailable: Boolean) :
+	GooglePlayServicesChecker {
 
 	val isAvailableRelay = BehaviorRelay.createDefault(initialIsAvailable)
 

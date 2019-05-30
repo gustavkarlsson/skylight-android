@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main.drawer
+package se.gustavkarlsson.skylight.android.feature.main.gui.drawer
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

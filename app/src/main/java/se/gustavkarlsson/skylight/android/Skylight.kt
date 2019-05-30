@@ -13,7 +13,7 @@ import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
 import se.gustavkarlsson.skylight.android.krate.Command
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
-import se.gustavkarlsson.skylight.android.services.Analytics
+import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 

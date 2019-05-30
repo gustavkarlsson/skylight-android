@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main.drawer
+package se.gustavkarlsson.skylight.android.feature.main.gui.drawer
 
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager

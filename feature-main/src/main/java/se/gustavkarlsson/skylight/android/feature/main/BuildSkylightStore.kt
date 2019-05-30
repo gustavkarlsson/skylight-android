@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android
+package se.gustavkarlsson.skylight.android.feature.main
 
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -11,8 +11,7 @@ import se.gustavkarlsson.skylight.android.krate.Command
 import se.gustavkarlsson.skylight.android.krate.Result
 import se.gustavkarlsson.skylight.android.krate.State
 import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
-import se.gustavkarlsson.skylight.android.services.PermissionChecker
-import se.gustavkarlsson.skylight.android.services.PlacesRepository
+import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import timber.log.Timber
 
 internal fun buildSkylightStore(

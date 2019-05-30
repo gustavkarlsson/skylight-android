@@ -19,6 +19,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.uiModule
 import se.gustavkarlsson.skylight.android.lib.weather.weatherModule
 
 internal val modules = listOf(
+	coreModule,
 	appModule,
 	settingsModule,
 	backgroundModule,

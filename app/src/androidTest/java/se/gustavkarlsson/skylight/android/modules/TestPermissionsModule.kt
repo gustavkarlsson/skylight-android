@@ -4,7 +4,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import org.koin.dsl.module.module
-import se.gustavkarlsson.skylight.android.services.PermissionChecker
+import se.gustavkarlsson.skylight.android.feature.main.PermissionChecker
 
 val testPermissionsModule = module {
 

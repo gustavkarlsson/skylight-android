@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main
+package se.gustavkarlsson.skylight.android.feature.main.gui
 
 import android.content.Context
 import android.os.Build
@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.layout_factor_card.view.card
 import kotlinx.android.synthetic.main.layout_factor_card.view.progressBar
 import kotlinx.android.synthetic.main.layout_factor_card.view.title
 import kotlinx.android.synthetic.main.layout_factor_card.view.value
+import se.gustavkarlsson.skylight.android.feature.main.R
 
 internal class FactorCard : FrameLayout {
 
@@ -31,9 +32,11 @@ internal class FactorCard : FrameLayout {
 	}
 
 	private fun init(context: Context, attrs: AttributeSet?) {
-		val view = inflate(getContext(), R.layout.layout_factor_card, null) as MaterialCardView
+		val view = inflate(getContext(),
+			R.layout.layout_factor_card, null) as MaterialCardView
 		addView(view)
-		context.theme.obtainStyledAttributes(attrs, R.styleable.FactorCard, 0, 0).apply {
+		context.theme.obtainStyledAttributes(attrs,
+			R.styleable.FactorCard, 0, 0).apply {
 			titleView.text = getString(R.styleable.FactorCard_title)
 			recycle()
 		}

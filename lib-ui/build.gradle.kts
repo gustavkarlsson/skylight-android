@@ -18,7 +18,8 @@ android {
 }
 
 dependencies {
-	api(project(":core"))
+	implementation(project(":core"))
+	implementation(project(":lib-analytics"))
 
 	api("com.google.android.material:material:${versions.androidMaterial}")
 	api("androidx.fragment:fragment:${versions.androidFragment}")

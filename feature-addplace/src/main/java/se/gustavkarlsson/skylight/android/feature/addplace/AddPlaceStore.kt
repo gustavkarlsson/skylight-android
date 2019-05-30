@@ -8,7 +8,7 @@ import se.gustavkarlsson.krate.core.dsl.buildStore
 import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.delaySubscription
-import se.gustavkarlsson.skylight.android.services.Geocoder
+import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 
 internal typealias AddPlaceStore = Store<State, Command, Result>
 

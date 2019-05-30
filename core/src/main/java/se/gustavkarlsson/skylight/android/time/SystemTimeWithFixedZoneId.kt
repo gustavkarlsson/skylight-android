@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main
+package se.gustavkarlsson.skylight.android.time
 
 import io.reactivex.Single
 import org.threeten.bp.Instant

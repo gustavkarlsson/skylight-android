@@ -11,7 +11,7 @@ import androidx.lifecycle.Lifecycle
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.android.lifecycle.scope
 import org.koin.android.ext.android.inject
-import se.gustavkarlsson.skylight.android.services.Analytics
+import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 
 abstract class BaseFragment : Fragment() {
 

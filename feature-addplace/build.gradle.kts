@@ -20,5 +20,7 @@ android {
 
 dependencies {
 	implementation(project(":core"))
+	implementation(project(":lib-geocoder"))
+	implementation(project(":lib-places"))
 	implementation(project(":lib-ui"))
 }

@@ -9,9 +9,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
-import se.gustavkarlsson.skylight.android.services.Geocoder
 
-internal class MapboxGeocoder(private val accessToken: String) : Geocoder {
+internal class MapboxGeocoder(private val accessToken: String) :
+	Geocoder {
 
 	override fun geocode(locationName: String): Single<List<PlaceSuggestion>> {
 		if (locationName.length <= 1)

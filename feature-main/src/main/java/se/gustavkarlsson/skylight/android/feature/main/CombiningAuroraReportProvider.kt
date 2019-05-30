@@ -9,19 +9,19 @@ import se.gustavkarlsson.koptional.toOptional
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
-import se.gustavkarlsson.skylight.android.services.DarknessProvider
-import se.gustavkarlsson.skylight.android.services.GeomagLocationProvider
-import se.gustavkarlsson.skylight.android.services.KpIndexProvider
-import se.gustavkarlsson.skylight.android.services.ReverseGeocoder
-import se.gustavkarlsson.skylight.android.services.LocationProvider
-import se.gustavkarlsson.skylight.android.services.WeatherProvider
+import se.gustavkarlsson.skylight.android.lib.darkness.DarknessProvider
+import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationProvider
+import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexProvider
+import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoder
+import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
+import se.gustavkarlsson.skylight.android.lib.weather.WeatherProvider
 import timber.log.Timber
 
 internal class CombiningAuroraReportProvider(
 	private val locationProvider: LocationProvider,
 	private val reverseGeocoder: ReverseGeocoder,
-	private val darknessProvider: DarknessProvider,
-	private val geomagLocationProvider: GeomagLocationProvider,
+	private val darknessProvider: se.gustavkarlsson.skylight.android.lib.darkness.DarknessProvider,
+	private val geomagLocationProvider: se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationProvider,
 	private val kpIndexProvider: KpIndexProvider,
 	private val weatherProvider: WeatherProvider
 ) : AuroraReportProvider {

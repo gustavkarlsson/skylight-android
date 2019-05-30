@@ -4,7 +4,6 @@ import android.content.Context
 import com.tbruyelle.rxpermissions2.RxPermissions
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
-import org.threeten.bp.ZoneId
 import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
@@ -13,13 +12,6 @@ import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.minutes
-import se.gustavkarlsson.skylight.android.feature.main.drawer.DrawerViewModel
-import se.gustavkarlsson.skylight.android.lib.ui.Destination
-import se.gustavkarlsson.skylight.android.lib.ui.DestinationRegistry
-import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.services.Formatter
-import se.gustavkarlsson.skylight.android.services.PermissionChecker
-import se.gustavkarlsson.skylight.android.services.Time
 import se.gustavkarlsson.skylight.android.feature.main.evaluation.AuroraReportEvaluator
 import se.gustavkarlsson.skylight.android.feature.main.evaluation.DarknessEvaluator
 import se.gustavkarlsson.skylight.android.feature.main.evaluation.GeomagLocationEvaluator
@@ -30,6 +22,16 @@ import se.gustavkarlsson.skylight.android.feature.main.formatters.DarknessFormat
 import se.gustavkarlsson.skylight.android.feature.main.formatters.GeomagLocationFormatter
 import se.gustavkarlsson.skylight.android.feature.main.formatters.KpIndexFormatter
 import se.gustavkarlsson.skylight.android.feature.main.formatters.WeatherFormatter
+import se.gustavkarlsson.skylight.android.feature.main.gui.MainFragment
+import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
+import se.gustavkarlsson.skylight.android.feature.main.gui.drawer.DrawerViewModel
+import se.gustavkarlsson.skylight.android.krate.SkylightStore
+import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
+import se.gustavkarlsson.skylight.android.lib.ui.Destination
+import se.gustavkarlsson.skylight.android.lib.ui.DestinationRegistry
+import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
+import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.services.Formatter
 
 val mainModule = module {
 
@@ -165,8 +167,20 @@ val mainModule = module {
 		DrawerViewModel(store = get("main"), navigator = get())
 	}
 
-	single<Time> {
-		SystemTimeWithFixedZoneId(ZoneId.systemDefault())
+	single("main") {
+		val permissionChecker = get<PermissionChecker>()
+		val auroraReportProvider = get<AuroraReportProvider>()
+		val placesRepo = get<PlacesRepository>()
+
+		buildSkylightStore(
+			permissionChecker,
+			placesRepo,
+			auroraReportProvider
+		)
+	}
+
+	single("state") {
+		get<SkylightStore>("main").states
 	}
 
 }
