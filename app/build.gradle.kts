@@ -109,6 +109,7 @@ dependencies {
 	implementation(project(":lib-reversegeocoder"))
 	implementation(project(":lib-places"))
 	implementation(project(":lib-ui"))
+	implementation(project(":lib-settings"))
 	implementation(project(":feature-googleplayservices"))
 	implementation(project(":feature-about"))
 	implementation(project(":feature-intro"))

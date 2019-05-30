@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services
+package se.gustavkarlsson.skylight.android.lib.settings
 
 import io.reactivex.Flowable
 import org.threeten.bp.Duration

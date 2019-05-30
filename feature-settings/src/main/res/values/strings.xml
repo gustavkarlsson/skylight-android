@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="pref_notifications_key" translatable="false">pref_notifications</string>
 	<string name="pref_notifications_name">Notifications</string>
 	<string name="pref_notifications_summary">Notify me when aurora conditions are good</string>
-	<bool name="pref_notifications_default">true</bool>
 
-	<string name="pref_trigger_level_key" translatable="false">pref_trigger_level</string>
 	<string name="pref_trigger_level_name">Notify at</string>
 	<string name="pref_trigger_level_summary">%s</string>
 	<string-array name="pref_trigger_level_entries">
@@ -19,27 +16,13 @@
 		<item>3</item>
 		<item>2</item>
 	</string-array>
-	<string name="pref_trigger_level_default" translatable="false">4</string>
 
 	<!-- Develop settings -->
-	<string name="pref_category_developer_key" translatable="false">developer</string>
 	<string name="pref_category_developer_title" translatable="false">Developer</string>
-
-	<string name="pref_override_values_key" translatable="false">override_values</string>
 	<string name="pref_override_values_title" translatable="false">Override values</string>
-
-	<string name="pref_kp_index_key" translatable="false">kp_index</string>
 	<string name="pref_kp_index_title" translatable="false">Kp index</string>
-
-	<string name="pref_geomag_latitude_key" translatable="false">geomag_latitude</string>
 	<string name="pref_geomag_latitude_title" translatable="false">Geomag latitude</string>
-
-	<string name="pref_cloud_percentage_key" translatable="false">cloud_percentage</string>
 	<string name="pref_cloud_percentage_title" translatable="false">Cloud percentage</string>
-
-	<string name="pref_sun_position_key" translatable="false">sun_position</string>
 	<string name="pref_sun_position_title" translatable="false">Sun position</string>
-
-	<string name="pref_refresh_duration_seconds_key" translatable="false">refresh_duration_seconds</string>
 	<string name="pref_refresh_duration_seconds_title" translatable="false">Refresh duration (seconds)</string>
 </resources>

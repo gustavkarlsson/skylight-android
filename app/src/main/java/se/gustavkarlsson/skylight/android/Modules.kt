@@ -17,6 +17,7 @@ import se.gustavkarlsson.skylight.android.lib.places.placesModule
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.reverseGeocoderModule
 import se.gustavkarlsson.skylight.android.lib.ui.uiModule
 import se.gustavkarlsson.skylight.android.lib.weather.weatherModule
+import se.gustavkarlsson.skylight.android.lib.settings.settingsModule as libSettingsModule
 
 internal val modules = listOf(
 	coreModule,
@@ -25,6 +26,7 @@ internal val modules = listOf(
 	backgroundModule,
 	googlePlayServicesModule,
 	uiModule,
+	libSettingsModule,
 	locationModule,
 	reverseGeocoderModule,
 	darknessModule,

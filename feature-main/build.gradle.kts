@@ -38,6 +38,7 @@ dependencies {
 	implementation(project(":lib-weather"))
 	implementation(project(":lib-kpindex"))
 	implementation(project(":lib-darkness"))
+	implementation(project(":lib-settings"))
 	implementation(project(":lib-geomaglocation"))
 	implementation(project(":lib-reversegeocoder"))
 	implementation(project(":lib-location"))

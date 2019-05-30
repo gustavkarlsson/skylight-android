@@ -1,13 +1,15 @@
-package se.gustavkarlsson.skylight.android.feature.settings
+package se.gustavkarlsson.skylight.android.lib.settings
 
 import android.content.Context
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
-import se.gustavkarlsson.skylight.android.services.Settings
 
-internal class RxPreferencesSettings(context: Context, rxSharedPreferences: RxSharedPreferences) : Settings {
+internal class RxPreferencesSettings(
+	context: Context,
+	rxSharedPreferences: RxSharedPreferences
+) : Settings {
 
 	private val notificationsEnabledPreference by lazy {
 		val key = context.getString(R.string.pref_notifications_key)

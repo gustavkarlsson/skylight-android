@@ -1,37 +1,11 @@
 package se.gustavkarlsson.skylight.android.feature.settings
 
-import android.preference.PreferenceManager
-import com.f2prateek.rx.preferences2.RxSharedPreferences
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.ui.Destination
 import se.gustavkarlsson.skylight.android.lib.ui.DestinationRegistry
-import se.gustavkarlsson.skylight.android.services.DevelopSettings
-import se.gustavkarlsson.skylight.android.services.Settings
 
 val settingsModule = module {
-
-	single<DevelopSettings> {
-		RxPreferencesDevelopSettings(
-			context = get(),
-			rxSharedPreferences = get()
-		)
-	}
-
-	single {
-		PreferenceManager.getDefaultSharedPreferences(get())
-	}
-
-	single {
-		RxSharedPreferences.create(get())
-	}
-
-	single<Settings> {
-		RxPreferencesSettings(
-			context = get(),
-			rxSharedPreferences = get()
-		)
-	}
 
 	single("preferences") {
 		@Suppress("ConstantConditionIf")

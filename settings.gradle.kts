@@ -7,6 +7,7 @@ include(
 	":lib-kpindex",
 	":lib-location",
 	":lib-places",
+	":lib-settings",
 	":lib-reversegeocoder",
 	":lib-weather",
 	":lib-ui",
