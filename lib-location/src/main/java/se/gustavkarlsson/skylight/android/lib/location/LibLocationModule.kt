@@ -7,7 +7,7 @@ import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.extensions.seconds
 
-val locationModule = module {
+val libLocationModule = module {
 
 	single {
 		ReactiveLocationProvider(get())

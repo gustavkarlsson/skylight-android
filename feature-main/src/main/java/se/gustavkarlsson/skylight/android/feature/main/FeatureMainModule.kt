@@ -32,7 +32,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.DestinationRegistry
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 
-val mainModule = module {
+val featureMainModule = module {
 
 	single<RelativeTimeFormatter> {
 		val rightNowText = get<Context>().getString(R.string.right_now)

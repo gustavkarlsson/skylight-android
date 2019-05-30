@@ -8,7 +8,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.Destination
 import se.gustavkarlsson.skylight.android.lib.ui.DestinationRegistry
 import android.location.Geocoder as BuiltInGeocoder
 
-val addPlaceModule = module {
+val featureAddPlaceModule = module {
 
 	viewModel {
 		AddPlaceViewModel(

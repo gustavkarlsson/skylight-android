@@ -4,7 +4,7 @@ import android.preference.PreferenceManager
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import org.koin.dsl.module.module
 
-val settingsModule = module {
+val libSettingsModule = module {
 
 	single<DevelopSettings> {
 		RxPreferencesDevelopSettings(

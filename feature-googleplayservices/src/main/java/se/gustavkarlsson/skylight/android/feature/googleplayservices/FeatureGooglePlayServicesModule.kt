@@ -6,7 +6,7 @@ import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.ui.Destination
 import se.gustavkarlsson.skylight.android.lib.ui.DestinationRegistry
 
-val googlePlayServicesModule = module {
+val featureGooglePlayServicesModule = module {
 
 	single<GooglePlayServicesChecker> {
 		GmsGooglePlayServicesChecker(context = get())

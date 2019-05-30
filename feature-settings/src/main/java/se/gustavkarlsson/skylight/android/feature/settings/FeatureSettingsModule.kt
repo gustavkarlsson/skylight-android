@@ -5,7 +5,7 @@ import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.ui.Destination
 import se.gustavkarlsson.skylight.android.lib.ui.DestinationRegistry
 
-val settingsModule = module {
+val featureSettingsModule = module {
 
 	single("preferences") {
 		@Suppress("ConstantConditionIf")

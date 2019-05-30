@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.ui.Destination
 import se.gustavkarlsson.skylight.android.lib.ui.DestinationRegistry
 
-val aboutModule = module {
+val featureAboutModule = module {
 
 	viewModel {
 		AboutViewModel(

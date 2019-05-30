@@ -25,7 +25,7 @@ import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.krate.State
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 
-val backgroundModule = module {
+val featureBackgroundModule = module {
 
 	single {
 		get<Context>().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

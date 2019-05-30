@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.lib.kpindex
+package se.gustavkarlsson.skylight.android.lib.weather
 
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
@@ -11,9 +11,9 @@ import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import java.util.concurrent.TimeUnit
 
-val kpIndexModule = module {
+val libWeatherModule = module {
 
-	single<KpIndexApi> {
+	single<OpenWeatherMapApi> {
 		val timeout = 30.seconds
 		Retrofit.Builder()
 			.client(
@@ -23,16 +23,17 @@ val kpIndexModule = module {
 					.writeTimeout(timeout)
 					.build()
 			)
-			.baseUrl("https://skylight-web-service-1.herokuapp.com/")
+			.baseUrl("https://api.openweathermap.org/data/2.5/")
 			.addConverterFactory(GsonConverterFactory.create())
 			.addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
 			.build()
-			.create(KpIndexApi::class.java)
+			.create(OpenWeatherMapApi::class.java)
 	}
 
-	single<KpIndexProvider> {
-		RetrofittedKpIndexProvider(
+	single<WeatherProvider> {
+		RetrofittedOpenWeatherMapWeatherProvider(
 			api = get(),
+			appId = BuildConfig.OPENWEATHERMAP_API_KEY,
 			time = get(),
 			retryDelay = 15.seconds,
 			pollingInterval = 15.minutes

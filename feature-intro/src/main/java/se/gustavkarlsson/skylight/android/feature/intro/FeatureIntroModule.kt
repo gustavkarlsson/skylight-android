@@ -6,7 +6,7 @@ import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.ui.Destination
 import se.gustavkarlsson.skylight.android.lib.ui.DestinationRegistry
 
-val introModule = module {
+val featureIntroModule = module {
 
 	viewModel { (targetId: String) ->
 		IntroViewModel(

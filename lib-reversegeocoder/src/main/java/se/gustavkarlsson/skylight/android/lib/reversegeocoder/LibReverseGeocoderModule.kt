@@ -4,7 +4,7 @@ import android.location.Geocoder
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.extensions.seconds
 
-val reverseGeocoderModule = module {
+val libReverseGeocoderModule = module {
 
 	single<ReverseGeocoder> {
 		AndroidReverseGeocoder(

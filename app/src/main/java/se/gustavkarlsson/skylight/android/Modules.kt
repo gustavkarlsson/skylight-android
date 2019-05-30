@@ -1,43 +1,43 @@
 package se.gustavkarlsson.skylight.android
 
-import se.gustavkarlsson.skylight.android.feature.about.aboutModule
-import se.gustavkarlsson.skylight.android.feature.addplace.addPlaceModule
-import se.gustavkarlsson.skylight.android.feature.background.backgroundModule
-import se.gustavkarlsson.skylight.android.feature.googleplayservices.googlePlayServicesModule
-import se.gustavkarlsson.skylight.android.feature.intro.introModule
-import se.gustavkarlsson.skylight.android.feature.main.mainModule
-import se.gustavkarlsson.skylight.android.feature.settings.settingsModule
-import se.gustavkarlsson.skylight.android.lib.analytics.analyticsModule
-import se.gustavkarlsson.skylight.android.lib.darkness.darknessModule
-import se.gustavkarlsson.skylight.android.lib.geocoder.geocoderModule
-import se.gustavkarlsson.skylight.android.lib.geomaglocation.geomagLocationModule
-import se.gustavkarlsson.skylight.android.lib.kpindex.kpIndexModule
-import se.gustavkarlsson.skylight.android.lib.location.locationModule
-import se.gustavkarlsson.skylight.android.lib.places.placesModule
-import se.gustavkarlsson.skylight.android.lib.reversegeocoder.reverseGeocoderModule
-import se.gustavkarlsson.skylight.android.lib.ui.uiModule
-import se.gustavkarlsson.skylight.android.lib.weather.weatherModule
-import se.gustavkarlsson.skylight.android.lib.settings.settingsModule as libSettingsModule
+import se.gustavkarlsson.skylight.android.feature.about.featureAboutModule
+import se.gustavkarlsson.skylight.android.feature.addplace.featureAddPlaceModule
+import se.gustavkarlsson.skylight.android.feature.background.featureBackgroundModule
+import se.gustavkarlsson.skylight.android.feature.googleplayservices.featureGooglePlayServicesModule
+import se.gustavkarlsson.skylight.android.feature.intro.featureIntroModule
+import se.gustavkarlsson.skylight.android.feature.main.featureMainModule
+import se.gustavkarlsson.skylight.android.feature.settings.featureSettingsModule
+import se.gustavkarlsson.skylight.android.lib.analytics.libAnalyticsModule
+import se.gustavkarlsson.skylight.android.lib.darkness.libDarknessModule
+import se.gustavkarlsson.skylight.android.lib.geocoder.libGeocoderModule
+import se.gustavkarlsson.skylight.android.lib.geomaglocation.libGeomagLocationModule
+import se.gustavkarlsson.skylight.android.lib.kpindex.libKpIndexModule
+import se.gustavkarlsson.skylight.android.lib.location.libLocationModule
+import se.gustavkarlsson.skylight.android.lib.places.libPlacesModule
+import se.gustavkarlsson.skylight.android.lib.reversegeocoder.libReverseGeocoderModule
+import se.gustavkarlsson.skylight.android.lib.ui.libUiModule
+import se.gustavkarlsson.skylight.android.lib.weather.libWeatherModule
+import se.gustavkarlsson.skylight.android.lib.settings.libSettingsModule as libSettingsModule
 
 internal val modules = listOf(
 	coreModule,
-	appModule,
-	settingsModule,
-	backgroundModule,
-	googlePlayServicesModule,
-	uiModule,
+	libUiModule,
 	libSettingsModule,
-	locationModule,
-	reverseGeocoderModule,
-	darknessModule,
-	geomagLocationModule,
-	kpIndexModule,
-	weatherModule,
-	analyticsModule,
-	addPlaceModule,
-	placesModule,
-	geocoderModule,
-	aboutModule,
-	introModule,
-	mainModule
+	libLocationModule,
+	libReverseGeocoderModule,
+	libDarknessModule,
+	libGeomagLocationModule,
+	libKpIndexModule,
+	libWeatherModule,
+	libAnalyticsModule,
+	libPlacesModule,
+	libGeocoderModule,
+	featureSettingsModule,
+	featureBackgroundModule,
+	featureGooglePlayServicesModule,
+	featureAddPlaceModule,
+	featureAboutModule,
+	featureIntroModule,
+	featureMainModule,
+	appModule
 )
