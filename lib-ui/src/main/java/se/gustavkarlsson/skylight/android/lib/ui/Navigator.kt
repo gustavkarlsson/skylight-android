@@ -12,7 +12,8 @@ class Navigator(
 	private val destinationRegistry: DestinationRegistry
 ) {
 
-	fun navigate(id: String) {
+	fun navigate(vararg ids: String) {
+		val id = ids[0] // FIXME handle multiple IDs
 		val destinations = destinationRegistry.destinations
 		val (targetDestination, targetFragment) = destinations.getTarget(id) ?: run {
 			Timber.w("No target for navigation id: $id")

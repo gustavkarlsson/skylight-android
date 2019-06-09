@@ -12,5 +12,6 @@ internal class IntroViewModel(
 	val privacyPolicyHtml: TextRef = TextRef(R.string.html_privacy_policy_link, TextRef(R.string.privacy_policy))
 
 	fun registerScreenSeen() = versionManager.signalRunCompleted()
-	fun navigateForward() = navigator.navigate(targetId)
+	fun navigateToMain() = navigator.navigate(targetId)
+	fun navigateToPickPlace() = navigator.navigate(targetId, "addplace")
 }

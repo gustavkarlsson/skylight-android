@@ -81,6 +81,11 @@
 		<item name="cornerRadius">56dp</item>
 	</style>
 
+	<style name="AppTheme.ExtendedTextButton" parent="Widget.MaterialComponents.Button.TextButton">
+		<item name="android:height">56dp</item>
+		<item name="cornerRadius">56dp</item>
+	</style>
+
 
 	<!-- Misc -->
 

@@ -4,7 +4,8 @@ import android.os.Bundle
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
-import kotlinx.android.synthetic.main.fragment_intro.nextButton
+import kotlinx.android.synthetic.main.fragment_intro.myLocationButton
+import kotlinx.android.synthetic.main.fragment_intro.pickLocationButton
 import kotlinx.android.synthetic.main.fragment_intro.privacyPolicyLink
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -25,11 +26,17 @@ internal class IntroFragment : BaseFragment() {
 	}
 
 	override fun bindData(scope: LifecycleScopeProvider<*>) {
-		nextButton.clicks()
+		myLocationButton.clicks()
 			.autoDisposable(scope)
 			.subscribe {
 				viewModel.registerScreenSeen()
-				viewModel.navigateForward()
+				viewModel.navigateToMain()
+			}
+		pickLocationButton.clicks()
+			.autoDisposable(scope)
+			.subscribe {
+				viewModel.registerScreenSeen()
+				viewModel.navigateToPickPlace()
 			}
 	}
 
