@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
-import android.os.Bundle
 import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
@@ -8,7 +7,6 @@ import kotlinx.android.synthetic.main.fragment_intro.myLocationButton
 import kotlinx.android.synthetic.main.fragment_intro.pickLocationButton
 import kotlinx.android.synthetic.main.fragment_intro.privacyPolicyLink
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.setHtml
 
@@ -16,10 +14,7 @@ internal class IntroFragment : BaseFragment() {
 
 	override val layoutId: Int = R.layout.fragment_intro
 
-	private val viewModel: IntroViewModel by viewModel {
-		val targetId = arguments!!.getString(ARG_TARGET_ID)!!
-		parametersOf(targetId)
-	}
+	private val viewModel: IntroViewModel by viewModel()
 
 	override fun initView() {
 		privacyPolicyLink.setHtml(viewModel.privacyPolicyHtml.resolve(requireContext()))
@@ -38,16 +33,5 @@ internal class IntroFragment : BaseFragment() {
 				viewModel.registerScreenSeen()
 				viewModel.navigateToPickPlace()
 			}
-	}
-
-	companion object {
-		fun newInstance(targetId: String): IntroFragment =
-			IntroFragment().apply {
-				arguments = Bundle().apply {
-					putString(ARG_TARGET_ID, targetId)
-				}
-			}
-
-		private const val ARG_TARGET_ID = "targetId"
 	}
 }

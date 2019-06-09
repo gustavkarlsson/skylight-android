@@ -12,10 +12,9 @@ val featureGooglePlayServicesModule = module {
 		GmsGooglePlayServicesChecker(context = get())
 	}
 
-	viewModel { (targetId: String) ->
+	viewModel {
 		GooglePlayServicesViewModel(
-			navigator = get(),
-			targetId = targetId
+			navigator = get()
 		)
 	}
 
@@ -23,9 +22,9 @@ val featureGooglePlayServicesModule = module {
 		val googlePlayServicesChecker = get<GooglePlayServicesChecker>()
 		object : ModuleStarter {
 			override fun start() {
-				val destination = Destination("googleplayservices", 10, false) { id ->
+				val destination = Destination(10) {
 					if (!googlePlayServicesChecker.isAvailable)
-						GooglePlayServicesFragment.newInstance(id)
+						GooglePlayServicesFragment()
 					else
 						null
 				}

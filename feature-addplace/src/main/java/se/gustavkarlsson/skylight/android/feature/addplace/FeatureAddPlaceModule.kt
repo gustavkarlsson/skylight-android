@@ -29,7 +29,7 @@ val featureAddPlaceModule = module {
 	single<ModuleStarter>("addplace") {
 		object : ModuleStarter {
 			override fun start() {
-				val destination = Destination("addplace", 0, true) { id ->
+				val destination = Destination(0) { id ->
 					if (id == "addplace")
 						AddPlaceFragment()
 					else

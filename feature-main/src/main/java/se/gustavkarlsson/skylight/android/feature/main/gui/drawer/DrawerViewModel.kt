@@ -55,7 +55,7 @@ internal class DrawerViewModel(
 	private fun createAddPlaceItem(): DrawerItem {
 		val onClick = {
 			closeDrawerRelay.accept(Unit)
-			navigator.navigate("addplace")
+			navigator.navigate("addplace", true)
 		}
 		val onLongClick = {}
 		return DrawerItem(false, R.drawable.ic_add_white_24dp, TextRef(R.string.add_place), onClick, onLongClick)

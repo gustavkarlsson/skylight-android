@@ -42,7 +42,7 @@ val featureMainModule = module {
 	single<ModuleStarter>("main") {
 		object : ModuleStarter {
 			override fun start() {
-				val destination = Destination("main", 0, true) { id ->
+				val destination = Destination(0) { id ->
 					if (id == "main")
 						MainFragment()
 					else

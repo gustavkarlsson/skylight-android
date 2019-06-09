@@ -8,12 +8,11 @@ import io.reactivex.Completable
 import se.gustavkarlsson.skylight.android.lib.ui.Navigator
 
 internal class GooglePlayServicesViewModel(
-	private val navigator: Navigator,
-	private val targetId: String
+	private val navigator: Navigator
 ) : ViewModel() {
 	fun makeGooglePlayServicesAvailable(activity: Activity): Completable =
 		GoogleApiAvailability.getInstance()
 			.makeGooglePlayServicesAvailable(activity).toCompletable()
 
-	fun navigateForward() = navigator.navigate(targetId)
+	fun navigateToMain() = navigator.navigate("main", false)
 }

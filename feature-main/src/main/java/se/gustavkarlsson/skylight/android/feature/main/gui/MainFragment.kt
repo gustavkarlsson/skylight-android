@@ -84,8 +84,8 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
 			.autoDisposable(scope)
 			.subscribe { item ->
 				when (item.itemId) {
-					R.id.action_settings -> navigator.navigate("settings")
-					R.id.action_about -> navigator.navigate("about")
+					R.id.action_settings -> navigator.navigate("settings", true)
+					R.id.action_about -> navigator.navigate("about", true)
 				}
 			}
 

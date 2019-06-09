@@ -60,6 +60,7 @@
 		<item name="android:shadowRadius">4</item>
 	</style>
 
+
 	<!-- Banner -->
 
 	<style name="AppTheme.BannerError">
@@ -71,18 +72,19 @@
 	</style>
 
 
-	<!-- Extended FAB -->
+	<!-- Buttons -->
 
-	<!-- TODO Replace with material extended FAB when available -->
-	<style name="AppTheme.ExtendedFab" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+	<style name="AppTheme.FilledButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
 		<item name="backgroundTint">@color/primary</item>
 		<item name="android:textColor">@color/on_primary</item>
 		<item name="android:height">56dp</item>
 		<item name="cornerRadius">56dp</item>
 	</style>
 
-	<style name="AppTheme.ExtendedTextButton" parent="Widget.MaterialComponents.Button.TextButton">
+	<style name="AppTheme.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
 		<item name="android:height">56dp</item>
+		<item name="android:paddingLeft">16dp</item>
+		<item name="android:paddingRight">16dp</item>
 		<item name="cornerRadius">56dp</item>
 	</style>
 

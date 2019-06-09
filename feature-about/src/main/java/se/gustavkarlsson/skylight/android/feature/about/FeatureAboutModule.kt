@@ -24,7 +24,7 @@ val featureAboutModule = module {
 	single<ModuleStarter>("about") {
 		object : ModuleStarter {
 			override fun start() {
-				val destination = Destination("about", 0, true) { id ->
+				val destination = Destination(0) { id ->
 					if (id == "about")
 						AboutFragment()
 					else

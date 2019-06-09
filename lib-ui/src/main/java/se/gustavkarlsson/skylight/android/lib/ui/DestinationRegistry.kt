@@ -9,12 +9,6 @@ class DestinationRegistry {
 
 	@Synchronized
 	fun register(destination: Destination) {
-		val duplicatedDestination = _destinations.find { it.name == destination.name }
-		require(duplicatedDestination == null) {
-			"Duplicate destination names (${destination.name}) detected in " +
-				"${destination::class.java.name} and " +
-				"${duplicatedDestination!!::class.java.name} "
-		}
 		_destinations += destination
 		_destinations.sortByDescending { it.priority }
 	}

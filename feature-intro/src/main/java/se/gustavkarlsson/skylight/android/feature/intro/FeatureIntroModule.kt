@@ -8,11 +8,10 @@ import se.gustavkarlsson.skylight.android.lib.ui.DestinationRegistry
 
 val featureIntroModule = module {
 
-	viewModel { (targetId: String) ->
+	viewModel {
 		IntroViewModel(
 			navigator = get(),
-			versionManager = get(),
-			targetId = targetId
+			versionManager = get()
 		)
 	}
 
@@ -20,9 +19,9 @@ val featureIntroModule = module {
 		val runVersionManager = get<RunVersionManager>()
 		object : ModuleStarter {
 			override fun start() {
-				val destination = Destination("intro", 5, false) { id ->
+				val destination = Destination(5) {
 					if (runVersionManager.isFirstRun) {
-						IntroFragment.newInstance(id)
+						IntroFragment()
 					} else {
 						null
 					}

@@ -6,12 +6,11 @@ import se.gustavkarlsson.skylight.android.lib.ui.Navigator
 
 internal class IntroViewModel(
 	private val navigator: Navigator,
-	private val versionManager: RunVersionManager,
-	private val targetId: String
+	private val versionManager: RunVersionManager
 ) : ViewModel() {
 	val privacyPolicyHtml: TextRef = TextRef(R.string.html_privacy_policy_link, TextRef(R.string.privacy_policy))
 
 	fun registerScreenSeen() = versionManager.signalRunCompleted()
-	fun navigateToMain() = navigator.navigate(targetId)
-	fun navigateToPickPlace() = navigator.navigate(targetId, "addplace")
+	fun navigateToMain() = navigator.navigate("main", false)
+	fun navigateToPickPlace() = navigator.navigate("addplace", false)
 }
