@@ -45,7 +45,25 @@ internal class AddPlaceViewModel(
 		}
 	}
 
-	val isLoading: Flowable<Boolean> = addPlaceStore.states
-		.map(State::searching)
-		.distinctUntilChanged()
+	private val resultState: Flowable<ResultState> = addPlaceStore.states
+		.map { state ->
+			when {
+				state.searching -> ResultState.SEARCHING
+				state.query.isBlank() -> ResultState.EMPTY
+				state.suggestions.isEmpty() -> ResultState.NO_SUGGESTIONS
+				else -> ResultState.SUGGESTIONS
+			}
+		}
+
+	val isEmptyVisible: Flowable<Boolean> = resultState.map { it == ResultState.EMPTY }
+
+	val isSearchingVisible: Flowable<Boolean> = resultState.map { it == ResultState.SEARCHING }
+
+	val isNoSuggestionsVisible: Flowable<Boolean> = resultState.map { it == ResultState.NO_SUGGESTIONS }
+
+	val isSuggestionsVisible: Flowable<Boolean> = resultState.map { it == ResultState.SUGGESTIONS }
+}
+
+internal enum class ResultState {
+	EMPTY, SEARCHING, NO_SUGGESTIONS, SUGGESTIONS
 }

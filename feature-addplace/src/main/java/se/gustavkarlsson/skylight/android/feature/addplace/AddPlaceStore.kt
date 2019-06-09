@@ -13,6 +13,7 @@ import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 internal typealias AddPlaceStore = Store<State, Command, Result>
 
 internal data class State(
+	val query: String = "",
 	val suggestions: List<PlaceSuggestion> = emptyList(),
 	val searching: Boolean = false
 )
@@ -22,6 +23,7 @@ internal sealed class Command {
 }
 
 internal sealed class Result {
+	data class Query(val text: String) : Result()
 	data class Suggestions(val suggestions: List<PlaceSuggestion> = emptyList()) : Result()
 	object Searching : Result()
 }
@@ -41,10 +43,10 @@ internal fun createStore(
 		transform<Command.Search> { commands ->
 			commands.switchMap { (text) ->
 				if (text.isBlank()) {
-					Flowable.just(Result.Suggestions())
+					Flowable.just(Result.Query(text.trim()), Result.Suggestions())
 				} else {
 					Flowable.concat(
-						Flowable.just<Result>(Result.Searching),
+						Flowable.just<Result>(Result.Query(text.trim()), Result.Searching),
 						geocoder.geocode(text)
 							.retryWhen { it.delay(retryDelay) }
 							.delaySubscription(searchDebounceDelay)
@@ -59,6 +61,7 @@ internal fun createStore(
 	results {
 		reduce { state, result ->
 			when (result) {
+				is Result.Query -> state.copy(query = result.text)
 				Result.Searching -> state.copy(searching = true)
 				is Result.Suggestions -> state.copy(suggestions = result.suggestions, searching = false)
 			}

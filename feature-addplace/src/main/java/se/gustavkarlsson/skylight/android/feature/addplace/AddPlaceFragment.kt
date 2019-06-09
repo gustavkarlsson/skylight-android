@@ -1,13 +1,17 @@
 package se.gustavkarlsson.skylight.android.feature.addplace
 
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.jakewharton.rxbinding2.view.visibility
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
+import kotlinx.android.synthetic.main.fragment_add_place.emptyView
+import kotlinx.android.synthetic.main.fragment_add_place.noSuggestionsView
 import kotlinx.android.synthetic.main.fragment_add_place.searchResultRecyclerView
 import kotlinx.android.synthetic.main.fragment_add_place.toolbarView
 import kotlinx.android.synthetic.main.layout_save_dialog.view.placeNameEditText
@@ -43,12 +47,21 @@ internal class AddPlaceFragment : BaseFragment() {
 			.autoDisposable(scope)
 			.subscribe(adapter::setItems)
 
-		viewModel.isLoading
+		viewModel.isEmptyVisible
 			.autoDisposable(scope)
-			.subscribe {
-				// TODO no progress indicator yet.
-				//  https://material.io/design/components/progress-indicators.html#implementation
-			}
+			.subscribe(emptyView.visibility())
+
+		viewModel.isSearchingVisible
+			.autoDisposable(scope)
+			.subscribe(searchView.visibility())
+
+		viewModel.isNoSuggestionsVisible
+			.autoDisposable(scope)
+			.subscribe(noSuggestionsView.visibility())
+
+		viewModel.isSuggestionsVisible
+			.autoDisposable(scope)
+			.subscribe(searchResultRecyclerView.visibility(View.INVISIBLE))
 
 		viewModel.openSaveDialog
 			.autoDisposable(scope)

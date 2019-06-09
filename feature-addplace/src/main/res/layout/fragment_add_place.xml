@@ -9,22 +9,48 @@
 		android:layout_width="match_parent"
 		android:layout_height="?attr/actionBarSize"
 		android:elevation="1dp"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
+
+	<TextView
+		android:id="@+id/emptyView"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:gravity="center"
+		android:text="Come on, do a search!"
+		android:visibility="gone"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/toolbarView" />
 
 	<!--
 	TODO Add material progress indicator when available
 	 https://material.io/design/components/progress-indicators.html#implementation
 	-->
+	<TextView
+		android:id="@+id/searchingView"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:gravity="center"
+		android:text="Searching"
+		android:visibility="gone"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/toolbarView" />
+
+	<TextView
+		android:id="@+id/noSuggestionsView"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:gravity="center"
+		android:text="No results :("
+		android:visibility="gone"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/toolbarView" />
 
 	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/searchResultRecyclerView"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
+		android:visibility="invisible"
 		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/toolbarView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
