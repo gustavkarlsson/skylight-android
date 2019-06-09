@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
@@ -13,10 +14,11 @@
 
 	<TextView
 		android:id="@+id/emptyView"
+		style="@style/TextAppearance.MaterialComponents.Body1"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:gravity="center"
-		android:text="Come on, do a search!"
+		android:text="@string/search_for_place_to_save"
 		android:visibility="gone"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/toolbarView" />
@@ -25,22 +27,25 @@
 	TODO Add material progress indicator when available
 	 https://material.io/design/components/progress-indicators.html#implementation
 	-->
-	<TextView
+	<com.github.ybq.android.spinkit.SpinKitView
 		android:id="@+id/searchingView"
-		android:layout_width="match_parent"
-		android:layout_height="0dp"
-		android:gravity="center"
-		android:text="Searching"
+		style="@style/SpinKitView.Large.Circle"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
 		android:visibility="gone"
+		app:SpinKit_Color="@color/primary"
 		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/toolbarView" />
 
 	<TextView
 		android:id="@+id/noSuggestionsView"
+		style="@style/TextAppearance.MaterialComponents.Body1"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:gravity="center"
-		android:text="No results :("
+		android:text="@string/no_place_found"
 		android:visibility="gone"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/toolbarView" />
@@ -51,6 +56,8 @@
 		android:layout_height="0dp"
 		android:visibility="invisible"
 		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/toolbarView" />
+		app:layout_constraintTop_toBottomOf="@id/toolbarView"
+		tools:listitem="@layout/layout_search_result_item"
+		tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

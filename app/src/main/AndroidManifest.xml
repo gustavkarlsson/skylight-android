@@ -19,7 +19,8 @@
 			android:name=".MainActivity"
 			android:label="@string/app_name"
 			android:screenOrientation="portrait"
-			android:launchMode="singleInstance">
+			android:launchMode="singleInstance"
+			android:windowSoftInputMode="adjustResize">
 			<intent-filter android:label="@string/app_name_variant">
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>

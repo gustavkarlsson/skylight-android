@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="save_place">Spara plats</string>
+	<string name="place_name">Namn på plats</string>
+	<string name="search_for_place_to_save">Sök efter en plats att spara</string>
+	<string name="no_place_found">Ingen plats med det namnet :(</string>
+</resources>

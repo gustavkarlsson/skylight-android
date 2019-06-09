@@ -11,6 +11,6 @@ sealed class Result {
 	}
 
 	data class LocationPermission(val permission: Permission) : Result()
-	data class PlaceSelected(val place: Place?) : Result()
+	data class PlaceSelected(val place: Place) : Result()
 	data class Places(val places: List<Place>) : Result()
 }

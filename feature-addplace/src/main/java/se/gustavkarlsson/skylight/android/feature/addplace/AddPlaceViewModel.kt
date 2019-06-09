@@ -48,8 +48,8 @@ internal class AddPlaceViewModel(
 	private val resultState: Flowable<ResultState> = addPlaceStore.states
 		.map { state ->
 			when {
-				state.searching -> ResultState.SEARCHING
 				state.query.isBlank() -> ResultState.EMPTY
+				state.searching && state.suggestions.isEmpty() -> ResultState.SEARCHING
 				state.suggestions.isEmpty() -> ResultState.NO_SUGGESTIONS
 				else -> ResultState.SUGGESTIONS
 			}

@@ -34,11 +34,9 @@ internal fun buildSkylightStore(
 					.flatMap { places ->
 						val state = getState()
 						val oldPlaces = state.places
-						val newSelection = state.selectedPlace?.let { selected ->
-							findNewPlace(oldPlaces, places)
-								?: findSamePlace(selected, places)
-								?: Place.Current
-						}
+						val newSelection = findNewPlace(oldPlaces, places)
+							?: findSamePlace(state.selectedPlace, places)
+							?: Place.Current
 						selectPlace(newSelection, auroraReportProvider)
 							.startWith(Result.Places(places))
 					}
@@ -80,7 +78,7 @@ internal fun buildSkylightStore(
 						}
 					}
 				}
-				*/
+			*/
 			transform<Command.SelectPlace> { commands ->
 				commands.switchMap { (place) ->
 					selectPlace(place, auroraReportProvider)
@@ -156,19 +154,15 @@ internal fun buildSkylightStore(
 }
 
 private fun selectPlace(
-	place: Place?,
+	place: Place,
 	auroraReportProvider: AuroraReportProvider
 ): Flowable<Result> {
-	return if (place == null) {
-		Flowable.just(Result.PlaceSelected(null))
-	} else {
-		val location = (place as? Place.Custom)?.location
-		auroraReportProvider.stream(location)
-			.map<Result> { result ->
-				Result.AuroraReport.Success(mapOf(place to result))
-			}
-			.startWith(Result.PlaceSelected(place))
-	}
+	val locationToStream = (place as? Place.Custom)?.location
+	return auroraReportProvider.stream(locationToStream)
+		.map<Result> { result ->
+			Result.AuroraReport.Success(mapOf(place to result))
+		}
+		.startWith(Result.PlaceSelected(place))
 }
 
 private fun findNewPlace(oldPlaces: List<Place>, newPlaces: List<Place>): Place? =

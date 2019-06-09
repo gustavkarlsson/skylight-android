@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.entities.Place
 data class State(
 	val locationPermission: Permission = Permission.Unknown,
 	val places: List<Place> = listOf(Place.Current),
-	val selectedPlace: Place? = null,
+	val selectedPlace: Place = Place.Current,
 	val auroraReports: Map<Place, AuroraReport> = emptyMap(),
 	val throwable: Throwable? = null
 ) {

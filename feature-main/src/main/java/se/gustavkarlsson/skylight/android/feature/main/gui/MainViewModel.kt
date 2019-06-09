@@ -18,17 +18,17 @@ import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
+import se.gustavkarlsson.skylight.android.entities.Permission
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.mapNotNull
 import se.gustavkarlsson.skylight.android.extensions.seconds
-import se.gustavkarlsson.skylight.android.krate.Command
-import se.gustavkarlsson.skylight.android.entities.Permission
 import se.gustavkarlsson.skylight.android.feature.main.ChanceToColorConverter
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.RelativeTimeFormatter
+import se.gustavkarlsson.skylight.android.krate.Command
 import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.krate.State
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
@@ -55,11 +55,11 @@ internal class MainViewModel(
 ) : ViewModel() {
 
 	init {
-		store.issue(Command.SelectPlace(Place.Current))
+		// FIXME Start streaming
 	}
 
 	override fun onCleared() {
-		store.issue(Command.SelectPlace(null))
+		// FIXME Stop streaming
 	}
 
 	val errorMessages: Flowable<Int> = store.states
@@ -70,8 +70,8 @@ internal class MainViewModel(
 		}
 
 	val toolbarTitleText: Flowable<TextRef> = store.states
-		.mapNotNull {
-			it.selectedPlace?.name
+		.map {
+			it.selectedPlace.name
 		}
 		.distinctUntilChanged()
 
