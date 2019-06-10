@@ -34,3 +34,13 @@ fun <T : Any, R : Any> Flowable<T>.mapNotNull(mapper: (T) -> R?): Flowable<R> =
 			Maybe.just(returned)
 		}
 	}
+
+fun <T : Any, R : Any> Observable<T>.mapNotNull(mapper: (T) -> R?): Observable<R> =
+	this.flatMapMaybe {
+		val returned = mapper(it)
+		if (returned == null) {
+			Maybe.empty()
+		} else {
+			Maybe.just(returned)
+		}
+	}

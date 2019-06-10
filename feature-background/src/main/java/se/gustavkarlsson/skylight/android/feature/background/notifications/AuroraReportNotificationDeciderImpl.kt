@@ -1,16 +1,14 @@
 package se.gustavkarlsson.skylight.android.feature.background.notifications
 
-import se.gustavkarlsson.skylight.android.feature.background.persistence.NotifiedChanceRepository
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.NotifiedChance
-import se.gustavkarlsson.skylight.android.krate.SkylightStore
+import se.gustavkarlsson.skylight.android.feature.background.persistence.NotifiedChanceRepository
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 
 internal class AuroraReportNotificationDeciderImpl(
 	private val notifiedChanceRepository: NotifiedChanceRepository,
 	private val chanceEvaluator: ChanceEvaluator<AuroraReport>,
-	private val store: SkylightStore,
 	private val outdatedEvaluator: OutdatedEvaluator,
 	private val appVisibilityEvaluator: AppVisibilityEvaluator
 ) : AuroraReportNotificationDecider {

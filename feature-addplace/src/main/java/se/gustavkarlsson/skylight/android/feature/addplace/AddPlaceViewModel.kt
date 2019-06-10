@@ -7,11 +7,10 @@ import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.ui.Navigator
-import se.gustavkarlsson.skylight.android.krate.SkylightStore
-import se.gustavkarlsson.skylight.android.krate.Command as MainCommand
+import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 
 internal class AddPlaceViewModel(
-	private val mainStore: SkylightStore,
+	private val placesRepository: PlacesRepository,
 	private val addPlaceStore: AddPlaceStore,
 	private val navigator: Navigator
 ) : ViewModel() {
@@ -37,7 +36,7 @@ internal class AddPlaceViewModel(
 		}
 
 	private fun addPlaceAndLeave(name: String, location: Location) {
-		mainStore.issue(MainCommand.AddPlace(name, location))
+		placesRepository.add(name, location)
 		if (navigator.backStackSize == 0) {
 			navigator.navigate("main", false)
 		} else {

@@ -12,7 +12,7 @@ val featureAddPlaceModule = module {
 
 	viewModel {
 		AddPlaceViewModel(
-			mainStore  = get("main"),
+			placesRepository  = get(),
 			addPlaceStore = get("addplace"),
 			navigator = get()
 		)

@@ -5,8 +5,10 @@ import android.app.NotificationManager
 import android.content.Context
 import com.evernote.android.job.JobManager
 import io.reactivex.Completable
-import io.reactivex.Flowable
 import org.koin.dsl.module.module
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.extensions.minutes
+import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.feature.background.notifications.AppVisibilityEvaluator
 import se.gustavkarlsson.skylight.android.feature.background.notifications.AuroraReportNotificationDecider
 import se.gustavkarlsson.skylight.android.feature.background.notifications.AuroraReportNotificationDeciderImpl
@@ -19,11 +21,6 @@ import se.gustavkarlsson.skylight.android.feature.background.persistence.SharedP
 import se.gustavkarlsson.skylight.android.feature.background.scheduling.GetLatestAuroraReportScheduler
 import se.gustavkarlsson.skylight.android.feature.background.scheduling.Scheduler
 import se.gustavkarlsson.skylight.android.feature.background.scheduling.UpdateJob
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.extensions.minutes
-import se.gustavkarlsson.skylight.android.extensions.seconds
-import se.gustavkarlsson.skylight.android.krate.State
-import se.gustavkarlsson.skylight.android.krate.SkylightStore
 
 val featureBackgroundModule = module {
 
@@ -59,7 +56,6 @@ val featureBackgroundModule = module {
 		AuroraReportNotificationDeciderImpl(
 			notifiedChanceRepository = get(),
 			chanceEvaluator = get("auroraReport"),
-			store = get("main"),
 			outdatedEvaluator = get(),
 			appVisibilityEvaluator = AppVisibilityEvaluator(get())
 		)
@@ -67,7 +63,6 @@ val featureBackgroundModule = module {
 
 	single<Completable>("initiateJobManager") {
 		val context = get<Context>()
-		val store = get<SkylightStore>("main")
 		val decider = get<AuroraReportNotificationDecider>()
 		val notifier = get<Notifier<AuroraReport>>()
 		val outdatedEvaluator = get<OutdatedEvaluator>()
@@ -76,7 +71,7 @@ val featureBackgroundModule = module {
 				addJobCreator { tag ->
 					when (tag) {
 						UpdateJob.UPDATE_JOB_TAG -> {
-							UpdateJob(store, decider, notifier, outdatedEvaluator, 60.seconds)
+							UpdateJob(decider, notifier, outdatedEvaluator, 60.seconds)
 						}
 						else -> null
 					}
@@ -87,9 +82,11 @@ val featureBackgroundModule = module {
 
 	single<Scheduler> { GetLatestAuroraReportScheduler(20.minutes, 10.minutes) }
 
-	single<Flowable<*>>("scheduleBasedOnSettings") {
+	single<Completable>("scheduleBasedOnSettings") {
+		/*
+		FIXME Implement schedule based on settings
 		val scheduler = get<Scheduler>()
-		get<Flowable<State>>("state")
+		get<Observable<se.gustavkarlsson.skylight.android.feature.main.knot.State>>("state")
 			.map {
 				val notificationsEnabled = true
 				notificationsEnabled // FIXME set based on settings
@@ -102,6 +99,8 @@ val featureBackgroundModule = module {
 					scheduler.unschedule()
 				}
 			}
+		*/
+		Completable.complete()
 	}
 
 	single {
@@ -121,9 +120,7 @@ val featureBackgroundModule = module {
 	single<Completable>("scheduleBackgroundNotifications") {
 		get<Completable>("createNotificationChannel")
 			.andThen(get<Completable>("initiateJobManager"))
-			.andThen(get<Flowable<*>>("scheduleBasedOnSettings"))
-			.lastOrError()
-			.ignoreElement()
+			.andThen(get<Completable>("scheduleBasedOnSettings"))
 
 	}
 

@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.feature.main
 
 import android.content.Context
 import com.tbruyelle.rxpermissions2.RxPermissions
+import de.halfbit.knot.Knot
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.ModuleStarter
@@ -25,7 +26,6 @@ import se.gustavkarlsson.skylight.android.feature.main.formatters.WeatherFormatt
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainFragment
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
 import se.gustavkarlsson.skylight.android.feature.main.gui.drawer.DrawerViewModel
-import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.ui.Destination
 import se.gustavkarlsson.skylight.android.lib.ui.DestinationRegistry
@@ -144,7 +144,7 @@ val featureMainModule = module {
 
 	viewModel {
 		MainViewModel(
-			store = get("main"),
+			mainKnot = get("main"),
 			auroraChanceEvaluator = get("auroraReport"),
 			relativeTimeFormatter = get(),
 			chanceLevelFormatter = get("chanceLevel"),
@@ -156,6 +156,7 @@ val featureMainModule = module {
 			kpIndexFormatter = get("kpIndex"),
 			weatherChanceEvaluator = get("weather"),
 			weatherFormatter = get("weather"),
+			permissionChecker = get(),
 			chanceToColorConverter = get(),
 			time = get(),
 			nowTextThreshold = 1.minutes
@@ -163,7 +164,11 @@ val featureMainModule = module {
 	}
 
 	viewModel {
-		DrawerViewModel(store = get("main"), navigator = get())
+		DrawerViewModel(
+			mainKnot = get("main"),
+			navigator = get(),
+			placesRepository = get()
+		)
 	}
 
 	single("main") {
@@ -171,7 +176,7 @@ val featureMainModule = module {
 		val auroraReportProvider = get<AuroraReportProvider>()
 		val placesRepo = get<PlacesRepository>()
 
-		buildSkylightStore(
+		buildMainKnot(
 			permissionChecker,
 			placesRepo,
 			auroraReportProvider
@@ -179,7 +184,11 @@ val featureMainModule = module {
 	}
 
 	single("state") {
-		get<SkylightStore>("main").states
+		get<Knot<State, Change>>("main").state
+	}
+
+	single("change") {
+		get<Knot<State, Change>>("main").change
 	}
 
 }

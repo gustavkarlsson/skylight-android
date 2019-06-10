@@ -3,23 +3,14 @@ package se.gustavkarlsson.skylight.android.feature.background.scheduling
 import com.evernote.android.job.Job
 import com.evernote.android.job.Job.Result.FAILURE
 import com.evernote.android.job.Job.Result.SUCCESS
-import io.reactivex.Single
 import org.threeten.bp.Duration
-import se.gustavkarlsson.koptional.Absent
-import se.gustavkarlsson.koptional.optionalOf
+import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.feature.background.notifications.AuroraReportNotificationDecider
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notifier
 import se.gustavkarlsson.skylight.android.feature.background.notifications.OutdatedEvaluator
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.entities.Place
-import se.gustavkarlsson.skylight.android.extensions.mapNotNull
-import se.gustavkarlsson.skylight.android.krate.Command
-import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 internal class UpdateJob(
-	private val store: SkylightStore,
 	private val decider: AuroraReportNotificationDecider,
 	private val notifier: Notifier<AuroraReport>,
 	private val outdatedEvaluator: OutdatedEvaluator,
@@ -41,25 +32,22 @@ internal class UpdateJob(
 	}
 
 	private fun getAuroraReport(): AuroraReport {
-		var bestReport = store.currentState.auroraReports[Place.Current]
+		/*
+		var bestReport = state.blockingFirst().auroraReports[Place.Current]
 		if (bestReport?.isRecent == true) {
 			return bestReport
 		}
 		bestReport = awaitBetterReport(bestReport) ?: bestReport
 		return bestReport ?: throw Exception("Failed to get best aurora report")
+		*/
+		TODO("FIXME implement this")
 	}
 
 	private fun awaitBetterReport(currentReport: AuroraReport?): AuroraReport? {
-		store.issue(Command.RefreshAll)
-		return store.states
-			.flatMapSingle {
-				if (it.throwable == null) {
-					Single.just(it)
-				} else {
-					Single.error(it.throwable)
-				}
-			}
+		/*
+		return state
 			// FIXME fix notifications
+			// FIXME What about errors?
 			.mapNotNull { it.auroraReports[Place.Current] }
 			.filter { it != currentReport }
 			.map { optionalOf(it) }
@@ -69,6 +57,8 @@ internal class UpdateJob(
 			.onErrorReturnItem(Absent)
 			.blockingGet()
 			.value
+		*/
+		return null
 	}
 
 	private val AuroraReport.isRecent: Boolean

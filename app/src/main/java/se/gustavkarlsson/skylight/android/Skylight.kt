@@ -11,8 +11,6 @@ import io.reactivex.rxkotlin.addTo
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
-import se.gustavkarlsson.skylight.android.krate.Command
-import se.gustavkarlsson.skylight.android.krate.SkylightStore
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 import timber.log.Timber
 import timber.log.Timber.DebugTree
@@ -20,8 +18,6 @@ import timber.log.Timber.DebugTree
 internal class Skylight : MultiDexApplication() {
 
 	private val disposables = CompositeDisposable()
-
-	private val store: SkylightStore by inject("main")
 
 	private val analytics: Analytics by inject()
 
@@ -39,7 +35,6 @@ internal class Skylight : MultiDexApplication() {
 		startKoin(this, modules, logger = KoinTimberLogger)
 		initializeModules()
 		setupSettingsAnalytics()
-		store.issue(Command.Bootstrap)
 		// FIXME store.issue(SettingsStreamCommand(true))
 		scheduleBackgroundNotifications()
 	}

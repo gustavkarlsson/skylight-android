@@ -8,14 +8,13 @@ import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Lifecycle
-import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding2.view.clicks
 import com.tbruyelle.rxpermissions2.RxPermissions
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_main.chance
 import kotlinx.android.synthetic.main.fragment_main.chanceSubtitle
 import kotlinx.android.synthetic.main.fragment_main.darknessCard
@@ -33,8 +32,6 @@ import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.ui.BackButtonHandler
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.Navigator
-import se.gustavkarlsson.skylight.android.lib.ui.doOnNext
-import se.gustavkarlsson.skylight.android.lib.ui.extensions.showErrorSnackbar
 import timber.log.Timber
 import kotlin.math.roundToInt
 
@@ -93,18 +90,6 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
 			.doOnNext { Timber.d("Updating toolbar title: %s", it) }
 			.autoDisposable(scope)
 			.subscribe { toolbarView.title = it.resolve(requireContext()) }
-
-		viewModel.errorMessages
-			.doOnNext { Timber.d("Showing error message") }
-			.autoDisposable(scope)
-			.subscribe {
-				view?.let { view ->
-					showErrorSnackbar(view, it, Snackbar.LENGTH_LONG)
-						.doOnNext(this, Lifecycle.Event.ON_DESTROY) { snackbar ->
-							snackbar.dismiss()
-						}
-				}
-			}
 
 		viewModel.chanceLevelText
 			.doOnNext { Timber.d("Updating chanceLevel text: %s", it) }
@@ -241,7 +226,7 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
 		}
 	}
 
-	private fun Flowable<FactorItem>.present(
+	private fun Observable<FactorItem>.present(
 		cardView: FactorCard,
 		onCardClick: () -> Unit,
 		scope: LifecycleScopeProvider<*>,

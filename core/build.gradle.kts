@@ -18,7 +18,6 @@ android {
 }
 
 dependencies {
-	api("com.github.gustavkarlsson:krate:${versions.krate}")
 	api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}")
 	api("com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}")
 	api("com.jakewharton.timber:timber:${versions.timber}")

@@ -4,21 +4,22 @@ import androidx.annotation.DrawableRes
 import androidx.lifecycle.ViewModel
 import com.ioki.textref.TextRef
 import com.jakewharton.rxrelay2.PublishRelay
-import io.reactivex.Flowable
+import de.halfbit.knot.Knot
 import io.reactivex.Observable
+import se.gustavkarlsson.skylight.android.feature.main.Change
 import se.gustavkarlsson.skylight.android.entities.Place
+import se.gustavkarlsson.skylight.android.feature.main.State
 import se.gustavkarlsson.skylight.android.feature.main.R
+import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.ui.Navigator
-import se.gustavkarlsson.skylight.android.krate.Command
-import se.gustavkarlsson.skylight.android.krate.SkylightStore
-import se.gustavkarlsson.skylight.android.krate.State
 
 internal class DrawerViewModel(
-	private val store: SkylightStore,
-	private val navigator: Navigator
+	private val mainKnot: Knot<State, Change>,
+	private val navigator: Navigator,
+	private val placesRepository: PlacesRepository
 ) : ViewModel() {
-	val places: Flowable<List<DrawerItem>> =
-		store.states
+	val places: Observable<List<DrawerItem>> =
+		mainKnot.state
 			.map(::createPlaceItems)
 			.distinctUntilChanged()
 
@@ -36,13 +37,13 @@ internal class DrawerViewModel(
 				is Place.Custom -> R.drawable.ic_map_white_24dp
 			}
 			val onClick = {
-				store.issue(Command.SelectPlace(place))
+				mainKnot.change.accept(Change.SelectPlace(place))
 				closeDrawerRelay.accept(Unit)
 			}
 			val onLongClick: () -> Unit = if (place is Place.Custom) {
 				{
 					val dialogData = RemoveLocationDialogData(TextRef(R.string.remove_thing, place.name)) {
-						store.issue(Command.RemovePlace(place.id))
+						placesRepository.remove(place.id)
 					}
 					openRemoveLocationDialogRelay.accept(dialogData)
 				}

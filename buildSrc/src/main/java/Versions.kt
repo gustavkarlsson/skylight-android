@@ -55,6 +55,7 @@ object Versions {
 	val sqldelight = "1.1.3"
 	val banner = "1.2.0"
 	val spinKit = "1.2.0"
+	val knot = "1.2"
 
 	// Test
 	val junit = "4.12"
