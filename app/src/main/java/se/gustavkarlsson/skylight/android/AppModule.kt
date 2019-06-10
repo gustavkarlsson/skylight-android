@@ -38,7 +38,7 @@ internal val appModule = module {
 	scope("activity") {
 		Navigator(
 			fragmentManager = get(),
-			containerId = R.id.fragmentContainer, // FIXME injected?
+			containerId = R.id.fragmentContainer, // TODO inject?
 			destinationRegistry = get()
 		)
 	}

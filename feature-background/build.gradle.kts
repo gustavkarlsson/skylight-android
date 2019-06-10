@@ -20,7 +20,7 @@ android {
 dependencies {
 	implementation(project(":core"))
 	implementation(project(":lib-analytics"))
-	implementation(project(":lib-ui")) //FIXME can we remove this?
+	implementation(project(":lib-ui")) //TODO only used for coloring notification?
 
 	// Firebase
 	implementation("com.google.firebase:firebase-core:${versions.firebase}")

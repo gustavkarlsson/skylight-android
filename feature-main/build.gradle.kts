@@ -46,7 +46,7 @@ dependencies {
 
 	implementation("com.tbruyelle.rxpermissions2:rxpermissions:${versions.rxpermissions}@aar")
 	implementation("androidx.cardview:cardview:${versions.androidCardview}")
-	// FIXME replace with google material banner when available
+	// TODO replace with google material banner when available
 	implementation("com.sergivonavi:materialbanner:${versions.banner}")
 	implementation("de.halfbit:knot:${versions.knot}")
 

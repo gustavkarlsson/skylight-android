@@ -35,7 +35,6 @@ internal class Skylight : MultiDexApplication() {
 		startKoin(this, modules, logger = KoinTimberLogger)
 		initializeModules()
 		setupSettingsAnalytics()
-		// FIXME store.issue(SettingsStreamCommand(true))
 		scheduleBackgroundNotifications()
 	}
 

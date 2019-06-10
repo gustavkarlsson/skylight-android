@@ -84,7 +84,7 @@ val featureBackgroundModule = module {
 
 	single<Completable>("scheduleBasedOnSettings") {
 		/*
-		FIXME Implement schedule based on settings
+		FIXME Implement schedule based on settings (through module starter?)
 		val scheduler = get<Scheduler>()
 		get<Observable<se.gustavkarlsson.skylight.android.feature.main.knot.State>>("state")
 			.map {
