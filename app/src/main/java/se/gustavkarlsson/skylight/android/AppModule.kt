@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android
 import android.app.Activity
 import android.content.Context
 import android.os.Build
+import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import io.reactivex.Single
 import org.koin.dsl.module.module
@@ -17,6 +18,10 @@ internal val appModule = module {
 
 	scope("activity") { (fragmentManager: FragmentManager) ->
 		fragmentManager
+	}
+
+	scope("activity") { (container: ViewGroup) ->
+		container
 	}
 
 	single<Class<out Activity>>("activity") {

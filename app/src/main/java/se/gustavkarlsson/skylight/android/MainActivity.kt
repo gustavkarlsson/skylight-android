@@ -2,17 +2,19 @@ package se.gustavkarlsson.skylight.android
 
 import android.app.Activity
 import android.os.Bundle
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import org.koin.android.ext.android.inject
+import kotlinx.android.synthetic.main.activity_main.fragmentContainer
+import org.koin.android.ext.android.get
 import org.koin.androidx.scope.ext.android.bindScope
 import org.koin.androidx.scope.ext.android.createScope
 import se.gustavkarlsson.skylight.android.extensions.addToKoin
-import se.gustavkarlsson.skylight.android.lib.ui.Navigator
+import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 
 
 internal class MainActivity : AppCompatActivity() {
 
-	private val navigator by inject<Navigator>()
+	private val navigator get() = get<Navigator>()
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -20,11 +22,12 @@ internal class MainActivity : AppCompatActivity() {
 		addToKoin<Activity>(this)
 		addToKoin(supportFragmentManager)
 		setContentView(R.layout.activity_main)
-		navigator.navigate("main", false)
+		addToKoin<ViewGroup>(fragmentContainer)
+		navigator.goTo("main")
 	}
 
 	override fun onBackPressed() {
-		if (navigator.onBackPressed()) return
+		if (navigator.goBack()) return
 		super.onBackPressed()
 	}
 }

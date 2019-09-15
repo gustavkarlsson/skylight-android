@@ -56,6 +56,7 @@ object Versions {
 	val banner = "1.2.0"
 	val spinKit = "1.2.0"
 	val knot = "1.2"
+	val simpleStack = "2.0.3"
 
 	// Test
 	val junit = "4.12"

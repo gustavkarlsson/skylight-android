@@ -106,6 +106,7 @@ dependencies {
 	implementation(project(":lib-kpindex"))
 	implementation(project(":lib-geomaglocation"))
 	implementation(project(":lib-geocoder"))
+	implementation(project(":lib-navigation"))
 	implementation(project(":lib-reversegeocoder"))
 	implementation(project(":lib-permissions"))
 	implementation(project(":lib-places"))

@@ -6,6 +6,7 @@ include(
 	":lib-geomaglocation",
 	":lib-kpindex",
 	":lib-location",
+	":lib-navigation",
 	":lib-places",
 	":lib-settings",
 	":lib-permissions",
