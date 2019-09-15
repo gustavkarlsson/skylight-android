@@ -15,6 +15,11 @@ internal class AddPlaceViewModel(
 	private val navigator: Navigator
 ) : ViewModel() {
 
+	override fun onCleared() {
+		super.onCleared()
+		addPlaceStore.dispose()
+	}
+
 	private val openSaveDialogRelay = PublishRelay.create<SaveDialogData>()
 	val openSaveDialog: Observable<SaveDialogData> = openSaveDialogRelay
 
