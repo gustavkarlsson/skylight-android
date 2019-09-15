@@ -8,6 +8,7 @@ include(
 	":lib-location",
 	":lib-places",
 	":lib-settings",
+	":lib-permissions",
 	":lib-reversegeocoder",
 	":lib-weather",
 	":lib-ui",

@@ -107,6 +107,7 @@ dependencies {
 	implementation(project(":lib-geomaglocation"))
 	implementation(project(":lib-geocoder"))
 	implementation(project(":lib-reversegeocoder"))
+	implementation(project(":lib-permissions"))
 	implementation(project(":lib-places"))
 	implementation(project(":lib-ui"))
 	implementation(project(":lib-settings"))

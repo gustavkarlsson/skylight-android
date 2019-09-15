@@ -1,20 +1,35 @@
-package se.gustavkarlsson.skylight.android.feature.main
+package se.gustavkarlsson.skylight.android.lib.permissions
 
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.jakewharton.rxrelay2.BehaviorRelay
+import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.BackpressureStrategy
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import se.gustavkarlsson.skylight.android.entities.Permission
 import timber.log.Timber
 
 internal class AndroidPermissionChecker(
+	private val permissionKey: String,
 	private val context: Context,
-	private val permissionKey: String
+	private val permissionRelay: BehaviorRelay<Permission>
 ) : PermissionChecker {
 
-	private val permissionRelay = BehaviorRelay.createDefault(checkSystemPermission())
+	override val permission: Flowable<Permission> =
+		permissionRelay
+			.distinctUntilChanged()
+			.toFlowable(BackpressureStrategy.LATEST)
+
+	override fun refresh() {
+		val systemPermission = checkSystemPermission()
+		if (systemPermission == Permission.Denied && permissionRelay.value == Permission.DeniedForever) {
+			Timber.d("Won't change from ${Permission.DeniedForever} to ${Permission.Denied}")
+			return
+		}
+		permissionRelay.accept(systemPermission)
+	}
 
 	private fun checkSystemPermission(): Permission {
 		val result = ContextCompat.checkSelfPermission(context, permissionKey)
@@ -24,23 +39,5 @@ internal class AndroidPermissionChecker(
 			Permission.Denied
 		Timber.d("$permissionKey = $permission")
 		return permission
-	}
-
-	override val permission: Flowable<Permission> =
-		permissionRelay
-			.distinctUntilChanged()
-			.toFlowable(BackpressureStrategy.LATEST)
-
-	override fun signalDeniedForever() {
-		permissionRelay.accept(Permission.DeniedForever)
-	}
-
-	override fun refresh() {
-		val systemPermission = checkSystemPermission()
-		if (systemPermission == Permission.Denied && permissionRelay.value == Permission.DeniedForever) {
-			Timber.d("Won't change from ${Permission.DeniedForever} to ${Permission.Denied}")
-			return
-		}
-		permissionRelay.accept(systemPermission)
 	}
 }

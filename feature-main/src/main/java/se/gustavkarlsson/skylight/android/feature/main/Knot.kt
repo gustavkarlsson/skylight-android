@@ -8,6 +8,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.Permission
 import se.gustavkarlsson.skylight.android.entities.Place
+import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import timber.log.Timber
 

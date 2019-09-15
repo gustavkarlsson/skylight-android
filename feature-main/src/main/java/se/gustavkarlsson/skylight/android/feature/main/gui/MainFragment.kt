@@ -10,7 +10,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Lifecycle
 import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding2.view.clicks
-import com.tbruyelle.rxpermissions2.RxPermissions
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.android.lifecycle.scope
 import com.uber.autodispose.kotlin.autoDisposable
@@ -25,10 +24,12 @@ import kotlinx.android.synthetic.main.fragment_main.kpIndexCard
 import kotlinx.android.synthetic.main.fragment_main.nav_view
 import kotlinx.android.synthetic.main.fragment_main.toolbarView
 import kotlinx.android.synthetic.main.fragment_main.weatherCard
+import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.feature.main.BuildConfig
 import se.gustavkarlsson.skylight.android.feature.main.R
+import se.gustavkarlsson.skylight.android.lib.permissions.PermissionRequester
 import se.gustavkarlsson.skylight.android.lib.ui.BackButtonHandler
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.Navigator
@@ -44,8 +45,6 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
 
 	private val viewModel: MainViewModel by viewModel()
 	private val navigator: Navigator by inject()
-	private val locationPermission: String by inject("locationPermission")
-	private val rxPermissions: RxPermissions by inject()
 
 	override val toolbar: Toolbar?
 		get() = toolbarView
@@ -156,24 +155,9 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
 	}
 
 	private fun requestLocationPermission() {
-		rxPermissions
-			.requestEach(locationPermission)
+		get<PermissionRequester>().request()
 			.autoDisposable(scope(Lifecycle.Event.ON_DESTROY)) // Required to not dispose for dialog
-			.subscribe {
-				when {
-					it.granted -> {
-						Timber.i("Permission is granted")
-						viewModel.refreshLocationPermission()
-					}
-					it.shouldShowRequestPermissionRationale -> {
-						Timber.i("Permission is denied")
-					}
-					else -> {
-						Timber.i("Permission is denied forever")
-						viewModel.signalLocationPermissionDeniedForever()
-					}
-				}
-			}
+			.subscribe()
 	}
 
 	private fun openAppDetails() {

@@ -27,9 +27,9 @@ import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.feature.main.ChanceToColorConverter
-import se.gustavkarlsson.skylight.android.feature.main.PermissionChecker
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.RelativeTimeFormatter
+import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.Time
@@ -195,8 +195,6 @@ internal class MainViewModel(
 	}
 
 	fun refreshLocationPermission() = permissionChecker.refresh()
-
-	fun signalLocationPermissionDeniedForever() = permissionChecker.signalDeniedForever()
 }
 
 internal data class FactorItem(

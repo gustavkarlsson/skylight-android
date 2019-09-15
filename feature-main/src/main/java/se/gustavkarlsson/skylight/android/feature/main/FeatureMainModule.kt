@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main
 
 import android.content.Context
-import com.tbruyelle.rxpermissions2.RxPermissions
 import de.halfbit.knot.Knot
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
@@ -26,6 +25,7 @@ import se.gustavkarlsson.skylight.android.feature.main.formatters.WeatherFormatt
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainFragment
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
 import se.gustavkarlsson.skylight.android.feature.main.gui.drawer.DrawerViewModel
+import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.ui.Destination
 import se.gustavkarlsson.skylight.android.lib.ui.DestinationRegistry
@@ -125,17 +125,6 @@ val featureMainModule = module {
 
 	single<Formatter<ChanceLevel>>("chanceLevel") {
 		ChanceLevelFormatter
-	}
-
-	single<PermissionChecker> {
-		AndroidPermissionChecker(
-			context = get(),
-			permissionKey = get("locationPermission")
-		)
-	}
-
-	scope("activity") {
-		RxPermissions(get()).apply { setLogging(BuildConfig.DEBUG) }
 	}
 
 	single {

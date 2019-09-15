@@ -42,9 +42,9 @@ dependencies {
 	implementation(project(":lib-geomaglocation"))
 	implementation(project(":lib-reversegeocoder"))
 	implementation(project(":lib-location"))
+	implementation(project(":lib-permissions"))
 	implementation(project(":lib-places"))
 
-	implementation("com.tbruyelle.rxpermissions2:rxpermissions:${versions.rxpermissions}@aar")
 	implementation("androidx.cardview:cardview:${versions.androidCardview}")
 	// TODO replace with google material banner when available
 	implementation("com.sergivonavi:materialbanner:${versions.banner}")

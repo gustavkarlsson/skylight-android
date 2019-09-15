@@ -1,10 +1,9 @@
-package se.gustavkarlsson.skylight.android.feature.main
+package se.gustavkarlsson.skylight.android.lib.permissions
 
 import io.reactivex.Flowable
 import se.gustavkarlsson.skylight.android.entities.Permission
 
-internal interface PermissionChecker {
+interface PermissionChecker {
 	val permission: Flowable<Permission>
-	fun signalDeniedForever()
 	fun refresh()
 }

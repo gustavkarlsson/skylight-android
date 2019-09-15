@@ -13,6 +13,7 @@ import se.gustavkarlsson.skylight.android.lib.geocoder.libGeocoderModule
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.libGeomagLocationModule
 import se.gustavkarlsson.skylight.android.lib.kpindex.libKpIndexModule
 import se.gustavkarlsson.skylight.android.lib.location.libLocationModule
+import se.gustavkarlsson.skylight.android.lib.permissions.libPermissionsModule
 import se.gustavkarlsson.skylight.android.lib.places.libPlacesModule
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.libReverseGeocoderModule
 import se.gustavkarlsson.skylight.android.lib.ui.libUiModule
@@ -30,6 +31,7 @@ internal val modules = listOf(
 	libKpIndexModule,
 	libWeatherModule,
 	libAnalyticsModule,
+	libPermissionsModule,
 	libPlacesModule,
 	libGeocoderModule,
 	featureSettingsModule,

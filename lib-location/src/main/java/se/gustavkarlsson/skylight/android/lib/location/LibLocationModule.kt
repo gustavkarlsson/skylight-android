@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.location
 
-import android.Manifest
 import com.google.android.gms.location.LocationRequest
 import org.koin.dsl.module.module
 import pl.charmas.android.reactivelocation2.ReactiveLocationProvider
@@ -23,10 +22,6 @@ val libLocationModule = module {
 			restPollingInterval = 10.minutes,
 			retryDelay = 30.seconds
 		)
-	}
-
-	single("locationPermission") {
-		Manifest.permission.ACCESS_FINE_LOCATION
 	}
 
 	single("locationAccuracy") {
