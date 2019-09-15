@@ -146,8 +146,9 @@ internal fun buildMainKnot(
 	}
 }
 
+// FIXME instead this, store selected place locally (in cache)
 private fun findNewPlace(oldPlaces: List<Place>, newPlaces: List<Place>): Place? =
-	newPlaces.firstOrNull { it !in oldPlaces }
+	newPlaces.lastOrNull { it !in oldPlaces }
 
 private fun findSamePlace(selectedPlace: Place?, newPlaces: List<Place>): Place? =
 	selectedPlace?.takeIf { it in newPlaces }
