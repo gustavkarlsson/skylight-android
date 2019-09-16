@@ -20,4 +20,8 @@ val libNavigationModule = module {
 		SimpleStackNavigator(backstack)
 	}
 
+	single<FragmentFactoryDirectory> {
+		FragmentFactoryDirectoryImpl()
+	}
+
 }
