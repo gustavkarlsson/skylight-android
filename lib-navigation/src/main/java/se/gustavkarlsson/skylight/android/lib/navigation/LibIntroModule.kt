@@ -5,23 +5,49 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import org.koin.dsl.module.module
 
-private typealias SSNavigator = com.zhuinden.simplestack.navigator.Navigator
+typealias SSNavigator = com.zhuinden.simplestack.navigator.Navigator
 
 val libNavigationModule = module {
 
 	scope<Navigator>("activity") {
-		val activity = get<Activity>(scopeId = "activity")
 		val fragmentManager = get<FragmentManager>(scopeId = "activity")
+		val fragmentFactory = get<FragmentFactory>()
 		val container = get<ViewGroup>(scopeId = "activity")
+		val activity = get<Activity>(scopeId = "activity")
+		val navItemOverride = get<NavItemOverride>()
+		val stateChanger = FragmentStateChanger(
+			fragmentManager,
+			fragmentFactory,
+			container.id
+		)
 		val backstack = SSNavigator
 			.configure()
-			.setStateChanger(FragmentStateChanger(fragmentManager, container.id))
+			.setStateChanger(stateChanger)
 			.install(activity, container, listOf(NavItem.EMPTY))
-		SimpleStackNavigator(backstack)
+		SimpleStackNavigator(activity, backstack, navItemOverride)
 	}
 
-	single<FragmentFactoryDirectory> {
-		FragmentFactoryDirectoryImpl()
+	single {
+		FragmentFactoryRegistryImpl()
 	}
 
+	single<FragmentFactoryRegistry> {
+		get<FragmentFactoryRegistryImpl>()
+	}
+
+	single<FragmentFactory> {
+		get<FragmentFactoryRegistryImpl>()
+	}
+
+	single {
+		NavItemOverrideRegistryImpl()
+	}
+
+	single<NavItemOverrideRegistry> {
+		get<NavItemOverrideRegistryImpl>()
+	}
+
+	single<NavItemOverride> {
+		get<NavItemOverrideRegistryImpl>()
+	}
 }

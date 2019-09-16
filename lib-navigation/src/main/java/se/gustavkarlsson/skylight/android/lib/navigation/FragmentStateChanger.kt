@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.navigation
 
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.zhuinden.simplestack.StateChange
@@ -9,6 +8,7 @@ import com.zhuinden.simplestack.StateChanger
 // Stolen from https://github.com/Zhuinden/simple-stack/blob/6f72e80/simple-stack-example-basic-kotlin-fragment/src/main/java/com/zhuinden/simplestackexamplekotlinfragment/core/navigation/FragmentStateChanger.kt
 internal class FragmentStateChanger(
 	private val fragmentManager: FragmentManager,
+	private val fragmentFactory: FragmentFactory,
 	private val containerId: Int
 ) : StateChanger {
 	override fun handleStateChange(
@@ -92,7 +92,6 @@ internal class FragmentStateChanger(
 		}
 	}
 
-	private fun createFragment(item: NavItem): Fragment {
-		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-	}
+	private fun createFragment(item: NavItem) =
+		fragmentFactory.createFragment(item) ?: error("No fragment factory for $item")
 }

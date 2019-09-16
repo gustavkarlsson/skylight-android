@@ -1,14 +1,18 @@
 package se.gustavkarlsson.skylight.android.lib.navigation
 
+import android.app.Activity
 import com.zhuinden.simplestack.Backstack
 import com.zhuinden.simplestack.StateChange
 
-internal class SimpleStackNavigator(private val backstack: Backstack) : Navigator {
+internal class SimpleStackNavigator(
+	private val activity: Activity,
+	private val backstack: Backstack,
+	private val navItemOverride: NavItemOverride
+) : Navigator {
 
-	private val history get() = backstack.getHistory<NavItem>().toList()
-
-	override fun push(item: NavItem) =
-		backstack.setHistory(history + item, StateChange.FORWARD)
+	override fun push(item: NavItem) = changeHistory {
+		this + item
+	}
 
 	override fun replace(item: NavItem) = changeHistory {
 		dropLast(1) + item
@@ -30,12 +34,19 @@ internal class SimpleStackNavigator(private val backstack: Backstack) : Navigato
 
 	private fun changeHistory(change: List<NavItem>.() -> List<NavItem>) {
 		val oldHistory = backstack.getHistory<NavItem>().toList()
-		val newHistory = oldHistory.change()
+		val newHistory = oldHistory.change().override()
 		val direction = when {
 			newHistory.size > oldHistory.size -> StateChange.FORWARD
 			newHistory.size < oldHistory.size -> StateChange.BACKWARD
 			else -> StateChange.REPLACE
 		}
-		backstack.setHistory(newHistory, direction)
+		if (newHistory.isEmpty()) activity.finish()
+		else backstack.setHistory(newHistory, direction)
+	}
+
+	private fun List<NavItem>.override(): List<NavItem> {
+		val top = lastOrNull() ?: return this
+		val overridden = navItemOverride.override(top) ?: return this
+		return dropLast(1) + overridden
 	}
 }
