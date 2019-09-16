@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import org.koin.dsl.module.module
 
-internal typealias SimpleStackNavigator = com.zhuinden.simplestack.navigator.Navigator
+private typealias SSNavigator = com.zhuinden.simplestack.navigator.Navigator
 
 val libNavigationModule = module {
 
@@ -13,11 +13,11 @@ val libNavigationModule = module {
 		val activity = get<Activity>(scopeId = "activity")
 		val fragmentManager = get<FragmentManager>(scopeId = "activity")
 		val container = get<ViewGroup>(scopeId = "activity")
-		val simpleStackNavigator = SimpleStackNavigator
+		val backstack = SSNavigator
 			.configure()
 			.setStateChanger(FragmentStateChanger(fragmentManager, container.id))
-			.install(activity, container, listOf(NavKey("")))
-		TODO("Create Navigator")
+			.install(activity, container, listOf(NavItem.EMPTY))
+		SimpleStackNavigator(backstack)
 	}
 
 }

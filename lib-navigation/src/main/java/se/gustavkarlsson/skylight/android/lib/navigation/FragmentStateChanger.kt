@@ -54,8 +54,8 @@ internal class FragmentStateChanger(
 	}
 
 	private fun FragmentTransaction.handlePreviousState(stateChange: StateChange) {
-		val oldState = stateChange.getPreviousKeys<NavKey>()
-		val newState = stateChange.getNewKeys<NavKey>()
+		val oldState = stateChange.getPreviousKeys<NavItem>()
+		val newState = stateChange.getNewKeys<NavItem>()
 		for (oldKey in oldState) {
 			val fragment = fragmentManager.findFragmentByTag(oldKey.name)
 			if (fragment != null) {
@@ -69,7 +69,7 @@ internal class FragmentStateChanger(
 	}
 
 	private fun FragmentTransaction.handleNewState(stateChange: StateChange) {
-		val newState = stateChange.getNewKeys<NavKey>()
+		val newState = stateChange.getNewKeys<NavItem>()
 		for (newKey in newState) {
 			val fragment = fragmentManager.findFragmentByTag(newKey.name)
 			if (newKey == stateChange.topNewKey()) {
@@ -92,7 +92,7 @@ internal class FragmentStateChanger(
 		}
 	}
 
-	private fun createFragment(key: NavKey): Fragment {
+	private fun createFragment(item: NavItem): Fragment {
 		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
 	}
 }
