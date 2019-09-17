@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import io.reactivex.Single
 import org.koin.dsl.module.module
-import se.gustavkarlsson.skylight.android.lib.ui.Navigator
+import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 import java.util.Locale
 
 internal val appModule = module {
@@ -38,14 +38,6 @@ internal val appModule = module {
 				context.resources.configuration.locale
 			}
 		}
-	}
-
-	scope("activity") {
-		Navigator(
-			fragmentManager = get(),
-			containerId = R.id.fragmentContainer, // TODO inject?
-			destinationRegistry = get()
-		)
 	}
 
 	single("versionCode") {

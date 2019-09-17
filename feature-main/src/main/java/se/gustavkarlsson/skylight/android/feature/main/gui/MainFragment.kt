@@ -30,9 +30,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.feature.main.BuildConfig
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionRequester
-import se.gustavkarlsson.skylight.android.lib.ui.BackButtonHandler
+import se.gustavkarlsson.skylight.android.lib.navigation.BackButtonHandler
+import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
+import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
-import se.gustavkarlsson.skylight.android.lib.ui.Navigator
 import timber.log.Timber
 import kotlin.math.roundToInt
 
@@ -66,22 +67,21 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
 		}
 	}
 
-	override fun onBackPressed(): Boolean {
-		return if (drawerLayout.isDrawerOpen(nav_view)) {
+	override fun onBackPressed(): Boolean =
+		if (drawerLayout.isDrawerOpen(nav_view)) {
 			drawerLayout.closeDrawer(nav_view)
 			true
 		} else {
 			false
 		}
-	}
 
 	override fun bindData(scope: LifecycleScopeProvider<*>) {
 		toolbarView.itemClicks()
 			.autoDisposable(scope)
 			.subscribe { item ->
 				when (item.itemId) {
-					R.id.action_settings -> navigator.navigate("settings", true)
-					R.id.action_about -> navigator.navigate("about", true)
+					R.id.action_settings -> navigator.push(NavItem("settings"))
+					R.id.action_about -> navigator.push(NavItem("about"))
 				}
 			}
 
@@ -197,7 +197,7 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
 
 	private fun showFactorBottomSheetDialogFragment(@StringRes title: Int, @StringRes description: Int) {
 		if (currentBottomSheetTitle == title) return
-		fragmentManager?.let {
+		childFragmentManager.let {
 			FactorBottomSheetDialogFragment.newInstance(
 				title,
 				description

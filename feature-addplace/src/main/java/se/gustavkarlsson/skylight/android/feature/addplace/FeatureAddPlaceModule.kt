@@ -1,20 +1,23 @@
 package se.gustavkarlsson.skylight.android.feature.addplace
 
+import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
+import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.extensions.seconds
-import se.gustavkarlsson.skylight.android.lib.ui.Destination
-import se.gustavkarlsson.skylight.android.lib.ui.DestinationRegistry
-import android.location.Geocoder as BuiltInGeocoder
+import se.gustavkarlsson.skylight.android.lib.navigation.FragmentFactory
+import se.gustavkarlsson.skylight.android.lib.navigation.FragmentFactoryRegistry
+import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 
 val featureAddPlaceModule = module {
 
-	viewModel {
+	viewModel { (destination: Optional<NavItem>) ->
 		AddPlaceViewModel(
 			placesRepository  = get(),
 			addPlaceStore = get("addplace"),
-			navigator = get()
+			navigator = get(),
+			destination = destination.value
 		)
 	}
 
@@ -29,13 +32,12 @@ val featureAddPlaceModule = module {
 	single<ModuleStarter>("addplace") {
 		object : ModuleStarter {
 			override fun start() {
-				val destination = Destination(0) { id ->
-					if (id == "addplace")
-						AddPlaceFragment()
-					else
-						null
+				val fragmentFactory = object : FragmentFactory {
+					override fun createFragment(name: String): Fragment? =
+						if (name == "addplace") AddPlaceFragment()
+						else null
 				}
-				get<DestinationRegistry>().register(destination)
+				get<FragmentFactoryRegistry>().register(fragmentFactory)
 			}
 		}
 	}

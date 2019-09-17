@@ -20,6 +20,7 @@ android {
 dependencies {
 	implementation(project(":core"))
 	implementation(project(":lib-analytics"))
+	api(project(":lib-navigation"))
 
 	api("com.google.android.material:material:${versions.androidMaterial}")
 	api("androidx.fragment:fragment:${versions.androidFragment}")

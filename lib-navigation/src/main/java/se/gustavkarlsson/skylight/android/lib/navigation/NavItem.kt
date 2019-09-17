@@ -28,6 +28,6 @@ data class NavItem(
 	companion object CREATOR : Parcelable.Creator<NavItem> {
 		override fun createFromParcel(parcel: Parcel): NavItem = NavItem(parcel)
 		override fun newArray(size: Int): Array<NavItem?> = arrayOfNulls(size)
-		val EMPTY: NavItem = NavItem("")
+		internal val EMPTY: NavItem = NavItem("")
 	}
 }

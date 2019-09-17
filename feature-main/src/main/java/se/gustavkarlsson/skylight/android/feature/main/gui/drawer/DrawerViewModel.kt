@@ -10,8 +10,9 @@ import se.gustavkarlsson.skylight.android.feature.main.Change
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.feature.main.State
 import se.gustavkarlsson.skylight.android.feature.main.R
+import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
+import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
-import se.gustavkarlsson.skylight.android.lib.ui.Navigator
 
 internal class DrawerViewModel(
 	private val mainKnot: Knot<State, Change>,
@@ -56,7 +57,7 @@ internal class DrawerViewModel(
 	private fun createAddPlaceItem(): DrawerItem {
 		val onClick = {
 			closeDrawerRelay.accept(Unit)
-			navigator.navigate("addplace", true)
+			navigator.push(NavItem("addplace"))
 		}
 		val onLongClick = {}
 		return DrawerItem(false, R.drawable.ic_add_white_24dp, TextRef(R.string.add_place), onClick, onLongClick)

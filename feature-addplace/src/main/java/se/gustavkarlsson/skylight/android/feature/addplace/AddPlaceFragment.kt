@@ -17,13 +17,21 @@ import kotlinx.android.synthetic.main.fragment_add_place.searchingView
 import kotlinx.android.synthetic.main.fragment_add_place.toolbarView
 import kotlinx.android.synthetic.main.layout_save_dialog.view.placeNameEditText
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
+import se.gustavkarlsson.koptional.toOptional
+import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 
 internal class AddPlaceFragment : BaseFragment() {
 
 	override val layoutId: Int = R.layout.fragment_add_place
 
-	private val viewModel: AddPlaceViewModel by viewModel()
+	private val viewModel: AddPlaceViewModel by viewModel {
+		parametersOf(
+			// FIXME by arguments
+			arguments?.getParcelable<NavItem>("destination").toOptional()
+		)
+	}
 
 	override val toolbar: Toolbar?
 		get() = toolbarView

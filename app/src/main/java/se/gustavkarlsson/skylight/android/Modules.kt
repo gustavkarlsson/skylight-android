@@ -17,13 +17,11 @@ import se.gustavkarlsson.skylight.android.lib.navigation.libNavigationModule
 import se.gustavkarlsson.skylight.android.lib.permissions.libPermissionsModule
 import se.gustavkarlsson.skylight.android.lib.places.libPlacesModule
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.libReverseGeocoderModule
-import se.gustavkarlsson.skylight.android.lib.ui.libUiModule
 import se.gustavkarlsson.skylight.android.lib.weather.libWeatherModule
 import se.gustavkarlsson.skylight.android.lib.settings.libSettingsModule as libSettingsModule
 
 internal val modules = listOf(
 	coreModule,
-	libUiModule,
 	libSettingsModule,
 	libLocationModule,
 	libReverseGeocoderModule,

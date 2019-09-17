@@ -1,8 +1,10 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import com.ioki.textref.TextRef
-import se.gustavkarlsson.skylight.android.lib.ui.Navigator
+import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
+import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 
 internal class IntroViewModel(
 	private val navigator: Navigator,
@@ -11,6 +13,11 @@ internal class IntroViewModel(
 	val privacyPolicyHtml: TextRef = TextRef(R.string.html_privacy_policy_link, TextRef(R.string.privacy_policy))
 
 	fun registerScreenSeen() = versionManager.signalRunCompleted()
-	fun navigateToMain() = navigator.navigate("main", false)
-	fun navigateToPickPlace() = navigator.navigate("addplace", false)
+	fun navigateToMain() = navigator.replace(NavItem("main"))
+	fun navigateToPickPlace() {
+		val arguments = Bundle().apply {
+			putParcelable("destination", NavItem("main"))
+		}
+		navigator.replace(NavItem("addplace", arguments = arguments))
+	}
 }

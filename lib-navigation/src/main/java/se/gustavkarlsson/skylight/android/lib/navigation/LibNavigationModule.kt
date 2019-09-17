@@ -24,7 +24,7 @@ val libNavigationModule = module {
 			.configure()
 			.setStateChanger(stateChanger)
 			.install(activity, container, listOf(NavItem.EMPTY))
-		SimpleStackNavigator(activity, backstack, navItemOverride)
+		SimpleStackNavigator(activity, fragmentManager, backstack, navItemOverride)
 	}
 
 	single {

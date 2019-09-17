@@ -116,5 +116,6 @@ internal class FragmentStateChanger(
 	}
 
 	private fun createFragment(name: String) =
-		fragmentFactory.createFragment(name) ?: error("No fragment factory for $name")
+		if (name == NavItem.EMPTY.name) Fragment()
+		else fragmentFactory.createFragment(name) ?: error("No fragment factory for $name")
 }

@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.main
 
 import android.content.Context
+import androidx.fragment.app.Fragment
 import de.halfbit.knot.Knot
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
@@ -25,10 +26,10 @@ import se.gustavkarlsson.skylight.android.feature.main.formatters.WeatherFormatt
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainFragment
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
 import se.gustavkarlsson.skylight.android.feature.main.gui.drawer.DrawerViewModel
+import se.gustavkarlsson.skylight.android.lib.navigation.FragmentFactory
+import se.gustavkarlsson.skylight.android.lib.navigation.FragmentFactoryRegistry
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
-import se.gustavkarlsson.skylight.android.lib.ui.Destination
-import se.gustavkarlsson.skylight.android.lib.ui.DestinationRegistry
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 
@@ -42,13 +43,12 @@ val featureMainModule = module {
 	single<ModuleStarter>("main") {
 		object : ModuleStarter {
 			override fun start() {
-				val destination = Destination(0) { id ->
-					if (id == "main")
-						MainFragment()
-					else
-						null
+				val fragmentFactory = object : FragmentFactory {
+					override fun createFragment(name: String): Fragment? =
+						if (name == "main") MainFragment()
+						else null
 				}
-				get<DestinationRegistry>().register(destination)
+				get<FragmentFactoryRegistry>().register(fragmentFactory)
 			}
 		}
 	}

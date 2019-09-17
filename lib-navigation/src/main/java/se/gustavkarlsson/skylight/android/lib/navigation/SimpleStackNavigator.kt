@@ -2,14 +2,17 @@ package se.gustavkarlsson.skylight.android.lib.navigation
 
 import android.app.Activity
 import android.os.Bundle
+import androidx.fragment.app.FragmentManager
 import com.zhuinden.simplestack.Backstack
 import com.zhuinden.simplestack.StateChange
 
 internal class SimpleStackNavigator(
 	private val activity: Activity,
+	private val fragmentManager: FragmentManager,
 	private val backstack: Backstack,
 	private val navItemOverride: NavItemOverride
 ) : Navigator {
+	override val backStackSize get() = backstack.getHistory<Any?>().size
 
 	override fun push(item: NavItem) = changeHistory {
 		this + item
@@ -41,7 +44,7 @@ internal class SimpleStackNavigator(
 	}
 
 	private fun changeHistory(change: List<NavItem>.() -> List<NavItem>) {
-		val oldHistory = backstack.getHistory<NavItem>().toList()
+		val oldHistory = backstack.getHistory<NavItem>().dropWhile { it == NavItem.EMPTY }
 		val newHistory = oldHistory.change().override()
 		val direction = when {
 			newHistory.size > oldHistory.size -> StateChange.FORWARD
@@ -56,5 +59,11 @@ internal class SimpleStackNavigator(
 		val top = lastOrNull() ?: return this
 		val overridden = navItemOverride.override(top) ?: return this
 		return dropLast(1) + overridden
+	}
+
+	override fun onBackPressed() {
+		val topFragment = fragmentManager.fragments.lastOrNull()
+		if ((topFragment as? BackButtonHandler)?.onBackPressed() == true) return
+		pop()
 	}
 }

@@ -6,7 +6,12 @@ import com.jakewharton.rxbinding2.view.clicks
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_google_play_services.installButton
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
+import se.gustavkarlsson.koptional.toOptional
+import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
+import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.doOnNext
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.showErrorSnackbar
@@ -16,7 +21,12 @@ internal class GooglePlayServicesFragment : BaseFragment() {
 
 	override val layoutId: Int = R.layout.fragment_google_play_services
 
-	private val viewModel: GooglePlayServicesViewModel by viewModel()
+	private val viewModel: GooglePlayServicesViewModel by viewModel {
+		parametersOf(
+			// FIXME by arguments
+			requireArguments().getParcelable<NavItem>("destination")!!
+		)
+	}
 
 	override fun bindData(scope: LifecycleScopeProvider<*>) {
 		installButton.clicks()
@@ -25,7 +35,7 @@ internal class GooglePlayServicesFragment : BaseFragment() {
 			}
 			.autoDisposable(scope)
 			.subscribe({
-				viewModel.navigateToMain()
+				viewModel.navigateForward()
 			}, {
 				Timber.e(it, "Failed to install Google Play Services")
 				view?.let { view ->

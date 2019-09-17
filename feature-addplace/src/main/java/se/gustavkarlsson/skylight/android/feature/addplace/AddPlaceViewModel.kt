@@ -6,13 +6,15 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
-import se.gustavkarlsson.skylight.android.lib.ui.Navigator
+import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
+import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 
 internal class AddPlaceViewModel(
 	private val placesRepository: PlacesRepository,
 	private val addPlaceStore: AddPlaceStore,
-	private val navigator: Navigator
+	private val navigator: Navigator,
+	private val destination: NavItem?
 ) : ViewModel() {
 
 	override fun onCleared() {
@@ -42,11 +44,7 @@ internal class AddPlaceViewModel(
 
 	private fun addPlaceAndLeave(name: String, location: Location) {
 		placesRepository.add(name, location)
-		if (navigator.backStackSize == 0) {
-			navigator.navigate("main", false)
-		} else {
-			navigator.goBack()
-		}
+		destination?.let(navigator::replace) ?: navigator.pop()
 	}
 
 	private val resultState: Flowable<ResultState> = addPlaceStore.states

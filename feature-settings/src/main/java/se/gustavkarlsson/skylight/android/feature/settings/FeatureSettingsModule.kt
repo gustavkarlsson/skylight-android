@@ -1,9 +1,10 @@
 package se.gustavkarlsson.skylight.android.feature.settings
 
+import androidx.fragment.app.Fragment
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.ModuleStarter
-import se.gustavkarlsson.skylight.android.lib.ui.Destination
-import se.gustavkarlsson.skylight.android.lib.ui.DestinationRegistry
+import se.gustavkarlsson.skylight.android.lib.navigation.FragmentFactory
+import se.gustavkarlsson.skylight.android.lib.navigation.FragmentFactoryRegistry
 
 val featureSettingsModule = module {
 
@@ -19,13 +20,12 @@ val featureSettingsModule = module {
 	single<ModuleStarter>("settings") {
 		object : ModuleStarter {
 			override fun start() {
-				val destination = Destination(0) { id ->
-					if (id == "settings")
-						SettingsFragment()
-					else
-						null
+				val fragmentFactory = object : FragmentFactory {
+					override fun createFragment(name: String): Fragment? =
+						if (name == "settings") SettingsFragment()
+						else null
 				}
-				get<DestinationRegistry>().register(destination)
+				get<FragmentFactoryRegistry>().register(fragmentFactory)
 			}
 		}
 	}

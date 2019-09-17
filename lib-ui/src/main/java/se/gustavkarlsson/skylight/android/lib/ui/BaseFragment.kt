@@ -12,6 +12,7 @@ import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.android.lifecycle.scope
 import org.koin.android.ext.android.inject
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
+import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 
 abstract class BaseFragment : Fragment() {
 
@@ -39,9 +40,9 @@ abstract class BaseFragment : Fragment() {
 	}
 
 	private fun setupBackNavigation(toolbar: Toolbar) {
-		if (requireFragmentManager().backStackEntryCount > 0) {
+		if (navigator.backStackSize > 1) {
 			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-			toolbar.setNavigationOnClickListener { navigator.goBack() }
+			toolbar.setNavigationOnClickListener { navigator.pop() }
 		}
 	}
 
