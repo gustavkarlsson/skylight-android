@@ -21,16 +21,16 @@ import org.koin.core.parameter.parametersOf
 import se.gustavkarlsson.koptional.toOptional
 import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
+import se.gustavkarlsson.skylight.android.lib.ui.argument
 
 internal class AddPlaceFragment : BaseFragment() {
 
 	override val layoutId: Int = R.layout.fragment_add_place
 
+	private val destination: NavItem? by argument()
+
 	private val viewModel: AddPlaceViewModel by viewModel {
-		parametersOf(
-			// FIXME by arguments
-			arguments?.getParcelable<NavItem>("destination").toOptional()
-		)
+		parametersOf(destination.toOptional())
 	}
 
 	override val toolbar: Toolbar?

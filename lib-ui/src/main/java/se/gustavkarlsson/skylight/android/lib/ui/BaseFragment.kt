@@ -10,15 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.android.lifecycle.scope
+import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 
 abstract class BaseFragment : Fragment() {
 
-	private val analytics: Analytics by inject()
-
-	private val navigator: Navigator by inject()
+	val a: String by lazy {""}
 
 	init {
 		@Suppress("LeakingThis")
@@ -40,6 +39,7 @@ abstract class BaseFragment : Fragment() {
 	}
 
 	private fun setupBackNavigation(toolbar: Toolbar) {
+		val navigator = get<Navigator>()
 		if (navigator.backStackSize > 1) {
 			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
 			toolbar.setNavigationOnClickListener { navigator.pop() }
@@ -48,7 +48,7 @@ abstract class BaseFragment : Fragment() {
 
 	override fun onStart() {
 		super.onStart()
-		analytics.logScreen(requireActivity(), this::class.java.simpleName)
+		get<Analytics>().logScreen(requireActivity(), this::class.java.simpleName)
 	}
 
 	@get:LayoutRes

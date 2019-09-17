@@ -13,6 +13,7 @@ import se.gustavkarlsson.koptional.toOptional
 import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
+import se.gustavkarlsson.skylight.android.lib.ui.argument
 import se.gustavkarlsson.skylight.android.lib.ui.doOnNext
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.showErrorSnackbar
 import timber.log.Timber
@@ -21,11 +22,10 @@ internal class GooglePlayServicesFragment : BaseFragment() {
 
 	override val layoutId: Int = R.layout.fragment_google_play_services
 
+	private val destination: NavItem by argument()
+
 	private val viewModel: GooglePlayServicesViewModel by viewModel {
-		parametersOf(
-			// FIXME by arguments
-			requireArguments().getParcelable<NavItem>("destination")!!
-		)
+		parametersOf(destination)
 	}
 
 	override fun bindData(scope: LifecycleScopeProvider<*>) {
