@@ -9,9 +9,9 @@ internal class FragmentFactoryRegistryImpl : FragmentFactory, FragmentFactoryReg
 		factories += fragmentFactory
 	}
 
-	override fun createFragment(navItem: NavItem): Fragment? =
+	override fun createFragment(name: String): Fragment? =
 		factories
 			.asSequence()
-			.mapNotNull { it.createFragment(navItem) }
+			.mapNotNull { it.createFragment(name) }
 			.firstOrNull()
 }

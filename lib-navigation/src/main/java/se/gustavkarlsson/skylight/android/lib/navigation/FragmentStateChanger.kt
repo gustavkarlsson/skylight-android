@@ -1,5 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.navigation
 
+import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.zhuinden.simplestack.StateChange
@@ -24,12 +26,12 @@ internal class FragmentStateChanger(
 	}
 
 	private fun perform(stateChange: StateChange) {
-		val fragmentTransaction = fragmentManager.beginTransaction().apply {
+		with(fragmentManager.beginTransaction()) {
 			setAnimations(stateChange)
 			handlePreviousState(stateChange)
 			handleNewState(stateChange)
+			commitAllowingStateLoss()
 		}
-		fragmentTransaction.commitAllowingStateLoss()
 	}
 
 	private fun FragmentTransaction.setAnimations(stateChange: StateChange) {
@@ -50,48 +52,69 @@ internal class FragmentStateChanger(
 					R.anim.slide_out_right
 				)
 			}
+			StateChange.REPLACE -> {
+				setCustomAnimations(
+					R.anim.fade_in,
+					R.anim.fade_out
+				)
+			}
 		}
 	}
 
 	private fun FragmentTransaction.handlePreviousState(stateChange: StateChange) {
-		val oldState = stateChange.getPreviousKeys<NavItem>()
-		val newState = stateChange.getNewKeys<NavItem>()
-		for (oldKey in oldState) {
-			val fragment = fragmentManager.findFragmentByTag(oldKey.name)
-			if (fragment != null) {
-				if (oldKey !in newState) {
-					remove(fragment)
-				} else if (!fragment.isDetached) {
-					detach(fragment)
+		val oldStack = stateChange.getPreviousKeys<NavItem>()
+		val newStack = stateChange.getNewKeys<NavItem>()
+		for (oldItem in oldStack) {
+			val existingFragment = fragmentManager.findFragmentByTag(oldItem.name)
+			if (existingFragment != null) {
+				if (oldItem !in newStack) {
+					remove(existingFragment)
+				} else if (!existingFragment.isDetached) {
+					detach(existingFragment)
 				}
 			}
 		}
 	}
 
 	private fun FragmentTransaction.handleNewState(stateChange: StateChange) {
-		val newState = stateChange.getNewKeys<NavItem>()
-		for (newKey in newState) {
-			val fragment = fragmentManager.findFragmentByTag(newKey.name)
-			if (newKey == stateChange.topNewKey()) {
-				if (fragment != null) {
-					if (fragment.isRemoving) { // Fragments are quirky, they die asynchronously. Ignore if they're still there.
-						val newFragment = createFragment(newKey)
-						replace(containerId, newFragment, newKey.name)
-					} else if (fragment.isDetached) {
-						attach(fragment)
-					}
-				} else {
-					val newFragment = createFragment(newKey)
-					add(containerId, newFragment, newKey.name)
-				}
-			} else {
-				if (fragment != null && !fragment.isDetached) {
-					detach(fragment)
-				}
+		val newStack = stateChange.getNewKeys<NavItem>()
+		for (newItem in newStack) {
+			val existingFragment = fragmentManager.findFragmentByTag(newItem.name)
+			if (newItem == stateChange.topNewKey()) {
+				handleNewTop(newItem, existingFragment)
+			} else if (existingFragment?.isDetached == false) {
+				detach(existingFragment)
 			}
 		}
 	}
 
-	private fun createFragment(item: NavItem) =
-		fragmentFactory.createFragment(item) ?: error("No fragment factory for $item")
+	private fun FragmentTransaction.handleNewTop(item: NavItem, existingFragment: Fragment?) {
+		val topFragment = when {
+			existingFragment == null -> {
+				val newFragment = createFragment(item.name)
+				add(containerId, newFragment, item.name)
+				newFragment
+			}
+			existingFragment.isRemoving -> {
+				val newFragment = createFragment(item.name)
+				replace(containerId, newFragment, item.name)
+				newFragment
+			}
+			existingFragment.isDetached -> {
+				attach(existingFragment)
+				existingFragment
+			}
+			else -> existingFragment
+		}
+		topFragment.mergeArguments(item.arguments)
+	}
+
+	private fun Fragment.mergeArguments(newArguments: Bundle) {
+		val finalArguments = arguments ?: Bundle()
+		finalArguments.putAll(newArguments)
+		arguments = finalArguments
+	}
+
+	private fun createFragment(name: String) =
+		fragmentFactory.createFragment(name) ?: error("No fragment factory for $name")
 }

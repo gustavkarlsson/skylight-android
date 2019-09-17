@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.navigation
 
 import android.app.Activity
+import android.os.Bundle
 import com.zhuinden.simplestack.Backstack
 import com.zhuinden.simplestack.StateChange
 
@@ -23,13 +24,20 @@ internal class SimpleStackNavigator(
 		dropLastWhile { it.scope == topScope } + item
 	}
 
-	override fun pop() = changeHistory {
-		dropLast(1)
+	override fun pop(arguments: Bundle?) = changeHistory {
+		val popped = dropLast(1)
+		popped.also { tryMergeTopArguments(arguments) }
 	}
 
-	override fun popScope() = changeHistory {
+	override fun popScope(arguments: Bundle?) = changeHistory {
 		val topScope = lastOrNull()?.scope ?: ""
-		dropLastWhile { it.scope == topScope }
+		val popped = dropLastWhile { it.scope == topScope }
+		popped.also { tryMergeTopArguments(arguments) }
+	}
+
+	private fun List<NavItem>.tryMergeTopArguments(arguments: Bundle?) {
+		if (isNotEmpty() && arguments != null)
+			last().arguments.putAll(arguments)
 	}
 
 	private fun changeHistory(change: List<NavItem>.() -> List<NavItem>) {

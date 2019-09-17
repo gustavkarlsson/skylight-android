@@ -7,14 +7,12 @@ import android.os.Parcelable
 data class NavItem(
 	val name: String,                  // unique name for the screen
 	val scope: String = "",            // name of the scope that this key belongs to
-	val arguments: Bundle = Bundle(),  // arguments for the screen
-	val destination: NavItem? = null   // target to continue to
+	val arguments: Bundle = Bundle()   // arguments for the screen
 ) : Parcelable {
 	constructor(parcel: Parcel) : this(
 		name = parcel.readString()!!,
 		scope = parcel.readString()!!,
-		arguments = parcel.readBundle(NavItem::class.java.classLoader)!!,
-		destination = parcel.readParcelable(NavItem::class.java.classLoader)
+		arguments = parcel.readBundle(NavItem::class.java.classLoader)!!
 	)
 
 	override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -22,7 +20,6 @@ data class NavItem(
 			writeString(name)
 			writeString(scope)
 			writeBundle(arguments)
-			writeParcelable(destination, 0)
 		}
 	}
 
