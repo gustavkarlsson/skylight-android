@@ -25,6 +25,9 @@ fun <T : Any> Flowable<T>.debounce(interval: Duration): Flowable<T> =
 fun <T : Any> Single<T>.delaySubscription(delay: Duration): Single<T> =
 	this.delaySubscription(delay.toMillis(), TimeUnit.MILLISECONDS)
 
+fun <T : Any> Observable<T>.buffer(delay: Duration): Observable<List<T>> =
+	this.buffer(delay.toMillis(), TimeUnit.MILLISECONDS)
+
 fun <T : Any, R : Any> Flowable<T>.mapNotNull(mapper: (T) -> R?): Flowable<R> =
 	this.flatMapMaybe {
 		val returned = mapper(it)

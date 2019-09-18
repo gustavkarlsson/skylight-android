@@ -23,6 +23,7 @@ dependencies {
 	implementation(project(":lib-geocoder"))
 	implementation(project(":lib-places"))
 	implementation(project(":lib-ui"))
-	implementation("com.github.gustavkarlsson:krate:${versions.krate}")
+	implementation("de.halfbit:knot:${versions.knot}")
+	// FIXME remove and use other indicator
 	implementation("com.github.ybq:Android-SpinKit:${versions.spinKit}")
 }

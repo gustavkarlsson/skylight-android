@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.feature.addplace
 
 import androidx.lifecycle.ViewModel
 import com.jakewharton.rxrelay2.PublishRelay
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.Location
@@ -12,22 +13,23 @@ import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 
 internal class AddPlaceViewModel(
 	private val placesRepository: PlacesRepository,
-	private val addPlaceStore: AddPlaceStore,
+	private val knot: AddPlaceKnot,
 	private val navigator: Navigator,
 	private val destination: NavItem?
 ) : ViewModel() {
+	private val state = knot.state.toFlowable(BackpressureStrategy.LATEST)
 
 	override fun onCleared() {
 		super.onCleared()
-		addPlaceStore.dispose()
+		knot.dispose()
 	}
 
 	private val openSaveDialogRelay = PublishRelay.create<SaveDialogData>()
 	val openSaveDialog: Observable<SaveDialogData> = openSaveDialogRelay
 
-	fun onSearchTextChanged(newText: String) = addPlaceStore.issue(Command.Search(newText))
+	fun onSearchTextChanged(newText: String) = knot.change.accept(Change.Query(newText))
 
-	val searchResultItems: Flowable<List<SearchResultItem>> = addPlaceStore.states
+	val searchResultItems: Flowable<List<SearchResultItem>> = state
 		.map(State::suggestions)
 		.distinctUntilChanged()
 		.map { suggestions ->
@@ -46,12 +48,11 @@ internal class AddPlaceViewModel(
 		placesRepository.add(name, location)
 		destination?.let(navigator::replaceScope) ?: navigator.pop()
 	}
-
-	private val resultState: Flowable<ResultState> = addPlaceStore.states
+	private val resultState: Flowable<ResultState> = state
 		.map { state ->
 			when {
 				state.query.isBlank() -> ResultState.EMPTY
-				state.searching && state.suggestions.isEmpty() -> ResultState.SEARCHING
+				state.searches > 0 && state.suggestions.isEmpty() -> ResultState.SEARCHING
 				state.suggestions.isEmpty() -> ResultState.NO_SUGGESTIONS
 				else -> ResultState.SUGGESTIONS
 			}

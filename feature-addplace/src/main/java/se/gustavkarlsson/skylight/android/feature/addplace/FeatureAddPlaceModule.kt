@@ -15,16 +15,16 @@ val featureAddPlaceModule = module {
 	viewModel { (destination: Optional<NavItem>) ->
 		AddPlaceViewModel(
 			placesRepository  = get(),
-			addPlaceStore = get("addplace"),
+			knot = get("addplace"),
 			navigator = get(),
 			destination = destination.value
 		)
 	}
 
 	factory("addplace") {
-		createStore(
+		createKnot(
 			geocoder = get(),
-			searchDebounceDelay = 1.seconds,
+			searchSampleDelay = 1.seconds,
 			retryDelay = 2.seconds
 		)
 	}
