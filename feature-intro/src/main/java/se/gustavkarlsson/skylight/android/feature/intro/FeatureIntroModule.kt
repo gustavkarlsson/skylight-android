@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
@@ -28,10 +27,7 @@ val featureIntroModule = module {
 					override val priority: Int = 5
 					override fun override(item: NavItem): NavItem? =
 						if (runVersionManager.isFirstRun) {
-							val arguments = Bundle().apply {
-								putParcelable("destination", item)
-							}
-							NavItem("intro", arguments = arguments)
+							NavItem("intro", "intro") { "destination" to item }
 						} else null
 				}
 				get<NavItemOverrideRegistry>().register(override)

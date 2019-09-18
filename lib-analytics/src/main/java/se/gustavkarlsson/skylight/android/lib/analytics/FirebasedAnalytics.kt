@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.lib.analytics
 
 import android.app.Activity
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import com.google.firebase.analytics.FirebaseAnalytics
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
@@ -10,9 +11,10 @@ internal class FirebasedAnalytics(private val firebaseAnalytics: FirebaseAnalyti
 	Analytics {
 
 	override fun logNotificationSent(chance: Chance) {
-		firebaseAnalytics.logEvent("notification_sent", Bundle().apply {
-			putDouble("chance", chance.value ?: -1.0)
-		})
+		firebaseAnalytics.logEvent(
+			"notification_sent",
+			bundleOf("chance" to (chance.value ?: -1.0))
+		)
 	}
 
 	override fun logScreen(activity: Activity, name: String) {

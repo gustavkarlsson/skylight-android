@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.core.os.bundleOf
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.layout_factor_bottom_sheet.description
 import kotlinx.android.synthetic.main.layout_factor_bottom_sheet.title
@@ -41,10 +42,10 @@ internal class FactorBottomSheetDialogFragment : BottomSheetDialogFragment() {
 		private const val DESCRIPTION_KEY = "description"
 		fun newInstance(@StringRes title: Int, @StringRes description: Int) =
 			FactorBottomSheetDialogFragment().apply {
-				arguments = Bundle().apply {
-					putInt(TITLE_KEY, title)
-					putInt(DESCRIPTION_KEY, description)
-				}
+				arguments = bundleOf(
+					TITLE_KEY to title,
+					DESCRIPTION_KEY to description
+				)
 			}
 	}
 

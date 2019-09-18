@@ -44,7 +44,7 @@ internal class AddPlaceViewModel(
 
 	private fun addPlaceAndLeave(name: String, location: Location) {
 		placesRepository.add(name, location)
-		destination?.let(navigator::replace) ?: navigator.pop()
+		destination?.let(navigator::replaceScope) ?: navigator.pop()
 	}
 
 	private val resultState: Flowable<ResultState> = addPlaceStore.states

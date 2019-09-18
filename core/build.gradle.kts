@@ -19,6 +19,7 @@ android {
 
 dependencies {
 	api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}")
+	api("androidx.core:core-ktx:${versions.coreKtx}")
 	api("com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}")
 	api("com.jakewharton.timber:timber:${versions.timber}")
 	api("com.github.gustavkarlsson:koptional:${versions.koptional}")

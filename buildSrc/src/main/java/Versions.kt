@@ -57,6 +57,7 @@ object Versions {
 	val spinKit = "1.2.0"
 	val knot = "1.2"
 	val simpleStack = "2.0.3"
+	val coreKtx = "1.1.0"
 
 	// Test
 	val junit = "4.12"

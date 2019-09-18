@@ -1,10 +1,8 @@
 package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
-import android.os.Bundle
 import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
-import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.navigation.FragmentFactory
 import se.gustavkarlsson.skylight.android.lib.navigation.FragmentFactoryRegistry
@@ -33,10 +31,7 @@ val featureGooglePlayServicesModule = module {
 					override val priority: Int = 10
 					override fun override(item: NavItem): NavItem? =
 						if (!googlePlayServicesChecker.isAvailable) {
-							val arguments = Bundle().apply {
-								putParcelable("destination", item)
-							}
-							NavItem("googleplayservices", arguments = arguments)
+							NavItem("googleplayservices") { "destination" to item }
 						} else null
 				}
 				get<NavItemOverrideRegistry>().register(override)

@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
-import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
@@ -15,9 +14,6 @@ internal class IntroViewModel(
 	fun registerScreenSeen() = versionManager.signalRunCompleted()
 	fun navigateToMain() = navigator.replace(NavItem("main"))
 	fun navigateToPickPlace() {
-		val arguments = Bundle().apply {
-			putParcelable("destination", NavItem("main"))
-		}
-		navigator.replace(NavItem("addplace", arguments = arguments))
+		navigator.push(NavItem("addplace", "intro") { "destination" to NavItem("main") })
 	}
 }
