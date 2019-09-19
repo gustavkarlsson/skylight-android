@@ -22,6 +22,7 @@ import se.gustavkarlsson.koptional.toOptional
 import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.argument
+import se.gustavkarlsson.skylight.android.lib.ui.extensions.fadeToVisible
 
 internal class AddPlaceFragment : BaseFragment() {
 
@@ -62,15 +63,21 @@ internal class AddPlaceFragment : BaseFragment() {
 
 		viewModel.isSearchingVisible
 			.autoDisposable(scope)
-			.subscribe(searchingView.visibility())
+			.subscribe { visible ->
+				searchingView.fadeToVisible(visible)
+			}
 
 		viewModel.isNoSuggestionsVisible
 			.autoDisposable(scope)
-			.subscribe(noSuggestionsView.visibility())
+			.subscribe { visible ->
+				noSuggestionsView.fadeToVisible(visible)
+			}
 
 		viewModel.isSuggestionsVisible
 			.autoDisposable(scope)
-			.subscribe(searchResultRecyclerView.visibility(View.INVISIBLE))
+			.subscribe { visible ->
+				searchResultRecyclerView.fadeToVisible(visible, View.INVISIBLE)
+			}
 
 		viewModel.openSaveDialog
 			.autoDisposable(scope)
