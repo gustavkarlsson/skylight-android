@@ -55,6 +55,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:visibility="invisible"
+		app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/toolbarView"
 		tools:listitem="@layout/layout_search_result_item"

@@ -1,10 +1,10 @@
 package se.gustavkarlsson.skylight.android.feature.addplace
 
 import android.view.View
+import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.jakewharton.rxbinding2.view.visibility
 import com.jakewharton.rxbinding2.widget.textChanges
@@ -43,8 +43,8 @@ internal class AddPlaceFragment : BaseFragment() {
 
 	override fun initView() {
 		toolbarView.inflateMenu(R.menu.add_place_menu)
-		searchResultRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 		searchResultRecyclerView.adapter = adapter
+		searchView.fixMargins()
 		searchView.setIconifiedByDefault(false)
 		searchView.queryHint = getString(R.string.place_name)
 	}
@@ -99,6 +99,12 @@ internal class AddPlaceFragment : BaseFragment() {
 			setOnDismissListener { textChangeDisposable.dispose() }
 		}
 	}
+}
+
+private fun SearchView.fixMargins() {
+	val linearLayout = findViewById<LinearLayout>(R.id.search_edit_frame)
+	val params = linearLayout.layoutParams
+	(params as LinearLayout.LayoutParams).leftMargin = -32
 }
 
 private fun SearchView.setQueryTextChangeListener(callback: (String) -> Unit) {
