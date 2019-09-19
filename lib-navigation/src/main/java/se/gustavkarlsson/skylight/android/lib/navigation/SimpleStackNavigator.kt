@@ -47,6 +47,7 @@ internal class SimpleStackNavigator(
 		val oldHistory = backstack.getHistory<NavItem>().dropWhile { it == NavItem.EMPTY }
 		val newHistory = oldHistory.change().override()
 		val direction = when {
+			oldHistory.isEmpty() -> StateChange.REPLACE
 			newHistory.size > oldHistory.size -> StateChange.FORWARD
 			newHistory.size < oldHistory.size -> StateChange.BACKWARD
 			else -> StateChange.REPLACE
