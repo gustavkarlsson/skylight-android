@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentManager
 import io.reactivex.Single
 import org.koin.dsl.module.module
-import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 import java.util.Locale
 
 internal val appModule = module {

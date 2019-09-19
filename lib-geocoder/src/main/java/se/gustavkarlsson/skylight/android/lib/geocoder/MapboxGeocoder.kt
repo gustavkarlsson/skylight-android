@@ -9,15 +9,18 @@ import retrofit2.Callback
 import retrofit2.Response
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
+import java.util.Locale
 
-internal class MapboxGeocoder(private val accessToken: String) :
-	Geocoder {
+internal class MapboxGeocoder(
+	private val accessToken: String,
+	private val getLocale: () -> Locale
+) : Geocoder {
 
 	override fun geocode(locationName: String): Single<List<PlaceSuggestion>> {
 		if (locationName.length <= 1)
 			return Single.just(emptyList())
 
-		return createSingle(createGeocoding(accessToken, locationName))
+		return createSingle(createGeocoding(accessToken, getLocale(), locationName))
 			.subscribeOn(Schedulers.io())
 			.map(GeocodingResponse::toPlaceSuggestions)
 	}
@@ -34,9 +37,16 @@ private fun GeocodingResponse.toPlaceSuggestions(): List<PlaceSuggestion> =
 			PlaceSuggestion(Location(center.latitude(), center.longitude()), placeName, text)
 	}
 
-private fun createGeocoding(accessToken: String, locationName: String): MapboxGeocoding =
+// TODO Add proximity bias
+private fun createGeocoding(
+	accessToken: String,
+	locale: Locale,
+	locationName: String
+): MapboxGeocoding =
 	MapboxGeocoding.builder()
 		.accessToken(accessToken)
+		.languages(locale)
+		.limit(10)
 		.autocomplete(true)
 		.query(locationName)
 		.build()
