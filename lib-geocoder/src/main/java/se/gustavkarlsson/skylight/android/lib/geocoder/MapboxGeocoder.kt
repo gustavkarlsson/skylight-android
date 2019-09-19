@@ -29,12 +29,12 @@ internal class MapboxGeocoder(
 private fun GeocodingResponse.toPlaceSuggestions(): List<PlaceSuggestion> =
 	features().mapNotNull { feature ->
 		val center = feature.center()
-		val placeName = feature.placeName() ?: feature.text()
-		val text = feature.text() ?: feature.placeName()
-		if (center == null || placeName == null || text == null)
+		val fullName = feature.placeName() ?: feature.text()
+		val simpleName = feature.text() ?: feature.placeName()
+		if (center == null || fullName == null || simpleName == null)
 			null
 		else
-			PlaceSuggestion(Location(center.latitude(), center.longitude()), placeName, text)
+			PlaceSuggestion(Location(center.latitude(), center.longitude()), fullName, simpleName)
 	}
 
 // TODO Add proximity bias

@@ -1,5 +1,8 @@
 package se.gustavkarlsson.skylight.android.feature.addplace
 
+import android.text.SpannedString
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
 import androidx.lifecycle.ViewModel
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.BackpressureStrategy
@@ -37,17 +40,34 @@ internal class AddPlaceViewModel(
 		}
 
 	private fun PlaceSuggestion.toSearchResultItem() =
-		SearchResultItem(fullName) {
+		SearchResultItem(createText()) {
 			val dialogData = SaveDialogData(simpleName) { finalName ->
 				addPlaceAndLeave(finalName, location)
 			}
 			openSaveDialogRelay.accept(dialogData)
 		}
 
+	private fun PlaceSuggestion.createText(): SpannedString {
+		val subTitle = createSubTitle()
+		return buildSpannedString {
+			bold { append(simpleName) }
+			if (subTitle.isNotBlank()) {
+				appendln()
+				append(subTitle)
+			}
+		}
+	}
+
+	private fun PlaceSuggestion.createSubTitle() =
+		fullName
+			.removePrefix(simpleName)
+			.dropWhile { !it.isLetterOrDigit() }
+
 	private fun addPlaceAndLeave(name: String, location: Location) {
 		placesRepository.add(name, location)
 		destination?.let(navigator::replaceScope) ?: navigator.pop()
 	}
+
 	private val resultState: Flowable<ResultState> = state
 		.map { state ->
 			when {
@@ -62,7 +82,8 @@ internal class AddPlaceViewModel(
 
 	val isSearchingVisible: Flowable<Boolean> = resultState.map { it == ResultState.SEARCHING }
 
-	val isNoSuggestionsVisible: Flowable<Boolean> = resultState.map { it == ResultState.NO_SUGGESTIONS }
+	val isNoSuggestionsVisible: Flowable<Boolean> =
+		resultState.map { it == ResultState.NO_SUGGESTIONS }
 
 	val isSuggestionsVisible: Flowable<Boolean> = resultState.map { it == ResultState.SUGGESTIONS }
 }

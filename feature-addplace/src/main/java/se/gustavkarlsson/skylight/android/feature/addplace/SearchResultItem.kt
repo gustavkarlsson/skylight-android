@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.addplace
 
 internal data class SearchResultItem(
-	val text: String,
+	val text: CharSequence,
 	val onClick: () -> Unit
 )
