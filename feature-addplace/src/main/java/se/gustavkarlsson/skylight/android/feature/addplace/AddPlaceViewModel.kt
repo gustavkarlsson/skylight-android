@@ -10,6 +10,7 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
+import se.gustavkarlsson.skylight.android.extensions.mapNotNull
 import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
@@ -35,6 +36,7 @@ internal class AddPlaceViewModel(
 	val searchResultItems: Flowable<List<SearchResultItem>> = state
 		.map(State::suggestions)
 		.distinctUntilChanged()
+		.filter { it.isNotEmpty() }
 		.map { suggestions ->
 			suggestions.map { it.toSearchResultItem() }
 		}
@@ -69,18 +71,17 @@ internal class AddPlaceViewModel(
 	}
 
 	private val resultState: Flowable<ResultState> = state
-		.map { state ->
+		.mapNotNull { state ->
 			when {
 				state.query.isBlank() -> ResultState.EMPTY
-				state.searches > 0 && state.suggestions.isEmpty() -> ResultState.SEARCHING
+				state.isSearching -> null
 				state.suggestions.isEmpty() -> ResultState.NO_SUGGESTIONS
 				else -> ResultState.SUGGESTIONS
 			}
 		}
+		.distinctUntilChanged()
 
 	val isEmptyVisible: Flowable<Boolean> = resultState.map { it == ResultState.EMPTY }
-
-	val isSearchingVisible: Flowable<Boolean> = resultState.map { it == ResultState.SEARCHING }
 
 	val isNoSuggestionsVisible: Flowable<Boolean> =
 		resultState.map { it == ResultState.NO_SUGGESTIONS }
@@ -89,5 +90,5 @@ internal class AddPlaceViewModel(
 }
 
 internal enum class ResultState {
-	EMPTY, SEARCHING, NO_SUGGESTIONS, SUGGESTIONS
+	EMPTY, NO_SUGGESTIONS, SUGGESTIONS
 }

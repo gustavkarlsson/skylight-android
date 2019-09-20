@@ -15,25 +15,11 @@
 	<TextView
 		android:id="@+id/emptyView"
 		style="@style/TextAppearance.MaterialComponents.Body1"
-		android:layout_width="match_parent"
-		android:layout_height="0dp"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
 		android:gravity="center"
 		android:text="@string/search_for_place_to_save"
 		android:visibility="gone"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/toolbarView" />
-
-	<!--
-	TODO Add material progress indicator when available
-	 https://material.io/design/components/progress-indicators.html#implementation
-	-->
-	<com.github.ybq.android.spinkit.SpinKitView
-		android:id="@+id/searchingView"
-		style="@style/SpinKitView.Large.Circle"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:visibility="gone"
-		app:SpinKit_Color="@color/primary"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
@@ -42,12 +28,14 @@
 	<TextView
 		android:id="@+id/noSuggestionsView"
 		style="@style/TextAppearance.MaterialComponents.Body1"
-		android:layout_width="match_parent"
-		android:layout_height="0dp"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
 		android:gravity="center"
 		android:text="@string/no_place_found"
 		android:visibility="gone"
 		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/toolbarView" />
 
 	<androidx.recyclerview.widget.RecyclerView

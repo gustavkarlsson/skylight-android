@@ -13,8 +13,10 @@ import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 internal data class State(
 	val query: String = "",
 	val suggestions: List<PlaceSuggestion> = emptyList(),
-	val searches: Long = 0
-)
+	val ongoingSearches: Long = 0
+) {
+	val isSearching: Boolean get() = ongoingSearches > 0
+}
 
 internal sealed class Change {
 	data class Query(val query: String) : Change()
@@ -47,13 +49,13 @@ internal fun createKnot(
 					when {
 						this.query == query -> this.only
 						query.isEmpty() -> copy(query = query).only
-						else -> copy(query = query, searches = searches + 1) + Action.Search(query)
+						else -> copy(query = query, ongoingSearches = ongoingSearches + 1) + Action.Search(query)
 					}
 				}
 				is Change.SearchesSkipped ->
-					copy(searches = searches - change.skipped).only
+					copy(ongoingSearches = ongoingSearches - change.skipped).only
 				is Change.SearchFinished ->
-					copy(suggestions = change.result, searches = searches - 1).only
+					copy(suggestions = change.result, ongoingSearches = ongoingSearches - 1).only
 			}
 		}
 	}

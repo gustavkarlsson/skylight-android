@@ -13,7 +13,6 @@ import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_add_place.emptyView
 import kotlinx.android.synthetic.main.fragment_add_place.noSuggestionsView
 import kotlinx.android.synthetic.main.fragment_add_place.searchResultRecyclerView
-import kotlinx.android.synthetic.main.fragment_add_place.searchingView
 import kotlinx.android.synthetic.main.fragment_add_place.toolbarView
 import kotlinx.android.synthetic.main.layout_save_dialog.view.placeNameEditText
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -59,12 +58,8 @@ internal class AddPlaceFragment : BaseFragment() {
 
 		viewModel.isEmptyVisible
 			.autoDisposable(scope)
-			.subscribe(emptyView.visibility())
-
-		viewModel.isSearchingVisible
-			.autoDisposable(scope)
 			.subscribe { visible ->
-				searchingView.fadeToVisible(visible)
+				emptyView.fadeToVisible(visible)
 			}
 
 		viewModel.isNoSuggestionsVisible
