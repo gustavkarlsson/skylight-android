@@ -21,6 +21,5 @@ dependencies {
 	implementation(project(":core"))
 
 	implementation("com.tbruyelle.rxpermissions2:rxpermissions:${versions.rxpermissions}@aar")
-	implementation("com.jakewharton.rxrelay2:rxrelay:${versions.rxrelay}")
 	implementation("androidx.appcompat:appcompat:${versions.androidAppcompat}")
 }

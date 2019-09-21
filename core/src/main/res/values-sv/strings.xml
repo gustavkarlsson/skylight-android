@@ -2,7 +2,6 @@
 <resources>
 	<!-- General -->
 	<string name="exit">Stäng</string>
-	<string name="main_your_location">Din plats</string>
 	<string name="right_now">Just nu</string>
 	<string name="time_in_location">%1$s i %2$s</string>
 	<string name="privacy_policy">Integritetspolicy (eng)</string>

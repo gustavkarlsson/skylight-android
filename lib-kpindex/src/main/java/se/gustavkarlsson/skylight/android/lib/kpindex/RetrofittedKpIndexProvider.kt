@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.kpindex
 
+import com.jakewharton.rx.replayingShare
 import io.reactivex.Flowable
 import io.reactivex.Single
 import org.threeten.bp.Duration
@@ -36,6 +37,5 @@ internal class RetrofittedKpIndexProvider(
 			.retryWhen { it.delay(retryDelay) }
 			.distinctUntilChanged()
 			.doOnNext { Timber.i("Streamed Kp index: %s", it) }
-			.replay(1)
-			.refCount()
+			.replayingShare()
 }

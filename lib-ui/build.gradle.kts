@@ -37,7 +37,6 @@ dependencies {
 
 	// Rx misc
 	api("io.reactivex.rxjava2:rxandroid:${versions.rxandroid}")
-	api("com.jakewharton.rxrelay2:rxrelay:${versions.rxrelay}")
 
 	// RxBinding
 	api("com.jakewharton.rxbinding2:rxbinding-kotlin:${versions.rxbinding}")

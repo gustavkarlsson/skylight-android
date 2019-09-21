@@ -44,8 +44,6 @@ internal class KlausBrunnerDarknessProvider(
 			}
 			.distinctUntilChanged()
 			.doOnNext { Timber.i("Streamed darkness: %s", it) }
-			.replay(1)
-			.refCount()
 }
 
 private fun Instant.toGregorianCalendar() =

@@ -45,8 +45,6 @@ internal class GeomagLocationProviderImpl(
 			.switchMapSingle { get(Single.just(it)) }
 			.distinctUntilChanged()
 			.doOnNext { Timber.i("Streamed geomag location: %s", it) }
-			.replay(1)
-			.refCount()
 
 	// http://stackoverflow.com/a/7949249/940731
 	private fun calculateGeomagneticLatitude(

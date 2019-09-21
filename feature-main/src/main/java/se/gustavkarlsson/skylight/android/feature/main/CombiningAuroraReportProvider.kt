@@ -11,8 +11,8 @@ import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.lib.darkness.DarknessProvider
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexProvider
-import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoder
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
+import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoder
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherProvider
 import timber.log.Timber
 
@@ -46,8 +46,6 @@ internal class CombiningAuroraReportProvider(
 			}
 			.distinctUntilChanged()
 			.doOnNext { Timber.i("Streamed aurora report: %s", it) }
-			.replay(1)
-			.refCount()
 	}
 
 	private fun zipToAuroraReport(

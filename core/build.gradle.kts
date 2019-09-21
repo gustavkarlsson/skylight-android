@@ -22,6 +22,8 @@ dependencies {
 	api("androidx.core:core-ktx:${versions.coreKtx}")
 	api("com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}")
 	api("com.jakewharton.timber:timber:${versions.timber}")
+	api("com.jakewharton.rxrelay2:rxrelay:${versions.rxrelay}")
+	api("com.jakewharton.rx2:replaying-share-kotlin:${versions.rxReplayingShare}")
 	api("com.github.gustavkarlsson:koptional:${versions.koptional}")
 	api("io.reactivex.rxjava2:rxjava:${versions.rxjava}")
 	api("io.reactivex.rxjava2:rxkotlin:${versions.rxkotlin}")

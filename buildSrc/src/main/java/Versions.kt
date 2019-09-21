@@ -57,6 +57,7 @@ object Versions {
 	val knot = "1.6.1"
 	val simpleStack = "2.0.3"
 	val coreKtx = "1.1.0"
+	val rxReplayingShare = "2.2.0"
 
 	// Test
 	val junit = "4.12"

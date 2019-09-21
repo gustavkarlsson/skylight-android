@@ -50,6 +50,4 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
 			}
 			.distinctUntilChanged()
 			.doOnNext { Timber.i("Streamed weather: %s", it) }
-			.replay(1)
-			.refCount()
 }

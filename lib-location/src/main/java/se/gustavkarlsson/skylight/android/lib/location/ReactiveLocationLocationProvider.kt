@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.lib.location
 
 import android.annotation.SuppressLint
 import com.google.android.gms.location.LocationRequest
+import com.jakewharton.rx.replayingShare
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Single
@@ -81,14 +82,13 @@ internal class ReactiveLocationLocationProvider(
 		.concatWith(pollingLocations)
 
 	override val stream: Flowable<Optional<Location>> = locations
-		.distinctUntilChanged()
 		.subscribeOn(Schedulers.io())
+		.distinctUntilChanged()
 		.doOnError { Timber.w(it) }
 		.retryWhen { it.delay(retryDelay) }
 		.map { Location(it.latitude, it.longitude).toOptional() }
 		.distinctUntilChanged()
 		.throttleLatest(throttleDuration.toMillis(), TimeUnit.MILLISECONDS)
 		.doOnNext { Timber.i("Streamed location: %s", it) }
-		.replay(1)
-		.refCount()
+		.replayingShare(Absent)
 }

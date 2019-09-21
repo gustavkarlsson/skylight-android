@@ -20,7 +20,7 @@ import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Permission
-import se.gustavkarlsson.skylight.android.entities.Place
+import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.feature.main.State
 import se.gustavkarlsson.skylight.android.entities.Weather
@@ -54,18 +54,18 @@ internal class MainViewModel(
 ) : ViewModel() {
 
 	init {
-		mainKnot.change.accept(Change.Stream(true))
+		mainKnot.change.accept(Change.StreamToggle(true))
 	}
 
 	override fun onCleared() {
-		mainKnot.change.accept(Change.Stream(false))
+		mainKnot.change.accept(Change.StreamToggle(false))
 	}
 
 	// FIXME what about errors?
 
 	val toolbarTitleText: Observable<TextRef> = mainKnot.state
 		.map {
-			it.selectedPlace?.name ?: TextRef.EMPTY
+			it.selectedPlace.name
 		}
 		.distinctUntilChanged()
 

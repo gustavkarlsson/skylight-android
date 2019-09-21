@@ -16,8 +16,7 @@
 			android:layout_height="?attr/actionBarSize"
 			android:elevation="1dp"
 			app:layout_constraintBottom_toTopOf="@+id/errorBanner"
-			app:layout_constraintTop_toTopOf="parent"
-			app:title="@string/main_your_location" />
+			app:layout_constraintTop_toTopOf="parent" />
 
 		<com.sergivonavi.materialbanner.Banner
 			android:id="@+id/errorBanner"

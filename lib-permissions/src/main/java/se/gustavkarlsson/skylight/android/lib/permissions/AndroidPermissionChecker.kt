@@ -21,6 +21,7 @@ internal class AndroidPermissionChecker(
 		permissionRelay
 			.distinctUntilChanged()
 			.toFlowable(BackpressureStrategy.LATEST)
+			.doOnSubscribe { refresh() }
 
 	override fun refresh() {
 		val systemPermission = checkSystemPermission()

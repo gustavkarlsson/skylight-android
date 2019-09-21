@@ -10,4 +10,8 @@ val libPlacesModule = module {
 		val database = Database(driver)
 		SqlDelightPlacesRepository(database.dbPlaceQueries)
 	}
+
+	single<SelectedPlaceRepository> {
+		PlacesRepoSelectedPlaceRepository(get())
+	}
 }

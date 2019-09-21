@@ -28,8 +28,6 @@ import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
 import se.gustavkarlsson.skylight.android.feature.main.gui.drawer.DrawerViewModel
 import se.gustavkarlsson.skylight.android.lib.navigation.FragmentFactory
 import se.gustavkarlsson.skylight.android.lib.navigation.FragmentFactoryRegistry
-import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
-import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 
@@ -154,21 +152,17 @@ val featureMainModule = module {
 
 	viewModel {
 		DrawerViewModel(
-			mainKnot = get("main"),
 			navigator = get(),
-			placesRepository = get()
+			placesRepository = get(),
+			selectedPlaceRepo = get()
 		)
 	}
 
 	single("main") {
-		val permissionChecker = get<PermissionChecker>()
-		val auroraReportProvider = get<AuroraReportProvider>()
-		val placesRepo = get<PlacesRepository>()
-
 		buildMainKnot(
-			permissionChecker,
-			placesRepo,
-			auroraReportProvider
+			permissionChecker = get(),
+			selectedPlaceRepo = get(),
+			auroraReportProvider = get()
 		)
 	}
 

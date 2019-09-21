@@ -50,6 +50,4 @@ internal class AndroidReverseGeocoder(
 			}
 			.distinctUntilChanged()
 			.doOnNext { Timber.i("Streamed location name: %s", it.value) }
-			.replay(1)
-			.refCount()
 }

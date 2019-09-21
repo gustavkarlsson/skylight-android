@@ -6,7 +6,6 @@ import com.squareup.sqldelight.runtime.rx.mapToList
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import se.gustavkarlsson.skylight.android.entities.Location
-import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.lib.places.db.DbPlaceQueries
 
 internal class SqlDelightPlacesRepository(
@@ -21,7 +20,7 @@ internal class SqlDelightPlacesRepository(
 		queries.delete(placeId)
 	}
 
-	override fun all(): Flowable<List<Place>> =
+	override val all: Flowable<List<Place>> =
 		queries
 			.selectAll<Place> { id, name, latitude, longitude ->
 				Place.Custom(id, TextRef(name), Location(latitude, longitude))
