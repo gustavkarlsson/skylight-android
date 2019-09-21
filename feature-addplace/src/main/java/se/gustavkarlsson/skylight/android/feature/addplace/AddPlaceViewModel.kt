@@ -4,13 +4,14 @@ import android.text.SpannedString
 import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.lifecycle.ViewModel
+import com.ioki.textref.TextRef
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.Location
-import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.extensions.mapNotNull
+import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
@@ -19,7 +20,8 @@ internal class AddPlaceViewModel(
 	private val placesRepository: PlacesRepository,
 	private val knot: AddPlaceKnot,
 	private val navigator: Navigator,
-	private val destination: NavItem?
+	private val destination: NavItem?,
+	val errorMessages: Observable<TextRef>
 ) : ViewModel() {
 	private val state = knot.state.toFlowable(BackpressureStrategy.LATEST)
 

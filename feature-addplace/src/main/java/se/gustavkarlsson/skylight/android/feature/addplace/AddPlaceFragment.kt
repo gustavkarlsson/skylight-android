@@ -6,15 +6,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.jakewharton.rxbinding2.view.visibility
+import com.google.android.material.snackbar.Snackbar
+import com.ioki.textref.TextRef
 import com.jakewharton.rxbinding2.widget.textChanges
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
-import kotlinx.android.synthetic.main.fragment_add_place.emptyView
-import kotlinx.android.synthetic.main.fragment_add_place.noSuggestionsView
-import kotlinx.android.synthetic.main.fragment_add_place.searchResultRecyclerView
-import kotlinx.android.synthetic.main.fragment_add_place.toolbarView
-import kotlinx.android.synthetic.main.layout_save_dialog.view.placeNameEditText
+import kotlinx.android.synthetic.main.fragment_add_place.*
+import kotlinx.android.synthetic.main.layout_save_dialog.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import se.gustavkarlsson.koptional.toOptional
@@ -22,6 +20,7 @@ import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.argument
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.fadeToVisible
+import se.gustavkarlsson.skylight.android.lib.ui.extensions.showErrorSnackbar
 
 internal class AddPlaceFragment : BaseFragment() {
 
@@ -41,12 +40,20 @@ internal class AddPlaceFragment : BaseFragment() {
 
 	private val adapter = SearchResultAdapter()
 
+	private var errorSnackbarAndMessage: Pair<Snackbar, TextRef>? = null
+
 	override fun initView() {
 		toolbarView.inflateMenu(R.menu.add_place_menu)
 		searchResultRecyclerView.adapter = adapter
 		searchView.fixMargins()
 		searchView.setIconifiedByDefault(false)
 		searchView.queryHint = getString(R.string.place_name)
+	}
+
+	override fun onDestroyView() {
+		errorSnackbarAndMessage?.first?.dismiss()
+		errorSnackbarAndMessage = null
+		super.onDestroyView()
 	}
 
 	override fun bindData(scope: LifecycleScopeProvider<*>) {
@@ -77,6 +84,24 @@ internal class AddPlaceFragment : BaseFragment() {
 		viewModel.openSaveDialog
 			.autoDisposable(scope)
 			.subscribe(::openSaveDialog)
+
+		viewModel.errorMessages
+			.autoDisposable(scope)
+			.subscribe { message ->
+				errorSnackbarAndMessage.handleNewMessage(message)
+			}
+	}
+
+	private fun Pair<Snackbar, TextRef>?.handleNewMessage(message: TextRef) {
+		val (oldSnackbar, oldMessage) = this ?: null to null
+		if (oldSnackbar == null || !oldSnackbar.isShown || oldMessage != message) {
+			oldSnackbar?.dismiss()
+			errorSnackbarAndMessage = showErrorSnackbar(
+				searchResultRecyclerView,
+				message,
+				Snackbar.LENGTH_LONG
+			) to message
+		}
 	}
 
 	private fun openSaveDialog(dialogData: SaveDialogData) {

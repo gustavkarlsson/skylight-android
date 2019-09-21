@@ -6,6 +6,7 @@ import android.view.ViewTreeObserver
 import androidx.annotation.StringRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.snackbar.Snackbar
+import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.lib.ui.R
 
 fun showErrorSnackbar(view: View, message: CharSequence, length: Int): Snackbar {
@@ -14,6 +15,10 @@ fun showErrorSnackbar(view: View, message: CharSequence, length: Int): Snackbar 
 
 fun showErrorSnackbar(view: View, @StringRes message: Int, length: Int): Snackbar {
 	return Snackbar.make(view, message, length).showErrorSnackbar()
+}
+
+fun showErrorSnackbar(view: View, message: TextRef, length: Int): Snackbar {
+	return Snackbar.make(view, message.resolve(view.context), length).showErrorSnackbar()
 }
 
 private fun Snackbar.showErrorSnackbar(): Snackbar {
