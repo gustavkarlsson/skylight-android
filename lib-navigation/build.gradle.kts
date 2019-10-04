@@ -5,15 +5,15 @@ plugins {
 }
 
 android {
-	compileSdkVersion(versions.compileSdk)
+	compileSdkVersion(Versions.compileSdk)
 
 	compileOptions {
-		sourceCompatibility = versions.java
-		targetCompatibility = versions.java
+		sourceCompatibility = Versions.java
+		targetCompatibility = Versions.java
 	}
 
 	defaultConfig {
-		minSdkVersion(versions.minSdk)
+		minSdkVersion(Versions.minSdk)
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 	}
 }
@@ -21,6 +21,6 @@ android {
 dependencies {
 	implementation(project(":core"))
 
-	implementation("androidx.fragment:fragment:${versions.androidFragment}")
-	implementation("com.github.Zhuinden:simple-stack:${versions.simpleStack}")
+	implementation("androidx.fragment:fragment:${Versions.androidFragment}")
+	implementation("com.github.Zhuinden:simple-stack:${Versions.simpleStack}")
 }

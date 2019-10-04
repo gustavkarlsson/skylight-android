@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-	compileSdkVersion(versions.compileSdk)
+	compileSdkVersion(Versions.compileSdk)
 
 	compileOptions {
-		sourceCompatibility = versions.java
-		targetCompatibility = versions.java
+		sourceCompatibility = Versions.java
+		targetCompatibility = Versions.java
 	}
 
 	defaultConfig {
-		minSdkVersion(versions.minSdk)
+		minSdkVersion(Versions.minSdk)
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
 		val mapboxApiKey = findProperty("mapbox_api_key") ?: run {
@@ -26,5 +26,5 @@ android {
 dependencies {
 	implementation(project(":core"))
 
-	implementation("com.mapbox.mapboxsdk:mapbox-sdk-services:${versions.mapboxService}")
+	implementation("com.mapbox.mapboxsdk:mapbox-sdk-services:${Versions.mapboxService}")
 }

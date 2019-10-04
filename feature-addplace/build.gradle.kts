@@ -5,15 +5,15 @@ plugins {
 }
 
 android {
-	compileSdkVersion(versions.compileSdk)
+	compileSdkVersion(Versions.compileSdk)
 
 	compileOptions {
-		sourceCompatibility = versions.java
-		targetCompatibility = versions.java
+		sourceCompatibility = Versions.java
+		targetCompatibility = Versions.java
 	}
 
 	defaultConfig {
-		minSdkVersion(versions.minSdk)
+		minSdkVersion(Versions.minSdk)
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 	}
 }
@@ -23,5 +23,5 @@ dependencies {
 	implementation(project(":lib-geocoder"))
 	implementation(project(":lib-places"))
 	implementation(project(":lib-ui"))
-	implementation("de.halfbit:knot:${versions.knot}")
+	implementation("de.halfbit:knot:${Versions.knot}")
 }

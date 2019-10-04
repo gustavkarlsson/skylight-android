@@ -5,15 +5,15 @@ plugins {
 }
 
 android {
-	compileSdkVersion(versions.compileSdk)
+	compileSdkVersion(Versions.compileSdk)
 
 	compileOptions {
-		sourceCompatibility = versions.java
-		targetCompatibility = versions.java
+		sourceCompatibility = Versions.java
+		targetCompatibility = Versions.java
 	}
 
 	defaultConfig {
-		minSdkVersion(versions.minSdk)
+		minSdkVersion(Versions.minSdk)
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 	}
 
@@ -45,9 +45,9 @@ dependencies {
 	implementation(project(":lib-permissions"))
 	implementation(project(":lib-places"))
 
-	implementation("androidx.cardview:cardview:${versions.androidCardview}")
+	implementation("androidx.cardview:cardview:${Versions.androidCardview}")
 	// TODO replace with google material banner when available
-	implementation("com.sergivonavi:materialbanner:${versions.banner}")
-	implementation("de.halfbit:knot:${versions.knot}")
+	implementation("com.sergivonavi:materialbanner:${Versions.banner}")
+	implementation("de.halfbit:knot:${Versions.knot}")
 
 }

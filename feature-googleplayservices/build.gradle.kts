@@ -5,15 +5,15 @@ plugins {
 }
 
 android {
-	compileSdkVersion(versions.compileSdk)
+	compileSdkVersion(Versions.compileSdk)
 
 	compileOptions {
-		sourceCompatibility = versions.java
-		targetCompatibility = versions.java
+		sourceCompatibility = Versions.java
+		targetCompatibility = Versions.java
 	}
 
 	defaultConfig {
-		minSdkVersion(versions.minSdk)
+		minSdkVersion(Versions.minSdk)
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 	}
 }
@@ -22,6 +22,6 @@ dependencies {
 	implementation(project(":core"))
 	implementation(project(":lib-ui"))
 
-	implementation("com.google.android.gms:play-services-gcm:${versions.playServicesGcm}")
-	implementation("io.ashdavies.rx.rxtasks:rx-tasks:${versions.rxtasks}")
+	implementation("com.google.android.gms:play-services-gcm:${Versions.playServicesGcm}")
+	implementation("io.ashdavies.rx.rxtasks:rx-tasks:${Versions.rxtasks}")
 }

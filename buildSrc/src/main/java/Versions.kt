@@ -15,7 +15,6 @@ object Versions {
 	val playPublisher = "1.2.2"
 
 	// Dependencies
-	val krate = "1.2.0"
 	val retrofit = "2.4.0"
 	val multidex = "2.0.1"
 	val playServicesLocation = "16.0.0"
@@ -31,7 +30,6 @@ object Versions {
 	val rxjava = "2.2.3"
 	val rxandroid = "2.1.1"
 	val rxkotlin = "2.2.0"
-	val gson = "2.8.2"
 	val googleServices = "4.2.0"
 	val firebase = "16.0.8"
 	val fabric = "1.25.4"
@@ -52,7 +50,7 @@ object Versions {
 	val koptional = "0.2.0"
 	val uiAutomator = "2.2.0"
 	val mapboxService = "4.7.0"
-	val sqldelight = "1.1.3"
+	val sqldelight = "1.1.4"
 	val banner = "1.2.0"
 	val knot = "1.6.1"
 	val simpleStack = "2.0.3"
@@ -73,5 +71,3 @@ object Versions {
 	val textref = "1.2.0"
 	val rxtasks = "2.1.2"
 }
-
-val versions = Versions

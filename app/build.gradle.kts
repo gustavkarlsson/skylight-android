@@ -23,12 +23,12 @@ play {
 }
 
 android {
-	compileSdkVersion(versions.compileSdk)
-	buildToolsVersion(versions.buildTools)
+	compileSdkVersion(Versions.compileSdk)
+	buildToolsVersion(Versions.buildTools)
 
 	compileOptions {
-		sourceCompatibility = versions.java
-		targetCompatibility = versions.java
+		sourceCompatibility = Versions.java
+		targetCompatibility = Versions.java
 	}
 
 	packagingOptions {
@@ -43,8 +43,8 @@ android {
 
 	defaultConfig {
 		applicationId = "se.gustavkarlsson.skylight.android"
-		minSdkVersion(versions.minSdk)
-		targetSdkVersion(versions.targetSdk)
+		minSdkVersion(Versions.minSdk)
+		targetSdkVersion(Versions.targetSdk)
 		versionCode = generateVersionCode(scmVersion.version)
 		versionName = scmVersion.version
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -120,56 +120,56 @@ dependencies {
 	implementation(project(":feature-addplace"))
 	implementation(project(":feature-main"))
 
-	implementation("androidx.multidex:multidex:${versions.multidex}")
-	implementation("androidx.appcompat:appcompat:${versions.androidAppcompat}")
-	implementation("androidx.annotation:annotation:${versions.androidAnnotation}")
+	implementation("androidx.multidex:multidex:${Versions.multidex}")
+	implementation("androidx.appcompat:appcompat:${Versions.androidAppcompat}")
+	implementation("androidx.annotation:annotation:${Versions.androidAnnotation}")
 
 	// Lifecycle
-	implementation("androidx.lifecycle:lifecycle-extensions:${versions.archLifecycle}")
+	implementation("androidx.lifecycle:lifecycle-extensions:${Versions.archLifecycle}")
 
 	// Crashlytics
-	implementation("com.google.firebase:firebase-core:${versions.firebase}")
-	implementation("com.crashlytics.sdk.android:crashlytics:${versions.crashlytics}")
+	implementation("com.google.firebase:firebase-core:${Versions.firebase}")
+	implementation("com.crashlytics.sdk.android:crashlytics:${Versions.crashlytics}")
 
 	// Leakcanary
-	debugImplementation("com.squareup.leakcanary:leakcanary-android:${versions.leakcanary}")
-	releaseImplementation("com.squareup.leakcanary:leakcanary-android-no-op:${versions.leakcanary}")
+	debugImplementation("com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}")
+	releaseImplementation("com.squareup.leakcanary:leakcanary-android-no-op:${Versions.leakcanary}")
 
 	// Testing
-	testImplementation("junit:junit:${versions.junit}")
-	testImplementation("org.mockito:mockito-inline:${versions.mockito}")
-	testImplementation("com.nhaarman:mockito-kotlin-kt1.1:${versions.mockitoKotlin}") {
+	testImplementation("junit:junit:${Versions.junit}")
+	testImplementation("org.mockito:mockito-inline:${Versions.mockito}")
+	testImplementation("com.nhaarman:mockito-kotlin-kt1.1:${Versions.mockitoKotlin}") {
 		exclude("org.jetbrains.kotlin")
 	}
-	testImplementation("com.willowtreeapps.assertk:assertk:${versions.assertk}") {
+	testImplementation("com.willowtreeapps.assertk:assertk:${Versions.assertk}") {
 		exclude("org.jetbrains.kotlin")
 	}
 
 	// Instrumentation testing
-	androidTestImplementation("com.willowtreeapps.assertk:assertk:${versions.assertk}") {
+	androidTestImplementation("com.willowtreeapps.assertk:assertk:${Versions.assertk}") {
 		exclude("org.jetbrains.kotlin")
 	}
-	androidTestImplementation("androidx.annotation:annotation:${versions.androidAnnotation}")
-	androidTestImplementation("androidx.test:runner:${versions.androidSupportTest}")
-	androidTestImplementation("androidx.test.ext:junit:${versions.androidSupportTest}")
-	androidTestImplementation("androidx.test:rules:${versions.androidSupportTest}")
-	androidTestUtil("androidx.test:orchestrator:${versions.androidSupportTest}")
-	androidTestImplementation("androidx.test.espresso:espresso-core:${versions.espresso}")
-	androidTestImplementation("androidx.test.espresso:espresso-intents:${versions.espressoIntents}")
-	androidTestImplementation("org.mockito:mockito-android:${versions.mockito}")
-	androidTestImplementation("com.nhaarman:mockito-kotlin-kt1.1:${versions.mockitoKotlin}") {
+	androidTestImplementation("androidx.annotation:annotation:${Versions.androidAnnotation}")
+	androidTestImplementation("androidx.test:runner:${Versions.androidSupportTest}")
+	androidTestImplementation("androidx.test.ext:junit:${Versions.androidSupportTest}")
+	androidTestImplementation("androidx.test:rules:${Versions.androidSupportTest}")
+	androidTestUtil("androidx.test:orchestrator:${Versions.androidSupportTest}")
+	androidTestImplementation("androidx.test.espresso:espresso-core:${Versions.espresso}")
+	androidTestImplementation("androidx.test.espresso:espresso-intents:${Versions.espressoIntents}")
+	androidTestImplementation("org.mockito:mockito-android:${Versions.mockito}")
+	androidTestImplementation("com.nhaarman:mockito-kotlin-kt1.1:${Versions.mockitoKotlin}") {
 		exclude("org.jetbrains.kotlin")
 	}
-	androidTestImplementation("commons-io:commons-io:${versions.commonsIo}")
-	androidTestImplementation("com.agoda.kakao:kakao:${versions.kakao}")
-	androidTestImplementation("androidx.test.uiautomator:uiautomator:${versions.uiAutomator}")
+	androidTestImplementation("commons-io:commons-io:${Versions.commonsIo}")
+	androidTestImplementation("com.agoda.kakao:kakao:${Versions.kakao}")
+	androidTestImplementation("androidx.test.uiautomator:uiautomator:${Versions.uiAutomator}")
 }
 
 /**
  * Calculates an Android version code from a version number string.<br>
  * <br>
  * Note that versions containing the string "snapshot" (case insensitive) will get a lower
- * version code than a release version, since release versions come after snapshot versions.<br>
+ * version code than a release version, since release versions come after snapshot Versions.<br>
  * <br>
  * Examples:
  * <ul>

@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-	compileSdkVersion(versions.compileSdk)
+	compileSdkVersion(Versions.compileSdk)
 
 	compileOptions {
-		sourceCompatibility = versions.java
-		targetCompatibility = versions.java
+		sourceCompatibility = Versions.java
+		targetCompatibility = Versions.java
 	}
 
 	defaultConfig {
-		minSdkVersion(versions.minSdk)
+		minSdkVersion(Versions.minSdk)
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
 		val openWeatherMapApiKey = findProperty("openweathermap_api_key") ?: run {
@@ -27,7 +27,7 @@ dependencies {
 	implementation(project(":core"))
 
 	// Retrofit
-	implementation("com.squareup.retrofit2:retrofit:${versions.retrofit}")
-	implementation("com.squareup.retrofit2:converter-gson:${versions.retrofit}")
-	implementation("com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}")
+	implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
+	implementation("com.squareup.retrofit2:converter-gson:${Versions.retrofit}")
+	implementation("com.squareup.retrofit2:adapter-rxjava2:${Versions.retrofit}")
 }

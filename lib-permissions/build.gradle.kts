@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-	compileSdkVersion(versions.compileSdk)
+	compileSdkVersion(Versions.compileSdk)
 
 	compileOptions {
-		sourceCompatibility = versions.java
-		targetCompatibility = versions.java
+		sourceCompatibility = Versions.java
+		targetCompatibility = Versions.java
 	}
 
 	defaultConfig {
-		minSdkVersion(versions.minSdk)
+		minSdkVersion(Versions.minSdk)
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 	}
 }
@@ -20,6 +20,6 @@ android {
 dependencies {
 	implementation(project(":core"))
 
-	implementation("com.tbruyelle.rxpermissions2:rxpermissions:${versions.rxpermissions}@aar")
-	implementation("androidx.appcompat:appcompat:${versions.androidAppcompat}")
+	implementation("com.tbruyelle.rxpermissions2:rxpermissions:${Versions.rxpermissions}@aar")
+	implementation("androidx.appcompat:appcompat:${Versions.androidAppcompat}")
 }

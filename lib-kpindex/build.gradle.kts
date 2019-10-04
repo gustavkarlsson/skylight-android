@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-	compileSdkVersion(versions.compileSdk)
+	compileSdkVersion(Versions.compileSdk)
 
 	compileOptions {
-		sourceCompatibility = versions.java
-		targetCompatibility = versions.java
+		sourceCompatibility = Versions.java
+		targetCompatibility = Versions.java
 	}
 
 	defaultConfig {
-		minSdkVersion(versions.minSdk)
+		minSdkVersion(Versions.minSdk)
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 	}
 }
@@ -21,19 +21,19 @@ dependencies {
 	implementation(project(":core"))
 
 	// Retrofit
-	implementation("com.squareup.retrofit2:retrofit:${versions.retrofit}")
-	implementation("com.squareup.retrofit2:converter-gson:${versions.retrofit}")
-	implementation("com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit}")
+	implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
+	implementation("com.squareup.retrofit2:converter-gson:${Versions.retrofit}")
+	implementation("com.squareup.retrofit2:adapter-rxjava2:${Versions.retrofit}")
 
 	// Testing
-	testImplementation("junit:junit:${versions.junit}")
-	testImplementation("org.robolectric:robolectric:${versions.robolectric}")
-	testImplementation("org.mockito:mockito-inline:${versions.mockito}")
-	testImplementation("com.nhaarman:mockito-kotlin-kt1.1:${versions.mockitoKotlin}") {
+	testImplementation("junit:junit:${Versions.junit}")
+	testImplementation("org.robolectric:robolectric:${Versions.robolectric}")
+	testImplementation("org.mockito:mockito-inline:${Versions.mockito}")
+	testImplementation("com.nhaarman:mockito-kotlin-kt1.1:${Versions.mockitoKotlin}") {
 		exclude("org.jetbrains.kotlin")
 	}
-	testImplementation("commons-io:commons-io:${versions.commonsIo}")
-	testImplementation("com.willowtreeapps.assertk:assertk:${versions.assertk}") {
+	testImplementation("commons-io:commons-io:${Versions.commonsIo}")
+	testImplementation("com.willowtreeapps.assertk:assertk:${Versions.assertk}") {
 		exclude("org.jetbrains.kotlin")
 	}
 }

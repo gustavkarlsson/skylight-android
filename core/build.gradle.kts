@@ -4,29 +4,29 @@ plugins {
 }
 
 android {
-	compileSdkVersion(versions.compileSdk)
+	compileSdkVersion(Versions.compileSdk)
 
 	compileOptions {
-		sourceCompatibility = versions.java
-		targetCompatibility = versions.java
+		sourceCompatibility = Versions.java
+		targetCompatibility = Versions.java
 	}
 
 	defaultConfig {
-		minSdkVersion(versions.minSdk)
+		minSdkVersion(Versions.minSdk)
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 	}
 }
 
 dependencies {
-	api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}")
-	api("androidx.core:core-ktx:${versions.coreKtx}")
-	api("com.jakewharton.threetenabp:threetenabp:${versions.threetenabp}")
-	api("com.jakewharton.timber:timber:${versions.timber}")
-	api("com.jakewharton.rxrelay2:rxrelay:${versions.rxrelay}")
-	api("com.jakewharton.rx2:replaying-share-kotlin:${versions.rxReplayingShare}")
-	api("com.github.gustavkarlsson:koptional:${versions.koptional}")
-	api("io.reactivex.rxjava2:rxjava:${versions.rxjava}")
-	api("io.reactivex.rxjava2:rxkotlin:${versions.rxkotlin}")
-	api("org.koin:koin-android:${versions.koin}")
-	api("com.github.ioki-mobility:TextRef:${versions.textref}")
+	api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}")
+	api("androidx.core:core-ktx:${Versions.coreKtx}")
+	api("com.jakewharton.threetenabp:threetenabp:${Versions.threetenabp}")
+	api("com.jakewharton.timber:timber:${Versions.timber}")
+	api("com.jakewharton.rxrelay2:rxrelay:${Versions.rxrelay}")
+	api("com.jakewharton.rx2:replaying-share-kotlin:${Versions.rxReplayingShare}")
+	api("com.github.gustavkarlsson:koptional:${Versions.koptional}")
+	api("io.reactivex.rxjava2:rxjava:${Versions.rxjava}")
+	api("io.reactivex.rxjava2:rxkotlin:${Versions.rxkotlin}")
+	api("org.koin:koin-android:${Versions.koin}")
+	api("com.github.ioki-mobility:TextRef:${Versions.textref}")
 }

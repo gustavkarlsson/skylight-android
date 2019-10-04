@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-	compileSdkVersion(versions.compileSdk)
+	compileSdkVersion(Versions.compileSdk)
 
 	compileOptions {
-		sourceCompatibility = versions.java
-		targetCompatibility = versions.java
+		sourceCompatibility = Versions.java
+		targetCompatibility = Versions.java
 	}
 
 	defaultConfig {
-		minSdkVersion(versions.minSdk)
+		minSdkVersion(Versions.minSdk)
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 	}
 }
@@ -20,5 +20,5 @@ android {
 dependencies {
 	implementation(project(":core"))
 
-	implementation("net.e175.klaus:solarpositioning:${versions.solarPositioning}")
+	implementation("net.e175.klaus:solarpositioning:${Versions.solarPositioning}")
 }
