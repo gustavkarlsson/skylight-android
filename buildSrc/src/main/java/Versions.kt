@@ -16,6 +16,7 @@ object Versions {
 
 	// Dependencies
 	val retrofit = "2.4.0"
+	val okHttp = "3.11.0"
 	val multidex = "2.0.1"
 	val playServicesLocation = "16.0.0"
 	val playServicesGcm = "16.1.0"

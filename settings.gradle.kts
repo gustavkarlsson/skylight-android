@@ -4,6 +4,7 @@ include(
 	":lib-darkness",
 	":lib-geocoder",
 	":lib-geomaglocation",
+	":lib-okhttp",
 	":lib-kpindex",
 	":lib-location",
 	":lib-navigation",
