@@ -29,23 +29,11 @@ internal class RxLocationLocationProvider(
 	retryDelay: Duration
 ) : LocationProvider {
 
-	private val locationRequest = LocationRequest().apply {
+	private val singleLocationRequest = LocationRequest().apply {
 		priority = requestAccuracy
 		interval = timeout.toMillis() / 2
 		numUpdates = 1
 	}
-
-	@SuppressLint("MissingPermission")
-	override fun get(): Single<Optional<Location>> =
-		fusedLocation
-			.updates(locationRequest)
-			.subscribeOn(Schedulers.io())
-			.firstOrError()
-			.map { optionalOf(Location(it.latitude, it.longitude)) }
-			.timeout(timeout)
-			.doOnError { Timber.w(it, "Failed to get location") }
-			.onErrorReturnItem(Absent)
-			.doOnSuccess { Timber.i("Provided location: %s", it) }
 
 	private val forcedLocationRequest = LocationRequest().apply {
 		priority = requestAccuracy
@@ -57,6 +45,18 @@ internal class RxLocationLocationProvider(
 		priority = requestAccuracy
 		interval = restPollingInterval.toMillis()
 	}
+
+	@SuppressLint("MissingPermission")
+	override fun get(): Single<Optional<Location>> =
+		fusedLocation
+			.updates(singleLocationRequest)
+			.subscribeOn(Schedulers.io())
+			.firstOrError()
+			.map { optionalOf(Location(it.latitude, it.longitude)) }
+			.timeout(timeout)
+			.doOnError { Timber.w(it, "Failed to get location") }
+			.onErrorReturnItem(Absent)
+			.doOnSuccess { Timber.i("Provided location: %s", it) }
 
 	@SuppressLint("MissingPermission")
 	private val lastLocation = fusedLocation
@@ -73,6 +73,7 @@ internal class RxLocationLocationProvider(
 	private val pollingLocations = fusedLocation
 		.updates(pollingLocationRequest)
 		.toFlowable(BackpressureStrategy.LATEST)
+		.doOnNext { Timber.d("Polled location: %s", it) }
 
 	private val locations = lastLocation
 		.switchIfEmpty(forcedLocation)
