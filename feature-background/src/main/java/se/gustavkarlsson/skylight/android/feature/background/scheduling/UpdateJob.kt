@@ -4,7 +4,7 @@ import com.evernote.android.job.Job
 import com.evernote.android.job.Job.Result.FAILURE
 import com.evernote.android.job.Job.Result.SUCCESS
 import org.threeten.bp.Duration
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.feature.background.notifications.AuroraReportNotificationDecider
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notifier
 import se.gustavkarlsson.skylight.android.feature.background.notifications.OutdatedEvaluator
@@ -12,7 +12,7 @@ import timber.log.Timber
 
 internal class UpdateJob(
 	private val decider: AuroraReportNotificationDecider,
-	private val notifier: Notifier<AuroraReport>,
+	private val notifier: Notifier<CompleteAuroraReport>,
 	private val outdatedEvaluator: OutdatedEvaluator,
 	private val timeout: Duration
 ) : Job() {
@@ -31,7 +31,7 @@ internal class UpdateJob(
 		}
 	}
 
-	private fun getAuroraReport(): AuroraReport {
+	private fun getAuroraReport(): CompleteAuroraReport {
 		/*
 		var bestReport = state.blockingFirst().auroraReports[Place.Current]
 		if (bestReport?.isRecent == true) {
@@ -43,7 +43,7 @@ internal class UpdateJob(
 		TODO("FIXME implement this")
 	}
 
-	private fun awaitBetterReport(currentReport: AuroraReport?): AuroraReport? {
+	private fun awaitBetterReport(currentReport: CompleteAuroraReport?): CompleteAuroraReport? {
 		/*
 		return state
 			// FIXME fix notifications
@@ -61,7 +61,7 @@ internal class UpdateJob(
 		return null
 	}
 
-	private val AuroraReport.isRecent: Boolean
+	private val CompleteAuroraReport.isRecent: Boolean
 		get() = !outdatedEvaluator.isOutdated(timestamp)
 
 	companion object {

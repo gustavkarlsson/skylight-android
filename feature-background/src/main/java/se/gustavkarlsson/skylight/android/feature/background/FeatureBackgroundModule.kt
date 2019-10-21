@@ -6,7 +6,7 @@ import android.content.Context
 import com.evernote.android.job.JobManager
 import io.reactivex.Completable
 import org.koin.dsl.module.module
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.feature.background.notifications.AppVisibilityEvaluator
@@ -36,7 +36,7 @@ val featureBackgroundModule = module {
 		"aurora"
 	}
 
-	single<Notifier<AuroraReport>> {
+	single<Notifier<CompleteAuroraReport>> {
 		AuroraReportNotifier(
 			context = get(),
 			notificationManager = get(),
@@ -64,7 +64,7 @@ val featureBackgroundModule = module {
 	single<Completable>("initiateJobManager") {
 		val context = get<Context>()
 		val decider = get<AuroraReportNotificationDecider>()
-		val notifier = get<Notifier<AuroraReport>>()
+		val notifier = get<Notifier<CompleteAuroraReport>>()
 		val outdatedEvaluator = get<OutdatedEvaluator>()
 		Completable.fromCallable {
 			JobManager.create(context).run {

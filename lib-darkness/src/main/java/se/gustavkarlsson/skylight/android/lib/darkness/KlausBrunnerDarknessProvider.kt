@@ -2,13 +2,13 @@ package se.gustavkarlsson.skylight.android.lib.darkness
 
 import io.reactivex.Flowable
 import io.reactivex.Single
-import io.reactivex.rxkotlin.Singles
 import net.e175.klaus.solarpositioning.Grena3
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
-import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.skylight.android.entities.Darkness
+import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.entities.LocationResult
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.services.Time
@@ -20,30 +20,58 @@ internal class KlausBrunnerDarknessProvider(
 	private val pollingInterval: Duration
 ) : DarknessProvider {
 
-	override fun get(location: Single<Optional<Location>>): Single<Report<Darkness>> =
-		Singles
-			.zip(time.now(), location) { timeValue, maybeLocation ->
-				maybeLocation.value?.let {
-					val date = timeValue.toGregorianCalendar()
-					val azimuthZenithAngle = Grena3.calculateSolarPosition(
-						date,
-						it.latitude,
-						it.longitude,
-						0.0
-					)
-					Report.success(Darkness(azimuthZenithAngle.zenithAngle), timeValue)
-				} ?: Report.error(R.string.error_no_location, timeValue)
-			}
+	override fun get(location: Single<LocationResult>): Single<Report<Darkness>> =
+		location
+			.map { getDarkness(it, time.now().blockingGet()) }
 			.doOnSuccess { Timber.i("Provided darkness: %s", it) }
 
-	override fun stream(locations: Flowable<Optional<Location>>): Flowable<Report<Darkness>> =
+	override fun stream(
+		locations: Flowable<Loadable<LocationResult>>
+	): Flowable<Loadable<Report<Darkness>>> =
 		locations
-			.switchMap { location ->
-				get(Single.just(location))
-					.repeatWhen { it.delay(pollingInterval) }
+			.switchMap { loadableLocation ->
+				when (loadableLocation) {
+					Loadable.Loading -> Flowable.just(Loadable.Loading)
+					is Loadable.Loaded -> {
+						Single
+							.fromCallable {
+								getDarkness(loadableLocation.value, time.now().blockingGet())
+							}
+							.map { Loadable.Loaded(it) }
+							.repeatWhen { it.delay(pollingInterval) }
+					}
+				}
 			}
 			.distinctUntilChanged()
 			.doOnNext { Timber.i("Streamed darkness: %s", it) }
+
+	private fun getDarkness(locationResult: LocationResult, timestamp: Instant): Report<Darkness> =
+		locationResult.map(
+			onSuccess = {
+				val sunZenithAngle = calculateSunZenithAngle(it, timestamp)
+				Report.success(Darkness(sunZenithAngle), timestamp)
+			},
+			onMissingPermissionError = {
+				Report.error(R.string.error_no_location_permission, timestamp)
+			},
+			onUnknownError = {
+				Report.error(R.string.error_no_location, timestamp)
+			}
+		)
+}
+
+private fun calculateSunZenithAngle(
+	location: Location,
+	time: Instant
+): Double {
+	val date = time.toGregorianCalendar()
+	val azimuthAndZenithAngle = Grena3.calculateSolarPosition(
+		date,
+		location.latitude,
+		location.longitude,
+		0.0
+	)
+	return azimuthAndZenithAngle.zenithAngle
 }
 
 private fun Instant.toGregorianCalendar() =

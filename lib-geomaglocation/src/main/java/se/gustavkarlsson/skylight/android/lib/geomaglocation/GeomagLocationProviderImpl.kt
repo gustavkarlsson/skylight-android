@@ -2,9 +2,9 @@ package se.gustavkarlsson.skylight.android.lib.geomaglocation
 
 import io.reactivex.Flowable
 import io.reactivex.Single
-import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
-import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.entities.Loadable
+import se.gustavkarlsson.skylight.android.entities.LocationResult
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.services.Time
 import timber.log.Timber
@@ -21,30 +21,45 @@ internal class GeomagLocationProviderImpl(
 	private val time: Time
 ) : GeomagLocationProvider {
 
-	override fun get(location: Single<Optional<Location>>): Single<Report<GeomagLocation>> {
-		return location
-			.map { maybeLocation ->
-				maybeLocation.value?.let {
-					val geomagneticLatitude = calculateGeomagneticLatitude(
-						it.latitude,
-						it.longitude,
-						MAGNETIC_NORTH_POLE_LATITUDE,
-						MAGNETIC_NORTH_POLE_LONGITUDE
-					)
-					Report.success(
-						GeomagLocation(geomagneticLatitude),
-						time.now().blockingGet()
-					)
-				} ?: Report.error(R.string.error_no_location, time.now().blockingGet())
-			}
-			.doOnSuccess { Timber.i("Provided geomagnetic location: %s", it) }
-	}
+	override fun get(location: Single<LocationResult>): Single<Report<GeomagLocation>> =
+		location
+			.map(::getSingleGeomagLocation)
+			.doOnSuccess { Timber.i("Provided geomag location: %s", it) }
 
-	override fun stream(locations: Flowable<Optional<Location>>): Flowable<Report<GeomagLocation>> =
+	override fun stream(
+		locations: Flowable<Loadable<LocationResult>>
+	): Flowable<Loadable<Report<GeomagLocation>>> =
 		locations
-			.switchMapSingle { get(Single.just(it)) }
+			.switchMapSingle { loadableLocation ->
+				when (loadableLocation) {
+					Loadable.Loading -> Single.just(Loadable.Loading)
+					is Loadable.Loaded -> {
+						Single.fromCallable { getSingleGeomagLocation(loadableLocation.value) }
+							.map { Loadable.Loaded(it) }
+					}
+				}
+			}
 			.distinctUntilChanged()
 			.doOnNext { Timber.i("Streamed geomag location: %s", it) }
+
+	private fun getSingleGeomagLocation(locationResult: LocationResult): Report<GeomagLocation> =
+		locationResult.map(
+			onSuccess = {
+				val geomagneticLatitude = calculateGeomagneticLatitude(
+					it.latitude,
+					it.longitude,
+					MAGNETIC_NORTH_POLE_LATITUDE,
+					MAGNETIC_NORTH_POLE_LONGITUDE
+				)
+				Report.success(GeomagLocation(geomagneticLatitude), time.now().blockingGet())
+			},
+			onMissingPermissionError = {
+				Report.error(R.string.error_no_location_permission, time.now().blockingGet())
+			},
+			onUnknownError = {
+				Report.error(R.string.error_no_location, time.now().blockingGet())
+			}
+		)
 
 	// http://stackoverflow.com/a/7949249/940731
 	private fun calculateGeomagneticLatitude(

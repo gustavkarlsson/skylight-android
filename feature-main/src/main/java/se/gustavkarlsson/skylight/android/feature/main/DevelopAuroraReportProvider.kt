@@ -3,11 +3,13 @@ package se.gustavkarlsson.skylight.android.feature.main
 import io.reactivex.Flowable
 import io.reactivex.Single
 import org.threeten.bp.Duration
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
-import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.entities.Loadable
+import se.gustavkarlsson.skylight.android.entities.LoadableAuroraReport
+import se.gustavkarlsson.skylight.android.entities.LocationResult
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.delay
@@ -21,12 +23,12 @@ internal class DevelopAuroraReportProvider(
 	private val pollingInterval: Duration
 ) : AuroraReportProvider {
 
-	override fun get(location: Location?): Single<AuroraReport> {
-		return Single.fromCallable {
+	override fun get(location: Single<LocationResult>): Single<CompleteAuroraReport> =
+		Single.fromCallable {
 			if (developSettings.overrideValues) {
 				val timestamp = time.now().blockingGet()
 				val auroraReport = developSettings.run {
-					AuroraReport(
+					CompleteAuroraReport(
 						"Fake Location",
 						Report.success(KpIndex(kpIndex), timestamp),
 						Report.success(GeomagLocation(geomagLatitude), timestamp),
@@ -40,8 +42,8 @@ internal class DevelopAuroraReportProvider(
 			}
 		}.flatMap { it }
 
-	}
-
-	override fun stream(location: Location?): Flowable<AuroraReport> =
-		realProvider.stream(location) // FIXME Honor develop settings
+	override fun stream(
+		locations: Flowable<Loadable<LocationResult>>
+	): Flowable<LoadableAuroraReport> =
+		realProvider.stream(locations) // FIXME Honor develop settings
 }

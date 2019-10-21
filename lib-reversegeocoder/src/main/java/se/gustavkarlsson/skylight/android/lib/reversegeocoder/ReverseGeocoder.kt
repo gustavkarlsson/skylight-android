@@ -3,9 +3,10 @@ package se.gustavkarlsson.skylight.android.lib.reversegeocoder
 import io.reactivex.Flowable
 import io.reactivex.Single
 import se.gustavkarlsson.koptional.Optional
-import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.entities.Loadable
+import se.gustavkarlsson.skylight.android.entities.LocationResult
 
 interface ReverseGeocoder {
-	fun get(location: Single<Optional<Location>>): Single<Optional<String>>
-	fun stream(locations: Flowable<Optional<Location>>): Flowable<Optional<String>>
+	fun get(location: Single<LocationResult>): Single<Optional<String>>
+	fun stream(locations: Flowable<Loadable<LocationResult>>): Flowable<Loadable<String?>>
 }

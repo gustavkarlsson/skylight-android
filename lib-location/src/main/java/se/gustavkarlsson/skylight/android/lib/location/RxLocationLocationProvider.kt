@@ -9,15 +9,14 @@ import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.Duration
-import se.gustavkarlsson.koptional.Absent
-import se.gustavkarlsson.koptional.Optional
-import se.gustavkarlsson.koptional.optionalOf
-import se.gustavkarlsson.koptional.toOptional
+import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.entities.LocationResult
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.timeout
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
 internal class RxLocationLocationProvider(
 	private val fusedLocation: FusedLocation,
@@ -47,15 +46,29 @@ internal class RxLocationLocationProvider(
 	}
 
 	@SuppressLint("MissingPermission")
-	override fun get(): Single<Optional<Location>> =
+	override fun get(): Single<LocationResult> =
 		fusedLocation
 			.updates(singleLocationRequest)
 			.subscribeOn(Schedulers.io())
 			.firstOrError()
-			.map { optionalOf(Location(it.latitude, it.longitude)) }
 			.timeout(timeout)
-			.doOnError { Timber.w(it, "Failed to get location") }
-			.onErrorReturnItem(Absent)
+			.map<LocationResult> { LocationResult.Success(Location(it.latitude, it.longitude)) }
+			.onErrorReturn { exception ->
+				when (exception) {
+					is SecurityException -> {
+						Timber.w(exception, "Missing location permission")
+						LocationResult.Failure.MissingPermission
+					}
+					is TimeoutException -> {
+						Timber.w(exception, "Timed out while getting location")
+						LocationResult.Failure.Unknown
+					}
+					else -> {
+						Timber.e(exception, "Failed to get location")
+						LocationResult.Failure.Unknown
+					}
+				}
+			}
 			.doOnSuccess { Timber.i("Provided location: %s", it) }
 
 	@SuppressLint("MissingPermission")
@@ -80,14 +93,36 @@ internal class RxLocationLocationProvider(
 		.toFlowable()
 		.concatWith(pollingLocations)
 
-	override val stream: Flowable<Optional<Location>> = locations
+	private val stream = locations
 		.subscribeOn(Schedulers.io())
-		.distinctUntilChanged()
-		.doOnError { Timber.w(it) }
-		.retryWhen { it.delay(retryDelay) }
-		.map { Location(it.latitude, it.longitude).toOptional() }
+		.map { Location(it.latitude, it.longitude) }
 		.distinctUntilChanged()
 		.throttleLatest(throttleDuration.toMillis(), TimeUnit.MILLISECONDS)
+		.map<LocationResult>(LocationResult::Success)
+		.onErrorResumeNext { exception: Throwable ->
+			val result = when (exception) {
+				is SecurityException -> {
+					Timber.w(exception, "Missing location permission")
+					LocationResult.Failure.MissingPermission
+				}
+				is TimeoutException -> {
+					Timber.w(exception, "Timed out while getting location")
+					LocationResult.Failure.Unknown
+				}
+				else -> {
+					Timber.e(exception, "Failed to get location")
+					LocationResult.Failure.Unknown
+				}
+			}
+			Flowable.concat(
+				Flowable.just(result),
+				Flowable.error(exception)
+			)
+		}
+		.map<Loadable<LocationResult>> { Loadable.Loaded(it) }
+		.retryWhen { it.delay(retryDelay) }
 		.doOnNext { Timber.i("Streamed location: %s", it) }
-		.replayingShare(Absent)
+		.replayingShare(Loadable.Loading)
+
+	override fun stream(): Flowable<Loadable<LocationResult>> = stream
 }

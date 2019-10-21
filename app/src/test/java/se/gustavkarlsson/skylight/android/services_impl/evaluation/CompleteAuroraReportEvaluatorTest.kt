@@ -21,7 +21,7 @@ import se.gustavkarlsson.skylight.android.mockito.any
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 
 @RunWith(MockitoJUnitRunner::class)
-class AuroraReportEvaluatorTest {
+class CompleteAuroraReportEvaluatorTest {
 	@Mock
 	lateinit var mockKpIndexEvaluator: ChanceEvaluator<KpIndex>
 

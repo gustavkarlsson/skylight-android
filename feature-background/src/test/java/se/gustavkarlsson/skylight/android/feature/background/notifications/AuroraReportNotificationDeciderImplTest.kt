@@ -13,7 +13,7 @@ import org.mockito.Mockito.verifyZeroInteractions
 import org.mockito.junit.MockitoJUnitRunner
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.feature.background.persistence.NotifiedChanceRepository
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.NotifiedChance
@@ -29,7 +29,7 @@ internal class AuroraReportNotificationDeciderImplTest {
 	lateinit var mockNotifiedChanceRepository: NotifiedChanceRepository
 
 	@Mock
-	lateinit var mockChanceEvaluator: ChanceEvaluator<AuroraReport>
+	lateinit var mockChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>
 
 	@Mock
 	lateinit var mockSettings: State.Settings
@@ -47,7 +47,7 @@ internal class AuroraReportNotificationDeciderImplTest {
 	lateinit var mockAppVisibilityEvaluator: AppVisibilityEvaluator
 
 	@Mock
-	lateinit var mockNewAuroraReport: AuroraReport
+	lateinit var mockNewAuroraReport: CompleteAuroraReport
 
 	@Mock
 	lateinit var mockLastNotifiedChance: NotifiedChance

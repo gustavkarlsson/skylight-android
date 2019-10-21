@@ -6,14 +6,14 @@ import de.halfbit.knot.Knot
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.ModuleStarter
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.minutes
-import se.gustavkarlsson.skylight.android.feature.main.evaluation.AuroraReportEvaluator
+import se.gustavkarlsson.skylight.android.feature.main.evaluation.CompleteAuroraReportEvaluator
 import se.gustavkarlsson.skylight.android.feature.main.evaluation.DarknessEvaluator
 import se.gustavkarlsson.skylight.android.feature.main.evaluation.GeomagLocationEvaluator
 import se.gustavkarlsson.skylight.android.feature.main.evaluation.KpIndexEvaluator
@@ -53,7 +53,6 @@ val featureMainModule = module {
 
 	single {
 		CombiningAuroraReportProvider(
-			locationProvider = get(),
 			reverseGeocoder = get(),
 			darknessProvider = get(),
 			geomagLocationProvider = get(),
@@ -96,8 +95,8 @@ val featureMainModule = module {
 		DarknessEvaluator
 	}
 
-	single<ChanceEvaluator<AuroraReport>>("auroraReport") {
-		AuroraReportEvaluator(
+	single<ChanceEvaluator<CompleteAuroraReport>>("auroraReport") {
+		CompleteAuroraReportEvaluator(
 			kpIndexEvaluator = get("kpIndex"),
 			geomagLocationEvaluator = get("geomagLocation"),
 			weatherEvaluator = get("weather"),
@@ -162,7 +161,8 @@ val featureMainModule = module {
 		buildMainKnot(
 			permissionChecker = get(),
 			selectedPlaceRepo = get(),
-			auroraReportProvider = get()
+			auroraReportProvider = get(),
+			locationProvider = get()
 		)
 	}
 

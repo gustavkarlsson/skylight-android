@@ -2,10 +2,12 @@ package se.gustavkarlsson.skylight.android.feature.main
 
 import io.reactivex.Flowable
 import io.reactivex.Single
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
-import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
+import se.gustavkarlsson.skylight.android.entities.Loadable
+import se.gustavkarlsson.skylight.android.entities.LoadableAuroraReport
+import se.gustavkarlsson.skylight.android.entities.LocationResult
 
 internal interface AuroraReportProvider {
-	fun get(location: Location?): Single<AuroraReport>
-	fun stream(location: Location?): Flowable<AuroraReport>
+	fun get(location: Single<LocationResult>): Single<CompleteAuroraReport>
+	fun stream(locations: Flowable<Loadable<LocationResult>>): Flowable<LoadableAuroraReport>
 }

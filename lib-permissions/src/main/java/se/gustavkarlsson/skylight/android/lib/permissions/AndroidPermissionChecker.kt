@@ -26,7 +26,7 @@ internal class AndroidPermissionChecker(
 	override fun refresh() {
 		val systemPermission = checkSystemPermission()
 		if (systemPermission == Permission.Denied && permissionRelay.value == Permission.DeniedForever) {
-			Timber.d("Won't change from ${Permission.DeniedForever} to ${Permission.Denied}")
+			Timber.d("Won't change from %s to %s", Permission.DeniedForever, Permission.Denied)
 			return
 		}
 		permissionRelay.accept(systemPermission)
@@ -38,7 +38,7 @@ internal class AndroidPermissionChecker(
 			Permission.Granted
 		else
 			Permission.Denied
-		Timber.d("$permissionKey = $permission")
+		Timber.d("%s = %s", permissionKey, permission)
 		return permission
 	}
 }

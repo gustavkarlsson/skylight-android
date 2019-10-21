@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.background.notifications
 
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.NotifiedChance
 import se.gustavkarlsson.skylight.android.feature.background.persistence.NotifiedChanceRepository
@@ -8,12 +8,12 @@ import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 
 internal class AuroraReportNotificationDeciderImpl(
 	private val notifiedChanceRepository: NotifiedChanceRepository,
-	private val chanceEvaluator: ChanceEvaluator<AuroraReport>,
+	private val chanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
 	private val outdatedEvaluator: OutdatedEvaluator,
 	private val appVisibilityEvaluator: AppVisibilityEvaluator
 ) : AuroraReportNotificationDecider {
 
-	override fun shouldNotify(newReport: AuroraReport): Boolean {
+	override fun shouldNotify(newReport: CompleteAuroraReport): Boolean {
 		val notificationsEnabled = true // FIXME get from settings
 		val triggerLevel = ChanceLevel.MEDIUM // FIXME get from settings
 		if (!notificationsEnabled) return false
@@ -26,7 +26,7 @@ internal class AuroraReportNotificationDeciderImpl(
 		return newChanceLevel > lastChanceLevel
 	}
 
-	private val AuroraReport.chanceLevel: ChanceLevel
+	private val CompleteAuroraReport.chanceLevel: ChanceLevel
 		get() = ChanceLevel.fromChance(chanceEvaluator.evaluate(this))
 
 	private val NotifiedChance?.chanceLevel: ChanceLevel
@@ -35,7 +35,7 @@ internal class AuroraReportNotificationDeciderImpl(
 	private val NotifiedChance?.outdated: Boolean
 		get() = this?.timestamp?.let { outdatedEvaluator.isOutdated(it) } ?: true
 
-	override fun onNotified(notifiedReport: AuroraReport) {
+	override fun onNotified(notifiedReport: CompleteAuroraReport) {
 		val chance = chanceEvaluator.evaluate(notifiedReport)
 		val timestamp = notifiedReport.timestamp
 		notifiedChanceRepository.insert(NotifiedChance(chance, timestamp))

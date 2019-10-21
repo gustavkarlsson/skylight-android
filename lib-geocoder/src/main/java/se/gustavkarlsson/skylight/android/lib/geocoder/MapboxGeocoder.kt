@@ -37,7 +37,7 @@ private fun createSingle(
 			createGeocoding(accessToken, locale, locationName)
 		} catch (e: Exception) {
 			Timber.e(e, "Failed to create Geocoding request")
-			emitter.onSuccess(GeocodingResult.Failure.Other)
+			emitter.onSuccess(GeocodingResult.Failure.Unknown)
 			return@create
 		}
 
@@ -50,7 +50,7 @@ private fun createSingle(
 					GeocodingResult.Failure.Io
 				} else {
 					Timber.e(t, "Geocoding failed")
-					GeocodingResult.Failure.Other
+					GeocodingResult.Failure.Unknown
 				}
 				emitter.onSuccess(result)
 			}
@@ -64,8 +64,8 @@ private fun createSingle(
 				} else {
 					val code = response.code()
 					val error = response.errorBody()?.string() ?: "<empty>"
-					Timber.e("Geocoding failed with HTTP $code: $error")
-					emitter.onSuccess(GeocodingResult.Failure.Other)
+					Timber.e("Geocoding failed with HTTP %d: %s", code, error)
+					emitter.onSuccess(GeocodingResult.Failure.Unknown)
 				}
 			}
 		})
@@ -93,10 +93,9 @@ private fun GeocodingResponse.toGeocodingResultSuccess(): GeocodingResult.Succes
 			null
 		else
 			PlaceSuggestion(
-				Location(
-					center.latitude(),
-					center.longitude()
-				), fullName, simpleName
+				Location(center.latitude(), center.longitude()),
+				fullName,
+				simpleName
 			)
 	}
 	return GeocodingResult.Success(suggestions)

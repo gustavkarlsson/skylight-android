@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.evaluation
 
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
@@ -8,14 +8,14 @@ import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 
-internal class AuroraReportEvaluator(
+internal class CompleteAuroraReportEvaluator(
 	private val kpIndexEvaluator: ChanceEvaluator<KpIndex>,
 	private val geomagLocationEvaluator: ChanceEvaluator<GeomagLocation>,
 	private val weatherEvaluator: ChanceEvaluator<Weather>,
 	private val darknessEvaluator: ChanceEvaluator<Darkness>
-) : ChanceEvaluator<AuroraReport> {
+) : ChanceEvaluator<CompleteAuroraReport> {
 
-	override fun evaluate(value: AuroraReport): Chance {
+	override fun evaluate(value: CompleteAuroraReport): Chance {
 		val activityChance = value.kpIndex.value
 			?.let(kpIndexEvaluator::evaluate) ?: Chance.UNKNOWN
 		val locationChance = value.geomagLocation.value

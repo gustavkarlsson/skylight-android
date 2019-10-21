@@ -17,6 +17,7 @@
 
 	<!-- Errors -->
 	<string name="error_unknown_update_error">An unknown error occurred while updating</string>
+	<string name="error_no_location_permission">Missing location permission</string>
 	<string name="error_no_location">Could not determine location</string>
 	<string name="error_no_internet_maybe">No internet connection?</string>
 

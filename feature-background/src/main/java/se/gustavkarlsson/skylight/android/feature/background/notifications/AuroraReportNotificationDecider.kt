@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.feature.background.notifications
 
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 
 internal interface AuroraReportNotificationDecider {
-	fun shouldNotify(newReport: AuroraReport): Boolean
-	fun onNotified(notifiedReport: AuroraReport)
+	fun shouldNotify(newReport: CompleteAuroraReport): Boolean
+	fun onNotified(notifiedReport: CompleteAuroraReport)
 }

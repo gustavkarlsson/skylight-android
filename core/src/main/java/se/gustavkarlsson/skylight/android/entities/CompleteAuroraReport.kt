@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.entities
 
 import org.threeten.bp.Instant
 
-data class AuroraReport(
+data class CompleteAuroraReport(
 	val locationName: String?,
 	val kpIndex: Report<KpIndex>,
 	val geomagLocation: Report<GeomagLocation>,

@@ -8,7 +8,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import se.gustavkarlsson.skylight.android.feature.background.R
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
@@ -18,13 +18,13 @@ internal class AuroraReportNotifier(
 	private val context: Context,
 	private val notificationManager: NotificationManager,
 	private val chanceLevelFormatter: Formatter<ChanceLevel>,
-	private val chanceEvaluator: ChanceEvaluator<AuroraReport>,
+	private val chanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
 	private val activityClass: Class<out Activity>,
 	private val channelId: String,
 	private val analytics: Analytics
-) : Notifier<AuroraReport> {
+) : Notifier<CompleteAuroraReport> {
 
-	override fun notify(value: AuroraReport) {
+	override fun notify(value: CompleteAuroraReport) {
 		val chance = chanceEvaluator.evaluate(value)
 		val chanceLevel = ChanceLevel.fromChance(chance)
 		val text = chanceLevelFormatter.format(chanceLevel).resolve(context)

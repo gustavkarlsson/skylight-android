@@ -13,11 +13,10 @@ import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mockito.verify
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.mockito.any
-import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
 
@@ -28,11 +27,11 @@ internal class AuroraReportNotifierTest {
 
 	lateinit var mockNotificationManager: NotificationManager
 
-	lateinit var mockChanceEvaluator: ChanceEvaluator<AuroraReport>
+	lateinit var mockChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>
 
 	lateinit var mockChanceLevelFormatter: SingleValueFormatter<ChanceLevel>
 
-    lateinit var mockAuroraReport: AuroraReport
+    lateinit var mockAuroraReport: CompleteAuroraReport
 
 	lateinit var mockAnalytics: se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 

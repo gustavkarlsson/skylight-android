@@ -14,7 +14,7 @@ internal class SharedPreferencesRunVersionManager(
 	override val isFirstRun: Boolean
 		get() {
 			val lastRunVersion = prefs.getInt(LAST_RUN_VERSION_KEY, NO_VERSION)
-			Timber.d("Last run version: $lastRunVersion")
+			Timber.d("Last run version: %d", lastRunVersion)
 			return lastRunVersion == NO_VERSION
 		}
 

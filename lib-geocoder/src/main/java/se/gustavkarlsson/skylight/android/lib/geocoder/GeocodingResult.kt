@@ -7,7 +7,7 @@ sealed class GeocodingResult {
 
 	sealed class Failure {
 		object Io : GeocodingResult()
-		object Other : GeocodingResult()
+		object Unknown : GeocodingResult()
 	}
 }
 

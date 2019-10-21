@@ -28,5 +28,6 @@ allprojects {
 		maven { setUrl("https://s3.amazonaws.com/repo.commonsware.com") }
 		maven { setUrl("https://jitpack.io") }
 		maven { setUrl("https://oss.sonatype.org/content/repositories/snapshots") }
+		maven { setUrl("https://plugins.gradle.org/m2/") }
 	}
 }

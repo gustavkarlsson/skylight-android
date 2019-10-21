@@ -12,31 +12,33 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.koptional.Absent
 import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.koptional.toOptional
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
+import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
-import se.gustavkarlsson.skylight.android.feature.main.Change
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
+import se.gustavkarlsson.skylight.android.entities.Loadable
+import se.gustavkarlsson.skylight.android.entities.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Permission
-import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.entities.Report
-import se.gustavkarlsson.skylight.android.feature.main.State
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.feature.main.ChanceToColorConverter
+import se.gustavkarlsson.skylight.android.feature.main.Change
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.RelativeTimeFormatter
+import se.gustavkarlsson.skylight.android.feature.main.State
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
+import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.Time
 
 internal class MainViewModel(
 	private val mainKnot: Knot<State, Change>,
-	auroraChanceEvaluator: ChanceEvaluator<AuroraReport>,
+	auroraChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
 	relativeTimeFormatter: RelativeTimeFormatter,
 	chanceLevelFormatter: Formatter<ChanceLevel>,
 	darknessChanceEvaluator: ChanceEvaluator<Darkness>,
@@ -61,8 +63,6 @@ internal class MainViewModel(
 		mainKnot.change.accept(Change.StreamToggle(false))
 	}
 
-	// FIXME what about errors?
-
 	val toolbarTitleText: Observable<TextRef> = mainKnot.state
 		.map {
 			it.selectedPlace.name
@@ -71,17 +71,16 @@ internal class MainViewModel(
 
 	val chanceLevelText: Observable<TextRef> = mainKnot.state
 		.map {
-			it.selectedAuroraReport
+			it.selectedAuroraReport.toCompleteAuroraReport()
 				?.let(auroraChanceEvaluator::evaluate)
 				?: Chance.UNKNOWN
 		}
 		.map(ChanceLevel.Companion::fromChance)
 		.map(chanceLevelFormatter::format)
 		.distinctUntilChanged()
-		.distinctUntilChanged()
 
 	private val timeSinceUpdate: Observable<Optional<String>> = mainKnot.state
-		.map { it.selectedAuroraReport?.timestamp.toOptional() }
+		.map { it.selectedAuroraReport.timestamp.toOptional() }
 		.switchMap { time ->
 			Observable.just(time)
 				.repeatWhen { it.delay(1.seconds) }
@@ -92,10 +91,9 @@ internal class MainViewModel(
 			}
 		}
 		.distinctUntilChanged()
-		.observeOn(AndroidSchedulers.mainThread())
 
 	private val locationName: Observable<Optional<String>> = mainKnot.state
-		.map { it.selectedAuroraReport?.locationName.toOptional() }
+		.map { (it.selectedAuroraReport.locationName as? Loadable.Loaded)?.value.toOptional() }
 
 	val chanceSubtitleText: Observable<TextRef> = Observables
 		.combineLatest(timeSinceUpdate, locationName) { (time), (name) ->
@@ -105,31 +103,32 @@ internal class MainViewModel(
 				else -> TextRef(R.string.time_in_location, time, name)
 			}
 		}
+		.observeOn(AndroidSchedulers.mainThread())
 
 	val darkness: Observable<FactorItem> = mainKnot.state
 		.toFactorItems(
-			AuroraReport::darkness,
+			LoadableAuroraReport::darkness,
 			darknessChanceEvaluator::evaluate,
 			darknessFormatter::format
 		)
 
 	val geomagLocation: Observable<FactorItem> = mainKnot.state
 		.toFactorItems(
-			AuroraReport::geomagLocation,
+			LoadableAuroraReport::geomagLocation,
 			geomagLocationChanceEvaluator::evaluate,
 			geomagLocationFormatter::format
 		)
 
 	val kpIndex: Observable<FactorItem> = mainKnot.state
 		.toFactorItems(
-			AuroraReport::kpIndex,
+			LoadableAuroraReport::kpIndex,
 			kpIndexChanceEvaluator::evaluate,
 			kpIndexFormatter::format
 		)
 
 	val weather: Observable<FactorItem> = mainKnot.state
 		.toFactorItems(
-			AuroraReport::weather,
+			LoadableAuroraReport::weather,
 			weatherChanceEvaluator::evaluate,
 			weatherFormatter::format
 		)
@@ -169,30 +168,33 @@ internal class MainViewModel(
 	val openAppDetails: Observable<Unit> = openAppDetailsRelay
 
 	private fun <T : Any> Observable<State>.toFactorItems(
-		selectFactor: AuroraReport.() -> Report<T>,
+		selectFactor: LoadableAuroraReport.() -> Loadable<Report<T>>,
 		evaluate: (T) -> Chance,
 		format: (T) -> TextRef
 	): Observable<FactorItem> =
-		map { it.selectedAuroraReport?.selectFactor()?.value.toOptional() }
-			.distinctUntilChanged()
-			.map { it.toFactorItem(evaluate, format) }
+		distinctUntilChanged()
+			.map { it.selectedAuroraReport.selectFactor().toFactorItem(evaluate, format) }
 
-	private fun <T : Any> Optional<T>.toFactorItem(
+	private fun <T : Any> Loadable<Report<T>>.toFactorItem(
 		evaluate: (T) -> Chance,
 		format: (T) -> TextRef
-	): FactorItem {
-		val factor = value
-		return if (factor == null) {
-			FactorItem.EMPTY
-		} else {
-			val chance = evaluate(factor).value
-			FactorItem(
-				valueText = format(factor),
-				progress = chance,
-				progressColor = chanceToColorConverter.convert(chance)
-			)
+	): FactorItem =
+		when (this) {
+			Loadable.Loading -> FactorItem.LOADING
+			is Loadable.Loaded -> {
+				val report = value
+				val value = report.value
+				when {
+					value != null -> {
+						val valueText = format(value)
+						val chance = evaluate(value).value
+						FactorItem(valueText, chance, chanceToColorConverter.convert(chance))
+					}
+					report.error != null -> FactorItem.ERROR
+					else -> error("Invalid report: $report")
+				}
+			}
 		}
-	}
 
 	fun refreshLocationPermission() = permissionChecker.refresh()
 }
@@ -203,8 +205,13 @@ internal data class FactorItem(
 	val progressColor: Int
 ) {
 	companion object {
-		val EMPTY = FactorItem(
+		val LOADING = FactorItem(
 			valueText = TextRef("?"),
+			progress = null,
+			progressColor = ChanceToColorConverter.UNKNOWN_COLOR
+		)
+		val ERROR = FactorItem( // TODO Replace with better error message
+			valueText = TextRef("error"),
 			progress = null,
 			progressColor = ChanceToColorConverter.UNKNOWN_COLOR
 		)
