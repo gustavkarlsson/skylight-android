@@ -87,7 +87,7 @@ internal class MainViewModel(
 		}
 		.map {
 			it.map { timeSince ->
-				relativeTimeFormatter.format(timeSince, time.now().blockingGet(), nowTextThreshold).toString()
+				relativeTimeFormatter.format(timeSince, time.now(), nowTextThreshold).toString()
 			}
 		}
 		.distinctUntilChanged()

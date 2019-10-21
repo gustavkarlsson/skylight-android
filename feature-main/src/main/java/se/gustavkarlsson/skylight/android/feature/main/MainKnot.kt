@@ -27,7 +27,6 @@ internal sealed class Change {
 	data class StreamToggle(val stream: Boolean) : Change()
 	data class LocationPermission(val permission: Permission) : Change()
 	data class AuroraReportSuccess(val place: Place, val report: LoadableAuroraReport) : Change()
-	data class AuroraReportFailure(val throwable: Throwable) : Change()
 }
 
 private sealed class Action {
@@ -67,10 +66,7 @@ internal fun buildMainKnot(
 				is Change.AuroraReportSuccess ->
 					if (selectedPlace == change.place) {
 						copy(selectedAuroraReport = change.report).only
-					} else {
-						this.only
-					}
-				is Change.AuroraReportFailure -> TODO("FIXME Take care of errors")
+					} else this.only
 			}
 		}
 

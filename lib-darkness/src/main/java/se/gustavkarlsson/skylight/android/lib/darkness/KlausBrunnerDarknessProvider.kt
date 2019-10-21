@@ -22,7 +22,7 @@ internal class KlausBrunnerDarknessProvider(
 
 	override fun get(location: Single<LocationResult>): Single<Report<Darkness>> =
 		location
-			.map { getDarkness(it, time.now().blockingGet()) }
+			.map { getDarkness(it, time.now()) }
 			.doOnSuccess { Timber.i("Provided darkness: %s", it) }
 
 	override fun stream(
@@ -35,7 +35,7 @@ internal class KlausBrunnerDarknessProvider(
 					is Loadable.Loaded -> {
 						Single
 							.fromCallable {
-								getDarkness(loadableLocation.value, time.now().blockingGet())
+								getDarkness(loadableLocation.value, time.now())
 							}
 							.map { Loadable.Loaded(it) }
 							.repeatWhen { it.delay(pollingInterval) }

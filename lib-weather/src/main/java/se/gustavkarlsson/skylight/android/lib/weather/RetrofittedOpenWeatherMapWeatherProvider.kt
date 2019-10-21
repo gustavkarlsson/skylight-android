@@ -4,7 +4,6 @@ import com.jakewharton.rx.replayingShare
 import io.reactivex.Flowable
 import io.reactivex.Single
 import org.threeten.bp.Duration
-import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.LocationResult
@@ -28,13 +27,15 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
 				result.map(
 					onSuccess = {
 						getReport(it)
-							.onErrorReturnItem(Report.Error(R.string.error_no_internet_maybe, time.now().blockingGet()))
+							.onErrorReturnItem(
+								Report.Error(R.string.error_no_internet_maybe, time.now())
+							)
 					},
 					onMissingPermissionError = {
-						Single.just(Report.Error(R.string.error_no_location_permission, time.now().blockingGet()))
+						Single.just(Report.Error(R.string.error_no_location_permission, time.now()))
 					},
 					onUnknownError = {
-						Single.just(Report.Error(R.string.error_no_location, time.now().blockingGet()))
+						Single.just(Report.Error(R.string.error_no_location, time.now()))
 					}
 				)
 			}
@@ -52,18 +53,12 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
 							onSuccess = ::streamReports,
 							onMissingPermissionError = {
 								Flowable.just(
-									Report.Error(
-										R.string.error_no_location_permission,
-										time.now().blockingGet()
-									)
+									Report.Error(R.string.error_no_location_permission, time.now())
 								)
 							},
 							onUnknownError = {
 								Flowable.just(
-									Report.Error(
-										R.string.error_no_location,
-										time.now().blockingGet()
-									)
+									Report.Error(R.string.error_no_location, time.now())
 								)
 							}
 						)
@@ -80,12 +75,7 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
 			.repeatWhen { it.delay(pollingInterval) }
 			.onErrorResumeNext { e: Throwable ->
 				Flowable.concat(
-					Flowable.just(
-						Report.Error(
-							R.string.error_no_internet_maybe,
-							time.now().blockingGet()
-						)
-					),
+					Flowable.just(Report.Error(R.string.error_no_internet_maybe, time.now())),
 					Flowable.error<Report<Weather>>(e)
 				)
 			}
@@ -93,6 +83,6 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
 
 	private fun getReport(location: Location): Single<Report<Weather>> =
 		api.get(location.latitude, location.longitude, "json", appId)
-			.map<Report<Weather>> { Report.Success(Weather(it.clouds.percentage), time.now().blockingGet()) }
+			.map<Report<Weather>> { Report.Success(Weather(it.clouds.percentage), time.now()) }
 			.doOnError { Timber.w(it, "Failed to get Weather from OpenWeatherMap API") }
 }

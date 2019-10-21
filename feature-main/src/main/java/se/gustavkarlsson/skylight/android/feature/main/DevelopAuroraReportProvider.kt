@@ -26,7 +26,7 @@ internal class DevelopAuroraReportProvider(
 	override fun get(location: Single<LocationResult>): Single<CompleteAuroraReport> =
 		Single.fromCallable {
 			if (developSettings.overrideValues) {
-				val timestamp = time.now().blockingGet()
+				val timestamp = time.now()
 				val auroraReport = developSettings.run {
 					CompleteAuroraReport(
 						"Fake Location",

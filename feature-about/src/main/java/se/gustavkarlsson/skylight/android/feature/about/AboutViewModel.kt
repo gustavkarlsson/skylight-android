@@ -39,7 +39,7 @@ internal class AboutViewModel(
 
 	private fun getBuildTime(): TextRef {
 		val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
-		val zoneId = time.zoneId().blockingGet()
+		val zoneId = time.zoneId()
 		val localDateTime = LocalDateTime.ofInstant(buildTime, zoneId)
 		val formattedTime = formatter.format(localDateTime)
 		return TextRef(R.string.about_built_on, formattedTime)

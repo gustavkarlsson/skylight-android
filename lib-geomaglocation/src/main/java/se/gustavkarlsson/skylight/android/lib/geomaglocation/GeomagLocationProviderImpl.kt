@@ -51,13 +51,13 @@ internal class GeomagLocationProviderImpl(
 					MAGNETIC_NORTH_POLE_LATITUDE,
 					MAGNETIC_NORTH_POLE_LONGITUDE
 				)
-				Report.Success(GeomagLocation(geomagneticLatitude), time.now().blockingGet())
+				Report.Success(GeomagLocation(geomagneticLatitude), time.now())
 			},
 			onMissingPermissionError = {
-				Report.Error(R.string.error_no_location_permission, time.now().blockingGet())
+				Report.Error(R.string.error_no_location_permission, time.now())
 			},
 			onUnknownError = {
-				Report.Error(R.string.error_no_location, time.now().blockingGet())
+				Report.Error(R.string.error_no_location, time.now())
 			}
 		)
 

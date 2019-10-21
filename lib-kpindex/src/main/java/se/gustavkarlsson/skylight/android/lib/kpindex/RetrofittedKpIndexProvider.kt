@@ -20,7 +20,7 @@ internal class RetrofittedKpIndexProvider(
 
 	override fun get(): Single<Report<KpIndex>> =
 		getReport()
-			.onErrorReturnItem(Report.Error(R.string.error_no_internet_maybe, time.now().blockingGet()))
+			.onErrorReturnItem(Report.Error(R.string.error_no_internet_maybe, time.now()))
 			.doOnSuccess { Timber.i("Provided Kp index: %s", it) }
 
 	override fun stream(): Flowable<Loadable<Report<KpIndex>>> = stream
@@ -31,7 +31,7 @@ internal class RetrofittedKpIndexProvider(
 			.onErrorResumeNext { e: Throwable ->
 				Flowable.concat<Report<KpIndex>>(
 					Flowable.just(
-						Report.Error(R.string.error_no_internet_maybe, time.now().blockingGet())
+						Report.Error(R.string.error_no_internet_maybe, time.now())
 					),
 					Flowable.error(e)
 				)
@@ -44,6 +44,6 @@ internal class RetrofittedKpIndexProvider(
 
 	private fun getReport(): Single<Report<KpIndex>> =
 		api.get()
-			.map<Report<KpIndex>> { Report.Success(KpIndex(it.value), time.now().blockingGet()) }
+			.map<Report<KpIndex>> { Report.Success(KpIndex(it.value), time.now()) }
 			.doOnError { Timber.w(it, "Failed to get Kp index from KpIndex API") }
 }
