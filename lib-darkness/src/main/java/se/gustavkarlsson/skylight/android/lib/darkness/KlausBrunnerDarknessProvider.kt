@@ -49,13 +49,13 @@ internal class KlausBrunnerDarknessProvider(
 		locationResult.map(
 			onSuccess = {
 				val sunZenithAngle = calculateSunZenithAngle(it, timestamp)
-				Report.success(Darkness(sunZenithAngle), timestamp)
+				Report.Success(Darkness(sunZenithAngle), timestamp)
 			},
 			onMissingPermissionError = {
-				Report.error(R.string.error_no_location_permission, timestamp)
+				Report.Error(R.string.error_no_location_permission, timestamp)
 			},
 			onUnknownError = {
-				Report.error(R.string.error_no_location, timestamp)
+				Report.Error(R.string.error_no_location, timestamp)
 			}
 		)
 }

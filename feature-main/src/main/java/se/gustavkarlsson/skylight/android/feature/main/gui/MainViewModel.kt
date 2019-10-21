@@ -182,15 +182,13 @@ internal class MainViewModel(
 		when (this) {
 			Loadable.Loading -> FactorItem.LOADING
 			is Loadable.Loaded -> {
-				val report = value
-				val value = report.value
-				when {
-					value != null -> {
-						val valueText = format(value)
-						val chance = evaluate(value).value
+				when (val report = value) {
+					is Report.Success -> {
+						val valueText = format(report.value)
+						val chance = evaluate(report.value).value
 						FactorItem(valueText, chance, chanceToColorConverter.convert(chance))
 					}
-					report.error != null -> FactorItem.ERROR
+					is Report.Error -> FactorItem.ERROR
 					else -> error("Invalid report: $report")
 				}
 			}

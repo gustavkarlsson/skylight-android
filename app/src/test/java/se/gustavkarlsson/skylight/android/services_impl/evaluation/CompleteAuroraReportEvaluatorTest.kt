@@ -41,10 +41,10 @@ class CompleteAuroraReportEvaluatorTest {
 
 	@Before
 	fun setUp() {
-		whenever(mockAuroraReport.kpIndex).thenReturn(Report.success(KpIndex(7.0), Instant.EPOCH))
-		whenever(mockAuroraReport.weather).thenReturn(Report.success(Weather(50), Instant.EPOCH))
-		whenever(mockAuroraReport.geomagLocation).thenReturn(Report.success(GeomagLocation(50.0), Instant.EPOCH))
-		whenever(mockAuroraReport.darkness).thenReturn(Report.success(Darkness(140.0), Instant.EPOCH))
+		whenever(mockAuroraReport.kpIndex).thenReturn(Report.Success(KpIndex(7.0), Instant.EPOCH))
+		whenever(mockAuroraReport.weather).thenReturn(Report.Success(Weather(50), Instant.EPOCH))
+		whenever(mockAuroraReport.geomagLocation).thenReturn(Report.Success(GeomagLocation(50.0), Instant.EPOCH))
+		whenever(mockAuroraReport.darkness).thenReturn(Report.Success(Darkness(140.0), Instant.EPOCH))
 		whenever(mockKpIndexEvaluator.evaluate(any())).thenReturn(Chance(0.5))
 		whenever(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(Chance(0.5))
 		whenever(mockWeatherEvaluator.evaluate(any())).thenReturn(Chance(0.5))

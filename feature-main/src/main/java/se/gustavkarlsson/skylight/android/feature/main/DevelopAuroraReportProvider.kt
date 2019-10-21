@@ -30,10 +30,10 @@ internal class DevelopAuroraReportProvider(
 				val auroraReport = developSettings.run {
 					CompleteAuroraReport(
 						"Fake Location",
-						Report.success(KpIndex(kpIndex), timestamp),
-						Report.success(GeomagLocation(geomagLatitude), timestamp),
-						Report.success(Darkness(sunZenithAngle), timestamp),
-						Report.success(Weather(cloudPercentage), timestamp)
+						Report.Success(KpIndex(kpIndex), timestamp),
+						Report.Success(GeomagLocation(geomagLatitude), timestamp),
+						Report.Success(Darkness(sunZenithAngle), timestamp),
+						Report.Success(Weather(cloudPercentage), timestamp)
 					)
 				}
 				Single.just(auroraReport).delay(developSettings.refreshDuration)

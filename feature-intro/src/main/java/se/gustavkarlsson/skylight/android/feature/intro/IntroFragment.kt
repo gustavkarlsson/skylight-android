@@ -24,7 +24,7 @@ internal class IntroFragment : BaseFragment() {
 		myLocationButton.clicks()
 			.autoDisposable(scope)
 			.subscribe {
-				// FIXME request location (use similar approach as beiwagen-android?)
+				// FIXME request location here already? (similar approach as beiwagen-android?)
 				viewModel.registerScreenSeen()
 				viewModel.navigateToMain()
 			}

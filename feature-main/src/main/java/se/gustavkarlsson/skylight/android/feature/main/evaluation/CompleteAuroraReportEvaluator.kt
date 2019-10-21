@@ -5,6 +5,7 @@ import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
+import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 
@@ -16,14 +17,10 @@ internal class CompleteAuroraReportEvaluator(
 ) : ChanceEvaluator<CompleteAuroraReport> {
 
 	override fun evaluate(value: CompleteAuroraReport): Chance {
-		val activityChance = value.kpIndex.value
-			?.let(kpIndexEvaluator::evaluate) ?: Chance.UNKNOWN
-		val locationChance = value.geomagLocation.value
-			?.let(geomagLocationEvaluator::evaluate) ?: Chance.UNKNOWN
-		val weatherChance = value.weather.value
-			?.let(weatherEvaluator::evaluate) ?: Chance.UNKNOWN
-		val darknessChance = value.darkness.value
-			?.let(darknessEvaluator::evaluate) ?: Chance.UNKNOWN
+		val activityChance = value.kpIndex.getChance(kpIndexEvaluator)
+		val locationChance = value.geomagLocation.getChance(geomagLocationEvaluator)
+		val weatherChance = value.weather.getChance(weatherEvaluator)
+		val darknessChance = value.darkness.getChance(darknessEvaluator)
 
 		val chances = listOf(activityChance, locationChance, weatherChance, darknessChance)
 
@@ -38,3 +35,9 @@ internal class CompleteAuroraReportEvaluator(
 		return listOf(weatherChance, darknessChance, activityChance * locationChance).min()!!
 	}
 }
+
+private fun <T : Any> Report<T>.getChance(evaluator: ChanceEvaluator<T>): Chance =
+	when (this) {
+		is Report.Success -> evaluator.evaluate(value)
+		is Report.Error -> Chance.UNKNOWN
+	}
