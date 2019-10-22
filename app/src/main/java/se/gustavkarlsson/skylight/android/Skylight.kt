@@ -64,8 +64,8 @@ internal class Skylight : MultiDexApplication() {
 			.map { it.settings }
 			.distinctUntilChanged()
 			.subscribe {
-				analytics.setNotificationsEnabled(it.notificationsEnabled)
-				analytics.setNotifyTriggerLevel(it.triggerLevel)
+				analytics.setProperty("notifications_enabled", it.notificationsEnabled)
+				analytics.setProperty("notifications_level", it.triggerLevel.name)
 			}
 			.addTo(disposables)
 		*/

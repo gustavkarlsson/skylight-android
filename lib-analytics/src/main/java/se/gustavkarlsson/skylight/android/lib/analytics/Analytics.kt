@@ -1,13 +1,11 @@
 package se.gustavkarlsson.skylight.android.lib.analytics
 
 import android.app.Activity
-import se.gustavkarlsson.skylight.android.entities.Chance
-import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 
 interface Analytics {
-	fun logNotificationSent(chance: Chance)
 	fun logScreen(activity: Activity, name: String)
-
-	fun setNotificationsEnabled(enabled: Boolean)
-	fun setNotifyTriggerLevel(triggerLevel: ChanceLevel)
+	fun setProperty(name: String, value: Any?)
+	fun logEvent(name: String, data: Map<String, Any?>? = null)
+	fun logEvent(name: String, key: String, value: Any?) =
+		logEvent(name, mapOf(key to value))
 }

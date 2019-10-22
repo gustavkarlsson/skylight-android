@@ -50,7 +50,7 @@ internal class AuroraReportNotifier(
 		}
 
 		notificationManager.notify(1, notification)
-		analytics.logNotificationSent(chance)
+		analytics.logEvent("notification_sent", "chance", chance.value ?: -1.0)
 	}
 
 	private fun createActivityPendingIntent(): PendingIntent {

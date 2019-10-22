@@ -17,8 +17,6 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 
 abstract class BaseFragment : Fragment() {
 
-	val a: String by lazy {""}
-
 	init {
 		@Suppress("LeakingThis")
 		doOnEvery(this, Lifecycle.Event.ON_START) {

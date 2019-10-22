@@ -1,31 +1,24 @@
 package se.gustavkarlsson.skylight.android.lib.analytics
 
 import android.app.Activity
-import android.os.Bundle
 import androidx.core.os.bundleOf
 import com.google.firebase.analytics.FirebaseAnalytics
-import se.gustavkarlsson.skylight.android.entities.Chance
-import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 
-internal class FirebasedAnalytics(private val firebaseAnalytics: FirebaseAnalytics) :
-	Analytics {
+internal class FirebasedAnalytics(
+	private val firebaseAnalytics: FirebaseAnalytics
+) : Analytics {
 
-	override fun logNotificationSent(chance: Chance) {
-		firebaseAnalytics.logEvent(
-			"notification_sent",
-			bundleOf("chance" to (chance.value ?: -1.0))
-		)
-	}
-
-	override fun logScreen(activity: Activity, name: String) {
+	override fun logScreen(activity: Activity, name: String) =
 		firebaseAnalytics.setCurrentScreen(activity, name, name)
-	}
 
-	override fun setNotificationsEnabled(enabled: Boolean) {
-		firebaseAnalytics.setUserProperty("notifications_enabled", enabled.toString())
-	}
+	override fun setProperty(name: String, value: Any?) =
+		firebaseAnalytics.setUserProperty(name, value?.toString())
 
-	override fun setNotifyTriggerLevel(triggerLevel: ChanceLevel) {
-		firebaseAnalytics.setUserProperty("notifications_level", triggerLevel.name)
+	override fun logEvent(name: String, data: Map<String, Any?>?) {
+		val bundle = data
+			?.toList()
+			?.toTypedArray()
+			?.let(::bundleOf)
+		firebaseAnalytics.logEvent(name, bundle)
 	}
 }
