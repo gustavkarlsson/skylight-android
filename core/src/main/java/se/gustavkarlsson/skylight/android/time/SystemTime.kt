@@ -4,7 +4,7 @@ import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId
 import se.gustavkarlsson.skylight.android.services.Time
 
-internal class SystemTimeWithFixedZoneId(private val zoneId: ZoneId) : Time {
+internal object SystemTime : Time {
 	override fun now(): Instant = Instant.now()
-	override fun zoneId(): ZoneId = zoneId
+	override fun zoneId(): ZoneId = ZoneId.systemDefault()
 }
