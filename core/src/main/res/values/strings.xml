@@ -14,6 +14,8 @@
 	<string name="remove">Remove</string>
 	<string name="remove_thing">Remove %s?</string>
 	<string name="fix">Fix</string>
+	<string name="your_location">Your location</string>
+	<string name="never">Never</string>
 
 	<!-- Errors -->
 	<string name="error_unknown_update_error">An unknown error occurred while updating</string>

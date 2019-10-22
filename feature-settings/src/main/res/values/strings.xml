@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="pref_notifications_name">Notifications</string>
-	<string name="pref_notifications_summary">Notify me when aurora conditions are good</string>
+	<string name="pref_notifications_category_title">Notifications</string>
+	<string name="pref_notifications_category_summary">Notify me when aurora conditions are good</string>
 
-	<string name="pref_trigger_level_name">Notify at</string>
-	<string name="pref_trigger_level_summary">%s</string>
-	<string-array name="pref_trigger_level_entries">
+	<string-array name="pref_notifications_level_entries">
+		<item>@string/never</item>
 		<item>@string/aurora_chance_high</item>
 		<item>@string/aurora_chance_medium</item>
 		<item>@string/aurora_chance_low</item>
 	</string-array>
-	<string-array name="pref_trigger_level_values">
+	<string-array name="pref_notifications_level_values">
 		<!-- These values relate directly to se.gustavkarlsson.skylight.android.entities.ChanceLevel -->
+		<item>-1</item> <!-- never -->
 		<item>4</item>
 		<item>3</item>
 		<item>2</item>

@@ -12,9 +12,12 @@
 	<string name="remove">Ta bort</string>
 	<string name="remove_thing">Ta bort %s?</string>
 	<string name="fix">Fixa</string>
+	<string name="your_location">Din plats</string>
+	<string name="never">Aldrig</string>
 
 	<!-- Errors -->
 	<string name="error_unknown_update_error">Ett oväntat fel inträffade vid uppdatering</string>
+	<string name="error_no_location_permission">Saknar åtkomst till plats</string>
 	<string name="error_no_location">Kunde inte hitta plats</string>
 	<string name="error_no_internet_maybe">Ingen internetanslutning?</string>
 

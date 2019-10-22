@@ -5,6 +5,7 @@ import org.threeten.bp.Duration
 
 interface DevelopSettings {
 	val overrideValues: Boolean
+
 	val overrideValuesChanges: Flowable<Boolean>
 
 	val kpIndex: Double

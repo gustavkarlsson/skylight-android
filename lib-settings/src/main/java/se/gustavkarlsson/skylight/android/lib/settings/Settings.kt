@@ -2,11 +2,12 @@ package se.gustavkarlsson.skylight.android.lib.settings
 
 import io.reactivex.Flowable
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
+import se.gustavkarlsson.skylight.android.lib.places.Place
 
 interface Settings {
-    val notificationsEnabled: Boolean
-	val notificationsEnabledChanges: Flowable<Boolean>
+    val notificationTriggerLevels: Flowable<List<Pair<Place, ChanceLevel?>>>
 
-    val triggerLevel: ChanceLevel
-	val triggerLevelChanges: Flowable<ChanceLevel>
+	companion object {
+		val DEFAULT_TRIGGER_LEVEL = ChanceLevel.MEDIUM
+	}
 }

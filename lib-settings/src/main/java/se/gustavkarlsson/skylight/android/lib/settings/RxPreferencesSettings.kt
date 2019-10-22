@@ -1,40 +1,49 @@
 package se.gustavkarlsson.skylight.android.lib.settings
 
-import android.content.Context
 import com.f2prateek.rx.preferences2.RxSharedPreferences
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.rxkotlin.combineLatest
+import se.gustavkarlsson.koptional.Optional
+import se.gustavkarlsson.koptional.toOptional
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
+import se.gustavkarlsson.skylight.android.lib.places.Place
+import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 
 internal class RxPreferencesSettings(
-	context: Context,
-	rxSharedPreferences: RxSharedPreferences
+	private val rxSharedPreferences: RxSharedPreferences,
+	placeRepository: PlacesRepository
 ) : Settings {
 
-	private val notificationsEnabledPreference by lazy {
-		val key = context.getString(R.string.pref_notifications_key)
-		val default = context.resources.getBoolean(R.bool.pref_notifications_default)
-		rxSharedPreferences.getBoolean(key, default)
-	}
+	private val defaultTriggerLevel =
+		ChanceLevel.values().indexOf(Settings.DEFAULT_TRIGGER_LEVEL).toString()
 
-	private val triggerLevelPreference by lazy {
-		val key = context.getString(R.string.pref_trigger_level_key)
-		val default = context.getString(R.string.pref_trigger_level_default)
-		rxSharedPreferences.getString(key, default)
-	}
+	override val notificationTriggerLevels: Flowable<List<Pair<Place, ChanceLevel?>>> =
+		placeRepository.all
+			.switchMap { places ->
+				places.map { place ->
+					getTriggerLevelFlowable(place)
+						.map { place to it.value }
+				}.combineLatest { it }
+			}
+			.share()
 
-	override val notificationsEnabled: Boolean
-		get() = notificationsEnabledPreference.get()
+	private fun getTriggerLevelFlowable(place: Place): Flowable<Optional<ChanceLevel>> =
+		rxSharedPreferences
+			.getString(getTriggerLevelPreferenceKey(place), defaultTriggerLevel)
+			.asObservable()
+			.toFlowable(BackpressureStrategy.LATEST)
+			.map {
+				val ordinal = it.toInt()
+				val chanceLevel =
+					if (ordinal == -1) null
+					else ChanceLevel.values()[ordinal]
+				chanceLevel.toOptional()
+			}
 
-	override val notificationsEnabledChanges: Flowable<Boolean> = notificationsEnabledPreference
-		.asObservable()
-		.toFlowable(BackpressureStrategy.LATEST)
-
-	override val triggerLevel: ChanceLevel
-		get() = triggerLevelPreference.get().let { ChanceLevel.values()[it.toInt()] }
-
-	override val triggerLevelChanges: Flowable<ChanceLevel> = triggerLevelPreference
-		.asObservable()
-		.map { ChanceLevel.values()[it.toInt()] }
-		.toFlowable(BackpressureStrategy.LATEST)
+	private fun getTriggerLevelPreferenceKey(place: Place) =
+		when (place) {
+			Place.Current -> "pref_notifications_place_key_current"
+			is Place.Custom -> "pref_notifications_place_key_${place.id}"
+		}
 }

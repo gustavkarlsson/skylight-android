@@ -23,8 +23,8 @@ val libSettingsModule = module {
 
 	single<Settings> {
 		RxPreferencesSettings(
-			context = get(),
-			rxSharedPreferences = get()
+			rxSharedPreferences = get(),
+			placeRepository = get()
 		)
 	}
 }
