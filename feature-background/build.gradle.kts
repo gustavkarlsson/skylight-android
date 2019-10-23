@@ -19,7 +19,6 @@ android {
 
 dependencies {
 	implementation(project(":core"))
-	implementation(project(":lib-analytics"))
 	implementation(project(":lib-ui")) //TODO only used for coloring notification?
 
 	// Firebase

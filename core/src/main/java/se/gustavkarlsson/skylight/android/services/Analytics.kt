@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.lib.analytics
+package se.gustavkarlsson.skylight.android.services
 
 import android.app.Activity
 

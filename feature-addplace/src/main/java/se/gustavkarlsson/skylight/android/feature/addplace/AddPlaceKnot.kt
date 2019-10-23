@@ -8,9 +8,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.extensions.buffer
-import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
-import se.gustavkarlsson.skylight.android.lib.geocoder.GeocodingResult
-import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
+import se.gustavkarlsson.skylight.android.services.Geocoder
+import se.gustavkarlsson.skylight.android.entities.GeocodingResult
+import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
 
 internal data class State(
 	val query: String = "",

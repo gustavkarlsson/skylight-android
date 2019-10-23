@@ -11,10 +11,10 @@ import io.reactivex.Flowable
 import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.extensions.mapNotNull
-import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
+import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
-import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
+import se.gustavkarlsson.skylight.android.services.PlacesRepository
 
 internal class AddPlaceViewModel(
 	private val placesRepository: PlacesRepository,

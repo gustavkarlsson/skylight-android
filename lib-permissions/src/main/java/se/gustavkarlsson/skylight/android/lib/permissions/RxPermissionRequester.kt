@@ -4,6 +4,7 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Completable
 import io.reactivex.functions.Consumer
 import se.gustavkarlsson.skylight.android.entities.Permission
+import se.gustavkarlsson.skylight.android.services.PermissionRequester
 import timber.log.Timber
 
 internal class RxPermissionRequester(

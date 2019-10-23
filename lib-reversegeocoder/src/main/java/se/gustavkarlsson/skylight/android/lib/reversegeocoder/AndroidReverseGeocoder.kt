@@ -11,6 +11,7 @@ import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.LocationResult
 import se.gustavkarlsson.skylight.android.extensions.delay
+import se.gustavkarlsson.skylight.android.services.ReverseGeocoder
 import timber.log.Timber
 import java.io.IOException
 

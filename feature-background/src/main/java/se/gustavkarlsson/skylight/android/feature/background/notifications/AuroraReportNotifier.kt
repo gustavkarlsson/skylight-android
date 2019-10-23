@@ -10,7 +10,7 @@ import androidx.core.app.NotificationCompat
 import se.gustavkarlsson.skylight.android.feature.background.R
 import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
-import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
+import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 

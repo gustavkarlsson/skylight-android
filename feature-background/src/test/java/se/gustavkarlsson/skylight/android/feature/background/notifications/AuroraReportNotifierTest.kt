@@ -17,6 +17,7 @@ import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.mockito.any
+import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.formatters.SingleValueFormatter
 
@@ -33,7 +34,7 @@ internal class AuroraReportNotifierTest {
 
     lateinit var mockAuroraReport: CompleteAuroraReport
 
-	lateinit var mockAnalytics: se.gustavkarlsson.skylight.android.lib.analytics.Analytics
+	lateinit var mockAnalytics: Analytics
 
 	lateinit var activityClass: Class<Activity>
 

@@ -35,15 +35,6 @@ android {
 dependencies {
 	implementation(project(":core"))
 	implementation(project(":lib-ui"))
-	implementation(project(":lib-weather"))
-	implementation(project(":lib-kpindex"))
-	implementation(project(":lib-darkness"))
-	implementation(project(":lib-settings"))
-	implementation(project(":lib-geomaglocation"))
-	implementation(project(":lib-reversegeocoder"))
-	implementation(project(":lib-location"))
-	implementation(project(":lib-permissions"))
-	implementation(project(":lib-places"))
 
 	implementation("androidx.cardview:cardview:${Versions.androidCardview}")
 	// TODO replace with google material banner when available

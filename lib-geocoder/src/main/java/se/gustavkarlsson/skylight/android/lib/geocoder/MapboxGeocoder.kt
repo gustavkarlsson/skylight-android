@@ -7,7 +7,10 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import se.gustavkarlsson.skylight.android.entities.GeocodingResult
 import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
+import se.gustavkarlsson.skylight.android.services.Geocoder
 import timber.log.Timber
 import java.io.IOException
 import java.util.Locale

@@ -11,7 +11,7 @@ import io.reactivex.rxkotlin.addTo
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
-import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
+import se.gustavkarlsson.skylight.android.services.Analytics
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 

@@ -20,8 +20,6 @@ android {
 
 dependencies {
 	implementation(project(":core"))
-	implementation(project(":lib-geocoder"))
-	implementation(project(":lib-places"))
 	implementation(project(":lib-ui"))
 	implementation("de.halfbit:knot:${Versions.knot}")
 }

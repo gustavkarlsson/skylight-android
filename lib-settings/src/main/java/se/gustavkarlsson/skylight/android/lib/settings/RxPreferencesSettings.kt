@@ -7,8 +7,9 @@ import io.reactivex.rxkotlin.combineLatest
 import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.koptional.toOptional
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
-import se.gustavkarlsson.skylight.android.lib.places.Place
-import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
+import se.gustavkarlsson.skylight.android.entities.Place
+import se.gustavkarlsson.skylight.android.services.PlacesRepository
+import se.gustavkarlsson.skylight.android.services.Settings
 
 internal class RxPreferencesSettings(
 	private val rxSharedPreferences: RxSharedPreferences,

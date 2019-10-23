@@ -6,6 +6,8 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import com.tbruyelle.rxpermissions2.RxPermissions
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.entities.Permission
+import se.gustavkarlsson.skylight.android.services.PermissionChecker
+import se.gustavkarlsson.skylight.android.services.PermissionRequester
 
 val libPermissionsModule = module {
 

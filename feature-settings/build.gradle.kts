@@ -35,8 +35,6 @@ android {
 dependencies {
 	implementation(project(":core"))
 	implementation(project(":lib-ui"))
-	implementation(project(":lib-settings"))
-	implementation(project(":lib-places")) // FIXME can we remove this if we move Place to core?
 
 	implementation("androidx.preference:preference:${Versions.androidPreference}")
 }

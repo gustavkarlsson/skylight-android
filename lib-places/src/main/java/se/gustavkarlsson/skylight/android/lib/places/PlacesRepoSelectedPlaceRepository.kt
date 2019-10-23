@@ -4,9 +4,12 @@ import com.jakewharton.rx.replayingShare
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
+import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.extensions.mapNotNull
+import se.gustavkarlsson.skylight.android.services.PlacesRepository
+import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 
-class PlacesRepoSelectedPlaceRepository(
+internal class PlacesRepoSelectedPlaceRepository(
 	placesRepo: PlacesRepository
 ) : SelectedPlaceRepository {
 	private val selectedPlaceRelay = PublishRelay.create<Place>()

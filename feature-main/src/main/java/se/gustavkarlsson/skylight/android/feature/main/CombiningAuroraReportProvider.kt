@@ -8,11 +8,11 @@ import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.entities.LocationResult
-import se.gustavkarlsson.skylight.android.lib.darkness.DarknessProvider
-import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationProvider
-import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexProvider
-import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoder
-import se.gustavkarlsson.skylight.android.lib.weather.WeatherProvider
+import se.gustavkarlsson.skylight.android.services.DarknessProvider
+import se.gustavkarlsson.skylight.android.services.GeomagLocationProvider
+import se.gustavkarlsson.skylight.android.services.KpIndexProvider
+import se.gustavkarlsson.skylight.android.services.ReverseGeocoder
+import se.gustavkarlsson.skylight.android.services.WeatherProvider
 import timber.log.Timber
 
 internal class CombiningAuroraReportProvider(

@@ -19,7 +19,6 @@ android {
 
 dependencies {
 	implementation(project(":core"))
-	implementation(project(":lib-analytics"))
 	api(project(":lib-navigation"))
 
 	api("com.google.android.material:material:${Versions.androidMaterial}")

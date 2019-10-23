@@ -6,6 +6,7 @@ import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.extensions.seconds
+import se.gustavkarlsson.skylight.android.services.DevelopSettings
 
 internal class RxPreferencesDevelopSettings(
 	context: Context,

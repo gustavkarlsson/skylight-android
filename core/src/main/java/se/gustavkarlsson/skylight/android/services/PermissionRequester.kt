@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.lib.permissions
+package se.gustavkarlsson.skylight.android.services
 
 import io.reactivex.Completable
 import io.reactivex.Flowable

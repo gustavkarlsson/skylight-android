@@ -29,7 +29,7 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.feature.main.BuildConfig
 import se.gustavkarlsson.skylight.android.feature.main.R
-import se.gustavkarlsson.skylight.android.lib.permissions.PermissionRequester
+import se.gustavkarlsson.skylight.android.services.PermissionRequester
 import se.gustavkarlsson.skylight.android.lib.navigation.BackButtonHandler
 import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator

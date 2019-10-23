@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.lib.kpindex
+package se.gustavkarlsson.skylight.android.services
 
 import io.reactivex.Flowable
 import io.reactivex.Single

@@ -4,11 +4,10 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.jakewharton.rxrelay2.BehaviorRelay
-import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.BackpressureStrategy
-import io.reactivex.Completable
 import io.reactivex.Flowable
 import se.gustavkarlsson.skylight.android.entities.Permission
+import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import timber.log.Timber
 
 internal class AndroidPermissionChecker(

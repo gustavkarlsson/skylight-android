@@ -5,6 +5,7 @@ import com.patloew.rxlocation.RxLocation
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.extensions.seconds
+import se.gustavkarlsson.skylight.android.services.LocationProvider
 
 val libLocationModule = module {
 

@@ -19,7 +19,6 @@ android {
 
 dependencies {
 	implementation(project(":core"))
-	implementation(project(":lib-places"))
 
 	implementation("com.f2prateek.rx.preferences2:rx-preferences:${Versions.rxpreferences}")
 }

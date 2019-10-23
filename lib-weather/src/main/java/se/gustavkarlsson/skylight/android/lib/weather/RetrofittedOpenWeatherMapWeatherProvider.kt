@@ -11,6 +11,7 @@ import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.services.Time
+import se.gustavkarlsson.skylight.android.services.WeatherProvider
 import timber.log.Timber
 
 internal class RetrofittedOpenWeatherMapWeatherProvider(

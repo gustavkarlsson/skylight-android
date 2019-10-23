@@ -8,7 +8,7 @@ import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import org.koin.android.ext.android.get
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
-import se.gustavkarlsson.skylight.android.lib.settings.Settings
+import se.gustavkarlsson.skylight.android.services.Settings
 
 internal class InnerSettingsFragment : PreferenceFragmentCompat() {
 

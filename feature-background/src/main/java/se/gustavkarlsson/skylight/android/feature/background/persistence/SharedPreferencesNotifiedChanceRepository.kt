@@ -6,7 +6,7 @@ import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.NotifiedChance
 
-class SharedPreferencesNotifiedChanceRepository(
+internal class SharedPreferencesNotifiedChanceRepository(
 	context: Context
 ) : NotifiedChanceRepository {
 
