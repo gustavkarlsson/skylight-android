@@ -21,12 +21,6 @@ internal class Skylight : MultiDexApplication() {
 
 	private val disposables = CompositeDisposable()
 
-	private val analytics: Analytics by inject()
-
-	init {
-		instance = this
-	}
-
 	override fun onCreate() {
 		super.onCreate()
 		if (LeakCanary.isInAnalyzerProcess(this)) return
@@ -36,8 +30,10 @@ internal class Skylight : MultiDexApplication() {
 		initRxJavaErrorHandling()
 		startKoin(this, modules, logger = KoinTimberLogger)
 		initializeModules()
-		setupSettingsAnalytics()
-		setupPlacesAnalytics()
+		get<Analytics>().run {
+			trackSettings()
+			trackPlacesCount()
+		}
 		scheduleBackgroundNotifications()
 	}
 
@@ -64,7 +60,7 @@ internal class Skylight : MultiDexApplication() {
 		// FIXME start background stuff like this too
 	}
 
-	private fun setupSettingsAnalytics() {
+	private fun Analytics.trackSettings() {
 		get<Settings>()
 			.notificationTriggerLevels
 			.map { it.unzip().second }
@@ -75,19 +71,19 @@ internal class Skylight : MultiDexApplication() {
 			}
 			.distinctUntilChanged()
 			.subscribe { (min, max) ->
-				analytics.setProperty("notification_trigger_lvl_min", min)
-				analytics.setProperty("notification_trigger_lvl_max", max)
+				setProperty("notification_trigger_lvl_min", min)
+				setProperty("notification_trigger_lvl_max", max)
 			}
 			.addTo(disposables)
 	}
 
-	private fun setupPlacesAnalytics() {
+	private fun Analytics.trackPlacesCount() {
 		get<PlacesRepository>()
 			.all
 			.map { it.count() }
 			.distinctUntilChanged()
 			.subscribe { placesCount ->
-				analytics.setProperty("places_count", placesCount)
+				setProperty("places_count", placesCount)
 			}
 			.addTo(disposables)
 	}
@@ -97,10 +93,4 @@ internal class Skylight : MultiDexApplication() {
 			.subscribe()
 			.addTo(disposables)
 	}
-
-	companion object {
-		lateinit var instance: Skylight
-			private set
-	}
-
 }
