@@ -12,6 +12,8 @@ import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.android.startKoin
 import se.gustavkarlsson.skylight.android.services.Analytics
+import se.gustavkarlsson.skylight.android.services.PlacesRepository
+import se.gustavkarlsson.skylight.android.services.Settings
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
@@ -29,12 +31,13 @@ internal class Skylight : MultiDexApplication() {
 		super.onCreate()
 		if (LeakCanary.isInAnalyzerProcess(this)) return
 		LeakCanary.install(this)
-		initLogging()
 		AndroidThreeTen.init(this)
+		initLogging()
 		initRxJavaErrorHandling()
 		startKoin(this, modules, logger = KoinTimberLogger)
 		initializeModules()
 		setupSettingsAnalytics()
+		setupPlacesAnalytics()
 		scheduleBackgroundNotifications()
 	}
 
@@ -51,26 +54,6 @@ internal class Skylight : MultiDexApplication() {
 		}
 	}
 
-	private fun scheduleBackgroundNotifications() {
-		get<Completable>("scheduleBackgroundNotifications")
-			.subscribe()
-			.addTo(disposables)
-	}
-
-	private fun setupSettingsAnalytics() {
-		/*
-		FIXME
-		store.states
-			.map { it.settings }
-			.distinctUntilChanged()
-			.subscribe {
-				analytics.setProperty("notifications_enabled", it.notificationsEnabled)
-				analytics.setProperty("notifications_level", it.triggerLevel.name)
-			}
-			.addTo(disposables)
-		*/
-	}
-
 	private fun initializeModules() {
 		get<ModuleStarter>("intro").start()
 		get<ModuleStarter>("main").start()
@@ -79,6 +62,40 @@ internal class Skylight : MultiDexApplication() {
 		get<ModuleStarter>("addplace").start()
 		get<ModuleStarter>("settings").start()
 		// FIXME start background stuff like this too
+	}
+
+	private fun setupSettingsAnalytics() {
+		get<Settings>()
+			.notificationTriggerLevels
+			.map { it.unzip().second }
+			.map { triggerLevels ->
+				val min = triggerLevels.minBy { it?.ordinal ?: Int.MAX_VALUE }
+				val max = triggerLevels.maxBy { it?.ordinal ?: Int.MAX_VALUE }
+				min to max
+			}
+			.distinctUntilChanged()
+			.subscribe { (min, max) ->
+				analytics.setProperty("notification_trigger_lvl_min", min)
+				analytics.setProperty("notification_trigger_lvl_max", max)
+			}
+			.addTo(disposables)
+	}
+
+	private fun setupPlacesAnalytics() {
+		get<PlacesRepository>()
+			.all
+			.map { it.count() }
+			.distinctUntilChanged()
+			.subscribe { placesCount ->
+				analytics.setProperty("places_count", placesCount)
+			}
+			.addTo(disposables)
+	}
+
+	private fun scheduleBackgroundNotifications() {
+		get<Completable>("scheduleBackgroundNotifications")
+			.subscribe()
+			.addTo(disposables)
 	}
 
 	companion object {

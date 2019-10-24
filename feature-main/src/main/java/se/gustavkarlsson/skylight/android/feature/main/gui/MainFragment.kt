@@ -162,7 +162,6 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
 
 	private fun openAppDetails() {
 		val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-		// FIXME Extract to module
 		intent.data = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
 		startActivity(intent)
 	}

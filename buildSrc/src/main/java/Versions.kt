@@ -42,7 +42,7 @@ object Versions {
 	val androidjob = "1.2.0"
 	val constraintLayout = "2.0.0-alpha5"
 	val timber = "4.7.1"
-	val rxpermissions = "0.9.5"
+	val rxpermissions = "0.10.2"
 	val solarPositioning = "0.0.9"
 	val autodispose = "0.8.0"
 	val leakcanary = "1.6.3"

@@ -20,6 +20,6 @@ android {
 dependencies {
 	implementation(project(":core"))
 
-	implementation("com.tbruyelle.rxpermissions2:rxpermissions:${Versions.rxpermissions}@aar")
+	implementation("com.github.tbruyelle:rxpermissions:${Versions.rxpermissions}")
 	implementation("androidx.appcompat:appcompat:${Versions.androidAppcompat}")
 }
