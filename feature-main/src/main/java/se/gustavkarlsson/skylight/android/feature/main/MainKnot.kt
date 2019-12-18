@@ -43,7 +43,7 @@ internal fun buildMainKnot(
 
 	state {
 		initial = State(
-			selectedPlace = selectedPlaceRepo.selected.blockingFirst()
+			selectedPlace = selectedPlaceRepo.get()
 		)
 		observeOn = AndroidSchedulers.mainThread()
 		if (BuildConfig.DEBUG) {
@@ -108,7 +108,7 @@ internal fun buildMainKnot(
 				.map(Change::LocationPermission)
 		}
 		source {
-			selectedPlaceRepo.selected
+			selectedPlaceRepo.stream()
 				.map(Change::PlaceSelected)
 		}
 	}

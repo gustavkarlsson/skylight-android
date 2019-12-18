@@ -24,7 +24,7 @@ internal class DrawerViewModel(
 	val places: Observable<List<DrawerItem>> =
 		Observables.combineLatest(
 			placesRepository.all.toObservable(),
-			selectedPlaceRepo.selected,
+			selectedPlaceRepo.stream(),
 			::createPlaceItems
 		).observeOn(observeScheduler)
 

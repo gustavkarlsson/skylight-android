@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.lib.places
 
 import android.annotation.SuppressLint
 import com.squareup.sqldelight.android.AndroidSqliteDriver
+import io.reactivex.disposables.CompositeDisposable
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.services.Analytics
@@ -17,7 +18,8 @@ val libPlacesModule = module {
 	}
 
 	single<SelectedPlaceRepository> {
-		PlacesRepoSelectedPlaceRepository(get())
+		// TODO activity local composite disposable?
+		PlacesRepoSelectedPlaceRepository(get(), CompositeDisposable())
 	}
 
 	single<ModuleStarter>("places") {
