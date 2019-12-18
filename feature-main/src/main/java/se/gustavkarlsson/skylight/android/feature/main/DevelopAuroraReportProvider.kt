@@ -13,6 +13,7 @@ import se.gustavkarlsson.skylight.android.entities.LocationResult
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.delay
+import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.DevelopSettings
 import se.gustavkarlsson.skylight.android.services.Time
 
@@ -45,5 +46,5 @@ internal class DevelopAuroraReportProvider(
 	override fun stream(
 		locations: Flowable<Loadable<LocationResult>>
 	): Flowable<LoadableAuroraReport> =
-		realProvider.stream(locations) // FIXME Honor develop settings
+		realProvider.stream(locations) // TODO Honor develop settings
 }

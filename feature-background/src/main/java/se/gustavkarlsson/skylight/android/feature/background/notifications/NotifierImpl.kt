@@ -8,26 +8,20 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import se.gustavkarlsson.skylight.android.feature.background.R
-import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
-import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.services.Analytics
-import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 
-internal class AuroraReportNotifier(
+internal class NotifierImpl(
 	private val context: Context,
 	private val notificationManager: NotificationManager,
-	private val chanceLevelFormatter: Formatter<ChanceLevel>,
-	private val chanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
+	private val notificationFormatter: Formatter<Notification>,
 	private val activityClass: Class<out Activity>,
 	private val channelId: String,
 	private val analytics: Analytics
-) : Notifier<CompleteAuroraReport> {
+) : Notifier {
 
-	override fun notify(value: CompleteAuroraReport) {
-		val chance = chanceEvaluator.evaluate(value)
-		val chanceLevel = ChanceLevel.fromChance(chance)
-		val text = chanceLevelFormatter.format(chanceLevel).resolve(context)
+	override fun notify(notification: Notification) {
+		val text = notificationFormatter.format(notification).resolve(context)
 		val pendingIntent = createActivityPendingIntent()
 
 		val tintColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -36,7 +30,7 @@ internal class AuroraReportNotifier(
 			null
 		}
 
-		val notification = NotificationCompat.Builder(context, channelId).run {
+		val androidNotification = NotificationCompat.Builder(context, channelId).run {
 			setSmallIcon(R.drawable.app_logo_small)
 			setContentTitle(context.getString(R.string.possible_aurora))
 			tintColor?.let { color = it }
@@ -49,8 +43,8 @@ internal class AuroraReportNotifier(
 			build()
 		}
 
-		notificationManager.notify(1, notification)
-		analytics.logEvent("notification_sent", "chance", chance.value ?: -1.0)
+		notificationManager.notify(1, androidNotification)
+		analytics.logEvent("notification_sent")
 	}
 
 	private fun createActivityPendingIntent(): PendingIntent {

@@ -1,10 +1,8 @@
 package se.gustavkarlsson.skylight.android
 
-import android.app.Activity
 import android.os.Bundle
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.fragmentContainer
+import androidx.fragment.app.FragmentActivity
 import org.koin.android.ext.android.inject
 import org.koin.androidx.scope.ext.android.bindScope
 import org.koin.androidx.scope.ext.android.createScope
@@ -21,10 +19,8 @@ internal class MainActivity : AppCompatActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		bindScope(createScope("activity"))
-		addToKoin<Activity>(this)
-		addToKoin(supportFragmentManager)
+		addToKoin<FragmentActivity>(this)
 		setContentView(R.layout.activity_main)
-		addToKoin<ViewGroup>(fragmentContainer)
 		if (savedInstanceState?.containsKey(HAS_RUN_KEY) != true) {
 			navigator.push(NavItem("main"))
 		}

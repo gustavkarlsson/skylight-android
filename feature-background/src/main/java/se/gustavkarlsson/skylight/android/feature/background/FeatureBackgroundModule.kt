@@ -6,21 +6,32 @@ import android.content.Context
 import com.evernote.android.job.JobManager
 import io.reactivex.Completable
 import org.koin.dsl.module.module
+import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.feature.background.notifications.AppVisibilityEvaluator
-import se.gustavkarlsson.skylight.android.feature.background.notifications.AuroraReportNotificationDecider
-import se.gustavkarlsson.skylight.android.feature.background.notifications.AuroraReportNotificationDeciderImpl
-import se.gustavkarlsson.skylight.android.feature.background.notifications.AuroraReportNotifier
+import se.gustavkarlsson.skylight.android.feature.background.notifications.Notification
 import se.gustavkarlsson.skylight.android.feature.background.notifications.NotificationChannelCreator
+import se.gustavkarlsson.skylight.android.feature.background.notifications.NotificationFormatter
+import se.gustavkarlsson.skylight.android.feature.background.notifications.NotificationEvaluator
+import se.gustavkarlsson.skylight.android.feature.background.notifications.NotificationEvaluatorImpl
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notifier
+import se.gustavkarlsson.skylight.android.feature.background.notifications.NotifierImpl
 import se.gustavkarlsson.skylight.android.feature.background.notifications.OutdatedEvaluator
-import se.gustavkarlsson.skylight.android.feature.background.persistence.NotifiedChanceRepository
-import se.gustavkarlsson.skylight.android.feature.background.persistence.SharedPreferencesNotifiedChanceRepository
-import se.gustavkarlsson.skylight.android.feature.background.scheduling.GetLatestAuroraReportScheduler
+import se.gustavkarlsson.skylight.android.feature.background.persistence.LastNotificationRepository
+import se.gustavkarlsson.skylight.android.feature.background.persistence.SharedPrefsLastNotificationRepository
+import se.gustavkarlsson.skylight.android.feature.background.scheduling.NotifyJob
+import se.gustavkarlsson.skylight.android.feature.background.scheduling.NotifyScheduler
 import se.gustavkarlsson.skylight.android.feature.background.scheduling.Scheduler
-import se.gustavkarlsson.skylight.android.feature.background.scheduling.UpdateJob
+import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
+import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.services.Formatter
+import se.gustavkarlsson.skylight.android.services.LocationProvider
+import se.gustavkarlsson.skylight.android.services.Settings
+import se.gustavkarlsson.skylight.android.services.Time
+import java.io.File
+
 
 val featureBackgroundModule = module {
 
@@ -36,12 +47,15 @@ val featureBackgroundModule = module {
 		"aurora"
 	}
 
-	single<Notifier<CompleteAuroraReport>> {
-		AuroraReportNotifier(
+	single<Formatter<Notification>>("notification") {
+		NotificationFormatter(chanceLevelFormatter = get("chanceLevel"))
+	}
+
+	single<Notifier> {
+		NotifierImpl(
 			context = get(),
 			notificationManager = get(),
-			chanceLevelFormatter = get("chanceLevel"),
-			chanceEvaluator = get("auroraReport"),
+			notificationFormatter = get("notification"),
 			activityClass = get("activity"),
 			channelId = get("auroraNotificationChannelId"),
 			analytics = get()
@@ -52,26 +66,43 @@ val featureBackgroundModule = module {
 		OutdatedEvaluator(time = get())
 	}
 
-	single<AuroraReportNotificationDecider> {
-		AuroraReportNotificationDeciderImpl(
-			notifiedChanceRepository = get(),
-			chanceEvaluator = get("auroraReport"),
-			outdatedEvaluator = get(),
-			appVisibilityEvaluator = AppVisibilityEvaluator(get())
+	single<NotificationEvaluator> {
+		NotificationEvaluatorImpl(
+			lastNotificationRepository = get(),
+			outdatedEvaluator = get()
 		)
+	}
+
+	single {
+		AppVisibilityEvaluator(keyguardManager = get())
 	}
 
 	single<Completable>("initiateJobManager") {
 		val context = get<Context>()
-		val decider = get<AuroraReportNotificationDecider>()
-		val notifier = get<Notifier<CompleteAuroraReport>>()
-		val outdatedEvaluator = get<OutdatedEvaluator>()
+		val settings = get<Settings>()
+		val appVisibilityEvaluator = get<AppVisibilityEvaluator>()
+		val locationProvider = get<LocationProvider>()
+		val provider = get<AuroraReportProvider>()
+		val chanceEvaluator = get<ChanceEvaluator<CompleteAuroraReport>>("completeAuroraReport")
+		val tracker = get<NotificationEvaluator>()
+		val notifier = get<Notifier>()
+		val time = get<Time>()
 		Completable.fromCallable {
 			JobManager.create(context).run {
 				addJobCreator { tag ->
 					when (tag) {
-						UpdateJob.UPDATE_JOB_TAG -> {
-							UpdateJob(decider, notifier, outdatedEvaluator, 60.seconds)
+						NotifyJob.NOTIFY_JOB_TAG -> {
+							NotifyJob(
+								settings,
+								appVisibilityEvaluator,
+								locationProvider,
+								provider,
+								chanceEvaluator,
+								tracker,
+								notifier,
+								time,
+								60.seconds
+							)
 						}
 						else -> null
 					}
@@ -80,7 +111,7 @@ val featureBackgroundModule = module {
 		}
 	}
 
-	single<Scheduler> { GetLatestAuroraReportScheduler(20.minutes, 10.minutes) }
+	single<Scheduler> { NotifyScheduler(20.minutes, 10.minutes) }
 
 	single<Completable>("scheduleBasedOnSettings") {
 		/*
@@ -121,10 +152,25 @@ val featureBackgroundModule = module {
 		get<Completable>("createNotificationChannel")
 			.andThen(get<Completable>("initiateJobManager"))
 			.andThen(get<Completable>("scheduleBasedOnSettings"))
-
 	}
 
-	single<NotifiedChanceRepository> {
-		SharedPreferencesNotifiedChanceRepository(context = get())
+	single<LastNotificationRepository> {
+		SharedPrefsLastNotificationRepository(context = get())
 	}
+
+	single<ModuleStarter>("background") {
+		val context = get<Context>()
+		val scheduleBackgroundNotifications = get<Completable>("scheduleBackgroundNotifications")
+		object : ModuleStarter {
+			override fun start() {
+				deleteOldNotifiedPrefsFile(context)
+				scheduleBackgroundNotifications.subscribe()
+			}
+
+		}
+	}
+}
+
+private fun deleteOldNotifiedPrefsFile(context: Context) {
+	File(context.filesDir.parent + "/shared_prefs/notified_chance.xml").delete()
 }

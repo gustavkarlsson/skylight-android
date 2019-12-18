@@ -1,5 +1,5 @@
 package se.gustavkarlsson.skylight.android.feature.background.notifications
 
-interface Notifier<in T> {
-	fun notify(value: T)
+internal interface Notifier {
+	fun notify(notification: Notification)
 }

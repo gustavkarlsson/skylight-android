@@ -8,6 +8,7 @@ import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.extensions.mapNotNull
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
+import timber.log.Timber
 
 internal class PlacesRepoSelectedPlaceRepository(
 	placesRepo: PlacesRepository

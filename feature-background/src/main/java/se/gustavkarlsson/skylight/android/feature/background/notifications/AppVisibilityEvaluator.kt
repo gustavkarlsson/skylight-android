@@ -9,8 +9,7 @@ internal class AppVisibilityEvaluator(
 ) {
 
 	fun isVisible(): Boolean {
-		val processInfo = getProcessInfo()
-		if (!isInForeground(processInfo)) return false
+		if (!isInForeground()) return false
 
 		// app is in foreground, but screen can be locked
 		return !keyguardManager.isKeyguardLocked
@@ -22,6 +21,6 @@ internal class AppVisibilityEvaluator(
 		return processInfo
 	}
 
-	private fun isInForeground(processInfo: RunningAppProcessInfo) =
-		processInfo.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+	private fun isInForeground() =
+		getProcessInfo().importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND
 }

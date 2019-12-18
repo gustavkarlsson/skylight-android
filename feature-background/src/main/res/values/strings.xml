@@ -2,4 +2,6 @@
 <resources>
 	<string name="aurora_alerts_channel_name">Aurora alerts</string>
 	<string name="possible_aurora">Possible Aurora</string>
+	<string name="x_at_your_current_location">%s at your current location</string>
+	<string name="x_in_y">%s in %s</string>
 </resources>

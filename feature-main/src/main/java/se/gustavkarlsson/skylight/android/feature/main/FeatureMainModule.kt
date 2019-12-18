@@ -95,7 +95,7 @@ val featureMainModule = module {
 		DarknessEvaluator
 	}
 
-	single<ChanceEvaluator<CompleteAuroraReport>>("auroraReport") {
+	single<ChanceEvaluator<CompleteAuroraReport>>("completeAuroraReport") {
 		CompleteAuroraReportEvaluator(
 			kpIndexEvaluator = get("kpIndex"),
 			geomagLocationEvaluator = get("geomagLocation"),
@@ -131,7 +131,7 @@ val featureMainModule = module {
 	viewModel {
 		MainViewModel(
 			mainKnot = get("main"),
-			auroraChanceEvaluator = get("auroraReport"),
+			auroraChanceEvaluator = get("completeAuroraReport"),
 			relativeTimeFormatter = get(),
 			chanceLevelFormatter = get("chanceLevel"),
 			darknessChanceEvaluator = get("darkness"),

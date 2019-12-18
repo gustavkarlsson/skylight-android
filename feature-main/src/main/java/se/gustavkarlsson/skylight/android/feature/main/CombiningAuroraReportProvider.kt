@@ -8,6 +8,7 @@ import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.entities.LocationResult
+import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.DarknessProvider
 import se.gustavkarlsson.skylight.android.services.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.services.KpIndexProvider

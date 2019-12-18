@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.settings
 
 import com.f2prateek.rx.preferences2.RxSharedPreferences
+import com.jakewharton.rx.replayingShare
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.rxkotlin.combineLatest
@@ -27,7 +28,7 @@ internal class RxPreferencesSettings(
 						.map { place to it.value }
 				}.combineLatest { it }
 			}
-			.share()
+			.replayingShare()
 
 	private fun getTriggerLevelFlowable(place: Place): Flowable<Optional<ChanceLevel>> =
 		rxSharedPreferences

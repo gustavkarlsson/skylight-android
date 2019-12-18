@@ -14,7 +14,7 @@ internal class InnerSettingsFragment : PreferenceFragmentCompat() {
 
 	override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
 		createPreferences(getThemedContext())
-		// FIXME conditionally add develop settings
+		// TODO conditionally add develop settings
 	}
 
 	private fun getThemedContext(): ContextThemeWrapper {
@@ -35,7 +35,7 @@ internal class InnerSettingsFragment : PreferenceFragmentCompat() {
 			summary = getString(R.string.pref_notifications_category_summary)
 		}.also { preferenceScreen.addPreference(it) }
 
-		val defaultValue = ChanceLevel.values().indexOf(Settings.DEFAULT_TRIGGER_LEVEL)
+		val defaultValue = ChanceLevel.values().indexOf(Settings.DEFAULT_TRIGGER_LEVEL).toString()
 		val entriesArray = resources.getStringArray(R.array.pref_notifications_level_entries)
 		val entryValuesArray = resources.getStringArray(R.array.pref_notifications_level_values)
 

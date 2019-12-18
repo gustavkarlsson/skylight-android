@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
 import android.Manifest
-import android.app.Activity
+import androidx.fragment.app.FragmentActivity
 import com.jakewharton.rxrelay2.BehaviorRelay
 import com.tbruyelle.rxpermissions2.RxPermissions
 import org.koin.dsl.module.module
@@ -26,7 +26,7 @@ val libPermissionsModule = module {
 	}
 
 	scope<PermissionRequester>("activity") {
-		val activity = get<Activity>(scopeId = "activity")
+		val activity = get<FragmentActivity>(scopeId = "activity")
 		val rxPermissions = RxPermissions(activity)
 			.apply { setLogging(BuildConfig.DEBUG) }
 		RxPermissionRequester(
