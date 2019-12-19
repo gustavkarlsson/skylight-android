@@ -17,9 +17,17 @@ val libPlacesModule = module {
 		SqlDelightPlacesRepository(database.dbPlaceQueries)
 	}
 
+	single<PlaceSelectionStorage> {
+		SharedPrefsPlaceSelectionStorage(context = get())
+	}
+
 	single<SelectedPlaceRepository> {
 		// TODO activity local composite disposable?
-		PlacesRepoSelectedPlaceRepository(get(), CompositeDisposable())
+		PlacesRepoSelectedPlaceRepository(
+			placesRepo = get(),
+			placeSelectionStorage = get(),
+			disposables = CompositeDisposable()
+		)
 	}
 
 	single<ModuleStarter>("places") {

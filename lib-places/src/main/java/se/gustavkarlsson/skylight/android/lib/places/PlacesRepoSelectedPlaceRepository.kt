@@ -8,13 +8,17 @@ import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 import timber.log.Timber
 
-// TODO Add persistence
 internal class PlacesRepoSelectedPlaceRepository(
 	placesRepo: PlacesRepository,
+	placeSelectionStorage: PlaceSelectionStorage,
 	disposables: CompositeDisposable
 ) : SelectedPlaceRepository {
-	private val knot = createKnot(placesRepo.all.toObservable())
-		.apply { disposables.add(this) }
+	private val knot =
+		createKnot(
+			placesRepo.all.toObservable(),
+			placeSelectionStorage::saveIndex,
+			placeSelectionStorage::loadIndex
+		).apply { disposables.add(this) }
 
 	override fun set(place: Place) = knot.change.accept(Change.SelectionChanged(place))
 
@@ -27,10 +31,19 @@ internal class PlacesRepoSelectedPlaceRepository(
 		.distinctUntilChanged()
 }
 
-private fun createKnot(placesStream: Observable<List<Place>>) = knot<State, Change, Nothing> {
+private fun createKnot(
+	placesStream: Observable<List<Place>>,
+	saveIndex: (Int) -> Unit,
+	loadIndex: () -> Int
+) = knot<State, Change, Nothing> {
 
 	state {
-		initial = State.Initial
+		initial = State.Initial(loadIndex())
+
+		watch<State.Loaded> {
+			val index = it.places.indexOf(it.selected)
+			saveIndex(index)
+		}
 	}
 
 	events {
@@ -49,7 +62,7 @@ private fun createKnot(placesStream: Observable<List<Place>>) = knot<State, Chan
 
 private fun State.selectionChanged(newSelection: Place): State =
 	when (this) {
-		State.Initial -> {
+		is State.Initial -> {
 			Timber.e(
 				"Cannot select a place before loading places. Place: %s",
 				newSelection
@@ -71,10 +84,23 @@ private fun State.selectionChanged(newSelection: Place): State =
 	}
 
 private fun State.placesUpdated(newPlaces: List<Place>): State {
-	val selected = when {
-		this == State.Initial -> newPlaces.last()
-		this is State.Loaded && newPlaces.size > places.size -> (newPlaces - places).last()
-		else -> selected.takeIf { it in newPlaces } ?: newPlaces.last()
+	val selected = when (this) {
+		is State.Initial -> {
+			val newIndex = selectedIndex.coerceIn(newPlaces.indices)
+			newPlaces[newIndex]
+		}
+		is State.Loaded -> when {
+			newPlaces.size > places.size -> {
+				(newPlaces - places).first()
+			}
+			selected in newPlaces -> {
+				selected
+			}
+			else -> {
+				val newIndex = places.indexOf(selected).coerceIn(newPlaces.indices)
+				newPlaces[newIndex]
+			}
+		}
 	}
 	return State.Loaded(selected = selected, places = newPlaces)
 }
@@ -82,7 +108,7 @@ private fun State.placesUpdated(newPlaces: List<Place>): State {
 private sealed class State {
 	abstract val selected: Place
 
-	object Initial : State() {
+	data class Initial(val selectedIndex: Int) : State() {
 		override val selected = Place.Current
 	}
 
