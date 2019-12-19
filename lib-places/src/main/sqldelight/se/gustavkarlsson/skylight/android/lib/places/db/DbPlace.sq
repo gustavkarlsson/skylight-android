@@ -1,4 +1,4 @@
-CREATE TABLE Place (
+CREATE TABLE DbPlace (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   latitude REAL NOT NULL,
@@ -6,12 +6,12 @@ CREATE TABLE Place (
 );
 
 selectAll:
-SELECT * FROM Place;
+SELECT * FROM DbPlace;
 
 insert:
-INSERT INTO Place (name, latitude, longitude)
+INSERT INTO DbPlace (name, latitude, longitude)
   VALUES (?, ?, ?);
 
 delete:
-DELETE FROM Place
+DELETE FROM DbPlace
   WHERE id = ?;
