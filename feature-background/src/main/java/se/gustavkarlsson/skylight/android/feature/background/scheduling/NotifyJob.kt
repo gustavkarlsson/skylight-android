@@ -11,6 +11,7 @@ import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.LocationResult
 import se.gustavkarlsson.skylight.android.entities.Place
+import se.gustavkarlsson.skylight.android.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.extensions.mapNotNull
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notification
 import se.gustavkarlsson.skylight.android.feature.background.notifications.PlaceWithChance
@@ -59,7 +60,7 @@ internal class NotifyJob(
 			.concatMapMaybe { (place, triggerLevel) ->
 				getPlaceWithChance(place)
 					.skipOnTimeout()
-					.filter { it.chanceLevel >= triggerLevel }
+					.filter { it.chanceLevel isGreaterOrEqual triggerLevel }
 			}
 			.blockingIterable()
 			.toList()
@@ -70,16 +71,16 @@ internal class NotifyJob(
 	}
 
 	private fun getPlacesToCheck() =
-		settings.notificationTriggerLevels
+		settings.streamNotificationTriggerLevels()
 			.firstOrError()
 			.flatMapObservable { it.toObservable() }
 			.mapNotNull(::onlyEnabled)
 
 	private fun onlyEnabled(
-		levels: Pair<Place, ChanceLevel?>
+		levels: Pair<Place, TriggerLevel>
 	): PlaceWithTriggerLevel? {
 		val (place, triggerLevel) = levels
-		return if (triggerLevel == null) null
+		return if (triggerLevel == TriggerLevel.NEVER) null
 		else PlaceWithTriggerLevel(place, triggerLevel)
 	}
 
@@ -115,4 +116,4 @@ internal class NotifyJob(
 	}
 }
 
-private data class PlaceWithTriggerLevel(val place: Place, val triggerLevel: ChanceLevel)
+private data class PlaceWithTriggerLevel(val place: Place, val triggerLevel: TriggerLevel)

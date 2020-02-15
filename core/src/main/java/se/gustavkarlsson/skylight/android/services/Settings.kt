@@ -1,13 +1,18 @@
 package se.gustavkarlsson.skylight.android.services
 
-import io.reactivex.Flowable
-import se.gustavkarlsson.skylight.android.entities.ChanceLevel
+import io.reactivex.Completable
+import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.Place
+import se.gustavkarlsson.skylight.android.entities.TriggerLevel
 
 interface Settings {
-    val notificationTriggerLevels: Flowable<List<Pair<Place, ChanceLevel?>>>
+	fun setNotificationTriggerLevel(place: Place, level: TriggerLevel): Completable
+
+	fun clearNotificationTriggerLevel(place: Place)
+
+	fun streamNotificationTriggerLevels(): Observable<List<Pair<Place, TriggerLevel>>>
 
 	companion object {
-		val DEFAULT_TRIGGER_LEVEL = ChanceLevel.MEDIUM
+		val DEFAULT_TRIGGER_LEVEL = TriggerLevel.MEDIUM
 	}
 }

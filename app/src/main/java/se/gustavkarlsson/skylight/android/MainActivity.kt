@@ -10,7 +10,8 @@ import se.gustavkarlsson.skylight.android.extensions.addToKoin
 import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 
-const val HAS_RUN_KEY = "has_run"
+// TODO Not necessary
+private const val HAS_RUN_KEY = "has_run"
 
 internal class MainActivity : AppCompatActivity() {
 

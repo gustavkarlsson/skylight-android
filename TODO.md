@@ -6,9 +6,10 @@
 * Rework API responses.
 * KtLint
 * Make testing use other settings
-* Add test to verify Koin setup
+* Switch to dagger
 * Add instrumentation testing to CI
 * Add more tests
+* Improve bindings (combine autodispose with scheduler?)
 
 ## Some day
 * Add the thing that clears data between launches (check with Nick)
@@ -25,6 +26,7 @@
 * Look into using Spek (problems with junit5 and android)
 * Look into replacing evernote-job with WorkManager (difficult since it's hard to post results)
 * Firebase remote config, or move more stuff to backend?
+* Use cases instead of repositories?
 
 ## Never?
 * Rename chance to score?

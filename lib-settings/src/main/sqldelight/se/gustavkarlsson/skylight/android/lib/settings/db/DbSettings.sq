@@ -1,0 +1,19 @@
+CREATE TABLE DbTriggerLevel (
+  placeId INTEGER NOT NULL PRIMARY KEY,
+  levelIndex INTEGER NOT NULL
+);
+
+getById:
+SELECT * FROM DbTriggerLevel WHERE placeId == ?;
+
+selectAll:
+SELECT * FROM DbTriggerLevel;
+
+update:
+UPDATE DbTriggerLevel SET levelIndex = ? WHERE placeId == ?;
+
+insert:
+INSERT INTO DbTriggerLevel (placeId, levelIndex) VALUES (?, ?);
+
+delete:
+DELETE FROM DbTriggerLevel WHERE placeId = ?;

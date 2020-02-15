@@ -1,13 +1,24 @@
 package se.gustavkarlsson.skylight.android.entities
 
 enum class ChanceLevel {
-	// Warning. These ordinals relate directly to pref_trigger_level_values
 	// Warning. The names are used to report analytics data
 	UNKNOWN,
 	NONE,
 	LOW,
 	MEDIUM,
 	HIGH;
+
+	infix fun isGreaterOrEqual(triggerLevel: TriggerLevel): Boolean =
+		when (this) {
+			UNKNOWN, NONE -> false
+			LOW -> triggerLevel == TriggerLevel.LOW
+			MEDIUM -> triggerLevel in (listOf(TriggerLevel.LOW, TriggerLevel.MEDIUM))
+			HIGH -> triggerLevel in (listOf(
+				TriggerLevel.LOW,
+				TriggerLevel.MEDIUM,
+				TriggerLevel.HIGH
+			))
+		}
 
 	companion object {
 		fun fromChance(chance: Chance): ChanceLevel {

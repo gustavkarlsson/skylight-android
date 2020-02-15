@@ -37,7 +37,6 @@ object Versions {
 	val fabric = "1.25.4"
 	val crashlytics = "2.10.0"
 	val archLifecycle = "2.0.0"
-	val rxpreferences = "2.0.0-RC3"
 	val rxrelay = "2.1.0"
 	val androidjob = "1.2.0"
 	val constraintLayout = "2.0.0-alpha5"
