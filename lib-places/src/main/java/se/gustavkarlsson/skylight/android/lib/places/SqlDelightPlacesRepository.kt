@@ -3,8 +3,7 @@ package se.gustavkarlsson.skylight.android.lib.places
 import com.ioki.textref.TextRef
 import com.squareup.sqldelight.runtime.rx.asObservable
 import com.squareup.sqldelight.runtime.rx.mapToList
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
 import se.gustavkarlsson.skylight.android.entities.Location
@@ -25,7 +24,7 @@ internal class SqlDelightPlacesRepository(
 		queries.delete(placeId)
 	}
 
-	override val all: Flowable<List<Place>> =
+	private val stream =
 		queries
 			.selectAll<Place> { id, name, latitude, longitude ->
 				Place.Custom(id, TextRef(name), Location(latitude, longitude))
@@ -33,5 +32,6 @@ internal class SqlDelightPlacesRepository(
 			.asObservable(dbScheduler)
 			.mapToList()
 			.map { listOf(Place.Current) + it }
-			.toFlowable(BackpressureStrategy.LATEST)
+
+	override fun stream(): Observable<List<Place>> = stream
 }

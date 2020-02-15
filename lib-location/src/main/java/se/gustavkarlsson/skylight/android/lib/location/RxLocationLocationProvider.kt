@@ -125,5 +125,5 @@ internal class RxLocationLocationProvider(
 		.doOnNext { Timber.i("Streamed location: %s", it) }
 		.replayingShare(Loadable.Loading)
 
-	override fun stream(): Flowable<Loadable<LocationResult>> = stream
+	override fun stream() = stream
 }

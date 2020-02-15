@@ -36,8 +36,7 @@ val libPlacesModule = module {
 		object : ModuleStarter {
 			@SuppressLint("CheckResult")
 			override fun start() {
-				placesRepository
-					.all
+				placesRepository.stream()
 					.map { it.count() }
 					.distinctUntilChanged()
 					.subscribe { placesCount ->

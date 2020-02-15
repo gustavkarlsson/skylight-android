@@ -1,11 +1,11 @@
 package se.gustavkarlsson.skylight.android.services
 
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Place
 
 interface PlacesRepository {
 	fun add(name: String, location: Location)
 	fun remove(placeId: Long)
-	val all: Flowable<List<Place>>
+	fun stream(): Observable<List<Place>>
 }

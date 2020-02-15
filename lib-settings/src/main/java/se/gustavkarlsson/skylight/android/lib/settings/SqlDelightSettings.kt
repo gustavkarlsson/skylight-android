@@ -38,12 +38,11 @@ internal class SqlDelightSettings(
 			.ignoreElement()
 	}
 
-	// FIXME call when deleting place?
 	override fun clearNotificationTriggerLevel(place: Place) = queries.delete(place.getId())
 
 	override fun streamNotificationTriggerLevels(
 	): Observable<List<Pair<Place, TriggerLevel>>> =
-		placesRepository.all.toObservable()
+		placesRepository.stream()
 			.flatMap<List<Pair<Place, TriggerLevel>>> { places ->
 				getTriggerLevelRecords()
 					.map { records ->

@@ -15,7 +15,7 @@ internal class PlacesRepoSelectedPlaceRepository(
 ) : SelectedPlaceRepository {
 	private val knot =
 		createKnot(
-			placesRepo.all.toObservable(),
+			placesRepo.stream(),
 			placeSelectionStorage::saveIndex,
 			placeSelectionStorage::loadIndex
 		).apply { disposables.add(this) }

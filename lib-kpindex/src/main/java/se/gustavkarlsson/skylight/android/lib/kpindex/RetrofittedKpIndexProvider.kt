@@ -15,8 +15,8 @@ import timber.log.Timber
 internal class RetrofittedKpIndexProvider(
 	private val api: KpIndexApi,
 	private val time: Time,
-	private val retryDelay: Duration,
-	private val pollingInterval: Duration
+	retryDelay: Duration,
+	pollingInterval: Duration
 ) : KpIndexProvider {
 
 	override fun get(): Single<Report<KpIndex>> =
@@ -24,22 +24,23 @@ internal class RetrofittedKpIndexProvider(
 			.onErrorReturnItem(Report.Error(R.string.error_no_internet_maybe, time.now()))
 			.doOnSuccess { Timber.i("Provided Kp index: %s", it) }
 
-	override fun stream(): Flowable<Loadable<Report<KpIndex>>> =
-		getReport()
-			.repeatWhen { it.delay(pollingInterval) }
-			.onErrorResumeNext { e: Throwable ->
-				Flowable.concat<Report<KpIndex>>(
-					Flowable.just(
-						Report.Error(R.string.error_no_internet_maybe, time.now())
-					),
-					Flowable.error(e)
-				)
-			}
-			.map<Loadable<Report<KpIndex>>> { Loadable.Loaded(it) }
-			.retryWhen { it.delay(retryDelay) }
-			.distinctUntilChanged()
-			.doOnNext { Timber.i("Streamed Kp index: %s", it) }
-			.replayingShare(Loadable.Loading)
+	private val stream = getReport()
+		.repeatWhen { it.delay(pollingInterval) }
+		.onErrorResumeNext { e: Throwable ->
+			Flowable.concat<Report<KpIndex>>(
+				Flowable.just(
+					Report.Error(R.string.error_no_internet_maybe, time.now())
+				),
+				Flowable.error(e)
+			)
+		}
+		.map<Loadable<Report<KpIndex>>> { Loadable.Loaded(it) }
+		.retryWhen { it.delay(retryDelay) }
+		.distinctUntilChanged()
+		.doOnNext { Timber.i("Streamed Kp index: %s", it) }
+		.replayingShare(Loadable.Loading)
+
+	override fun stream() = stream
 
 	private fun getReport(): Single<Report<KpIndex>> =
 		api.get()
