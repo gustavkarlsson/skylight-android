@@ -2,11 +2,9 @@ package se.gustavkarlsson.skylight.android.feature.settings
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
-import io.reactivex.Completable
-import io.reactivex.schedulers.Schedulers
+import androidx.preference.PreferenceManager
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.ModuleStarter
@@ -25,9 +23,7 @@ val featureSettingsModule = module {
 		val analytics = get<Analytics>()
 		val settings = get<Settings>()
 		val factoryRegistry = get<FragmentFactoryRegistry>()
-		val oldSharedPreferencesFileName = "FIXME"
-		val sharedPrefs =
-			get<Context>().getSharedPreferences(oldSharedPreferencesFileName, Context.MODE_PRIVATE)
+		val context = get<Context>()
 		object : ModuleStarter {
 			@SuppressLint("CheckResult")
 			override fun start() {
@@ -37,8 +33,7 @@ val featureSettingsModule = module {
 						analytics.setProperty("trigger_lvl_min", min)
 						analytics.setProperty("trigger_lvl_max", max)
 					}
-				clearOldSharedPreferences(sharedPrefs, oldSharedPreferencesFileName)
-					.subscribe()
+				clearOldSharedPreferences(context)
 			}
 		}
 	}
@@ -62,12 +57,5 @@ private fun getTriggerLevels(settings: Settings) =
 		.distinctUntilChanged()
 
 
-private fun clearOldSharedPreferences(sharedPrefs: SharedPreferences, fileName: String) =
-	Completable
-		.fromRunnable {
-			sharedPrefs.edit(commit = true) {
-				clear()
-			}
-			// FIXME delete file
-		}
-		.subscribeOn(Schedulers.io())
+private fun clearOldSharedPreferences(context: Context) =
+	PreferenceManager.getDefaultSharedPreferences(context).edit { clear() }
