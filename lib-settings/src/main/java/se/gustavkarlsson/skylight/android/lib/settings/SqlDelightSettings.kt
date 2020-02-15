@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.settings
 
+import com.jakewharton.rx.replayingShare
 import com.squareup.sqldelight.runtime.rx.asObservable
 import com.squareup.sqldelight.runtime.rx.mapToList
 import io.reactivex.Completable
@@ -13,7 +14,7 @@ import se.gustavkarlsson.skylight.android.lib.settings.db.DbSettingsQueries
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.Settings
 
-class SqlDelightSettings(
+internal class SqlDelightSettings(
 	private val queries: DbSettingsQueries,
 	private val placesRepository: PlacesRepository,
 	private val dbScheduler: Scheduler = Schedulers.io()
@@ -40,9 +41,10 @@ class SqlDelightSettings(
 	// FIXME call when deleting place?
 	override fun clearNotificationTriggerLevel(place: Place) = queries.delete(place.getId())
 
-	override fun streamNotificationTriggerLevels(): Observable<List<Pair<Place, TriggerLevel>>> =
+	override fun streamNotificationTriggerLevels(
+	): Observable<List<Pair<Place, TriggerLevel>>> =
 		placesRepository.all.toObservable()
-			.flatMap { places ->
+			.flatMap<List<Pair<Place, TriggerLevel>>> { places ->
 				getTriggerLevelRecords()
 					.map { records ->
 						places.map { place ->
@@ -50,6 +52,7 @@ class SqlDelightSettings(
 						}
 					}
 			}
+			.replayingShare()
 
 	private fun getTriggerLevelRecords(): Observable<List<TriggerLevelRecord>> =
 		queries

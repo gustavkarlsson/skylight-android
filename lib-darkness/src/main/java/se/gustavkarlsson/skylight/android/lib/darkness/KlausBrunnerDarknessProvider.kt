@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.darkness
 
+import com.jakewharton.rx.replayingShare
 import io.reactivex.Flowable
 import io.reactivex.Single
 import net.e175.klaus.solarpositioning.Grena3
@@ -45,6 +46,7 @@ internal class KlausBrunnerDarknessProvider(
 			}
 			.distinctUntilChanged()
 			.doOnNext { Timber.i("Streamed darkness: %s", it) }
+			.replayingShare(Loadable.Loading)
 
 	private fun getDarkness(locationResult: LocationResult, timestamp: Instant): Report<Darkness> =
 		locationResult.map(

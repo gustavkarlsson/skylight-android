@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.geomaglocation
 
+import com.jakewharton.rx.replayingShare
 import io.reactivex.Flowable
 import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
@@ -42,6 +43,7 @@ internal class GeomagLocationProviderImpl(
 			}
 			.distinctUntilChanged()
 			.doOnNext { Timber.i("Streamed geomag location: %s", it) }
+			.replayingShare(Loadable.Loading)
 
 	private fun getSingleGeomagLocation(locationResult: LocationResult): Report<GeomagLocation> =
 		locationResult.map(

@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.reversegeocoder
 
 import android.location.Geocoder
+import com.jakewharton.rx.replayingShare
 import io.reactivex.Flowable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
@@ -60,6 +61,7 @@ internal class AndroidReverseGeocoder(
 			}
 			.distinctUntilChanged()
 			.doOnNext { Timber.i("Streamed location name: %s", it) }
+			.replayingShare(Loadable.Loading)
 
 	private fun getSingleName(locationResult: LocationResult): Single<ReverseGeocodingResult> =
 		Single.fromCallable {

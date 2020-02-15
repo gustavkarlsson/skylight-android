@@ -15,8 +15,8 @@ import timber.log.Timber
 internal class RetrofittedKpIndexProvider(
 	private val api: KpIndexApi,
 	private val time: Time,
-	retryDelay: Duration,
-	pollingInterval: Duration
+	private val retryDelay: Duration,
+	private val pollingInterval: Duration
 ) : KpIndexProvider {
 
 	override fun get(): Single<Report<KpIndex>> =
@@ -24,9 +24,7 @@ internal class RetrofittedKpIndexProvider(
 			.onErrorReturnItem(Report.Error(R.string.error_no_internet_maybe, time.now()))
 			.doOnSuccess { Timber.i("Provided Kp index: %s", it) }
 
-	override fun stream(): Flowable<Loadable<Report<KpIndex>>> = stream
-
-	private val stream =
+	override fun stream(): Flowable<Loadable<Report<KpIndex>>> =
 		getReport()
 			.repeatWhen { it.delay(pollingInterval) }
 			.onErrorResumeNext { e: Throwable ->
