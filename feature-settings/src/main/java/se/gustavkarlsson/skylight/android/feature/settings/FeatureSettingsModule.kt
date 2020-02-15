@@ -2,9 +2,9 @@ package se.gustavkarlsson.skylight.android.feature.settings
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.preference.PreferenceManager
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
-import androidx.preference.PreferenceManager
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.ModuleStarter

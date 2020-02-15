@@ -50,7 +50,7 @@ object Versions {
 	val koptional = "0.2.0"
 	val uiAutomator = "2.2.0"
 	val mapboxService = "4.7.0"
-	val sqldelight = "1.1.4"
+	val sqldelight = "1.2.2"
 	val banner = "1.2.0"
 	val knot = "1.6.1"
 	val simpleStack = "2.0.3"

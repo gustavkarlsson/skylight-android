@@ -35,6 +35,4 @@ android {
 dependencies {
 	implementation(project(":core"))
 	implementation(project(":lib-ui"))
-
-	implementation("androidx.preference:preference:${Versions.androidPreference}")
 }
