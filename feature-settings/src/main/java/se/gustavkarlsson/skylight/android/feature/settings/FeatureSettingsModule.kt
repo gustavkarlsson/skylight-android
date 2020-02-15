@@ -75,5 +75,6 @@ private fun getTriggerLevels(settings: Settings) =
 private fun clearOldSharedPreferences(context: Context) =
 	PreferenceManager.getDefaultSharedPreferences(context)
 		.edit {
-			clear()
+			putString("pref_notifications_key", null)
+			putString("pref_trigger_level_key", null)
 		}
