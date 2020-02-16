@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import se.gustavkarlsson.skylight.android.feature.main.R
 
-internal class DrawerAdapter : RecyclerView.Adapter<DrawerAdapter.ViewHolder>() {
+internal class DrawerAdapter(
+	private val viewModel: DrawerViewModel
+) : RecyclerView.Adapter<DrawerAdapter.ViewHolder>() {
 
 	private var items: List<DrawerItem> = emptyList()
 
@@ -33,14 +35,18 @@ internal class DrawerAdapter : RecyclerView.Adapter<DrawerAdapter.ViewHolder>() 
 		val context = view.context
 		val item = items[position]
 		view.setCompoundDrawablesRelativeWithIntrinsicBounds(item.icon, 0, 0, 0)
-		view.text = item.name.resolve(context)
+		view.text = item.text.resolve(context)
 		view.isSelected = item.isActive
-		view.setOnClickListener {
-			item.onClick()
+		item.clickEvent?.let { event ->
+			view.setOnClickListener {
+				viewModel.onEvent(event)
+			}
 		}
-		view.setOnLongClickListener {
-			item.onLongClick()
-			true
+		item.longClickEvent?.let { event ->
+			view.setOnLongClickListener {
+				viewModel.onEvent(event)
+				true
+			}
 		}
 	}
 
@@ -54,8 +60,8 @@ internal class DrawerAdapter : RecyclerView.Adapter<DrawerAdapter.ViewHolder>() 
 		override fun getNewListSize() = newItems.size
 
 		override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-			val oldLocation = oldItems[oldItemPosition].name
-			val newLocation = newItems[newItemPosition].name
+			val oldLocation = oldItems[oldItemPosition].text
+			val newLocation = newItems[newItemPosition].text
 			return oldLocation == newLocation
 		}
 

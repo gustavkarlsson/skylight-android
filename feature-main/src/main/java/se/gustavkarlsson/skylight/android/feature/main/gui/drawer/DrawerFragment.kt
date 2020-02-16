@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.gui.drawer
 
+import android.content.DialogInterface
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -16,8 +17,6 @@ internal class DrawerFragment : BaseFragment() {
 
 	override val layoutId: Int = R.layout.fragment_drawer
 
-	private val adapter = DrawerAdapter()
-
 	private fun closeDrawer() {
 		view?.findParentViewByType<NavigationView>()?.let { navView ->
 			view?.findParentViewByType<DrawerLayout>()?.closeDrawer(navView)
@@ -26,13 +25,23 @@ internal class DrawerFragment : BaseFragment() {
 
 	private val viewModel by viewModel<DrawerViewModel>()
 
+	private val adapter by lazy { DrawerAdapter(viewModel) }
+
+	private var removePlaceDialog: DialogInterface? = null
+
 	override fun initView() {
 		placesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 		placesRecyclerView.adapter = adapter
 	}
 
+	override fun onDestroyView() {
+		removePlaceDialog?.dismiss()
+		removePlaceDialog = null
+		super.onDestroyView()
+	}
+
 	override fun bindData(scope: LifecycleScopeProvider<*>) {
-		viewModel.places
+		viewModel.drawerItems
 			.autoDisposable(scope)
 			.subscribe(adapter::setItems)
 
@@ -40,15 +49,20 @@ internal class DrawerFragment : BaseFragment() {
 			.autoDisposable(scope)
 			.subscribe { closeDrawer() }
 
-		viewModel.openRemoveLocationDialog
+		viewModel.openRemovePlaceDialog
 			.autoDisposable(scope)
-			.subscribe {
+			.subscribe { dialogData ->
+				removePlaceDialog?.dismiss()
 				val context = requireContext()
-				MaterialAlertDialogBuilder(context)
-					.setTitle(it.title.resolve(context))
-					.setPositiveButton(R.string.remove) { _, _ -> it.onConfirm() }
+				val dialog = MaterialAlertDialogBuilder(context)
+					.setTitle(dialogData.title.resolve(context))
+					.setPositiveButton(R.string.remove) { _, _ ->
+						viewModel.onRemovePlaceClicked(dialogData.placeId)
+					}
 					.setNegativeButton(R.string.cancel, null)
-					.show()
+					.create()
+				removePlaceDialog = dialog
+				dialog.show()
 			}
 	}
 }
