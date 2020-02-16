@@ -10,9 +10,6 @@ import se.gustavkarlsson.skylight.android.extensions.addToKoin
 import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 
-// TODO Not necessary
-private const val HAS_RUN_KEY = "has_run"
-
 internal class MainActivity : AppCompatActivity() {
 
 	private val navigator by inject<Navigator>()
@@ -22,14 +19,9 @@ internal class MainActivity : AppCompatActivity() {
 		bindScope(createScope("activity"))
 		addToKoin<FragmentActivity>(this)
 		setContentView(R.layout.activity_main)
-		if (savedInstanceState?.containsKey(HAS_RUN_KEY) != true) {
+		if (savedInstanceState == null) {
 			navigator.push(NavItem("main"))
 		}
-	}
-
-	override fun onSaveInstanceState(outState: Bundle) {
-		outState.putBoolean(HAS_RUN_KEY, true)
-		super.onSaveInstanceState(outState)
 	}
 
 	override fun onBackPressed() = navigator.onBackPressed()
