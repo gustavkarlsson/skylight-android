@@ -1,21 +1,17 @@
 package se.gustavkarlsson.skylight.android.feature.addplace
 
-import android.text.SpannedString
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.text.bold
-import androidx.core.text.buildSpannedString
 import androidx.recyclerview.widget.RecyclerView
-import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
 
 internal class SearchResultAdapter(
 	private val viewModel: AddPlaceViewModel
 ) : RecyclerView.Adapter<SearchResultAdapter.ViewHolder>() {
 
-	private var items: List<PlaceSuggestion> = emptyList()
+	private var items: List<SuggestionItem> = emptyList()
 
-	fun setItems(items: List<PlaceSuggestion>) {
+	fun setItems(items: List<SuggestionItem>) {
 		this.items = items
 		notifyDataSetChanged()
 	}
@@ -33,26 +29,10 @@ internal class SearchResultAdapter(
 
 	override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 		val view = holder.view
-		val suggestion = items[position]
-		view.text = suggestion.createText()
-		view.setOnClickListener { viewModel.onSuggestionClicked(suggestion) }
+		val item = items[position]
+		view.text = item.text
+		view.setOnClickListener { viewModel.onSuggestionClicked(item.suggestion) }
 	}
 
 	class ViewHolder(val view: TextView) : RecyclerView.ViewHolder(view)
 }
-
-private fun PlaceSuggestion.createText(): SpannedString {
-	val subTitle = createSubTitle()
-	return buildSpannedString {
-		bold { append(simpleName) }
-		if (subTitle.isNotBlank()) {
-			appendln()
-			append(subTitle)
-		}
-	}
-}
-
-private fun PlaceSuggestion.createSubTitle() =
-	fullName
-		.removePrefix(simpleName)
-		.dropWhile { !it.isLetterOrDigit() }

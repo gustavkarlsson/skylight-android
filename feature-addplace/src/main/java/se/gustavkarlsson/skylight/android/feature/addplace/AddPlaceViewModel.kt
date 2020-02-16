@@ -1,5 +1,8 @@
 package se.gustavkarlsson.skylight.android.feature.addplace
 
+import android.text.SpannedString
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
 import androidx.lifecycle.ViewModel
 import com.ioki.textref.TextRef
 import com.jakewharton.rxrelay2.PublishRelay
@@ -32,10 +35,15 @@ internal class AddPlaceViewModel(
 
 	fun onSearchTextChanged(newText: String) = knot.change.accept(Change.Query(newText))
 
-	val placeSuggestions: Flowable<List<PlaceSuggestion>> = state
+	val placeSuggestions: Flowable<List<SuggestionItem>> = state
 		.map(State::suggestions)
 		.distinctUntilChanged()
 		.filter { it.isNotEmpty() }
+		.map { suggestions ->
+			suggestions.map {
+				SuggestionItem(createText(it), it)
+			}
+		}
 
 	fun onSuggestionClicked(suggestion: PlaceSuggestion) = openSaveDialogRelay.accept(suggestion)
 
@@ -62,6 +70,24 @@ internal class AddPlaceViewModel(
 
 	val isSuggestionsVisible: Flowable<Boolean> = resultState.map { it == ResultState.SUGGESTIONS }
 }
+
+private fun createText(suggestion: PlaceSuggestion): SpannedString {
+	val subTitle = createSubTitle(suggestion)
+	return buildSpannedString {
+		bold { append(suggestion.simpleName) }
+		if (subTitle.isNotBlank()) {
+			appendln()
+			append(subTitle)
+		}
+	}
+}
+
+private fun createSubTitle(suggestion: PlaceSuggestion) =
+	suggestion.fullName
+		.removePrefix(suggestion.simpleName)
+		.dropWhile { !it.isLetterOrDigit() }
+
+internal data class SuggestionItem(val text: CharSequence, val suggestion: PlaceSuggestion)
 
 internal enum class ResultState {
 	EMPTY, NO_SUGGESTIONS, SUGGESTIONS
