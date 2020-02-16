@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.darkness
 
 import com.jakewharton.rx.replayingShare
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
 import net.e175.klaus.solarpositioning.Grena3
 import org.threeten.bp.Duration
@@ -28,12 +28,12 @@ internal class KlausBrunnerDarknessProvider(
 			.doOnSuccess { Timber.i("Provided darkness: %s", it) }
 
 	override fun stream(
-		locations: Flowable<Loadable<LocationResult>>
-	): Flowable<Loadable<Report<Darkness>>> =
+		locations: Observable<Loadable<LocationResult>>
+	): Observable<Loadable<Report<Darkness>>> =
 		locations
 			.switchMap { loadableLocation ->
 				when (loadableLocation) {
-					Loadable.Loading -> Flowable.just(Loadable.Loading)
+					Loadable.Loading -> Observable.just(Loadable.Loading)
 					is Loadable.Loaded -> {
 						Single
 							.fromCallable {
@@ -41,6 +41,7 @@ internal class KlausBrunnerDarknessProvider(
 							}
 							.map { Loadable.Loaded(it) }
 							.repeatWhen { it.delay(pollingInterval) }
+							.toObservable()
 					}
 				}
 			}

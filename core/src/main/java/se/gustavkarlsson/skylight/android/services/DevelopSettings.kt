@@ -1,12 +1,12 @@
 package se.gustavkarlsson.skylight.android.services
 
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import org.threeten.bp.Duration
 
 interface DevelopSettings {
 	val overrideValues: Boolean
 
-	val overrideValuesChanges: Flowable<Boolean>
+	val overrideValuesChanges: Observable<Boolean>
 
 	val kpIndex: Double
 

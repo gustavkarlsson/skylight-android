@@ -1,9 +1,9 @@
 package se.gustavkarlsson.skylight.android.feature.main
 
 import com.jakewharton.rx.replayingShare
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.rxkotlin.Flowables
+import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.Singles
 import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Loadable
@@ -29,9 +29,9 @@ internal class CombiningAuroraReportProvider(
 			.doOnSuccess { Timber.i("Provided aurora report: %s", it) }
 
 	override fun stream(
-		locations: Flowable<Loadable<LocationResult>>
-	): Flowable<LoadableAuroraReport> =
-		Flowables
+		locations: Observable<Loadable<LocationResult>>
+	): Observable<LoadableAuroraReport> =
+		Observables
 			.combineLatest(
 				reverseGeocoder.stream(locations),
 				kpIndexProvider.stream(),

@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.modules
 
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.feature.main.PermissionChecker
 
@@ -25,8 +25,8 @@ class TestPermissionChecker(
 	val isLocationGrantedRelay =
 		BehaviorRelay.createDefault(initialIsLocationGranted)
 
-	override val isLocationGranted: Flowable<Boolean> =
-		isLocationGrantedRelay.toFlowable(BackpressureStrategy.LATEST)
+	override val isLocationGranted: Observable<Boolean> =
+		isLocationGrantedRelay.toObservable(BackpressureStrategy.LATEST)
 
 	override fun signalPermissionGranted() = isLocationGrantedRelay.accept(true)
 

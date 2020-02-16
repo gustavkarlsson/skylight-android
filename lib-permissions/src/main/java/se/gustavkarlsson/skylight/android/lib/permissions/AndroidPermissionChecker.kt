@@ -4,8 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.jakewharton.rxrelay2.BehaviorRelay
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.Permission
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import timber.log.Timber
@@ -16,10 +15,9 @@ internal class AndroidPermissionChecker(
 	private val permissionRelay: BehaviorRelay<Permission>
 ) : PermissionChecker {
 
-	override val permission: Flowable<Permission> =
+	override val permission: Observable<Permission> =
 		permissionRelay
 			.distinctUntilChanged()
-			.toFlowable(BackpressureStrategy.LATEST)
 			.doOnSubscribe { refresh() }
 
 	override fun refresh() {

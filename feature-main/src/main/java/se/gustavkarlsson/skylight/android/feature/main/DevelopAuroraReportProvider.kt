@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main
 
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
@@ -44,7 +44,7 @@ internal class DevelopAuroraReportProvider(
 		}.flatMap { it }
 
 	override fun stream(
-		locations: Flowable<Loadable<LocationResult>>
-	): Flowable<LoadableAuroraReport> =
+		locations: Observable<Loadable<LocationResult>>
+	): Observable<LoadableAuroraReport> =
 		realProvider.stream(locations) // TODO Honor develop settings
 }

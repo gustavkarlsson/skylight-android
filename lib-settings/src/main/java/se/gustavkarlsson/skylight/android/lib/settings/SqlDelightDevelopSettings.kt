@@ -1,13 +1,13 @@
 package se.gustavkarlsson.skylight.android.lib.settings
 
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.services.DevelopSettings
 
 internal class SqlDelightDevelopSettings : DevelopSettings {
 	override val overrideValues: Boolean
 		get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-	override val overrideValuesChanges: Flowable<Boolean>
+	override val overrideValuesChanges: Observable<Boolean>
 		get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 	override val kpIndex: Double
 		get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.

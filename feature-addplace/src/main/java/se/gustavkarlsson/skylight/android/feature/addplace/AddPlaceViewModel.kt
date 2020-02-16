@@ -6,8 +6,6 @@ import androidx.core.text.buildSpannedString
 import androidx.lifecycle.ViewModel
 import com.ioki.textref.TextRef
 import com.jakewharton.rxrelay2.PublishRelay
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
@@ -23,7 +21,6 @@ internal class AddPlaceViewModel(
 	private val destination: NavItem?,
 	val errorMessages: Observable<TextRef>
 ) : ViewModel() {
-	private val state = knot.state.toFlowable(BackpressureStrategy.LATEST)
 
 	override fun onCleared() {
 		super.onCleared()
@@ -35,7 +32,7 @@ internal class AddPlaceViewModel(
 
 	fun onSearchTextChanged(newText: String) = knot.change.accept(Change.Query(newText))
 
-	val placeSuggestions: Flowable<List<SuggestionItem>> = state
+	val placeSuggestions: Observable<List<SuggestionItem>> = knot.state
 		.map(State::suggestions)
 		.distinctUntilChanged()
 		.filter { it.isNotEmpty() }
@@ -52,7 +49,7 @@ internal class AddPlaceViewModel(
 		destination?.let(navigator::replaceScope) ?: navigator.pop()
 	}
 
-	private val resultState: Flowable<ResultState> = state
+	private val resultState: Observable<ResultState> = knot.state
 		.mapNotNull { state ->
 			when {
 				state.query.isBlank() -> ResultState.EMPTY
@@ -63,12 +60,12 @@ internal class AddPlaceViewModel(
 		}
 		.distinctUntilChanged()
 
-	val isEmptyVisible: Flowable<Boolean> = resultState.map { it == ResultState.EMPTY }
+	val isEmptyVisible: Observable<Boolean> = resultState.map { it == ResultState.EMPTY }
 
-	val isNoSuggestionsVisible: Flowable<Boolean> =
+	val isNoSuggestionsVisible: Observable<Boolean> =
 		resultState.map { it == ResultState.NO_SUGGESTIONS }
 
-	val isSuggestionsVisible: Flowable<Boolean> = resultState.map { it == ResultState.SUGGESTIONS }
+	val isSuggestionsVisible: Observable<Boolean> = resultState.map { it == ResultState.SUGGESTIONS }
 }
 
 private fun createText(suggestion: PlaceSuggestion): SpannedString {

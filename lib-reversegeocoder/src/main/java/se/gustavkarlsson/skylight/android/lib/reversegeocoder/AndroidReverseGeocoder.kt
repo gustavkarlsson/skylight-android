@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.lib.reversegeocoder
 
 import android.location.Geocoder
 import com.jakewharton.rx.replayingShare
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.Duration
@@ -33,25 +33,24 @@ internal class AndroidReverseGeocoder(
 			.doOnSuccess { Timber.i("Provided location name: %s", it.value) }
 
 	override fun stream(
-		locations: Flowable<Loadable<LocationResult>>
-	): Flowable<Loadable<String?>> =
+		locations: Observable<Loadable<LocationResult>>
+	): Observable<Loadable<String?>> =
 		locations
 			.switchMap { loadableLocationResult ->
 				when (loadableLocationResult) {
-					Loadable.Loading -> Flowable.just(Loadable.Loading)
+					Loadable.Loading -> Observable.just(Loadable.Loading)
 					is Loadable.Loaded -> {
 						getSingleName(loadableLocationResult.value)
-							.toFlowable()
-							.flatMap { reverseGeocodingResult ->
+							.flatMapObservable { reverseGeocodingResult ->
 								when (reverseGeocodingResult) {
 									is ReverseGeocodingResult.Success ->
-										Flowable.just(Loadable.Loaded(reverseGeocodingResult.name))
+										Observable.just(Loadable.Loaded(reverseGeocodingResult.name))
 									ReverseGeocodingResult.Failure.Location ->
-										Flowable.just(Loadable.Loaded(null))
+										Observable.just(Loadable.Loaded(null))
 									is ReverseGeocodingResult.Failure.Io ->
-										Flowable.concat(
-											Flowable.just(Loadable.Loaded(null)),
-											Flowable.error(reverseGeocodingResult.exception)
+										Observable.concat(
+											Observable.just(Loadable.Loaded(null)),
+											Observable.error(reverseGeocodingResult.exception)
 										)
 								}
 							}

@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.modules
 
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
 import org.koin.dsl.module.module
 import se.gustavkarlsson.koptional.Optional
@@ -27,6 +27,6 @@ class TestLocationProvider(
 		return Single.fromCallable { delegate() }
 	}
 
-	override val stream: Flowable<Optional<Location>> =
+	override val stream: Observable<Optional<Location>> =
 		TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
 }

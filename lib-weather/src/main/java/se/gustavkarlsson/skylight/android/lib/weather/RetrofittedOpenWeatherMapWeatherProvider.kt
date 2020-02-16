@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.weather
 
 import com.jakewharton.rx.replayingShare
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Loadable
@@ -43,22 +43,22 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
 			.doOnSuccess { Timber.i("Provided weather: %s", it) }
 
 	override fun stream(
-		locations: Flowable<Loadable<LocationResult>>
-	): Flowable<Loadable<Report<Weather>>> =
+		locations: Observable<Loadable<LocationResult>>
+	): Observable<Loadable<Report<Weather>>> =
 		locations
 			.switchMap { loadable ->
 				when (loadable) {
-					Loadable.Loading -> Flowable.just(Loadable.Loading)
+					Loadable.Loading -> Observable.just(Loadable.Loading)
 					is Loadable.Loaded -> {
 						val reports = loadable.value.map(
 							onSuccess = ::streamReports,
 							onMissingPermissionError = {
-								Flowable.just(
+								Observable.just(
 									Report.Error(R.string.error_no_location_permission, time.now())
 								)
 							},
 							onUnknownError = {
-								Flowable.just(
+								Observable.just(
 									Report.Error(R.string.error_no_location, time.now())
 								)
 							}
@@ -71,13 +71,14 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
 			.doOnNext { Timber.i("Streamed weather: %s", it) }
 			.replayingShare(Loadable.Loading)
 
-	private fun streamReports(location: Location): Flowable<Report<Weather>> =
+	private fun streamReports(location: Location): Observable<Report<Weather>> =
 		getReport(location)
 			.repeatWhen { it.delay(pollingInterval) }
+			.toObservable()
 			.onErrorResumeNext { e: Throwable ->
-				Flowable.concat(
-					Flowable.just(Report.Error(R.string.error_no_internet_maybe, time.now())),
-					Flowable.error<Report<Weather>>(e)
+				Observable.concat(
+					Observable.just(Report.Error(R.string.error_no_internet_maybe, time.now())),
+					Observable.error<Report<Weather>>(e)
 				)
 			}
 			.retryWhen { it.delay(retryDelay) }

@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.feature.main
 
 import de.halfbit.knot.Knot
 import de.halfbit.knot.knot
-import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import se.gustavkarlsson.skylight.android.entities.Loadable
@@ -81,12 +80,11 @@ internal fun buildMainKnot(
 			distinctUntilChanged()
 			switchMap { (stream, place) ->
 				if (stream && place != null) {
-					val locationUpdates: Flowable<Loadable<LocationResult>> =
+					val locationUpdates: Observable<Loadable<LocationResult>> =
 						if (place is Place.Custom) {
-							Flowable.just(Loadable.Loaded(LocationResult.Success(place.location)))
+							Observable.just(Loadable.Loaded(LocationResult.Success(place.location)))
 						} else locationProvider.stream()
 					auroraReportProvider.stream(locationUpdates)
-						.toObservable()
 						.map<Change> { result ->
 							Change.AuroraReportSuccess(place, result)
 						}
@@ -104,7 +102,6 @@ internal fun buildMainKnot(
 	events {
 		source {
 			permissionChecker.permission
-				.toObservable()
 				.map(Change::LocationPermission)
 		}
 		source {

@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.geomaglocation
 
 import com.jakewharton.rx.replayingShare
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.Loadable
@@ -29,8 +29,8 @@ internal class GeomagLocationProviderImpl(
 			.doOnSuccess { Timber.i("Provided geomag location: %s", it) }
 
 	override fun stream(
-		locations: Flowable<Loadable<LocationResult>>
-	): Flowable<Loadable<Report<GeomagLocation>>> =
+		locations: Observable<Loadable<LocationResult>>
+	): Observable<Loadable<Report<GeomagLocation>>> =
 		locations
 			.switchMapSingle { loadableLocation ->
 				when (loadableLocation) {

@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.modules
 
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.feature.intro.RunVersionManager
 
@@ -24,8 +24,8 @@ class TestRunVersionManager(
 
 	val isFirstRunRelay = BehaviorRelay.createDefault(initialIsFirstRun)
 
-	override val isFirstRun: Flowable<Boolean> =
-		isFirstRunRelay.toFlowable(BackpressureStrategy.LATEST)
+	override val isFirstRun: Observable<Boolean> =
+		isFirstRunRelay.toObservable(BackpressureStrategy.LATEST)
 
 	override fun signalFirstRunCompleted() = isFirstRunRelay.accept(false)
 

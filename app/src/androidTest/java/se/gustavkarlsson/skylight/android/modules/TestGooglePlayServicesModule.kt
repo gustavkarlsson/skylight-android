@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.modules
 
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.feature.googleplayservices.GooglePlayServicesChecker
 
@@ -23,7 +23,7 @@ class TestGooglePlayServicesChecker(initialIsAvailable: Boolean) :
 
 	val isAvailableRelay = BehaviorRelay.createDefault(initialIsAvailable)
 
-	override val isAvailable: Flowable<Boolean> = isAvailableRelay.toFlowable(BackpressureStrategy.LATEST)
+	override val isAvailable: Observable<Boolean> = isAvailableRelay.toObservable(BackpressureStrategy.LATEST)
 
 	override fun signalInstalled() {
 		isAvailableRelay.accept(true)

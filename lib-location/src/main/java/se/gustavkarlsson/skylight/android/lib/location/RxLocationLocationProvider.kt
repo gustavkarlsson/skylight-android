@@ -4,8 +4,7 @@ import android.annotation.SuppressLint
 import com.google.android.gms.location.LocationRequest
 import com.jakewharton.rx.replayingShare
 import com.patloew.rxlocation.FusedLocation
-import io.reactivex.BackpressureStrategy
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.Duration
@@ -86,12 +85,11 @@ internal class RxLocationLocationProvider(
 	@SuppressLint("MissingPermission")
 	private val pollingLocations = fusedLocation
 		.updates(pollingLocationRequest)
-		.toFlowable(BackpressureStrategy.LATEST)
 		.doOnNext { Timber.d("Polled location: %s", it) }
 
 	private val locations = lastLocation
 		.switchIfEmpty(forcedLocation)
-		.toFlowable()
+		.toObservable()
 		.concatWith(pollingLocations)
 
 	private val stream = locations
@@ -115,9 +113,9 @@ internal class RxLocationLocationProvider(
 					LocationResult.Failure.Unknown
 				}
 			}
-			Flowable.concat(
-				Flowable.just(result),
-				Flowable.error(exception)
+			Observable.concat(
+				Observable.just(result),
+				Observable.error(exception)
 			)
 		}
 		.map<Loadable<LocationResult>> { Loadable.Loaded(it) }

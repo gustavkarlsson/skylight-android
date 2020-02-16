@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.kpindex
 
 import com.jakewharton.rx.replayingShare
-import io.reactivex.Flowable
+import io.reactivex.Observable
 import io.reactivex.Single
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.KpIndex
@@ -26,12 +26,13 @@ internal class RetrofittedKpIndexProvider(
 
 	private val stream = getReport()
 		.repeatWhen { it.delay(pollingInterval) }
+		.toObservable()
 		.onErrorResumeNext { e: Throwable ->
-			Flowable.concat<Report<KpIndex>>(
-				Flowable.just(
+			Observable.concat<Report<KpIndex>>(
+				Observable.just(
 					Report.Error(R.string.error_no_internet_maybe, time.now())
 				),
-				Flowable.error(e)
+				Observable.error(e)
 			)
 		}
 		.map<Loadable<Report<KpIndex>>> { Loadable.Loaded(it) }
