@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.places
 
 import com.ioki.textref.TextRef
+import com.jakewharton.rx.replayingShare
 import com.squareup.sqldelight.runtime.rx.asObservable
 import com.squareup.sqldelight.runtime.rx.mapToList
 import io.reactivex.Observable
@@ -16,13 +17,10 @@ internal class SqlDelightPlacesRepository(
 	dbScheduler: Scheduler = Schedulers.io()
 ) : PlacesRepository {
 
-	override fun add(name: String, location: Location) {
+	override fun add(name: String, location: Location) =
 		queries.insert(name, location.latitude, location.longitude)
-	}
 
-	override fun remove(placeId: Long) {
-		queries.delete(placeId)
-	}
+	override fun remove(placeId: Long) = queries.delete(placeId)
 
 	private val stream =
 		queries
@@ -32,6 +30,8 @@ internal class SqlDelightPlacesRepository(
 			.asObservable(dbScheduler)
 			.mapToList()
 			.map { listOf(Place.Current) + it }
+			.distinctUntilChanged()
+			.replayingShare()
 
 	override fun stream(): Observable<List<Place>> = stream
 }

@@ -1,40 +1,47 @@
 package se.gustavkarlsson.skylight.android.feature.background.scheduling
 
-import com.evernote.android.job.JobManager
-import com.evernote.android.job.JobRequest
+import android.content.Context
+import androidx.work.Constraints
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import org.threeten.bp.Duration
-import se.gustavkarlsson.skylight.android.feature.background.scheduling.NotifyJob.Companion.NOTIFY_JOB_TAG
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 internal class NotifyScheduler(
-	private val scheduleInterval: Duration,
-	private val scheduleFlex: Duration
+	private val appContext: Context,
+	private val scheduleInterval: Duration
 ) : Scheduler {
 
+	private val workManager get() = WorkManager.getInstance(appContext)
+
 	override fun schedule() {
-		if (!isScheduled()) {
-			JobRequest.Builder(NOTIFY_JOB_TAG)
-				.setPeriodic(scheduleInterval.toMillis(), scheduleFlex.toMillis())
-				.setUpdateCurrent(true)
-				.setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
-				.setRequirementsEnforced(true)
-				.build()
-				.schedule()
-			Timber.d("Scheduling periodic updates")
-		}
+		val request = createRequest(scheduleInterval)
+		workManager.enqueueUniquePeriodicWork(
+			UNIQUE_NAME_NOTIFY,
+			ExistingPeriodicWorkPolicy.KEEP,
+			request
+		)
+		Timber.d("Scheduled periodic updates")
 	}
 
 	override fun unschedule() {
-		if (isScheduled()) {
-			JobManager.instance().cancelAllForTag(NOTIFY_JOB_TAG)
-			Timber.d("Unscheduling periodic updates")
-		}
-	}
-
-	private fun isScheduled(): Boolean {
-		val jobRequests = JobManager.instance().getAllJobRequestsForTag(NOTIFY_JOB_TAG)
-		val scheduled = jobRequests.isNotEmpty()
-		Timber.d(if (scheduled) "updates are scheduled" else "updates are not scheduled")
-		return scheduled
+		workManager.cancelUniqueWork(UNIQUE_NAME_NOTIFY)
+		Timber.d("Unscheduled periodic updates")
 	}
 }
+
+private const val UNIQUE_NAME_NOTIFY = "NOTIFY"
+
+internal fun createRequest(interval: Duration) =
+	PeriodicWorkRequestBuilder<NotifyWorker>(interval.toMillis(), TimeUnit.MILLISECONDS)
+		.setInitialDelay(interval.toMillis(), TimeUnit.MILLISECONDS)
+		.setConstraints(buildConstraints())
+		.build()
+
+private fun buildConstraints() = Constraints.Builder()
+	.setRequiredNetworkType(NetworkType.CONNECTED) // TODO Make roaming configurable?
+	.setRequiresBatteryNotLow(true)
+	.build()

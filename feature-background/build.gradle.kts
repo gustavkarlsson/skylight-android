@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+
 plugins {
 	id("com.android.library")
 	id("kotlin-android")
@@ -11,6 +13,11 @@ android {
 		targetCompatibility = Versions.java
 	}
 
+	kotlinOptions {
+		this as KotlinJvmOptions // TODO Upgrade gradle and this can be removed (from all modules)
+		jvmTarget = Versions.java.toString()
+	}
+
 	defaultConfig {
 		minSdkVersion(Versions.minSdk)
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -21,11 +28,10 @@ dependencies {
 	implementation(project(":core"))
 	implementation(project(":lib-ui")) //TODO only used for coloring notification?
 
-	// Firebase
-	implementation("com.google.firebase:firebase-core:${Versions.firebase}")
-
-	// Android Job
-	implementation("com.evernote:android-job:${Versions.androidjob}")
+	// WorkManager
+	implementation("androidx.work:work-runtime:${Versions.workManager}")
+	implementation("androidx.work:work-runtime-ktx:${Versions.workManager}")
+	implementation("androidx.work:work-rxjava2:${Versions.workManager}")
 
 	// Ktx
 	implementation("androidx.core:core-ktx:${Versions.ktxCore}")

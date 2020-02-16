@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Build
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
 import io.reactivex.Single
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.dsl.module.module

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+
 plugins {
 	id("com.android.library")
 	id("kotlin-android")
@@ -9,6 +11,11 @@ android {
 	compileOptions {
 		sourceCompatibility = Versions.java
 		targetCompatibility = Versions.java
+	}
+
+	kotlinOptions {
+		this as KotlinJvmOptions
+		jvmTarget = Versions.java.toString()
 	}
 
 	defaultConfig {
@@ -26,5 +33,5 @@ android {
 dependencies {
 	implementation(project(":core"))
 
-	implementation("com.mapbox.mapboxsdk:mapbox-sdk-services:${Versions.mapboxService}")
+	implementation("com.mapbox.mapboxsdk:mapbox-sdk-services:${Versions.mapboxServices}")
 }
