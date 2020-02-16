@@ -2,17 +2,13 @@ package se.gustavkarlsson.skylight.android.feature.addplace
 
 import android.view.View
 import android.widget.LinearLayout
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.ioki.textref.TextRef
-import com.jakewharton.rxbinding2.widget.textChanges
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_add_place.*
-import kotlinx.android.synthetic.main.layout_save_dialog.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import se.gustavkarlsson.koptional.toOptional
@@ -32,13 +28,12 @@ internal class AddPlaceFragment : BaseFragment() {
 		parametersOf(destination.toOptional())
 	}
 
-	override val toolbar: Toolbar?
-		get() = toolbarView
+	override val toolbar: Toolbar? get() = toolbarView
 
 	private val searchView: SearchView
 		get() = (toolbarView.menu.findItem(R.id.action_search).actionView as SearchView)
 
-	private val adapter = SearchResultAdapter()
+	private val adapter by lazy { SearchResultAdapter(viewModel) }
 
 	private var errorSnackbarAndMessage: Pair<Snackbar, TextRef>? = null
 
@@ -59,7 +54,7 @@ internal class AddPlaceFragment : BaseFragment() {
 	override fun bindData(scope: LifecycleScopeProvider<*>) {
 		searchView.setQueryTextChangeListener(viewModel::onSearchTextChanged)
 
-		viewModel.searchResultItems
+		viewModel.placeSuggestions
 			.autoDisposable(scope)
 			.subscribe(adapter::setItems)
 
@@ -81,10 +76,6 @@ internal class AddPlaceFragment : BaseFragment() {
 				searchResultRecyclerView.fadeToVisible(visible, View.INVISIBLE)
 			}
 
-		viewModel.openSaveDialog
-			.autoDisposable(scope)
-			.subscribe(::openSaveDialog)
-
 		viewModel.errorMessages
 			.autoDisposable(scope)
 			.subscribe { message ->
@@ -101,29 +92,6 @@ internal class AddPlaceFragment : BaseFragment() {
 				message,
 				Snackbar.LENGTH_LONG
 			) to message
-		}
-	}
-
-	private fun openSaveDialog(dialogData: SaveDialogData) {
-		val customView = layoutInflater.inflate(R.layout.layout_save_dialog, null)
-		val editText = customView.placeNameEditText.apply {
-			setText(dialogData.suggestedName)
-			setSelection(dialogData.suggestedName.length)
-		}
-		MaterialAlertDialogBuilder(requireContext()).apply {
-			setView(customView)
-			setTitle(R.string.save_place)
-			setNegativeButton(R.string.cancel, null)
-			setPositiveButton(R.string.save) { _, _ -> dialogData.onSave(editText.text.toString()) }
-		}.create().run {
-			show()
-			val positiveButton = getButton(AlertDialog.BUTTON_POSITIVE)
-			val textChangeDisposable = editText.textChanges()
-				.map(CharSequence::isNotBlank)
-				.subscribe {
-					positiveButton.isEnabled = it
-				}
-			setOnDismissListener { textChangeDisposable.dispose() }
 		}
 	}
 }

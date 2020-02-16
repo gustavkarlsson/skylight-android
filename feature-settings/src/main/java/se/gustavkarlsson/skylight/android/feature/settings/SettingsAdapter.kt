@@ -5,8 +5,8 @@ import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ioki.textref.TextRef
 import kotlinx.android.synthetic.main.layout_settings_item.view.*
 import se.gustavkarlsson.skylight.android.entities.Place
@@ -49,7 +49,8 @@ internal class SettingsAdapter(
 			val triggerLevel = TriggerLevel.values()[which]
 			viewModel.onTriggerLevelSelected(place, triggerLevel)
 		}
-		AlertDialog.Builder(context)
+		// TODO dismiss on activity stopped
+		MaterialAlertDialogBuilder(context)
 			.setItems(text, listener)
 			.show()
 	}
