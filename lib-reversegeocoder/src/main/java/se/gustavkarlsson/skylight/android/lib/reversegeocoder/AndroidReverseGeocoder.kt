@@ -10,6 +10,7 @@ import se.gustavkarlsson.koptional.Absent
 import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.entities.Loadable
+import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.LocationResult
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.services.ReverseGeocoder
@@ -63,24 +64,25 @@ internal class AndroidReverseGeocoder(
 			.replayingShare(Loadable.Loading)
 
 	private fun getSingleName(locationResult: LocationResult): Single<ReverseGeocodingResult> =
-		Single.fromCallable {
+		Single.defer {
 			when (locationResult) {
-				is LocationResult.Success -> {
-					val actualLocation = locationResult.location
-					try {
-						val addresses = geocoder.getFromLocation(
-							actualLocation.latitude,
-							actualLocation.longitude,
-							1
-						)
-						ReverseGeocodingResult.Success(addresses.firstOrNull()?.locality)
-					} catch (e: IOException) {
-						Timber.w(e, "Failed to reverse geocode: %s", actualLocation)
-						ReverseGeocodingResult.Failure.Io(e)
-					}
-				}
-				is LocationResult.Failure ->
-					ReverseGeocodingResult.Failure.Location
+				is LocationResult.Success -> getSingleName(locationResult.location)
+				is LocationResult.Failure -> Single.just(ReverseGeocodingResult.Failure.Location)
+			}
+		}
+
+	private fun getSingleName(location: Location): Single<ReverseGeocodingResult> =
+		Single.fromCallable {
+			try {
+				val addresses = geocoder.getFromLocation(
+					location.latitude,
+					location.longitude,
+					1
+				)
+				ReverseGeocodingResult.Success(addresses.firstOrNull()?.locality)
+			} catch (e: IOException) {
+				Timber.w(e, "Failed to reverse geocode: %s", location)
+				ReverseGeocodingResult.Failure.Io(e)
 			}
 		}.subscribeOn(Schedulers.io())
 }
