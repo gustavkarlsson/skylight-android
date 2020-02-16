@@ -9,7 +9,6 @@
 * Switch to dagger
 * Add instrumentation testing to CI
 * Add more tests
-* Improve bindings (combine autodispose with scheduler?)
 
 ## Some day
 * Add the thing that clears data between launches (check with Nick)
