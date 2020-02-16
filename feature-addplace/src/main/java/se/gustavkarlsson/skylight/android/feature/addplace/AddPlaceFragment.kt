@@ -12,8 +12,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.ioki.textref.TextRef
 import com.jakewharton.rxbinding2.widget.textChanges
-import com.uber.autodispose.LifecycleScopeProvider
-import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_add_place.*
 import kotlinx.android.synthetic.main.layout_save_dialog.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -23,6 +21,7 @@ import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.argument
+import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.fadeToVisible
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.showErrorSnackbar
 
@@ -63,40 +62,28 @@ internal class AddPlaceFragment : BaseFragment() {
 		super.onDestroyView()
 	}
 
-	override fun bindData(scope: LifecycleScopeProvider<*>) {
+	override fun bindData() {
 		searchView.setQueryTextChangeListener(viewModel::onSearchTextChanged)
 
-		viewModel.placeSuggestions
-			.autoDisposable(scope)
-			.subscribe(adapter::setItems)
+		viewModel.placeSuggestions.bind(this, adapter::setItems)
 
-		viewModel.openSaveDialog
-			.autoDisposable(scope)
-			.subscribe(::openSaveDialog)
+		viewModel.openSaveDialog.bind(this, ::openSaveDialog)
 
-		viewModel.isEmptyVisible
-			.autoDisposable(scope)
-			.subscribe { visible ->
-				emptyView.fadeToVisible(visible)
-			}
+		viewModel.isEmptyVisible.bind(this) { visible ->
+			emptyView.fadeToVisible(visible)
+		}
 
-		viewModel.isNoSuggestionsVisible
-			.autoDisposable(scope)
-			.subscribe { visible ->
-				noSuggestionsView.fadeToVisible(visible)
-			}
+		viewModel.isNoSuggestionsVisible.bind(this) { visible ->
+			noSuggestionsView.fadeToVisible(visible)
+		}
 
-		viewModel.isSuggestionsVisible
-			.autoDisposable(scope)
-			.subscribe { visible ->
-				searchResultRecyclerView.fadeToVisible(visible, View.INVISIBLE)
-			}
+		viewModel.isSuggestionsVisible.bind(this) { visible ->
+			searchResultRecyclerView.fadeToVisible(visible, View.INVISIBLE)
+		}
 
-		viewModel.errorMessages
-			.autoDisposable(scope)
-			.subscribe { message ->
-				errorSnackbarAndMessage.handleNewMessage(message)
-			}
+		viewModel.errorMessages.bind(this) { message ->
+			errorSnackbarAndMessage.handleNewMessage(message)
+		}
 	}
 
 	@SuppressLint("InflateParams")

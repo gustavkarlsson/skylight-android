@@ -5,12 +5,11 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
-import com.uber.autodispose.LifecycleScopeProvider
-import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_drawer.placesRecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
+import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.findParentViewByType
 
 internal class DrawerFragment : BaseFragment() {
@@ -40,18 +39,12 @@ internal class DrawerFragment : BaseFragment() {
 		super.onDestroyView()
 	}
 
-	override fun bindData(scope: LifecycleScopeProvider<*>) {
-		viewModel.drawerItems
-			.autoDisposable(scope)
-			.subscribe(adapter::setItems)
+	override fun bindData() {
+		viewModel.drawerItems.bind(this, adapter::setItems)
 
-		viewModel.closeDrawer
-			.autoDisposable(scope)
-			.subscribe { closeDrawer() }
+		viewModel.closeDrawer.bind(this) { closeDrawer() }
 
-		viewModel.openRemovePlaceDialog
-			.autoDisposable(scope)
-			.subscribe { dialogData ->
+		viewModel.openRemovePlaceDialog.bind(this) { dialogData ->
 				removePlaceDialog?.dismiss()
 				val context = requireContext()
 				val dialog = MaterialAlertDialogBuilder(context)

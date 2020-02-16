@@ -4,13 +4,12 @@ import android.content.DialogInterface
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ioki.textref.TextRef
-import com.uber.autodispose.LifecycleScopeProvider
-import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_settings.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
+import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 
 internal class SettingsFragment : BaseFragment() {
 
@@ -28,16 +27,10 @@ internal class SettingsFragment : BaseFragment() {
 		itemsRecyclerView.adapter = adapter
 	}
 
-	override fun bindData(scope: LifecycleScopeProvider<*>) {
-		viewModel.triggerLevelItems
-			.autoDisposable(scope)
-			.subscribe(adapter::setItems)
+	override fun bindData() {
+		viewModel.triggerLevelItems.bind(this, adapter::setItems)
 
-		viewModel.showSelectTriggerLevel
-			.autoDisposable(scope)
-			.subscribe {
-				showTriggerLevelDialog(it)
-			}
+		viewModel.showSelectTriggerLevel.bind(this, ::showTriggerLevelDialog)
 	}
 
 	override fun onDestroyView() {

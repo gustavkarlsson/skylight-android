@@ -32,11 +32,6 @@ dependencies {
 	api("androidx.fragment:fragment:${Versions.androidFragment}")
 	api("androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}")
 
-	// AutoDispose
-	api("com.uber.autodispose:autodispose-kotlin:${Versions.autodispose}")
-	api("com.uber.autodispose:autodispose-android-kotlin:${Versions.autodispose}")
-	api("com.uber.autodispose:autodispose-android-archcomponents-kotlin:${Versions.autodispose}")
-
 	// Koin
 	api("org.koin:koin-androidx-viewmodel:${Versions.koin}")
 	api("org.koin:koin-androidx-scope:${Versions.koin}")

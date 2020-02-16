@@ -7,21 +7,11 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import com.uber.autodispose.LifecycleScopeProvider
-import com.uber.autodispose.android.lifecycle.scope
 import org.koin.android.ext.android.get
-import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
+import se.gustavkarlsson.skylight.android.services.Analytics
 
 abstract class BaseFragment : Fragment() {
-
-	init {
-		@Suppress("LeakingThis")
-		doOnEvery(this, Lifecycle.Event.ON_START) {
-			bindData(scope(Lifecycle.Event.ON_STOP))
-		}
-	}
 
 	final override fun onCreateView(
 		inflater: LayoutInflater,
@@ -32,6 +22,7 @@ abstract class BaseFragment : Fragment() {
 	override fun onViewStateRestored(savedInstanceState: Bundle?) {
 		super.onViewStateRestored(savedInstanceState)
 		initView()
+		bindData()
 		toolbar?.let(::setupBackNavigation)
 	}
 
@@ -55,5 +46,5 @@ abstract class BaseFragment : Fragment() {
 
 	protected open fun initView() = Unit
 
-	protected open fun bindData(scope: LifecycleScopeProvider<*>) = Unit
+	protected open fun bindData() = Unit
 }

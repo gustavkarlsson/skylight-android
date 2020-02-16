@@ -7,33 +7,21 @@ import android.provider.Settings
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.Lifecycle
+import androidx.fragment.app.Fragment
 import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding2.view.clicks
-import com.uber.autodispose.LifecycleScopeProvider
-import com.uber.autodispose.android.lifecycle.scope
-import com.uber.autodispose.kotlin.autoDisposable
 import io.reactivex.Observable
-import kotlinx.android.synthetic.main.fragment_main.chance
-import kotlinx.android.synthetic.main.fragment_main.chanceSubtitle
-import kotlinx.android.synthetic.main.fragment_main.darknessCard
-import kotlinx.android.synthetic.main.fragment_main.drawerLayout
-import kotlinx.android.synthetic.main.fragment_main.errorBanner
-import kotlinx.android.synthetic.main.fragment_main.geomagLocationCard
-import kotlinx.android.synthetic.main.fragment_main.kpIndexCard
-import kotlinx.android.synthetic.main.fragment_main.nav_view
-import kotlinx.android.synthetic.main.fragment_main.toolbarView
-import kotlinx.android.synthetic.main.fragment_main.weatherCard
+import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import se.gustavkarlsson.skylight.android.feature.main.BuildConfig
 import se.gustavkarlsson.skylight.android.feature.main.R
-import se.gustavkarlsson.skylight.android.services.PermissionRequester
 import se.gustavkarlsson.skylight.android.lib.navigation.BackButtonHandler
 import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
+import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
+import se.gustavkarlsson.skylight.android.services.PermissionRequester
 import timber.log.Timber
 import kotlin.math.roundToInt
 
@@ -75,10 +63,9 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
 			false
 		}
 
-	override fun bindData(scope: LifecycleScopeProvider<*>) {
+	override fun bindData() {
 		toolbarView.itemClicks()
-			.autoDisposable(scope)
-			.subscribe { item ->
+			.bind(this) { item ->
 				when (item.itemId) {
 					R.id.action_settings -> navigator.push(NavItem("settings"))
 					R.id.action_about -> navigator.push(NavItem("about"))
@@ -87,56 +74,47 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
 
 		viewModel.toolbarTitleText
 			.doOnNext { Timber.d("Updating toolbar title: %s", it) }
-			.autoDisposable(scope)
-			.subscribe { toolbarView.title = it.resolve(requireContext()) }
+			.bind(this) { toolbarView.title = it.resolve(requireContext()) }
 
 		viewModel.chanceLevelText
 			.doOnNext { Timber.d("Updating chanceLevel text: %s", it) }
 			.map { it.resolve(requireContext()) }
-			.autoDisposable(scope)
-			.subscribe(chance::setText)
+			.bind(this, chance::setText)
 
 		viewModel.chanceSubtitleText
 			.doOnNext { Timber.d("Updating chanceSubtitle text: %s", it) }
-			.autoDisposable(scope)
-			.subscribe { chanceSubtitle.text = it.resolve(requireContext()) }
+			.bind(this) { chanceSubtitle.text = it.resolve(requireContext()) }
 
-		viewModel.darkness.present(
+		viewModel.darkness.bindToCard(
+			this,
 			darknessCard,
 			::showDarknessDetails,
-			scope,
 			"darkness"
 		)
-		viewModel.geomagLocation.present(
+		viewModel.geomagLocation.bindToCard(
+			this,
 			geomagLocationCard,
 			::showGeomagLocationDetails,
-			scope,
 			"geomagLocation"
 		)
-		viewModel.kpIndex.present(
+		viewModel.kpIndex.bindToCard(
+			this,
 			kpIndexCard,
 			::showKpIndexDetails,
-			scope,
 			"kpIndex"
 		)
-		viewModel.weather.present(
+		viewModel.weather.bindToCard(
+			this,
 			weatherCard,
 			::showWeatherDetails,
-			scope,
 			"weather"
 		)
 
-		viewModel.errorBannerData
-			.autoDisposable(scope)
-			.subscribe { updateBanner(it.value) }
+		viewModel.errorBannerData.bind(this) { updateBanner(it.value) }
 
-		viewModel.requestLocationPermission
-			.autoDisposable(scope)
-			.subscribe { requestLocationPermission() }
+		viewModel.requestLocationPermission.bind(this) { requestLocationPermission() }
 
-		viewModel.openAppDetails
-			.autoDisposable(scope)
-			.subscribe { openAppDetails() }
+		viewModel.openAppDetails.bind(this) { openAppDetails() }
 	}
 
 	private fun updateBanner(data: BannerData?) {
@@ -155,14 +133,12 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
 	}
 
 	private fun requestLocationPermission() {
-		get<PermissionRequester>().request()
-			.autoDisposable(scope(Lifecycle.Event.ON_DESTROY)) // Required to not dispose for dialog
-			.subscribe()
+		get<PermissionRequester>().request().bind(this)
 	}
 
 	private fun openAppDetails() {
 		val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-		intent.data = Uri.parse("package:${BuildConfig.APPLICATION_ID}")
+		intent.data = Uri.fromParts("package", requireContext().packageName, null)
 		startActivity(intent)
 	}
 
@@ -209,18 +185,17 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
 		}
 	}
 
-	private fun Observable<FactorItem>.present(
+	private fun Observable<FactorItem>.bindToCard(
+		fragment: Fragment,
 		cardView: FactorCard,
 		onCardClick: () -> Unit,
-		scope: LifecycleScopeProvider<*>,
 		factorDebugName: String
 	) {
 		val maxProgress = (cardView.progressView.max * 0.97).roundToInt()
 		val minProgress = (cardView.progressView.max - maxProgress)
 
 		doOnNext { Timber.d("Updating %s factor card: %s", factorDebugName, it) }
-			.autoDisposable(scope)
-			.subscribe { item ->
+			.bind(fragment) { item ->
 				cardView.valueView.text = item.valueText.resolve(cardView.context)
 				cardView.progressView.progressTintList = ColorStateList.valueOf(item.progressColor)
 				cardView.progressView.progress = item.progress?.let { progressPercent ->
@@ -229,7 +204,6 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
 			}
 
 		cardView.clicks()
-			.autoDisposable(scope)
-			.subscribe { onCardClick() }
+			.bind(fragment) { onCardClick() }
 	}
 }

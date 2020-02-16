@@ -42,7 +42,6 @@ object Versions {
 	val timber = "4.7.1"
 	val rxpermissions = "0.10.2"
 	val solarPositioning = "0.0.9"
-	val autodispose = "0.8.0"
 	val leakcanary = "1.6.3"
 	val ktxCore = "1.0.1"
 	val koin = "1.0.1"
