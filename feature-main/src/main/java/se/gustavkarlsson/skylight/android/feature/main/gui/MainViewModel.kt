@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.feature.main.gui
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.ViewModel
 import com.ioki.textref.TextRef
-import com.jakewharton.rxrelay2.PublishRelay
 import de.halfbit.knot.Knot
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -141,16 +140,16 @@ internal class MainViewModel(
 					BannerData(
 						TextRef(R.string.location_permission_denied_message),
 						TextRef(R.string.fix),
-						{ requestLocationPermissionRelay.accept(Unit) },
-						R.drawable.ic_location_on_white_24dp
+						R.drawable.ic_location_on_white_24dp,
+						BannerData.Event.RequestLocationPermission
 					).toOptional()
 				}
 				it.locationPermission == Permission.DeniedForever -> {
 					BannerData(
 						TextRef(R.string.location_permission_denied_forever_message),
 						TextRef(R.string.fix),
-						{ openAppDetailsRelay.accept(Unit) },
-						R.drawable.ic_warning_white_24dp
+						R.drawable.ic_warning_white_24dp,
+						BannerData.Event.OpenAppDetails
 					).toOptional()
 				}
 				else -> Absent
@@ -160,12 +159,6 @@ internal class MainViewModel(
 			a.value?.message == b.value?.message &&
 				a.value?.buttonText == b.value?.buttonText
 		}
-
-	private val requestLocationPermissionRelay = PublishRelay.create<Unit>()
-	val requestLocationPermission: Observable<Unit> = requestLocationPermissionRelay
-
-	private val openAppDetailsRelay = PublishRelay.create<Unit>()
-	val openAppDetails: Observable<Unit> = openAppDetailsRelay
 
 	private fun <T : Any> Observable<State>.toFactorItems(
 		selectFactor: LoadableAuroraReport.() -> Loadable<Report<T>>,
@@ -219,6 +212,10 @@ internal data class FactorItem(
 internal data class BannerData(
 	val message: TextRef,
 	val buttonText: TextRef,
-	val buttonAction: () -> Unit,
-	@DrawableRes val icon: Int
-)
+	@DrawableRes val icon: Int,
+	val buttonEvent: Event
+) {
+	enum class Event {
+		RequestLocationPermission, OpenAppDetails
+	}
+}

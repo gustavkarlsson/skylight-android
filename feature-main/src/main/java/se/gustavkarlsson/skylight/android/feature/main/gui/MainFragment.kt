@@ -111,17 +111,18 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
 		)
 
 		viewModel.errorBannerData.bind(this) { updateBanner(it.value) }
-
-		viewModel.requestLocationPermission.bind(this) { requestLocationPermission() }
-
-		viewModel.openAppDetails.bind(this) { openAppDetails() }
 	}
 
 	private fun updateBanner(data: BannerData?) {
 		errorBanner.run {
 			if (data != null) {
 				setMessage(data.message.resolve(requireContext()))
-				setRightButton(data.buttonText.resolve(requireContext())) { data.buttonAction() }
+				setRightButton(data.buttonText.resolve(requireContext())) {
+					when (data.buttonEvent) {
+						BannerData.Event.RequestLocationPermission -> requestLocationPermission()
+						BannerData.Event.OpenAppDetails -> openAppDetails()
+					}
+				}
 			}
 			val isVisible = visibility == View.VISIBLE
 			val shouldShow = data != null
