@@ -44,6 +44,7 @@ dependencies {
 	implementation(project(":lib-ui"))
 
 	implementation("androidx.cardview:cardview:${Versions.androidCardview}")
+
 	// TODO replace with google material banner when available
 	implementation("com.sergivonavi:materialbanner:${Versions.banner}")
 	implementation("de.halfbit:knot:${Versions.knot}")

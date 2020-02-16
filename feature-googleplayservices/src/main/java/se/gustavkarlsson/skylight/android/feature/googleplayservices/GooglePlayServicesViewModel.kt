@@ -12,7 +12,7 @@ internal class GooglePlayServicesViewModel(
 	private val navigator: Navigator,
 	private val destination: NavItem
 ) : ViewModel() {
-	// TODO Extract to module (together with GooglePlayServicesChecker)
+	// TODO Extract to library module (together with GooglePlayServicesChecker)
 	fun makeGooglePlayServicesAvailable(activity: Activity): Completable =
 		GoogleApiAvailability.getInstance()
 			.makeGooglePlayServicesAvailable(activity).toCompletable()

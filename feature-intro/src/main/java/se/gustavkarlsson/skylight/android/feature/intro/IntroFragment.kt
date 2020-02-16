@@ -24,7 +24,6 @@ internal class IntroFragment : BaseFragment() {
 		myLocationButton.clicks()
 			.autoDisposable(scope)
 			.subscribe {
-				// TODO request location here already? (similar approach as beiwagen-android?)
 				viewModel.registerScreenSeen()
 				viewModel.navigateToMain()
 			}
