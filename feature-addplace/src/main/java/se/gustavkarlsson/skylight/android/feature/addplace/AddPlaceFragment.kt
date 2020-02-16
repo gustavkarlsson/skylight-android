@@ -1,17 +1,25 @@
 package se.gustavkarlsson.skylight.android.feature.addplace
 
+import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.view.View
 import android.widget.LinearLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import com.ioki.textref.TextRef
+import com.jakewharton.rxbinding2.widget.textChanges
 import com.uber.autodispose.LifecycleScopeProvider
 import com.uber.autodispose.kotlin.autoDisposable
 import kotlinx.android.synthetic.main.fragment_add_place.*
+import kotlinx.android.synthetic.main.layout_save_dialog.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import se.gustavkarlsson.koptional.toOptional
+import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.argument
@@ -37,6 +45,8 @@ internal class AddPlaceFragment : BaseFragment() {
 
 	private var errorSnackbarAndMessage: Pair<Snackbar, TextRef>? = null
 
+	private var savePlaceDialog: DialogInterface? = null
+
 	override fun initView() {
 		toolbarView.inflateMenu(R.menu.add_place_menu)
 		searchResultRecyclerView.adapter = adapter
@@ -48,6 +58,8 @@ internal class AddPlaceFragment : BaseFragment() {
 	override fun onDestroyView() {
 		errorSnackbarAndMessage?.first?.dismiss()
 		errorSnackbarAndMessage = null
+		savePlaceDialog?.dismiss()
+		savePlaceDialog = null
 		super.onDestroyView()
 	}
 
@@ -57,6 +69,10 @@ internal class AddPlaceFragment : BaseFragment() {
 		viewModel.placeSuggestions
 			.autoDisposable(scope)
 			.subscribe(adapter::setItems)
+
+		viewModel.openSaveDialog
+			.autoDisposable(scope)
+			.subscribe(::openSaveDialog)
 
 		viewModel.isEmptyVisible
 			.autoDisposable(scope)
@@ -81,6 +97,24 @@ internal class AddPlaceFragment : BaseFragment() {
 			.subscribe { message ->
 				errorSnackbarAndMessage.handleNewMessage(message)
 			}
+	}
+
+	@SuppressLint("InflateParams")
+	private fun openSaveDialog(placeSuggestion: PlaceSuggestion) {
+		savePlaceDialog?.dismiss()
+		val customView = layoutInflater.inflate(R.layout.layout_save_dialog, null)
+		val editText = customView.placeNameEditText.apply {
+			setText(placeSuggestion.simpleName)
+			setSelection(0, placeSuggestion.simpleName.length)
+		}
+		val dialog = createDialog(customView) {
+			val name = editText.text.toString().trim()
+			viewModel.onSavePlaceClicked(name, placeSuggestion.location)
+		}
+		savePlaceDialog = dialog
+		dialog.show()
+		dialog.initView(editText)
+		editText.requestFocus()
 	}
 
 	private fun Pair<Snackbar, TextRef>?.handleNewMessage(message: TextRef) {
@@ -111,4 +145,20 @@ private fun SearchView.setQueryTextChangeListener(callback: (String) -> Unit) {
 			return true
 		}
 	})
+}
+
+private fun createDialog(view: View, onClick: () -> Unit) =
+	MaterialAlertDialogBuilder(view.context).apply {
+		setView(view)
+		setTitle(R.string.save_place)
+		setNegativeButton(R.string.cancel, null)
+		setPositiveButton(R.string.save) { _, _ -> onClick() }
+	}.create()
+
+private fun AlertDialog.initView(editText: TextInputEditText) {
+	val positiveButton = getButton(AlertDialog.BUTTON_POSITIVE)
+	val textChangeDisposable = editText.textChanges()
+		.map(CharSequence::isNotBlank)
+		.subscribe { positiveButton.isEnabled = it }
+	setOnDismissListener { textChangeDisposable.dispose() }
 }

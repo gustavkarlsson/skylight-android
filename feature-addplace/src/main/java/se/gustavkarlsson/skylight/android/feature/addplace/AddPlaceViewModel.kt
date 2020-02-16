@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.feature.addplace
 
 import androidx.lifecycle.ViewModel
 import com.ioki.textref.TextRef
+import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -26,12 +27,17 @@ internal class AddPlaceViewModel(
 		knot.dispose()
 	}
 
+	private val openSaveDialogRelay = PublishRelay.create<PlaceSuggestion>()
+	val openSaveDialog: Observable<PlaceSuggestion> = openSaveDialogRelay
+
 	fun onSearchTextChanged(newText: String) = knot.change.accept(Change.Query(newText))
 
 	val placeSuggestions: Flowable<List<PlaceSuggestion>> = state
 		.map(State::suggestions)
 		.distinctUntilChanged()
 		.filter { it.isNotEmpty() }
+
+	fun onSuggestionClicked(suggestion: PlaceSuggestion) = openSaveDialogRelay.accept(suggestion)
 
 	fun onSavePlaceClicked(name: String, location: Location) {
 		placesRepository.add(name, location)

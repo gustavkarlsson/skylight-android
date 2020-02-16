@@ -91,6 +91,7 @@ internal data class RemoveLocationDialogData(
 	val onConfirm: () -> Unit
 )
 
+// FIXME get rid of onclicks
 internal data class DrawerItem(
 	val isActive: Boolean,
 	@DrawableRes val icon: Int,
