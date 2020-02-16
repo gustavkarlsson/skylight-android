@@ -7,8 +7,8 @@ object Versions {
 	val targetSdk = 28
 	val buildTools = "28.0.3"
 	val java = JavaVersion.VERSION_1_8
-	val kotlin = "1.3.31"
-	val androidGradle = "3.4.0"
+	val kotlin = "1.3.61"
+	val androidGradle = "3.5.2"
 	val easylauncher = "1.2.0"
 	val jgit = "4.1.1.201511131810-r"
 	val axionRelease = "1.8.1"
