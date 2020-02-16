@@ -9,7 +9,7 @@ import se.gustavkarlsson.skylight.android.feature.main.R
 
 internal class DrawerAdapter(
 	private val viewModel: DrawerViewModel
-) : RecyclerView.Adapter<DrawerAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<ViewHolder>() {
 
 	private var items: List<DrawerItem> = emptyList()
 
@@ -72,6 +72,6 @@ internal class DrawerAdapter(
 		}
 
 	}
-
-	class ViewHolder(val view: TextView) : RecyclerView.ViewHolder(view)
 }
+
+internal class ViewHolder(val view: TextView) : RecyclerView.ViewHolder(view)

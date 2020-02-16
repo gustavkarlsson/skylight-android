@@ -12,6 +12,7 @@
 		app:layout_constraintTop_toTopOf="parent"
 		app:title="@string/settings" />
 
+	<!-- TODO When pulling down in options menu, this makes it look weird -->
 	<TextView
 		android:id="@+id/notificationsTitle"
 		style="@style/TextAppearance.MaterialComponents.Caption"

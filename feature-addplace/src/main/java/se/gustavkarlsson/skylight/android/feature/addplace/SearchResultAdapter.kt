@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 internal class SearchResultAdapter(
 	private val viewModel: AddPlaceViewModel
-) : RecyclerView.Adapter<SearchResultAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<ViewHolder>() {
 
 	private var items: List<SuggestionItem> = emptyList()
 
@@ -33,6 +33,6 @@ internal class SearchResultAdapter(
 		view.text = item.text
 		view.setOnClickListener { viewModel.onSuggestionClicked(item.suggestion) }
 	}
-
-	class ViewHolder(val view: TextView) : RecyclerView.ViewHolder(view)
 }
+
+internal class ViewHolder(val view: TextView) : RecyclerView.ViewHolder(view)
