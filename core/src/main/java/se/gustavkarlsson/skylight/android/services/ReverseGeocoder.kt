@@ -2,11 +2,11 @@ package se.gustavkarlsson.skylight.android.services
 
 import io.reactivex.Observable
 import io.reactivex.Single
-import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.LocationResult
+import se.gustavkarlsson.skylight.android.entities.ReverseGeocodingResult
 
 interface ReverseGeocoder {
-	fun get(location: Single<LocationResult>): Single<Optional<String>>
-	fun stream(locations: Observable<Loadable<LocationResult>>): Observable<Loadable<String?>>
+	fun get(location: Single<LocationResult>): Single<ReverseGeocodingResult>
+	fun stream(locations: Observable<Loadable<LocationResult>>): Observable<Loadable<ReverseGeocodingResult>>
 }

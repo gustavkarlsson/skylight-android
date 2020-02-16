@@ -3,5 +3,5 @@
 	<string name="aurora_alerts_channel_name">Norrskensaviseringar</string>
 	<string name="possible_aurora">Chans för norrsken</string>
 	<string name="x_at_your_current_location">%s på din nuvarande plats</string>
-	<string name="x_in_y">%s i %s</string>
+	<string name="x_in_y">%1$s i %2$s</string>
 </resources>

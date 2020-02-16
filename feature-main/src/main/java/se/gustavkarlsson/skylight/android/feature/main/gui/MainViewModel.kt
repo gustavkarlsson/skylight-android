@@ -10,6 +10,7 @@ import io.reactivex.rxkotlin.Observables
 import org.threeten.bp.Duration
 import se.gustavkarlsson.koptional.Absent
 import se.gustavkarlsson.koptional.Optional
+import se.gustavkarlsson.koptional.Present
 import se.gustavkarlsson.koptional.toOptional
 import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Chance
@@ -31,6 +32,7 @@ import se.gustavkarlsson.skylight.android.feature.main.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.feature.main.State
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import se.gustavkarlsson.skylight.android.entities.Place
+import se.gustavkarlsson.skylight.android.entities.ReverseGeocodingResult
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.Time
@@ -92,7 +94,12 @@ internal class MainViewModel(
 		.distinctUntilChanged()
 
 	private val locationName: Observable<Optional<String>> = mainKnot.state
-		.map { (it.selectedAuroraReport.locationName as? Loadable.Loaded)?.value.toOptional() }
+		.map {
+			when (val name = (it.selectedAuroraReport.locationName as? Loadable.Loaded)?.value) {
+				is ReverseGeocodingResult.Success -> Present(name.name)
+				else -> Absent
+			}
+		}
 
 	val chanceSubtitleText: Observable<TextRef> = Observables
 		.combineLatest(timeSinceUpdate, locationName) { (time), (name) ->

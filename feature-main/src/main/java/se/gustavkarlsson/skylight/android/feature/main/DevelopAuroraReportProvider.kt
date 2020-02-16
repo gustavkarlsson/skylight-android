@@ -11,6 +11,7 @@ import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.entities.LocationResult
 import se.gustavkarlsson.skylight.android.entities.Report
+import se.gustavkarlsson.skylight.android.entities.ReverseGeocodingResult
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
@@ -30,7 +31,7 @@ internal class DevelopAuroraReportProvider(
 				val timestamp = time.now()
 				val auroraReport = developSettings.run {
 					CompleteAuroraReport(
-						"Fake Location",
+						ReverseGeocodingResult.Success("Fake location"),
 						Report.Success(KpIndex(kpIndex), timestamp),
 						Report.Success(GeomagLocation(geomagLatitude), timestamp),
 						Report.Success(Darkness(sunZenithAngle), timestamp),

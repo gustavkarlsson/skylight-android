@@ -6,12 +6,10 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.Duration
-import se.gustavkarlsson.koptional.Absent
-import se.gustavkarlsson.koptional.Optional
-import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.LocationResult
+import se.gustavkarlsson.skylight.android.entities.ReverseGeocodingResult
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.services.ReverseGeocoder
 import timber.log.Timber
@@ -22,46 +20,40 @@ internal class AndroidReverseGeocoder(
 	private val retryDelay: Duration
 ) : ReverseGeocoder {
 
-	override fun get(location: Single<LocationResult>): Single<Optional<String>> =
+	override fun get(location: Single<LocationResult>): Single<ReverseGeocodingResult> =
 		location
 			.flatMap(::getSingleName)
-			.map { reverseGeocodingResult ->
-				when (reverseGeocodingResult) {
-					is ReverseGeocodingResult.Success -> optionalOf(reverseGeocodingResult.name)
-					is ReverseGeocodingResult.Failure -> Absent
-				}
-			}
-			.doOnSuccess { Timber.i("Provided location name: %s", it.value) }
+			.doOnSuccess { Timber.i("Provided location name: %s", it) }
 
 	override fun stream(
 		locations: Observable<Loadable<LocationResult>>
-	): Observable<Loadable<String?>> =
+	): Observable<Loadable<ReverseGeocodingResult>> =
 		locations
 			.switchMap { loadableLocationResult ->
 				when (loadableLocationResult) {
 					Loadable.Loading -> Observable.just(Loadable.Loading)
-					is Loadable.Loaded -> {
-						getSingleName(loadableLocationResult.value)
-							.flatMapObservable { reverseGeocodingResult ->
-								when (reverseGeocodingResult) {
-									is ReverseGeocodingResult.Success ->
-										Observable.just(Loadable.Loaded(reverseGeocodingResult.name))
-									ReverseGeocodingResult.Failure.Location ->
-										Observable.just(Loadable.Loaded(null))
-									is ReverseGeocodingResult.Failure.Io ->
-										Observable.concat(
-											Observable.just(Loadable.Loaded(null)),
-											Observable.error(reverseGeocodingResult.exception)
-										)
-								}
-							}
-							.retryWhen { it.delay(retryDelay) }
-					}
+					is Loadable.Loaded -> getSingleNameWithRetry(loadableLocationResult.value)
 				}
 			}
 			.distinctUntilChanged()
 			.doOnNext { Timber.i("Streamed location name: %s", it) }
 			.replayingShare(Loadable.Loading)
+
+	private fun getSingleNameWithRetry(
+		locationResult: LocationResult
+	): Observable<Loadable.Loaded<ReverseGeocodingResult>> =
+		getSingleName(locationResult)
+			.flatMapObservable { reverseGeocodingResult ->
+				when (reverseGeocodingResult) {
+					is ReverseGeocodingResult.Failure.Io ->
+						Observable.concat(
+							Observable.just(Loadable.Loaded(reverseGeocodingResult)),
+							Observable.error(reverseGeocodingResult.exception)
+						)
+					else -> Observable.just(Loadable.Loaded(reverseGeocodingResult))
+				}
+			}
+			.retryWhen { it.delay(retryDelay) }
 
 	private fun getSingleName(locationResult: LocationResult): Single<ReverseGeocodingResult> =
 		Single.defer {
@@ -74,23 +66,13 @@ internal class AndroidReverseGeocoder(
 	private fun getSingleName(location: Location): Single<ReverseGeocodingResult> =
 		Single.fromCallable {
 			try {
-				val addresses = geocoder.getFromLocation(
-					location.latitude,
-					location.longitude,
-					1
-				)
-				ReverseGeocodingResult.Success(addresses.firstOrNull()?.locality)
+				val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+				val name = addresses.firstOrNull()?.locality
+				if (name == null) ReverseGeocodingResult.Failure.NotFound
+				else ReverseGeocodingResult.Success(name)
 			} catch (e: IOException) {
 				Timber.w(e, "Failed to reverse geocode: %s", location)
 				ReverseGeocodingResult.Failure.Io(e)
 			}
 		}.subscribeOn(Schedulers.io())
-}
-
-private sealed class ReverseGeocodingResult {
-	data class Success(val name: String?) : ReverseGeocodingResult()
-	sealed class Failure : ReverseGeocodingResult() {
-		object Location : Failure()
-		data class Io(val exception: IOException) : Failure()
-	}
 }

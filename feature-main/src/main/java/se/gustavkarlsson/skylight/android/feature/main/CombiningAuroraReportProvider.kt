@@ -55,7 +55,7 @@ internal class CombiningAuroraReportProvider(
 				darknessProvider.get(cachedLocation),
 				weatherProvider.get(cachedLocation)
 			) { locationName, kpIndex, geomagLocation, darkness, weather ->
-				CompleteAuroraReport(locationName.value, kpIndex, geomagLocation, darkness, weather)
+				CompleteAuroraReport(locationName, kpIndex, geomagLocation, darkness, weather)
 			}
 	}
 }

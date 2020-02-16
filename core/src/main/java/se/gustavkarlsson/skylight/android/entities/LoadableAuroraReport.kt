@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.entities
 import org.threeten.bp.Instant
 
 data class LoadableAuroraReport(
-	val locationName: Loadable<String?>,
+	val locationName: Loadable<ReverseGeocodingResult>,
 	val kpIndex: Loadable<Report<KpIndex>>,
 	val geomagLocation: Loadable<Report<GeomagLocation>>,
 	val darkness: Loadable<Report<Darkness>>,
