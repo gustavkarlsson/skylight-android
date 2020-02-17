@@ -1,12 +1,14 @@
 package se.gustavkarlsson.skylight.android
 
+import android.content.ComponentCallbacks
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import org.koin.android.ext.android.inject
 import org.koin.androidx.scope.ext.android.bindScope
 import org.koin.androidx.scope.ext.android.createScope
-import se.gustavkarlsson.skylight.android.extensions.addToKoin
+import org.koin.core.parameter.parametersOf
+import org.koin.core.scope.Scope
 import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 
@@ -25,4 +27,12 @@ internal class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() = navigator.onBackPressed()
+}
+
+private inline fun <reified T : Any> ComponentCallbacks.addToKoin(
+    value: T,
+    name: String = "",
+    scope: Scope? = null
+) {
+    inject<T>(name = name, scope = scope) { parametersOf(value) }.value
 }
