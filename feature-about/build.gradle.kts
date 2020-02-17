@@ -1,6 +1,5 @@
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.RepositoryBuilder
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 import java.io.File
 
 plugins {
@@ -15,11 +14,6 @@ android {
 	compileOptions {
 		sourceCompatibility = Versions.java
 		targetCompatibility = Versions.java
-	}
-
-	kotlinOptions {
-		this as KotlinJvmOptions
-		jvmTarget = Versions.java.toString()
 	}
 
 	defaultConfig {

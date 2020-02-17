@@ -1,4 +1,5 @@
 import org.gradle.kotlin.dsl.repositories
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
 	repositories {
@@ -29,5 +30,9 @@ allprojects {
 		maven { setUrl("https://jitpack.io") }
 		maven { setUrl("https://oss.sonatype.org/content/repositories/snapshots") }
 		maven { setUrl("https://plugins.gradle.org/m2/") }
+	}
+
+	tasks.withType<KotlinCompile> {
+		kotlinOptions.jvmTarget = Versions.java.toString()
 	}
 }

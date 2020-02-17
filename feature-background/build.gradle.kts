@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
-
 plugins {
 	id("com.android.library")
 	id("kotlin-android")
@@ -11,11 +9,6 @@ android {
 	compileOptions {
 		sourceCompatibility = Versions.java
 		targetCompatibility = Versions.java
-	}
-
-	kotlinOptions {
-		this as KotlinJvmOptions // TODO Upgrade gradle and this can be removed (from all modules)
-		jvmTarget = Versions.java.toString()
 	}
 
 	defaultConfig {

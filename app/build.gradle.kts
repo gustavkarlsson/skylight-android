@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 import pl.allegro.tech.build.axion.release.domain.TagNameSerializationConfig
 
 plugins {
@@ -30,11 +29,6 @@ android {
 	compileOptions {
 		sourceCompatibility = Versions.java
 		targetCompatibility = Versions.java
-	}
-
-	kotlinOptions {
-		this as KotlinJvmOptions
-		jvmTarget = Versions.java.toString()
 	}
 
 	packagingOptions {
