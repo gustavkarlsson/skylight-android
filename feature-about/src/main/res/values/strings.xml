@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="author" translatable="false">Gustav Karlsson</string>
 	<string name="about_app_by">App by: %s</string>
 	<string name="about_branch" translatable="false">Branch: %s</string>
 	<string name="about_version_name">Version: %s</string>

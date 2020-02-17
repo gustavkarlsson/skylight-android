@@ -6,7 +6,7 @@ plugins {
 android {
     defaultConfig {
         val openWeatherMapApiKey = findProperty("openweathermap_api_key") ?: run {
-            logger.error("WARNING: openweathermap_api_key not set")
+            logger.warn("WARNING: openweathermap_api_key not set")
             "openweathermap_api_key_not_set"
         }
         buildConfigField("String", "OPENWEATHERMAP_API_KEY", "\"$openWeatherMapApiKey\"")

@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="right_now">Right now</string>
+    <string name="time_in_location">%1$s in %2$s</string>
+    <string name="remove">Remove</string>
+    <string name="remove_thing">Remove %s?</string>
+    <string name="fix">Fix</string>
+    <string name="places">Places</string>
+
 	<string name="factor_geomag_location_title_full">Geomagnetic location</string>
 	<string name="factor_geomag_location_title_compact">Location</string>
 	<string name="factor_geomag_location_desc">The aurora is only visible close to
@@ -24,4 +31,19 @@
 		the position of the sun is important.
 		This value shows how dark your current location is based on the sun\'s position.
 		<u>100\% darkness is perfect</u> for aurora sightings.</string>
+
+    <string name="aurora_chance_none">No chance</string>
+    <string name="aurora_chance_low">Low chance</string>
+    <string name="aurora_chance_medium">Medium chance</string>
+    <string name="aurora_chance_high">High chance</string>
+    <string name="aurora_chance_unknown">Unknown chance</string>
+
+    <string name="weather_clear">Clear</string>
+    <string name="weather_some_clouds">Some clouds</string>
+    <string name="weather_cloudy">Cloudy</string>
+    <string name="weather_overcast">Overcast</string>
+
+    <string name="location_permission_denied_message">To determine aurora chances for your current location, please
+		allow Skylight to access it.</string>
+    <string name="location_permission_denied_forever_message">Location access is permanently denied.</string>
 </resources>

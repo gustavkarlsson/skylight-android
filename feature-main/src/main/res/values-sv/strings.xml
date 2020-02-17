@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="right_now">Just nu</string>
+    <string name="time_in_location">%1$s i %2$s</string>
+    <string name="remove">Ta bort</string>
+    <string name="remove_thing">Ta bort %s?</string>
+    <string name="fix">Fixa</string>
+    <string name="places">Platser</string>
+
 	<string name="factor_geomag_location_title_full">Geomagnetisk plats</string>
 	<string name="factor_geomag_location_title_compact">Plats</string>
 	<string name="factor_geomag_location_desc">Norrsken är bara synligt nära
@@ -24,4 +31,19 @@
 		på himlen viktig.
 		Det här värdet visar hur mörkt det är ute på nuvarande plats baserat på solens position.
 		<u>100\% mörker är perfekt</u> för att se norrsken.</string>
+
+    <string name="aurora_chance_none">Ingen chans</string>
+    <string name="aurora_chance_low">Låg chans</string>
+    <string name="aurora_chance_medium">Medium chans</string>
+    <string name="aurora_chance_high">Hög chans</string>
+    <string name="aurora_chance_unknown">Okänd chans</string>
+
+    <string name="weather_clear">Klart</string>
+    <string name="weather_some_clouds">Spridda moln</string>
+    <string name="weather_cloudy">Molnigt</string>
+    <string name="weather_overcast">Mulet</string>
+
+    <string name="location_permission_denied_message">För att beräkna chansen att se norrsken för din nuvarande plats,
+		var vänlig ge Skylight åtkomst till den.</string>
+    <string name="location_permission_denied_forever_message">Åtkomst till din plats är nekad permanent.</string>
 </resources>

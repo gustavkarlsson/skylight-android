@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="save">Save</string>
 	<string name="save_place">Save place</string>
 	<string name="place_name">Place name</string>
 	<string name="search_for_place_to_save">Search for a place to save</string>

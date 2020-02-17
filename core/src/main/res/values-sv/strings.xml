@@ -1,45 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<!-- General -->
-	<string name="exit">Stäng</string>
-	<string name="right_now">Just nu</string>
-	<string name="time_in_location">%1$s i %2$s</string>
 	<string name="privacy_policy">Integritetspolicy (eng)</string>
-	<string name="places">Platser</string>
-	<string name="add_place">Lägg till plats</string>
 	<string name="cancel">Avbryt</string>
-	<string name="save">Spara</string>
-	<string name="remove">Ta bort</string>
-	<string name="remove_thing">Ta bort %s?</string>
-	<string name="fix">Fixa</string>
 	<string name="your_location">Din plats</string>
-	<string name="never">Aldrig</string>
 
-	<!-- Errors -->
-	<string name="error_unknown_update_error">Ett oväntat fel inträffade vid uppdatering</string>
+    <string name="settings">Inställningar</string>
+    <string name="about">Om</string>
+    <string name="add_place">Lägg till plats</string>
+
 	<string name="error_no_location_permission">Saknar åtkomst till plats</string>
 	<string name="error_no_location">Kunde inte hitta plats</string>
 	<string name="error_no_internet_maybe">Ingen internetanslutning?</string>
-
-	<!-- Screen titles -->
-	<string name="settings">Inställningar</string>
-	<string name="about">Om</string>
-
-	<!-- Aurora chance -->
-	<string name="aurora_chance_none">Ingen chans</string>
-	<string name="aurora_chance_low">Låg chans</string>
-	<string name="aurora_chance_medium">Medium chans</string>
-	<string name="aurora_chance_high">Hög chans</string>
-	<string name="aurora_chance_unknown">Okänd chans</string>
-
-	<!-- Weather -->
-	<string name="main_weather_clear">Klart</string>
-	<string name="main_weather_some_clouds">Spridda moln</string>
-	<string name="main_weather_cloudy">Molnigt</string>
-	<string name="main_weather_overcast">Mulet</string>
-
-	<!-- Location permission -->
-	<string name="location_permission_denied_message">För att beräkna chansen att se norrsken för din nuvarande plats,
-		var vänlig ge Skylight åtkomst till den.</string>
-	<string name="location_permission_denied_forever_message">Åtkomst till din plats är nekad permanent.</string>
 </resources>
