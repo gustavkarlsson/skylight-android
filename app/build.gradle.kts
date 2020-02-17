@@ -23,13 +23,7 @@ play {
 }
 
 android {
-	compileSdkVersion(Versions.compileSdk)
 	buildToolsVersion(Versions.buildTools)
-
-	compileOptions {
-		sourceCompatibility = Versions.java
-		targetCompatibility = Versions.java
-	}
 
 	packagingOptions {
 		exclude("META-INF/LICENSE")
@@ -43,12 +37,9 @@ android {
 
 	defaultConfig {
 		applicationId = "se.gustavkarlsson.skylight.android"
-		minSdkVersion(Versions.minSdk)
 		targetSdkVersion(Versions.targetSdk)
 		versionCode = generateVersionCode(scmVersion.version)
 		versionName = scmVersion.version
-		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-		testInstrumentationRunnerArgument("clearPackageData", "true")
 		multiDexEnabled = true
 	}
 
