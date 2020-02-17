@@ -4,17 +4,7 @@ plugins {
 }
 
 android {
-	compileSdkVersion(Versions.compileSdk)
-
-	compileOptions {
-		sourceCompatibility = Versions.java
-		targetCompatibility = Versions.java
-	}
-
 	defaultConfig {
-		minSdkVersion(Versions.minSdk)
-		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
 		val openWeatherMapApiKey = findProperty("openweathermap_api_key") ?: run {
 			logger.error("WARNING: openweathermap_api_key not set")
 			"openweathermap_api_key_not_set"

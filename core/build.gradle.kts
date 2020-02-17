@@ -3,20 +3,6 @@ plugins {
 	id("kotlin-android")
 }
 
-android {
-	compileSdkVersion(Versions.compileSdk)
-
-	compileOptions {
-		sourceCompatibility = Versions.java
-		targetCompatibility = Versions.java
-	}
-
-	defaultConfig {
-		minSdkVersion(Versions.minSdk)
-		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-	}
-}
-
 dependencies {
 	api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}")
 	api("androidx.core:core-ktx:${Versions.coreKtx}")

@@ -5,18 +5,6 @@ plugins {
 }
 
 android {
-	compileSdkVersion(Versions.compileSdk)
-
-	compileOptions {
-		sourceCompatibility = Versions.java
-		targetCompatibility = Versions.java
-	}
-
-	defaultConfig {
-		minSdkVersion(Versions.minSdk)
-		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-	}
-
 	flavorDimensions("environment")
 
 	productFlavors {

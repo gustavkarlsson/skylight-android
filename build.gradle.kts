@@ -1,5 +1,5 @@
-import org.gradle.kotlin.dsl.repositories
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.android.build.gradle.LibraryPlugin as AndroidLibraryPlugin
 
 buildscript {
 	repositories {
@@ -34,5 +34,21 @@ allprojects {
 
 	tasks.withType<KotlinCompile> {
 		kotlinOptions.jvmTarget = Versions.java.toString()
+	}
+
+	plugins.withType<AndroidLibraryPlugin> {
+		extension.run {
+			compileSdkVersion(Versions.compileSdk)
+
+			compileOptions {
+				sourceCompatibility = Versions.java
+				targetCompatibility = Versions.java
+			}
+
+			defaultConfig {
+				minSdkVersion(Versions.minSdk)
+				testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+			}
+		}
 	}
 }

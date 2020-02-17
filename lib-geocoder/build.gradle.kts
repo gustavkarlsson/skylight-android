@@ -4,17 +4,7 @@ plugins {
 }
 
 android {
-	compileSdkVersion(Versions.compileSdk)
-
-	compileOptions {
-		sourceCompatibility = Versions.java
-		targetCompatibility = Versions.java
-	}
-
 	defaultConfig {
-		minSdkVersion(Versions.minSdk)
-		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
 		val mapboxApiKey = findProperty("mapbox_api_key") ?: run {
 			logger.error("WARNING: mapbox_api_key not set")
 			"mapbox_api_key_not_set"
