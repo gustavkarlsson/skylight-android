@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.reversegeocoder
 
+import android.location.Address
 import android.location.Geocoder
 import com.jakewharton.rx.replayingShare
 import io.reactivex.Observable
@@ -66,13 +67,21 @@ internal class AndroidReverseGeocoder(
     private fun getSingleName(location: Location): Single<ReverseGeocodingResult> =
         Single.fromCallable {
             try {
-                val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-                val name = addresses.firstOrNull()?.locality
-                if (name == null) ReverseGeocodingResult.Failure.NotFound
-                else ReverseGeocodingResult.Success(name)
+                val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 10)
+                val bestName = addresses.getBestName()
+                if (bestName == null) ReverseGeocodingResult.Failure.NotFound
+                else ReverseGeocodingResult.Success(bestName)
             } catch (e: IOException) {
                 Timber.w(e, "Failed to reverse geocode: %s", location)
                 ReverseGeocodingResult.Failure.Io(e)
             }
         }.subscribeOn(Schedulers.io())
 }
+
+// FIXME clean up
+private fun List<Address>.getBestName() =
+    mapNotNull { it.featureName }.firstOrNull()
+        ?: mapNotNull { it.subLocality }.firstOrNull()
+        ?: mapNotNull { it.locality }.firstOrNull()
+        ?: mapNotNull { it.subAdminArea }.firstOrNull()
+        ?: mapNotNull { it.adminArea }.firstOrNull()

@@ -14,8 +14,12 @@ internal class SharedPrefsPlaceSelectionStorage(context: Context) : PlaceSelecti
         }
     }
 
-    override fun loadIndex() = sharedPreferences.getInt(PLACE_INDEX_KEY, 0)
+    override fun loadIndex(): Int? {
+        val index = sharedPreferences.getInt(PLACE_INDEX_KEY, -1)
+        return if (index == DEFAULT_VALUE) null else index
+    }
 }
 
 private const val PREFS_FILE_NAME = "selected_place"
 private const val PLACE_INDEX_KEY = "place_index"
+private const val DEFAULT_VALUE = -1

@@ -34,7 +34,7 @@ internal class PlacesRepoSelectedPlaceRepository(
 private fun createKnot(
     placesStream: Observable<List<Place>>,
     saveIndex: (Int) -> Unit,
-    loadIndex: () -> Int
+    loadIndex: () -> Int?
 ) = knot<State, Change, Nothing> {
 
     state {
@@ -86,8 +86,10 @@ private fun State.selectionChanged(newSelection: Place): State =
 private fun State.placesUpdated(newPlaces: List<Place>): State {
     val selected = when (this) {
         is State.Initial -> {
-            val newIndex = selectedIndex.coerceIn(newPlaces.indices)
-            newPlaces[newIndex]
+            if (selectedIndex != null) {
+                val index = selectedIndex.coerceIn(newPlaces.indices)
+                newPlaces[index]
+            } else newPlaces.last()
         }
         is State.Loaded -> when {
             newPlaces.size > places.size -> {
@@ -108,7 +110,7 @@ private fun State.placesUpdated(newPlaces: List<Place>): State {
 private sealed class State {
     abstract val selected: Place
 
-    data class Initial(val selectedIndex: Int) : State() {
+    data class Initial(val selectedIndex: Int?) : State() {
         override val selected = Place.Current
     }
 
