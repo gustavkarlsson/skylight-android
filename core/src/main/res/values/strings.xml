@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<!-- General -->
-	<string name="app_name" translatable="false">Skylight</string>
 	<string name="author" translatable="false">Gustav Karlsson</string>
 	<string name="exit">Exit</string>
 	<string name="right_now">Right now</string>

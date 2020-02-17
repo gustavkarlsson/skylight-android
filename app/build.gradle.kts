@@ -1,4 +1,5 @@
 import pl.allegro.tech.build.axion.release.domain.TagNameSerializationConfig
+import kotlin.text.buildString
 
 plugins {
     id("com.android.application")
@@ -65,13 +66,30 @@ android {
     }
 
     applicationVariants.all {
-        var appName = "Skylight"
-
-        if (buildType.name != "release" || flavorName != "production") {
-            appName += " ($flavorName${buildType.name.capitalize()})"
+        val isProductionRelease = buildType.name == "release" && flavorName == "production"
+        val appName = buildString {
+            append("Skylight")
+            if (!isProductionRelease) {
+                append(" (")
+                append(flavorName.take(3).capitalize())
+                append(buildType.name.take(3).capitalize())
+                append(")")
+            }
         }
+        resValue("string", "app_name", appName)
 
-        resValue("string", "app_name_variant", appName)
+        val appLauncherName = buildString {
+            if (isProductionRelease) {
+                append("Skylight")
+            } else {
+                append("SL")
+                append(" (")
+                append(flavorName.take(3).capitalize())
+                append(buildType.name.take(3).capitalize())
+                append(")")
+            }
+        }
+        resValue("string", "app_launcher_name", appLauncherName)
     }
 }
 
