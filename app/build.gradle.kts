@@ -23,21 +23,8 @@ play {
 }
 
 android {
-	buildToolsVersion(Versions.buildTools)
-
-	packagingOptions {
-		exclude("META-INF/LICENSE")
-		exclude("META-INF/NOTICE")
-	}
-
-	testOptions {
-		unitTests.isReturnDefaultValues = true
-		execution = "ANDROIDX_TEST_ORCHESTRATOR"
-	}
-
 	defaultConfig {
 		applicationId = "se.gustavkarlsson.skylight.android"
-		targetSdkVersion(Versions.targetSdk)
 		versionCode = generateVersionCode(scmVersion.version)
 		versionName = scmVersion.version
 		multiDexEnabled = true

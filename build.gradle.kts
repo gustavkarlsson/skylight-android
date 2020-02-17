@@ -10,6 +10,7 @@ buildscript {
 		google()
 		maven { setUrl("https://maven.fabric.io/public") }
 	}
+
 	dependencies {
 		classpath("com.android.tools.build:gradle:${Versions.androidGradle}")
 		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
@@ -49,6 +50,17 @@ allprojects {
 
 fun AndroidBaseExtension.setupForAndroid() {
 	compileSdkVersion(Versions.compileSdk)
+	buildToolsVersion(Versions.buildTools)
+
+	packagingOptions {
+		exclude("META-INF/LICENSE")
+		exclude("META-INF/NOTICE")
+	}
+
+	testOptions {
+		unitTests.isReturnDefaultValues = true
+		execution = "ANDROIDX_TEST_ORCHESTRATOR"
+	}
 
 	compileOptions {
 		sourceCompatibility = Versions.java
@@ -57,6 +69,7 @@ fun AndroidBaseExtension.setupForAndroid() {
 
 	defaultConfig {
 		minSdkVersion(Versions.minSdk)
+		targetSdkVersion(Versions.targetSdk)
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 		testInstrumentationRunnerArgument("clearPackageData", "true")
 	}
