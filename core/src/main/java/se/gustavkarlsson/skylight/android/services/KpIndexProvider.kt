@@ -7,6 +7,6 @@ import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.Report
 
 interface KpIndexProvider {
-	fun get(): Single<Report<KpIndex>>
-	fun stream(): Observable<Loadable<Report<KpIndex>>>
+    fun get(): Single<Report<KpIndex>>
+    fun stream(): Observable<Loadable<Report<KpIndex>>>
 }

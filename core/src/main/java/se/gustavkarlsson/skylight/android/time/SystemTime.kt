@@ -5,6 +5,6 @@ import org.threeten.bp.ZoneId
 import se.gustavkarlsson.skylight.android.services.Time
 
 internal object SystemTime : Time {
-	override fun now(): Instant = Instant.now()
-	override fun zoneId(): ZoneId = ZoneId.systemDefault()
+    override fun now(): Instant = Instant.now()
+    override fun zoneId(): ZoneId = ZoneId.systemDefault()
 }

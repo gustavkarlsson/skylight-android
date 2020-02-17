@@ -17,38 +17,38 @@ import timber.log.Timber
 
 internal class GooglePlayServicesFragment : BaseFragment() {
 
-	override val layoutId: Int = R.layout.fragment_google_play_services
+    override val layoutId: Int = R.layout.fragment_google_play_services
 
-	private val destination: NavItem by argument()
+    private val destination: NavItem by argument()
 
-	private val viewModel: GooglePlayServicesViewModel by viewModel {
-		parametersOf(destination)
-	}
+    private val viewModel: GooglePlayServicesViewModel by viewModel {
+        parametersOf(destination)
+    }
 
-	override fun bindData() {
-		// TODO Make this nicer
-		installButton.clicks()
-			.flatMapCompletable {
-				viewModel.makeGooglePlayServicesAvailable(requireActivity())
-			}
-			.toSingleDefault(optionalOf<Throwable>(null))
-			.onErrorReturn { optionalOf(it) }
-			.toObservable()
-			.bind(this) { (error) ->
-				if (error == null) {
-					viewModel.navigateForward()
-				} else {
-					Timber.e(error, "Failed to install Google Play Services")
-					view?.let { view ->
-						showErrorSnackbar(
-							view,
-							R.string.google_play_services_install_failed,
-							Snackbar.LENGTH_LONG
-						).doOnNext(this, Lifecycle.Event.ON_DESTROY) { snackbar ->
-							snackbar.dismiss()
-						}
-					}
-				}
-			}
-	}
+    override fun bindData() {
+        // TODO Make this nicer
+        installButton.clicks()
+            .flatMapCompletable {
+                viewModel.makeGooglePlayServicesAvailable(requireActivity())
+            }
+            .toSingleDefault(optionalOf<Throwable>(null))
+            .onErrorReturn { optionalOf(it) }
+            .toObservable()
+            .bind(this) { (error) ->
+                if (error == null) {
+                    viewModel.navigateForward()
+                } else {
+                    Timber.e(error, "Failed to install Google Play Services")
+                    view?.let { view ->
+                        showErrorSnackbar(
+                            view,
+                            R.string.google_play_services_install_failed,
+                            Snackbar.LENGTH_LONG
+                        ).doOnNext(this, Lifecycle.Event.ON_DESTROY) { snackbar ->
+                            snackbar.dismiss()
+                        }
+                    }
+                }
+            }
+    }
 }

@@ -15,38 +15,37 @@ import se.gustavkarlsson.skylight.android.feature.main.R
 
 internal class FactorBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
-	var onCancelListener: (() -> Unit)? = null
+    var onCancelListener: (() -> Unit)? = null
 
-	override fun onCreateView(
-		inflater: LayoutInflater,
-		container: ViewGroup?,
-		savedInstanceState: Bundle?
-	): View? = inflater.inflate(R.layout.layout_factor_bottom_sheet, container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.layout_factor_bottom_sheet, container, false)
 
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-		super.onViewCreated(view, savedInstanceState)
-		arguments!!.apply {
-			title.setText(getInt(TITLE_KEY))
-			description.setText(getInt(DESCRIPTION_KEY))
-			description.movementMethod = LinkMovementMethod.getInstance()
-		}
-	}
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        arguments!!.apply {
+            title.setText(getInt(TITLE_KEY))
+            description.setText(getInt(DESCRIPTION_KEY))
+            description.movementMethod = LinkMovementMethod.getInstance()
+        }
+    }
 
-	override fun onCancel(dialog: DialogInterface) {
-		onCancelListener?.invoke()
-		super.onCancel(dialog)
-	}
+    override fun onCancel(dialog: DialogInterface) {
+        onCancelListener?.invoke()
+        super.onCancel(dialog)
+    }
 
-	companion object {
-		private const val TITLE_KEY = "title"
-		private const val DESCRIPTION_KEY = "description"
-		fun newInstance(@StringRes title: Int, @StringRes description: Int) =
-			FactorBottomSheetDialogFragment().apply {
-				arguments = bundleOf(
-					TITLE_KEY to title,
-					DESCRIPTION_KEY to description
-				)
-			}
-	}
-
+    companion object {
+        private const val TITLE_KEY = "title"
+        private const val DESCRIPTION_KEY = "description"
+        fun newInstance(@StringRes title: Int, @StringRes description: Int) =
+            FactorBottomSheetDialogFragment().apply {
+                arguments = bundleOf(
+                    TITLE_KEY to title,
+                    DESCRIPTION_KEY to description
+                )
+            }
+    }
 }

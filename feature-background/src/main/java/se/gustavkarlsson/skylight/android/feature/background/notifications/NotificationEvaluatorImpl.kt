@@ -6,38 +6,38 @@ import se.gustavkarlsson.skylight.android.feature.background.persistence.PlaceRe
 import se.gustavkarlsson.skylight.android.feature.background.persistence.LastNotificationRepository
 
 internal class NotificationEvaluatorImpl(
-	private val lastNotificationRepository: LastNotificationRepository,
-	private val outdatedEvaluator: OutdatedEvaluator
+    private val lastNotificationRepository: LastNotificationRepository,
+    private val outdatedEvaluator: OutdatedEvaluator
 ) : NotificationEvaluator {
 
-	override fun shouldNotify(notification: Notification): Boolean {
-		val lastData = lastNotificationRepository.get() ?: return true
-		if (lastData.isOutdated) return true
-		return notification hasHigherChanceThan lastData
-	}
+    override fun shouldNotify(notification: Notification): Boolean {
+        val lastData = lastNotificationRepository.get() ?: return true
+        if (lastData.isOutdated) return true
+        return notification hasHigherChanceThan lastData
+    }
 
-	private val NotificationRecord.isOutdated: Boolean
-		get() = outdatedEvaluator.isOutdated(timestamp)
+    private val NotificationRecord.isOutdated: Boolean
+        get() = outdatedEvaluator.isOutdated(timestamp)
 
-	override fun onNotified(notification: Notification) {
-		lastNotificationRepository.insert(notification)
-	}
+    override fun onNotified(notification: Notification) {
+        lastNotificationRepository.insert(notification)
+    }
 }
 
 private infix fun Notification.hasHigherChanceThan(old: NotificationRecord): Boolean {
-	val oldAndNewChances = data.map { new ->
-		val correspondingOldChance = old.data
-			.firstOrNull { old -> new.place isSameAs old.placeRef }
-			?.chanceLevel
-		correspondingOldChance to new.chanceLevel
-	}
-	return oldAndNewChances.any { (old, new) ->
-		old == null || new > old
-	}
+    val oldAndNewChances = data.map { new ->
+        val correspondingOldChance = old.data
+            .firstOrNull { old -> new.place isSameAs old.placeRef }
+            ?.chanceLevel
+        correspondingOldChance to new.chanceLevel
+    }
+    return oldAndNewChances.any { (old, new) ->
+        old == null || new > old
+    }
 }
 
 private infix fun Place.isSameAs(other: PlaceRef) =
-	when (this) {
-		Place.Current -> other is PlaceRef.Current
-		is Place.Custom -> other is PlaceRef.Custom && id == other.id
-	}
+    when (this) {
+        Place.Current -> other is PlaceRef.Current
+        is Place.Custom -> other is PlaceRef.Custom && id == other.id
+    }

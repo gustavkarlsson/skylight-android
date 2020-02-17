@@ -10,13 +10,13 @@ internal class CrashlyticsTree(private val core: CrashlyticsCore) : Timber.Tree(
             return
         }
 
-		core.log(priority, tag.toString(), message)
+        core.log(priority, tag.toString(), message)
 
-		if (priority == Log.ERROR) {
-			val exception = throwable ?: NoException(message)
-			core.logException(exception)
-		}
+        if (priority == Log.ERROR) {
+            val exception = throwable ?: NoException(message)
+            core.logException(exception)
+        }
     }
 
-	private class NoException(message: String) : Exception(message)
+    private class NoException(message: String) : Exception(message)
 }

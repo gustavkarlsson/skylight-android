@@ -13,25 +13,25 @@ import se.gustavkarlsson.skylight.android.lib.places.db.DbPlaceQueries
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
 
 internal class SqlDelightPlacesRepository(
-	private val queries: DbPlaceQueries,
-	dbScheduler: Scheduler = Schedulers.io()
+    private val queries: DbPlaceQueries,
+    dbScheduler: Scheduler = Schedulers.io()
 ) : PlacesRepository {
 
-	override fun add(name: String, location: Location) =
-		queries.insert(name, location.latitude, location.longitude)
+    override fun add(name: String, location: Location) =
+        queries.insert(name, location.latitude, location.longitude)
 
-	override fun remove(placeId: Long) = queries.delete(placeId)
+    override fun remove(placeId: Long) = queries.delete(placeId)
 
-	private val stream =
-		queries
-			.selectAll<Place> { id, name, latitude, longitude ->
-				Place.Custom(id, TextRef(name), Location(latitude, longitude))
-			}
-			.asObservable(dbScheduler)
-			.mapToList()
-			.map { listOf(Place.Current) + it }
-			.distinctUntilChanged()
-			.replayingShare()
+    private val stream =
+        queries
+            .selectAll<Place> { id, name, latitude, longitude ->
+                Place.Custom(id, TextRef(name), Location(latitude, longitude))
+            }
+            .asObservable(dbScheduler)
+            .mapToList()
+            .map { listOf(Place.Current) + it }
+            .distinctUntilChanged()
+            .replayingShare()
 
-	override fun stream(): Observable<List<Place>> = stream
+    override fun stream(): Observable<List<Place>> = stream
 }

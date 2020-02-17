@@ -51,13 +51,13 @@ class GeomagLocationEvaluatorTest {
     fun _60LatitudeEvaluatesToMediumChance() {
         val chance = impl.evaluate(GeomagLocation(60.0))
 
-		assertk.assert(chance).isBetween(Chance(0.4), Chance(0.6))
+        assertk.assert(chance).isBetween(Chance(0.4), Chance(0.6))
     }
 
     @Test
     fun minus60LatitudeEvaluatesToMediumChance() {
         val chance = impl.evaluate(GeomagLocation(-60.0))
 
-		assertk.assert(chance).isBetween(Chance(0.4), Chance(0.6))
+        assertk.assert(chance).isBetween(Chance(0.4), Chance(0.6))
     }
 }

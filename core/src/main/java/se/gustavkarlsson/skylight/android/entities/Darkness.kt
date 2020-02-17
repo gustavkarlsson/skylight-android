@@ -1,5 +1,5 @@
 package se.gustavkarlsson.skylight.android.entities
 
 data class Darkness(
-	val sunZenithAngle: Double
+    val sunZenithAngle: Double
 )

@@ -9,10 +9,10 @@ internal object WeatherEvaluator : ChanceEvaluator<Weather> {
 
     override fun evaluate(value: Weather): Chance {
         val clouds = value.cloudPercentage
-		if (clouds < 0 || clouds > 100) {
-			return UNKNOWN
+        if (clouds < 0 || clouds > 100) {
+            return UNKNOWN
         }
-		val chance = -1.0 / 50.0 * clouds.toDouble() + 1.0
-		return Chance(chance)
+        val chance = -1.0 / 50.0 * clouds.toDouble() + 1.0
+        return Chance(chance)
     }
 }

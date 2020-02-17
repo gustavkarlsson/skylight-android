@@ -22,78 +22,78 @@ import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 
 @RunWith(MockitoJUnitRunner::class)
 class CompleteAuroraReportEvaluatorTest {
-	@Mock
-	lateinit var mockKpIndexEvaluator: ChanceEvaluator<KpIndex>
+    @Mock
+    lateinit var mockKpIndexEvaluator: ChanceEvaluator<KpIndex>
 
-	@Mock
-	lateinit var mockGeomagLocationEvaluator: ChanceEvaluator<GeomagLocation>
+    @Mock
+    lateinit var mockGeomagLocationEvaluator: ChanceEvaluator<GeomagLocation>
 
-	@Mock
-	lateinit var mockWeatherEvaluator: ChanceEvaluator<Weather>
+    @Mock
+    lateinit var mockWeatherEvaluator: ChanceEvaluator<Weather>
 
-	@Mock
-	lateinit var mockDarknessEvaluator: ChanceEvaluator<Darkness>
+    @Mock
+    lateinit var mockDarknessEvaluator: ChanceEvaluator<Darkness>
 
-	@Mock
-	lateinit var mockAuroraReport: AuroraReport
+    @Mock
+    lateinit var mockAuroraReport: AuroraReport
 
-	lateinit var impl: AuroraReportEvaluator
+    lateinit var impl: AuroraReportEvaluator
 
-	@Before
-	fun setUp() {
-		whenever(mockAuroraReport.kpIndex).thenReturn(Report.Success(KpIndex(7.0), Instant.EPOCH))
-		whenever(mockAuroraReport.weather).thenReturn(Report.Success(Weather(50), Instant.EPOCH))
-		whenever(mockAuroraReport.geomagLocation).thenReturn(Report.Success(GeomagLocation(50.0), Instant.EPOCH))
-		whenever(mockAuroraReport.darkness).thenReturn(Report.Success(Darkness(140.0), Instant.EPOCH))
-		whenever(mockKpIndexEvaluator.evaluate(any())).thenReturn(Chance(0.5))
-		whenever(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(Chance(0.5))
-		whenever(mockWeatherEvaluator.evaluate(any())).thenReturn(Chance(0.5))
-		whenever(mockDarknessEvaluator.evaluate(any())).thenReturn(Chance(0.5))
-		impl = AuroraReportEvaluator(
-			mockKpIndexEvaluator,
-			mockGeomagLocationEvaluator,
-			mockWeatherEvaluator,
-			mockDarknessEvaluator
-		)
-	}
+    @Before
+    fun setUp() {
+        whenever(mockAuroraReport.kpIndex).thenReturn(Report.Success(KpIndex(7.0), Instant.EPOCH))
+        whenever(mockAuroraReport.weather).thenReturn(Report.Success(Weather(50), Instant.EPOCH))
+        whenever(mockAuroraReport.geomagLocation).thenReturn(Report.Success(GeomagLocation(50.0), Instant.EPOCH))
+        whenever(mockAuroraReport.darkness).thenReturn(Report.Success(Darkness(140.0), Instant.EPOCH))
+        whenever(mockKpIndexEvaluator.evaluate(any())).thenReturn(Chance(0.5))
+        whenever(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(Chance(0.5))
+        whenever(mockWeatherEvaluator.evaluate(any())).thenReturn(Chance(0.5))
+        whenever(mockDarknessEvaluator.evaluate(any())).thenReturn(Chance(0.5))
+        impl = AuroraReportEvaluator(
+            mockKpIndexEvaluator,
+            mockGeomagLocationEvaluator,
+            mockWeatherEvaluator,
+            mockDarknessEvaluator
+        )
+    }
 
-	@Test
-	fun oneImpossibleEvaluatesToImpossible() {
-		whenever(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(IMPOSSIBLE)
+    @Test
+    fun oneImpossibleEvaluatesToImpossible() {
+        whenever(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(IMPOSSIBLE)
 
-		val chance = impl.evaluate(mockAuroraReport)
+        val chance = impl.evaluate(mockAuroraReport)
 
-		assert(chance).isEqualTo(IMPOSSIBLE)
-	}
+        assert(chance).isEqualTo(IMPOSSIBLE)
+    }
 
-	@Test
-	fun oneUnknownEvaluatesToUnknown() {
-		whenever(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(UNKNOWN)
+    @Test
+    fun oneUnknownEvaluatesToUnknown() {
+        whenever(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(UNKNOWN)
 
-		val chance = impl.evaluate(mockAuroraReport)
+        val chance = impl.evaluate(mockAuroraReport)
 
-		assert(chance).isEqualTo(UNKNOWN)
-	}
+        assert(chance).isEqualTo(UNKNOWN)
+    }
 
-	@Test
-	fun lowWeatherEvaluatesToLowChance() {
-		val lowChance = Chance(0.1)
-		whenever(mockWeatherEvaluator.evaluate(any())).thenReturn(lowChance)
+    @Test
+    fun lowWeatherEvaluatesToLowChance() {
+        val lowChance = Chance(0.1)
+        whenever(mockWeatherEvaluator.evaluate(any())).thenReturn(lowChance)
 
-		val chance = impl.evaluate(mockAuroraReport)
+        val chance = impl.evaluate(mockAuroraReport)
 
-		assert(chance).isEqualTo(lowChance)
-	}
+        assert(chance).isEqualTo(lowChance)
+    }
 
-	@Test
-	fun lowActivityAndLocationEvaluatesToSomethingLower() {
-		val lowestChance = Chance(0.2)
-		val lowChance = Chance(0.4)
-		whenever(mockKpIndexEvaluator.evaluate(any())).thenReturn(lowestChance)
-		whenever(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(lowChance)
+    @Test
+    fun lowActivityAndLocationEvaluatesToSomethingLower() {
+        val lowestChance = Chance(0.2)
+        val lowChance = Chance(0.4)
+        whenever(mockKpIndexEvaluator.evaluate(any())).thenReturn(lowestChance)
+        whenever(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(lowChance)
 
-		val chance = impl.evaluate(mockAuroraReport)
+        val chance = impl.evaluate(mockAuroraReport)
 
-		assert(chance).isBetween(IMPOSSIBLE, lowestChance)
-	}
+        assert(chance).isBetween(IMPOSSIBLE, lowestChance)
+    }
 }

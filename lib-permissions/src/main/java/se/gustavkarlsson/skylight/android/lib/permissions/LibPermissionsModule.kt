@@ -11,28 +11,28 @@ import se.gustavkarlsson.skylight.android.services.PermissionRequester
 
 val libPermissionsModule = module {
 
-	val relay = BehaviorRelay.create<Permission>()
+    val relay = BehaviorRelay.create<Permission>()
 
-	single("locationPermission") {
-		Manifest.permission.ACCESS_FINE_LOCATION
-	}
+    single("locationPermission") {
+        Manifest.permission.ACCESS_FINE_LOCATION
+    }
 
-	single<PermissionChecker> {
-		AndroidPermissionChecker(
-			permissionKey = get("locationPermission"),
-			permissionRelay = relay,
-			context = get()
-		)
-	}
+    single<PermissionChecker> {
+        AndroidPermissionChecker(
+            permissionKey = get("locationPermission"),
+            permissionRelay = relay,
+            context = get()
+        )
+    }
 
-	scope<PermissionRequester>("activity") {
-		val activity = get<FragmentActivity>(scopeId = "activity")
-		val rxPermissions = RxPermissions(activity)
-			.apply { setLogging(BuildConfig.DEBUG) }
-		RxPermissionRequester(
-			permissionKey = get("locationPermission"),
-			rxPermissions = rxPermissions,
-			permissionChangeConsumer = relay
-		)
-	}
+    scope<PermissionRequester>("activity") {
+        val activity = get<FragmentActivity>(scopeId = "activity")
+        val rxPermissions = RxPermissions(activity)
+            .apply { setLogging(BuildConfig.DEBUG) }
+        RxPermissionRequester(
+            permissionKey = get("locationPermission"),
+            rxPermissions = rxPermissions,
+            permissionChangeConsumer = relay
+        )
+    }
 }

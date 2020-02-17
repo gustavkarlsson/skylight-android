@@ -7,16 +7,16 @@ import se.gustavkarlsson.skylight.android.services.Settings
 
 val libSettingsModule = module {
 
-	single<DevelopSettings> {
-		SqlDelightDevelopSettings()
-	}
+    single<DevelopSettings> {
+        SqlDelightDevelopSettings()
+    }
 
-	single<Settings> {
-		val driver = AndroidSqliteDriver(Database.Schema, get(), "settings.db")
-		val database = Database(driver)
-		SqlDelightSettings(
-			queries = database.dbSettingsQueries,
-			placesRepository = get()
-		)
-	}
+    single<Settings> {
+        val driver = AndroidSqliteDriver(Database.Schema, get(), "settings.db")
+        val database = Database(driver)
+        SqlDelightSettings(
+            queries = database.dbSettingsQueries,
+            placesRepository = get()
+        )
+    }
 }

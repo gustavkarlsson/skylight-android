@@ -10,15 +10,15 @@ import org.koin.standalone.get
 import timber.log.Timber
 
 internal class NotifyWorker(
-	appContext: Context,
-	workerParams: WorkerParameters
+    appContext: Context,
+    workerParams: WorkerParameters
 ) : RxWorker(appContext, workerParams), KoinComponent {
 
-	override fun createWork(): Single<Result> {
-		val work = get<Completable>("notify")
-		return work
-			.toSingleDefault(Result.success())
-			.doOnError { Timber.e(it, "Failed to complete work") }
-			.onErrorReturnItem(Result.retry())
-	}
+    override fun createWork(): Single<Result> {
+        val work = get<Completable>("notify")
+        return work
+            .toSingleDefault(Result.success())
+            .doOnError { Timber.e(it, "Failed to complete work") }
+            .onErrorReturnItem(Result.retry())
+    }
 }

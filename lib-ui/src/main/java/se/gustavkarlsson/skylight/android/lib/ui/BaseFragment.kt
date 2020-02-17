@@ -13,38 +13,38 @@ import se.gustavkarlsson.skylight.android.services.Analytics
 
 abstract class BaseFragment : Fragment() {
 
-	final override fun onCreateView(
-		inflater: LayoutInflater,
-		container: ViewGroup?,
-		savedInstanceState: Bundle?
-	): View? = inflater.inflate(layoutId, container, false)
+    final override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(layoutId, container, false)
 
-	override fun onViewStateRestored(savedInstanceState: Bundle?) {
-		super.onViewStateRestored(savedInstanceState)
-		initView()
-		bindData()
-		toolbar?.let(::setupBackNavigation)
-	}
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        initView()
+        bindData()
+        toolbar?.let(::setupBackNavigation)
+    }
 
-	private fun setupBackNavigation(toolbar: Toolbar) {
-		val navigator = get<Navigator>()
-		if (navigator.backStackSize > 1) {
-			toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
-			toolbar.setNavigationOnClickListener { navigator.pop() }
-		}
-	}
+    private fun setupBackNavigation(toolbar: Toolbar) {
+        val navigator = get<Navigator>()
+        if (navigator.backStackSize > 1) {
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+            toolbar.setNavigationOnClickListener { navigator.pop() }
+        }
+    }
 
-	override fun onStart() {
-		super.onStart()
-		get<Analytics>().logScreen(requireActivity(), this::class.java.simpleName)
-	}
+    override fun onStart() {
+        super.onStart()
+        get<Analytics>().logScreen(requireActivity(), this::class.java.simpleName)
+    }
 
-	@get:LayoutRes
-	protected abstract val layoutId: Int
+    @get:LayoutRes
+    protected abstract val layoutId: Int
 
-	protected open val toolbar: Toolbar? = null
+    protected open val toolbar: Toolbar? = null
 
-	protected open fun initView() = Unit
+    protected open fun initView() = Unit
 
-	protected open fun bindData() = Unit
+    protected open fun bindData() = Unit
 }

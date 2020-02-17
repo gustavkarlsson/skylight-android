@@ -16,6 +16,6 @@ internal object GeomagLocationEvaluator : ChanceEvaluator<GeomagLocation> {
         return Chance(chance)
     }
 
-	const val BEST = 67.0
-	const val FLEX = 13.0
+    const val BEST = 67.0
+    const val FLEX = 13.0
 }

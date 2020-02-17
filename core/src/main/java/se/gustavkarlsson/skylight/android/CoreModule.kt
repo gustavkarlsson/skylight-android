@@ -6,7 +6,7 @@ import se.gustavkarlsson.skylight.android.time.SystemTime
 
 val coreModule = module {
 
-	single<Time> {
-		SystemTime
-	}
+    single<Time> {
+        SystemTime
+    }
 }

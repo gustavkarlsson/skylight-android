@@ -1,11 +1,11 @@
 plugins {
-	id("com.android.library")
-	id("kotlin-android")
+    id("com.android.library")
+    id("kotlin-android")
 }
 
 dependencies {
-	implementation(project(":core"))
+    implementation(project(":core"))
 
-	implementation("com.google.android.gms:play-services-location:${Versions.playServicesLocation}")
-	implementation("com.patloew.rxlocation:rxlocation:${Versions.rxLocation}")
+    implementation("com.google.android.gms:play-services-location:${Versions.playServicesLocation}")
+    implementation("com.patloew.rxlocation:rxlocation:${Versions.rxLocation}")
 }

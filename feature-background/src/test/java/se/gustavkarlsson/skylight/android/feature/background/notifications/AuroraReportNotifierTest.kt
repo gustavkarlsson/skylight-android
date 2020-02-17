@@ -26,43 +26,43 @@ internal class AuroraReportNotifierTest {
 
     lateinit var context: Context
 
-	lateinit var mockNotificationManager: NotificationManager
+    lateinit var mockNotificationManager: NotificationManager
 
-	lateinit var mockChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>
+    lateinit var mockChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>
 
-	lateinit var mockChanceLevelFormatter: SingleValueFormatter<ChanceLevel>
+    lateinit var mockChanceLevelFormatter: SingleValueFormatter<ChanceLevel>
 
     lateinit var mockAuroraReport: CompleteAuroraReport
 
-	lateinit var mockAnalytics: Analytics
+    lateinit var mockAnalytics: Analytics
 
-	lateinit var activityClass: Class<Activity>
+    lateinit var activityClass: Class<Activity>
 
-	lateinit var impl: AuroraReportNotifier
+    lateinit var impl: AuroraReportNotifier
 
     @Before
     fun setUp() {
         context = RuntimeEnvironment.application
-		val chance = Chance(0.5)
-		val chanceLevel = ChanceLevel.fromChance(chance)
-		mockNotificationManager = mock()
-		mockChanceEvaluator = mock()
-		mockChanceLevelFormatter = mock {
-			whenever(it.format(chanceLevel)).thenReturn(TextRef("some chance"))
-		}
+        val chance = Chance(0.5)
+        val chanceLevel = ChanceLevel.fromChance(chance)
+        mockNotificationManager = mock()
+        mockChanceEvaluator = mock()
+        mockChanceLevelFormatter = mock {
+            whenever(it.format(chanceLevel)).thenReturn(TextRef("some chance"))
+        }
         mockAuroraReport = mock()
-		mockAnalytics = mock()
-		activityClass = Activity::class.java
-		whenever(mockChanceEvaluator.evaluate(any())).thenReturn(chance)
+        mockAnalytics = mock()
+        activityClass = Activity::class.java
+        whenever(mockChanceEvaluator.evaluate(any())).thenReturn(chance)
         impl = AuroraReportNotifier(
-			context,
-			mockNotificationManager,
-			mockChanceLevelFormatter,
-			mockChanceEvaluator,
-			activityClass,
-			"channelId",
-			mockAnalytics
-		)
+            context,
+            mockNotificationManager,
+            mockChanceLevelFormatter,
+            mockChanceEvaluator,
+            activityClass,
+            "channelId",
+            mockAnalytics
+        )
     }
 
     @Test
@@ -72,4 +72,3 @@ internal class AuroraReportNotifierTest {
         verify(mockNotificationManager).notify(anyInt(), any())
     }
 }
-

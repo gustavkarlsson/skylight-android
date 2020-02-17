@@ -44,6 +44,6 @@ class WeatherEvaluatorTest {
     fun _50CloudPercentageEvaluatesToMediumChance() {
         val chance = impl.evaluate(Weather(25))
 
-		assertk.assert(chance).isBetween(Chance(0.4), Chance(0.6))
+        assertk.assert(chance).isBetween(Chance(0.4), Chance(0.6))
     }
 }

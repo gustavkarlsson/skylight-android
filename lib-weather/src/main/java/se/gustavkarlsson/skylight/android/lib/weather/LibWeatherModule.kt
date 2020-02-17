@@ -11,24 +11,23 @@ import se.gustavkarlsson.skylight.android.services.WeatherProvider
 
 val libWeatherModule = module {
 
-	single<OpenWeatherMapApi> {
-		Retrofit.Builder()
-			.client(get())
-			.baseUrl("https://api.openweathermap.org/data/2.5/")
-			.addConverterFactory(GsonConverterFactory.create())
-			.addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
-			.build()
-			.create(OpenWeatherMapApi::class.java)
-	}
+    single<OpenWeatherMapApi> {
+        Retrofit.Builder()
+            .client(get())
+            .baseUrl("https://api.openweathermap.org/data/2.5/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+            .build()
+            .create(OpenWeatherMapApi::class.java)
+    }
 
-	single<WeatherProvider> {
-		RetrofittedOpenWeatherMapWeatherProvider(
-			api = get(),
-			appId = BuildConfig.OPENWEATHERMAP_API_KEY,
-			time = get(),
-			retryDelay = 15.seconds,
-			pollingInterval = 15.minutes
-		)
-	}
-
+    single<WeatherProvider> {
+        RetrofittedOpenWeatherMapWeatherProvider(
+            api = get(),
+            appId = BuildConfig.OPENWEATHERMAP_API_KEY,
+            time = get(),
+            retryDelay = 15.seconds,
+            pollingInterval = 15.minutes
+        )
+    }
 }

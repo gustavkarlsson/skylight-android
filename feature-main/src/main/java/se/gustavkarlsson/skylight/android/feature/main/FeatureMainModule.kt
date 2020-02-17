@@ -33,145 +33,144 @@ import se.gustavkarlsson.skylight.android.services.Formatter
 
 val featureMainModule = module {
 
-	single<RelativeTimeFormatter> {
-		val rightNowText = get<Context>().getString(R.string.right_now)
-		DateUtilsRelativeTimeFormatter(rightNowText)
-	}
+    single<RelativeTimeFormatter> {
+        val rightNowText = get<Context>().getString(R.string.right_now)
+        DateUtilsRelativeTimeFormatter(rightNowText)
+    }
 
-	single<ModuleStarter>("main") {
-		object : ModuleStarter {
-			override fun start() {
-				val fragmentFactory = object : FragmentFactory {
-					override fun createFragment(name: String): Fragment? =
-						if (name == "main") MainFragment()
-						else null
-				}
-				get<FragmentFactoryRegistry>().register(fragmentFactory)
-			}
-		}
-	}
+    single<ModuleStarter>("main") {
+        object : ModuleStarter {
+            override fun start() {
+                val fragmentFactory = object : FragmentFactory {
+                    override fun createFragment(name: String): Fragment? =
+                        if (name == "main") MainFragment()
+                        else null
+                }
+                get<FragmentFactoryRegistry>().register(fragmentFactory)
+            }
+        }
+    }
 
-	single {
-		CombiningAuroraReportProvider(
-			reverseGeocoder = get(),
-			darknessProvider = get(),
-			geomagLocationProvider = get(),
-			kpIndexProvider = get(),
-			weatherProvider = get()
-		)
-	}
+    single {
+        CombiningAuroraReportProvider(
+            reverseGeocoder = get(),
+            darknessProvider = get(),
+            geomagLocationProvider = get(),
+            kpIndexProvider = get(),
+            weatherProvider = get()
+        )
+    }
 
-	single {
-		DevelopAuroraReportProvider(
-			realProvider = get<CombiningAuroraReportProvider>(),
-			developSettings = get(),
-			time = get(),
-			pollingInterval = 1.minutes
-		)
-	}
+    single {
+        DevelopAuroraReportProvider(
+            realProvider = get<CombiningAuroraReportProvider>(),
+            developSettings = get(),
+            time = get(),
+            pollingInterval = 1.minutes
+        )
+    }
 
-	single {
-		@Suppress("ConstantConditionIf")
-		if (BuildConfig.DEVELOP) {
-			get<DevelopAuroraReportProvider>()
-		} else {
-			get<CombiningAuroraReportProvider>()
-		}
-	}
+    single {
+        @Suppress("ConstantConditionIf")
+        if (BuildConfig.DEVELOP) {
+            get<DevelopAuroraReportProvider>()
+        } else {
+            get<CombiningAuroraReportProvider>()
+        }
+    }
 
-	single<ChanceEvaluator<KpIndex>>("kpIndex") {
-		KpIndexEvaluator
-	}
+    single<ChanceEvaluator<KpIndex>>("kpIndex") {
+        KpIndexEvaluator
+    }
 
-	single<ChanceEvaluator<GeomagLocation>>("geomagLocation") {
-		GeomagLocationEvaluator
-	}
+    single<ChanceEvaluator<GeomagLocation>>("geomagLocation") {
+        GeomagLocationEvaluator
+    }
 
-	single<ChanceEvaluator<Weather>>("weather") {
-		WeatherEvaluator
-	}
+    single<ChanceEvaluator<Weather>>("weather") {
+        WeatherEvaluator
+    }
 
-	single<ChanceEvaluator<Darkness>>("darkness") {
-		DarknessEvaluator
-	}
+    single<ChanceEvaluator<Darkness>>("darkness") {
+        DarknessEvaluator
+    }
 
-	single<ChanceEvaluator<CompleteAuroraReport>>("completeAuroraReport") {
-		CompleteAuroraReportEvaluator(
-			kpIndexEvaluator = get("kpIndex"),
-			geomagLocationEvaluator = get("geomagLocation"),
-			weatherEvaluator = get("weather"),
-			darknessEvaluator = get("darkness")
-		)
-	}
+    single<ChanceEvaluator<CompleteAuroraReport>>("completeAuroraReport") {
+        CompleteAuroraReportEvaluator(
+            kpIndexEvaluator = get("kpIndex"),
+            geomagLocationEvaluator = get("geomagLocation"),
+            weatherEvaluator = get("weather"),
+            darknessEvaluator = get("darkness")
+        )
+    }
 
-	single<Formatter<Darkness>>("darkness") {
-		DarknessFormatter
-	}
+    single<Formatter<Darkness>>("darkness") {
+        DarknessFormatter
+    }
 
-	single<Formatter<GeomagLocation>>("geomagLocation") {
-		GeomagLocationFormatter(get("locale"))
-	}
+    single<Formatter<GeomagLocation>>("geomagLocation") {
+        GeomagLocationFormatter(get("locale"))
+    }
 
-	single<Formatter<KpIndex>>("kpIndex") {
-		KpIndexFormatter
-	}
+    single<Formatter<KpIndex>>("kpIndex") {
+        KpIndexFormatter
+    }
 
-	single<Formatter<Weather>>("weather") {
-		WeatherFormatter
-	}
+    single<Formatter<Weather>>("weather") {
+        WeatherFormatter
+    }
 
-	single<Formatter<ChanceLevel>>("chanceLevel") {
-		ChanceLevelFormatter
-	}
+    single<Formatter<ChanceLevel>>("chanceLevel") {
+        ChanceLevelFormatter
+    }
 
-	single {
-		ChanceToColorConverter(context = get())
-	}
+    single {
+        ChanceToColorConverter(context = get())
+    }
 
-	viewModel {
-		MainViewModel(
-			mainKnot = get("main"),
-			auroraChanceEvaluator = get("completeAuroraReport"),
-			relativeTimeFormatter = get(),
-			chanceLevelFormatter = get("chanceLevel"),
-			darknessChanceEvaluator = get("darkness"),
-			darknessFormatter = get("darkness"),
-			geomagLocationChanceEvaluator = get("geomagLocation"),
-			geomagLocationFormatter = get("geomagLocation"),
-			kpIndexChanceEvaluator = get("kpIndex"),
-			kpIndexFormatter = get("kpIndex"),
-			weatherChanceEvaluator = get("weather"),
-			weatherFormatter = get("weather"),
-			permissionChecker = get(),
-			chanceToColorConverter = get(),
-			time = get(),
-			nowTextThreshold = 1.minutes
-		)
-	}
+    viewModel {
+        MainViewModel(
+            mainKnot = get("main"),
+            auroraChanceEvaluator = get("completeAuroraReport"),
+            relativeTimeFormatter = get(),
+            chanceLevelFormatter = get("chanceLevel"),
+            darknessChanceEvaluator = get("darkness"),
+            darknessFormatter = get("darkness"),
+            geomagLocationChanceEvaluator = get("geomagLocation"),
+            geomagLocationFormatter = get("geomagLocation"),
+            kpIndexChanceEvaluator = get("kpIndex"),
+            kpIndexFormatter = get("kpIndex"),
+            weatherChanceEvaluator = get("weather"),
+            weatherFormatter = get("weather"),
+            permissionChecker = get(),
+            chanceToColorConverter = get(),
+            time = get(),
+            nowTextThreshold = 1.minutes
+        )
+    }
 
-	viewModel {
-		DrawerViewModel(
-			navigator = get(),
-			placesRepository = get(),
-			selectedPlaceRepo = get()
-		)
-	}
+    viewModel {
+        DrawerViewModel(
+            navigator = get(),
+            placesRepository = get(),
+            selectedPlaceRepo = get()
+        )
+    }
 
-	single("main") {
-		buildMainKnot(
-			permissionChecker = get(),
-			selectedPlaceRepo = get(),
-			auroraReportProvider = get(),
-			locationProvider = get()
-		)
-	}
+    single("main") {
+        buildMainKnot(
+            permissionChecker = get(),
+            selectedPlaceRepo = get(),
+            auroraReportProvider = get(),
+            locationProvider = get()
+        )
+    }
 
-	single("state") {
-		get<Knot<State, Change>>("main").state
-	}
+    single("state") {
+        get<Knot<State, Change>>("main").state
+    }
 
-	single("change") {
-		get<Knot<State, Change>>("main").change
-	}
-
+    single("change") {
+        get<Knot<State, Change>>("main").change
+    }
 }

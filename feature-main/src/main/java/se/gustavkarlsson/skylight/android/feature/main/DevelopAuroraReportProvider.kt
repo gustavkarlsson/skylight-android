@@ -19,33 +19,33 @@ import se.gustavkarlsson.skylight.android.services.DevelopSettings
 import se.gustavkarlsson.skylight.android.services.Time
 
 internal class DevelopAuroraReportProvider(
-	private val realProvider: AuroraReportProvider,
-	private val developSettings: DevelopSettings,
-	private val time: Time,
-	private val pollingInterval: Duration
+    private val realProvider: AuroraReportProvider,
+    private val developSettings: DevelopSettings,
+    private val time: Time,
+    private val pollingInterval: Duration
 ) : AuroraReportProvider {
 
-	override fun get(location: Single<LocationResult>): Single<CompleteAuroraReport> =
-		Single.fromCallable {
-			if (developSettings.overrideValues) {
-				val timestamp = time.now()
-				val auroraReport = developSettings.run {
-					CompleteAuroraReport(
-						ReverseGeocodingResult.Success("Fake location"),
-						Report.Success(KpIndex(kpIndex), timestamp),
-						Report.Success(GeomagLocation(geomagLatitude), timestamp),
-						Report.Success(Darkness(sunZenithAngle), timestamp),
-						Report.Success(Weather(cloudPercentage), timestamp)
-					)
-				}
-				Single.just(auroraReport).delay(developSettings.refreshDuration)
-			} else {
-				realProvider.get(location)
-			}
-		}.flatMap { it }
+    override fun get(location: Single<LocationResult>): Single<CompleteAuroraReport> =
+        Single.fromCallable {
+            if (developSettings.overrideValues) {
+                val timestamp = time.now()
+                val auroraReport = developSettings.run {
+                    CompleteAuroraReport(
+                        ReverseGeocodingResult.Success("Fake location"),
+                        Report.Success(KpIndex(kpIndex), timestamp),
+                        Report.Success(GeomagLocation(geomagLatitude), timestamp),
+                        Report.Success(Darkness(sunZenithAngle), timestamp),
+                        Report.Success(Weather(cloudPercentage), timestamp)
+                    )
+                }
+                Single.just(auroraReport).delay(developSettings.refreshDuration)
+            } else {
+                realProvider.get(location)
+            }
+        }.flatMap { it }
 
-	override fun stream(
-		locations: Observable<Loadable<LocationResult>>
-	): Observable<LoadableAuroraReport> =
-		realProvider.stream(locations) // TODO Honor develop settings
+    override fun stream(
+        locations: Observable<Loadable<LocationResult>>
+    ): Observable<LoadableAuroraReport> =
+        realProvider.stream(locations) // TODO Honor develop settings
 }

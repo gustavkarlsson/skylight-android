@@ -5,7 +5,7 @@ import se.gustavkarlsson.skylight.android.services.GeomagLocationProvider
 
 val libGeomagLocationModule = module {
 
-	single<GeomagLocationProvider> {
-		GeomagLocationProviderImpl(time = get())
-	}
+    single<GeomagLocationProvider> {
+        GeomagLocationProviderImpl(time = get())
+    }
 }

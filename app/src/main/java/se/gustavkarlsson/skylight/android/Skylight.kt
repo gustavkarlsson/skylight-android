@@ -13,38 +13,38 @@ import timber.log.Timber.DebugTree
 @Suppress("unused")
 internal class Skylight : MultiDexApplication() {
 
-	override fun onCreate() {
-		super.onCreate()
-		if (LeakCanary.isInAnalyzerProcess(this)) return
-		LeakCanary.install(this)
-		AndroidThreeTen.init(this)
-		initLogging()
-		initRxJavaErrorHandling()
-		startKoin(this, modules, logger = KoinTimberLogger)
-		initializeModules()
-	}
+    override fun onCreate() {
+        super.onCreate()
+        if (LeakCanary.isInAnalyzerProcess(this)) return
+        LeakCanary.install(this)
+        AndroidThreeTen.init(this)
+        initLogging()
+        initRxJavaErrorHandling()
+        startKoin(this, modules, logger = KoinTimberLogger)
+        initializeModules()
+    }
 
-	private fun initLogging() {
-		if (BuildConfig.DEBUG) {
-			Timber.plant(DebugTree())
-		}
-		Timber.plant(CrashlyticsTree(Crashlytics.getInstance().core))
-	}
+    private fun initLogging() {
+        if (BuildConfig.DEBUG) {
+            Timber.plant(DebugTree())
+        }
+        Timber.plant(CrashlyticsTree(Crashlytics.getInstance().core))
+    }
 
-	private fun initRxJavaErrorHandling() {
-		RxJavaPlugins.setErrorHandler {
-			Timber.e(it, "Unhandled RxJava error")
-		}
-	}
+    private fun initRxJavaErrorHandling() {
+        RxJavaPlugins.setErrorHandler {
+            Timber.e(it, "Unhandled RxJava error")
+        }
+    }
 
-	private fun initializeModules() {
-		get<ModuleStarter>("intro").start()
-		get<ModuleStarter>("main").start()
-		get<ModuleStarter>("googleplayservices").start()
-		get<ModuleStarter>("about").start()
-		get<ModuleStarter>("addplace").start()
-		get<ModuleStarter>("settings").start()
-		get<ModuleStarter>("background").start()
-		get<ModuleStarter>("places").start()
-	}
+    private fun initializeModules() {
+        get<ModuleStarter>("intro").start()
+        get<ModuleStarter>("main").start()
+        get<ModuleStarter>("googleplayservices").start()
+        get<ModuleStarter>("about").start()
+        get<ModuleStarter>("addplace").start()
+        get<ModuleStarter>("settings").start()
+        get<ModuleStarter>("background").start()
+        get<ModuleStarter>("places").start()
+    }
 }

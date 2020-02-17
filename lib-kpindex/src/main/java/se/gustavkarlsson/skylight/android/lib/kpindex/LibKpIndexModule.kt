@@ -11,23 +11,22 @@ import se.gustavkarlsson.skylight.android.services.KpIndexProvider
 
 val libKpIndexModule = module {
 
-	single<KpIndexApi> {
-		Retrofit.Builder()
-			.client(get())
-			.baseUrl("https://skylight-web-service-1.herokuapp.com/")
-			.addConverterFactory(GsonConverterFactory.create())
-			.addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
-			.build()
-			.create(KpIndexApi::class.java)
-	}
+    single<KpIndexApi> {
+        Retrofit.Builder()
+            .client(get())
+            .baseUrl("https://skylight-web-service-1.herokuapp.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+            .build()
+            .create(KpIndexApi::class.java)
+    }
 
-	single<KpIndexProvider> {
-		RetrofittedKpIndexProvider(
-			api = get(),
-			time = get(),
-			retryDelay = 15.seconds,
-			pollingInterval = 15.minutes
-		)
-	}
-
+    single<KpIndexProvider> {
+        RetrofittedKpIndexProvider(
+            api = get(),
+            time = get(),
+            retryDelay = 15.seconds,
+            pollingInterval = 15.minutes
+        )
+    }
 }

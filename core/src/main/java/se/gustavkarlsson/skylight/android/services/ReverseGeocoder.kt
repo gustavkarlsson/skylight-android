@@ -7,6 +7,6 @@ import se.gustavkarlsson.skylight.android.entities.LocationResult
 import se.gustavkarlsson.skylight.android.entities.ReverseGeocodingResult
 
 interface ReverseGeocoder {
-	fun get(location: Single<LocationResult>): Single<ReverseGeocodingResult>
-	fun stream(locations: Observable<Loadable<LocationResult>>): Observable<Loadable<ReverseGeocodingResult>>
+    fun get(location: Single<LocationResult>): Single<ReverseGeocodingResult>
+    fun stream(locations: Observable<Loadable<LocationResult>>): Observable<Loadable<ReverseGeocodingResult>>
 }

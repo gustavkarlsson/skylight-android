@@ -6,10 +6,10 @@ import kotlin.reflect.KClass
 
 class ManualLaunchActivityTestRule<T : Activity>(
     activityClass: KClass<T>,
-	initialTouchMode: Boolean = false
+    initialTouchMode: Boolean = false
 ) : IntentsTestRule<T>(activityClass.java, initialTouchMode, false) {
 
-	fun launchActivity() {
-		launchActivity(null)
-	}
+    fun launchActivity() {
+        launchActivity(null)
+    }
 }

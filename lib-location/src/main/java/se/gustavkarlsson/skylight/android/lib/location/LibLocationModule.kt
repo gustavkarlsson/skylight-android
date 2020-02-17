@@ -9,15 +9,15 @@ import se.gustavkarlsson.skylight.android.services.LocationProvider
 
 val libLocationModule = module {
 
-	single<LocationProvider> {
-		RxLocationLocationProvider(
-			fusedLocation = RxLocation(get()).location(),
-			timeout = 30.seconds,
-			requestAccuracy = LocationRequest.PRIORITY_HIGH_ACCURACY,
-			throttleDuration = 1.minutes,
-			firstPollingInterval = 10.seconds,
-			restPollingInterval = 10.minutes,
-			retryDelay = 30.seconds
-		)
-	}
+    single<LocationProvider> {
+        RxLocationLocationProvider(
+            fusedLocation = RxLocation(get()).location(),
+            timeout = 30.seconds,
+            requestAccuracy = LocationRequest.PRIORITY_HIGH_ACCURACY,
+            throttleDuration = 1.minutes,
+            firstPollingInterval = 10.seconds,
+            restPollingInterval = 10.minutes,
+            retryDelay = 30.seconds
+        )
+    }
 }

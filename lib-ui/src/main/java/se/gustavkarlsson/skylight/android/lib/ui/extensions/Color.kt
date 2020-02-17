@@ -6,5 +6,5 @@ import androidx.core.content.ContextCompat
 
 @ColorInt
 fun @receiver:ColorInt Int.toArgb(context: Context): Int {
-	return ContextCompat.getColor(context, this)
+    return ContextCompat.getColor(context, this)
 }

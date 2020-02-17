@@ -10,16 +10,16 @@ import se.gustavkarlsson.skylight.android.lib.ui.extensions.setHtml
 
 internal class AboutFragment : BaseFragment() {
 
-	override val layoutId: Int = R.layout.fragment_about
+    override val layoutId: Int = R.layout.fragment_about
 
-	private val viewModel: AboutViewModel by viewModel()
+    private val viewModel: AboutViewModel by viewModel()
 
-	override val toolbar: Toolbar?
-		get() = toolbarView
+    override val toolbar: Toolbar?
+        get() = toolbarView
 
-	override fun initView() {
-		val context = requireContext()
-		detailsTextView.text = viewModel.detailsText.resolve(context)
-		privacyPolicyLink.setHtml(viewModel.privacyPolicyLink.resolve(context))
-	}
+    override fun initView() {
+        val context = requireContext()
+        detailsTextView.text = viewModel.detailsText.resolve(context)
+        privacyPolicyLink.setHtml(viewModel.privacyPolicyLink.resolve(context))
+    }
 }

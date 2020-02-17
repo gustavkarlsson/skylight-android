@@ -4,5 +4,5 @@ import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.entities.GeocodingResult
 
 interface Geocoder {
-	fun geocode(locationName: String): Single<GeocodingResult>
+    fun geocode(locationName: String): Single<GeocodingResult>
 }

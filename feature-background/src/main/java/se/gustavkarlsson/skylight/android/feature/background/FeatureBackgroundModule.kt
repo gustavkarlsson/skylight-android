@@ -26,121 +26,119 @@ import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.Settings
 import java.io.File
 
-
 val featureBackgroundModule = module {
 
-	single {
-		get<Context>().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-	}
+    single {
+        get<Context>().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    }
 
-	single {
-		get<Context>().getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-	}
+    single {
+        get<Context>().getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+    }
 
-	single("auroraNotificationChannelId") {
-		"aurora"
-	}
+    single("auroraNotificationChannelId") {
+        "aurora"
+    }
 
-	single<Formatter<Notification>>("notification") {
-		NotificationFormatter(chanceLevelFormatter = get("chanceLevel"))
-	}
+    single<Formatter<Notification>>("notification") {
+        NotificationFormatter(chanceLevelFormatter = get("chanceLevel"))
+    }
 
-	single<Notifier> {
-		NotifierImpl(
-			context = get(),
-			notificationManager = get(),
-			notificationFormatter = get("notification"),
-			activityClass = get("activity"),
-			channelId = get("auroraNotificationChannelId"),
-			analytics = get()
-		)
-	}
+    single<Notifier> {
+        NotifierImpl(
+            context = get(),
+            notificationManager = get(),
+            notificationFormatter = get("notification"),
+            activityClass = get("activity"),
+            channelId = get("auroraNotificationChannelId"),
+            analytics = get()
+        )
+    }
 
-	single {
-		OutdatedEvaluator(time = get())
-	}
+    single {
+        OutdatedEvaluator(time = get())
+    }
 
-	single<NotificationEvaluator> {
-		NotificationEvaluatorImpl(
-			lastNotificationRepository = get(),
-			outdatedEvaluator = get()
-		)
-	}
+    single<NotificationEvaluator> {
+        NotificationEvaluatorImpl(
+            lastNotificationRepository = get(),
+            outdatedEvaluator = get()
+        )
+    }
 
-	single {
-		AppVisibilityEvaluator(keyguardManager = get())
-	}
+    single {
+        AppVisibilityEvaluator(keyguardManager = get())
+    }
 
-	single("notify") {
-		createNotifyWork(
-			settings = get(),
-			appVisibilityEvaluator = get(),
-			locationProvider = get(),
-			reportProvider = get(),
-			chanceEvaluator = get("completeAuroraReport"),
-			notificationEvaluator = get(),
-			notifier = get(),
-			time = get()
-		)
-	}
+    single("notify") {
+        createNotifyWork(
+            settings = get(),
+            appVisibilityEvaluator = get(),
+            locationProvider = get(),
+            reportProvider = get(),
+            chanceEvaluator = get("completeAuroraReport"),
+            notificationEvaluator = get(),
+            notifier = get(),
+            time = get()
+        )
+    }
 
-	single<Scheduler> {
-		NotifyScheduler(
-			appContext = get(),
-			scheduleInterval = 15.minutes
-		)
-	}
+    single<Scheduler> {
+        NotifyScheduler(
+            appContext = get(),
+            scheduleInterval = 15.minutes
+        )
+    }
 
-	single<Completable>("scheduleBasedOnSettings") {
-		val scheduler = get<Scheduler>()
-		val settings = get<Settings>()
-		settings.streamNotificationTriggerLevels()
-			.map {
-				it.any { (_, triggerLevel) ->
-					triggerLevel != TriggerLevel.NEVER
-				}
-			}
-			.distinctUntilChanged()
-			.doOnNext { enable -> if (enable) scheduler.schedule() else scheduler.unschedule() }
-			.ignoreElements()
-	}
+    single<Completable>("scheduleBasedOnSettings") {
+        val scheduler = get<Scheduler>()
+        val settings = get<Settings>()
+        settings.streamNotificationTriggerLevels()
+            .map {
+                it.any { (_, triggerLevel) ->
+                    triggerLevel != TriggerLevel.NEVER
+                }
+            }
+            .distinctUntilChanged()
+            .doOnNext { enable -> if (enable) scheduler.schedule() else scheduler.unschedule() }
+            .ignoreElements()
+    }
 
-	single {
-		val context = get<Context>()
-		NotificationChannelCreator(
-			notificationManager = get(),
-			id = get("auroraNotificationChannelId"),
-			name = context.getString(R.string.aurora_alerts_channel_name)
-		)
-	}
+    single {
+        val context = get<Context>()
+        NotificationChannelCreator(
+            notificationManager = get(),
+            id = get("auroraNotificationChannelId"),
+            name = context.getString(R.string.aurora_alerts_channel_name)
+        )
+    }
 
-	single<Completable>("createNotificationChannel") {
-		val channelCreator = get<NotificationChannelCreator>()
-		Completable.fromAction { channelCreator.createChannel() }
-	}
+    single<Completable>("createNotificationChannel") {
+        val channelCreator = get<NotificationChannelCreator>()
+        Completable.fromAction { channelCreator.createChannel() }
+    }
 
-	single<Completable>("scheduleBackgroundNotifications") {
-		get<Completable>("createNotificationChannel")
-			.andThen(get<Completable>("scheduleBasedOnSettings"))
-	}
+    single<Completable>("scheduleBackgroundNotifications") {
+        get<Completable>("createNotificationChannel")
+            .andThen(get<Completable>("scheduleBasedOnSettings"))
+    }
 
-	single<LastNotificationRepository> {
-		SharedPrefsLastNotificationRepository(context = get())
-	}
+    single<LastNotificationRepository> {
+        SharedPrefsLastNotificationRepository(context = get())
+    }
 
-	single<ModuleStarter>("background") {
-		val context = get<Context>()
-		val scheduleBackgroundNotifications = get<Completable>("scheduleBackgroundNotifications")
-		object : ModuleStarter {
-			override fun start() {
-				deleteOldNotifiedPrefsFile(context)
-				scheduleBackgroundNotifications.subscribe()
-			}
-
-		}
-	}
+    single<ModuleStarter>("background") {
+        val context = get<Context>()
+        val scheduleBackgroundNotifications = get<Completable>("scheduleBackgroundNotifications")
+        object : ModuleStarter {
+            override fun start() {
+                deleteOldNotifiedPrefsFile(context)
+                scheduleBackgroundNotifications.subscribe()
+            }
+        }
+    }
 }
 
 private fun deleteOldNotifiedPrefsFile(context: Context) {
-	File(context.filesDir.parent + "/shared_prefs/notified_chance.xml").delete()
+    File(context.filesDir.parent + "/shared_prefs/notified_chance.xml").delete()
 }

@@ -5,22 +5,22 @@ import android.app.ActivityManager.RunningAppProcessInfo
 import android.app.KeyguardManager
 
 internal class AppVisibilityEvaluator(
-	private val keyguardManager: KeyguardManager
+    private val keyguardManager: KeyguardManager
 ) {
 
-	fun isVisible(): Boolean {
-		if (!isInForeground()) return false
+    fun isVisible(): Boolean {
+        if (!isInForeground()) return false
 
-		// app is in foreground, but screen can be locked
-		return !keyguardManager.isKeyguardLocked
-	}
+        // app is in foreground, but screen can be locked
+        return !keyguardManager.isKeyguardLocked
+    }
 
-	private fun getProcessInfo(): RunningAppProcessInfo {
-		val processInfo = RunningAppProcessInfo()
-		ActivityManager.getMyMemoryState(processInfo)
-		return processInfo
-	}
+    private fun getProcessInfo(): RunningAppProcessInfo {
+        val processInfo = RunningAppProcessInfo()
+        ActivityManager.getMyMemoryState(processInfo)
+        return processInfo
+    }
 
-	private fun isInForeground() =
-		getProcessInfo().importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND
+    private fun isInForeground() =
+        getProcessInfo().importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND
 }

@@ -17,64 +17,63 @@ import se.gustavkarlsson.skylight.android.services.Settings
 
 val featureSettingsModule = module {
 
-	viewModel {
-		SettingsViewModel(get())
-	}
+    viewModel {
+        SettingsViewModel(get())
+    }
 
-	single<ModuleStarter>("settings") {
-		val analytics = get<Analytics>()
-		val placesRepository = get<PlacesRepository>()
-		val settings = get<Settings>()
-		val factoryRegistry = get<FragmentFactoryRegistry>()
-		val context = get<Context>()
-		object : ModuleStarter {
-			@SuppressLint("CheckResult")
-			override fun start() {
-				factoryRegistry.register(SettingsFragmentFactory)
-				clearSettingsForDeletedPlaces(placesRepository, settings)
-				getTriggerLevels(settings)
-					.subscribe { (min, max) ->
-						analytics.setProperty("trigger_lvl_min", min)
-						analytics.setProperty("trigger_lvl_max", max)
-					}
-				clearOldSharedPreferences(context)
-			}
-		}
-	}
+    single<ModuleStarter>("settings") {
+        val analytics = get<Analytics>()
+        val placesRepository = get<PlacesRepository>()
+        val settings = get<Settings>()
+        val factoryRegistry = get<FragmentFactoryRegistry>()
+        val context = get<Context>()
+        object : ModuleStarter {
+            @SuppressLint("CheckResult")
+            override fun start() {
+                factoryRegistry.register(SettingsFragmentFactory)
+                clearSettingsForDeletedPlaces(placesRepository, settings)
+                getTriggerLevels(settings)
+                    .subscribe { (min, max) ->
+                        analytics.setProperty("trigger_lvl_min", min)
+                        analytics.setProperty("trigger_lvl_max", max)
+                    }
+                clearOldSharedPreferences(context)
+            }
+        }
+    }
 }
 
 private object SettingsFragmentFactory : FragmentFactory {
-	override fun createFragment(name: String): Fragment? =
-		if (name == "settings") SettingsFragment()
-		else null
+    override fun createFragment(name: String): Fragment? =
+        if (name == "settings") SettingsFragment()
+        else null
 }
 
 @SuppressLint("CheckResult")
 private fun clearSettingsForDeletedPlaces(placesRepository: PlacesRepository, settings: Settings) {
-	placesRepository.stream()
-		.buffer(2, 1)
-		.flatMap { (old, new) ->
-			val remaining = old - new
-			remaining.toObservable()
-		}
-		.subscribe(settings::clearNotificationTriggerLevel)
+    placesRepository.stream()
+        .buffer(2, 1)
+        .flatMap { (old, new) ->
+            val remaining = old - new
+            remaining.toObservable()
+        }
+        .subscribe(settings::clearNotificationTriggerLevel)
 }
 
 private fun getTriggerLevels(settings: Settings) =
-	settings
-		.streamNotificationTriggerLevels()
-		.map { it.unzip().second }
-		.map { triggerLevels ->
-			val min = triggerLevels.minBy { it.ordinal }
-			val max = triggerLevels.maxBy { it.ordinal }
-			min to max
-		}
-		.distinctUntilChanged()
-
+    settings
+        .streamNotificationTriggerLevels()
+        .map { it.unzip().second }
+        .map { triggerLevels ->
+            val min = triggerLevels.minBy { it.ordinal }
+            val max = triggerLevels.maxBy { it.ordinal }
+            min to max
+        }
+        .distinctUntilChanged()
 
 private fun clearOldSharedPreferences(context: Context) =
-	PreferenceManager.getDefaultSharedPreferences(context)
-		.edit {
-			putString("pref_notifications_key", null)
-			putString("pref_trigger_level_key", null)
-		}
+    PreferenceManager.getDefaultSharedPreferences(context)
+        .edit {
+            putString("pref_notifications_key", null)
+            putString("pref_trigger_level_key", null)
+        }

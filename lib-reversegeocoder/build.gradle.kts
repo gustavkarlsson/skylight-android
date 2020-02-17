@@ -1,8 +1,8 @@
 plugins {
-	id("com.android.library")
-	id("kotlin-android")
+    id("com.android.library")
+    id("kotlin-android")
 }
 
 dependencies {
-	implementation(project(":core"))
+    implementation(project(":core"))
 }

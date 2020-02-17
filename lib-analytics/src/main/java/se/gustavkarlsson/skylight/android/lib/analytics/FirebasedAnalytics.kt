@@ -6,20 +6,20 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import se.gustavkarlsson.skylight.android.services.Analytics
 
 internal class FirebasedAnalytics(
-	private val firebaseAnalytics: FirebaseAnalytics
+    private val firebaseAnalytics: FirebaseAnalytics
 ) : Analytics {
 
-	override fun logScreen(activity: Activity, name: String) =
-		firebaseAnalytics.setCurrentScreen(activity, name, name)
+    override fun logScreen(activity: Activity, name: String) =
+        firebaseAnalytics.setCurrentScreen(activity, name, name)
 
-	override fun setProperty(name: String, value: Any?) =
-		firebaseAnalytics.setUserProperty(name, value?.toString())
+    override fun setProperty(name: String, value: Any?) =
+        firebaseAnalytics.setUserProperty(name, value?.toString())
 
-	override fun logEvent(name: String, data: Map<String, Any?>?) {
-		val bundle = data
-			?.toList()
-			?.toTypedArray()
-			?.let(::bundleOf)
-		firebaseAnalytics.logEvent(name, bundle)
-	}
+    override fun logEvent(name: String, data: Map<String, Any?>?) {
+        val bundle = data
+            ?.toList()
+            ?.toTypedArray()
+            ?.let(::bundleOf)
+        firebaseAnalytics.logEvent(name, bundle)
+    }
 }

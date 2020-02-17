@@ -8,6 +8,6 @@ import se.gustavkarlsson.skylight.android.entities.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.entities.LocationResult
 
 interface AuroraReportProvider {
-	fun get(location: Single<LocationResult>): Single<CompleteAuroraReport>
-	fun stream(locations: Observable<Loadable<LocationResult>>): Observable<LoadableAuroraReport>
+    fun get(location: Single<LocationResult>): Single<CompleteAuroraReport>
+    fun stream(locations: Observable<Loadable<LocationResult>>): Observable<LoadableAuroraReport>
 }

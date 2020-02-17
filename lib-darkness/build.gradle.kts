@@ -1,10 +1,10 @@
 plugins {
-	id("com.android.library")
-	id("kotlin-android")
+    id("com.android.library")
+    id("kotlin-android")
 }
 
 dependencies {
-	implementation(project(":core"))
+    implementation(project(":core"))
 
-	implementation("net.e175.klaus:solarpositioning:${Versions.solarPositioning}")
+    implementation("net.e175.klaus:solarpositioning:${Versions.solarPositioning}")
 }

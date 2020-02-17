@@ -6,7 +6,7 @@ import se.gustavkarlsson.skylight.android.services.DarknessProvider
 
 val libDarknessModule = module {
 
-	single<DarknessProvider> {
-		KlausBrunnerDarknessProvider(time = get(), pollingInterval = 1.minutes)
-	}
+    single<DarknessProvider> {
+        KlausBrunnerDarknessProvider(time = get(), pollingInterval = 1.minutes)
+    }
 }

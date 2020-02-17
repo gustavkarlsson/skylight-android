@@ -25,129 +25,129 @@ import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 @RunWith(MockitoJUnitRunner::class)
 internal class AuroraReportNotificationDeciderImplTest {
 
-	@Mock
-	lateinit var mockNotifiedChanceRepository: NotifiedChanceRepository
+    @Mock
+    lateinit var mockNotifiedChanceRepository: NotifiedChanceRepository
 
-	@Mock
-	lateinit var mockChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>
+    @Mock
+    lateinit var mockChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>
 
-	@Mock
-	lateinit var mockSettings: State.Settings
+    @Mock
+    lateinit var mockSettings: State.Settings
 
-	@Mock
-	lateinit var mockState: State
+    @Mock
+    lateinit var mockState: State
 
-	@Mock
-	lateinit var mockStore: SkylightStore
+    @Mock
+    lateinit var mockStore: SkylightStore
 
-	@Mock
-	lateinit var mockOutdatedEvaluator: OutdatedEvaluator
+    @Mock
+    lateinit var mockOutdatedEvaluator: OutdatedEvaluator
 
-	@Mock
-	lateinit var mockAppVisibilityEvaluator: AppVisibilityEvaluator
+    @Mock
+    lateinit var mockAppVisibilityEvaluator: AppVisibilityEvaluator
 
-	@Mock
-	lateinit var mockNewAuroraReport: CompleteAuroraReport
+    @Mock
+    lateinit var mockNewAuroraReport: CompleteAuroraReport
 
-	@Mock
-	lateinit var mockLastNotifiedChance: NotifiedChance
+    @Mock
+    lateinit var mockLastNotifiedChance: NotifiedChance
 
-	lateinit var impl: AuroraReportNotificationDecider
+    lateinit var impl: AuroraReportNotificationDecider
 
-	@Before
-	fun setUp() {
-		whenever(mockLastNotifiedChance.chance).thenReturn(Chance(0.5))
-		whenever(mockLastNotifiedChance.timestamp).thenReturn(Instant.ofEpochMilli(50000))
-		whenever(mockNotifiedChanceRepository.get()).thenReturn(mockLastNotifiedChance)
-		whenever(mockSettings.notificationsEnabled).thenReturn(true)
-		whenever(mockStore.currentState).thenReturn(mockState)
-		whenever(mockState.settings).thenReturn(mockSettings)
-		whenever(mockOutdatedEvaluator.isOutdated(any())).thenReturn(false)
-		whenever(mockAppVisibilityEvaluator.isVisible()).thenReturn(false)
+    @Before
+    fun setUp() {
+        whenever(mockLastNotifiedChance.chance).thenReturn(Chance(0.5))
+        whenever(mockLastNotifiedChance.timestamp).thenReturn(Instant.ofEpochMilli(50000))
+        whenever(mockNotifiedChanceRepository.get()).thenReturn(mockLastNotifiedChance)
+        whenever(mockSettings.notificationsEnabled).thenReturn(true)
+        whenever(mockStore.currentState).thenReturn(mockState)
+        whenever(mockState.settings).thenReturn(mockSettings)
+        whenever(mockOutdatedEvaluator.isOutdated(any())).thenReturn(false)
+        whenever(mockAppVisibilityEvaluator.isVisible()).thenReturn(false)
 
-		impl =
-			AuroraReportNotificationDeciderImpl(
-				mockNotifiedChanceRepository,
-				mockChanceEvaluator,
-				mockStore,
-				mockOutdatedEvaluator,
-				mockAppVisibilityEvaluator
-			)
-	}
+        impl =
+            AuroraReportNotificationDeciderImpl(
+                mockNotifiedChanceRepository,
+                mockChanceEvaluator,
+                mockStore,
+                mockOutdatedEvaluator,
+                mockAppVisibilityEvaluator
+            )
+    }
 
-	@Test
-	fun notifyIfNewChanceIsHigherThanOldChanceAndTriggerLevel() {
-		whenever(mockChanceEvaluator.evaluate(any())).thenReturn(Chance(0.2))
-		whenever(mockChanceEvaluator.evaluate(mockNewAuroraReport)).thenReturn(Chance(0.9))
-		whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.MEDIUM)
+    @Test
+    fun notifyIfNewChanceIsHigherThanOldChanceAndTriggerLevel() {
+        whenever(mockChanceEvaluator.evaluate(any())).thenReturn(Chance(0.2))
+        whenever(mockChanceEvaluator.evaluate(mockNewAuroraReport)).thenReturn(Chance(0.9))
+        whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.MEDIUM)
 
-		val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
+        val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
 
-		assertk.assert(shouldNotify).isTrue()
-	}
+        assertk.assert(shouldNotify).isTrue()
+    }
 
-	@Test
-	fun notifyIfNewChanceIsAboveTriggerLevelAndLastValueIsOutdated() {
-		whenever(mockChanceEvaluator.evaluate(mockNewAuroraReport)).thenReturn(Chance(0.5))
-		whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.LOW)
-		whenever(mockOutdatedEvaluator.isOutdated(any())).thenReturn(true)
+    @Test
+    fun notifyIfNewChanceIsAboveTriggerLevelAndLastValueIsOutdated() {
+        whenever(mockChanceEvaluator.evaluate(mockNewAuroraReport)).thenReturn(Chance(0.5))
+        whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.LOW)
+        whenever(mockOutdatedEvaluator.isOutdated(any())).thenReturn(true)
 
-		val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
+        val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
 
-		assertk.assert(shouldNotify).isEqualTo(true)
-	}
+        assertk.assert(shouldNotify).isEqualTo(true)
+    }
 
-	@Test
-	fun dontNotifyIfNotificationsAreDisabled() {
-		whenever(mockSettings.notificationsEnabled).thenReturn(false)
+    @Test
+    fun dontNotifyIfNotificationsAreDisabled() {
+        whenever(mockSettings.notificationsEnabled).thenReturn(false)
 
-		val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
+        val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
 
-		verify(mockSettings).notificationsEnabled
-		verifyNoMoreInteractions(mockSettings)
-		verifyZeroInteractions(mockChanceEvaluator)
-		verifyZeroInteractions(mockOutdatedEvaluator)
-		assertk.assert(shouldNotify).isEqualTo(false)
-	}
+        verify(mockSettings).notificationsEnabled
+        verifyNoMoreInteractions(mockSettings)
+        verifyZeroInteractions(mockChanceEvaluator)
+        verifyZeroInteractions(mockOutdatedEvaluator)
+        assertk.assert(shouldNotify).isEqualTo(false)
+    }
 
-	@Test
-	fun dontNotifyIfNewChanceIsLowerThanTriggerLevel() {
-		whenever(mockChanceEvaluator.evaluate(mockNewAuroraReport)).thenReturn(Chance(0.5))
-		whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.HIGH)
+    @Test
+    fun dontNotifyIfNewChanceIsLowerThanTriggerLevel() {
+        whenever(mockChanceEvaluator.evaluate(mockNewAuroraReport)).thenReturn(Chance(0.5))
+        whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.HIGH)
 
-		val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
+        val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
 
-		assertk.assert(shouldNotify).isEqualTo(false)
-	}
+        assertk.assert(shouldNotify).isEqualTo(false)
+    }
 
-	@Test
-	fun dontNotifyIfNewChanceIsLowerThanOldChance() {
-		whenever(mockLastNotifiedChance.chance).thenReturn(Chance(0.5))
-		whenever(mockChanceEvaluator.evaluate(mockNewAuroraReport)).thenReturn(Chance(0.2))
-		whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.LOW)
+    @Test
+    fun dontNotifyIfNewChanceIsLowerThanOldChance() {
+        whenever(mockLastNotifiedChance.chance).thenReturn(Chance(0.5))
+        whenever(mockChanceEvaluator.evaluate(mockNewAuroraReport)).thenReturn(Chance(0.2))
+        whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.LOW)
 
-		val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
+        val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
 
-		assertk.assert(shouldNotify).isEqualTo(false)
-	}
+        assertk.assert(shouldNotify).isEqualTo(false)
+    }
 
-	@Test
-	fun dontNotifyIfNewChanceIsSameAsOldChance() {
-		whenever(mockLastNotifiedChance.chance).thenReturn(Chance(0.5))
-		whenever(mockChanceEvaluator.evaluate(mockNewAuroraReport)).thenReturn(Chance(0.5))
-		whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.LOW)
+    @Test
+    fun dontNotifyIfNewChanceIsSameAsOldChance() {
+        whenever(mockLastNotifiedChance.chance).thenReturn(Chance(0.5))
+        whenever(mockChanceEvaluator.evaluate(mockNewAuroraReport)).thenReturn(Chance(0.5))
+        whenever(mockSettings.triggerLevel).thenReturn(ChanceLevel.LOW)
 
-		val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
+        val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
 
-		assertk.assert(shouldNotify).isEqualTo(false)
-	}
+        assertk.assert(shouldNotify).isEqualTo(false)
+    }
 
-	@Test
-	fun dontNotifyIfAppIsVisible() {
-		whenever(mockAppVisibilityEvaluator.isVisible()).thenReturn(true)
+    @Test
+    fun dontNotifyIfAppIsVisible() {
+        whenever(mockAppVisibilityEvaluator.isVisible()).thenReturn(true)
 
-		val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
+        val shouldNotify = impl.shouldNotify(mockNewAuroraReport)
 
-		assertk.assert(shouldNotify).isEqualTo(false)
-	}
+        assertk.assert(shouldNotify).isEqualTo(false)
+    }
 }

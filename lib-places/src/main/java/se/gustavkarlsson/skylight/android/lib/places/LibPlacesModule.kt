@@ -11,38 +11,38 @@ import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 
 val libPlacesModule = module {
 
-	single<PlacesRepository> {
-		val driver = AndroidSqliteDriver(Database.Schema, get(), "places.db")
-		val database = Database(driver)
-		SqlDelightPlacesRepository(database.dbPlaceQueries)
-	}
+    single<PlacesRepository> {
+        val driver = AndroidSqliteDriver(Database.Schema, get(), "places.db")
+        val database = Database(driver)
+        SqlDelightPlacesRepository(database.dbPlaceQueries)
+    }
 
-	single<PlaceSelectionStorage> {
-		SharedPrefsPlaceSelectionStorage(context = get())
-	}
+    single<PlaceSelectionStorage> {
+        SharedPrefsPlaceSelectionStorage(context = get())
+    }
 
-	single<SelectedPlaceRepository> {
-		// TODO activity local composite disposable?
-		PlacesRepoSelectedPlaceRepository(
-			placesRepo = get(),
-			placeSelectionStorage = get(),
-			disposables = CompositeDisposable()
-		)
-	}
+    single<SelectedPlaceRepository> {
+        // TODO activity local composite disposable?
+        PlacesRepoSelectedPlaceRepository(
+            placesRepo = get(),
+            placeSelectionStorage = get(),
+            disposables = CompositeDisposable()
+        )
+    }
 
-	single<ModuleStarter>("places") {
-		val placesRepository = get<PlacesRepository>()
-		val analytics = get<Analytics>()
-		object : ModuleStarter {
-			@SuppressLint("CheckResult")
-			override fun start() {
-				placesRepository.stream()
-					.map { it.count() }
-					.distinctUntilChanged()
-					.subscribe { placesCount ->
-						analytics.setProperty("places_count", placesCount)
-					}
-			}
-		}
-	}
+    single<ModuleStarter>("places") {
+        val placesRepository = get<PlacesRepository>()
+        val analytics = get<Analytics>()
+        object : ModuleStarter {
+            @SuppressLint("CheckResult")
+            override fun start() {
+                placesRepository.stream()
+                    .map { it.count() }
+                    .distinctUntilChanged()
+                    .subscribe { placesCount ->
+                        analytics.setProperty("places_count", placesCount)
+                    }
+            }
+        }
+    }
 }

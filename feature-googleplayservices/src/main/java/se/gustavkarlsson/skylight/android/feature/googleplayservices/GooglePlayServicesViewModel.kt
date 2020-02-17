@@ -9,13 +9,13 @@ import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 
 internal class GooglePlayServicesViewModel(
-	private val navigator: Navigator,
-	private val destination: NavItem
+    private val navigator: Navigator,
+    private val destination: NavItem
 ) : ViewModel() {
-	// TODO Extract to library module (together with GooglePlayServicesChecker)
-	fun makeGooglePlayServicesAvailable(activity: Activity): Completable =
-		GoogleApiAvailability.getInstance()
-			.makeGooglePlayServicesAvailable(activity).toCompletable()
+    // TODO Extract to library module (together with GooglePlayServicesChecker)
+    fun makeGooglePlayServicesAvailable(activity: Activity): Completable =
+        GoogleApiAvailability.getInstance()
+            .makeGooglePlayServicesAvailable(activity).toCompletable()
 
-	fun navigateForward() = navigator.replace(destination)
+    fun navigateForward() = navigator.replace(destination)
 }

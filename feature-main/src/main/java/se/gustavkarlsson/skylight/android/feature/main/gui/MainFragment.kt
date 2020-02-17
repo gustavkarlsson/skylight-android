@@ -25,186 +25,188 @@ import se.gustavkarlsson.skylight.android.services.PermissionRequester
 import timber.log.Timber
 import kotlin.math.roundToInt
 
-
 internal class MainFragment : BaseFragment(), BackButtonHandler {
 
-	override val layoutId: Int = R.layout.fragment_main
+    override val layoutId: Int = R.layout.fragment_main
 
-	private var currentBottomSheetTitle: Int? = null
+    private var currentBottomSheetTitle: Int? = null
 
-	private val viewModel: MainViewModel by viewModel()
-	private val navigator: Navigator by inject()
+    private val viewModel: MainViewModel by viewModel()
+    private val navigator: Navigator by inject()
 
-	override val toolbar: Toolbar?
-		get() = toolbarView
+    override val toolbar: Toolbar?
+        get() = toolbarView
 
-	override fun onStart() {
-		super.onStart()
-		viewModel.refreshLocationPermission()
-	}
+    override fun onStart() {
+        super.onStart()
+        viewModel.refreshLocationPermission()
+    }
 
-	override fun initView() {
-		toolbarView.enableNavigationDrawer()
-		toolbarView.inflateMenu(R.menu.menu_main)
-	}
+    override fun initView() {
+        toolbarView.enableNavigationDrawer()
+        toolbarView.inflateMenu(R.menu.menu_main)
+    }
 
-	private fun Toolbar.enableNavigationDrawer() {
-		setNavigationIcon(R.drawable.ic_menu_white_24dp)
-		setNavigationOnClickListener {
-			drawerLayout.openDrawer(nav_view)
-		}
-	}
+    private fun Toolbar.enableNavigationDrawer() {
+        setNavigationIcon(R.drawable.ic_menu_white_24dp)
+        setNavigationOnClickListener {
+            drawerLayout.openDrawer(nav_view)
+        }
+    }
 
-	override fun onBackPressed(): Boolean =
-		if (drawerLayout.isDrawerOpen(nav_view)) {
-			drawerLayout.closeDrawer(nav_view)
-			true
-		} else {
-			false
-		}
+    override fun onBackPressed(): Boolean =
+        if (drawerLayout.isDrawerOpen(nav_view)) {
+            drawerLayout.closeDrawer(nav_view)
+            true
+        } else {
+            false
+        }
 
-	override fun bindData() {
-		toolbarView.itemClicks()
-			.bind(this) { item ->
-				when (item.itemId) {
-					R.id.action_settings -> navigator.push(NavItem("settings"))
-					R.id.action_about -> navigator.push(NavItem("about"))
-				}
-			}
+    override fun bindData() {
+        toolbarView.itemClicks()
+            .bind(this) { item ->
+                when (item.itemId) {
+                    R.id.action_settings -> navigator.push(NavItem("settings"))
+                    R.id.action_about -> navigator.push(NavItem("about"))
+                }
+            }
 
-		viewModel.toolbarTitleText
-			.doOnNext { Timber.d("Updating toolbar title: %s", it) }
-			.bind(this) { toolbarView.title = it.resolve(requireContext()) }
+        viewModel.toolbarTitleText
+            .doOnNext { Timber.d("Updating toolbar title: %s", it) }
+            .bind(this) { toolbarView.title = it.resolve(requireContext()) }
 
-		viewModel.chanceLevelText
-			.doOnNext { Timber.d("Updating chanceLevel text: %s", it) }
-			.map { it.resolve(requireContext()) }
-			.bind(this, chance::setText)
+        viewModel.chanceLevelText
+            .doOnNext { Timber.d("Updating chanceLevel text: %s", it) }
+            .map { it.resolve(requireContext()) }
+            .bind(this, chance::setText)
 
-		viewModel.chanceSubtitleText
-			.doOnNext { Timber.d("Updating chanceSubtitle text: %s", it) }
-			.bind(this) { chanceSubtitle.text = it.resolve(requireContext()) }
+        viewModel.chanceSubtitleText
+            .doOnNext { Timber.d("Updating chanceSubtitle text: %s", it) }
+            .bind(this) { chanceSubtitle.text = it.resolve(requireContext()) }
 
-		viewModel.darkness.bindToCard(
-			this,
-			darknessCard,
-			::showDarknessDetails,
-			"darkness"
-		)
-		viewModel.geomagLocation.bindToCard(
-			this,
-			geomagLocationCard,
-			::showGeomagLocationDetails,
-			"geomagLocation"
-		)
-		viewModel.kpIndex.bindToCard(
-			this,
-			kpIndexCard,
-			::showKpIndexDetails,
-			"kpIndex"
-		)
-		viewModel.weather.bindToCard(
-			this,
-			weatherCard,
-			::showWeatherDetails,
-			"weather"
-		)
+        viewModel.darkness.bindToCard(
+            this,
+            darknessCard,
+            ::showDarknessDetails,
+            "darkness"
+        )
+        viewModel.geomagLocation.bindToCard(
+            this,
+            geomagLocationCard,
+            ::showGeomagLocationDetails,
+            "geomagLocation"
+        )
+        viewModel.kpIndex.bindToCard(
+            this,
+            kpIndexCard,
+            ::showKpIndexDetails,
+            "kpIndex"
+        )
+        viewModel.weather.bindToCard(
+            this,
+            weatherCard,
+            ::showWeatherDetails,
+            "weather"
+        )
 
-		viewModel.errorBannerData.bind(this) { updateBanner(it.value) }
-	}
+        viewModel.errorBannerData.bind(this) { updateBanner(it.value) }
+    }
 
-	private fun updateBanner(data: BannerData?) {
-		errorBanner.run {
-			if (data != null) {
-				setMessage(data.message.resolve(requireContext()))
-				setRightButton(data.buttonText.resolve(requireContext())) {
-					when (data.buttonEvent) {
-						BannerData.Event.RequestLocationPermission -> requestLocationPermission()
-						BannerData.Event.OpenAppDetails -> openAppDetails()
-					}
-				}
-			}
-			val isVisible = visibility == View.VISIBLE
-			val shouldShow = data != null
-			if (!isVisible && shouldShow)
-				show()
-			else if (isVisible && !shouldShow)
-				dismiss()
-		}
-	}
+    private fun updateBanner(data: BannerData?) {
+        errorBanner.run {
+            if (data != null) {
+                setMessage(data.message.resolve(requireContext()))
+                setRightButton(data.buttonText.resolve(requireContext())) {
+                    when (data.buttonEvent) {
+                        BannerData.Event.RequestLocationPermission -> requestLocationPermission()
+                        BannerData.Event.OpenAppDetails -> openAppDetails()
+                    }
+                }
+            }
+            val isVisible = visibility == View.VISIBLE
+            val shouldShow = data != null
+            if (!isVisible && shouldShow)
+                show()
+            else if (isVisible && !shouldShow)
+                dismiss()
+        }
+    }
 
-	private fun requestLocationPermission() {
-		get<PermissionRequester>().request().bind(this)
-	}
+    private fun requestLocationPermission() {
+        get<PermissionRequester>().request().bind(this)
+    }
 
-	private fun openAppDetails() {
-		val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-		intent.data = Uri.fromParts("package", requireContext().packageName, null)
-		startActivity(intent)
-	}
+    private fun openAppDetails() {
+        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        intent.data = Uri.fromParts("package", requireContext().packageName, null)
+        startActivity(intent)
+    }
 
-	private fun showKpIndexDetails() {
-		showFactorBottomSheetDialogFragment(
-			R.string.factor_kp_index_title_full,
-			R.string.factor_kp_index_desc
-		)
-	}
+    private fun showKpIndexDetails() {
+        showFactorBottomSheetDialogFragment(
+            R.string.factor_kp_index_title_full,
+            R.string.factor_kp_index_desc
+        )
+    }
 
-	private fun showGeomagLocationDetails() {
-		showFactorBottomSheetDialogFragment(
-			R.string.factor_geomag_location_title_full,
-			R.string.factor_geomag_location_desc
-		)
-	}
+    private fun showGeomagLocationDetails() {
+        showFactorBottomSheetDialogFragment(
+            R.string.factor_geomag_location_title_full,
+            R.string.factor_geomag_location_desc
+        )
+    }
 
-	private fun showWeatherDetails() {
-		showFactorBottomSheetDialogFragment(
-			R.string.factor_weather_title_full,
-			R.string.factor_weather_desc
-		)
-	}
+    private fun showWeatherDetails() {
+        showFactorBottomSheetDialogFragment(
+            R.string.factor_weather_title_full,
+            R.string.factor_weather_desc
+        )
+    }
 
-	private fun showDarknessDetails() {
-		showFactorBottomSheetDialogFragment(
-			R.string.factor_darkness_title_full,
-			R.string.factor_darkness_desc
-		)
-	}
+    private fun showDarknessDetails() {
+        showFactorBottomSheetDialogFragment(
+            R.string.factor_darkness_title_full,
+            R.string.factor_darkness_desc
+        )
+    }
 
-	private fun showFactorBottomSheetDialogFragment(@StringRes title: Int, @StringRes description: Int) {
-		if (currentBottomSheetTitle == title) return
-		childFragmentManager.let {
-			FactorBottomSheetDialogFragment.newInstance(
-				title,
-				description
-			)
-				.apply {
-					onCancelListener = { currentBottomSheetTitle = null }
-					show(it, javaClass.simpleName)
-				}
-			currentBottomSheetTitle = title
-		}
-	}
+    private fun showFactorBottomSheetDialogFragment(
+        @StringRes title: Int,
+        @StringRes description: Int
+    ) {
+        if (currentBottomSheetTitle == title) return
+        childFragmentManager.let {
+            FactorBottomSheetDialogFragment.newInstance(
+                title,
+                description
+            )
+                .apply {
+                    onCancelListener = { currentBottomSheetTitle = null }
+                    show(it, javaClass.simpleName)
+                }
+            currentBottomSheetTitle = title
+        }
+    }
 
-	private fun Observable<FactorItem>.bindToCard(
-		fragment: Fragment,
-		cardView: FactorCard,
-		onCardClick: () -> Unit,
-		factorDebugName: String
-	) {
-		val maxProgress = (cardView.progressView.max * 0.97).roundToInt()
-		val minProgress = (cardView.progressView.max - maxProgress)
+    private fun Observable<FactorItem>.bindToCard(
+        fragment: Fragment,
+        cardView: FactorCard,
+        onCardClick: () -> Unit,
+        factorDebugName: String
+    ) {
+        val maxProgress = (cardView.progressView.max * 0.97).roundToInt()
+        val minProgress = (cardView.progressView.max - maxProgress)
 
-		doOnNext { Timber.d("Updating %s factor card: %s", factorDebugName, it) }
-			.bind(fragment) { item ->
-				cardView.valueView.text = item.valueText.resolve(cardView.context)
-				cardView.progressView.progressTintList = ColorStateList.valueOf(item.progressColor)
-				cardView.progressView.progress = item.progress?.let { progressPercent ->
-					(progressPercent * maxProgress).roundToInt() + minProgress
-				} ?: 0
-			}
+        doOnNext { Timber.d("Updating %s factor card: %s", factorDebugName, it) }
+            .bind(fragment) { item ->
+                cardView.valueView.text = item.valueText.resolve(cardView.context)
+                cardView.progressView.progressTintList = ColorStateList.valueOf(item.progressColor)
+                cardView.progressView.progress = item.progress?.let { progressPercent ->
+                    (progressPercent * maxProgress).roundToInt() + minProgress
+                } ?: 0
+            }
 
-		cardView.clicks()
-			.bind(fragment) { onCardClick() }
-	}
+        cardView.clicks()
+            .bind(fragment) { onCardClick() }
+    }
 }

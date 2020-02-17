@@ -18,44 +18,44 @@ import se.gustavkarlsson.skylight.android.services.WeatherProvider
 import timber.log.Timber
 
 internal class CombiningAuroraReportProvider(
-	private val reverseGeocoder: ReverseGeocoder,
-	private val darknessProvider: DarknessProvider,
-	private val geomagLocationProvider: GeomagLocationProvider,
-	private val kpIndexProvider: KpIndexProvider,
-	private val weatherProvider: WeatherProvider
+    private val reverseGeocoder: ReverseGeocoder,
+    private val darknessProvider: DarknessProvider,
+    private val geomagLocationProvider: GeomagLocationProvider,
+    private val kpIndexProvider: KpIndexProvider,
+    private val weatherProvider: WeatherProvider
 ) : AuroraReportProvider {
-	override fun get(location: Single<LocationResult>): Single<CompleteAuroraReport> =
-		zipToAuroraReport(location)
-			.doOnSuccess { Timber.i("Provided aurora report: %s", it) }
+    override fun get(location: Single<LocationResult>): Single<CompleteAuroraReport> =
+        zipToAuroraReport(location)
+            .doOnSuccess { Timber.i("Provided aurora report: %s", it) }
 
-	override fun stream(
-		locations: Observable<Loadable<LocationResult>>
-	): Observable<LoadableAuroraReport> =
-		Observables
-			.combineLatest(
-				reverseGeocoder.stream(locations),
-				kpIndexProvider.stream(),
-				geomagLocationProvider.stream(locations),
-				darknessProvider.stream(locations),
-				weatherProvider.stream(locations)
-			) { locationName, kpIndex, geomagLocation, darkness, weather ->
-				LoadableAuroraReport(locationName, kpIndex, geomagLocation, darkness, weather)
-			}
-			.distinctUntilChanged()
-			.doOnNext { Timber.i("Streamed aurora report: %s", it) }
-			.replayingShare(LoadableAuroraReport.LOADING)
+    override fun stream(
+        locations: Observable<Loadable<LocationResult>>
+    ): Observable<LoadableAuroraReport> =
+        Observables
+            .combineLatest(
+                reverseGeocoder.stream(locations),
+                kpIndexProvider.stream(),
+                geomagLocationProvider.stream(locations),
+                darknessProvider.stream(locations),
+                weatherProvider.stream(locations)
+            ) { locationName, kpIndex, geomagLocation, darkness, weather ->
+                LoadableAuroraReport(locationName, kpIndex, geomagLocation, darkness, weather)
+            }
+            .distinctUntilChanged()
+            .doOnNext { Timber.i("Streamed aurora report: %s", it) }
+            .replayingShare(LoadableAuroraReport.LOADING)
 
-	private fun zipToAuroraReport(location: Single<LocationResult>): Single<CompleteAuroraReport> {
-		val cachedLocation = location.cache()
-		return Singles
-			.zip(
-				reverseGeocoder.get(cachedLocation),
-				kpIndexProvider.get(),
-				geomagLocationProvider.get(cachedLocation),
-				darknessProvider.get(cachedLocation),
-				weatherProvider.get(cachedLocation)
-			) { locationName, kpIndex, geomagLocation, darkness, weather ->
-				CompleteAuroraReport(locationName, kpIndex, geomagLocation, darkness, weather)
-			}
-	}
+    private fun zipToAuroraReport(location: Single<LocationResult>): Single<CompleteAuroraReport> {
+        val cachedLocation = location.cache()
+        return Singles
+            .zip(
+                reverseGeocoder.get(cachedLocation),
+                kpIndexProvider.get(),
+                geomagLocationProvider.get(cachedLocation),
+                darknessProvider.get(cachedLocation),
+                weatherProvider.get(cachedLocation)
+            ) { locationName, kpIndex, geomagLocation, darkness, weather ->
+                CompleteAuroraReport(locationName, kpIndex, geomagLocation, darkness, weather)
+            }
+    }
 }

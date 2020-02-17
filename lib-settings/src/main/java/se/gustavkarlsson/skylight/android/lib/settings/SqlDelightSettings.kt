@@ -15,72 +15,71 @@ import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.Settings
 
 internal class SqlDelightSettings(
-	private val queries: DbSettingsQueries,
-	private val placesRepository: PlacesRepository,
-	private val dbScheduler: Scheduler = Schedulers.io()
+    private val queries: DbSettingsQueries,
+    private val placesRepository: PlacesRepository,
+    private val dbScheduler: Scheduler = Schedulers.io()
 ) : Settings {
 
-	override fun setNotificationTriggerLevel(place: Place, level: TriggerLevel): Completable {
-		val placeId = place.getId()
-		return queries.getById(placeId)
-			.asObservable(dbScheduler)
-			.mapToList()
-			.firstElement()
-			.map { it.isNotEmpty() }
-			.switchIfEmpty(Single.just(false))
-			.doOnSuccess { exists ->
-				val levelIndex = level.ordinal.toLong()
-				if (exists)
-					queries.update(levelIndex, placeId)
-				else
-					queries.insert(placeId, levelIndex)
-			}
-			.ignoreElement()
-	}
+    override fun setNotificationTriggerLevel(place: Place, level: TriggerLevel): Completable {
+        val placeId = place.getId()
+        return queries.getById(placeId)
+            .asObservable(dbScheduler)
+            .mapToList()
+            .firstElement()
+            .map { it.isNotEmpty() }
+            .switchIfEmpty(Single.just(false))
+            .doOnSuccess { exists ->
+                val levelIndex = level.ordinal.toLong()
+                if (exists)
+                    queries.update(levelIndex, placeId)
+                else
+                    queries.insert(placeId, levelIndex)
+            }
+            .ignoreElement()
+    }
 
-	override fun clearNotificationTriggerLevel(place: Place) = queries.delete(place.getId())
+    override fun clearNotificationTriggerLevel(place: Place) = queries.delete(place.getId())
 
-	override fun streamNotificationTriggerLevels(
-	): Observable<List<Pair<Place, TriggerLevel>>> =
-		placesRepository.stream()
-			.switchMap<List<Pair<Place, TriggerLevel>>> { places ->
-				getTriggerLevelRecords()
-					.map { records ->
-						places.map { place ->
-							place to getTriggerLevel(place, records)
-						}
-					}
-			}
-			.replayingShare()
+    override fun streamNotificationTriggerLevels(): Observable<List<Pair<Place, TriggerLevel>>> =
+        placesRepository.stream()
+            .switchMap<List<Pair<Place, TriggerLevel>>> { places ->
+                getTriggerLevelRecords()
+                    .map { records ->
+                        places.map { place ->
+                            place to getTriggerLevel(place, records)
+                        }
+                    }
+            }
+            .replayingShare()
 
-	private fun getTriggerLevelRecords(): Observable<List<TriggerLevelRecord>> =
-		queries
-			.selectAll { id, levelIndex -> TriggerLevelRecord(id, levelIndex) }
-			.asObservable(dbScheduler)
-			.mapToList()
+    private fun getTriggerLevelRecords(): Observable<List<TriggerLevelRecord>> =
+        queries
+            .selectAll { id, levelIndex -> TriggerLevelRecord(id, levelIndex) }
+            .asObservable(dbScheduler)
+            .mapToList()
 }
 
 private fun getTriggerLevel(
-	place: Place,
-	records: List<TriggerLevelRecord>
+    place: Place,
+    records: List<TriggerLevelRecord>
 ): TriggerLevel {
-	val placeId = place.getId()
-	val matchingRecord = records.find { record -> record.placeId == placeId }
-		?: return Settings.DEFAULT_TRIGGER_LEVEL
-	return findTriggerLevelByIndex(matchingRecord.triggerLevelIndex)
-		?: Settings.DEFAULT_TRIGGER_LEVEL
+    val placeId = place.getId()
+    val matchingRecord = records.find { record -> record.placeId == placeId }
+        ?: return Settings.DEFAULT_TRIGGER_LEVEL
+    return findTriggerLevelByIndex(matchingRecord.triggerLevelIndex)
+        ?: Settings.DEFAULT_TRIGGER_LEVEL
 }
 
 private fun Place.getId(): Long = when (this) {
-	Place.Current -> CURRENT_ID
-	is Place.Custom -> id
+    Place.Current -> CURRENT_ID
+    is Place.Custom -> id
 }
 
 private fun findTriggerLevelByIndex(levelIndex: Long): TriggerLevel? =
-	if (levelIndex in TriggerLevel.values().indices)
-		TriggerLevel.values()[levelIndex.toInt()]
-	else
-		null
+    if (levelIndex in TriggerLevel.values().indices)
+        TriggerLevel.values()[levelIndex.toInt()]
+    else
+        null
 
 private data class TriggerLevelRecord(val placeId: Long, val triggerLevelIndex: Long)
 

@@ -7,11 +7,11 @@ import java.util.Locale
 
 val libGeocoderModule = module {
 
-	single<Geocoder> {
-		val locale = get<Single<Locale>>("locale")
-		MapboxGeocoder(
-			accessToken = BuildConfig.MAPBOX_API_KEY,
-			getLocale = locale::blockingGet
-		)
-	}
+    single<Geocoder> {
+        val locale = get<Single<Locale>>("locale")
+        MapboxGeocoder(
+            accessToken = BuildConfig.MAPBOX_API_KEY,
+            getLocale = locale::blockingGet
+        )
+    }
 }

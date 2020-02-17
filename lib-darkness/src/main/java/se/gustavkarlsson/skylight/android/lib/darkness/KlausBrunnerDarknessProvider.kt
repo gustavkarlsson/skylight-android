@@ -18,65 +18,65 @@ import timber.log.Timber
 import java.util.GregorianCalendar
 
 internal class KlausBrunnerDarknessProvider(
-	private val time: Time,
-	private val pollingInterval: Duration
+    private val time: Time,
+    private val pollingInterval: Duration
 ) : DarknessProvider {
 
-	override fun get(location: Single<LocationResult>): Single<Report<Darkness>> =
-		location
-			.map { getDarkness(it, time.now()) }
-			.doOnSuccess { Timber.i("Provided darkness: %s", it) }
+    override fun get(location: Single<LocationResult>): Single<Report<Darkness>> =
+        location
+            .map { getDarkness(it, time.now()) }
+            .doOnSuccess { Timber.i("Provided darkness: %s", it) }
 
-	override fun stream(
-		locations: Observable<Loadable<LocationResult>>
-	): Observable<Loadable<Report<Darkness>>> =
-		locations
-			.switchMap { loadableLocation ->
-				when (loadableLocation) {
-					Loadable.Loading -> Observable.just(Loadable.Loading)
-					is Loadable.Loaded -> {
-						Single
-							.fromCallable {
-								getDarkness(loadableLocation.value, time.now())
-							}
-							.map { Loadable.Loaded(it) }
-							.repeatWhen { it.delay(pollingInterval) }
-							.toObservable()
-					}
-				}
-			}
-			.distinctUntilChanged()
-			.doOnNext { Timber.i("Streamed darkness: %s", it) }
-			.replayingShare(Loadable.Loading)
+    override fun stream(
+        locations: Observable<Loadable<LocationResult>>
+    ): Observable<Loadable<Report<Darkness>>> =
+        locations
+            .switchMap { loadableLocation ->
+                when (loadableLocation) {
+                    Loadable.Loading -> Observable.just(Loadable.Loading)
+                    is Loadable.Loaded -> {
+                        Single
+                            .fromCallable {
+                                getDarkness(loadableLocation.value, time.now())
+                            }
+                            .map { Loadable.Loaded(it) }
+                            .repeatWhen { it.delay(pollingInterval) }
+                            .toObservable()
+                    }
+                }
+            }
+            .distinctUntilChanged()
+            .doOnNext { Timber.i("Streamed darkness: %s", it) }
+            .replayingShare(Loadable.Loading)
 
-	private fun getDarkness(locationResult: LocationResult, timestamp: Instant): Report<Darkness> =
-		locationResult.map(
-			onSuccess = {
-				val sunZenithAngle = calculateSunZenithAngle(it, timestamp)
-				Report.Success(Darkness(sunZenithAngle), timestamp)
-			},
-			onMissingPermissionError = {
-				Report.Error(R.string.error_no_location_permission, timestamp)
-			},
-			onUnknownError = {
-				Report.Error(R.string.error_no_location, timestamp)
-			}
-		)
+    private fun getDarkness(locationResult: LocationResult, timestamp: Instant): Report<Darkness> =
+        locationResult.map(
+            onSuccess = {
+                val sunZenithAngle = calculateSunZenithAngle(it, timestamp)
+                Report.Success(Darkness(sunZenithAngle), timestamp)
+            },
+            onMissingPermissionError = {
+                Report.Error(R.string.error_no_location_permission, timestamp)
+            },
+            onUnknownError = {
+                Report.Error(R.string.error_no_location, timestamp)
+            }
+        )
 }
 
 private fun calculateSunZenithAngle(
-	location: Location,
-	time: Instant
+    location: Location,
+    time: Instant
 ): Double {
-	val date = time.toGregorianCalendar()
-	val azimuthAndZenithAngle = Grena3.calculateSolarPosition(
-		date,
-		location.latitude,
-		location.longitude,
-		0.0
-	)
-	return azimuthAndZenithAngle.zenithAngle
+    val date = time.toGregorianCalendar()
+    val azimuthAndZenithAngle = Grena3.calculateSolarPosition(
+        date,
+        location.latitude,
+        location.longitude,
+        0.0
+    )
+    return azimuthAndZenithAngle.zenithAngle
 }
 
 private fun Instant.toGregorianCalendar() =
-	GregorianCalendar().apply { timeInMillis = toEpochMilli() }
+    GregorianCalendar().apply { timeInMillis = toEpochMilli() }

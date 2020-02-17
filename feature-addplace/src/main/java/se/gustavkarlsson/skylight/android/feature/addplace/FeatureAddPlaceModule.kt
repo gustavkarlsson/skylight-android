@@ -16,47 +16,46 @@ import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
 
 val featureAddPlaceModule = module {
 
-	single("addplace_errors") {
-		PublishRelay.create<TextRef>()
-	}
+    single("addplace_errors") {
+        PublishRelay.create<TextRef>()
+    }
 
-	single<Consumer<TextRef>>("addplace_errors") {
-		get<PublishRelay<TextRef>>("addplace_errors")
-	}
+    single<Consumer<TextRef>>("addplace_errors") {
+        get<PublishRelay<TextRef>>("addplace_errors")
+    }
 
-	single<Observable<TextRef>>("addplace_errors") {
-		get<PublishRelay<TextRef>>("addplace_errors")
-	}
+    single<Observable<TextRef>>("addplace_errors") {
+        get<PublishRelay<TextRef>>("addplace_errors")
+    }
 
-	viewModel { (destination: Optional<NavItem>) ->
-		AddPlaceViewModel(
-			placesRepository  = get(),
-			knot = get("addplace"),
-			navigator = get(),
-			destination = destination.value,
-			errorMessages = get("addplace_errors")
-		)
-	}
+    viewModel { (destination: Optional<NavItem>) ->
+        AddPlaceViewModel(
+            placesRepository = get(),
+            knot = get("addplace"),
+            navigator = get(),
+            destination = destination.value,
+            errorMessages = get("addplace_errors")
+        )
+    }
 
-	factory("addplace") {
-		createKnot(
-			geocoder = get(),
-			querySampleDelay = 1.seconds,
-			errorMessageConsumer = get("addplace_errors")
-		)
-	}
+    factory("addplace") {
+        createKnot(
+            geocoder = get(),
+            querySampleDelay = 1.seconds,
+            errorMessageConsumer = get("addplace_errors")
+        )
+    }
 
-	single<ModuleStarter>("addplace") {
-		object : ModuleStarter {
-			override fun start() {
-				val fragmentFactory = object : FragmentFactory {
-					override fun createFragment(name: String): Fragment? =
-						if (name == "addplace") AddPlaceFragment()
-						else null
-				}
-				get<FragmentFactoryRegistry>().register(fragmentFactory)
-			}
-		}
-	}
-
+    single<ModuleStarter>("addplace") {
+        object : ModuleStarter {
+            override fun start() {
+                val fragmentFactory = object : FragmentFactory {
+                    override fun createFragment(name: String): Fragment? =
+                        if (name == "addplace") AddPlaceFragment()
+                        else null
+                }
+                get<FragmentFactoryRegistry>().register(fragmentFactory)
+            }
+        }
+    }
 }

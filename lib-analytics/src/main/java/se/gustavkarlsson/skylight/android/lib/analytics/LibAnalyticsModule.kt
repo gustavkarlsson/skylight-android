@@ -6,11 +6,11 @@ import se.gustavkarlsson.skylight.android.services.Analytics
 
 val libAnalyticsModule = module {
 
-	single {
-		FirebaseAnalytics.getInstance(get())
-	}
+    single {
+        FirebaseAnalytics.getInstance(get())
+    }
 
-	single<Analytics> {
-		FirebasedAnalytics(firebaseAnalytics = get())
-	}
+    single<Analytics> {
+        FirebasedAnalytics(firebaseAnalytics = get())
+    }
 }

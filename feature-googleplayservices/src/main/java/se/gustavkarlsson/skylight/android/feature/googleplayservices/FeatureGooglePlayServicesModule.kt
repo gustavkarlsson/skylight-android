@@ -12,38 +12,37 @@ import se.gustavkarlsson.skylight.android.lib.navigation.NavItemOverrideRegistry
 
 val featureGooglePlayServicesModule = module {
 
-	single<GooglePlayServicesChecker> {
-		GmsGooglePlayServicesChecker(context = get())
-	}
+    single<GooglePlayServicesChecker> {
+        GmsGooglePlayServicesChecker(context = get())
+    }
 
-	viewModel { (destination: NavItem) ->
-		GooglePlayServicesViewModel(
-			navigator = get(),
-			destination = destination
-		)
-	}
+    viewModel { (destination: NavItem) ->
+        GooglePlayServicesViewModel(
+            navigator = get(),
+            destination = destination
+        )
+    }
 
-	single<ModuleStarter>("googleplayservices") {
-		val googlePlayServicesChecker = get<GooglePlayServicesChecker>()
-		object : ModuleStarter {
-			override fun start() {
-				val override = object : NavItemOverride {
-					override val priority: Int = 10
-					override fun override(item: NavItem): NavItem? =
-						if (!googlePlayServicesChecker.isAvailable) {
-							NavItem("googleplayservices") { "destination" to item }
-						} else null
-				}
-				get<NavItemOverrideRegistry>().register(override)
+    single<ModuleStarter>("googleplayservices") {
+        val googlePlayServicesChecker = get<GooglePlayServicesChecker>()
+        object : ModuleStarter {
+            override fun start() {
+                val override = object : NavItemOverride {
+                    override val priority: Int = 10
+                    override fun override(item: NavItem): NavItem? =
+                        if (!googlePlayServicesChecker.isAvailable) {
+                            NavItem("googleplayservices") { "destination" to item }
+                        } else null
+                }
+                get<NavItemOverrideRegistry>().register(override)
 
-				val fragmentFactory = object : FragmentFactory {
-					override fun createFragment(name: String): Fragment? =
-						if (name == "googleplayservices") GooglePlayServicesFragment()
-						else null
-				}
-				get<FragmentFactoryRegistry>().register(fragmentFactory)
-			}
-		}
-	}
-
+                val fragmentFactory = object : FragmentFactory {
+                    override fun createFragment(name: String): Fragment? =
+                        if (name == "googleplayservices") GooglePlayServicesFragment()
+                        else null
+                }
+                get<FragmentFactoryRegistry>().register(fragmentFactory)
+            }
+        }
+    }
 }

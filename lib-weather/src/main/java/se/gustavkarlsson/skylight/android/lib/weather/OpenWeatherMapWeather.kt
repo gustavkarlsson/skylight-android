@@ -3,9 +3,9 @@ package se.gustavkarlsson.skylight.android.lib.weather
 import com.google.gson.annotations.SerializedName
 
 internal data class OpenWeatherMapWeather(
-		@SerializedName("clouds") var clouds: Clouds = Clouds()
+    @SerializedName("clouds") var clouds: Clouds = Clouds()
 ) {
-	data class Clouds(
-			@SerializedName("all") var percentage: Int = -1
-	)
+    data class Clouds(
+        @SerializedName("all") var percentage: Int = -1
+    )
 }

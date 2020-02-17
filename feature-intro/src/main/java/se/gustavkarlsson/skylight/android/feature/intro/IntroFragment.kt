@@ -11,23 +11,23 @@ import se.gustavkarlsson.skylight.android.lib.ui.extensions.setHtml
 
 internal class IntroFragment : BaseFragment() {
 
-	override val layoutId: Int = R.layout.fragment_intro
+    override val layoutId: Int = R.layout.fragment_intro
 
-	private val viewModel: IntroViewModel by viewModel()
+    private val viewModel: IntroViewModel by viewModel()
 
-	override fun initView() {
-		privacyPolicyLink.setHtml(viewModel.privacyPolicyHtml.resolve(requireContext()))
-	}
+    override fun initView() {
+        privacyPolicyLink.setHtml(viewModel.privacyPolicyHtml.resolve(requireContext()))
+    }
 
-	override fun bindData() {
-		myLocationButton.clicks().bind(this) {
-			viewModel.registerScreenSeen()
-			viewModel.navigateToMain()
-		}
+    override fun bindData() {
+        myLocationButton.clicks().bind(this) {
+            viewModel.registerScreenSeen()
+            viewModel.navigateToMain()
+        }
 
-		pickLocationButton.clicks().bind(this) {
-			viewModel.registerScreenSeen()
-			viewModel.navigateToPickPlace()
-		}
-	}
+        pickLocationButton.clicks().bind(this) {
+            viewModel.registerScreenSeen()
+            viewModel.navigateToPickPlace()
+        }
+    }
 }

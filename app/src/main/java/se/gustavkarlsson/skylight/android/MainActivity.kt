@@ -12,17 +12,17 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 
 internal class MainActivity : AppCompatActivity() {
 
-	private val navigator by inject<Navigator>()
+    private val navigator by inject<Navigator>()
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		bindScope(createScope("activity"))
-		addToKoin<FragmentActivity>(this)
-		setContentView(R.layout.activity_main)
-		if (savedInstanceState == null) {
-			navigator.push(NavItem("main"))
-		}
-	}
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        bindScope(createScope("activity"))
+        addToKoin<FragmentActivity>(this)
+        setContentView(R.layout.activity_main)
+        if (savedInstanceState == null) {
+            navigator.push(NavItem("main"))
+        }
+    }
 
-	override fun onBackPressed() = navigator.onBackPressed()
+    override fun onBackPressed() = navigator.onBackPressed()
 }

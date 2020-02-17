@@ -4,6 +4,6 @@ import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.Permission
 
 interface PermissionChecker {
-	val permission: Observable<Permission>
-	fun refresh()
+    val permission: Observable<Permission>
+    fun refresh()
 }

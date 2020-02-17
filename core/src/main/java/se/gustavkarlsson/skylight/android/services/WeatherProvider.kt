@@ -8,6 +8,6 @@ import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.entities.Weather
 
 interface WeatherProvider {
-	fun get(location: Single<LocationResult>): Single<Report<Weather>>
-	fun stream(locations: Observable<Loadable<LocationResult>>): Observable<Loadable<Report<Weather>>>
+    fun get(location: Single<LocationResult>): Single<Report<Weather>>
+    fun stream(locations: Observable<Loadable<LocationResult>>): Observable<Loadable<Report<Weather>>>
 }
