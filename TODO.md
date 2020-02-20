@@ -10,6 +10,10 @@
 * Add instrumentation testing to CI
 * Add more tests
 
+## Android 11 migration checklist
+* https://developer.android.com/preview/privacy/permissions#one-time
+* https://developer.android.com/preview/privacy/location#background-location
+
 ## Some day
 * Add the thing that clears data between launches (check with Nick)
 * Add prettier detail screens

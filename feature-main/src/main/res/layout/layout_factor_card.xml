@@ -5,7 +5,7 @@
 	android:id="@+id/card"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	app:cardBackgroundColor="@color/surface">
+	app:cardBackgroundColor="?attr/colorSurface">
 
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
@@ -19,7 +19,7 @@
 			android:layout_height="wrap_content"
 			android:ellipsize="end"
 			android:lines="1"
-			android:textColor="@color/on_surface"
+			android:textColor="?attr/colorOnSurface"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent"
 			app:layout_constraintWidth_default="percent"

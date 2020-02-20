@@ -15,3 +15,4 @@
 	android:paddingStart="@dimen/rhythm"
 	android:paddingEnd="@dimen/rhythm"
 	tools:text="Some Place, Some City, Some Country" />
+<!-- FIXME second line using ?android:attr/textColorSecondary -->

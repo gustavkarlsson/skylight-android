@@ -78,10 +78,5 @@ internal class AndroidReverseGeocoder(
         }.subscribeOn(Schedulers.io())
 }
 
-// FIXME clean up
 private fun List<Address>.getBestName() =
-    mapNotNull { it.featureName }.firstOrNull()
-        ?: mapNotNull { it.subLocality }.firstOrNull()
-        ?: mapNotNull { it.locality }.firstOrNull()
-        ?: mapNotNull { it.subAdminArea }.firstOrNull()
-        ?: mapNotNull { it.adminArea }.firstOrNull()
+    mapNotNull { it.subLocality ?: it.locality ?: it.subAdminArea ?: it.adminArea }.firstOrNull()

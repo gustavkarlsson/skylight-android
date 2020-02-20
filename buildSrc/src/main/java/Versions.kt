@@ -24,7 +24,7 @@ object Versions {
     val androidAppcompat = "1.1.0-alpha04"
     val androidFragment = "1.1.0-alpha07"
     val androidAnnotation = "1.0.0"
-    val androidMaterial = "1.1.0-alpha06"
+    val androidMaterial = "1.1.0"
     val androidCardview = "1.0.0"
     val rxbinding = "2.2.0"
     val threetenabp = "1.2.0"

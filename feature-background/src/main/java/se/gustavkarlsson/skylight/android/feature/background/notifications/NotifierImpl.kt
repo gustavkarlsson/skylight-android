@@ -25,6 +25,7 @@ internal class NotifierImpl(
         val pendingIntent = createActivityPendingIntent()
 
         val tintColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // TODO Use attrs?
             context.resources.getColor(R.color.primary, null)
         } else {
             null

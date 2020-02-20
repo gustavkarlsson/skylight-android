@@ -28,6 +28,7 @@ private fun Snackbar.showErrorSnackbar(): Snackbar {
 }
 
 private fun Snackbar.setErrorColor(): Snackbar {
+    // TODO Use attrs?
     view.setBackgroundColor(R.color.error.toArgb(view.context))
     return this
 }

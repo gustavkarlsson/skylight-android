@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 	<item android:right="@dimen/rhythmHalf">
-		<ripple android:color="@color/ripple">
+		<ripple android:color="?attr/colorControlHighlight">
 			<item>
 				<shape>
-					<solid android:color="@color/surface" />
+					<solid android:color="?attr/colorSurface" />
 					<corners
 						android:bottomRightRadius="@dimen/rhythmTriple"
 						android:topRightRadius="@dimen/rhythmTriple" />
