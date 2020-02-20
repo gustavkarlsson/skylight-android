@@ -79,4 +79,4 @@ internal class AndroidReverseGeocoder(
 }
 
 private fun List<Address>.getBestName() =
-    mapNotNull { it.subLocality ?: it.locality ?: it.subAdminArea ?: it.adminArea }.firstOrNull()
+    mapNotNull { it.locality ?: it.subAdminArea ?: it.adminArea }.firstOrNull()

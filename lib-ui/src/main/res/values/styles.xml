@@ -56,7 +56,7 @@
 	<style name="AppTheme.TextTitleSmall" parent="TextAppearance.MaterialComponents.Headline5">
         <item name="android:textColor">?android:attr/textColor</item>
 		<item name="autoSizeTextType">uniform</item>
-		<item name="autoSizeMaxTextSize">28sp</item>
+		<item name="autoSizeMaxTextSize">24sp</item>
 		<item name="android:lines">1</item>
 	</style>
 

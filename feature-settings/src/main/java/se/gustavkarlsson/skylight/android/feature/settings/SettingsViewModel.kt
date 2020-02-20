@@ -18,16 +18,21 @@ internal class SettingsViewModel(private val settings: Settings) : ViewModel() {
     private val showSelectTriggerLevelRelay = PublishRelay.create<Place>()
     val showSelectTriggerLevel: Observable<Place> = showSelectTriggerLevelRelay
 
-    val triggerLevelItems: Observable<List<TriggerLevelItem>> =
+    val settingsItems: Observable<List<SettingsItem>> =
         settings.streamNotificationTriggerLevels()
             .map { levels ->
-                levels.map { (place, triggerLevel) ->
-                    TriggerLevelItem(place.name, triggerLevel.longText, place)
+                val triggerLevelItems = levels.map { (place, triggerLevel) ->
+                    SettingsItem.TriggerLevel(
+                        place.name,
+                        triggerLevel.longText,
+                        place
+                    )
                 }
+                listOf(SettingsItem.Title) + triggerLevelItems
             }
             .observeOn(AndroidSchedulers.mainThread())
 
-    fun onItemClicked(place: Place) {
+    fun onTriggerLevelItemClicked(place: Place) {
         showSelectTriggerLevelRelay.accept(place)
     }
 
@@ -38,11 +43,15 @@ internal class SettingsViewModel(private val settings: Settings) : ViewModel() {
     override fun onCleared() = disposables.clear()
 }
 
-internal data class TriggerLevelItem(
-    val title: TextRef,
-    val subtitle: TextRef,
-    val place: Place
-)
+internal sealed class SettingsItem {
+    object Title : SettingsItem()
+
+    data class TriggerLevel(
+        val title: TextRef,
+        val subtitle: TextRef,
+        val place: Place
+    ) : SettingsItem()
+}
 
 private val TriggerLevel.longText: TextRef
     get() = when (this) {

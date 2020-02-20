@@ -28,7 +28,7 @@ internal class SettingsFragment : BaseFragment() {
     }
 
     override fun bindData() {
-        viewModel.triggerLevelItems.bind(this, adapter::setItems)
+        viewModel.settingsItems.bind(this, adapter::setItems)
 
         viewModel.showSelectTriggerLevel.bind(this, ::showTriggerLevelDialog)
     }
