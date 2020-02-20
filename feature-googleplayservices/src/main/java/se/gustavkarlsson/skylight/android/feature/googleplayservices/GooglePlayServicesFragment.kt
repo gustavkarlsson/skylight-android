@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
 import androidx.lifecycle.Lifecycle
-import com.google.android.material.snackbar.Snackbar
 import com.jakewharton.rxbinding2.view.clicks
 import kotlinx.android.synthetic.main.fragment_google_play_services.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -12,7 +11,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.argument
 import se.gustavkarlsson.skylight.android.lib.ui.doOnNext
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
-import se.gustavkarlsson.skylight.android.lib.ui.extensions.showErrorSnackbar
+import se.gustavkarlsson.skylight.android.lib.ui.extensions.showSnackbar
 import timber.log.Timber
 
 internal class GooglePlayServicesFragment : BaseFragment() {
@@ -40,11 +39,14 @@ internal class GooglePlayServicesFragment : BaseFragment() {
                 } else {
                     Timber.e(error, "Failed to install Google Play Services")
                     view?.let { view ->
-                        showErrorSnackbar(
+                        showSnackbar(
                             view,
-                            R.string.google_play_services_install_failed,
-                            Snackbar.LENGTH_LONG
-                        ).doOnNext(this, Lifecycle.Event.ON_DESTROY) { snackbar ->
+                            R.string.google_play_services_install_failed
+                        ) {
+                            setIndefiniteDuration()
+                            setErrorStyle()
+                            setDismiss(R.string.dismiss)
+                        }.doOnNext(this, Lifecycle.Event.ON_DESTROY) { snackbar ->
                             snackbar.dismiss()
                         }
                     }

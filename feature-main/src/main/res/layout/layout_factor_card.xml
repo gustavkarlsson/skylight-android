@@ -1,61 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:id="@+id/card"
-	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
-	app:cardBackgroundColor="?attr/colorSurface"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="?attr/colorSurface"
     app:cardElevation="2dp"
-    app:rippleColor="?attr/colorControlHighlight"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="true"
+    app:rippleColor="?attr/colorControlHighlight">
 
-	<androidx.constraintlayout.widget.ConstraintLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:padding="@dimen/screen_margin">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/screen_margin">
 
-		<com.google.android.material.textview.MaterialTextView
-			android:id="@+id/title"
-			style="@style/AppTheme.TextBody1"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:ellipsize="end"
-			android:lines="1"
-			android:textColor="?attr/colorOnSurface"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintTop_toTopOf="parent"
-			app:layout_constraintWidth_default="percent"
-			app:layout_constraintWidth_percent=".25"
-			tools:text="Current Weather" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/title"
+            style="@style/AppTheme.TextBody1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="?attr/colorOnSurface"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent=".25"
+            tools:text="Current Weather" />
 
-		<com.google.android.material.textview.MaterialTextView
-			android:id="@+id/value"
-			style="@style/AppTheme.TextBody1"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:layout_marginStart="8dp"
-			android:layout_marginEnd="8dp"
-			android:ellipsize="end"
-			android:lines="1"
-			app:layout_constraintEnd_toStartOf="@id/progressBar"
-			app:layout_constraintStart_toEndOf="@id/title"
-			app:layout_constraintTop_toTopOf="parent"
-			tools:text="Slightly cloudier than normal" />
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/value"
+            style="@style/AppTheme.TextBody2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:lines="1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/progressBar"
+            app:layout_constraintStart_toEndOf="@id/title"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Slightly cloudier than normal" />
 
-		<ProgressBar
-			android:id="@+id/progressBar"
-			style="@style/AppTheme.ProgressBar"
-			android:layout_width="0dp"
-			android:layout_height="wrap_content"
-			android:max="1000"
-			android:progress="0"
-			app:layout_constraintBottom_toBottomOf="@id/value"
-			app:layout_constraintEnd_toEndOf="parent"
-			app:layout_constraintWidth_default="percent"
-			app:layout_constraintWidth_percent=".25"
-			tools:progress="37" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="@style/AppTheme.ProgressBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:max="1000"
+            android:progress="0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent=".25"
+            tools:progress="37" />
 
-	</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>

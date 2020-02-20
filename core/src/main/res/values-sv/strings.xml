@@ -3,6 +3,7 @@
 	<!-- General -->
 	<string name="privacy_policy">Integritetspolicy (eng)</string>
 	<string name="cancel">Avbryt</string>
+    <string name="dismiss">Avvisa</string>
 	<string name="your_location">Din plats</string>
 
     <string name="settings">Inställningar</string>

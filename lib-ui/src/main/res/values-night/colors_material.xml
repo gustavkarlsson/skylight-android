@@ -21,5 +21,5 @@
 	<color name="on_secondary">#FFFFFF</color>
 
     <color name="scrim_background">#52000000</color>
-    <color name="ripple">#11FFFFFF</color>
+    <color name="ripple">#20FFFFFF</color>
 </resources>

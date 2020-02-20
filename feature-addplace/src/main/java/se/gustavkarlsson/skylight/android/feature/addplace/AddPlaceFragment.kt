@@ -23,7 +23,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.argument
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.fadeToVisible
-import se.gustavkarlsson.skylight.android.lib.ui.extensions.showErrorSnackbar
+import se.gustavkarlsson.skylight.android.lib.ui.extensions.showSnackbar
 
 internal class AddPlaceFragment : BaseFragment() {
 
@@ -108,11 +108,11 @@ internal class AddPlaceFragment : BaseFragment() {
         val (oldSnackbar, oldMessage) = this ?: null to null
         if (oldSnackbar == null || !oldSnackbar.isShown || oldMessage != message) {
             oldSnackbar?.dismiss()
-            errorSnackbarAndMessage = showErrorSnackbar(
-                searchResultRecyclerView,
-                message,
-                Snackbar.LENGTH_LONG
-            ) to message
+            errorSnackbarAndMessage = showSnackbar(searchResultRecyclerView, message) {
+                setIndefiniteDuration()
+                setErrorStyle()
+                setDismiss(R.string.dismiss)
+            } to message
         }
     }
 }
