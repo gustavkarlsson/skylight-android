@@ -6,7 +6,7 @@
 	android:layout_height="56dp"
 	android:background="?attr/selectableItemBackground">
 
-	<TextView
+	<com.google.android.material.textview.MaterialTextView
 		android:id="@+id/title"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
 		app:layout_constraintVertical_chainStyle="packed"
 		tools:text="Title" />
 
-	<TextView
+	<com.google.android.material.textview.MaterialTextView
 		android:id="@+id/subtitle"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"

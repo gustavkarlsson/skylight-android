@@ -11,7 +11,7 @@
 		android:layout_height="?attr/actionBarSize"
 		app:layout_constraintTop_toTopOf="parent" />
 
-	<TextView
+	<com.google.android.material.textview.MaterialTextView
 		android:id="@+id/emptyView"
 		style="@style/TextAppearance.MaterialComponents.Body1"
 		android:layout_width="wrap_content"
@@ -24,7 +24,7 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/toolbarView" />
 
-	<TextView
+	<com.google.android.material.textview.MaterialTextView
 		android:id="@+id/noSuggestionsView"
 		style="@style/TextAppearance.MaterialComponents.Body1"
 		android:layout_width="wrap_content"

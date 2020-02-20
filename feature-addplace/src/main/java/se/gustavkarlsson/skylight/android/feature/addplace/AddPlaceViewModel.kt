@@ -1,8 +1,5 @@
 package se.gustavkarlsson.skylight.android.feature.addplace
 
-import android.text.SpannedString
-import androidx.core.text.bold
-import androidx.core.text.buildSpannedString
 import androidx.lifecycle.ViewModel
 import com.ioki.textref.TextRef
 import com.jakewharton.rxrelay2.PublishRelay
@@ -38,7 +35,7 @@ internal class AddPlaceViewModel(
         .filter { it.isNotEmpty() }
         .map { suggestions ->
             suggestions.map {
-                SuggestionItem(createText(it), it)
+                SuggestionItem(createTitle(it), createSubtitle(it), it)
             }
         }
 
@@ -68,23 +65,18 @@ internal class AddPlaceViewModel(
     val isSuggestionsVisible: Observable<Boolean> = resultState.map { it == ResultState.SUGGESTIONS }
 }
 
-private fun createText(suggestion: PlaceSuggestion): SpannedString {
-    val subTitle = createSubTitle(suggestion)
-    return buildSpannedString {
-        bold { append(suggestion.simpleName) }
-        if (subTitle.isNotBlank()) {
-            appendln()
-            append(subTitle)
-        }
-    }
-}
+private fun createTitle(suggestion: PlaceSuggestion) = suggestion.simpleName
 
-private fun createSubTitle(suggestion: PlaceSuggestion) =
+private fun createSubtitle(suggestion: PlaceSuggestion) =
     suggestion.fullName
         .removePrefix(suggestion.simpleName)
         .dropWhile { !it.isLetterOrDigit() }
 
-internal data class SuggestionItem(val text: CharSequence, val suggestion: PlaceSuggestion)
+internal data class SuggestionItem(
+    val textLine1: String,
+    val textLine2: String,
+    val suggestion: PlaceSuggestion
+)
 
 internal enum class ResultState {
     EMPTY, NO_SUGGESTIONS, SUGGESTIONS

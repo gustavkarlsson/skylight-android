@@ -15,7 +15,7 @@
 		android:layout_height="wrap_content"
 		android:padding="@dimen/screen_margin">
 
-		<TextView
+		<com.google.android.material.textview.MaterialTextView
 			android:id="@+id/title"
 			style="@style/AppTheme.TextBody1"
 			android:layout_width="0dp"
@@ -29,7 +29,7 @@
 			app:layout_constraintWidth_percent=".25"
 			tools:text="Current Weather" />
 
-		<TextView
+		<com.google.android.material.textview.MaterialTextView
 			android:id="@+id/value"
 			style="@style/AppTheme.TextBody1"
 			android:layout_width="0dp"

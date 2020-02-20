@@ -30,7 +30,7 @@
 			app:layout_constraintTop_toTopOf="parent"
 			tools:ignore="ContentDescription" />
 
-		<TextView
+		<com.google.android.material.textview.MaterialTextView
 			android:id="@+id/appNameTextView"
 			style="@style/AppTheme.TextTitleLarge"
 			android:layout_width="0dp"
@@ -42,7 +42,7 @@
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toBottomOf="@id/portraitImageView" />
 
-		<TextView
+		<com.google.android.material.textview.MaterialTextView
 			android:id="@+id/detailsTextView"
 			style="@style/AppTheme.TextBody1"
 			android:layout_width="wrap_content"
@@ -55,7 +55,7 @@
 			app:layout_constraintTop_toBottomOf="@id/appNameTextView"
 			tools:text="Version: x.y.z\nApp by: Gustav Karlsson" />
 
-		<TextView
+		<com.google.android.material.textview.MaterialTextView
 			android:id="@+id/privacyPolicyLink"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"

@@ -12,7 +12,7 @@
 		app:title="@string/settings" />
 
 	<!-- TODO When pulling down in options menu, this makes it look weird -->
-	<TextView
+	<com.google.android.material.textview.MaterialTextView
 		android:id="@+id/notificationsTitle"
 		style="@style/TextAppearance.MaterialComponents.Caption"
 		android:layout_width="match_parent"

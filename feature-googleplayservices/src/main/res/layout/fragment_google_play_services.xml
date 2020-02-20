@@ -18,7 +18,7 @@
 		app:layout_constraintTop_toTopOf="parent"
 		tools:ignore="ContentDescription" />
 
-	<TextView
+	<com.google.android.material.textview.MaterialTextView
 		android:id="@+id/titleTextView"
 		style="@style/AppTheme.TextTitleSmall"
 		android:layout_width="0dp"
@@ -29,7 +29,7 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/locationImageView" />
 
-	<TextView
+	<com.google.android.material.textview.MaterialTextView
 		android:id="@+id/descriptionTextView"
 		style="@style/AppTheme.TextBody1"
 		android:layout_width="0dp"

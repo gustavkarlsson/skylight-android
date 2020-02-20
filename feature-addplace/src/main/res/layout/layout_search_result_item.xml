@@ -1,18 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	style="@style/TextAppearance.MaterialComponents.Subtitle2"
-	android:layout_width="match_parent"
-	android:layout_height="@dimen/rhythmTriple"
-	android:background="?attr/selectableItemBackground"
-	android:clickable="true"
-	android:drawableStart="@drawable/ic_map_white_24dp"
-	android:drawablePadding="@dimen/rhythm"
-	android:ellipsize="end"
-	android:focusable="true"
-	android:gravity="center_vertical"
-	android:maxLines="2"
-	android:paddingStart="@dimen/rhythm"
-	android:paddingEnd="@dimen/rhythm"
-	tools:text="Some Place, Some City, Some Country" />
-<!-- FIXME second line using ?android:attr/textColorSecondary -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/rhythmTriple"
+    android:background="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/rhythm"
+        android:src="@drawable/ic_map_white_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/line1TextView"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/rhythm"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toTopOf="@id/line2TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/icon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="Some Place, Some City" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/line2TextView"
+        style="@style/TextAppearance.MaterialComponents.Subtitle2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?android:attr/textColorSecondary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/line1TextView"
+        app:layout_constraintStart_toStartOf="@id/line1TextView"
+        app:layout_constraintTop_toBottomOf="@id/line1TextView"
+        tools:text="Some Country" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

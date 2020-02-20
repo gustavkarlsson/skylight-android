@@ -6,7 +6,7 @@
 	android:layout_height="match_parent"
 	android:padding="@dimen/screen_margin_tighter">
 
-	<TextView
+	<com.google.android.material.textview.MaterialTextView
 		android:id="@+id/title"
 		style="@style/AppTheme.TextTitleLarge"
 		android:layout_width="0dp"
@@ -17,7 +17,7 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
 
-	<TextView
+	<com.google.android.material.textview.MaterialTextView
 		android:id="@+id/description"
 		style="@style/AppTheme.TextBody1"
 		android:layout_width="0dp"
@@ -28,7 +28,7 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/title" />
 
-	<TextView
+	<com.google.android.material.textview.MaterialTextView
 		android:id="@+id/privacyPolicyLink"
 		style="@style/AppTheme.TextBody2"
 		android:layout_width="0dp"
