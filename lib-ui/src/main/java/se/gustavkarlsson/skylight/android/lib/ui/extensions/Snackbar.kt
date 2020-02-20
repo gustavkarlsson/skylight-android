@@ -28,8 +28,10 @@ private fun Snackbar.showErrorSnackbar(): Snackbar {
 }
 
 private fun Snackbar.setErrorColor(): Snackbar {
-    // TODO Use attrs?
-    view.setBackgroundColor(R.color.error.toArgb(view.context))
+    val backgroundColor = context.theme.resolveColor(R.attr.colorError)
+    view.setBackgroundColor(backgroundColor)
+    val foregroundColor = context.theme.resolveColor(R.attr.colorOnError)
+    setTextColor(foregroundColor)
     return this
 }
 

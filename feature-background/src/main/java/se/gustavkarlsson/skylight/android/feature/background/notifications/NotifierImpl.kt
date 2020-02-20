@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import se.gustavkarlsson.skylight.android.feature.background.R
+import se.gustavkarlsson.skylight.android.lib.ui.extensions.resolveColor
 import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.Formatter
 
@@ -25,8 +26,7 @@ internal class NotifierImpl(
         val pendingIntent = createActivityPendingIntent()
 
         val tintColor = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            // TODO Use attrs?
-            context.resources.getColor(R.color.primary, null)
+            context.theme.resolveColor(R.attr.colorPrimary)
         } else {
             null
         }
