@@ -1,5 +1,6 @@
 ## Soon
-* Show banner when no location or network
+* Use rhythm for layout, and other dimensions for elevation
+* Show banner when no network (or just when on flight mode?)
 * App bundles
 * Consider refresh after changing debug options
 * Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
