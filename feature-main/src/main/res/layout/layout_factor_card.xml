@@ -43,10 +43,9 @@
 			app:layout_constraintTop_toTopOf="parent"
 			tools:text="Slightly cloudier than normal" />
 
-        <!-- FIXME Make background darker in light mode -->
 		<ProgressBar
 			android:id="@+id/progressBar"
-			style="@android:style/Widget.Holo.ProgressBar.Horizontal"
+			style="@style/AppTheme.ProgressBar"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:max="1000"
