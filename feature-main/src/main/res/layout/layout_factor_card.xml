@@ -5,7 +5,10 @@
 	android:id="@+id/card"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	app:cardBackgroundColor="?attr/colorSurface">
+	app:cardBackgroundColor="?attr/colorSurface"
+    app:cardElevation="2dp"
+    app:rippleColor="?attr/colorControlHighlight"
+    app:cardUseCompatPadding="true">
 
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
@@ -40,6 +43,7 @@
 			app:layout_constraintTop_toTopOf="parent"
 			tools:text="Slightly cloudier than normal" />
 
+        <!-- FIXME Make background darker in light mode -->
 		<ProgressBar
 			android:id="@+id/progressBar"
 			style="@android:style/Widget.Holo.ProgressBar.Horizontal"

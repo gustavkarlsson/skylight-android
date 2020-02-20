@@ -22,6 +22,7 @@
 
         <item name="scrimBackground">@color/scrim_background</item>
 
+        <item name="colorControlNormal">@color/on_background_weaker</item>
         <item name="colorControlHighlight">@color/ripple</item>
         <item name="android:textColor">@color/on_background</item>
 		<item name="android:textColorPrimary">@color/on_background</item>
@@ -33,7 +34,7 @@
 	</style>
 
     <style name="AppTheme.Toolbar" parent="@style/Widget.MaterialComponents.Toolbar.Surface">
-        <item name="android:elevation">5dp</item>
+        <item name="android:elevation">2dp</item>
         <item name="titleTextColor">?android:attr/textColorPrimary</item>
         <item name="subtitleTextColor">?android:attr/textColorSecondary</item>
     </style>
