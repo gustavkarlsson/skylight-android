@@ -48,7 +48,7 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
     }
 
     private fun Toolbar.enableNavigationDrawer() {
-        setNavigationIcon(R.drawable.ic_menu_white_24dp)
+        setNavigationIcon(R.drawable.ic_menu)
         setNavigationOnClickListener {
             drawerLayout.openDrawer(nav_view)
         }

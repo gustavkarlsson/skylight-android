@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<dimen name="rhythmHalf">8dp</dimen>
-	<dimen name="rhythm">16dp</dimen>
-	<dimen name="rhythmDouble">32dp</dimen>
-	<dimen name="rhythmTriple">48dp</dimen>
-	<dimen name="rhythmTripleAndAHalf">56dp</dimen>
-	<dimen name="rhythmQuadruple">64dp</dimen>
-	<dimen name="screen_margin">16dp</dimen>
-	<dimen name="screen_margin_tighter">24dp</dimen>
+	<dimen name="nextTo">8dp</dimen>
+	<dimen name="screenMargin">16dp</dimen>
+	<dimen name="screenMarginTighter">24dp</dimen>
 	<dimen name="gutter">16dp</dimen>
+    <dimen name="twoLineListItemHeight">64dp</dimen>
+    <dimen name="listItemPadding">16dp</dimen>
+    <dimen name="buttonHeight">56dp</dimen>
+    <dimen name="iconSize">24dp</dimen>
+    <dimen name="toolbarElevation">4dp</dimen>
 </resources>

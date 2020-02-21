@@ -47,8 +47,8 @@ internal class DrawerViewModel(
 
     private fun createIcon(place: Place) =
         when (place) {
-            is Place.Current -> R.drawable.ic_location_on_white_24dp
-            is Place.Custom -> R.drawable.ic_map_white_24dp
+            is Place.Current -> R.drawable.ic_location_on
+            is Place.Custom -> R.drawable.ic_map
         }
 
     private fun createLongClickEvent(place: Place) =
@@ -59,7 +59,7 @@ internal class DrawerViewModel(
     private fun createAddPlaceItem() =
         DrawerItem(
             isActive = false,
-            icon = R.drawable.ic_add_white_24dp,
+            icon = R.drawable.ic_add,
             text = TextRef(R.string.add_place),
             clickEvent = DrawerEvent.AddPlaceClicked,
             longClickEvent = null

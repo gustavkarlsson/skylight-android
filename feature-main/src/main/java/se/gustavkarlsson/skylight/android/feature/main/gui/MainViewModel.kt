@@ -147,7 +147,7 @@ internal class MainViewModel(
                     BannerData(
                         TextRef(R.string.location_permission_denied_message),
                         TextRef(R.string.fix),
-                        R.drawable.ic_location_on_white_24dp,
+                        R.drawable.ic_location_on,
                         BannerData.Event.RequestLocationPermission
                     ).toOptional()
                 }
@@ -155,7 +155,7 @@ internal class MainViewModel(
                     BannerData(
                         TextRef(R.string.location_permission_denied_forever_message),
                         TextRef(R.string.fix),
-                        R.drawable.ic_warning_white_24dp,
+                        R.drawable.ic_warning,
                         BannerData.Event.OpenAppDetails
                     ).toOptional()
                 }

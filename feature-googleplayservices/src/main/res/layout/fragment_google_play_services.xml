@@ -4,7 +4,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:padding="@dimen/screen_margin">
+	android:padding="@dimen/screenMargin">
 
 	<ImageView
 		android:id="@+id/locationImageView"
@@ -12,7 +12,7 @@
 		android:layout_height="wrap_content"
 		android:layout_marginTop="64dp"
 		android:adjustViewBounds="true"
-		android:src="@drawable/ic_google_play_store_white_24dp"
+		android:src="@drawable/ic_google_play_store"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"

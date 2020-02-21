@@ -1,5 +1,5 @@
 ## Soon
-* Use rhythm for layout, and other dimensions for elevation
+* Set dimensions
 * Show banner when no network (or just when on flight mode?)
 * App bundles
 * Consider refresh after changing debug options

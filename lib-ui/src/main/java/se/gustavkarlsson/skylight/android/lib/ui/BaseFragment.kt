@@ -29,7 +29,7 @@ abstract class BaseFragment : Fragment() {
     private fun setupBackNavigation(toolbar: Toolbar) {
         val navigator = get<Navigator>()
         if (navigator.backStackSize > 1) {
-            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp)
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
             toolbar.setNavigationOnClickListener { navigator.pop() }
         }
     }
