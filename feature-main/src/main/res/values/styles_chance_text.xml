@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="AppTheme.ChanceText">
         <item name="android:textColor">?android:attr/textColor</item>
         <item name="android:fontFamily">@font/open_sans_condensed_light</item>

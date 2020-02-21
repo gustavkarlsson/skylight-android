@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="pref_notifications_category_title">Place Notifications</string>
+    <string name="pref_notifications_category_title">Place Notifications</string>
 
-	<string name="pref_notifications_entry_never_short">Never</string>
-	<string name="pref_notifications_entry_high_short">High</string>
-	<string name="pref_notifications_entry_medium_short">Medium</string>
-	<string name="pref_notifications_entry_low_short">Low</string>
+    <string name="pref_notifications_entry_never_short">Never</string>
+    <string name="pref_notifications_entry_high_short">High</string>
+    <string name="pref_notifications_entry_medium_short">Medium</string>
+    <string name="pref_notifications_entry_low_short">Low</string>
 
-	<string name="pref_notifications_entry_never_long">Never notify</string>
-	<string name="pref_notifications_entry_high_long">Notify when chance is high</string>
-	<string name="pref_notifications_entry_medium_long">Notify when chance is medium</string>
-	<string name="pref_notifications_entry_low_long">Notify when chance is low</string>
+    <string name="pref_notifications_entry_never_long">Never notify</string>
+    <string name="pref_notifications_entry_high_long">Notify when chance is high</string>
+    <string name="pref_notifications_entry_medium_long">Notify when chance is medium</string>
+    <string name="pref_notifications_entry_low_long">Notify when chance is low</string>
 </resources>

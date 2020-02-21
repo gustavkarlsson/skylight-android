@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="about_app_by">App av: %s</string>
-	<string name="about_version_name">Version: %s</string>
-	<string name="about_version_code">Versionskod: %s</string>
-	<string name="about_built_on">Byggt: %s</string>
+    <string name="about_app_by">App av: %s</string>
+    <string name="about_version_name">Version: %s</string>
+    <string name="about_version_code">Versionskod: %s</string>
+    <string name="about_built_on">Byggt: %s</string>
 </resources>

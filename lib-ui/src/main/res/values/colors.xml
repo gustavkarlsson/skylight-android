@@ -6,7 +6,7 @@
     <color name="logo_secondary">#B0DCD8</color>
 
     <!-- Custom colors -->
-	<color name="chance_lowest">#F44336</color>
-	<color name="chance_middle">#F0F436</color>
-	<color name="chance_highest">#34B4E2</color>
+    <color name="chance_lowest">#F44336</color>
+    <color name="chance_middle">#F0F436</color>
+    <color name="chance_highest">#34B4E2</color>
 </resources>

@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:padding="@dimen/screenMarginTighter">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/screenMarginTighter">
 
-	<com.google.android.material.textview.MaterialTextView
-		android:id="@+id/title"
-		style="@style/AppTheme.TextTitleLarge"
-		android:layout_width="match_parent"
-        android:gravity="center"
-		android:layout_height="@dimen/largeTitleHeight"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/title"
+        style="@style/AppTheme.TextTitleLarge"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/largeTitleHeight"
         android:layout_marginTop="@dimen/largeGap"
-		android:text="@string/intro_title"
-		app:layout_constraintTop_toTopOf="parent" />
+        android:gravity="center"
+        android:text="@string/intro_title"
+        app:layout_constraintTop_toTopOf="parent" />
 
-	<com.google.android.material.textview.MaterialTextView
-		android:id="@+id/description"
-		style="@style/AppTheme.TextBody1"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/description"
+        style="@style/AppTheme.TextBody1"
         android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/smallGap"
-		android:text="@string/intro_desc"
-		app:layout_constraintTop_toBottomOf="@id/title" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/smallGap"
+        android:text="@string/intro_desc"
+        app:layout_constraintTop_toBottomOf="@id/title" />
 
-	<com.google.android.material.textview.MaterialTextView
-		android:id="@+id/privacyPolicyLink"
-		style="@style/AppTheme.TextBody2"
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/privacyPolicyLink"
+        style="@style/AppTheme.TextBody2"
         android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/gutter"
-		app:layout_constraintTop_toBottomOf="@id/description"
-		tools:text="@string/privacy_policy" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/gutter"
+        app:layout_constraintTop_toBottomOf="@id/description"
+        tools:text="@string/privacy_policy" />
 
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/pickLocationButton"
-		style="@style/AppTheme.TextButton"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="@string/intro_pick_location"
-		app:layout_constraintBottom_toTopOf="@id/myLocationButton"
-		app:layout_constraintEnd_toEndOf="parent" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/pickLocationButton"
+        style="@style/AppTheme.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/intro_pick_location"
+        app:layout_constraintBottom_toTopOf="@id/myLocationButton"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/myLocationButton"
-		style="@style/AppTheme.FilledButton"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="@string/intro_use_my_location"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toEndOf="parent" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/myLocationButton"
+        style="@style/AppTheme.FilledButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/intro_use_my_location"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

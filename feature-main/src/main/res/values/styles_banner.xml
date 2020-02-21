@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="AppTheme.BannerError" parent="@style/Widget.Material.Banner">
         <item name="backgroundColor">?attr/colorError</item>
         <item name="iconTint">?attr/colorOnError</item>

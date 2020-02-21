@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-		<item name="android:colorBackground">@color/background</item>
-		<item name="colorOnBackground">@color/on_background</item>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorOnBackground">@color/on_background</item>
 
-		<item name="colorSurface">@color/surface</item>
-		<item name="colorOnSurface">@color/on_surface</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/on_surface</item>
 
-		<item name="colorError">@color/error</item>
-		<item name="colorOnError">@color/on_error</item>
+        <item name="colorError">@color/error</item>
+        <item name="colorOnError">@color/on_error</item>
 
-		<item name="colorPrimary">@color/primary</item>
-		<item name="colorPrimaryVariant">@color/primary_variant</item>
-		<item name="colorPrimaryDark">@color/primary_dark</item>
-		<item name="colorOnPrimary">@color/on_primary</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_variant</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/on_primary</item>
 
-		<item name="colorSecondary">@color/secondary</item>
-		<item name="colorSecondaryVariant">@color/secondary_variant</item>
-		<item name="colorOnSecondary">@color/on_secondary</item>
+        <item name="colorSecondary">@color/secondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_variant</item>
+        <item name="colorOnSecondary">@color/on_secondary</item>
 
         <item name="scrimBackground">@color/scrim_background</item>
 
         <item name="colorControlNormal">@color/on_background_weaker</item>
         <item name="colorControlHighlight">@color/ripple</item>
         <item name="android:textColor">@color/on_background</item>
-		<item name="android:textColorPrimary">@color/on_background</item>
-		<item name="android:textColorSecondary">@color/on_background_weaker</item>
+        <item name="android:textColorPrimary">@color/on_background</item>
+        <item name="android:textColorSecondary">@color/on_background_weaker</item>
 
-		<item name="toolbarStyle">@style/AppTheme.Toolbar</item>
+        <item name="toolbarStyle">@style/AppTheme.Toolbar</item>
         <item name="actionOverflowButtonStyle">@style/AppTheme.ToolbarOverflowButton</item>
         <item name="android:textColorHint">?android:attr/textColorSecondary</item>
-	</style>
+    </style>
 
     <style name="AppTheme.Toolbar" parent="@style/Widget.MaterialComponents.Toolbar.Surface">
         <item name="android:elevation">@dimen/toolbarElevation</item>
@@ -44,45 +44,45 @@
     </style>
 
 
-	<!-- Typography -->
+    <!-- Typography -->
 
-	<style name="AppTheme.TextTitleLarge" parent="TextAppearance.MaterialComponents.Headline4">
-		<item name="android:textColor">?android:attr/textColor</item>
-		<item name="autoSizeTextType">uniform</item>
-		<item name="autoSizeMaxTextSize">40sp</item>
-		<item name="android:lines">1</item>
-	</style>
-
-	<style name="AppTheme.TextTitleSmall" parent="TextAppearance.MaterialComponents.Headline5">
+    <style name="AppTheme.TextTitleLarge" parent="TextAppearance.MaterialComponents.Headline4">
         <item name="android:textColor">?android:attr/textColor</item>
-		<item name="autoSizeTextType">uniform</item>
-		<item name="autoSizeMaxTextSize">24sp</item>
-		<item name="android:lines">1</item>
-	</style>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMaxTextSize">40sp</item>
+        <item name="android:lines">1</item>
+    </style>
 
-	<style name="AppTheme.TextBody1" parent="TextAppearance.MaterialComponents.Body1">
+    <style name="AppTheme.TextTitleSmall" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textColor">?android:attr/textColor</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="autoSizeMaxTextSize">24sp</item>
+        <item name="android:lines">1</item>
+    </style>
+
+    <style name="AppTheme.TextBody1" parent="TextAppearance.MaterialComponents.Body1">
         <item name="android:textColor">?android:attr/textColor</item>
     </style>
 
-	<style name="AppTheme.TextBody2" parent="TextAppearance.MaterialComponents.Body2">
+    <style name="AppTheme.TextBody2" parent="TextAppearance.MaterialComponents.Body2">
         <item name="android:textColor">?android:attr/textColor</item>
     </style>
 
 
-	<!-- Buttons -->
+    <!-- Buttons -->
 
-	<style name="AppTheme.FilledButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
-		<item name="backgroundTint">?attr/colorPrimary</item>
-		<item name="android:textColor">?attr/colorOnPrimary</item>
-		<item name="android:height">@dimen/buttonHeight</item>
-		<item name="cornerRadius">@dimen/buttonHeight</item>
-	</style>
+    <style name="AppTheme.FilledButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:height">@dimen/buttonHeight</item>
+        <item name="cornerRadius">@dimen/buttonHeight</item>
+    </style>
 
-	<style name="AppTheme.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
-		<item name="android:height">@dimen/buttonHeight</item>
-		<item name="android:paddingLeft">@dimen/gutter</item>
-		<item name="android:paddingRight">@dimen/gutter</item>
-		<item name="cornerRadius">@dimen/buttonHeight</item>
-	</style>
+    <style name="AppTheme.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:height">@dimen/buttonHeight</item>
+        <item name="android:paddingLeft">@dimen/gutter</item>
+        <item name="android:paddingRight">@dimen/gutter</item>
+        <item name="cornerRadius">@dimen/buttonHeight</item>
+    </style>
 
 </resources>

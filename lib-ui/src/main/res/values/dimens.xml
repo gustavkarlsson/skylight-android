@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<dimen name="nextTo">8dp</dimen>
-	<dimen name="screenMargin">16dp</dimen>
-	<dimen name="screenMarginTighter">24dp</dimen>
-	<dimen name="gutter">16dp</dimen>
+    <dimen name="nextTo">8dp</dimen>
+    <dimen name="screenMargin">16dp</dimen>
+    <dimen name="screenMarginTighter">24dp</dimen>
+    <dimen name="gutter">16dp</dimen>
     <dimen name="smallGap">32dp</dimen>
-	<dimen name="largeGap">64dp</dimen>
+    <dimen name="largeGap">64dp</dimen>
     <dimen name="twoLineListItemHeight">64dp</dimen>
     <dimen name="listItemPadding">16dp</dimen>
     <dimen name="listItemTextStart">72dp</dimen>

@@ -52,9 +52,9 @@
             android:layout_height="wrap_content"
             android:max="1000"
             android:progress="0"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_default="percent"
             app:layout_constraintWidth_percent=".25"
             tools:progress="37" />
