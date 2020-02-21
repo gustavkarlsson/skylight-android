@@ -7,7 +7,6 @@
     android:layout_height="wrap_content"
     app:cardBackgroundColor="?attr/colorSurface"
     app:cardElevation="@dimen/surfaceElevation"
-    app:cardUseCompatPadding="true"
     app:rippleColor="?attr/colorControlHighlight">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,8 +25,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent=".25"
+            app:layout_constraintWidth_percent=".35"
             tools:text="Current Weather" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -43,6 +41,7 @@
             app:layout_constraintEnd_toStartOf="@id/progressBar"
             app:layout_constraintStart_toEndOf="@id/title"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".35"
             tools:text="Slightly cloudier than normal" />
 
         <ProgressBar
@@ -56,7 +55,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent=".25"
+            app:layout_constraintWidth_percent=".3"
             tools:progress="37" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
