@@ -7,7 +7,6 @@ import android.provider.Settings
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.Observable
@@ -85,25 +84,21 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
             .bind(this) { chanceSubtitle.text = it.resolve(requireContext()) }
 
         viewModel.darkness.bindToCard(
-            this,
             darknessCard,
             ::showDarknessDetails,
             "darkness"
         )
         viewModel.geomagLocation.bindToCard(
-            this,
             geomagLocationCard,
             ::showGeomagLocationDetails,
             "geomagLocation"
         )
         viewModel.kpIndex.bindToCard(
-            this,
             kpIndexCard,
             ::showKpIndexDetails,
             "kpIndex"
         )
         viewModel.weather.bindToCard(
-            this,
             weatherCard,
             ::showWeatherDetails,
             "weather"
@@ -175,11 +170,8 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
         @StringRes description: Int
     ) {
         if (currentBottomSheetTitle == title) return
-        childFragmentManager.let {
-            FactorBottomSheetDialogFragment.newInstance(
-                title,
-                description
-            )
+        requireFragmentManager().let {
+            FactorBottomSheetDialogFragment.newInstance(title, description)
                 .apply {
                     onCancelListener = { currentBottomSheetTitle = null }
                     show(it, javaClass.simpleName)
@@ -189,7 +181,6 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
     }
 
     private fun Observable<FactorItem>.bindToCard(
-        fragment: Fragment,
         cardView: FactorCard,
         onCardClick: () -> Unit,
         factorDebugName: String
@@ -198,7 +189,7 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
         val minProgress = (cardView.progressView.max - maxProgress)
 
         doOnNext { Timber.d("Updating %s factor card: %s", factorDebugName, it) }
-            .bind(fragment) { item ->
+            .bind(this@MainFragment) { item ->
                 cardView.valueView.text = item.valueText.resolve(cardView.context)
                 cardView.progressView.progressTintList = ColorStateList.valueOf(item.progressColor)
                 cardView.progressView.progress = item.progress?.let { progressPercent ->
@@ -207,6 +198,6 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
             }
 
         cardView.clicks()
-            .bind(fragment) { onCardClick() }
+            .bind(this@MainFragment) { onCardClick() }
     }
 }
