@@ -1,53 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:padding="@dimen/screenMargin">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/screenMargin">
 
-	<ImageView
-		android:id="@+id/locationImageView"
-		android:layout_width="160dp"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="64dp"
-		android:adjustViewBounds="true"
-		android:src="@drawable/ic_google_play_store"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toTopOf="parent"
-		tools:ignore="ContentDescription" />
+    <ImageView
+        android:id="@+id/locationImageView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/largeGap"
+        android:adjustViewBounds="true"
+        android:src="@drawable/ic_google_play_store"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.5"
+        tools:ignore="ContentDescription" />
 
-	<com.google.android.material.textview.MaterialTextView
-		android:id="@+id/titleTextView"
-		style="@style/AppTheme.TextTitleSmall"
-		android:layout_width="0dp"
-		android:layout_height="40dp"
-		android:layout_marginTop="32dp"
-		android:text="@string/google_play_services_title"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/locationImageView" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/titleTextView"
+        style="@style/AppTheme.TextTitleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/smallGap"
+        android:text="@string/google_play_services_title"
+        app:layout_constraintTop_toBottomOf="@id/locationImageView" />
 
-	<com.google.android.material.textview.MaterialTextView
-		android:id="@+id/descriptionTextView"
-		style="@style/AppTheme.TextBody1"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="24dp"
-		android:text="@string/google_play_services_desc"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/titleTextView" />
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/descriptionTextView"
+        style="@style/AppTheme.TextBody1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/smallGap"
+        android:text="@string/google_play_services_desc"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView" />
 
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/installButton"
-		style="@style/AppTheme.FilledButton"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="@string/google_play_services_install"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/installButton"
+        style="@style/AppTheme.FilledButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/google_play_services_install"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

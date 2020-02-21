@@ -3,7 +3,7 @@
 	<string name="intro_title">Välkommen till Skylight</string>
 	<string name="intro_desc">Skylight hjälper dig att upptäcka norrsken genom att
 		titta på olika faktorer som plats, väder och tid på dygnet.
-		\n\nSkylight meddelar dig när chansen blir tillräkligt hög.</string>
+		\n\nAppen meddelar dig när chansen blir tillräkligt hög.</string>
 	<string name="intro_pick_location">Välj plats</string>
 	<string name="intro_use_my_location">Använd min plats</string>
 </resources>

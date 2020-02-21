@@ -4,9 +4,14 @@
 	<dimen name="screenMargin">16dp</dimen>
 	<dimen name="screenMarginTighter">24dp</dimen>
 	<dimen name="gutter">16dp</dimen>
+    <dimen name="smallGap">32dp</dimen>
+	<dimen name="largeGap">64dp</dimen>
     <dimen name="twoLineListItemHeight">64dp</dimen>
     <dimen name="listItemPadding">16dp</dimen>
+    <dimen name="listItemTextStart">72dp</dimen>
     <dimen name="buttonHeight">56dp</dimen>
     <dimen name="iconSize">24dp</dimen>
     <dimen name="toolbarElevation">4dp</dimen>
+    <dimen name="surfaceElevation">2dp</dimen>
+    <dimen name="largeTitleHeight">64dp</dimen>
 </resources>

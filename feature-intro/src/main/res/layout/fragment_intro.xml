@@ -9,32 +9,28 @@
 	<com.google.android.material.textview.MaterialTextView
 		android:id="@+id/title"
 		style="@style/AppTheme.TextTitleLarge"
-		android:layout_width="0dp"
-		android:layout_height="64dp"
-		android:layout_marginTop="64dp"
+		android:layout_width="match_parent"
+        android:gravity="center"
+		android:layout_height="@dimen/largeTitleHeight"
+        android:layout_marginTop="@dimen/largeGap"
 		android:text="@string/intro_title"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent" />
 
 	<com.google.android.material.textview.MaterialTextView
 		android:id="@+id/description"
 		style="@style/AppTheme.TextBody1"
-		android:layout_width="0dp"
+        android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="24dp"
+		android:layout_marginTop="@dimen/smallGap"
 		android:text="@string/intro_desc"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/title" />
 
 	<com.google.android.material.textview.MaterialTextView
 		android:id="@+id/privacyPolicyLink"
 		style="@style/AppTheme.TextBody2"
-		android:layout_width="0dp"
+        android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="@dimen/gutter"
-		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/description"
 		tools:text="@string/privacy_policy" />
 
