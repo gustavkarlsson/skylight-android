@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.lib.navigation.newer
+package se.gustavkarlsson.skylight.android.lib.navigation
 
 interface Navigator {
     val backstack: Backstack

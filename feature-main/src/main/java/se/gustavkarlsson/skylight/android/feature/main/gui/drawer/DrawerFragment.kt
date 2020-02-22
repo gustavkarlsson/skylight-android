@@ -8,8 +8,8 @@ import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.fragment_drawer.placesRecyclerView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.feature.main.R
-import se.gustavkarlsson.skylight.android.lib.navigation.newer.navigator
-import se.gustavkarlsson.skylight.android.lib.navigation.newer.screens
+import se.gustavkarlsson.skylight.android.lib.navigation.navigator
+import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.findParentViewByType

@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.navigationsetup.internal
 
-import se.gustavkarlsson.skylight.android.lib.navigation.newer.Backstack
-import se.gustavkarlsson.skylight.android.lib.navigation.newer.Screen
+import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
+import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import com.zhuinden.simplestack.StateChange
 
 internal object DefaultDirectionsCalculator : DirectionsCalculator {

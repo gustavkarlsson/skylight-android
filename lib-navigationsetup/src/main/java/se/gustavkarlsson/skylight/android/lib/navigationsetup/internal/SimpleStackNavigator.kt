@@ -1,9 +1,9 @@
 package se.gustavkarlsson.skylight.android.lib.navigationsetup.internal
 
-import se.gustavkarlsson.skylight.android.lib.navigation.newer.Backstack
-import se.gustavkarlsson.skylight.android.lib.navigation.newer.NavigationOverride
-import se.gustavkarlsson.skylight.android.lib.navigation.newer.Navigator
-import se.gustavkarlsson.skylight.android.lib.navigation.newer.Screen
+import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
+import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
+import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
+import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import timber.log.Timber
 import com.zhuinden.simplestack.Backstack as SSBackstack
 

@@ -3,9 +3,9 @@ package se.gustavkarlsson.skylight.android
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import org.koin.android.ext.android.get
-import se.gustavkarlsson.skylight.android.lib.navigation.newer.Navigator
-import se.gustavkarlsson.skylight.android.lib.navigation.newer.NavigatorHost
-import se.gustavkarlsson.skylight.android.lib.navigation.newer.ScreensHost
+import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
+import se.gustavkarlsson.skylight.android.lib.navigation.NavigatorHost
+import se.gustavkarlsson.skylight.android.lib.navigation.ScreensHost
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.BackButtonController
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.NavigationInstaller
 

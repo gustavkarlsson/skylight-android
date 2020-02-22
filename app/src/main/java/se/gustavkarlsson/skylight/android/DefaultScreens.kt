@@ -7,11 +7,11 @@ import se.gustavkarlsson.skylight.android.feature.about.AboutFragment
 import se.gustavkarlsson.skylight.android.feature.addplace.AddPlaceFragment
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainFragment
 import se.gustavkarlsson.skylight.android.feature.settings.SettingsFragment
-import se.gustavkarlsson.skylight.android.lib.navigation.newer.Backstack
-import se.gustavkarlsson.skylight.android.lib.navigation.newer.Screen
-import se.gustavkarlsson.skylight.android.lib.navigation.newer.ScreenName
-import se.gustavkarlsson.skylight.android.lib.navigation.newer.Screens
-import se.gustavkarlsson.skylight.android.lib.navigation.newer.withTarget
+import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
+import se.gustavkarlsson.skylight.android.lib.navigation.Screen
+import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
+import se.gustavkarlsson.skylight.android.lib.navigation.Screens
+import se.gustavkarlsson.skylight.android.lib.navigation.withTarget
 
 internal object DefaultScreens : Screens {
     override val main: Screen = MainScreen()

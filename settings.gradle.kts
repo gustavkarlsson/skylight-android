@@ -7,7 +7,7 @@ include(
     ":lib-okhttp",
     ":lib-kpindex",
     ":lib-location",
-    ":lib-navigation-newer",
+    ":lib-navigation",
     ":lib-navigationsetup",
     ":lib-places",
     ":lib-settings",

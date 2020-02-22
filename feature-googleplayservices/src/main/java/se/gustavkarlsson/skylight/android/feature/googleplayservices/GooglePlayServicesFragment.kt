@@ -5,8 +5,8 @@ import com.jakewharton.rxbinding2.view.clicks
 import kotlinx.android.synthetic.main.fragment_google_play_services.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.koptional.optionalOf
-import se.gustavkarlsson.skylight.android.lib.navigation.newer.navigator
-import se.gustavkarlsson.skylight.android.lib.navigation.newer.target
+import se.gustavkarlsson.skylight.android.lib.navigation.navigator
+import se.gustavkarlsson.skylight.android.lib.navigation.target
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.doOnNext
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
