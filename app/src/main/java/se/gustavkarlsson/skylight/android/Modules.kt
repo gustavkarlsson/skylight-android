@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android
 
-import se.gustavkarlsson.skylight.android.feature.about.featureAboutModule
 import se.gustavkarlsson.skylight.android.feature.addplace.featureAddPlaceModule
 import se.gustavkarlsson.skylight.android.feature.background.featureBackgroundModule
 import se.gustavkarlsson.skylight.android.feature.googleplayservices.featureGooglePlayServicesModule
@@ -42,7 +41,6 @@ internal val modules = listOf(
     featureBackgroundModule,
     featureGooglePlayServicesModule,
     featureAddPlaceModule,
-    featureAboutModule,
     featureIntroModule,
     featureMainModule,
     appModule

@@ -4,7 +4,8 @@ import java.io.File
 
 plugins {
     id("com.android.library")
-    id("kotlin-android")
+    kotlin("android")
+    kotlin("kapt")
     id("kotlin-android-extensions")
 }
 
@@ -46,4 +47,7 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":lib-ui"))
+
+    // Dagger
+    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }
