@@ -9,6 +9,7 @@ include(
     ":lib-location",
     ":lib-navigation",
     ":lib-navigationsetup",
+    ":lib-scopedservice",
     ":lib-places",
     ":lib-settings",
     ":lib-permissions",

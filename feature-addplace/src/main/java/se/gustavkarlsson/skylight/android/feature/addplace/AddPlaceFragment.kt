@@ -14,10 +14,11 @@ import com.ioki.textref.TextRef
 import com.jakewharton.rxbinding2.widget.textChanges
 import kotlinx.android.synthetic.main.fragment_add_place.*
 import kotlinx.android.synthetic.main.layout_save_dialog.view.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.ext.android.get
 import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.target
+import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.fadeToVisible
@@ -27,7 +28,9 @@ class AddPlaceFragment : BaseFragment() {
 
     override val layoutId: Int = R.layout.fragment_add_place
 
-    private val viewModel: AddPlaceViewModel by viewModel()
+    private val viewModel by lazy {
+        getOrRegisterService("addPlaceViewModel") { get<AddPlaceViewModel>() }
+    }
 
     override val toolbar: Toolbar? get() = toolbarView
 

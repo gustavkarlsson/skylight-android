@@ -5,7 +5,6 @@ import android.content.Context
 import android.preference.PreferenceManager
 import androidx.core.content.edit
 import io.reactivex.rxkotlin.toObservable
-import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.services.Analytics
@@ -14,7 +13,7 @@ import se.gustavkarlsson.skylight.android.services.Settings
 
 val featureSettingsModule = module {
 
-    viewModel {
+    factory {
         SettingsViewModel(get())
     }
 

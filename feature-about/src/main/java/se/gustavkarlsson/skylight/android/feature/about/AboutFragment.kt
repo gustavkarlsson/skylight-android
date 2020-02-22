@@ -1,10 +1,9 @@
 package se.gustavkarlsson.skylight.android.feature.about
 
 import androidx.appcompat.widget.Toolbar
-import kotlinx.android.synthetic.main.fragment_about.detailsTextView
-import kotlinx.android.synthetic.main.fragment_about.privacyPolicyLink
-import kotlinx.android.synthetic.main.fragment_about.toolbarView
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlinx.android.synthetic.main.fragment_about.*
+import org.koin.android.ext.android.get
+import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.setHtml
 
@@ -12,7 +11,9 @@ class AboutFragment : BaseFragment() {
 
     override val layoutId: Int = R.layout.fragment_about
 
-    private val viewModel: AboutViewModel by viewModel()
+    private val viewModel by lazy {
+        getOrRegisterService("aboutViewModel") { get<AboutViewModel>() }
+    }
 
     override val toolbar: Toolbar?
         get() = toolbarView

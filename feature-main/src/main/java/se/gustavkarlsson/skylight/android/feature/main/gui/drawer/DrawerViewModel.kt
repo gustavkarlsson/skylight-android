@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.gui.drawer
 
 import androidx.annotation.DrawableRes
-import androidx.lifecycle.ViewModel
 import com.ioki.textref.TextRef
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
@@ -10,6 +9,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.feature.main.R
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 
@@ -17,7 +17,7 @@ internal class DrawerViewModel(
     private val placesRepository: PlacesRepository,
     private val selectedPlaceRepo: SelectedPlaceRepository,
     observeScheduler: Scheduler = AndroidSchedulers.mainThread()
-) : ViewModel() {
+) : ScopedService {
     val drawerItems: Observable<List<DrawerItem>> =
         Observables.combineLatest(
             placesRepository.stream(),

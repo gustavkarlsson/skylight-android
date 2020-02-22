@@ -18,6 +18,7 @@ import se.gustavkarlsson.skylight.android.lib.okhttp.libOkHttpModule
 import se.gustavkarlsson.skylight.android.lib.permissions.libPermissionsModule
 import se.gustavkarlsson.skylight.android.lib.places.libPlacesModule
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.libReverseGeocoderModule
+import se.gustavkarlsson.skylight.android.lib.scopedservice.libScopedServiceModule
 import se.gustavkarlsson.skylight.android.lib.weather.libWeatherModule
 import se.gustavkarlsson.skylight.android.lib.settings.libSettingsModule as libSettingsModule
 
@@ -35,6 +36,7 @@ internal val modules = listOf(
     libAnalyticsModule,
     libPermissionsModule,
     libPlacesModule,
+    libScopedServiceModule,
     libGeocoderModule,
     featureSettingsModule,
     featureBackgroundModule,

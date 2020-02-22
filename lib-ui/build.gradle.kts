@@ -6,12 +6,12 @@ plugins {
 dependencies {
     implementation(project(":core"))
     api(project(":lib-navigation"))
+    api(project(":lib-scopedservice"))
 
     api("com.google.android.material:material:${Versions.androidMaterial}")
     api("androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}")
 
     // Koin
-    api("org.koin:koin-androidx-viewmodel:${Versions.koin}")
     api("org.koin:koin-androidx-scope:${Versions.koin}")
 
     // Rx misc

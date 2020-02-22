@@ -1,12 +1,11 @@
 package se.gustavkarlsson.skylight.android.feature.about
 
-import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import org.threeten.bp.Instant
 
 val featureAboutModule = module {
 
-    viewModel {
+    factory {
         AboutViewModel(
             time = get(),
             showDevelopData = BuildConfig.DEVELOP,

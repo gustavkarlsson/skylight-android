@@ -1,10 +1,10 @@
 package se.gustavkarlsson.skylight.android.feature.about
 
-import androidx.lifecycle.ViewModel
 import com.ioki.textref.TextRef
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.services.Time
 
 internal class AboutViewModel(
@@ -15,7 +15,7 @@ internal class AboutViewModel(
     private val gitBranch: String,
     private val gitSha1: String,
     private val buildTime: Instant?
-) : ViewModel() {
+) : ScopedService {
 
     val detailsText: TextRef = createDetailsText()
 

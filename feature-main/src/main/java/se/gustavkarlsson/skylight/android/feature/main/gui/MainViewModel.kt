@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.gui
 
 import androidx.annotation.DrawableRes
-import androidx.lifecycle.ViewModel
 import com.ioki.textref.TextRef
 import de.halfbit.knot.Knot
 import io.reactivex.Observable
@@ -12,17 +11,19 @@ import se.gustavkarlsson.koptional.Absent
 import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.koptional.Present
 import se.gustavkarlsson.koptional.toOptional
-import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
+import se.gustavkarlsson.skylight.android.entities.Access
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
+import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.LoadableAuroraReport
-import se.gustavkarlsson.skylight.android.entities.Access
 import se.gustavkarlsson.skylight.android.entities.Permission
+import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.entities.Report
+import se.gustavkarlsson.skylight.android.entities.ReverseGeocodingResult
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.seconds
@@ -31,11 +32,10 @@ import se.gustavkarlsson.skylight.android.feature.main.Change
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.feature.main.State
-import se.gustavkarlsson.skylight.android.services.PermissionChecker
-import se.gustavkarlsson.skylight.android.entities.Place
-import se.gustavkarlsson.skylight.android.entities.ReverseGeocodingResult
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
+import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import se.gustavkarlsson.skylight.android.services.Time
 
 internal class MainViewModel(
@@ -55,7 +55,7 @@ internal class MainViewModel(
     private val chanceToColorConverter: ChanceToColorConverter,
     time: Time,
     nowTextThreshold: Duration
-) : ViewModel() {
+) : ScopedService {
 
     init {
         mainKnot.change.accept(Change.StreamToggle(true))

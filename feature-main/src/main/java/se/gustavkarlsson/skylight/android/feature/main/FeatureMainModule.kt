@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.feature.main
 
 import android.content.Context
 import de.halfbit.knot.Knot
-import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
@@ -110,7 +109,7 @@ val featureMainModule = module {
         ChanceToColorConverter(context = get())
     }
 
-    viewModel {
+    factory {
         MainViewModel(
             mainKnot = get("main"),
             auroraChanceEvaluator = get("completeAuroraReport"),
@@ -131,7 +130,7 @@ val featureMainModule = module {
         )
     }
 
-    viewModel {
+    factory {
         DrawerViewModel(
             placesRepository = get(),
             selectedPlaceRepo = get()

@@ -5,11 +5,12 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
-import kotlinx.android.synthetic.main.fragment_drawer.placesRecyclerView
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlinx.android.synthetic.main.fragment_drawer.*
+import org.koin.android.ext.android.get
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
+import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.findParentViewByType
@@ -24,7 +25,9 @@ internal class DrawerFragment : BaseFragment() {
         }
     }
 
-    private val viewModel by viewModel<DrawerViewModel>()
+    private val viewModel by lazy {
+        requireParentFragment().getOrRegisterService("drawerViewModel") { get<DrawerViewModel>() }
+    }
 
     private val adapter by lazy { DrawerAdapter(viewModel) }
 

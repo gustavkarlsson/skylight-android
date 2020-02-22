@@ -4,7 +4,6 @@ import com.ioki.textref.TextRef
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.functions.Consumer
-import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.extensions.seconds
 
@@ -22,7 +21,7 @@ val featureAddPlaceModule = module {
         get<PublishRelay<TextRef>>("addplace_errors")
     }
 
-    viewModel {
+    factory {
         AddPlaceViewModel(
             placesRepository = get(),
             knot = get("addplace"),

@@ -1,13 +1,12 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
-import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
 
 val featureIntroModule = module {
 
-    viewModel {
+    factory {
         IntroViewModel(versionManager = get())
     }
 

@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.feature.settings
 
-import androidx.lifecycle.ViewModel
 import com.ioki.textref.TextRef
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
@@ -9,9 +8,10 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.entities.TriggerLevel
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.services.Settings
 
-internal class SettingsViewModel(private val settings: Settings) : ViewModel() {
+internal class SettingsViewModel(private val settings: Settings) : ScopedService {
 
     private val disposables = CompositeDisposable()
 

@@ -3,10 +3,11 @@ package se.gustavkarlsson.skylight.android.feature.googleplayservices
 import androidx.lifecycle.Lifecycle
 import com.jakewharton.rxbinding2.view.clicks
 import kotlinx.android.synthetic.main.fragment_google_play_services.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.ext.android.get
 import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.target
+import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.doOnNext
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
@@ -17,7 +18,9 @@ internal class GooglePlayServicesFragment : BaseFragment() {
 
     override val layoutId: Int = R.layout.fragment_google_play_services
 
-    private val viewModel: GooglePlayServicesViewModel by viewModel()
+    private val viewModel by lazy {
+        getOrRegisterService("googlePlayServicesViewModel") { get<GooglePlayServicesViewModel>() }
+    }
 
     override fun bindData() {
         // TODO Make this nicer

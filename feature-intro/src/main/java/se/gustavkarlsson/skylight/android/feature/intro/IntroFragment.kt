@@ -1,13 +1,12 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
 import com.jakewharton.rxbinding2.view.clicks
-import kotlinx.android.synthetic.main.fragment_intro.myLocationButton
-import kotlinx.android.synthetic.main.fragment_intro.pickLocationButton
-import kotlinx.android.synthetic.main.fragment_intro.privacyPolicyLink
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlinx.android.synthetic.main.fragment_intro.*
+import org.koin.android.ext.android.get
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.navigation.target
+import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.setHtml
@@ -16,7 +15,9 @@ internal class IntroFragment : BaseFragment() {
 
     override val layoutId: Int = R.layout.fragment_intro
 
-    private val viewModel: IntroViewModel by viewModel()
+    private val viewModel by lazy {
+        getOrRegisterService("introViewModel") { get<IntroViewModel>() }
+    }
 
     override fun initView() {
         privacyPolicyLink.setHtml(viewModel.privacyPolicyHtml.resolve(requireContext()))
