@@ -1,10 +1,14 @@
 plugins {
     id("com.android.library")
-    id("kotlin-android")
+    kotlin("android")
+    kotlin("kapt")
 }
 
 dependencies {
     implementation(project(":core"))
 
     implementation("net.e175.klaus:solarpositioning:${Versions.solarPositioning}")
+
+    // Dagger
+    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }
