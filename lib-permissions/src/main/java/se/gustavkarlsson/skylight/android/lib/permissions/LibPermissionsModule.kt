@@ -16,10 +16,6 @@ val libPermissionsModule = module {
 
     val relay = BehaviorRelay.create<Access>()
 
-    single("locationPermission") {
-        Manifest.permission.ACCESS_FINE_LOCATION
-    }
-
     single<PermissionChecker<Permission.Location>> {
         AndroidPermissionChecker(
             permission = Permission.Location,
