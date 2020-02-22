@@ -10,6 +10,7 @@ import se.gustavkarlsson.skylight.android.lib.location.LibLocationModule
 import se.gustavkarlsson.skylight.android.lib.okhttp.LibOkHttpModule
 import se.gustavkarlsson.skylight.android.lib.places.LibPlacesModule
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.LibReverseGeocoderModule
+import se.gustavkarlsson.skylight.android.lib.settings.LibSettingsModule
 import se.gustavkarlsson.skylight.android.lib.weather.LibWeatherModule
 import javax.inject.Singleton
 
@@ -27,7 +28,8 @@ import javax.inject.Singleton
         LibKpIndexModule::class,
         LibLocationModule::class,
         LibPlacesModule::class,
-        LibReverseGeocoderModule::class
+        LibReverseGeocoderModule::class,
+        LibSettingsModule::class
     ]
 )
 internal interface ActualAppComponent : AppComponent
