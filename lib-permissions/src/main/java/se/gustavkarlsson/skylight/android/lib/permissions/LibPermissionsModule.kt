@@ -1,7 +1,11 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
 import android.Manifest
+import android.content.Context
 import com.jakewharton.rxrelay2.BehaviorRelay
+import dagger.Module
+import dagger.Provides
+import dagger.Reusable
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.entities.Access
 import se.gustavkarlsson.skylight.android.entities.Permission
@@ -30,4 +34,22 @@ val libPermissionsModule = module {
             accessChangeConsumer = relay
         )
     }
+}
+
+@Module
+class LibPermissionsModule {
+
+    private val relay = BehaviorRelay.create<Access>()
+
+    @Provides
+    @Reusable
+    internal fun locationPermissionChecker(
+        context: Context
+    ): PermissionChecker<Permission.Location> =
+        AndroidPermissionChecker(Permission.Location, context, relay)
+
+    @Provides
+    @Reusable
+    internal fun locationPermissionRequester(): PermissionRequester<Permission.Location> =
+        RxPermissionRequester(Permission.Location, relay)
 }
