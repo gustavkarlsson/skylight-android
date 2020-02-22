@@ -8,7 +8,7 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import org.koin.android.ext.android.get
-import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
+import se.gustavkarlsson.skylight.android.lib.navigation.newer.navigator
 import se.gustavkarlsson.skylight.android.services.Analytics
 
 abstract class BaseFragment : Fragment() {
@@ -27,10 +27,9 @@ abstract class BaseFragment : Fragment() {
     }
 
     private fun setupBackNavigation(toolbar: Toolbar) {
-        val navigator = get<Navigator>()
-        if (navigator.backStackSize > 1) {
+        if (navigator.backstack.size > 1) {
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
-            toolbar.setNavigationOnClickListener { navigator.pop() }
+            toolbar.setNavigationOnClickListener { navigator.closeScreen() }
         }
     }
 

@@ -41,11 +41,6 @@ internal class Skylight : MultiDexApplication(), AppComponent.Setter {
     }
 
     private fun initializeModules() {
-        get<ModuleStarter>("intro").start()
-        get<ModuleStarter>("main").start()
-        get<ModuleStarter>("googleplayservices").start()
-        get<ModuleStarter>("about").start()
-        get<ModuleStarter>("addplace").start()
         get<ModuleStarter>("settings").start()
         get<ModuleStarter>("background").start()
         get<ModuleStarter>("places").start()

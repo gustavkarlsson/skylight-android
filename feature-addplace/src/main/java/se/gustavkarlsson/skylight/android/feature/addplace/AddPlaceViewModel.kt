@@ -7,15 +7,11 @@ import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.extensions.mapNotNull
-import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
-import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
 
 internal class AddPlaceViewModel(
     private val placesRepository: PlacesRepository,
     private val knot: AddPlaceKnot,
-    private val navigator: Navigator,
-    private val destination: NavItem?,
     val errorMessages: Observable<TextRef>
 ) : ViewModel() {
 
@@ -23,6 +19,9 @@ internal class AddPlaceViewModel(
         super.onCleared()
         knot.dispose()
     }
+
+    private val navigateAwayRelay = PublishRelay.create<Unit>()
+    val navigateAway: Observable<Unit> = navigateAwayRelay
 
     private val openSaveDialogRelay = PublishRelay.create<PlaceSuggestion>()
     val openSaveDialog: Observable<PlaceSuggestion> = openSaveDialogRelay
@@ -43,7 +42,7 @@ internal class AddPlaceViewModel(
 
     fun onSavePlaceClicked(name: String, location: Location) {
         placesRepository.add(name, location)
-        destination?.let(navigator::replaceScope) ?: navigator.pop()
+        navigateAwayRelay.accept(Unit)
     }
 
     private val resultState: Observable<ResultState> = knot.state

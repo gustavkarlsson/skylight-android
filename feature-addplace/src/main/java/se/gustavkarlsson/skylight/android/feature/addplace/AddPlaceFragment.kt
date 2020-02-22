@@ -15,25 +15,19 @@ import com.jakewharton.rxbinding2.widget.textChanges
 import kotlinx.android.synthetic.main.fragment_add_place.*
 import kotlinx.android.synthetic.main.layout_save_dialog.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
-import se.gustavkarlsson.koptional.toOptional
 import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
-import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
+import se.gustavkarlsson.skylight.android.lib.navigation.newer.navigator
+import se.gustavkarlsson.skylight.android.lib.navigation.newer.target
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
-import se.gustavkarlsson.skylight.android.lib.ui.argument
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.fadeToVisible
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.showSnackbar
 
-internal class AddPlaceFragment : BaseFragment() {
+class AddPlaceFragment : BaseFragment() {
 
     override val layoutId: Int = R.layout.fragment_add_place
 
-    private val destination: NavItem? by argument()
-
-    private val viewModel: AddPlaceViewModel by viewModel {
-        parametersOf(destination.toOptional())
-    }
+    private val viewModel: AddPlaceViewModel by viewModel()
 
     override val toolbar: Toolbar? get() = toolbarView
 
@@ -79,6 +73,15 @@ internal class AddPlaceFragment : BaseFragment() {
 
         viewModel.isSuggestionsVisible.bind(this) { visible ->
             searchResultRecyclerView.fadeToVisible(visible, View.INVISIBLE)
+        }
+
+        viewModel.navigateAway.bind(this) {
+            val target = arguments?.target
+            if (target != null) {
+                navigator.setBackstack(target)
+            } else {
+                navigator.closeScreen()
+            }
         }
 
         viewModel.errorMessages.bind(this) { message ->

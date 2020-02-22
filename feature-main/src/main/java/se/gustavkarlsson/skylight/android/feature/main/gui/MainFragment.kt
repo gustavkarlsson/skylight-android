@@ -12,27 +12,25 @@ import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.android.ext.android.get
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.entities.Permission
 import se.gustavkarlsson.skylight.android.feature.main.R
-import se.gustavkarlsson.skylight.android.lib.navigation.BackButtonHandler
-import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
-import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
+import se.gustavkarlsson.skylight.android.lib.navigation.newer.BackButtonHandler
+import se.gustavkarlsson.skylight.android.lib.navigation.newer.navigator
+import se.gustavkarlsson.skylight.android.lib.navigation.newer.screens
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.services.PermissionRequester
 import timber.log.Timber
 import kotlin.math.roundToInt
 
-internal class MainFragment : BaseFragment(), BackButtonHandler {
+class MainFragment : BaseFragment(), BackButtonHandler {
 
     override val layoutId: Int = R.layout.fragment_main
 
     private var currentBottomSheetTitle: Int? = null
 
     private val viewModel: MainViewModel by viewModel()
-    private val navigator: Navigator by inject()
 
     override val toolbar: Toolbar?
         get() = toolbarView
@@ -66,8 +64,8 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
         toolbarView.itemClicks()
             .bind(this) { item ->
                 when (item.itemId) {
-                    R.id.action_settings -> navigator.push(NavItem("settings"))
-                    R.id.action_about -> navigator.push(NavItem("about"))
+                    R.id.action_settings -> navigator.goTo(screens.settings)
+                    R.id.action_about -> navigator.goTo(screens.about)
                 }
             }
 

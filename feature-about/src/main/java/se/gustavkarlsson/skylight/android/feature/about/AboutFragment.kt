@@ -8,7 +8,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.setHtml
 
-internal class AboutFragment : BaseFragment() {
+class AboutFragment : BaseFragment() {
 
     override val layoutId: Int = R.layout.fragment_about
 

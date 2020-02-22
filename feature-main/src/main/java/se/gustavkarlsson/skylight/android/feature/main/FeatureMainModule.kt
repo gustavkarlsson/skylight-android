@@ -1,11 +1,9 @@
 package se.gustavkarlsson.skylight.android.feature.main
 
 import android.content.Context
-import androidx.fragment.app.Fragment
 import de.halfbit.knot.Knot
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
-import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.Darkness
@@ -23,11 +21,8 @@ import se.gustavkarlsson.skylight.android.feature.main.formatters.DarknessFormat
 import se.gustavkarlsson.skylight.android.feature.main.formatters.GeomagLocationFormatter
 import se.gustavkarlsson.skylight.android.feature.main.formatters.KpIndexFormatter
 import se.gustavkarlsson.skylight.android.feature.main.formatters.WeatherFormatter
-import se.gustavkarlsson.skylight.android.feature.main.gui.MainFragment
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
 import se.gustavkarlsson.skylight.android.feature.main.gui.drawer.DrawerViewModel
-import se.gustavkarlsson.skylight.android.lib.navigation.FragmentFactory
-import se.gustavkarlsson.skylight.android.lib.navigation.FragmentFactoryRegistry
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 
@@ -36,19 +31,6 @@ val featureMainModule = module {
     single<RelativeTimeFormatter> {
         val rightNowText = get<Context>().getString(R.string.right_now)
         DateUtilsRelativeTimeFormatter(rightNowText)
-    }
-
-    single<ModuleStarter>("main") {
-        object : ModuleStarter {
-            override fun start() {
-                val fragmentFactory = object : FragmentFactory {
-                    override fun createFragment(name: String): Fragment? =
-                        if (name == "main") MainFragment()
-                        else null
-                }
-                get<FragmentFactoryRegistry>().register(fragmentFactory)
-            }
-        }
     }
 
     single {
@@ -151,7 +133,6 @@ val featureMainModule = module {
 
     viewModel {
         DrawerViewModel(
-            navigator = get(),
             placesRepository = get(),
             selectedPlaceRepo = get()
         )

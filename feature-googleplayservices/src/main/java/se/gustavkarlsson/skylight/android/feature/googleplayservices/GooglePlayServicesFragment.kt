@@ -4,11 +4,10 @@ import androidx.lifecycle.Lifecycle
 import com.jakewharton.rxbinding2.view.clicks
 import kotlinx.android.synthetic.main.fragment_google_play_services.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
 import se.gustavkarlsson.koptional.optionalOf
-import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
+import se.gustavkarlsson.skylight.android.lib.navigation.newer.navigator
+import se.gustavkarlsson.skylight.android.lib.navigation.newer.target
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
-import se.gustavkarlsson.skylight.android.lib.ui.argument
 import se.gustavkarlsson.skylight.android.lib.ui.doOnNext
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.showSnackbar
@@ -18,11 +17,7 @@ internal class GooglePlayServicesFragment : BaseFragment() {
 
     override val layoutId: Int = R.layout.fragment_google_play_services
 
-    private val destination: NavItem by argument()
-
-    private val viewModel: GooglePlayServicesViewModel by viewModel {
-        parametersOf(destination)
-    }
+    private val viewModel: GooglePlayServicesViewModel by viewModel()
 
     override fun bindData() {
         // TODO Make this nicer
@@ -35,7 +30,8 @@ internal class GooglePlayServicesFragment : BaseFragment() {
             .toObservable()
             .bind(this) { (error) ->
                 if (error == null) {
-                    viewModel.navigateForward()
+                    val target = requireNotNull(requireArguments().target)
+                    navigator.setBackstack(target)
                 } else {
                     Timber.e(error, "Failed to install Google Play Services")
                     view?.let { view ->

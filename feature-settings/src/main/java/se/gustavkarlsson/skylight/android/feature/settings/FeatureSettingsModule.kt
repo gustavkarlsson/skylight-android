@@ -4,13 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.preference.PreferenceManager
 import androidx.core.content.edit
-import androidx.fragment.app.Fragment
 import io.reactivex.rxkotlin.toObservable
 import org.koin.androidx.viewmodel.ext.koin.viewModel
 import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.ModuleStarter
-import se.gustavkarlsson.skylight.android.lib.navigation.FragmentFactory
-import se.gustavkarlsson.skylight.android.lib.navigation.FragmentFactoryRegistry
 import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.Settings
@@ -25,12 +22,10 @@ val featureSettingsModule = module {
         val analytics = get<Analytics>()
         val placesRepository = get<PlacesRepository>()
         val settings = get<Settings>()
-        val factoryRegistry = get<FragmentFactoryRegistry>()
         val context = get<Context>()
         object : ModuleStarter {
             @SuppressLint("CheckResult")
             override fun start() {
-                factoryRegistry.register(SettingsFragmentFactory)
                 clearSettingsForDeletedPlaces(placesRepository, settings)
                 getTriggerLevels(settings)
                     .subscribe { (min, max) ->
@@ -41,12 +36,6 @@ val featureSettingsModule = module {
             }
         }
     }
-}
-
-private object SettingsFragmentFactory : FragmentFactory {
-    override fun createFragment(name: String): Fragment? =
-        if (name == "settings") SettingsFragment()
-        else null
 }
 
 @SuppressLint("CheckResult")

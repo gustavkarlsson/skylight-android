@@ -10,13 +10,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.feature.main.R
-import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
-import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 
 internal class DrawerViewModel(
-    private val navigator: Navigator,
     private val placesRepository: PlacesRepository,
     private val selectedPlaceRepo: SelectedPlaceRepository,
     observeScheduler: Scheduler = AndroidSchedulers.mainThread()
@@ -33,6 +30,9 @@ internal class DrawerViewModel(
 
     private val openRemovePlaceDialogRelay = PublishRelay.create<RemovePlaceDialogData>()
     val openRemovePlaceDialog: Observable<RemovePlaceDialogData> = openRemovePlaceDialogRelay
+
+    private val navigateToAddPlaceRelay = PublishRelay.create<Unit>()
+    val navigateToAddPlace: Observable<Unit> = navigateToAddPlaceRelay
 
     private fun createPlaceItems(places: List<Place>, selected: Place) =
         places.map { place ->
@@ -90,7 +90,7 @@ internal class DrawerViewModel(
 
     private fun navigateToAddPlace() {
         closeDrawerRelay.accept(Unit)
-        navigator.push(NavItem("addplace"))
+        navigateToAddPlaceRelay.accept(Unit)
     }
 }
 

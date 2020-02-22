@@ -11,7 +11,7 @@ import se.gustavkarlsson.skylight.android.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 
-internal class SettingsFragment : BaseFragment() {
+class SettingsFragment : BaseFragment() {
 
     private val viewModel by viewModel<SettingsViewModel>()
 
