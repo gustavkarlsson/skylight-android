@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.lib.navigation
+package se.gustavkarlsson.skylight.android.navigation
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

@@ -29,7 +29,7 @@ internal interface AboutComponent {
 internal class AboutModule {
 
     @Provides
-    fun aboutViewModel(
+    fun viewModel(
         time: Time,
         @Named("versionCode") versionCode: Int,
         @Named("versionName") versionName: String

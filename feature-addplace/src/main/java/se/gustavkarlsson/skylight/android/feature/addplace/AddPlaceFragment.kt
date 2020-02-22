@@ -15,8 +15,8 @@ import com.jakewharton.rxbinding2.widget.textChanges
 import kotlinx.android.synthetic.main.fragment_add_place.*
 import kotlinx.android.synthetic.main.layout_save_dialog.view.*
 import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
-import se.gustavkarlsson.skylight.android.lib.navigation.navigator
-import se.gustavkarlsson.skylight.android.lib.navigation.target
+import se.gustavkarlsson.skylight.android.navigation.navigator
+import se.gustavkarlsson.skylight.android.navigation.target
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind

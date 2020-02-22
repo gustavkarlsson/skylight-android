@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
-    id("kotlin-android")
+    kotlin("android")
+    kotlin("kapt")
     id("kotlin-android-extensions")
 }
 
@@ -10,4 +11,7 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-gcm:${Versions.playServicesGcm}")
     implementation("io.ashdavies.rx.rxtasks:rx-tasks:${Versions.rxtasks}")
+
+    // Dagger
+    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

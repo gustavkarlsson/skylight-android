@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android
 
 import dagger.Component
+import se.gustavkarlsson.skylight.android.feature.googleplayservices.GooglePlayServicesOverrideModule
 import se.gustavkarlsson.skylight.android.lib.analytics.LibAnalyticsModule
 import se.gustavkarlsson.skylight.android.lib.darkness.LibDarknessModule
 import se.gustavkarlsson.skylight.android.lib.geocoder.LibGeocoderModule
@@ -35,7 +36,8 @@ import javax.inject.Singleton
         LibSettingsModule::class,
         LibNavigationSetupModule::class,
         LibPermissionsModule::class,
-        LibScopedServiceModule::class
+        LibScopedServiceModule::class,
+        GooglePlayServicesOverrideModule::class
     ]
 )
 internal interface ActualAppComponent : AppComponent

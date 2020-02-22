@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
 import org.koin.dsl.module.module
-import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
-import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
+import se.gustavkarlsson.skylight.android.navigation.Backstack
+import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
 
 val featureIntroModule = module {
 
@@ -11,7 +11,8 @@ val featureIntroModule = module {
     }
 
     single<NavigationOverride>("intro") {
-        object : NavigationOverride {
+        object :
+            NavigationOverride {
             val runVersionManager = get<RunVersionManager>()
 
             override val priority = 10

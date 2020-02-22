@@ -31,7 +31,7 @@ internal interface AddPlaceComponent {
 internal class AddPlaceModule {
 
     @Provides
-    fun aboutViewModel(
+    fun viewModel(
         placesRepository: PlacesRepository,
         geocoder: Geocoder
     ): AddPlaceViewModel {

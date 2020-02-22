@@ -2,10 +2,10 @@ package se.gustavkarlsson.skylight.android.lib.navigationsetup
 
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
-import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
-import se.gustavkarlsson.skylight.android.lib.navigation.BackstackListener
-import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
-import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
+import se.gustavkarlsson.skylight.android.navigation.Backstack
+import se.gustavkarlsson.skylight.android.navigation.BackstackListener
+import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
+import se.gustavkarlsson.skylight.android.navigation.Navigator
 
 interface NavigationInstaller {
     fun install(

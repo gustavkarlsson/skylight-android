@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android
 
 import se.gustavkarlsson.skylight.android.feature.background.featureBackgroundModule
-import se.gustavkarlsson.skylight.android.feature.googleplayservices.featureGooglePlayServicesModule
 import se.gustavkarlsson.skylight.android.feature.intro.featureIntroModule
 import se.gustavkarlsson.skylight.android.feature.main.featureMainModule
 import se.gustavkarlsson.skylight.android.feature.settings.featureSettingsModule
@@ -17,8 +16,8 @@ import se.gustavkarlsson.skylight.android.lib.permissions.libPermissionsModule
 import se.gustavkarlsson.skylight.android.lib.places.libPlacesModule
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.libReverseGeocoderModule
 import se.gustavkarlsson.skylight.android.lib.scopedservice.libScopedServiceModule
+import se.gustavkarlsson.skylight.android.lib.settings.libSettingsModule
 import se.gustavkarlsson.skylight.android.lib.weather.libWeatherModule
-import se.gustavkarlsson.skylight.android.lib.settings.libSettingsModule as libSettingsModule
 
 internal val modules = listOf(
     coreModule,
@@ -38,7 +37,6 @@ internal val modules = listOf(
     libGeocoderModule,
     featureSettingsModule,
     featureBackgroundModule,
-    featureGooglePlayServicesModule,
     featureIntroModule,
     featureMainModule,
     appModule

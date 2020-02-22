@@ -3,18 +3,20 @@ package se.gustavkarlsson.skylight.android
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import org.koin.android.ext.android.get
-import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
-import se.gustavkarlsson.skylight.android.lib.navigation.BackstackListener
-import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
-import se.gustavkarlsson.skylight.android.lib.navigation.NavigatorHost
-import se.gustavkarlsson.skylight.android.lib.navigation.Screen
-import se.gustavkarlsson.skylight.android.lib.navigation.ScreensHost
+import se.gustavkarlsson.skylight.android.navigation.Backstack
+import se.gustavkarlsson.skylight.android.navigation.BackstackListener
+import se.gustavkarlsson.skylight.android.navigation.Navigator
+import se.gustavkarlsson.skylight.android.navigation.NavigatorHost
+import se.gustavkarlsson.skylight.android.navigation.Screen
+import se.gustavkarlsson.skylight.android.navigation.ScreensHost
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.BackButtonController
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.NavigationInstaller
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceHost
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceRegistry
 
-internal class MainActivity : AppCompatActivity(), NavigatorHost, ScreensHost, ServiceHost,
+internal class MainActivity : AppCompatActivity(),
+    NavigatorHost,
+    ScreensHost, ServiceHost,
     BackstackListener {
 
     override lateinit var navigator: Navigator private set
@@ -36,7 +38,7 @@ internal class MainActivity : AppCompatActivity(), NavigatorHost, ScreensHost, S
             this,
             R.id.fragmentContainer,
             listOf(screens.main),
-            listOf(get("intro"), get("googleplayservices")),
+            appComponent.navigationOverrides(),
             emptyList(),
             animationConfig
         )

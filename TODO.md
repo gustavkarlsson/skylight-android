@@ -1,4 +1,5 @@
 ## Soon
+* Split up core module
 * Fix insets
 * Show banner when no network (or just when on flight mode?)
 * App bundles

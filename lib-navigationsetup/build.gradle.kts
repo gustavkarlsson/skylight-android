@@ -8,7 +8,6 @@ plugins {
 dependencies {
     implementation(project(":core"))
     implementation(project(":lib-ui"))
-    implementation(project(":lib-navigation"))
 
     implementation("com.github.Zhuinden:simple-stack:${Versions.simpleStack}")
 

@@ -6,7 +6,6 @@ import com.crashlytics.android.Crashlytics
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.squareup.leakcanary.LeakCanary
 import io.reactivex.plugins.RxJavaPlugins
-import org.koin.android.ext.android.get
 import org.koin.android.ext.android.startKoin
 import timber.log.Timber
 import timber.log.Timber.DebugTree
@@ -23,7 +22,6 @@ internal class Skylight : MultiDexApplication(), AppComponent.Setter {
         initLogging()
         initRxJavaErrorHandling()
         startKoin(this, modules, logger = KoinTimberLogger)
-        initializeModules()
         setupDagger()
     }
 
@@ -40,16 +38,11 @@ internal class Skylight : MultiDexApplication(), AppComponent.Setter {
         }
     }
 
-    private fun initializeModules() {
-        get<ModuleStarter>("settings").start()
-        get<ModuleStarter>("background").start()
-        get<ModuleStarter>("places").start()
-    }
-
     private fun setupDagger() {
         val component = DaggerActualAppComponent.builder()
             .appModule(AppModule(this))
             .build()
+        component.moduleStarters().forEach(ModuleStarter::start)
         setAppComponent(component)
     }
 }

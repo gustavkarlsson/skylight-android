@@ -14,9 +14,9 @@ import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.android.ext.android.get
 import se.gustavkarlsson.skylight.android.entities.Permission
 import se.gustavkarlsson.skylight.android.feature.main.R
-import se.gustavkarlsson.skylight.android.lib.navigation.BackButtonHandler
-import se.gustavkarlsson.skylight.android.lib.navigation.navigator
-import se.gustavkarlsson.skylight.android.lib.navigation.screens
+import se.gustavkarlsson.skylight.android.navigation.BackButtonHandler
+import se.gustavkarlsson.skylight.android.navigation.navigator
+import se.gustavkarlsson.skylight.android.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
@@ -24,7 +24,8 @@ import se.gustavkarlsson.skylight.android.services.PermissionRequester
 import timber.log.Timber
 import kotlin.math.roundToInt
 
-class MainFragment : BaseFragment(), BackButtonHandler {
+class MainFragment : BaseFragment(),
+    BackButtonHandler {
 
     override val layoutId: Int = R.layout.fragment_main
 

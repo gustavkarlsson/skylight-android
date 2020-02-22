@@ -3,8 +3,8 @@ package se.gustavkarlsson.skylight.android.lib.navigationsetup.internal
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import se.gustavkarlsson.skylight.android.lib.navigation.BackstackListener
-import se.gustavkarlsson.skylight.android.lib.navigation.Screen
+import se.gustavkarlsson.skylight.android.navigation.BackstackListener
+import se.gustavkarlsson.skylight.android.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.AnimationConfig
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.Animations
 import com.zhuinden.simplestack.StateChange

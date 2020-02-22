@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.lib.navigation
+package se.gustavkarlsson.skylight.android.navigation
 
 interface BackButtonHandler {
     /**
