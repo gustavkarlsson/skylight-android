@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
-    id("kotlin-android")
+    kotlin("android")
+    kotlin("kapt")
 }
 
 dependencies {
@@ -8,4 +9,7 @@ dependencies {
 
     // Firebase
     implementation("com.google.firebase:firebase-core:${Versions.firebase}")
+
+    // Dagger
+    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }
