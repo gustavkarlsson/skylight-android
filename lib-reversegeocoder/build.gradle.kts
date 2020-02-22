@@ -1,8 +1,12 @@
 plugins {
     id("com.android.library")
-    id("kotlin-android")
+    kotlin("android")
+    kotlin("kapt")
 }
 
 dependencies {
     implementation(project(":core"))
+
+    // Dagger
+    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }
