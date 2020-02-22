@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
-    id("kotlin-android")
+    kotlin("android")
+    kotlin("kapt")
 }
 
 android {
@@ -17,4 +18,7 @@ dependencies {
     implementation(project(":core"))
 
     implementation("com.mapbox.mapboxsdk:mapbox-sdk-services:${Versions.mapboxServices}")
+
+    // Dagger
+    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }
