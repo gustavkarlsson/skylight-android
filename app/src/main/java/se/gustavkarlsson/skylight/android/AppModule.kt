@@ -1,10 +1,14 @@
 package se.gustavkarlsson.skylight.android
 
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.os.Build
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
+import dagger.Module
+import dagger.Provides
+import dagger.Reusable
 import io.reactivex.Single
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.dsl.module.module
@@ -51,4 +55,16 @@ internal val appModule = module {
     single("versionName") {
         BuildConfig.VERSION_NAME
     }
+}
+
+@Module
+internal class AppModule(private val application: Application) {
+
+    @Provides
+    @Reusable
+    fun application(): Application = application
+
+    @Provides
+    @Reusable
+    fun context(): Context = application
 }

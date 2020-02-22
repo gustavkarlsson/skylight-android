@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
-    id("kotlin-android")
+    kotlin("android")
+    kotlin("kapt")
 }
 
 dependencies {
@@ -14,5 +15,9 @@ dependencies {
     api("io.reactivex.rxjava2:rxjava:${Versions.rxjava}")
     api("io.reactivex.rxjava2:rxkotlin:${Versions.rxkotlin}")
     api("org.koin:koin-android:${Versions.koin}")
+    api("com.google.dagger:dagger:${Versions.dagger}")
     api("com.github.ioki-mobility:TextRef:${Versions.textref}")
+
+    // Dagger
+    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

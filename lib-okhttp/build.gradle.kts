@@ -1,10 +1,14 @@
 plugins {
     id("com.android.library")
-    id("kotlin-android")
+    kotlin("android")
+    kotlin("kapt")
 }
 
 dependencies {
     implementation(project(":core"))
 
-    implementation("com.squareup.okhttp3:okhttp:${Versions.okHttp}")
+    api("com.squareup.okhttp3:okhttp:${Versions.okHttp}") // Dagger requires it
+
+    // Dagger
+    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

@@ -3,7 +3,8 @@ import kotlin.text.buildString
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
+    kotlin("android")
+    kotlin("kapt")
     id("kotlin-android-extensions")
     id("io.fabric")
     id("com.akaita.android.easylauncher")
@@ -120,6 +121,9 @@ dependencies {
     implementation("androidx.multidex:multidex:${Versions.multidex}")
     implementation("androidx.appcompat:appcompat:${Versions.androidAppcompat}")
     implementation("androidx.annotation:annotation:${Versions.androidAnnotation}")
+
+    // Dagger
+    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 
     // Lifecycle
     implementation("androidx.lifecycle:lifecycle-extensions:${Versions.archLifecycle}")

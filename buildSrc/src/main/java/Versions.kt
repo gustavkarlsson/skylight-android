@@ -45,6 +45,7 @@ object Versions {
     val leakcanary = "1.6.3"
     val ktxCore = "1.0.1"
     val koin = "1.0.1"
+    val dagger = "2.26"
     val koptional = "0.2.0"
     val uiAutomator = "2.2.0"
     val mapboxServices = "4.7.0"

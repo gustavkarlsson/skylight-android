@@ -12,7 +12,7 @@ import timber.log.Timber
 import timber.log.Timber.DebugTree
 
 @Suppress("unused")
-internal class Skylight : MultiDexApplication() {
+internal class Skylight : MultiDexApplication(), AppComponent.Setter {
 
     override fun onCreate() {
         super.onCreate()
@@ -24,6 +24,7 @@ internal class Skylight : MultiDexApplication() {
         initRxJavaErrorHandling()
         startKoin(this, modules, logger = KoinTimberLogger)
         initializeModules()
+        setupDagger()
     }
 
     private fun initLogging() {
@@ -48,5 +49,12 @@ internal class Skylight : MultiDexApplication() {
         get<ModuleStarter>("settings").start()
         get<ModuleStarter>("background").start()
         get<ModuleStarter>("places").start()
+    }
+
+    private fun setupDagger() {
+        val component = DaggerActualAppComponent.builder()
+            .appModule(AppModule(this))
+            .build()
+        setAppComponent(component)
     }
 }
