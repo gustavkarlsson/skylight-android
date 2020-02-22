@@ -1,17 +1,23 @@
 package se.gustavkarlsson.skylight.android
 
+import se.gustavkarlsson.skylight.android.services.Geocoder
+import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.Time
 import javax.inject.Named
 
 interface AppComponent {
 
-    val time: Time
+    fun time(): Time
 
-    @get:Named("versionCode")
-    val versionCode: Int
+    @Named("versionCode")
+    fun versionCode(): Int
 
-    @get:Named("versionName")
-    val versionName: String
+    @Named("versionName")
+    fun versionName(): String
+
+    fun placesRepository(): PlacesRepository
+
+    fun geocoder(): Geocoder
 
     interface Setter
 }
