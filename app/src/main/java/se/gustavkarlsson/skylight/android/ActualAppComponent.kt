@@ -5,6 +5,7 @@ import se.gustavkarlsson.skylight.android.lib.analytics.LibAnalyticsModule
 import se.gustavkarlsson.skylight.android.lib.darkness.LibDarknessModule
 import se.gustavkarlsson.skylight.android.lib.geocoder.LibGeocoderModule
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.LibGeomagLocationModule
+import se.gustavkarlsson.skylight.android.lib.kpindex.LibKpIndexModule
 import se.gustavkarlsson.skylight.android.lib.okhttp.LibOkHttpModule
 import se.gustavkarlsson.skylight.android.lib.weather.LibWeatherModule
 import javax.inject.Singleton
@@ -19,7 +20,8 @@ import javax.inject.Singleton
         LibAnalyticsModule::class,
         LibDarknessModule::class,
         LibGeocoderModule::class,
-        LibGeomagLocationModule::class
+        LibGeomagLocationModule::class,
+        LibKpIndexModule::class
     ]
 )
 internal interface ActualAppComponent : AppComponent
