@@ -8,6 +8,8 @@ include(
     ":lib-kpindex",
     ":lib-location",
     ":lib-navigation",
+    ":lib-navigation-newer",
+    ":lib-navigationsetup",
     ":lib-places",
     ":lib-settings",
     ":lib-permissions",

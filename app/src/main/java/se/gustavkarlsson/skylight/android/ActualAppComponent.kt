@@ -7,6 +7,7 @@ import se.gustavkarlsson.skylight.android.lib.geocoder.LibGeocoderModule
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.LibGeomagLocationModule
 import se.gustavkarlsson.skylight.android.lib.kpindex.LibKpIndexModule
 import se.gustavkarlsson.skylight.android.lib.location.LibLocationModule
+import se.gustavkarlsson.skylight.android.lib.navigationsetup.LibNavigationSetupModule
 import se.gustavkarlsson.skylight.android.lib.okhttp.LibOkHttpModule
 import se.gustavkarlsson.skylight.android.lib.permissions.LibPermissionsModule
 import se.gustavkarlsson.skylight.android.lib.places.LibPlacesModule
@@ -31,6 +32,7 @@ import javax.inject.Singleton
         LibPlacesModule::class,
         LibReverseGeocoderModule::class,
         LibSettingsModule::class,
+        LibNavigationSetupModule::class,
         LibPermissionsModule::class
     ]
 )

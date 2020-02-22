@@ -6,6 +6,7 @@ plugins {
 dependencies {
     implementation(project(":core"))
     api(project(":lib-navigation"))
+    api(project(":lib-navigation-newer"))
 
     api("com.google.android.material:material:${Versions.androidMaterial}")
     api("androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}")

@@ -14,6 +14,7 @@ import se.gustavkarlsson.skylight.android.lib.geomaglocation.libGeomagLocationMo
 import se.gustavkarlsson.skylight.android.lib.kpindex.libKpIndexModule
 import se.gustavkarlsson.skylight.android.lib.location.libLocationModule
 import se.gustavkarlsson.skylight.android.lib.navigation.libNavigationModule
+import se.gustavkarlsson.skylight.android.lib.navigationsetup.libNavigationSetupModule
 import se.gustavkarlsson.skylight.android.lib.okhttp.libOkHttpModule
 import se.gustavkarlsson.skylight.android.lib.permissions.libPermissionsModule
 import se.gustavkarlsson.skylight.android.lib.places.libPlacesModule
@@ -31,6 +32,7 @@ internal val modules = listOf(
     libOkHttpModule,
     libKpIndexModule,
     libNavigationModule,
+    libNavigationSetupModule,
     libWeatherModule,
     libAnalyticsModule,
     libPermissionsModule,
