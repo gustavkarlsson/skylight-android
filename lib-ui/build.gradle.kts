@@ -8,7 +8,6 @@ dependencies {
     api(project(":lib-navigation"))
 
     api("com.google.android.material:material:${Versions.androidMaterial}")
-    api("androidx.fragment:fragment:${Versions.androidFragment}")
     api("androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}")
 
     // Koin

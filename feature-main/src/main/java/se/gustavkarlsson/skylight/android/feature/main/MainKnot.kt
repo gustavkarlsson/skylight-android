@@ -7,6 +7,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.entities.LocationResult
+import se.gustavkarlsson.skylight.android.entities.Access
 import se.gustavkarlsson.skylight.android.entities.Permission
 import se.gustavkarlsson.skylight.android.services.LocationProvider
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
@@ -17,7 +18,7 @@ import timber.log.Timber
 
 internal data class State(
     val isStreaming: Boolean = false,
-    val locationPermission: Permission = Permission.Unknown,
+    val locationAccess: Access = Access.Unknown,
     val selectedPlace: Place,
     val selectedAuroraReport: LoadableAuroraReport = LoadableAuroraReport.LOADING
 )
@@ -25,7 +26,7 @@ internal data class State(
 internal sealed class Change {
     data class PlaceSelected(val place: Place) : Change()
     data class StreamToggle(val stream: Boolean) : Change()
-    data class LocationPermission(val permission: Permission) : Change()
+    data class LocationPermission(val access: Access) : Change()
     data class AuroraReportSuccess(val place: Place, val report: LoadableAuroraReport) : Change()
 }
 
@@ -34,7 +35,7 @@ private sealed class Action {
 }
 
 internal fun buildMainKnot(
-    permissionChecker: PermissionChecker,
+    permissionChecker: PermissionChecker<Permission.Location>,
     selectedPlaceRepo: SelectedPlaceRepository,
     locationProvider: LocationProvider,
     auroraReportProvider: AuroraReportProvider
@@ -54,7 +55,7 @@ internal fun buildMainKnot(
         reduce { change ->
             when (change) {
                 is Change.LocationPermission ->
-                    copy(locationPermission = change.permission).only
+                    copy(locationAccess = change.access).only
                 is Change.PlaceSelected ->
                     copy(
                         selectedPlace = change.place,
@@ -101,7 +102,7 @@ internal fun buildMainKnot(
 
     events {
         source {
-            permissionChecker.permission
+            permissionChecker.access
                 .map(Change::LocationPermission)
         }
         source {

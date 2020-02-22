@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import se.gustavkarlsson.skylight.android.entities.Permission
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.navigation.BackButtonHandler
 import se.gustavkarlsson.skylight.android.lib.navigation.NavItem
@@ -128,7 +129,8 @@ internal class MainFragment : BaseFragment(), BackButtonHandler {
     }
 
     private fun requestLocationPermission() {
-        get<PermissionRequester>().request().bind(this)
+        val requester = get<PermissionRequester<Permission.Location>>()
+        requester.request(this).bind(this)
     }
 
     private fun openAppDetails() {

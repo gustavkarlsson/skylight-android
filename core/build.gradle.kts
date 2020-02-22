@@ -17,6 +17,7 @@ dependencies {
     api("org.koin:koin-android:${Versions.koin}")
     api("com.google.dagger:dagger:${Versions.dagger}")
     api("com.github.ioki-mobility:TextRef:${Versions.textref}")
+    api("androidx.fragment:fragment:${Versions.androidFragment}")
 
     // Dagger
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")

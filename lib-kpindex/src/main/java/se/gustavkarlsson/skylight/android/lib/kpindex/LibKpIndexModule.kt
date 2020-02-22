@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.lib.kpindex
 
 import dagger.Module
 import dagger.Provides
-import dagger.Reusable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import org.koin.dsl.module.module

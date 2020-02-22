@@ -5,37 +5,40 @@ import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
+import se.gustavkarlsson.skylight.android.entities.Access
 import se.gustavkarlsson.skylight.android.entities.Permission
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import timber.log.Timber
 
-internal class AndroidPermissionChecker(
-    private val permissionKey: String,
+internal class AndroidPermissionChecker<T : Permission>(
+    permission: T,
     private val context: Context,
-    private val permissionRelay: BehaviorRelay<Permission>
-) : PermissionChecker {
+    private val accessRelay: BehaviorRelay<Access>
+) : PermissionChecker<T> {
 
-    override val permission: Observable<Permission> =
-        permissionRelay
+    private val permissionKey = permission.key
+
+    override val access: Observable<Access> =
+        accessRelay
             .distinctUntilChanged()
             .doOnSubscribe { refresh() }
 
     override fun refresh() {
         val systemPermission = checkSystemPermission()
-        if (systemPermission == Permission.Denied && permissionRelay.value == Permission.DeniedForever) {
-            Timber.d("Won't change from %s to %s", Permission.DeniedForever, Permission.Denied)
+        if (systemPermission == Access.Denied && accessRelay.value == Access.DeniedForever) {
+            Timber.d("Won't change from %s to %s", Access.DeniedForever, Access.Denied)
             return
         }
-        permissionRelay.accept(systemPermission)
+        accessRelay.accept(systemPermission)
     }
 
-    private fun checkSystemPermission(): Permission {
+    private fun checkSystemPermission(): Access {
         val result = ContextCompat.checkSelfPermission(context, permissionKey)
-        val permission = if (result == PackageManager.PERMISSION_GRANTED)
-            Permission.Granted
+        val access = if (result == PackageManager.PERMISSION_GRANTED)
+            Access.Granted
         else
-            Permission.Denied
-        Timber.d("%s = %s", permissionKey, permission)
-        return permission
+            Access.Denied
+        Timber.d("%s = %s", permissionKey, access)
+        return access
     }
 }

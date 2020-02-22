@@ -1,5 +1,7 @@
 package se.gustavkarlsson.skylight.android.entities
 
-enum class Permission {
-    Unknown, Granted, Denied, DeniedForever
+import android.Manifest
+
+sealed class Permission(val key: String) {
+    object Location : Permission(Manifest.permission.ACCESS_FINE_LOCATION)
 }

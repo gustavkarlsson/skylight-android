@@ -20,6 +20,7 @@ import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.LoadableAuroraReport
+import se.gustavkarlsson.skylight.android.entities.Access
 import se.gustavkarlsson.skylight.android.entities.Permission
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.entities.Weather
@@ -50,7 +51,7 @@ internal class MainViewModel(
     kpIndexFormatter: Formatter<KpIndex>,
     weatherChanceEvaluator: ChanceEvaluator<Weather>,
     weatherFormatter: Formatter<Weather>,
-    private val permissionChecker: PermissionChecker,
+    private val permissionChecker: PermissionChecker<Permission.Location>,
     private val chanceToColorConverter: ChanceToColorConverter,
     time: Time,
     nowTextThreshold: Duration
@@ -143,7 +144,7 @@ internal class MainViewModel(
         .map {
             when {
                 it.selectedPlace != Place.Current -> Absent
-                it.locationPermission == Permission.Denied -> {
+                it.locationAccess == Access.Denied -> {
                     BannerData(
                         TextRef(R.string.location_permission_denied_message),
                         TextRef(R.string.fix),
@@ -151,7 +152,7 @@ internal class MainViewModel(
                         BannerData.Event.RequestLocationPermission
                     ).toOptional()
                 }
-                it.locationPermission == Permission.DeniedForever -> {
+                it.locationAccess == Access.DeniedForever -> {
                     BannerData(
                         TextRef(R.string.location_permission_denied_forever_message),
                         TextRef(R.string.fix),
