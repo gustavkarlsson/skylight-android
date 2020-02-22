@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
-    id("kotlin-android")
+    kotlin("android")
+    kotlin("kapt")
 }
 
 dependencies {
@@ -8,4 +9,7 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-location:${Versions.playServicesLocation}")
     implementation("com.patloew.rxlocation:rxlocation:${Versions.rxLocation}")
+
+    // Dagger
+    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

@@ -13,6 +13,7 @@ import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.KpIndexProvider
 import se.gustavkarlsson.skylight.android.services.Time
+import javax.inject.Singleton
 
 val libKpIndexModule = module {
 
@@ -40,7 +41,7 @@ val libKpIndexModule = module {
 class LibKpIndexModule {
 
     @Provides
-    @Reusable
+    @Singleton
     internal fun kpIndexProvider(okHttpClient: OkHttpClient, time: Time): KpIndexProvider {
         val api = Retrofit.Builder()
             .client(okHttpClient)
