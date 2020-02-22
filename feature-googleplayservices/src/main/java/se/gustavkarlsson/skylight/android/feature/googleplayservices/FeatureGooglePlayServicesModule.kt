@@ -9,14 +9,13 @@ import se.gustavkarlsson.skylight.android.navigation.Backstack
 import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
 
 @Module
-class GooglePlayServicesOverrideModule {
+class FeatureGooglePlayServicesModule {
 
     @Provides
     @Reusable
     @IntoSet
     internal fun navigationOverride(context: Context): NavigationOverride =
-        object :
-            NavigationOverride {
+        object : NavigationOverride {
             val googlePlayServicesChecker = GmsGooglePlayServicesChecker(context)
 
             override val priority = 8

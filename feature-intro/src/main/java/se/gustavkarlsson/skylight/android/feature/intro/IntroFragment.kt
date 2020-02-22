@@ -16,7 +16,9 @@ internal class IntroFragment : BaseFragment() {
     override val layoutId: Int = R.layout.fragment_intro
 
     private val viewModel by lazy {
-        getOrRegisterService("introViewModel") { get<IntroViewModel>() }
+        getOrRegisterService("introViewModel") {
+            IntroComponent.viewModel()
+        }
     }
 
     override fun initView() {

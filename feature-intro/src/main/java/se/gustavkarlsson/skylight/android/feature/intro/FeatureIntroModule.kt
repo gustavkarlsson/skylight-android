@@ -1,20 +1,31 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
-import org.koin.dsl.module.module
+import android.content.Context
+import dagger.Module
+import dagger.Provides
+import dagger.Reusable
+import dagger.multibindings.IntoSet
 import se.gustavkarlsson.skylight.android.navigation.Backstack
 import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
+import se.gustavkarlsson.skylight.android.services.RunVersionManager
+import javax.inject.Named
+import javax.inject.Singleton
 
-val featureIntroModule = module {
+@Module
+class FeatureIntroModule {
 
-    factory {
-        IntroViewModel(versionManager = get())
-    }
+    @Provides
+    @Singleton
+    internal fun runVersionManager(
+        context: Context,
+        @Named("versionCode") versionCode: Int
+    ): RunVersionManager = SharedPreferencesRunVersionManager(context, versionCode)
 
-    single<NavigationOverride>("intro") {
-        object :
-            NavigationOverride {
-            val runVersionManager = get<RunVersionManager>()
-
+    @Provides
+    @Reusable
+    @IntoSet
+    internal fun navigationOverride(runVersionManager: RunVersionManager): NavigationOverride =
+        object : NavigationOverride {
             override val priority = 10
 
             override fun override(backstack: Backstack): Backstack? =
@@ -22,12 +33,4 @@ val featureIntroModule = module {
                     listOf(IntroScreen(backstack))
                 } else null
         }
-    }
-
-    single<RunVersionManager> {
-        SharedPreferencesRunVersionManager(
-            context = get(),
-            currentVersionCode = get("versionCode")
-        )
-    }
 }

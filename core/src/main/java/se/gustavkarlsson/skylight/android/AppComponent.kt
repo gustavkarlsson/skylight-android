@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android
 import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.services.Geocoder
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
+import se.gustavkarlsson.skylight.android.services.RunVersionManager
 import se.gustavkarlsson.skylight.android.services.Time
 import javax.inject.Named
 
@@ -19,6 +20,8 @@ interface AppComponent {
     fun placesRepository(): PlacesRepository
 
     fun geocoder(): Geocoder
+
+    fun runVersionManager(): RunVersionManager
 
     fun navigationOverrides(): Set<NavigationOverride>
 

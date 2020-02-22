@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android
 
 import se.gustavkarlsson.skylight.android.feature.background.featureBackgroundModule
-import se.gustavkarlsson.skylight.android.feature.intro.featureIntroModule
 import se.gustavkarlsson.skylight.android.feature.main.featureMainModule
 import se.gustavkarlsson.skylight.android.feature.settings.featureSettingsModule
 import se.gustavkarlsson.skylight.android.lib.analytics.libAnalyticsModule
@@ -37,7 +36,6 @@ internal val modules = listOf(
     libGeocoderModule,
     featureSettingsModule,
     featureBackgroundModule,
-    featureIntroModule,
     featureMainModule,
     appModule
 )

@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.feature.intro
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import se.gustavkarlsson.skylight.android.services.RunVersionManager
 import timber.log.Timber
 
 internal class SharedPreferencesRunVersionManager(

@@ -26,5 +26,5 @@ internal interface GooglePlayServicesComponent {
 internal class GooglePlayServicesModule {
 
     @Provides
-    fun aboutViewModel(): GooglePlayServicesViewModel = GooglePlayServicesViewModel()
+    fun viewModel(): GooglePlayServicesViewModel = GooglePlayServicesViewModel()
 }
