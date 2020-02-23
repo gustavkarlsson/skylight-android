@@ -11,7 +11,7 @@
     <dimen name="listItemTextStart">72dp</dimen>
     <dimen name="buttonHeight">56dp</dimen>
     <dimen name="iconSize">24dp</dimen>
-    <dimen name="toolbarElevation">4dp</dimen>
-    <dimen name="surfaceElevation">2dp</dimen>
+    <dimen name="toolbarElevation">2dp</dimen>
+    <dimen name="surfaceElevation">1dp</dimen>
     <dimen name="largeTitleHeight">64dp</dimen>
 </resources>
