@@ -10,10 +10,10 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
-import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
+import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 
-class SettingsFragment : BaseFragment() {
+class SettingsFragment : ScreenFragment() {
 
     private val viewModel by lazy {
         getOrRegisterService("settingsViewModel") {

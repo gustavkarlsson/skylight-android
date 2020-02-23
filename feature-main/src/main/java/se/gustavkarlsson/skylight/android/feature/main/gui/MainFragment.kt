@@ -20,12 +20,12 @@ import se.gustavkarlsson.skylight.android.navigation.BackButtonHandler
 import se.gustavkarlsson.skylight.android.navigation.navigator
 import se.gustavkarlsson.skylight.android.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
-import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
+import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import timber.log.Timber
 import kotlin.math.roundToInt
 
-class MainFragment : BaseFragment(), BackButtonHandler {
+class MainFragment : ScreenFragment(), BackButtonHandler {
 
     override val layoutId: Int = R.layout.fragment_main
 

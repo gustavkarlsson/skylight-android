@@ -5,10 +5,10 @@ import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_about.*
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
-import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
+import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.setHtml
 
-class AboutFragment : BaseFragment() {
+class AboutFragment : ScreenFragment() {
 
     override val layoutId: Int = R.layout.fragment_about
 

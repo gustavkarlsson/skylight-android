@@ -20,12 +20,12 @@ import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.navigation.navigator
 import se.gustavkarlsson.skylight.android.navigation.target
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
-import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
+import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.fadeToVisible
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.showSnackbar
 
-class AddPlaceFragment : BaseFragment() {
+class AddPlaceFragment : ScreenFragment() {
 
     override val layoutId: Int = R.layout.fragment_add_place
 

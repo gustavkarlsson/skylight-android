@@ -8,11 +8,11 @@ import se.gustavkarlsson.skylight.android.navigation.navigator
 import se.gustavkarlsson.skylight.android.navigation.screens
 import se.gustavkarlsson.skylight.android.navigation.target
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
-import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
+import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.setHtml
 
-internal class IntroFragment : BaseFragment() {
+internal class IntroFragment : ScreenFragment() {
 
     override val layoutId: Int = R.layout.fragment_intro
 
