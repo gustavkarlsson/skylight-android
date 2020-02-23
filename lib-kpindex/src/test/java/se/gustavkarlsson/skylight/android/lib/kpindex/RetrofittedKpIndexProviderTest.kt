@@ -37,7 +37,11 @@ class RetrofittedKpIndexProviderTest {
         }
     }
 
-    private fun mockClient(statusCode: Int, bodyResourcePath: String, mediaType: String): OkHttpClient {
+    private fun mockClient(
+        statusCode: Int,
+        bodyResourcePath: String,
+        mediaType: String
+    ): OkHttpClient {
         val mockedCall = mockCall(statusCode, bodyResourcePath, mediaType)
         val mockedClient = mock<OkHttpClient>()
         whenever(mockedClient.newCall(ArgumentMatchers.any(Request::class.java))).thenReturn(mockedCall)

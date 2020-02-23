@@ -61,7 +61,8 @@ internal class AddPlaceViewModel(
     val isNoSuggestionsVisible: Observable<Boolean> =
         resultState.map { it == ResultState.NO_SUGGESTIONS }
 
-    val isSuggestionsVisible: Observable<Boolean> = resultState.map { it == ResultState.SUGGESTIONS }
+    val isSuggestionsVisible: Observable<Boolean> =
+        resultState.map { it == ResultState.SUGGESTIONS }
 }
 
 private fun createTitle(suggestion: PlaceSuggestion) = suggestion.simpleName

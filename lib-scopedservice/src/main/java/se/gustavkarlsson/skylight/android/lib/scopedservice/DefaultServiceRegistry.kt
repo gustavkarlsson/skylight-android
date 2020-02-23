@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.lib.scopedservice.internal
+package se.gustavkarlsson.skylight.android.lib.scopedservice
 
 import se.gustavkarlsson.skylight.android.ScopedService
 import se.gustavkarlsson.skylight.android.services.ServiceRegistry
@@ -12,7 +12,10 @@ internal class DefaultServiceRegistry :
     override fun register(id: String, tag: String, service: ScopedService) {
         require(id !in services) { "Service already exists for $id" }
         Timber.i("Registering service '$id' with tag '$tag'")
-        services = services + (id to ServiceEntry(tag, service))
+        services = services + (id to ServiceEntry(
+            tag,
+            service
+        ))
     }
 
     @Synchronized

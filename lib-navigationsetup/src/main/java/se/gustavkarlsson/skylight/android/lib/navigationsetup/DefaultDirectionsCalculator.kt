@@ -1,10 +1,11 @@
-package se.gustavkarlsson.skylight.android.lib.navigationsetup.internal
+package se.gustavkarlsson.skylight.android.lib.navigationsetup
 
 import se.gustavkarlsson.skylight.android.navigation.Backstack
 import se.gustavkarlsson.skylight.android.navigation.Screen
 import com.zhuinden.simplestack.StateChange
 
-internal object DefaultDirectionsCalculator : DirectionsCalculator {
+internal object DefaultDirectionsCalculator :
+    DirectionsCalculator {
 
     override fun getDirection(oldBackstack: Backstack, newBackstack: Backstack) =
         when {

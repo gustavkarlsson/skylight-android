@@ -83,9 +83,16 @@ internal fun createKnot(
                         geocoder.geocode(texts.last())
                             .map {
                                 when (val result = it) {
-                                    is GeocodingResult.Success -> Change.SearchFinished(result.suggestions)
-                                    GeocodingResult.Failure.Io -> Change.SearchFailed(TextRef(R.string.place_search_failed_io))
-                                    GeocodingResult.Failure.Unknown -> Change.SearchFailed(TextRef(R.string.place_search_failed_generic))
+                                    is GeocodingResult.Success ->
+                                        Change.SearchFinished(result.suggestions)
+                                    GeocodingResult.Failure.Io ->
+                                        Change.SearchFailed(
+                                            TextRef(R.string.place_search_failed_io)
+                                        )
+                                    GeocodingResult.Failure.Unknown ->
+                                        Change.SearchFailed(
+                                            TextRef(R.string.place_search_failed_generic)
+                                        )
                                 }
                             }
                             .toObservable()

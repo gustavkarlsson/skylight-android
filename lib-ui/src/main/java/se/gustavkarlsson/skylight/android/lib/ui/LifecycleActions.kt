@@ -97,8 +97,11 @@ fun doOnEvery(owner: LifecycleOwner, event: Lifecycle.Event, block: () -> Unit):
     return onAction
 }
 
-fun <T> T.doOnEvery(owner: LifecycleOwner, event: Lifecycle.Event, block: (T) -> Unit): LifecycleAction =
-    doOnEvery(owner, event) { -> block(this) }
+fun <T> T.doOnEvery(
+    owner: LifecycleOwner,
+    event: Lifecycle.Event,
+    block: (T) -> Unit
+): LifecycleAction = doOnEvery(owner, event) { -> block(this) }
 
 fun doOnNext(owner: LifecycleOwner, event: Lifecycle.Event, block: () -> Unit) {
     val lifecycle = owner.lifecycle

@@ -3,7 +3,8 @@ package se.gustavkarlsson.skylight.android.lib.ui
 import android.view.View
 import android.view.ViewParent
 
-inline fun <reified T : View> View.findParentViewByType(): T = findParentViewInViewByType(T::class.java)
+inline fun <reified T : View> View.findParentViewByType(): T =
+    findParentViewInViewByType(T::class.java)
 
 fun <T : View> View.findParentViewInViewByType(clazz: Class<T>): T {
     val parent = parent

@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.lib.navigationsetup.internal
+package se.gustavkarlsson.skylight.android.lib.navigationsetup
 
 import android.app.Activity
 import android.view.ViewGroup
@@ -26,26 +26,35 @@ internal class SimpleStackNavigationInstaller(
         animationConfig: AnimationConfig
     ): Pair<Navigator, BackButtonController> {
         val fragmentManager = activity.supportFragmentManager
-        val navigationOverride = AggregatingNavigationOverride(navigationOverrides)
-        val stateChanger = FragmentStateChanger(
-            fragmentManager,
-            containerId,
-            animationConfig,
-            backstackListeners
-        )
+        val navigationOverride =
+            AggregatingNavigationOverride(
+                navigationOverrides
+            )
+        val stateChanger =
+            FragmentStateChanger(
+                fragmentManager,
+                containerId,
+                animationConfig,
+                backstackListeners
+            )
         val backstack = activity.installBackstack(
             containerId,
             initialBackstack,
             navigationOverride,
             stateChanger
         )
-        val navigator = SimpleStackNavigator(
-            backstack,
-            navigationOverride,
-            directionsCalculator,
-            activity::finish
-        )
-        val backButtonController = NavigatorBackButtonController(navigator, fragmentManager)
+        val navigator =
+            SimpleStackNavigator(
+                backstack,
+                navigationOverride,
+                directionsCalculator,
+                activity::finish
+            )
+        val backButtonController =
+            NavigatorBackButtonController(
+                navigator,
+                fragmentManager
+            )
         return navigator to backButtonController
     }
 }

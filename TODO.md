@@ -1,25 +1,22 @@
 ## Soon
 * Rework how to show errors from provider
-* Show banner when no network (or just when on flight mode?)
+* Show banner when no connectivity (check for flight mode?)
 * Split up core module
-* App bundles
-* Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
 * Rework API responses.
-* KtLint
-* Make testing use other settings
-* Add instrumentation testing to CI
-* Add more tests
-
-## Android 11 migration checklist
-* https://developer.android.com/preview/privacy/permissions#one-time
-* https://developer.android.com/preview/privacy/location#background-location
+* Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
+* Use cases instead of repositories?
+* Add prettier detail screens
 
 ## Some day
-* Add develop settings
 * Use Store lib?
+* KtLint
+* Make testing use other settings
+* Add more tests
+* App bundles
+* Add develop settings
+* Add instrumentation testing to CI
 * Consider refresh after changing debug options
 * Add the thing that clears data between launches (check with Nick)
-* Add prettier detail screens
 * Separate debug menu instead of settings page
 * Add more KTX
 * Firebase performance monitoring
@@ -30,9 +27,9 @@
 * Add performance traces
 * Integrate code coverage (Coveralls or Codecov)
 * Look into using Spek (problems with junit5 and android)
-* Look into replacing evernote-job with WorkManager (difficult since it's hard to post results)
 * Firebase remote config, or move more stuff to backend?
-* Use cases instead of repositories?
+* Android 11: https://developer.android.com/preview/privacy/permissions#one-time
+* Android 11: https://developer.android.com/preview/privacy/location#background-location
 
 ## Never?
 * Rename chance to score?

@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.lib.navigationsetup.internal
+package se.gustavkarlsson.skylight.android.lib.navigationsetup
 
 import androidx.fragment.app.FragmentManager
 import se.gustavkarlsson.skylight.android.navigation.BackButtonHandler
