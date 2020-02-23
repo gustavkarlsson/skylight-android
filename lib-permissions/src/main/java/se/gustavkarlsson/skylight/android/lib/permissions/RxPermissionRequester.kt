@@ -5,16 +5,13 @@ import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Completable
 import io.reactivex.functions.Consumer
 import se.gustavkarlsson.skylight.android.entities.Access
-import se.gustavkarlsson.skylight.android.entities.Permission
 import se.gustavkarlsson.skylight.android.services.PermissionRequester
 import timber.log.Timber
 
-internal class RxPermissionRequester<T : Permission>(
-    permission: T,
+internal class RxPermissionRequester(
+    private val permissionKey: String,
     private val accessChangeConsumer: Consumer<Access>
-) : PermissionRequester<T> {
-
-    private val permissionKey = permission.key
+) : PermissionRequester {
 
     override fun request(fragment: Fragment): Completable {
         val rxPermissions = RxPermissions(fragment)

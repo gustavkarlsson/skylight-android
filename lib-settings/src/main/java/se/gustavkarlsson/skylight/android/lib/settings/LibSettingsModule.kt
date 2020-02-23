@@ -5,27 +5,10 @@ import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.services.DevelopSettings
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.Settings
 import javax.inject.Singleton
-
-val libSettingsModule = module {
-
-    single<DevelopSettings> {
-        SqlDelightDevelopSettings()
-    }
-
-    single<Settings> {
-        val driver = AndroidSqliteDriver(Database.Schema, get(), "settings.db")
-        val database = Database(driver)
-        SqlDelightSettings(
-            queries = database.dbSettingsQueries,
-            placesRepository = get()
-        )
-    }
-}
 
 @Module
 class LibSettingsModule {

@@ -2,9 +2,8 @@ package se.gustavkarlsson.skylight.android.services
 
 import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.Access
-import se.gustavkarlsson.skylight.android.entities.Permission
 
-interface PermissionChecker<T : Permission> {
+interface PermissionChecker {
     val access: Observable<Access>
     fun refresh()
 }

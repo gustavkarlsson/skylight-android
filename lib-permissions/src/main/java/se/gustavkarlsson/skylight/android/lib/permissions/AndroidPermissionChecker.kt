@@ -6,17 +6,14 @@ import androidx.core.content.ContextCompat
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.Access
-import se.gustavkarlsson.skylight.android.entities.Permission
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import timber.log.Timber
 
-internal class AndroidPermissionChecker<T : Permission>(
-    permission: T,
+internal class AndroidPermissionChecker(
+    private val permissionKey: String,
     private val context: Context,
     private val accessRelay: BehaviorRelay<Access>
-) : PermissionChecker<T> {
-
-    private val permissionKey = permission.key
+) : PermissionChecker {
 
     override val access: Observable<Access> =
         accessRelay

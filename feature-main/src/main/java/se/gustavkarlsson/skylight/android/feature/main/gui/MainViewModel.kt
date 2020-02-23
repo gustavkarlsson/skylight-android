@@ -20,7 +20,6 @@ import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.LoadableAuroraReport
-import se.gustavkarlsson.skylight.android.entities.Permission
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.entities.ReverseGeocodingResult
@@ -32,7 +31,7 @@ import se.gustavkarlsson.skylight.android.feature.main.Change
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.feature.main.State
-import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
+import se.gustavkarlsson.skylight.android.ScopedService
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
@@ -51,7 +50,7 @@ internal class MainViewModel(
     kpIndexFormatter: Formatter<KpIndex>,
     weatherChanceEvaluator: ChanceEvaluator<Weather>,
     weatherFormatter: Formatter<Weather>,
-    private val permissionChecker: PermissionChecker<Permission.Location>,
+    private val permissionChecker: PermissionChecker,
     private val chanceToColorConverter: ChanceToColorConverter,
     time: Time,
     nowTextThreshold: Duration

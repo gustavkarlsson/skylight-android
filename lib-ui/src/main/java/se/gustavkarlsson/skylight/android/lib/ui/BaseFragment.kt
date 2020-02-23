@@ -7,9 +7,8 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import org.koin.android.ext.android.get
+import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.navigation.navigator
-import se.gustavkarlsson.skylight.android.services.Analytics
 
 abstract class BaseFragment : Fragment() {
 
@@ -35,7 +34,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        get<Analytics>().logScreen(requireActivity(), this::class.java.simpleName)
+        appComponent.analytics().logScreen(requireActivity(), this::class.java.simpleName)
     }
 
     @get:LayoutRes

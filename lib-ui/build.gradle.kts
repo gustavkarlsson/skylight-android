@@ -10,9 +10,6 @@ dependencies {
     api("com.google.android.material:material:${Versions.androidMaterial}")
     api("androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}")
 
-    // Koin
-    api("org.koin:koin-androidx-scope:${Versions.koin}")
-
     // Rx misc
     api("io.reactivex.rxjava2:rxandroid:${Versions.rxandroid}")
 

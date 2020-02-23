@@ -5,7 +5,6 @@ import androidx.appcompat.widget.Toolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ioki.textref.TextRef
 import kotlinx.android.synthetic.main.fragment_settings.*
-import org.koin.android.ext.android.get
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
@@ -15,7 +14,9 @@ import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 class SettingsFragment : BaseFragment() {
 
     private val viewModel by lazy {
-        getOrRegisterService("settingsViewModel") { get<SettingsViewModel>() }
+        getOrRegisterService("settingsViewModel") {
+            SettingsComponent.viewModel()
+        }
     }
 
     private val adapter by lazy { SettingsAdapter(viewModel) }

@@ -14,10 +14,10 @@ dependencies {
     api("com.github.gustavkarlsson:koptional:${Versions.koptional}")
     api("io.reactivex.rxjava2:rxjava:${Versions.rxjava}")
     api("io.reactivex.rxjava2:rxkotlin:${Versions.rxkotlin}")
-    api("org.koin:koin-android:${Versions.koin}")
     api("com.google.dagger:dagger:${Versions.dagger}")
     api("com.github.ioki-mobility:TextRef:${Versions.textref}")
     api("androidx.fragment:fragment:${Versions.androidFragment}")
+    api("androidx.appcompat:appcompat:${Versions.androidAppcompat}")
 
     // Dagger
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")

@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.feature.intro
 
 import com.jakewharton.rxbinding2.view.clicks
 import kotlinx.android.synthetic.main.fragment_intro.*
-import org.koin.android.ext.android.get
 import se.gustavkarlsson.skylight.android.navigation.navigator
 import se.gustavkarlsson.skylight.android.navigation.screens
 import se.gustavkarlsson.skylight.android.navigation.target

@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.lib.navigationsetup
+package se.gustavkarlsson.skylight.android.entities
 
 data class AnimationConfig(
     val forward: Animations = Animations.NONE,

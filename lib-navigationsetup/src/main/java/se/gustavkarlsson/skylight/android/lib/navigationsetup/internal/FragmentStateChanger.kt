@@ -5,8 +5,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import se.gustavkarlsson.skylight.android.navigation.BackstackListener
 import se.gustavkarlsson.skylight.android.navigation.Screen
-import se.gustavkarlsson.skylight.android.lib.navigationsetup.AnimationConfig
-import se.gustavkarlsson.skylight.android.lib.navigationsetup.Animations
+import se.gustavkarlsson.skylight.android.entities.AnimationConfig
+import se.gustavkarlsson.skylight.android.entities.Animations
 import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.StateChanger
 import timber.log.Timber

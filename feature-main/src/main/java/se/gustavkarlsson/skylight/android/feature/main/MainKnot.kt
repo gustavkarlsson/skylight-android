@@ -8,7 +8,6 @@ import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.entities.LocationResult
 import se.gustavkarlsson.skylight.android.entities.Access
-import se.gustavkarlsson.skylight.android.entities.Permission
 import se.gustavkarlsson.skylight.android.services.LocationProvider
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import se.gustavkarlsson.skylight.android.entities.Place
@@ -35,7 +34,7 @@ private sealed class Action {
 }
 
 internal fun buildMainKnot(
-    permissionChecker: PermissionChecker<Permission.Location>,
+    permissionChecker: PermissionChecker,
     selectedPlaceRepo: SelectedPlaceRepository,
     locationProvider: LocationProvider,
     auroraReportProvider: AuroraReportProvider

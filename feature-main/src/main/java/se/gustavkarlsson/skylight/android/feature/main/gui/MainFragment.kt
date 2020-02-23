@@ -11,8 +11,8 @@ import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding2.view.clicks
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_main.*
-import org.koin.android.ext.android.get
-import se.gustavkarlsson.skylight.android.entities.Permission
+import se.gustavkarlsson.skylight.android.appComponent
+import se.gustavkarlsson.skylight.android.feature.main.MainComponent
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.navigation.BackButtonHandler
 import se.gustavkarlsson.skylight.android.navigation.navigator
@@ -20,7 +20,6 @@ import se.gustavkarlsson.skylight.android.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
-import se.gustavkarlsson.skylight.android.services.PermissionRequester
 import timber.log.Timber
 import kotlin.math.roundToInt
 
@@ -32,7 +31,9 @@ class MainFragment : BaseFragment(),
     private var currentBottomSheetTitle: Int? = null
 
     private val viewModel by lazy {
-        getOrRegisterService("mainViewModel") { get<MainViewModel>() }
+        getOrRegisterService("mainViewModel") {
+            MainComponent.viewModel()
+        }
     }
 
     override val toolbar: Toolbar?
@@ -130,8 +131,7 @@ class MainFragment : BaseFragment(),
     }
 
     private fun requestLocationPermission() {
-        val requester = get<PermissionRequester<Permission.Location>>()
-        requester.request(this).bind(this)
+        appComponent.locationPermissionRequester().request(this).bind(this)
     }
 
     private fun openAppDetails() {

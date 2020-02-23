@@ -32,12 +32,6 @@
 		This value shows how dark your current location is based on the sun\'s position.
 		<u>100\% darkness is perfect</u> for aurora sightings.</string>
 
-    <string name="aurora_chance_none">No chance</string>
-    <string name="aurora_chance_low">Low chance</string>
-    <string name="aurora_chance_medium">Medium chance</string>
-    <string name="aurora_chance_high">High chance</string>
-    <string name="aurora_chance_unknown">Unknown chance</string>
-
     <string name="weather_clear">Clear</string>
     <string name="weather_some_clouds">Some clouds</string>
     <string name="weather_cloudy">Cloudy</string>

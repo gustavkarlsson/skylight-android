@@ -4,22 +4,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import okhttp3.OkHttpClient
-import org.koin.dsl.module.module
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import java.util.concurrent.TimeUnit
-
-val libOkHttpModule = module {
-
-    single {
-        val timeout = 30.seconds
-        OkHttpClient.Builder()
-            .connectTimeout(timeout)
-            .readTimeout(timeout)
-            .writeTimeout(timeout)
-            .build()
-    }
-}
 
 @Module
 class LibOkHttpModule {

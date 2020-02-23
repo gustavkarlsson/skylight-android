@@ -6,7 +6,7 @@ import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.extensions.mapNotNull
-import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
+import se.gustavkarlsson.skylight.android.ScopedService
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
 
 internal class AddPlaceViewModel(

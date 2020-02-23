@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
 import com.ioki.textref.TextRef
-import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
+import se.gustavkarlsson.skylight.android.ScopedService
 import se.gustavkarlsson.skylight.android.services.RunVersionManager
 
 internal class IntroViewModel(

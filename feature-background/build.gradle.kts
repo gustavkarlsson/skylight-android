@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
-    id("kotlin-android")
+    kotlin("android")
+    kotlin("kapt")
 }
 
 dependencies {
@@ -14,6 +15,9 @@ dependencies {
 
     // Ktx
     implementation("androidx.core:core-ktx:${Versions.ktxCore}")
+
+    // Dagger
+    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 
     // Testing
     testImplementation("org.robolectric:robolectric:${Versions.robolectric}")

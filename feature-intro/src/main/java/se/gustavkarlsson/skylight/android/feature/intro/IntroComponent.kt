@@ -27,6 +27,6 @@ internal interface IntroComponent {
 internal class IntroModule {
 
     @Provides
-    fun introViewModel(runVersionManager: RunVersionManager): IntroViewModel =
+    fun viewModel(runVersionManager: RunVersionManager): IntroViewModel =
         IntroViewModel(runVersionManager)
 }

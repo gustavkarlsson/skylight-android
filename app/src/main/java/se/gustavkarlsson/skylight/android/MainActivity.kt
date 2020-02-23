@@ -2,17 +2,15 @@ package se.gustavkarlsson.skylight.android
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import org.koin.android.ext.android.get
 import se.gustavkarlsson.skylight.android.navigation.Backstack
 import se.gustavkarlsson.skylight.android.navigation.BackstackListener
 import se.gustavkarlsson.skylight.android.navigation.Navigator
 import se.gustavkarlsson.skylight.android.navigation.NavigatorHost
 import se.gustavkarlsson.skylight.android.navigation.Screen
 import se.gustavkarlsson.skylight.android.navigation.ScreensHost
-import se.gustavkarlsson.skylight.android.lib.navigationsetup.BackButtonController
-import se.gustavkarlsson.skylight.android.lib.navigationsetup.NavigationInstaller
+import se.gustavkarlsson.skylight.android.services.BackButtonController
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceHost
-import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceRegistry
+import se.gustavkarlsson.skylight.android.services.ServiceRegistry
 
 internal class MainActivity : AppCompatActivity(),
     NavigatorHost,
@@ -23,7 +21,7 @@ internal class MainActivity : AppCompatActivity(),
 
     private lateinit var backButtonController: BackButtonController
 
-    override val serviceRegistry: ServiceRegistry = get()
+    override val serviceRegistry: ServiceRegistry = appComponent.serviceRegistry()
 
     override val screens = DefaultScreens
 
@@ -34,7 +32,7 @@ internal class MainActivity : AppCompatActivity(),
     }
 
     private fun setupNavigation() {
-        val (navigator, backButtonController) = get<NavigationInstaller>().install(
+        val (navigator, backButtonController) = appComponent.navigationInstaller().install(
             this,
             R.id.fragmentContainer,
             listOf(screens.main),

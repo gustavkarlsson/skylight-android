@@ -1,4 +1,6 @@
-package se.gustavkarlsson.skylight.android.lib.scopedservice
+package se.gustavkarlsson.skylight.android.services
+
+import se.gustavkarlsson.skylight.android.ScopedService
 
 interface ServiceRegistry {
     fun register(id: String, tag: String, service: ScopedService)

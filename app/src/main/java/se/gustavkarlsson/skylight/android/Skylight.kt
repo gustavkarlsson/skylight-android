@@ -6,7 +6,6 @@ import com.crashlytics.android.Crashlytics
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.squareup.leakcanary.LeakCanary
 import io.reactivex.plugins.RxJavaPlugins
-import org.koin.android.ext.android.startKoin
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
@@ -21,7 +20,6 @@ internal class Skylight : MultiDexApplication(), AppComponent.Setter {
         AndroidThreeTen.init(this)
         initLogging()
         initRxJavaErrorHandling()
-        startKoin(this, modules, logger = KoinTimberLogger)
         setupDagger()
     }
 

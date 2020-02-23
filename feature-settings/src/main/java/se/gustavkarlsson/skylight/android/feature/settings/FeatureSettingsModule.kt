@@ -4,24 +4,28 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.preference.PreferenceManager
 import androidx.core.content.edit
+import dagger.Module
+import dagger.Provides
+import dagger.multibindings.IntoSet
 import io.reactivex.rxkotlin.toObservable
-import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.Settings
+import javax.inject.Singleton
 
-val featureSettingsModule = module {
+@Module
+class FeatureSettingsModule {
 
-    factory {
-        SettingsViewModel(get())
-    }
-
-    single<ModuleStarter>("settings") {
-        val analytics = get<Analytics>()
-        val placesRepository = get<PlacesRepository>()
-        val settings = get<Settings>()
-        val context = get<Context>()
+    @Provides
+    @Singleton
+    @IntoSet
+    fun moduleStarter(
+        context: Context,
+        settings: Settings,
+        placesRepository: PlacesRepository,
+        analytics: Analytics
+    ): ModuleStarter =
         object : ModuleStarter {
             @SuppressLint("CheckResult")
             override fun start() {
@@ -34,7 +38,6 @@ val featureSettingsModule = module {
                 clearOldSharedPreferences(context)
             }
         }
-    }
 }
 
 @SuppressLint("CheckResult")

@@ -1,8 +1,10 @@
 package se.gustavkarlsson.skylight.android
 
 import dagger.Component
+import se.gustavkarlsson.skylight.android.feature.background.FeatureBackgroundModule
 import se.gustavkarlsson.skylight.android.feature.googleplayservices.FeatureGooglePlayServicesModule
 import se.gustavkarlsson.skylight.android.feature.intro.FeatureIntroModule
+import se.gustavkarlsson.skylight.android.feature.settings.FeatureSettingsModule
 import se.gustavkarlsson.skylight.android.lib.analytics.LibAnalyticsModule
 import se.gustavkarlsson.skylight.android.lib.darkness.LibDarknessModule
 import se.gustavkarlsson.skylight.android.lib.geocoder.LibGeocoderModule
@@ -39,7 +41,12 @@ import javax.inject.Singleton
         LibPermissionsModule::class,
         LibScopedServiceModule::class,
         FeatureGooglePlayServicesModule::class,
-        FeatureIntroModule::class
+        FeatureIntroModule::class,
+        FeatureSettingsModule::class,
+        FeatureBackgroundModule::class,
+        AuroraReportProviderModule::class,
+        EvaluatorsModule::class,
+        FormattersModule::class
     ]
 )
 internal interface ActualAppComponent : AppComponent

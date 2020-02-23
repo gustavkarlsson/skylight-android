@@ -2,8 +2,6 @@ package se.gustavkarlsson.skylight.android.feature.about
 
 import androidx.appcompat.widget.Toolbar
 import kotlinx.android.synthetic.main.fragment_about.*
-import org.koin.android.ext.android.get
-import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.setHtml

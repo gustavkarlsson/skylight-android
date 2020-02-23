@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main
+package se.gustavkarlsson.skylight.android
 
 import com.jakewharton.rx.replayingShare
 import io.reactivex.Observable

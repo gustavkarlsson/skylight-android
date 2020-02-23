@@ -14,6 +14,11 @@
     <string name="error_no_location">Could not determine location</string>
     <string name="error_no_internet_maybe">No internet connection?</string>
 
+    <string name="aurora_chance_none">No chance</string>
+    <string name="aurora_chance_low">Low chance</string>
+    <string name="aurora_chance_medium">Medium chance</string>
+    <string name="aurora_chance_high">High chance</string>
+    <string name="aurora_chance_unknown">Unknown chance</string>
 
     <string name="html_privacy_policy_link" translatable="false">
 		&lt;a href="https://github.com/gustavkarlsson/skylight-android/blob/master/PRIVACY_POLICY.md"&gt;%s&lt;/a&gt;

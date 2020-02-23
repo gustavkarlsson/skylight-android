@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
-    id("kotlin-android")
+    kotlin("android")
+    kotlin("kapt")
     id("kotlin-android-extensions")
 }
 
@@ -29,4 +30,7 @@ dependencies {
     // TODO replace with google material banner when available
     implementation("com.sergivonavi:materialbanner:${Versions.banner}")
     implementation("de.halfbit:knot:${Versions.knot}")
+
+    // Dagger
+    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

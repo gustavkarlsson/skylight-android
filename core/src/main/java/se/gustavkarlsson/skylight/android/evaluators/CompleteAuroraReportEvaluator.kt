@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main.evaluation
+package se.gustavkarlsson.skylight.android.evaluators
 
 import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Chance

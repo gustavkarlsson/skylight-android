@@ -8,10 +8,11 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.entities.TriggerLevel
-import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
+import se.gustavkarlsson.skylight.android.ScopedService
 import se.gustavkarlsson.skylight.android.services.Settings
 
-internal class SettingsViewModel(private val settings: Settings) : ScopedService {
+internal class SettingsViewModel(private val settings: Settings) :
+    ScopedService {
 
     private val disposables = CompositeDisposable()
 

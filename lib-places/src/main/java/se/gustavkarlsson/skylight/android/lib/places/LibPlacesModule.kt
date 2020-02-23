@@ -7,50 +7,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
 import io.reactivex.disposables.CompositeDisposable
-import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 import javax.inject.Singleton
-
-val libPlacesModule = module {
-
-    single<PlacesRepository> {
-        val driver = AndroidSqliteDriver(Database.Schema, get(), "places.db")
-        val database = Database(driver)
-        SqlDelightPlacesRepository(database.dbPlaceQueries)
-    }
-
-    single<PlaceSelectionStorage> {
-        SharedPrefsPlaceSelectionStorage(context = get())
-    }
-
-    single<SelectedPlaceRepository> {
-        // TODO activity local composite disposable?
-        PlacesRepoSelectedPlaceRepository(
-            placesRepo = get(),
-            placeSelectionStorage = get(),
-            disposables = CompositeDisposable()
-        )
-    }
-
-    single<ModuleStarter>("places") {
-        val placesRepository = get<PlacesRepository>()
-        val analytics = get<Analytics>()
-        object : ModuleStarter {
-            @SuppressLint("CheckResult")
-            override fun start() {
-                placesRepository.stream()
-                    .map { it.count() }
-                    .distinctUntilChanged()
-                    .subscribe { placesCount ->
-                        analytics.setProperty("places_count", placesCount)
-                    }
-            }
-        }
-    }
-}
 
 @Module
 class LibPlacesModule {

@@ -1,7 +1,8 @@
-package se.gustavkarlsson.skylight.android.lib.navigationsetup
+package se.gustavkarlsson.skylight.android.services
 
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
+import se.gustavkarlsson.skylight.android.entities.AnimationConfig
 import se.gustavkarlsson.skylight.android.navigation.Backstack
 import se.gustavkarlsson.skylight.android.navigation.BackstackListener
 import se.gustavkarlsson.skylight.android.navigation.NavigationOverride

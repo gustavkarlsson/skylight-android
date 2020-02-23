@@ -3,16 +3,8 @@ package se.gustavkarlsson.skylight.android.lib.geomaglocation
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import org.koin.dsl.module.module
 import se.gustavkarlsson.skylight.android.services.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.services.Time
-
-val libGeomagLocationModule = module {
-
-    single<GeomagLocationProvider> {
-        GeomagLocationProviderImpl(time = get())
-    }
-}
 
 @Module
 class LibGeomagLocationModule {
