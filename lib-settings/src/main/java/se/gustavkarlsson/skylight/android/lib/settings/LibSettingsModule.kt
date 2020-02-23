@@ -4,18 +4,12 @@ import android.content.Context
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Module
 import dagger.Provides
-import dagger.Reusable
-import se.gustavkarlsson.skylight.android.services.DevelopSettings
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.Settings
 import javax.inject.Singleton
 
 @Module
 class LibSettingsModule {
-
-    @Provides
-    @Reusable
-    internal fun developSettings(): DevelopSettings = SqlDelightDevelopSettings()
 
     @Provides
     @Singleton

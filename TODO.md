@@ -1,13 +1,12 @@
 ## Soon
-* Split up core module
+* Rework how to show errors from provider
 * Show banner when no network (or just when on flight mode?)
+* Split up core module
 * App bundles
-* Consider refresh after changing debug options
 * Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
 * Rework API responses.
 * KtLint
 * Make testing use other settings
-* Switch to dagger
 * Add instrumentation testing to CI
 * Add more tests
 
@@ -16,6 +15,9 @@
 * https://developer.android.com/preview/privacy/location#background-location
 
 ## Some day
+* Add develop settings
+* Use Store lib?
+* Consider refresh after changing debug options
 * Add the thing that clears data between launches (check with Nick)
 * Add prettier detail screens
 * Separate debug menu instead of settings page
