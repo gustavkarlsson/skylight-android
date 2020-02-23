@@ -38,7 +38,7 @@ object Versions {
     val archLifecycle = "2.0.0"
     val rxrelay = "2.1.0"
     val workManager = "2.3.1"
-    val constraintLayout = "2.0.0-alpha5"
+    val constraintLayout = "2.0.0-beta4"
     val timber = "4.7.1"
     val rxpermissions = "0.10.2"
     val solarPositioning = "0.0.9"

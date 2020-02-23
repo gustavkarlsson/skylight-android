@@ -1,6 +1,5 @@
 ## Soon
 * Rework how to show errors from provider
-* Fix layout and make main screen scrollable
 * Show banner when no connectivity (check for flight mode?)
 * Split up core module
 * Rework API responses.
