@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.entities
 
-import androidx.annotation.StringRes
 import org.threeten.bp.Instant
 
 sealed class Report<out T : Any> {
@@ -12,7 +11,7 @@ sealed class Report<out T : Any> {
     ) : Report<T>()
 
     data class Error(
-        @StringRes val message: Int,
+        val cause: Cause,
         override val timestamp: Instant
     ) : Report<Nothing>()
 }

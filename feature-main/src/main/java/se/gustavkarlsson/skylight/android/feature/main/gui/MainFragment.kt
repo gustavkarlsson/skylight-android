@@ -22,6 +22,7 @@ import se.gustavkarlsson.skylight.android.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
+import se.gustavkarlsson.skylight.android.lib.ui.extensions.toArgb
 import timber.log.Timber
 import kotlin.math.roundToInt
 
@@ -201,6 +202,7 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
         doOnNext { Timber.d("Updating %s factor card: %s", factorDebugName, it) }
             .bind(this@MainFragment) { item ->
                 cardView.valueView.text = item.valueText.resolve(cardView.context)
+                cardView.valueView.setTextColor(item.valueTextColor.toArgb(cardView.context))
                 cardView.progressView.progressTintList = ColorStateList.valueOf(item.progressColor)
                 cardView.progressView.progress = item.progress?.let { progressPercent ->
                     (progressPercent * maxProgress).roundToInt() + minProgress

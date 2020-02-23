@@ -7,12 +7,14 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.LocationResult
+import se.gustavkarlsson.skylight.android.entities.Cause
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.services.Time
 import se.gustavkarlsson.skylight.android.services.WeatherProvider
 import timber.log.Timber
+import java.io.IOException
 
 internal class RetrofittedOpenWeatherMapWeatherProvider(
     private val api: OpenWeatherMapApi,
@@ -28,15 +30,15 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
                 result.map(
                     onSuccess = {
                         getReport(it)
-                            .onErrorReturnItem(
-                                Report.Error(R.string.error_no_internet_maybe, time.now())
-                            )
+                            .onErrorReturn { throwable ->
+                                Report.Error(getCause(throwable), time.now())
+                            }
                     },
                     onMissingPermissionError = {
-                        Single.just(Report.Error(R.string.error_no_location_permission, time.now()))
+                        Single.just(Report.Error(Cause.LocationPermission, time.now()))
                     },
                     onUnknownError = {
-                        Single.just(Report.Error(R.string.error_no_location, time.now()))
+                        Single.just(Report.Error(Cause.Location, time.now()))
                     }
                 )
             }
@@ -54,12 +56,12 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
                             onSuccess = ::streamReports,
                             onMissingPermissionError = {
                                 Observable.just(
-                                    Report.Error(R.string.error_no_location_permission, time.now())
+                                    Report.Error(Cause.LocationPermission, time.now())
                                 )
                             },
                             onUnknownError = {
                                 Observable.just(
-                                    Report.Error(R.string.error_no_location, time.now())
+                                    Report.Error(Cause.Location, time.now())
                                 )
                             }
                         )
@@ -75,10 +77,10 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
         getReport(location)
             .repeatWhen { it.delay(pollingInterval) }
             .toObservable()
-            .onErrorResumeNext { e: Throwable ->
+            .onErrorResumeNext { throwable: Throwable ->
                 Observable.concat(
-                    Observable.just(Report.Error(R.string.error_no_internet_maybe, time.now())),
-                    Observable.error<Report<Weather>>(e)
+                    Observable.just(Report.Error(getCause(throwable), time.now())),
+                    Observable.error<Report<Weather>>(throwable)
                 )
             }
             .retryWhen { it.delay(retryDelay) }
@@ -88,3 +90,9 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
             .map<Report<Weather>> { Report.Success(Weather(it.clouds.percentage), time.now()) }
             .doOnError { Timber.w(it, "Failed to get Weather from OpenWeatherMap API") }
 }
+
+private fun getCause(throwable: Throwable): Cause =
+    when (throwable) {
+        is IOException -> Cause.Connectivity
+        else -> Cause.Unknown
+    }

@@ -6,6 +6,7 @@ import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.LocationResult
+import se.gustavkarlsson.skylight.android.entities.Cause
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.services.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.services.Time
@@ -55,10 +56,10 @@ internal class GeomagLocationProviderImpl(
                 Report.Success(GeomagLocation(geomagneticLatitude), time.now())
             },
             onMissingPermissionError = {
-                Report.Error(R.string.error_no_location_permission, time.now())
+                Report.Error(Cause.LocationPermission, time.now())
             },
             onUnknownError = {
-                Report.Error(R.string.error_no_location, time.now())
+                Report.Error(Cause.Location, time.now())
             }
         )
 

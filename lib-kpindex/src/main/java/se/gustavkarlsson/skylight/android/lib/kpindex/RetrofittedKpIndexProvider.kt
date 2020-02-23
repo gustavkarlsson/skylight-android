@@ -4,6 +4,7 @@ import com.jakewharton.rx.replayingShare
 import io.reactivex.Observable
 import io.reactivex.Single
 import org.threeten.bp.Duration
+import se.gustavkarlsson.skylight.android.entities.Cause
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.Report
@@ -11,6 +12,7 @@ import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.services.KpIndexProvider
 import se.gustavkarlsson.skylight.android.services.Time
 import timber.log.Timber
+import java.io.IOException
 
 internal class RetrofittedKpIndexProvider(
     private val api: KpIndexApi,
@@ -21,18 +23,19 @@ internal class RetrofittedKpIndexProvider(
 
     override fun get(): Single<Report<KpIndex>> =
         getReport()
-            .onErrorReturnItem(Report.Error(R.string.error_no_internet_maybe, time.now()))
+            .onErrorReturn { throwable ->
+                Report.Error(getCause(throwable), time.now())
+            }
             .doOnSuccess { Timber.i("Provided Kp index: %s", it) }
 
     private val stream = getReport()
         .repeatWhen { it.delay(pollingInterval) }
         .toObservable()
-        .onErrorResumeNext { e: Throwable ->
+        .onErrorResumeNext { throwable: Throwable ->
+            val cause = getCause(throwable)
             Observable.concat<Report<KpIndex>>(
-                Observable.just(
-                    Report.Error(R.string.error_no_internet_maybe, time.now())
-                ),
-                Observable.error(e)
+                Observable.just(Report.Error(cause, time.now())),
+                Observable.error(throwable)
             )
         }
         .map<Loadable<Report<KpIndex>>> { Loadable.Loaded(it) }
@@ -48,3 +51,9 @@ internal class RetrofittedKpIndexProvider(
             .map<Report<KpIndex>> { Report.Success(KpIndex(it.value), time.now()) }
             .doOnError { Timber.w(it, "Failed to get Kp index from KpIndex API") }
 }
+
+private fun getCause(throwable: Throwable): Cause =
+    when (throwable) {
+        is IOException -> Cause.Connectivity
+        else -> Cause.Unknown
+    }

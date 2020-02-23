@@ -10,6 +10,7 @@ import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.LocationResult
+import se.gustavkarlsson.skylight.android.entities.Cause
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.services.DarknessProvider
@@ -56,10 +57,10 @@ internal class KlausBrunnerDarknessProvider(
                 Report.Success(Darkness(sunZenithAngle), timestamp)
             },
             onMissingPermissionError = {
-                Report.Error(R.string.error_no_location_permission, timestamp)
+                Report.Error(Cause.LocationPermission, timestamp)
             },
             onUnknownError = {
-                Report.Error(R.string.error_no_location, timestamp)
+                Report.Error(Cause.Location, timestamp)
             }
         )
 }

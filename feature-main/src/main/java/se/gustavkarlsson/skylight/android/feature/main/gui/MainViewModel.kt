@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.gui
 
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import com.ioki.textref.TextRef
 import de.halfbit.knot.Knot
@@ -11,7 +12,9 @@ import se.gustavkarlsson.koptional.Absent
 import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.koptional.Present
 import se.gustavkarlsson.koptional.toOptional
+import se.gustavkarlsson.skylight.android.ScopedService
 import se.gustavkarlsson.skylight.android.entities.Access
+import se.gustavkarlsson.skylight.android.entities.Cause
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
@@ -31,11 +34,11 @@ import se.gustavkarlsson.skylight.android.feature.main.Change
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.feature.main.State
-import se.gustavkarlsson.skylight.android.ScopedService
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import se.gustavkarlsson.skylight.android.services.Time
+import java.util.Locale
 
 internal class MainViewModel(
     private val mainKnot: Knot<State, Change>,
@@ -186,9 +189,14 @@ internal class MainViewModel(
                     is Report.Success -> {
                         val valueText = format(report.value)
                         val chance = evaluate(report.value).value
-                        FactorItem(valueText, chance, chanceToColorConverter.convert(chance))
+                        FactorItem(
+                            valueText,
+                            R.color.on_surface,
+                            chance,
+                            chanceToColorConverter.convert(chance)
+                        )
                     }
-                    is Report.Error -> FactorItem.ERROR
+                    is Report.Error -> FactorItem.error(report.cause)
                     else -> error("Invalid report: $report")
                 }
             }
@@ -199,17 +207,22 @@ internal class MainViewModel(
 
 internal data class FactorItem(
     val valueText: TextRef,
+    @ColorRes val valueTextColor: Int,
     val progress: Double?,
     val progressColor: Int
 ) {
     companion object {
         val LOADING = FactorItem(
-            valueText = TextRef("?"),
+            valueText = TextRef("…"),
+            valueTextColor = R.color.on_surface_weaker,
             progress = null,
             progressColor = ChanceToColorConverter.UNKNOWN_COLOR
         )
-        val ERROR = FactorItem(// TODO Replace with better error message
-            valueText = TextRef("error"),
+
+        fun error(cause: Cause) = FactorItem(
+            // FIXME Replace with better error message
+            valueText = TextRef(cause.toString().toLowerCase(Locale.ROOT)),
+            valueTextColor = R.color.error,
             progress = null,
             progressColor = ChanceToColorConverter.UNKNOWN_COLOR
         )
