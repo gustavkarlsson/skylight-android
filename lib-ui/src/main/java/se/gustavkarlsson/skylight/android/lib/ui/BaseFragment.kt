@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import de.halfbit.edgetoedge.EdgeToEdgeBuilder
+import de.halfbit.edgetoedge.edgeToEdge
 import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.navigation.navigator
 
@@ -20,6 +22,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
+        edgeToEdge(setupEdgeToEdge())
         initView()
         bindData()
         toolbar?.let(::setupBackNavigation)
@@ -41,6 +44,8 @@ abstract class BaseFragment : Fragment() {
     protected abstract val layoutId: Int
 
     protected open val toolbar: Toolbar? = null
+
+    protected abstract fun setupEdgeToEdge(): EdgeToEdgeBuilder.() -> Unit
 
     protected open fun initView() = Unit
 

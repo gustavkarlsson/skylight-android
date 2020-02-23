@@ -7,7 +7,7 @@
     android:padding="@dimen/screenMargin">
 
     <ImageView
-        android:id="@+id/locationImageView"
+        android:id="@+id/playStoreImageView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/largeGap"
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/smallGap"
         android:text="@string/google_play_services_title"
-        app:layout_constraintTop_toBottomOf="@id/locationImageView" />
+        app:layout_constraintTop_toBottomOf="@id/playStoreImageView" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/descriptionTextView"

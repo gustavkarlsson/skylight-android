@@ -1,6 +1,8 @@
 package se.gustavkarlsson.skylight.android.feature.about
 
 import androidx.appcompat.widget.Toolbar
+import de.halfbit.edgetoedge.Edge
+import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_about.*
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
@@ -16,6 +18,10 @@ class AboutFragment : BaseFragment() {
 
     override val toolbar: Toolbar?
         get() = toolbarView
+
+    override fun setupEdgeToEdge(): EdgeToEdgeBuilder.() -> Unit = {
+        toolbarView.fit { Edge.Top }
+    }
 
     override fun initView() {
         val context = requireContext()

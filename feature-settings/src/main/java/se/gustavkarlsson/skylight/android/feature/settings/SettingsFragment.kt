@@ -4,6 +4,8 @@ import android.content.DialogInterface
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ioki.textref.TextRef
+import de.halfbit.edgetoedge.Edge
+import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_settings.*
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.entities.TriggerLevel
@@ -26,6 +28,11 @@ class SettingsFragment : BaseFragment() {
     override val toolbar: Toolbar? get() = toolbarView
 
     private var triggerLevelDialog: DialogInterface? = null
+
+    override fun setupEdgeToEdge(): EdgeToEdgeBuilder.() -> Unit = {
+        toolbarView.fit { Edge.Top }
+        itemsRecyclerView.fit { Edge.Bottom }
+    }
 
     override fun initView() {
         itemsRecyclerView.adapter = adapter

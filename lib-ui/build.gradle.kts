@@ -19,4 +19,6 @@ dependencies {
     api("com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:${Versions.rxbinding}")
     api("com.jakewharton.rxbinding2:rxbinding-design-kotlin:${Versions.rxbinding}")
     api("com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:${Versions.rxbinding}")
+
+    api("de.halfbit:edge-to-edge:${Versions.edgeToEdge}")
 }

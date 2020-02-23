@@ -12,6 +12,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.ioki.textref.TextRef
 import com.jakewharton.rxbinding2.widget.textChanges
+import de.halfbit.edgetoedge.Edge
+import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_add_place.*
 import kotlinx.android.synthetic.main.layout_save_dialog.view.*
 import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
@@ -41,6 +43,11 @@ class AddPlaceFragment : BaseFragment() {
     private var errorSnackbarAndMessage: Pair<Snackbar, TextRef>? = null
 
     private var savePlaceDialog: DialogInterface? = null
+
+    override fun setupEdgeToEdge(): EdgeToEdgeBuilder.() -> Unit = {
+        toolbarView.fit { Edge.Top }
+        searchResultRecyclerView.fit { Edge.Bottom }
+    }
 
     override fun initView() {
         toolbarView.inflateMenu(R.menu.add_place_menu)

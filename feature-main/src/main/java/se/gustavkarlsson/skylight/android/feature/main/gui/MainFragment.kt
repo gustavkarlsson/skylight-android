@@ -9,6 +9,8 @@ import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding2.view.clicks
+import de.halfbit.edgetoedge.Edge
+import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_main.*
 import se.gustavkarlsson.skylight.android.appComponent
@@ -23,8 +25,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import timber.log.Timber
 import kotlin.math.roundToInt
 
-class MainFragment : BaseFragment(),
-    BackButtonHandler {
+class MainFragment : BaseFragment(), BackButtonHandler {
 
     override val layoutId: Int = R.layout.fragment_main
 
@@ -44,6 +45,12 @@ class MainFragment : BaseFragment(),
         viewModel.refreshLocationPermission()
     }
 
+    override fun setupEdgeToEdge(): EdgeToEdgeBuilder.() -> Unit = {
+        toolbarView.fit { Edge.Top }
+        darknessCard.fit { Edge.Bottom }
+        navigationView.fit { Edge.Top + Edge.Bottom }
+    }
+
     override fun initView() {
         toolbarView.enableNavigationDrawer()
         toolbarView.inflateMenu(R.menu.menu_main)
@@ -52,13 +59,13 @@ class MainFragment : BaseFragment(),
     private fun Toolbar.enableNavigationDrawer() {
         setNavigationIcon(R.drawable.ic_menu)
         setNavigationOnClickListener {
-            drawerLayout.openDrawer(nav_view)
+            drawerLayout.openDrawer(navigationView)
         }
     }
 
     override fun onBackPressed(): Boolean =
-        if (drawerLayout.isDrawerOpen(nav_view)) {
-            drawerLayout.closeDrawer(nav_view)
+        if (drawerLayout.isDrawerOpen(navigationView)) {
+            drawerLayout.closeDrawer(navigationView)
             true
         } else {
             false

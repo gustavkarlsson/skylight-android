@@ -5,6 +5,8 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
+import de.halfbit.edgetoedge.Edge
+import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_drawer.*
 import se.gustavkarlsson.skylight.android.feature.main.DrawerComponent
 import se.gustavkarlsson.skylight.android.feature.main.R
@@ -34,6 +36,10 @@ internal class DrawerFragment : BaseFragment() {
     private val adapter by lazy { DrawerAdapter(viewModel) }
 
     private var removePlaceDialog: DialogInterface? = null
+
+    override fun setupEdgeToEdge(): EdgeToEdgeBuilder.() -> Unit = {
+        // FIXME this is dumb...
+    }
 
     override fun initView() {
         placesRecyclerView.layoutManager = LinearLayoutManager(requireContext())

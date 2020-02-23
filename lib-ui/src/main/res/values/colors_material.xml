@@ -22,4 +22,5 @@
 
     <color name="scrim_background">#52000000</color>
     <color name="ripple">#1F000000</color>
+    <color name="bars">#52000000</color>
 </resources>

@@ -2,6 +2,8 @@ package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
 import androidx.lifecycle.Lifecycle
 import com.jakewharton.rxbinding2.view.clicks
+import de.halfbit.edgetoedge.Edge
+import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_google_play_services.*
 import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.navigation.navigator
@@ -21,6 +23,11 @@ internal class GooglePlayServicesFragment : BaseFragment() {
         getOrRegisterService("googlePlayServicesViewModel") {
             GooglePlayServicesComponent.viewModel()
         }
+    }
+
+    override fun setupEdgeToEdge(): EdgeToEdgeBuilder.() -> Unit = {
+        playStoreImageView.fit { Edge.Top }
+        installButton.fit { Edge.Bottom }
     }
 
     override fun bindData() {

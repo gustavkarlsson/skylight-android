@@ -22,4 +22,5 @@
 
     <color name="scrim_background">#52000000</color>
     <color name="ripple">#20FFFFFF</color>
+    <color name="bars">@android:color/transparent</color>
 </resources>

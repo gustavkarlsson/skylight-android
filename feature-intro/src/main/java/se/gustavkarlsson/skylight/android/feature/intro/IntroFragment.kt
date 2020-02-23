@@ -1,6 +1,8 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
 import com.jakewharton.rxbinding2.view.clicks
+import de.halfbit.edgetoedge.Edge
+import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_intro.*
 import se.gustavkarlsson.skylight.android.navigation.navigator
 import se.gustavkarlsson.skylight.android.navigation.screens
@@ -18,6 +20,11 @@ internal class IntroFragment : BaseFragment() {
         getOrRegisterService("introViewModel") {
             IntroComponent.viewModel()
         }
+    }
+
+    override fun setupEdgeToEdge(): EdgeToEdgeBuilder.() -> Unit = {
+        title.fit { Edge.Top }
+        myLocationButton.fit { Edge.Bottom }
     }
 
     override fun initView() {
