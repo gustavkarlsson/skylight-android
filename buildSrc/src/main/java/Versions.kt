@@ -10,13 +10,14 @@ object Versions {
     val kotlin = "1.3.61"
     val androidGradle = "3.5.3"
     val easylauncher = "1.3.1"
-    val jgit = "4.1.1.201511131810-r"
+    val jgit = "5.6.1.202002131546-r"
     val axionRelease = "1.11.0"
     val playPublisher = "2.5.0"
 
     // Dependencies
-    val retrofit = "2.4.0"
-    val okHttp = "3.11.0"
+    val retrofit = "2.7.1"
+    val okHttp = "3.14.4"
+    val retrofitKotlinSerialization = "0.4.0"
     val multidex = "2.0.1"
     val googleServices = "4.3.3"
     val playServicesLocation = "17.0.0"

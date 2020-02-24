@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
+    kotlin("plugin.serialization") version Versions.kotlin
 }
 
 dependencies {
@@ -9,7 +10,7 @@ dependencies {
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
-    implementation("com.squareup.retrofit2:converter-gson:${Versions.retrofit}")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:${Versions.retrofitKotlinSerialization}")
     implementation("com.squareup.retrofit2:adapter-rxjava2:${Versions.retrofit}")
 
     // Dagger

@@ -1,11 +1,14 @@
 package se.gustavkarlsson.skylight.android.lib.weather
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
 
-internal data class OpenWeatherMapWeather(
-    @SerializedName("clouds") var clouds: Clouds = Clouds()
-) {
+@Serializable
+internal data class OpenWeatherMapWeather(val clouds: Clouds) {
+    @Serializable
     data class Clouds(
-        @SerializedName("all") var percentage: Int = -1
+        /**
+         * Cloud percentage
+         */
+        val all: Int
     )
 }

@@ -87,7 +87,7 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
 
     private fun getReport(location: Location): Single<Report<Weather>> =
         api.get(location.latitude, location.longitude, "json", appId)
-            .map<Report<Weather>> { Report.Success(Weather(it.clouds.percentage), time.now()) }
+            .map<Report<Weather>> { Report.Success(Weather(it.clouds.all), time.now()) }
             .doOnError { Timber.w(it, "Failed to get Weather from OpenWeatherMap API") }
 }
 

@@ -5,5 +5,5 @@ import retrofit2.http.GET
 
 internal interface KpIndexApi {
     @GET("kp-index")
-    fun get(): Single<DoubleHolder>
+    fun get(): Single<KpIndexBody>
 }
