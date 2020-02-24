@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.FilledButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:height">@dimen/buttonHeight</item>
+        <item name="cornerRadius">@dimen/buttonHeight</item>
+    </style>
+
+    <style name="AppTheme.TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:height">@dimen/buttonHeight</item>
+        <item name="android:paddingLeft">@dimen/gutter</item>
+        <item name="android:paddingRight">@dimen/gutter</item>
+        <item name="cornerRadius">@dimen/buttonHeight</item>
+    </style>
+
+</resources>

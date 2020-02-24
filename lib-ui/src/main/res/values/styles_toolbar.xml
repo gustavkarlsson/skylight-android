@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppTheme.Toolbar" parent="@style/Widget.MaterialComponents.Toolbar.Surface">
+        <item name="android:elevation">@dimen/toolbarElevation</item>
+        <item name="titleTextColor">?android:attr/textColorPrimary</item>
+        <item name="subtitleTextColor">?android:attr/textColorSecondary</item>
+    </style>
+
+    <style name="AppTheme.ToolbarOverflowButton" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">?android:attr/textColorPrimary</item>
+    </style>
+
+</resources>
