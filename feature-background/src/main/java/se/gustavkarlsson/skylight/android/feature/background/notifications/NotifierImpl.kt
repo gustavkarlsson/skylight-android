@@ -23,6 +23,7 @@ internal class NotifierImpl(
 ) : Notifier {
 
     // FIXME check why notifications don't look good (text invisible?)
+    // FIXME verify if notifications are shown at the correct time with the correct content.
     override fun notify(notification: Notification) {
         val androidNotification = NotificationCompat.Builder(context, channelId).run {
             setSmallIcon(R.drawable.app_logo_small)
