@@ -69,28 +69,16 @@ android {
     applicationVariants.all {
         val isProductionRelease = buildType.name == "release" && flavorName == "production"
         val appName = buildString {
-            append("Skylight")
-            if (!isProductionRelease) {
-                append(" (")
-                append(flavorName.take(3).capitalize())
-                append(buildType.name.take(3).capitalize())
-                append(")")
-            }
-        }
-        resValue("string", "app_name", appName)
-
-        val appLauncherName = buildString {
             if (isProductionRelease) {
                 append("Skylight")
             } else {
                 append("SL")
-                append(" (")
+                append(' ')
                 append(flavorName.take(3).capitalize())
                 append(buildType.name.take(3).capitalize())
-                append(")")
             }
         }
-        resValue("string", "app_launcher_name", appLauncherName)
+        resValue("string", "app_name", appName)
     }
 }
 

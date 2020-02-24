@@ -2,8 +2,8 @@ package se.gustavkarlsson.skylight.android.feature.settings
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.preference.PreferenceManager
 import androidx.core.content.edit
+import androidx.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet

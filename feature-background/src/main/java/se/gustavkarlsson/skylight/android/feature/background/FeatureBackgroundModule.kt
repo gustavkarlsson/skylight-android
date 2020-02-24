@@ -188,7 +188,8 @@ class FeatureBackgroundModule {
 }
 
 private fun deleteOldNotifiedPrefsFile(context: Context) {
-    File(context.filesDir.parent + "/shared_prefs/notified_chance.xml").delete()
+    val file = File(context.applicationInfo.dataDir, "shared_prefs/notified_chance.xml")
+    file.delete()
 }
 
 private const val notificationChannelId = "aurora"
