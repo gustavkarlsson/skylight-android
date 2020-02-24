@@ -12,7 +12,7 @@ object Versions {
     val easylauncher = "1.3.1"
     val jgit = "4.1.1.201511131810-r"
     val axionRelease = "1.11.0"
-    val playPublisher = "1.2.2"
+    val playPublisher = "2.5.0"
 
     // Dependencies
     val retrofit = "2.4.0"

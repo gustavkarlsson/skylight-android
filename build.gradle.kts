@@ -19,7 +19,6 @@ buildscript {
         classpath("com.akaita.android:easylauncher:${Versions.easylauncher}")
         classpath("org.eclipse.jgit:org.eclipse.jgit:${Versions.jgit}")
         classpath("pl.allegro.tech.build:axion-release-plugin:${Versions.axionRelease}")
-        classpath("com.github.triplet.gradle:play-publisher:${Versions.playPublisher}")
         classpath("com.squareup.sqldelight:gradle-plugin:${Versions.sqldelight}")
     }
 }

@@ -9,7 +9,7 @@ plugins {
     id("io.fabric")
     id("com.akaita.android.easylauncher")
     id("pl.allegro.tech.build.axion-release")
-    id("com.github.triplet.play")
+    id("com.github.triplet.play") version Versions.playPublisher
 }
 
 scmVersion {
@@ -19,9 +19,8 @@ scmVersion {
 }
 
 play {
-    jsonFile = file("play-service-account.json")
-    setTrack("alpha")
-    uploadImages = true
+    serviceAccountCredentials = file("play-service-account.json")
+    track = "alpha"
 }
 
 android {
