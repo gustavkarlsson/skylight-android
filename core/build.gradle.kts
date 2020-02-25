@@ -6,7 +6,7 @@ plugins {
 
 dependencies {
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}")
-    api("androidx.core:core-ktx:${Versions.coreKtx}")
+    api("androidx.core:core-ktx:${Versions.androidCoreKtx}")
     api("androidx.preference:preference-ktx:${Versions.androidPreferences}")
     api("com.jakewharton.threetenabp:threetenabp:${Versions.threetenabp}")
     api("com.jakewharton.timber:timber:${Versions.timber}")
@@ -17,9 +17,8 @@ dependencies {
     api("io.reactivex.rxjava2:rxkotlin:${Versions.rxkotlin}")
     api("com.google.dagger:dagger:${Versions.dagger}")
     api("com.github.ioki-mobility:TextRef:${Versions.textref}")
-    api("androidx.fragment:fragment:${Versions.androidFragment}")
+    api("androidx.fragment:fragment-ktx:${Versions.androidFragment}")
     api("androidx.appcompat:appcompat:${Versions.androidAppcompat}")
 
-    // Dagger
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

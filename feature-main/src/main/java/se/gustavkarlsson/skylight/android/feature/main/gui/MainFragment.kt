@@ -181,7 +181,7 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
         @StringRes description: Int
     ) {
         if (currentBottomSheetTitle == title) return
-        requireFragmentManager().let {
+        parentFragmentManager.let {
             FactorBottomSheetDialogFragment.newInstance(title, description)
                 .apply {
                     onCancelListener = { currentBottomSheetTitle = null }

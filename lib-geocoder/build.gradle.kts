@@ -19,6 +19,5 @@ dependencies {
 
     implementation("com.mapbox.mapboxsdk:mapbox-sdk-services:${Versions.mapboxServices}")
 
-    // Dagger
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

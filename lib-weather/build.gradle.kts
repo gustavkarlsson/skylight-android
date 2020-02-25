@@ -23,6 +23,5 @@ dependencies {
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:${Versions.retrofitKotlinSerialization}")
     implementation("com.squareup.retrofit2:adapter-rxjava2:${Versions.retrofit}")
 
-    // Dagger
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

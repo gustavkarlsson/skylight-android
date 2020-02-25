@@ -9,6 +9,5 @@ dependencies {
 
     implementation("net.e175.klaus:solarpositioning:${Versions.solarPositioning}")
 
-    // Dagger
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

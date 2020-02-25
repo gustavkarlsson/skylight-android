@@ -12,6 +12,5 @@ dependencies {
     implementation("com.google.android.gms:play-services-gcm:${Versions.playServicesGcm}")
     implementation("io.ashdavies.rx.rxtasks:rx-tasks:${Versions.rxtasks}")
 
-    // Dagger
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

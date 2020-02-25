@@ -8,8 +8,6 @@ dependencies {
     implementation(project(":core"))
 
     implementation("com.github.tbruyelle:rxpermissions:${Versions.rxpermissions}")
-    implementation("androidx.appcompat:appcompat:${Versions.androidAppcompat}")
 
-    // Dagger
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

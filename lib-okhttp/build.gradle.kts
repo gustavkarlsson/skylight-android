@@ -9,6 +9,5 @@ dependencies {
 
     api("com.squareup.okhttp3:okhttp:${Versions.okHttp}") // Dagger requires api
 
-    // Dagger
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

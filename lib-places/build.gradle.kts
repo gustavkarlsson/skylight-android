@@ -12,6 +12,5 @@ dependencies {
     implementation("com.squareup.sqldelight:rxjava2-extensions:${Versions.sqldelight}")
     implementation("de.halfbit:knot:${Versions.knot}")
 
-    // Dagger
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

@@ -31,6 +31,5 @@ dependencies {
     implementation("com.sergivonavi:materialbanner:${Versions.banner}")
     implementation("de.halfbit:knot:${Versions.knot}")
 
-    // Dagger
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

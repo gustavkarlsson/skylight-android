@@ -7,8 +7,8 @@ dependencies {
     implementation(project(":core"))
     api(project(":lib-scopedservice"))
 
-    api("com.google.android.material:material:${Versions.androidMaterial}")
-    api("androidx.constraintlayout:constraintlayout:${Versions.constraintLayout}")
+    api("com.google.android.material:material:${Versions.material}")
+    api("androidx.constraintlayout:constraintlayout:${Versions.androidConstraintLayout}")
 
     // Rx misc
     api("io.reactivex.rxjava2:rxandroid:${Versions.rxandroid}")

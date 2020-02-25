@@ -106,15 +106,14 @@ dependencies {
     implementation(project(":feature-addplace"))
     implementation(project(":feature-main"))
 
-    implementation("androidx.multidex:multidex:${Versions.multidex}")
-    implementation("androidx.appcompat:appcompat:${Versions.androidAppcompat}")
+    implementation("androidx.multidex:multidex:${Versions.androidMultidex}")
     implementation("androidx.annotation:annotation:${Versions.androidAnnotation}")
 
     // Dagger
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 
     // Lifecycle
-    implementation("androidx.lifecycle:lifecycle-extensions:${Versions.archLifecycle}")
+    implementation("androidx.lifecycle:lifecycle-extensions:${Versions.androidLifecycle}")
 
     // Crashlytics
     implementation("com.google.firebase:firebase-core:${Versions.firebase}")
@@ -122,7 +121,6 @@ dependencies {
 
     // Leakcanary
     debugImplementation("com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}")
-    releaseImplementation("com.squareup.leakcanary:leakcanary-android-no-op:${Versions.leakcanary}")
 
     // Testing
     testImplementation("junit:junit:${Versions.junit}")

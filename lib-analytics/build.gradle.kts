@@ -10,6 +10,5 @@ dependencies {
     // Firebase
     implementation("com.google.firebase:firebase-core:${Versions.firebase}")
 
-    // Dagger
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

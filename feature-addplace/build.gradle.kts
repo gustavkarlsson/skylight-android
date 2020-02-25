@@ -10,6 +10,5 @@ dependencies {
     implementation(project(":lib-ui"))
     implementation("de.halfbit:knot:${Versions.knot}")
 
-    // Dagger
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

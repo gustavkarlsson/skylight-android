@@ -7,6 +7,5 @@ plugins {
 dependencies {
     implementation(project(":core"))
 
-    // Dagger
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }
