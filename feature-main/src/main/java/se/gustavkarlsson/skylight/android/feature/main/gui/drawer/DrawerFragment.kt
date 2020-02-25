@@ -43,6 +43,7 @@ internal class DrawerFragment : BaseFragment() {
     override fun onDestroyView() {
         removePlaceDialog?.dismiss()
         removePlaceDialog = null
+        placesRecyclerView.adapter = null
         super.onDestroyView()
     }
 

@@ -47,6 +47,7 @@ class SettingsFragment : ScreenFragment() {
     override fun onDestroyView() {
         triggerLevelDialog?.dismiss()
         triggerLevelDialog = null
+        itemsRecyclerView.adapter = null
         super.onDestroyView()
     }
 

@@ -62,6 +62,7 @@ class AddPlaceFragment : ScreenFragment() {
         errorSnackbarAndMessage = null
         savePlaceDialog?.dismiss()
         savePlaceDialog = null
+        searchResultRecyclerView.adapter = null
         super.onDestroyView()
     }
 

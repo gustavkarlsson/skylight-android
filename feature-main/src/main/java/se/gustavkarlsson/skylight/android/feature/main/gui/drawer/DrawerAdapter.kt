@@ -49,27 +49,27 @@ internal class DrawerAdapter(
             }
         }
     }
+}
 
-    class DiffCallback(
-        private val oldItems: List<DrawerItem>,
-        private val newItems: List<DrawerItem>
-    ) : DiffUtil.Callback() {
+private class DiffCallback(
+    private val oldItems: List<DrawerItem>,
+    private val newItems: List<DrawerItem>
+) : DiffUtil.Callback() {
 
-        override fun getOldListSize() = oldItems.size
+    override fun getOldListSize() = oldItems.size
 
-        override fun getNewListSize() = newItems.size
+    override fun getNewListSize() = newItems.size
 
-        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            val oldLocation = oldItems[oldItemPosition].text
-            val newLocation = newItems[newItemPosition].text
-            return oldLocation == newLocation
-        }
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        val oldLocation = oldItems[oldItemPosition].text
+        val newLocation = newItems[newItemPosition].text
+        return oldLocation == newLocation
+    }
 
-        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            val oldPlace = oldItems[oldItemPosition]
-            val newPlace = newItems[newItemPosition]
-            return oldPlace == newPlace
-        }
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        val oldPlace = oldItems[oldItemPosition]
+        val newPlace = newItems[newItemPosition]
+        return oldPlace == newPlace
     }
 }
 
