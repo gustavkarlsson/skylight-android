@@ -39,12 +39,16 @@ allprojects {
     }
 
     plugins.withType<AndroidLibraryPlugin> {
-        extension.setupForAndroid()
+        project.setupForAndroid()
     }
 
     plugins.withType<AndroidAppPlugin> {
-        extension.setupForAndroid()
+        project.setupForAndroid()
     }
+}
+
+fun Project.setupForAndroid() {
+    extensions.getByType<AndroidBaseExtension>().setupForAndroid()
 }
 
 fun AndroidBaseExtension.setupForAndroid() {
@@ -72,4 +76,8 @@ fun AndroidBaseExtension.setupForAndroid() {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArgument("clearPackageData", "true")
     }
+}
+
+task("clean", Delete::class) {
+    delete(rootProject.buildDir)
 }
