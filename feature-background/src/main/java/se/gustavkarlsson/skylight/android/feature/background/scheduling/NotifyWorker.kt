@@ -13,7 +13,7 @@ internal class NotifyWorker(
 ) : RxWorker(appContext, workerParams) {
 
     override fun createWork(): Single<Result> {
-        // FIXME Look into creating factory
+        // TODO Look into creating factory
         val work = appComponent.notifyWork()
         return work
             .toSingleDefault(Result.success())
