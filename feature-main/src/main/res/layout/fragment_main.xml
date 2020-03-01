@@ -6,18 +6,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
-            app:layout_constraintBottom_toTopOf="@+id/errorBanner"
+            app:layout_constraintBottom_toTopOf="@id/scrollView"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbarView">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
         <com.sergivonavi.materialbanner.Banner
             android:id="@+id/errorBanner"
@@ -25,8 +39,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/chance"
-            app:layout_constraintTop_toBottomOf="@+id/toolbarView"
             tools:visibility="visible" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -35,11 +47,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/screenMargin"
-            android:layout_marginTop="@dimen/nextTo"
+                    android:layout_marginTop="@dimen/screenMargin"
             android:layout_marginEnd="@dimen/screenMargin"
-            app:layout_constraintBottom_toTopOf="@+id/chanceSubtitle"
-            app:layout_constraintTop_toBottomOf="@id/errorBanner"
-            app:layout_constraintVertical_weight="0.6"
+                    android:layout_weight="0.6"
             tools:text="High Chance" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -49,9 +59,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/screenMargin"
             android:layout_marginEnd="@dimen/screenMargin"
-            app:layout_constraintBottom_toTopOf="@+id/kpIndexCard"
-            app:layout_constraintTop_toBottomOf="@+id/chance"
-            app:layout_constraintVertical_weight="0.4"
+            android:layout_weight="0.4"
             tools:text="3 minutes ago" />
 
         <se.gustavkarlsson.skylight.android.feature.main.gui.FactorCard
@@ -63,8 +71,6 @@
             android:paddingTop="@dimen/nextTo"
             android:paddingEnd="@dimen/screenMargin"
             android:paddingBottom="@dimen/nextTo"
-            app:layout_constraintBottom_toTopOf="@+id/geomagLocationCard"
-            app:layout_constraintTop_toBottomOf="@+id/chanceSubtitle"
             app:title="@string/factor_kp_index_title_compact" />
 
         <se.gustavkarlsson.skylight.android.feature.main.gui.FactorCard
@@ -76,8 +82,6 @@
             android:paddingTop="@dimen/nextTo"
             android:paddingEnd="@dimen/screenMargin"
             android:paddingBottom="@dimen/nextTo"
-            app:layout_constraintBottom_toTopOf="@+id/weatherCard"
-            app:layout_constraintTop_toBottomOf="@+id/kpIndexCard"
             app:title="@string/factor_geomag_location_title_compact" />
 
         <se.gustavkarlsson.skylight.android.feature.main.gui.FactorCard
@@ -89,8 +93,6 @@
             android:paddingTop="@dimen/nextTo"
             android:paddingEnd="@dimen/screenMargin"
             android:paddingBottom="@dimen/nextTo"
-            app:layout_constraintBottom_toTopOf="@+id/darknessCard"
-            app:layout_constraintTop_toBottomOf="@+id/geomagLocationCard"
             app:title="@string/factor_weather_title_compact" />
 
         <se.gustavkarlsson.skylight.android.feature.main.gui.FactorCard
@@ -102,11 +104,13 @@
             android:paddingTop="@dimen/nextTo"
             android:paddingEnd="@dimen/screenMargin"
             android:paddingBottom="@dimen/screenMargin"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/weatherCard"
             app:title="@string/factor_darkness_title_compact" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
@@ -114,6 +118,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start">
 
+        <!-- TODO FragmentContainerView -->
         <fragment
             android:id="@+id/drawerFragment"
             android:name="se.gustavkarlsson.skylight.android.feature.main.gui.drawer.DrawerFragment"

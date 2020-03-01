@@ -1,12 +1,12 @@
 package se.gustavkarlsson.skylight.android.feature.main.gui
 
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.net.Uri
 import android.provider.Settings
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
+import com.ioki.textref.TextRef
 import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding2.view.clicks
 import de.halfbit.edgetoedge.Edge
@@ -19,12 +19,10 @@ import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
-import se.gustavkarlsson.skylight.android.lib.ui.extensions.toArgb
 import se.gustavkarlsson.skylight.android.navigation.BackButtonHandler
 import se.gustavkarlsson.skylight.android.navigation.navigator
 import se.gustavkarlsson.skylight.android.navigation.screens
 import timber.log.Timber
-import kotlin.math.roundToInt
 
 class MainFragment : ScreenFragment(), BackButtonHandler {
 
@@ -95,21 +93,28 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
             .bind(this) { chanceSubtitle.text = it.resolve(requireContext()) }
 
         viewModel.darkness.bindToCard(
+            this,
             darknessCard,
             ::showDarknessDetails,
             "darkness"
         )
+
         viewModel.geomagLocation.bindToCard(
+            this,
             geomagLocationCard,
             ::showGeomagLocationDetails,
             "geomagLocation"
         )
+
         viewModel.kpIndex.bindToCard(
+            this,
             kpIndexCard,
             ::showKpIndexDetails,
             "kpIndex"
         )
+
         viewModel.weather.bindToCard(
+            this,
             weatherCard,
             ::showWeatherDetails,
             "weather"
@@ -148,41 +153,47 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
         startActivity(intent)
     }
 
-    private fun showKpIndexDetails() {
+    private fun showKpIndexDetails(errorText: TextRef?) {
         showFactorBottomSheetDialogFragment(
             R.string.factor_kp_index_title_full,
-            R.string.factor_kp_index_desc
+            R.string.factor_kp_index_desc,
+            errorText
         )
     }
 
-    private fun showGeomagLocationDetails() {
+    private fun showGeomagLocationDetails(errorText: TextRef?) {
         showFactorBottomSheetDialogFragment(
             R.string.factor_geomag_location_title_full,
-            R.string.factor_geomag_location_desc
+            R.string.factor_geomag_location_desc,
+            errorText
         )
     }
 
-    private fun showWeatherDetails() {
+    private fun showWeatherDetails(errorText: TextRef?) {
         showFactorBottomSheetDialogFragment(
             R.string.factor_weather_title_full,
-            R.string.factor_weather_desc
+            R.string.factor_weather_desc,
+            errorText
         )
     }
 
-    private fun showDarknessDetails() {
+    private fun showDarknessDetails(errorText: TextRef?) {
         showFactorBottomSheetDialogFragment(
             R.string.factor_darkness_title_full,
-            R.string.factor_darkness_desc
+            R.string.factor_darkness_desc,
+            errorText
         )
     }
 
     private fun showFactorBottomSheetDialogFragment(
         @StringRes title: Int,
-        @StringRes description: Int
+        @StringRes description: Int,
+        errorText: TextRef?
     ) {
         if (currentBottomSheetTitle == title) return
         parentFragmentManager.let {
-            FactorBottomSheetDialogFragment.newInstance(title, description)
+            val resolvedErrorText = errorText?.resolve(requireContext())
+            FactorBottomSheetDialogFragment.newInstance(title, description, resolvedErrorText)
                 .apply {
                     onCancelListener = { currentBottomSheetTitle = null }
                     show(it, javaClass.simpleName)
@@ -192,24 +203,17 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
     }
 
     private fun Observable<FactorItem>.bindToCard(
+        fragment: MainFragment,
         cardView: FactorCard,
-        onCardClick: () -> Unit,
+        onCardClick: (errorText: TextRef?) -> Unit,
         factorDebugName: String
     ) {
-        val maxProgress = (cardView.progressView.max * 0.97).roundToInt()
-        val minProgress = (cardView.progressView.max - maxProgress)
-
         doOnNext { Timber.d("Updating %s factor card: %s", factorDebugName, it) }
-            .bind(this@MainFragment) { item ->
-                cardView.valueView.text = item.valueText.resolve(cardView.context)
-                cardView.valueView.setTextColor(item.valueTextColor.toArgb(cardView.context))
-                cardView.progressView.progressTintList = ColorStateList.valueOf(item.progressColor)
-                cardView.progressView.progress = item.progress?.let { progressPercent ->
-                    (progressPercent * maxProgress).roundToInt() + minProgress
-                } ?: 0
+            .bind(fragment) { item ->
+                cardView.setItem(item)
+                cardView.clicks().bind(fragment) {
+                    onCardClick(item.errorText)
+                }
             }
-
-        cardView.clicks()
-            .bind(this@MainFragment) { onCardClick() }
     }
 }

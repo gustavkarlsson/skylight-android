@@ -1,11 +1,10 @@
 package se.gustavkarlsson.skylight.android.feature.main.gui
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Build
 import android.util.AttributeSet
 import android.widget.FrameLayout
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.layout_factor_card.view.card
@@ -13,6 +12,8 @@ import kotlinx.android.synthetic.main.layout_factor_card.view.progressBar
 import kotlinx.android.synthetic.main.layout_factor_card.view.title
 import kotlinx.android.synthetic.main.layout_factor_card.view.value
 import se.gustavkarlsson.skylight.android.feature.main.R
+import se.gustavkarlsson.skylight.android.lib.ui.extensions.toArgb
+import kotlin.math.roundToInt
 
 internal class FactorCard : FrameLayout {
 
@@ -32,12 +33,14 @@ internal class FactorCard : FrameLayout {
     }
 
     private fun init(context: Context, attrs: AttributeSet?) {
-        val view = inflate(getContext(),
-            R.layout.layout_factor_card, null) as MaterialCardView
+        val view = inflate(
+            getContext(),
+            R.layout.layout_factor_card, null
+        ) as MaterialCardView
         addView(view)
         context.theme.obtainStyledAttributes(attrs,
             R.styleable.FactorCard, 0, 0).apply {
-            titleView.text = getString(R.styleable.FactorCard_title)
+            title.text = getString(R.styleable.FactorCard_title)
             recycle()
         }
     }
@@ -53,12 +56,15 @@ internal class FactorCard : FrameLayout {
     override fun setOnContextClickListener(listener: OnContextClickListener?) =
         card.setOnContextClickListener(listener)
 
-    private val titleView: TextView
-        get() = title
+    fun setItem(item: FactorItem) {
+        val totalProgress = (progressBar.max * 0.97).roundToInt()
+        val minProgress = (progressBar.max - totalProgress)
 
-    val valueView: TextView
-        get() = value
-
-    val progressView: ProgressBar
-        get() = progressBar
+        value.text = item.valueText.resolve(context)
+        value.setTextColor(item.valueTextColor.toArgb(context))
+        progressBar.progressTintList = ColorStateList.valueOf(item.progressColor)
+        progressBar.progress = item.progress?.let { progress ->
+            (progress * totalProgress).roundToInt() + minProgress
+        } ?: 0
+    }
 }

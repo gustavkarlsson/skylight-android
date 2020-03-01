@@ -14,7 +14,7 @@
 		Det här värdet visar din geomagnetiska latitud.
 		Bäst förhållanden hittas kring <u>67°&#160;och&#160;-67°</u>.</string>
     <string name="factor_kp_index_title_full">Kp index</string>
-    <string name="factor_kp_index_title_compact">Kp</string>
+    <string name="factor_kp_index_title_compact">Kp index</string>
     <string name="factor_kp_index_desc">Grundorsaken till norrsken
 		kommer från interaktionen mellan solarvindar och jordens magnetosfär.
 		Detta kan representeras som ett värde på Kp index-skalan som går

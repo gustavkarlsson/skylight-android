@@ -14,7 +14,6 @@ import se.gustavkarlsson.koptional.Present
 import se.gustavkarlsson.koptional.toOptional
 import se.gustavkarlsson.skylight.android.ScopedService
 import se.gustavkarlsson.skylight.android.entities.Access
-import se.gustavkarlsson.skylight.android.entities.Cause
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
@@ -193,10 +192,18 @@ internal class MainViewModel(
                             valueText,
                             R.color.on_surface,
                             chance,
-                            chanceToColorConverter.convert(chance)
+                            chanceToColorConverter.convert(chance),
+                            errorText = null
                         )
                     }
-                    is Report.Error -> FactorItem.error(report.cause)
+                    is Report.Error -> FactorItem(
+                        valueText = TextRef("?"),
+                        valueTextColor = R.color.error,
+                        progress = null,
+                        progressColor = ChanceToColorConverter.UNKNOWN_COLOR,
+                        // FIXME Replace with better error message
+                        errorText = TextRef(report.cause.toString().toLowerCase(Locale.ROOT))
+                    )
                     else -> error("Invalid report: $report")
                 }
             }
@@ -209,22 +216,16 @@ internal data class FactorItem(
     val valueText: TextRef,
     @ColorRes val valueTextColor: Int,
     val progress: Double?,
-    val progressColor: Int
+    val progressColor: Int,
+    val errorText: TextRef?
 ) {
     companion object {
         val LOADING = FactorItem(
             valueText = TextRef("…"),
             valueTextColor = R.color.on_surface_weaker,
             progress = null,
-            progressColor = ChanceToColorConverter.UNKNOWN_COLOR
-        )
-
-        fun error(cause: Cause) = FactorItem(
-            // FIXME Replace with better error message
-            valueText = TextRef(cause.toString().toLowerCase(Locale.ROOT)),
-            valueTextColor = R.color.error,
-            progress = null,
-            progressColor = ChanceToColorConverter.UNKNOWN_COLOR
+            progressColor = ChanceToColorConverter.UNKNOWN_COLOR,
+            errorText = null
         )
     }
 }

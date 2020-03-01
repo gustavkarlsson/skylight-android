@@ -14,7 +14,7 @@
 		This value shows your geomagnetic latitude.
 		The best latitude for aurora sightings is around <u>67°&#160;and&#160;-67°</u>.</string>
     <string name="factor_kp_index_title_full">Kp index</string>
-    <string name="factor_kp_index_title_compact">Kp</string>
+    <string name="factor_kp_index_title_compact">Kp index</string>
     <string name="factor_kp_index_desc">The basic cause of the aurora involves the
 		interaction of the solar wind with the Earth\'s magnetosphere.
 		This can be represented as a value on the Kp index scale, ranging from <u>0&#160;to&#160;9</u>.

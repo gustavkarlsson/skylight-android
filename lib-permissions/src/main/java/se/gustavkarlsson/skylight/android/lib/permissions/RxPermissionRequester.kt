@@ -9,7 +9,7 @@ import se.gustavkarlsson.skylight.android.services.PermissionRequester
 import timber.log.Timber
 
 internal class RxPermissionRequester(
-    private val permissionKey: String,
+    private val permissionKeys: List<String>,
     private val accessChangeConsumer: Consumer<Access>
 ) : PermissionRequester {
 
@@ -17,7 +17,7 @@ internal class RxPermissionRequester(
         val rxPermissions = RxPermissions(fragment)
             .apply { setLogging(BuildConfig.DEBUG) }
 
-        return rxPermissions.requestEach(permissionKey)
+        return rxPermissions.requestEach(*permissionKeys.toTypedArray())
             .doOnNext {
                 when {
                     it.granted -> {
