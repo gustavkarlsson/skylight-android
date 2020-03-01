@@ -37,6 +37,11 @@
     <string name="weather_cloudy">Molnigt</string>
     <string name="weather_overcast">Mulet</string>
 
+    <string name="cause_location_permission">Åtkomst till plats saknas</string>
+    <string name="cause_location">Kunde inte hitta din nuvarande plats</string>
+    <string name="cause_connectivity">Ingen anslutning till internet</string>
+    <string name="cause_unknown">Något gick fel ☹️</string>
+
     <string name="location_permission_denied_message">För att beräkna chansen att se norrsken för din nuvarande plats,
 		var vänlig ge Skylight åtkomst till den.</string>
     <string name="location_permission_denied_forever_message">Åtkomst till din plats är nekad permanent.</string>

@@ -14,6 +14,7 @@ import se.gustavkarlsson.koptional.Present
 import se.gustavkarlsson.koptional.toOptional
 import se.gustavkarlsson.skylight.android.ScopedService
 import se.gustavkarlsson.skylight.android.entities.Access
+import se.gustavkarlsson.skylight.android.entities.Cause
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
@@ -37,7 +38,6 @@ import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import se.gustavkarlsson.skylight.android.services.Time
-import java.util.Locale
 
 internal class MainViewModel(
     private val mainKnot: Knot<State, Change>,
@@ -201,8 +201,7 @@ internal class MainViewModel(
                         valueTextColor = R.color.error,
                         progress = null,
                         progressColor = ChanceToColorConverter.UNKNOWN_COLOR,
-                        // FIXME Replace with better error message
-                        errorText = TextRef(report.cause.toString().toLowerCase(Locale.ROOT))
+                        errorText = format(report.cause)
                     )
                     else -> error("Invalid report: $report")
                 }
@@ -210,6 +209,16 @@ internal class MainViewModel(
         }
 
     fun refreshLocationPermission() = permissionChecker.refresh()
+}
+
+private fun format(cause: Cause): TextRef {
+    val id = when (cause) {
+        Cause.LocationPermission -> R.string.cause_location_permission
+        Cause.Location -> R.string.cause_location
+        Cause.Connectivity -> R.string.cause_connectivity
+        Cause.Unknown -> R.string.cause_unknown
+    }
+    return TextRef(id)
 }
 
 internal data class FactorItem(
