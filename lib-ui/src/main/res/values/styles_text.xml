@@ -16,11 +16,11 @@
     </style>
 
     <style name="AppTheme.TextBody1" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textColor">?android:attr/textColor</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 
     <style name="AppTheme.TextBody2" parent="TextAppearance.MaterialComponents.Body2">
-        <item name="android:textColor">?android:attr/textColor</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
     </style>
 
 </resources>

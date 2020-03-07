@@ -1,5 +1,4 @@
 ## Soon
-* Rework how to show errors from provider
 * Show banner when no connectivity (check for flight mode?)
 * Split up core module
 * Rework API responses.
@@ -8,6 +7,7 @@
 * Add prettier detail screens
 
 ## Some day
+* Oversee text style usage (also use TextAppearance instead of style in XML)
 * Use Store lib?
 * KtLint
 * Make testing use other settings
