@@ -11,6 +11,7 @@ internal class NotificationEvaluatorImpl(
 ) : NotificationEvaluator {
 
     override fun shouldNotify(notification: Notification): Boolean {
+        if (notification.data.isEmpty()) return false
         val lastData = lastNotificationRepository.get() ?: return true
         if (lastData.isOutdated) return true
         return notification hasHigherChanceThan lastData
