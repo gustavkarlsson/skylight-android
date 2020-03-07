@@ -14,7 +14,8 @@ import se.gustavkarlsson.skylight.android.services.ServiceRegistry
 
 internal class MainActivity : AppCompatActivity(),
     NavigatorHost,
-    ScreensHost, ServiceHost,
+    ScreensHost,
+    ServiceHost,
     BackstackListener {
 
     override lateinit var navigator: Navigator private set
@@ -37,7 +38,7 @@ internal class MainActivity : AppCompatActivity(),
             R.id.fragmentContainer,
             listOf(screens.main),
             appComponent.navigationOverrides(),
-            emptyList(),
+            listOf(this),
             animationConfig
         )
         this.navigator = navigator
