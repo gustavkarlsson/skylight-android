@@ -16,25 +16,26 @@ internal class SettingsViewModel(private val settings: Settings) :
 
     private val disposables = CompositeDisposable()
 
-    private val showSelectTriggerLevelRelay = PublishRelay.create<Place>()
-    val showSelectTriggerLevel: Observable<Place> = showSelectTriggerLevelRelay
+    private val showSelectTriggerLevelRelay = PublishRelay.create<Pair<Place, TriggerLevel>>()
+    val showSelectTriggerLevel: Observable<Pair<Place, TriggerLevel>> = showSelectTriggerLevelRelay
 
     val settingsItems: Observable<List<SettingsItem>> =
         settings.streamNotificationTriggerLevels()
             .map { levels ->
                 val triggerLevelItems = levels.map { (place, triggerLevel) ->
-                    SettingsItem.TriggerLevel(
+                    SettingsItem.TriggerLevelItem(
                         place.name,
                         triggerLevel.longText,
-                        place
+                        place,
+                        triggerLevel
                     )
                 }
-                listOf(SettingsItem.Title) + triggerLevelItems
+                listOf(SettingsItem.TitleItem) + triggerLevelItems
             }
             .observeOn(AndroidSchedulers.mainThread())
 
-    fun onTriggerLevelItemClicked(place: Place) {
-        showSelectTriggerLevelRelay.accept(place)
+    fun onTriggerLevelItemClicked(place: Place, triggerLevel: TriggerLevel) {
+        showSelectTriggerLevelRelay.accept(place to triggerLevel)
     }
 
     fun onTriggerLevelSelected(place: Place, triggerLevel: TriggerLevel) {
@@ -45,12 +46,13 @@ internal class SettingsViewModel(private val settings: Settings) :
 }
 
 internal sealed class SettingsItem {
-    object Title : SettingsItem()
+    object TitleItem : SettingsItem()
 
-    data class TriggerLevel(
+    data class TriggerLevelItem(
         val title: TextRef,
         val subtitle: TextRef,
-        val place: Place
+        val place: Place,
+        val triggerLevel: TriggerLevel
     ) : SettingsItem()
 }
 

@@ -41,7 +41,9 @@ class SettingsFragment : ScreenFragment() {
     override fun bindData() {
         viewModel.settingsItems.bind(this, adapter::setItems)
 
-        viewModel.showSelectTriggerLevel.bind(this, ::showTriggerLevelDialog)
+        viewModel.showSelectTriggerLevel.bind(this) { (place, triggerLevel) ->
+            showTriggerLevelDialog(place, triggerLevel)
+        }
     }
 
     override fun onDestroyView() {
@@ -51,17 +53,19 @@ class SettingsFragment : ScreenFragment() {
         super.onDestroyView()
     }
 
-    private fun showTriggerLevelDialog(place: Place) {
+    private fun showTriggerLevelDialog(place: Place, currentTriggerLevel: TriggerLevel) {
         triggerLevelDialog?.dismiss()
         val text = TriggerLevel.values()
             .map { it.shortText.resolve(requireContext()) }
             .toTypedArray()
-        val listener = DialogInterface.OnClickListener { _, which ->
+        val checked = TriggerLevel.values().indexOf(currentTriggerLevel)
+        val listener = DialogInterface.OnClickListener { dialog, which ->
             val triggerLevel = TriggerLevel.values()[which]
             viewModel.onTriggerLevelSelected(place, triggerLevel)
+            dialog.dismiss()
         }
         val dialog = MaterialAlertDialogBuilder(context)
-            .setItems(text, listener)
+            .setSingleChoiceItems(text, checked, listener)
             .create()
         triggerLevelDialog = dialog
         dialog.show()

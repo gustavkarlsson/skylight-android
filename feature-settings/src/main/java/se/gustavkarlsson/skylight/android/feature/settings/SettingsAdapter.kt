@@ -30,22 +30,22 @@ internal class SettingsAdapter(
     override fun getItemCount() = items.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val triggerLevelItem = items[position] as? SettingsItem.TriggerLevel
+        val triggerLevelItem = items[position] as? SettingsItem.TriggerLevelItem
         if (triggerLevelItem != null) holder.itemView.bind(triggerLevelItem)
     }
 
-    private fun View.bind(item: SettingsItem.TriggerLevel) {
+    private fun View.bind(item: SettingsItem.TriggerLevelItem) {
         title.text = item.title.resolve(context)
         subtitle.text = item.subtitle.resolve(context)
         setOnClickListener {
-            viewModel.onTriggerLevelItemClicked(item.place)
+            viewModel.onTriggerLevelItemClicked(item.place, item.triggerLevel)
         }
     }
 
     override fun getItemViewType(position: Int): Int =
         when (items[position]) {
-            SettingsItem.Title -> TYPE_TITLE
-            is SettingsItem.TriggerLevel -> TYPE_TRIGGER_LEVEL
+            SettingsItem.TitleItem -> TYPE_TITLE
+            is SettingsItem.TriggerLevelItem -> TYPE_TRIGGER_LEVEL
         }
 }
 
