@@ -35,7 +35,6 @@
         <item name="android:textColorSecondary">@color/on_background_weaker</item>
 
         <item name="toolbarStyle">@style/AppTheme.Toolbar</item>
-        <item name="actionOverflowButtonStyle">@style/AppTheme.ToolbarOverflowButton</item>
         <item name="android:textColorHint">?android:attr/textColorSecondary</item>
         <item name="bottomSheetDialogTheme">@style/AppTheme.BottomSheetDialogTheme</item>
     </style>

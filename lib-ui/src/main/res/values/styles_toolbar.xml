@@ -7,8 +7,4 @@
         <item name="subtitleTextColor">?android:attr/textColorSecondary</item>
     </style>
 
-    <style name="AppTheme.ToolbarOverflowButton" parent="Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:tint">?android:attr/textColorPrimary</item>
-    </style>
-
 </resources>
