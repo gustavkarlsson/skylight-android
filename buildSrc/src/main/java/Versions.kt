@@ -56,11 +56,11 @@ object Versions {
     val sqldelight = "1.2.2"
     val leakcanary = "2.2"
     val banner = "1.2.0"
-    val mapboxServices = "4.7.0"
-    val knot = "1.8.1"
+    val mapboxServices = "5.0.0"
+    val knot = "3.0.2"
     val edgeToEdge = "0.8"
-    val koptional = "0.2.0"
-    val simpleStack = "2.0.3"
+    val koptional = "0.4.0"
+    val simpleStack = "2.3.0"
 
     // Test
     val junit = "4.12"
