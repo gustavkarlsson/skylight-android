@@ -29,7 +29,7 @@ internal class NotifierImpl(
             setSmallIcon(R.drawable.app_logo_small)
             setContentTitle(context.getString(R.string.possible_aurora))
             createColor()?.let { color = it }
-            setContentText(createText(notification))
+            setText(notification)
             setCategory(NotificationCompat.CATEGORY_RECOMMENDATION)
             setAutoCancel(true)
             priority = createPriority(notification)
@@ -40,6 +40,16 @@ internal class NotifierImpl(
 
         notificationManager.notify(1, androidNotification)
         analytics.logEvent("notification_sent")
+    }
+
+    private fun NotificationCompat.Builder.setText(notification: Notification) {
+        val lines = createText(notification).lines()
+        setContentText(lines.first())
+        val inboxStyle = NotificationCompat.InboxStyle()
+        lines.forEach {
+            inboxStyle.addLine(it)
+        }
+        setStyle(inboxStyle)
     }
 
     private fun createPriority(notification: Notification): Int =
