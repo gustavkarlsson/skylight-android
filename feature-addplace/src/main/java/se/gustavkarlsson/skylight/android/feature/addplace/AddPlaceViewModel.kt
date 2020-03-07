@@ -16,7 +16,6 @@ internal class AddPlaceViewModel(
 ) : ScopedService {
 
     override fun onCleared() {
-        super.onCleared()
         knot.dispose()
     }
 

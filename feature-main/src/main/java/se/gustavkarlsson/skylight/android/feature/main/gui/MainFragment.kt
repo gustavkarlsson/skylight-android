@@ -41,7 +41,13 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
 
     override fun onStart() {
         super.onStart()
+        viewModel.resumeStreaming()
         viewModel.refreshLocationPermission()
+    }
+
+    override fun onStop() {
+        viewModel.pauseStreaming()
+        super.onStop()
     }
 
     override fun setupEdgeToEdge(): EdgeToEdgeBuilder.() -> Unit = {

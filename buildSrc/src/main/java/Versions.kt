@@ -57,7 +57,7 @@ object Versions {
     val leakcanary = "2.2"
     val banner = "1.2.0"
     val mapboxServices = "5.0.0"
-    val knot = "3.0.2"
+    val knot = "3.0.1" // 3.0.2 is broken (https://github.com/beworker/knot/issues/28)
     val edgeToEdge = "0.8"
     val koptional = "0.4.0"
     val simpleStack = "2.3.0"

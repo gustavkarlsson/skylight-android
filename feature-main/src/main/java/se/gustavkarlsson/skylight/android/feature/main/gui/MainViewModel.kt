@@ -58,13 +58,13 @@ internal class MainViewModel(
     nowTextThreshold: Duration
 ) : ScopedService {
 
-    init {
-        mainKnot.change.accept(Change.StreamToggle(true))
+    override fun onCleared() {
+        mainKnot.dispose()
     }
 
-    override fun onCleared() {
-        mainKnot.change.accept(Change.StreamToggle(false))
-    }
+    fun resumeStreaming() = mainKnot.change.accept(Change.StreamToggle(true))
+
+    fun pauseStreaming() = mainKnot.change.accept(Change.StreamToggle(false))
 
     val toolbarTitleText: Observable<TextRef> = mainKnot.state
         .map {
