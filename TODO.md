@@ -20,6 +20,7 @@
 * Separate debug menu instead of settings page
 * Add more KTX
 * Firebase performance monitoring
+* Hyperion?
 * Add manual clearing of "notification sent" in develop mode
 * Add more testing options (individual overrides for example)
 * Look into country changes while app running (Locale etc)
