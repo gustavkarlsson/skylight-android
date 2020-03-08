@@ -118,8 +118,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start">
 
-        <!-- TODO FragmentContainerView -->
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/drawerFragment"
             android:name="se.gustavkarlsson.skylight.android.feature.main.gui.drawer.DrawerFragment"
             android:layout_width="match_parent"
