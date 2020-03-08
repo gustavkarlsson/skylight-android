@@ -9,7 +9,6 @@ import se.gustavkarlsson.skylight.android.feature.background.notifications.Notif
 import se.gustavkarlsson.skylight.android.feature.background.notifications.PlaceWithChance
 import timber.log.Timber
 
-// FIXME use cache?
 internal class SharedPrefsLastNotificationRepository(
     context: Context
 ) : LastNotificationRepository {

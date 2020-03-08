@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import androidx.core.content.edit
 
-// FIXME use cache?
 internal class SharedPrefsPlaceSelectionStorage(context: Context) : PlaceSelectionStorage {
 
     private val sharedPreferences = context.getSharedPreferences(PREFS_FILE_NAME, MODE_PRIVATE)
