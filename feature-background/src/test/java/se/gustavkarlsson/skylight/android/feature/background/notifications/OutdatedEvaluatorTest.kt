@@ -4,18 +4,16 @@ import assertk.assert
 import assertk.assertions.isEqualTo
 import assertk.tableOf
 import com.nhaarman.mockito_kotlin.whenever
-import io.reactivex.Single
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import org.threeten.bp.Instant
-import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.temporal.ChronoUnit.DAYS
 import org.threeten.bp.temporal.ChronoUnit.HOURS
-import se.gustavkarlsson.skylight.android.services.providers.Time
+import se.gustavkarlsson.skylight.android.services.Time
 
 @RunWith(MockitoJUnitRunner::class)
 internal class OutdatedEvaluatorTest {
@@ -27,7 +25,7 @@ internal class OutdatedEvaluatorTest {
 
     @Before
     fun setUp() {
-        whenever(mockTime.zoneId()).thenReturn(Single.just(ZONE_OFFSET))
+        whenever(mockTime.zoneId()).thenReturn(ZONE_OFFSET)
         impl = OutdatedEvaluator(
             mockTime
         )
@@ -49,10 +47,7 @@ internal class OutdatedEvaluatorTest {
             .row(AFTER_NOON.minus(1, DAYS), BEFORE_NOON, true)
             .row(AFTER_NOON.minus(1, DAYS), AFTER_NOON, true)
             .forAll { time, now, expected ->
-                whenever(mockTime.now()).thenReturn(Single.just(now))
-                whenever(mockTime.localDate()).thenReturn(
-                    Single.just(LocalDateTime.ofInstant(now, ZONE_OFFSET).toLocalDate())
-                )
+                whenever(mockTime.now()).thenReturn(now)
 
                 val actual = impl.isOutdated(time)
 

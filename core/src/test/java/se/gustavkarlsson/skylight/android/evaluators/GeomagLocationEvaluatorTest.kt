@@ -1,12 +1,14 @@
-package se.gustavkarlsson.skylight.android.services_impl.evaluation
+package se.gustavkarlsson.skylight.android.evaluators
 
 import assertk.assert
+import assertk.assertions.isBetween
+import assertk.assertions.isEqualTo
 import org.junit.Test
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.IMPOSSIBLE
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.MAX
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
-import se.gustavkarlsson.skylight.android.services_impl.evaluation.GeomagLocationEvaluator.BEST
+import se.gustavkarlsson.skylight.android.evaluators.GeomagLocationEvaluator.BEST
 
 class GeomagLocationEvaluatorTest {
 
@@ -51,13 +53,13 @@ class GeomagLocationEvaluatorTest {
     fun _60LatitudeEvaluatesToMediumChance() {
         val chance = impl.evaluate(GeomagLocation(60.0))
 
-        assertk.assert(chance).isBetween(Chance(0.4), Chance(0.6))
+        assert(chance).isBetween(Chance(0.4), Chance(0.6))
     }
 
     @Test
     fun minus60LatitudeEvaluatesToMediumChance() {
         val chance = impl.evaluate(GeomagLocation(-60.0))
 
-        assertk.assert(chance).isBetween(Chance(0.4), Chance(0.6))
+        assert(chance).isBetween(Chance(0.4), Chance(0.6))
     }
 }

@@ -2,9 +2,11 @@ package se.gustavkarlsson.skylight.android.lib.kpindex
 
 import assertk.assert
 import assertk.assertions.isBetween
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
-import io.reactivex.Single
+import kotlinx.serialization.UnstableDefault
+import kotlinx.serialization.json.Json
 import okhttp3.Call
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
@@ -21,8 +23,9 @@ import org.robolectric.RobolectricTestRunner
 import org.threeten.bp.Instant
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
-import se.gustavkarlsson.skylight.android.services.providers.Time
+import se.gustavkarlsson.skylight.android.entities.Report
+import se.gustavkarlsson.skylight.android.extensions.seconds
+import se.gustavkarlsson.skylight.android.services.Time
 
 @RunWith(RobolectricTestRunner::class)
 class RetrofittedKpIndexProviderTest {
@@ -33,7 +36,7 @@ class RetrofittedKpIndexProviderTest {
     fun setUp() {
         mockedClient = mockClient(200, "fixtures/kp_index_report.json", "application/json")
         mockedTime = mock {
-            on(it.now()).thenReturn(Single.just(Instant.EPOCH))
+            on(it.now()).thenReturn(Instant.EPOCH)
         }
     }
 
@@ -72,17 +75,18 @@ class RetrofittedKpIndexProviderTest {
         return IOUtils.toByteArray(classLoader.getResource(resourcePath).openStream())
     }
 
+    @UnstableDefault
     @Test
     fun parsesKpIndexCorrectly() {
         val service = RetrofittedKpIndexProvider(Retrofit.Builder()
             .client(mockedClient)
             .baseUrl("http://mocked.com")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(Json.nonstrict.asConverterFactory(MediaType.get("application/json")))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-            .create(KpIndexApi::class.java), 1, mockedTime)
+            .create(KpIndexApi::class.java), mockedTime, 2.seconds, 5.seconds)
 
-        val kpIndex = service.get().blockingGet().value!!
+        val kpIndex = (service.get().blockingGet() as Report.Success).value
 
         assert(kpIndex.value).isBetween(1.32, 1.34)
     }

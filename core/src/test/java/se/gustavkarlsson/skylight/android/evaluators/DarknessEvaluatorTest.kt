@@ -1,6 +1,8 @@
-package se.gustavkarlsson.skylight.android.services_impl.evaluation
+package se.gustavkarlsson.skylight.android.evaluators
 
 import assertk.assert
+import assertk.assertions.isBetween
+import assertk.assertions.isEqualTo
 import org.junit.Test
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.IMPOSSIBLE

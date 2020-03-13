@@ -131,25 +131,6 @@ dependencies {
     testImplementation("com.willowtreeapps.assertk:assertk:${Versions.assertk}") {
         exclude("org.jetbrains.kotlin")
     }
-
-    // Instrumentation testing
-    androidTestImplementation("com.willowtreeapps.assertk:assertk:${Versions.assertk}") {
-        exclude("org.jetbrains.kotlin")
-    }
-    androidTestImplementation("androidx.annotation:annotation:${Versions.androidAnnotation}")
-    androidTestImplementation("androidx.test:runner:${Versions.androidSupportTest}")
-    androidTestImplementation("androidx.test.ext:junit:${Versions.androidSupportTest}")
-    androidTestImplementation("androidx.test:rules:${Versions.androidSupportTest}")
-    androidTestUtil("androidx.test:orchestrator:${Versions.androidSupportTest}")
-    androidTestImplementation("androidx.test.espresso:espresso-core:${Versions.espresso}")
-    androidTestImplementation("androidx.test.espresso:espresso-intents:${Versions.espressoIntents}")
-    androidTestImplementation("org.mockito:mockito-android:${Versions.mockito}")
-    androidTestImplementation("com.nhaarman:mockito-kotlin-kt1.1:${Versions.mockitoKotlin}") {
-        exclude("org.jetbrains.kotlin")
-    }
-    androidTestImplementation("commons-io:commons-io:${Versions.commonsIo}")
-    androidTestImplementation("com.agoda.kakao:kakao:${Versions.kakao}")
-    androidTestImplementation("androidx.test.uiautomator:uiautomator:${Versions.uiAutomator}")
 }
 
 /**

@@ -6,6 +6,7 @@
 * Use cases instead of repositories?
 * Add prettier detail screens
 * Improve feature graphics
+* Upgrade TextRef
 
 ## Some day
 * Oversee text style usage (also use TextAppearance instead of style in XML)

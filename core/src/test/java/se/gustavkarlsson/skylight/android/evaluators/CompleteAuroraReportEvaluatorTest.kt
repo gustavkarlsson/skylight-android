@@ -1,6 +1,9 @@
-package se.gustavkarlsson.skylight.android.services_impl.evaluation
+package se.gustavkarlsson.skylight.android.evaluators
 
 import assertk.assert
+import assertk.assertions.isBetween
+import assertk.assertions.isEqualTo
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.whenever
 import org.junit.Before
 import org.junit.Test
@@ -8,16 +11,15 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.entities.AuroraReport
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.IMPOSSIBLE
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.UNKNOWN
+import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.entities.Weather
-import se.gustavkarlsson.skylight.android.mockito.any
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 
 @RunWith(MockitoJUnitRunner::class)
@@ -35,21 +37,31 @@ class CompleteAuroraReportEvaluatorTest {
     lateinit var mockDarknessEvaluator: ChanceEvaluator<Darkness>
 
     @Mock
-    lateinit var mockAuroraReport: AuroraReport
+    lateinit var mockAuroraReport: CompleteAuroraReport
 
-    lateinit var impl: AuroraReportEvaluator
+    private lateinit var impl: CompleteAuroraReportEvaluator
 
     @Before
     fun setUp() {
         whenever(mockAuroraReport.kpIndex).thenReturn(Report.Success(KpIndex(7.0), Instant.EPOCH))
         whenever(mockAuroraReport.weather).thenReturn(Report.Success(Weather(50), Instant.EPOCH))
-        whenever(mockAuroraReport.geomagLocation).thenReturn(Report.Success(GeomagLocation(50.0), Instant.EPOCH))
-        whenever(mockAuroraReport.darkness).thenReturn(Report.Success(Darkness(140.0), Instant.EPOCH))
+        whenever(mockAuroraReport.geomagLocation).thenReturn(
+            Report.Success(
+                GeomagLocation(50.0),
+                Instant.EPOCH
+            )
+        )
+        whenever(mockAuroraReport.darkness).thenReturn(
+            Report.Success(
+                Darkness(140.0),
+                Instant.EPOCH
+            )
+        )
         whenever(mockKpIndexEvaluator.evaluate(any())).thenReturn(Chance(0.5))
         whenever(mockGeomagLocationEvaluator.evaluate(any())).thenReturn(Chance(0.5))
         whenever(mockWeatherEvaluator.evaluate(any())).thenReturn(Chance(0.5))
         whenever(mockDarknessEvaluator.evaluate(any())).thenReturn(Chance(0.5))
-        impl = AuroraReportEvaluator(
+        impl = CompleteAuroraReportEvaluator(
             mockKpIndexEvaluator,
             mockGeomagLocationEvaluator,
             mockWeatherEvaluator,
