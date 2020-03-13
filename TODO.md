@@ -5,6 +5,7 @@
 * Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
 * Use cases instead of repositories?
 * Add prettier detail screens
+* Improve feature graphics
 
 ## Some day
 * Oversee text style usage (also use TextAppearance instead of style in XML)
