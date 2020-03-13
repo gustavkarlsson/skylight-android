@@ -12,7 +12,7 @@ object Versions {
     val easylauncher = "1.3.1"
     val jgit = "5.6.1.202002131546-r"
     val axionRelease = "1.11.0"
-    val playPublisher = "2.5.0"
+    val playPublisher = "2.7.2"
 
     // Dependencies
     val googleServices = "4.3.3"
