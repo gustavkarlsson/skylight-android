@@ -1,1 +1,7 @@
-Små förbättringar kring text och färg
+Ny funktion:
+Du kan nu spåra norrsken på andra platser än din nuvarande! Bara sök efter den plats du vill lägga till och spara den.
+
+Mindre förbättringar:
+* Förbättrat tema och färger
+* Mer informativa felmeddelanden
+* Appen startar lite snabbare än förut

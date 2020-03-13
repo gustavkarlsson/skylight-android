@@ -8,6 +8,4 @@ Conditions are based on 4 factors:
 
 Because of this, you will not get notifications in broad daylight or on your vacation in Spain, but only when there is a REAL chance of seeing the aurora.
 
-The app is designed to be non-intrusive. You can use it to check manually, but the best way is to just turn on notifications to let the app do the work for you.
-
 I Hope you enjoy it :)

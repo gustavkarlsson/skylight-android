@@ -1,1 +1,7 @@
-Minor improvements to colors and text
+New feature:
+You can now track the aurora chance in other locations than your own! Just search for the location you wish to track and save it.
+
+Minor improvements:
+* Improved theme and colors
+* More informative error messages
+* The app starts a bit faster than before

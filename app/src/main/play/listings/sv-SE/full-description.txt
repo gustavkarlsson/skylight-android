@@ -6,8 +6,6 @@ Förhållandena baseras på 4 faktorer:
 - Sikt pga väder
 - Utomhusmörker
 
-På grund av detta kommer du inte få meddelanden i dagsljus eller under Spanienresan, utan enbart när det finns en RIKTIG chans att se norrsken.
-
-Appen är gjord för att vara så bekväm som möjligt. Du kan använda den för att kolla förhållandena manuellt, men det bästa är att aktivera aviseringar och låta appen meddela dig istället.
+På grund av detta kommer du inte få meddelanden i dagsljus eller under Spanienresan, utan enbart när det finns en VERKLIG chans att se norrsken.
 
 Hoppas du gillar den :)
