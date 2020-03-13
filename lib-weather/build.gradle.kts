@@ -6,6 +6,8 @@ plugins {
 }
 
 android {
+    commonConfig()
+
     defaultConfig {
         val openWeatherMapApiKey = findProperty("openweathermap_api_key") ?: run {
             logger.warn("WARNING: openweathermap_api_key not set")

@@ -5,6 +5,10 @@ plugins {
     id("kotlin-android-extensions")
 }
 
+android {
+    commonConfig()
+}
+
 dependencies {
     implementation(project(":core"))
 

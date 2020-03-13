@@ -24,6 +24,8 @@ play {
 }
 
 android {
+    commonConfig()
+
     defaultConfig {
         applicationId = "se.gustavkarlsson.skylight.android"
         versionCode = generateVersionCode(scmVersion.version)

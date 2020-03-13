@@ -3,6 +3,10 @@ plugins {
     id("kotlin-android")
 }
 
+android {
+    commonConfig()
+}
+
 dependencies {
     implementation(project(":core"))
     api(project(":lib-scopedservice"))

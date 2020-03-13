@@ -5,6 +5,8 @@ plugins {
 }
 
 android {
+    commonConfig()
+
     defaultConfig {
         val mapboxApiKey = findProperty("mapbox_api_key") ?: run {
             logger.warn("WARNING: mapbox_api_key not set")

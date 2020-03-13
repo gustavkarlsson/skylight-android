@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import com.android.build.gradle.AppPlugin as AndroidAppPlugin
 import com.android.build.gradle.BaseExtension as AndroidBaseExtension
 import com.android.build.gradle.LibraryPlugin as AndroidLibraryPlugin
 
@@ -36,45 +35,6 @@ allprojects {
 
     tasks.withType<KotlinCompile> {
         kotlinOptions.jvmTarget = Versions.java.toString()
-    }
-
-    plugins.withType<AndroidLibraryPlugin> {
-        project.setupForAndroid()
-    }
-
-    plugins.withType<AndroidAppPlugin> {
-        project.setupForAndroid()
-    }
-}
-
-fun Project.setupForAndroid() {
-    extensions.getByType<AndroidBaseExtension>().setupForAndroid()
-}
-
-fun AndroidBaseExtension.setupForAndroid() {
-    compileSdkVersion(Versions.compileSdk)
-    buildToolsVersion(Versions.buildTools)
-
-    packagingOptions {
-        exclude("META-INF/LICENSE")
-        exclude("META-INF/NOTICE")
-    }
-
-    testOptions {
-        unitTests.isReturnDefaultValues = true
-        execution = "ANDROIDX_TEST_ORCHESTRATOR"
-    }
-
-    compileOptions {
-        sourceCompatibility = Versions.java
-        targetCompatibility = Versions.java
-    }
-
-    defaultConfig {
-        minSdkVersion(Versions.minSdk)
-        targetSdkVersion(Versions.targetSdk)
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArgument("clearPackageData", "true")
     }
 }
 

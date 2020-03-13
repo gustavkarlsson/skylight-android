@@ -5,6 +5,10 @@ plugins {
     id("com.squareup.sqldelight")
 }
 
+android {
+    commonConfig()
+}
+
 dependencies {
     implementation(project(":core"))
 

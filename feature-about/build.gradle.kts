@@ -10,6 +10,8 @@ plugins {
 }
 
 android {
+    commonConfig()
+
     defaultConfig {
         val repo = RepositoryBuilder().run {
             gitDir = File(rootDir, "/.git")

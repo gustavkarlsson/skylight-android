@@ -4,6 +4,10 @@ plugins {
     kotlin("kapt")
 }
 
+android {
+    commonConfig()
+}
+
 dependencies {
     implementation(project(":core"))
 

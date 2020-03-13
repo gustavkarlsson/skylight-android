@@ -6,6 +6,8 @@ plugins {
 }
 
 android {
+    commonConfig()
+
     flavorDimensions("environment")
 
     productFlavors {

@@ -4,6 +4,10 @@ plugins {
     kotlin("kapt")
 }
 
+android {
+    commonConfig()
+}
+
 dependencies {
     implementation(project(":core"))
     implementation(project(":lib-ui")) // TODO only used for coloring notification?

@@ -5,6 +5,10 @@ plugins {
     kotlin("plugin.serialization") version Versions.kotlin
 }
 
+android {
+    commonConfig()
+}
+
 dependencies {
     implementation(project(":core"))
 

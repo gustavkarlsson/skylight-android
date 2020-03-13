@@ -4,6 +4,10 @@ plugins {
     kotlin("kapt")
 }
 
+android {
+    commonConfig()
+}
+
 dependencies {
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}")
     api("androidx.core:core-ktx:${Versions.androidCoreKtx}")
