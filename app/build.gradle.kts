@@ -33,7 +33,7 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = File(findProperty("android_store_file") as String? ?: "dummy-keystore.jks")
+            storeFile = findProperty("android_store_file")?.let { File(it as String) } ?: file("dummy-keystore.jks")
             storePassword = findProperty("android_store_password") as String? ?: "password"
             keyAlias = findProperty("android_key_alias") as String? ?: "dummy"
             keyPassword = findProperty("android_key_password") as String? ?: "password"
