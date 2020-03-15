@@ -13,6 +13,7 @@ include(
     ":lib-settings",
     ":lib-permissions",
     ":lib-reversegeocoder",
+    ":lib-time",
     ":lib-weather",
     ":lib-ui",
     ":feature-googleplayservices",

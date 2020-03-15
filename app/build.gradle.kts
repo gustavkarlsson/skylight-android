@@ -98,6 +98,7 @@ dependencies {
     implementation(project(":lib-reversegeocoder"))
     implementation(project(":lib-permissions"))
     implementation(project(":lib-places"))
+    implementation(project(":lib-time"))
     implementation(project(":lib-ui"))
     implementation(project(":lib-settings"))
     implementation(project(":feature-googleplayservices"))

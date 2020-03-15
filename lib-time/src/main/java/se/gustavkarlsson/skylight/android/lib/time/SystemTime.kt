@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.time
+package se.gustavkarlsson.skylight.android.lib.time
 
 import org.threeten.bp.Instant
 import org.threeten.bp.ZoneId

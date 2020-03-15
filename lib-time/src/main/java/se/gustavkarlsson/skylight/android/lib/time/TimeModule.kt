@@ -1,10 +1,9 @@
-package se.gustavkarlsson.skylight.android
+package se.gustavkarlsson.skylight.android.lib.time
 
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.services.Time
-import se.gustavkarlsson.skylight.android.time.SystemTime
 
 @Module
 class TimeModule {

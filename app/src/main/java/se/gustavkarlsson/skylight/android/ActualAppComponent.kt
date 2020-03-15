@@ -18,6 +18,7 @@ import se.gustavkarlsson.skylight.android.lib.places.LibPlacesModule
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.LibReverseGeocoderModule
 import se.gustavkarlsson.skylight.android.lib.scopedservice.LibScopedServiceModule
 import se.gustavkarlsson.skylight.android.lib.settings.LibSettingsModule
+import se.gustavkarlsson.skylight.android.lib.time.TimeModule
 import se.gustavkarlsson.skylight.android.lib.weather.LibWeatherModule
 import javax.inject.Singleton
 
