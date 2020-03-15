@@ -45,9 +45,7 @@ import javax.inject.Singleton
         FeatureIntroModule::class,
         FeatureSettingsModule::class,
         FeatureBackgroundModule::class,
-        AuroraReportProviderModule::class,
-        EvaluatorsModule::class,
-        FormattersModule::class
+        AuroraModule::class
     ]
 )
 internal interface ActualAppComponent : AppComponent

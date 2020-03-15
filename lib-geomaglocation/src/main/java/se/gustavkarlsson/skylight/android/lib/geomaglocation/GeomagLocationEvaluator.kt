@@ -1,14 +1,15 @@
-package se.gustavkarlsson.skylight.android.evaluators
+package se.gustavkarlsson.skylight.android.lib.geomaglocation
 
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
+import kotlin.math.abs
 
 internal object GeomagLocationEvaluator : ChanceEvaluator<GeomagLocation> {
 
     override fun evaluate(value: GeomagLocation): Chance {
         val latitude = value.latitude
-        val absoluteLatitude = Math.abs(latitude)
+        val absoluteLatitude = abs(latitude)
         var chance = ((1.0 / FLEX) * absoluteLatitude) - ((BEST - FLEX) / FLEX)
         if (chance > 1.0) {
             chance = 2.0 - chance
@@ -16,6 +17,6 @@ internal object GeomagLocationEvaluator : ChanceEvaluator<GeomagLocation> {
         return Chance(chance)
     }
 
-    const val BEST = 67.0
-    const val FLEX = 13.0
+    private const val BEST = 67.0
+    private const val FLEX = 13.0
 }

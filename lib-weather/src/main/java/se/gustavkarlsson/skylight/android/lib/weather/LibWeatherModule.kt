@@ -10,13 +10,19 @@ import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.extensions.seconds
+import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Time
 import se.gustavkarlsson.skylight.android.services.WeatherProvider
 
 @Module
 class LibWeatherModule {
+
+    @Provides
+    @Reusable
+    internal fun weatherEvaluator(): ChanceEvaluator<Weather> = WeatherEvaluator
 
     @Suppress("EXPERIMENTAL_API_USAGE") // Json.nonstrict
     @Provides

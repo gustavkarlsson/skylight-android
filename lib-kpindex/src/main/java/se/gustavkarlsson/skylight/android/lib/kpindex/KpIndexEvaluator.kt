@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.evaluators
+package se.gustavkarlsson.skylight.android.lib.kpindex
 
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.UNKNOWN
