@@ -4,8 +4,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import io.reactivex.Single
-import se.gustavkarlsson.skylight.android.services.Geocoder
 import java.util.Locale
+import se.gustavkarlsson.skylight.android.services.Geocoder
 
 @Module
 class LibGeocoderModule {

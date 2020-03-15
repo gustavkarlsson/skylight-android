@@ -1,5 +1,5 @@
-import pl.allegro.tech.build.axion.release.domain.TagNameSerializationConfig
 import kotlin.text.buildString
+import pl.allegro.tech.build.axion.release.domain.TagNameSerializationConfig
 
 plugins {
     id("com.android.application")

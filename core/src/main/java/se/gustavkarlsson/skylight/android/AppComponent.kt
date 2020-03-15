@@ -3,6 +3,8 @@ package se.gustavkarlsson.skylight.android
 import android.content.Context
 import io.reactivex.Completable
 import io.reactivex.Single
+import java.util.Locale
+import javax.inject.Named
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Darkness
@@ -25,8 +27,6 @@ import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.services.ServiceRegistry
 import se.gustavkarlsson.skylight.android.services.Settings
 import se.gustavkarlsson.skylight.android.services.Time
-import java.util.Locale
-import javax.inject.Named
 
 interface AppComponent {
 

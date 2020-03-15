@@ -1,9 +1,9 @@
 package se.gustavkarlsson.skylight.android.lib.darkness
 
+import kotlin.math.abs
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
-import kotlin.math.abs
 
 internal object DarknessEvaluator : ChanceEvaluator<Darkness> {
 

@@ -4,14 +4,14 @@ import de.halfbit.knot.Knot
 import de.halfbit.knot.knot
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import se.gustavkarlsson.skylight.android.entities.Access
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.entities.LocationResult
-import se.gustavkarlsson.skylight.android.entities.Access
-import se.gustavkarlsson.skylight.android.services.LocationProvider
-import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
+import se.gustavkarlsson.skylight.android.services.LocationProvider
+import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 import timber.log.Timber
 

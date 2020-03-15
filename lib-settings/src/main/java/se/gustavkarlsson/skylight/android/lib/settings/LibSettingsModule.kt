@@ -4,9 +4,9 @@ import android.content.Context
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Module
 import dagger.Provides
+import javax.inject.Singleton
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.Settings
-import javax.inject.Singleton
 
 @Module
 class LibSettingsModule {

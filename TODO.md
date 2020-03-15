@@ -1,6 +1,5 @@
 ## Soon
 * Show banner when no connectivity (check for flight mode?)
-* Split up core module
 * Rework API responses.
 * Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
 * Use cases instead of repositories?
@@ -11,7 +10,6 @@
 ## Some day
 * Oversee text style usage (also use TextAppearance instead of style in XML)
 * Use Store lib?
-* KtLint
 * Make testing use other settings
 * Add more tests
 * App bundles

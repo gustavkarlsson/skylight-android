@@ -3,10 +3,10 @@ package se.gustavkarlsson.skylight.android.lib.okhttp
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.extensions.seconds
-import java.util.concurrent.TimeUnit
 
 @Module
 class LibOkHttpModule {

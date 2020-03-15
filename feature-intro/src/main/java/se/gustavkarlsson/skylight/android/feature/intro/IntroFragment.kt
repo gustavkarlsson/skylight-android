@@ -4,13 +4,13 @@ import com.jakewharton.rxbinding2.view.clicks
 import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_intro.*
-import se.gustavkarlsson.skylight.android.navigation.navigator
-import se.gustavkarlsson.skylight.android.navigation.screens
-import se.gustavkarlsson.skylight.android.navigation.target
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.setHtml
+import se.gustavkarlsson.skylight.android.navigation.navigator
+import se.gustavkarlsson.skylight.android.navigation.screens
+import se.gustavkarlsson.skylight.android.navigation.target
 
 internal class IntroFragment : ScreenFragment() {
 

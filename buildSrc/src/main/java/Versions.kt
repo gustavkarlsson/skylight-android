@@ -13,6 +13,7 @@ object Versions {
     val jgit = "5.6.1.202002131546-r"
     val axionRelease = "1.11.0"
     val playPublisher = "2.7.2"
+    val ktlint = "9.2.1"
 
     // Dependencies
     val googleServices = "4.3.3"

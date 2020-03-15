@@ -1,6 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import com.android.build.gradle.BaseExtension as AndroidBaseExtension
-import com.android.build.gradle.LibraryPlugin as AndroidLibraryPlugin
 
 buildscript {
     repositories {
@@ -8,6 +6,7 @@ buildscript {
         mavenCentral()
         google()
         maven { setUrl("https://maven.fabric.io/public") }
+        maven("https://plugins.gradle.org/m2/")
     }
 
     dependencies {
@@ -19,10 +18,13 @@ buildscript {
         classpath("org.eclipse.jgit:org.eclipse.jgit:${Versions.jgit}")
         classpath("pl.allegro.tech.build:axion-release-plugin:${Versions.axionRelease}")
         classpath("com.squareup.sqldelight:gradle-plugin:${Versions.sqldelight}")
+        classpath("org.jlleitschuh.gradle:ktlint-gradle:${Versions.ktlint}")
     }
 }
 
 allprojects {
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+
     repositories {
         jcenter()
         mavenCentral()

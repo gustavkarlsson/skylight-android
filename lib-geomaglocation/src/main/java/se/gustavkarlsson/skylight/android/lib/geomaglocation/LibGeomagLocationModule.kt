@@ -4,12 +4,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import io.reactivex.Single
+import java.util.Locale
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.services.Time
-import java.util.Locale
 
 @Module
 class LibGeomagLocationModule {

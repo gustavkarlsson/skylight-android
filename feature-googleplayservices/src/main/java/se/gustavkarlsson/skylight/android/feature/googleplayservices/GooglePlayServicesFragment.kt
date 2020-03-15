@@ -6,13 +6,13 @@ import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_google_play_services.*
 import se.gustavkarlsson.koptional.optionalOf
-import se.gustavkarlsson.skylight.android.navigation.navigator
-import se.gustavkarlsson.skylight.android.navigation.target
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.doOnNext
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.showSnackbar
+import se.gustavkarlsson.skylight.android.navigation.navigator
+import se.gustavkarlsson.skylight.android.navigation.target
 import timber.log.Timber
 
 internal class GooglePlayServicesFragment : ScreenFragment() {

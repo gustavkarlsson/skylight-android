@@ -3,12 +3,12 @@ package se.gustavkarlsson.skylight.android.lib.navigationsetup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import se.gustavkarlsson.skylight.android.navigation.BackstackListener
-import se.gustavkarlsson.skylight.android.navigation.Screen
-import se.gustavkarlsson.skylight.android.entities.AnimationConfig
-import se.gustavkarlsson.skylight.android.entities.Animations
 import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.StateChanger
+import se.gustavkarlsson.skylight.android.entities.AnimationConfig
+import se.gustavkarlsson.skylight.android.entities.Animations
+import se.gustavkarlsson.skylight.android.navigation.BackstackListener
+import se.gustavkarlsson.skylight.android.navigation.Screen
 import timber.log.Timber
 
 // Stolen from https://github.com/Zhuinden/simple-stack/blob/a9adb03/simple-stack-example-basic-kotlin-fragment/src/main/java/com/zhuinden/simplestackexamplekotlinfragment/core/navigation/FragmentStateChanger.kt

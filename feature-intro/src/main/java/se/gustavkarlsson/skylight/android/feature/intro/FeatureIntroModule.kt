@@ -5,11 +5,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.multibindings.IntoSet
+import javax.inject.Named
+import javax.inject.Singleton
 import se.gustavkarlsson.skylight.android.navigation.Backstack
 import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.services.RunVersionManager
-import javax.inject.Named
-import javax.inject.Singleton
 
 @Module
 class FeatureIntroModule {

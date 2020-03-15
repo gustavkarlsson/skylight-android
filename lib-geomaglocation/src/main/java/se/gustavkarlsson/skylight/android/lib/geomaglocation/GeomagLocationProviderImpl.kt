@@ -3,14 +3,6 @@ package se.gustavkarlsson.skylight.android.lib.geomaglocation
 import com.jakewharton.rx.replayingShare
 import io.reactivex.Observable
 import io.reactivex.Single
-import se.gustavkarlsson.skylight.android.entities.GeomagLocation
-import se.gustavkarlsson.skylight.android.entities.Loadable
-import se.gustavkarlsson.skylight.android.entities.LocationResult
-import se.gustavkarlsson.skylight.android.entities.Cause
-import se.gustavkarlsson.skylight.android.entities.Report
-import se.gustavkarlsson.skylight.android.services.GeomagLocationProvider
-import se.gustavkarlsson.skylight.android.services.Time
-import timber.log.Timber
 import java.lang.Math.PI
 import java.lang.Math.toDegrees
 import java.lang.Math.toRadians
@@ -19,6 +11,14 @@ import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
+import se.gustavkarlsson.skylight.android.entities.Cause
+import se.gustavkarlsson.skylight.android.entities.GeomagLocation
+import se.gustavkarlsson.skylight.android.entities.Loadable
+import se.gustavkarlsson.skylight.android.entities.LocationResult
+import se.gustavkarlsson.skylight.android.entities.Report
+import se.gustavkarlsson.skylight.android.services.GeomagLocationProvider
+import se.gustavkarlsson.skylight.android.services.Time
+import timber.log.Timber
 
 internal class GeomagLocationProviderImpl(
     private val time: Time

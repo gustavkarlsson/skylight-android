@@ -7,6 +7,8 @@ import com.patloew.rxlocation.FusedLocation
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.Location
@@ -15,8 +17,6 @@ import se.gustavkarlsson.skylight.android.extensions.delay
 import se.gustavkarlsson.skylight.android.extensions.timeout
 import se.gustavkarlsson.skylight.android.services.LocationProvider
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.TimeoutException
 
 internal class RxLocationLocationProvider(
     private val fusedLocation: FusedLocation,

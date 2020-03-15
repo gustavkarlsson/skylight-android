@@ -1,11 +1,11 @@
 package se.gustavkarlsson.skylight.android.lib.navigationsetup
 
+import com.zhuinden.simplestack.Backstack as SSBackstack
 import se.gustavkarlsson.skylight.android.navigation.Backstack
 import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.navigation.Navigator
 import se.gustavkarlsson.skylight.android.navigation.Screen
 import timber.log.Timber
-import com.zhuinden.simplestack.Backstack as SSBackstack
 
 internal class SimpleStackNavigator(
     private val simpleStackBackstack: SSBackstack,

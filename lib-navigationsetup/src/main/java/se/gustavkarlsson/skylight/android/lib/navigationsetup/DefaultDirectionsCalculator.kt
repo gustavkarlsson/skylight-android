@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.lib.navigationsetup
 
+import com.zhuinden.simplestack.StateChange
 import se.gustavkarlsson.skylight.android.navigation.Backstack
 import se.gustavkarlsson.skylight.android.navigation.Screen
-import com.zhuinden.simplestack.StateChange
 
 internal object DefaultDirectionsCalculator :
     DirectionsCalculator {

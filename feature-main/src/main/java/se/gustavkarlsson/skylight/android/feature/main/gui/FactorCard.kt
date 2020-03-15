@@ -7,13 +7,13 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import androidx.annotation.RequiresApi
 import com.google.android.material.card.MaterialCardView
+import kotlin.math.roundToInt
 import kotlinx.android.synthetic.main.layout_factor_card.view.card
 import kotlinx.android.synthetic.main.layout_factor_card.view.progressBar
 import kotlinx.android.synthetic.main.layout_factor_card.view.title
 import kotlinx.android.synthetic.main.layout_factor_card.view.value
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.toArgb
-import kotlin.math.roundToInt
 
 internal class FactorCard : FrameLayout {
 
