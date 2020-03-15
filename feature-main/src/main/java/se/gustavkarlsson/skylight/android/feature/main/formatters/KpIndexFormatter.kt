@@ -26,6 +26,6 @@ internal object KpIndexFormatter : Formatter<KpIndex> {
 
     private fun parseWhole(whole: Int, partString: String): String {
         val wholeAdjusted = if (partString == "-") whole + 1 else whole
-        return Integer.toString(wholeAdjusted)
+        return wholeAdjusted.toString()
     }
 }
