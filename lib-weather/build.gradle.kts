@@ -26,4 +26,14 @@ dependencies {
     implementation("com.squareup.retrofit2:adapter-rxjava2:${Versions.retrofit}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
+
+    // Testing
+    testImplementation("junit:junit:${Versions.junit}")
+    testImplementation("org.mockito:mockito-inline:${Versions.mockito}")
+    testImplementation("com.nhaarman:mockito-kotlin-kt1.1:${Versions.mockitoKotlin}") {
+        exclude("org.jetbrains.kotlin")
+    }
+    testImplementation("com.willowtreeapps.assertk:assertk:${Versions.assertk}") {
+        exclude("org.jetbrains.kotlin")
+    }
 }

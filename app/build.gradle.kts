@@ -92,6 +92,7 @@ dependencies {
     implementation(project(":lib-darkness"))
     implementation(project(":lib-kpindex"))
     implementation(project(":lib-geomaglocation"))
+    implementation(project(":lib-aurora"))
     implementation(project(":lib-geocoder"))
     implementation(project(":lib-navigationsetup"))
     implementation(project(":lib-scopedservice"))
