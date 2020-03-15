@@ -17,7 +17,7 @@ class SettingsFragment : ScreenFragment() {
 
     private val viewModel by lazy {
         getOrRegisterService("settingsViewModel") {
-            SettingsComponent.viewModel()
+            SettingsComponent.build().viewModel()
         }
     }
 

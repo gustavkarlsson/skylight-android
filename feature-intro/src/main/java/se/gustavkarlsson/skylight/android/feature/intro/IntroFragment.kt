@@ -18,7 +18,7 @@ internal class IntroFragment : ScreenFragment() {
 
     private val viewModel by lazy {
         getOrRegisterService("introViewModel") {
-            IntroComponent.viewModel()
+            IntroComponent.build().viewModel()
         }
     }
 

@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.work.RxWorker
 import androidx.work.WorkerParameters
 import io.reactivex.Single
-import se.gustavkarlsson.skylight.android.appComponent
+import se.gustavkarlsson.skylight.android.AppComponent
 import timber.log.Timber
 
 internal class NotifyWorker(
@@ -14,7 +14,7 @@ internal class NotifyWorker(
 
     override fun createWork(): Single<Result> {
         // TODO Look into creating factory
-        val work = appComponent.notifyWork()
+        val work = AppComponent.instance.notifyWork()
         return work
             .toSingleDefault(Result.success())
             .doOnError { Timber.e(it, "Failed to complete work") }

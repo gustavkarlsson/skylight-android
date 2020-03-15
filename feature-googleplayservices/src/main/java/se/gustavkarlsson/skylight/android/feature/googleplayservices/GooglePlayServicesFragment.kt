@@ -21,7 +21,7 @@ internal class GooglePlayServicesFragment : ScreenFragment() {
 
     private val viewModel by lazy {
         getOrRegisterService("googlePlayServicesViewModel") {
-            GooglePlayServicesComponent.viewModel()
+            GooglePlayServicesComponent.build().viewModel()
         }
     }
 

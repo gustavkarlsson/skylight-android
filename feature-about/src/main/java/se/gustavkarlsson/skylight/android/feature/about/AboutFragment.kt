@@ -13,7 +13,7 @@ class AboutFragment : ScreenFragment() {
     override val layoutId: Int = R.layout.fragment_about
 
     private val viewModel by lazy {
-        getOrRegisterService("aboutViewModel") { AboutComponent.viewModel() }
+        getOrRegisterService("aboutViewModel") { AboutComponent.build().viewModel() }
     }
 
     override val toolbar: Toolbar?

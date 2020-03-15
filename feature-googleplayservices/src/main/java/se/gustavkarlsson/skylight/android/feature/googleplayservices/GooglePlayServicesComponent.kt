@@ -4,8 +4,6 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import se.gustavkarlsson.skylight.android.AppComponent
-import se.gustavkarlsson.skylight.android.appComponent
-
 @Component(
     modules = [GooglePlayServicesModule::class],
     dependencies = [AppComponent::class]
@@ -14,11 +12,10 @@ internal interface GooglePlayServicesComponent {
     fun viewModel(): GooglePlayServicesViewModel
 
     companion object {
-        fun viewModel(): GooglePlayServicesViewModel =
+        fun build(): GooglePlayServicesComponent =
             DaggerGooglePlayServicesComponent.builder()
-                .appComponent(appComponent)
+                .appComponent(AppComponent.instance)
                 .build()
-                .viewModel()
     }
 }
 

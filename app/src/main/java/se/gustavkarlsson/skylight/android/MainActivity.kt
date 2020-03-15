@@ -22,7 +22,7 @@ internal class MainActivity : AppCompatActivity(),
 
     private lateinit var backButtonController: BackButtonController
 
-    override val serviceRegistry: ServiceRegistry = appComponent.serviceRegistry()
+    override val serviceRegistry: ServiceRegistry = AppComponent.instance.serviceRegistry()
 
     override val screens = DefaultScreens
 
@@ -33,11 +33,12 @@ internal class MainActivity : AppCompatActivity(),
     }
 
     private fun setupNavigation() {
-        val (navigator, backButtonController) = appComponent.navigationInstaller().install(
+        val installer = AppComponent.instance.navigationInstaller()
+        val (navigator, backButtonController) = installer.install(
             this,
             R.id.fragmentContainer,
             listOf(screens.main),
-            appComponent.navigationOverrides(),
+            AppComponent.instance.navigationOverrides(),
             listOf(this),
             animationConfig
         )

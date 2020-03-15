@@ -4,7 +4,6 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import se.gustavkarlsson.skylight.android.AppComponent
-import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.services.Settings
 
 @Component(
@@ -15,11 +14,10 @@ internal interface SettingsComponent {
     fun viewModel(): SettingsViewModel
 
     companion object {
-        fun viewModel(): SettingsViewModel =
+        fun build(): SettingsComponent =
             DaggerSettingsComponent.builder()
-                .appComponent(appComponent)
+                .appComponent(AppComponent.instance)
                 .build()
-                .viewModel()
     }
 }
 

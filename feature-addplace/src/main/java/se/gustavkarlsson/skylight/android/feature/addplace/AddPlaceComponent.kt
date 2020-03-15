@@ -6,7 +6,6 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import se.gustavkarlsson.skylight.android.AppComponent
-import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.Geocoder
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
@@ -19,11 +18,10 @@ internal interface AddPlaceComponent {
     fun viewModel(): AddPlaceViewModel
 
     companion object {
-        fun viewModel(): AddPlaceViewModel =
+        fun build(): AddPlaceComponent =
             DaggerAddPlaceComponent.builder()
-                .appComponent(appComponent)
+                .appComponent(AppComponent.instance)
                 .build()
-                .viewModel()
     }
 }
 

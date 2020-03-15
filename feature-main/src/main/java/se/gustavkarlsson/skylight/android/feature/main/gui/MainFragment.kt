@@ -13,7 +13,7 @@ import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_main.*
-import se.gustavkarlsson.skylight.android.appComponent
+import se.gustavkarlsson.skylight.android.AppComponent
 import se.gustavkarlsson.skylight.android.feature.main.MainComponent
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
@@ -32,7 +32,7 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
 
     private val viewModel by lazy {
         getOrRegisterService("mainViewModel") {
-            MainComponent.viewModel()
+            MainComponent.build().viewModel()
         }
     }
 
@@ -150,7 +150,7 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
     }
 
     private fun requestLocationPermission() {
-        appComponent.locationPermissionRequester().request(this).bind(this)
+        AppComponent.instance.locationPermissionRequester().request(this).bind(this)
     }
 
     private fun openAppDetails() {

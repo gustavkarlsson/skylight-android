@@ -27,7 +27,7 @@ internal class DrawerFragment : BaseFragment() {
 
     private val viewModel by lazy {
         requireParentFragment().getOrRegisterService("drawerViewModel") {
-            DrawerComponent.viewModel()
+            DrawerComponent.build().viewModel()
         }
     }
 

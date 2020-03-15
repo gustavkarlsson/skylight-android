@@ -7,7 +7,6 @@ import dagger.Provides
 import de.halfbit.knot.Knot
 import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.AppComponent
-import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Darkness
@@ -37,11 +36,10 @@ internal interface MainComponent {
     fun viewModel(): MainViewModel
 
     companion object {
-        fun viewModel(): MainViewModel =
+        fun build(): MainComponent =
             DaggerMainComponent.builder()
-                .appComponent(appComponent)
+                .appComponent(AppComponent.instance)
                 .build()
-                .viewModel()
     }
 }
 

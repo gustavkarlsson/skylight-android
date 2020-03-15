@@ -4,7 +4,6 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import se.gustavkarlsson.skylight.android.AppComponent
-import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.services.RunVersionManager
 
 @Component(
@@ -15,11 +14,10 @@ internal interface IntroComponent {
     fun viewModel(): IntroViewModel
 
     companion object {
-        fun viewModel(): IntroViewModel =
+        fun build(): IntroComponent =
             DaggerIntroComponent.builder()
-                .appComponent(appComponent)
+                .appComponent(AppComponent.instance)
                 .build()
-                .viewModel()
     }
 }
 

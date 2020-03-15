@@ -5,7 +5,6 @@ import dagger.Module
 import dagger.Provides
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.AppComponent
-import se.gustavkarlsson.skylight.android.appComponent
 import se.gustavkarlsson.skylight.android.services.Time
 import javax.inject.Named
 
@@ -17,11 +16,10 @@ internal interface AboutComponent {
     fun viewModel(): AboutViewModel
 
     companion object {
-        fun viewModel(): AboutViewModel =
+        fun build(): AboutComponent =
             DaggerAboutComponent.builder()
-                .appComponent(appComponent)
+                .appComponent(AppComponent.instance)
                 .build()
-                .viewModel()
     }
 }
 

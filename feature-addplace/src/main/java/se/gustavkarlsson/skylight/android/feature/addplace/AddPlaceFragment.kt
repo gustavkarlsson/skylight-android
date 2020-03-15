@@ -30,7 +30,7 @@ class AddPlaceFragment : ScreenFragment() {
     override val layoutId: Int = R.layout.fragment_add_place
 
     private val viewModel by lazy {
-        getOrRegisterService("addPlaceViewModel") { AddPlaceComponent.viewModel() }
+        getOrRegisterService("addPlaceViewModel") { AddPlaceComponent.build().viewModel() }
     }
 
     override val toolbar: Toolbar? get() = toolbarView

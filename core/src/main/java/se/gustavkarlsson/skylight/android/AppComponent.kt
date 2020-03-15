@@ -85,13 +85,14 @@ interface AppComponent {
     @Named("notify")
     fun notifyWork(): Completable
 
-    interface Setter
-}
+    interface Setter {
+        fun setAppComponent(component: AppComponent) {
+            instance = component
+        }
+    }
 
-@Suppress("unused")
-fun AppComponent.Setter.setAppComponent(component: AppComponent) {
-    appComponent = component
+    companion object {
+        lateinit var instance: AppComponent
+            internal set
+    }
 }
-
-lateinit var appComponent: AppComponent
-    private set
