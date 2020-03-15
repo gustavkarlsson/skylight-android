@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main.formatters
+package se.gustavkarlsson.skylight.android.lib.darkness
 
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.entities.Darkness

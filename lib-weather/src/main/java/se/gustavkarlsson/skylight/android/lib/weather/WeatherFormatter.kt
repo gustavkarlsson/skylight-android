@@ -1,8 +1,7 @@
-package se.gustavkarlsson.skylight.android.feature.main.formatters
+package se.gustavkarlsson.skylight.android.lib.weather
 
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.entities.Weather
-import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.services.Formatter
 
 internal object WeatherFormatter : Formatter<Weather> {

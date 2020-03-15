@@ -5,7 +5,6 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import de.halfbit.knot.Knot
-import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.AppComponent
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
@@ -14,10 +13,6 @@ import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.minutes
-import se.gustavkarlsson.skylight.android.feature.main.formatters.DarknessFormatter
-import se.gustavkarlsson.skylight.android.feature.main.formatters.GeomagLocationFormatter
-import se.gustavkarlsson.skylight.android.feature.main.formatters.KpIndexFormatter
-import se.gustavkarlsson.skylight.android.feature.main.formatters.WeatherFormatter
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
 import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
@@ -26,7 +21,6 @@ import se.gustavkarlsson.skylight.android.services.LocationProvider
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.services.Time
-import java.util.Locale
 
 @Component(
     modules = [MainModule::class],
@@ -63,14 +57,17 @@ internal class MainModule {
     fun viewModel(
         context: Context,
         mainKnot: Knot<State, Change>,
-        locale: Single<Locale>,
         time: Time,
         auroraChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
         chanceLevelFormatter: Formatter<ChanceLevel>,
         kpIndexEvaluator: ChanceEvaluator<KpIndex>,
+        kpIndexFormatter: Formatter<KpIndex>,
         geomagLocationEvaluator: ChanceEvaluator<GeomagLocation>,
+        geomagLocationFormatter: Formatter<GeomagLocation>,
         weatherEvaluator: ChanceEvaluator<Weather>,
+        weatherFormatter: Formatter<Weather>,
         darknessEvaluator: ChanceEvaluator<Darkness>,
+        darknessFormatter: Formatter<Darkness>,
         locationPermissionChecker: PermissionChecker
     ): MainViewModel {
         val rightNowText = context.getString(R.string.right_now)
@@ -81,13 +78,13 @@ internal class MainModule {
             relativeTimeFormatter,
             chanceLevelFormatter,
             darknessEvaluator,
-            DarknessFormatter,
+            darknessFormatter,
             geomagLocationEvaluator,
-            GeomagLocationFormatter(locale),
+            geomagLocationFormatter,
             kpIndexEvaluator,
-            KpIndexFormatter,
+            kpIndexFormatter,
             weatherEvaluator,
-            WeatherFormatter,
+            weatherFormatter,
             locationPermissionChecker,
             ChanceToColorConverter(context),
             time,

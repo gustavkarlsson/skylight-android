@@ -14,12 +14,17 @@ import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.KpIndexProvider
 import se.gustavkarlsson.skylight.android.services.Time
 import javax.inject.Singleton
 
 @Module
 class LibKpIndexModule {
+
+    @Provides
+    @Reusable
+    internal fun kpIndexFormatter(): Formatter<KpIndex> = KpIndexFormatter
 
     @Provides
     @Reusable

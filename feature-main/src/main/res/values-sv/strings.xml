@@ -32,11 +32,6 @@
 		Det här värdet visar hur mörkt det är ute på nuvarande plats baserat på solens position.
 		<u>100\% mörker är perfekt</u> för att se norrsken.</string>
 
-    <string name="weather_clear">Klart</string>
-    <string name="weather_some_clouds">Spridda moln</string>
-    <string name="weather_cloudy">Molnigt</string>
-    <string name="weather_overcast">Mulet</string>
-
     <string name="cause_location_permission">Åtkomst till plats saknas</string>
     <string name="cause_location">Kunde inte hitta din nuvarande plats</string>
     <string name="cause_connectivity">Ingen anslutning till internet</string>

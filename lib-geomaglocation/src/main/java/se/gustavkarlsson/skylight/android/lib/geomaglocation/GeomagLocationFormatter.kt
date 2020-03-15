@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main.formatters
+package se.gustavkarlsson.skylight.android.lib.geomaglocation
 
 import com.ioki.textref.TextRef
 import io.reactivex.Single

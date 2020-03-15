@@ -14,11 +14,16 @@ import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.Time
 import se.gustavkarlsson.skylight.android.services.WeatherProvider
 
 @Module
 class LibWeatherModule {
+
+    @Provides
+    @Reusable
+    internal fun weatherFormatter(): Formatter<Weather> = WeatherFormatter
 
     @Provides
     @Reusable

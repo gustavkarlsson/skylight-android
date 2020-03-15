@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main.formatters
+package se.gustavkarlsson.skylight.android.lib.kpindex
 
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.entities.KpIndex
@@ -9,8 +9,15 @@ internal object KpIndexFormatter : Formatter<KpIndex> {
         val kpIndex = value.value
         val whole = kpIndex.toInt()
         val part = kpIndex - whole
-        val partString = parsePart(part)
-        val wholeString = parseWhole(whole, partString)
+        val partString =
+            parsePart(
+                part
+            )
+        val wholeString =
+            parseWhole(
+                whole,
+                partString
+            )
         return TextRef(wholeString + partString)
     }
 

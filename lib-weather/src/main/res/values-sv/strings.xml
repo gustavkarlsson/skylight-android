@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="weather_clear">Klart</string>
+    <string name="weather_some_clouds">Spridda moln</string>
+    <string name="weather_cloudy">Molnigt</string>
+    <string name="weather_overcast">Mulet</string>
+</resources>

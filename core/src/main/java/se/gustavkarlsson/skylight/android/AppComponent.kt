@@ -46,11 +46,19 @@ interface AppComponent {
 
     fun kpIndexChanceEvaluator(): ChanceEvaluator<KpIndex>
 
+    fun kpIndexFormatter(): Formatter<KpIndex>
+
     fun weatherChanceEvaluator(): ChanceEvaluator<Weather>
+
+    fun weatherFormatter(): Formatter<Weather>
 
     fun geomagLocationChanceEvaluator(): ChanceEvaluator<GeomagLocation>
 
+    fun geomagLocationFormatter(): Formatter<GeomagLocation>
+
     fun darknessChanceEvaluator(): ChanceEvaluator<Darkness>
+
+    fun darknessFormatter(): Formatter<Darkness>
 
     fun chanceLevelFormatter(): Formatter<ChanceLevel>
 

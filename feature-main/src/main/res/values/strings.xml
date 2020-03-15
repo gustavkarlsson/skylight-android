@@ -32,11 +32,6 @@
 		This value shows how dark your current location is based on the sun\'s position.
 		<u>100\% darkness is perfect</u> for aurora sightings.</string>
 
-    <string name="weather_clear">Clear</string>
-    <string name="weather_some_clouds">Some clouds</string>
-    <string name="weather_cloudy">Cloudy</string>
-    <string name="weather_overcast">Overcast</string>
-
     <string name="cause_location_permission">Location permission missing</string>
     <string name="cause_location">Could not determine the current location</string>
     <string name="cause_connectivity">No internet connection</string>
