@@ -5,11 +5,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.multibindings.IntoSet
-import javax.inject.Named
-import javax.inject.Singleton
 import se.gustavkarlsson.skylight.android.navigation.Backstack
 import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.services.RunVersionManager
+import javax.inject.Named
+import javax.inject.Singleton
 
 @Module
 class FeatureIntroModule {
@@ -28,9 +28,11 @@ class FeatureIntroModule {
         object : NavigationOverride {
             override val priority = 10
 
-            override fun override(backstack: Backstack): Backstack? =
-                if (runVersionManager.isFirstRun) {
-                    listOf(IntroScreen(backstack))
-                } else null
+            override fun override(oldBackstack: Backstack, targetBackstack: Backstack) =
+                when {
+                    oldBackstack.isNotEmpty() && targetBackstack.isEmpty() -> null
+                    runVersionManager.isFirstRun -> listOf(IntroScreen(targetBackstack))
+                    else -> null
+                }
         }
 }

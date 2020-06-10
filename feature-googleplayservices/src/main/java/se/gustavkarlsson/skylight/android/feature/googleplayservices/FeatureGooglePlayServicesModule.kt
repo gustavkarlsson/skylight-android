@@ -20,9 +20,12 @@ class FeatureGooglePlayServicesModule {
 
             override val priority = 8
 
-            override fun override(backstack: Backstack): Backstack? =
-                if (!googlePlayServicesChecker.isAvailable) {
-                    listOf(GooglePlayServicesScreen(backstack))
-                } else null
+            override fun override(oldBackstack: Backstack, targetBackstack: Backstack) =
+                when {
+                    oldBackstack.isNotEmpty() && targetBackstack.isEmpty() -> null
+                    !googlePlayServicesChecker.isAvailable ->
+                        listOf(GooglePlayServicesScreen(targetBackstack))
+                    else -> null
+                }
         }
 }

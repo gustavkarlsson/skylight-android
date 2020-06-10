@@ -9,10 +9,12 @@ internal class AggregatingNavigationOverride(
 ) : NavigationOverride {
     override val priority = 0
 
-    override fun override(backstack: Backstack) =
+    override fun override(oldBackstack: Backstack, targetBackstack: Backstack) =
         overrides.asSequence()
             .sortedByDescending { it.priority }
-            .mapNotNull { it.override(backstack) }
+            .mapNotNull { it.override(oldBackstack, targetBackstack) }
             .firstOrNull()
-            ?.also { Timber.i("Overrode $backstack with $it") }
+            ?.also {
+                Timber.i("Overrode $oldBackstack with $it instead of $targetBackstack")
+            }
 }

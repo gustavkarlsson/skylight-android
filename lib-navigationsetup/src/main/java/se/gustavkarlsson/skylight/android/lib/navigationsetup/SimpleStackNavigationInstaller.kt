@@ -66,7 +66,8 @@ private fun Activity.installBackstack(
     stateChanger: FragmentStateChanger
 ): SSBackstack {
     val container = findViewById<ViewGroup>(containerId)
-    val finalBackstack = navigationOverride.override(initialBackstack) ?: initialBackstack
+    val finalBackstack =
+        navigationOverride.override(emptyList(), initialBackstack) ?: initialBackstack
     return SSNavigator
         .configure()
         .setStateChanger(stateChanger)

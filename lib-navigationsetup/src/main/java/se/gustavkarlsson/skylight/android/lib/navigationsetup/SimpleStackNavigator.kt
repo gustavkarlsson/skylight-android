@@ -50,8 +50,9 @@ internal class SimpleStackNavigator(
 
     private fun changeBackstack(change: (stack: Backstack) -> Backstack) {
         val oldBackstack = simpleStackBackstack.getHistory<Screen>()
-        val changedBackstack = change(oldBackstack)
-        val newBackstack = backstackOverride.override(changedBackstack) ?: changedBackstack
+        val targetBackstack = change(oldBackstack)
+        val newBackstack =
+            backstackOverride.override(oldBackstack, targetBackstack) ?: targetBackstack
         if (newBackstack.isEmpty()) {
             Timber.i("Backstack is empty")
             onBackstackEmpty()
