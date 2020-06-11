@@ -3,18 +3,14 @@ package se.gustavkarlsson.skylight.android.feature.about
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import javax.inject.Named
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.AppComponent
-import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.services.Time
+import javax.inject.Named
 
 @Component(
     modules = [AboutModule::class],
-    dependencies = [
-        AppComponent::class,
-        TimeComponent::class
-    ]
+    dependencies = [AppComponent::class]
 )
 internal interface AboutComponent {
     fun viewModel(): AboutViewModel
@@ -23,7 +19,6 @@ internal interface AboutComponent {
         fun build(): AboutComponent =
             DaggerAboutComponent.builder()
                 .appComponent(AppComponent.instance)
-                .timeComponent(TimeComponent.instance)
                 .build()
     }
 }

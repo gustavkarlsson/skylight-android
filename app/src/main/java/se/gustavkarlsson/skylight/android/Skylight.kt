@@ -5,14 +5,14 @@ import androidx.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
 import com.jakewharton.threetenabp.AndroidThreeTen
 import io.reactivex.plugins.RxJavaPlugins
+import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
-import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
 @Suppress("unused")
 internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsComponent.Setter,
-    TimeComponent.Setter {
+    BackgroundComponent.Setter {
 
     override fun onCreate() {
         super.onCreate()
@@ -42,7 +42,7 @@ internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsC
             .build()
         setAppComponent(component)
         setAnalyticsComponent(component)
-        setTimeComponent(component)
+        setBackgroundComponent(component)
         component.moduleStarters().forEach(ModuleStarter::start)
     }
 }

@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android
 
 import android.content.Context
-import io.reactivex.Completable
 import io.reactivex.Single
 import java.util.Locale
 import javax.inject.Named
@@ -83,9 +82,6 @@ interface AppComponent {
     fun navigationOverrides(): Set<NavigationOverride>
 
     fun moduleStarters(): Set<ModuleStarter>
-
-    @Named("notify")
-    fun notifyWork(): Completable
 
     interface Setter {
         fun setAppComponent(component: AppComponent) {
