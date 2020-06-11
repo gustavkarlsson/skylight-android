@@ -7,7 +7,6 @@ import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
-import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 import java.util.Locale
@@ -40,8 +39,6 @@ interface AppComponent {
 
     @Named("versionName")
     fun versionName(): String
-
-    fun navigationOverrides(): Set<NavigationOverride>
 
     fun moduleStarters(): Set<ModuleStarter>
 

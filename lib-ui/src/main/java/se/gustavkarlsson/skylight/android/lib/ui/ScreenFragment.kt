@@ -5,7 +5,7 @@ import androidx.appcompat.widget.Toolbar
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import de.halfbit.edgetoedge.edgeToEdge
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
-import se.gustavkarlsson.skylight.android.navigation.navigator
+import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 
 abstract class ScreenFragment : BaseFragment() {
 

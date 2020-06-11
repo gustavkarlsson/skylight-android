@@ -7,8 +7,8 @@ import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.StateChanger
 import se.gustavkarlsson.skylight.android.entities.AnimationConfig
 import se.gustavkarlsson.skylight.android.entities.Animations
-import se.gustavkarlsson.skylight.android.navigation.BackstackListener
-import se.gustavkarlsson.skylight.android.navigation.Screen
+import se.gustavkarlsson.skylight.android.lib.navigation.BackstackListener
+import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import timber.log.Timber
 
 // Stolen from https://github.com/Zhuinden/simple-stack/blob/a9adb03/simple-stack-example-basic-kotlin-fragment/src/main/java/com/zhuinden/simplestackexamplekotlinfragment/core/navigation/FragmentStateChanger.kt

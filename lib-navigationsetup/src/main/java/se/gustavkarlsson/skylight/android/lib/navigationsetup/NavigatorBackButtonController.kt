@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.lib.navigationsetup
 
 import androidx.fragment.app.FragmentManager
-import se.gustavkarlsson.skylight.android.navigation.BackButtonHandler
-import se.gustavkarlsson.skylight.android.navigation.Navigator
+import se.gustavkarlsson.skylight.android.lib.navigation.BackButtonHandler
+import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import timber.log.Timber
 
 internal class NavigatorBackButtonController(

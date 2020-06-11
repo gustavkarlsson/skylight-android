@@ -5,8 +5,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.multibindings.IntoSet
-import se.gustavkarlsson.skylight.android.navigation.Backstack
-import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
+import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
+import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
 
 @Module
 class FeatureGooglePlayServicesModule {

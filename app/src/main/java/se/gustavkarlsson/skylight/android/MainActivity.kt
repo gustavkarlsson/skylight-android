@@ -2,17 +2,18 @@ package se.gustavkarlsson.skylight.android
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
+import se.gustavkarlsson.skylight.android.lib.navigation.BackstackListener
+import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
+import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
+import se.gustavkarlsson.skylight.android.lib.navigation.NavigatorHost
+import se.gustavkarlsson.skylight.android.lib.navigation.Screen
+import se.gustavkarlsson.skylight.android.lib.navigation.ScreensHost
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.BackButtonController
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.NavigationSetupComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedServiceComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceHost
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceRegistry
-import se.gustavkarlsson.skylight.android.navigation.Backstack
-import se.gustavkarlsson.skylight.android.navigation.BackstackListener
-import se.gustavkarlsson.skylight.android.navigation.Navigator
-import se.gustavkarlsson.skylight.android.navigation.NavigatorHost
-import se.gustavkarlsson.skylight.android.navigation.Screen
-import se.gustavkarlsson.skylight.android.navigation.ScreensHost
 
 internal class MainActivity : AppCompatActivity(), NavigatorHost, ScreensHost, ServiceHost,
     BackstackListener {
@@ -38,7 +39,7 @@ internal class MainActivity : AppCompatActivity(), NavigatorHost, ScreensHost, S
             this,
             R.id.fragmentContainer,
             listOf(screens.main),
-            AppComponent.instance.navigationOverrides(),
+            NavigationComponent.instance.navigationOverrides(),
             listOf(this),
             animationConfig
         )

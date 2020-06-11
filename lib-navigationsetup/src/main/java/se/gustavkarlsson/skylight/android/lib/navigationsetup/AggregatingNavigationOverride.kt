@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.navigationsetup
 
-import se.gustavkarlsson.skylight.android.navigation.Backstack
-import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
+import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
+import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
 import timber.log.Timber
 
 internal class AggregatingNavigationOverride(

@@ -8,6 +8,7 @@ include(
     ":lib-kpindex",
     ":lib-location",
     ":lib-aurora",
+    ":lib-navigation",
     ":lib-navigationsetup",
     ":lib-scopedservice",
     ":lib-places",
