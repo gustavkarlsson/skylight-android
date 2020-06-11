@@ -26,6 +26,7 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":lib-ui"))
+    implementation(project(":lib-time"))
 
     implementation("androidx.cardview:cardview:${Versions.androidCardview}")
 

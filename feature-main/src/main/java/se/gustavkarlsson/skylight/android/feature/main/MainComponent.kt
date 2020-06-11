@@ -14,6 +14,7 @@ import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
+import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
@@ -24,7 +25,10 @@ import se.gustavkarlsson.skylight.android.services.Time
 
 @Component(
     modules = [MainModule::class],
-    dependencies = [AppComponent::class]
+    dependencies = [
+        AppComponent::class,
+        TimeComponent::class
+    ]
 )
 internal interface MainComponent {
     fun viewModel(): MainViewModel
@@ -33,6 +37,7 @@ internal interface MainComponent {
         fun build(): MainComponent =
             DaggerMainComponent.builder()
                 .appComponent(AppComponent.instance)
+                .timeComponent(TimeComponent.instance)
                 .build()
     }
 }

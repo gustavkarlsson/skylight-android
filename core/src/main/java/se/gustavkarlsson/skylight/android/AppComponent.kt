@@ -25,13 +25,10 @@ import se.gustavkarlsson.skylight.android.services.RunVersionManager
 import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.services.ServiceRegistry
 import se.gustavkarlsson.skylight.android.services.Settings
-import se.gustavkarlsson.skylight.android.services.Time
 
 interface AppComponent {
 
     fun context(): Context
-
-    fun time(): Time
 
     fun settings(): Settings
 

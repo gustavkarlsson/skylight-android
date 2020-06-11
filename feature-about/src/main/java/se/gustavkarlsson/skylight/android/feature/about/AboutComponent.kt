@@ -6,11 +6,15 @@ import dagger.Provides
 import javax.inject.Named
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.AppComponent
+import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.services.Time
 
 @Component(
     modules = [AboutModule::class],
-    dependencies = [AppComponent::class]
+    dependencies = [
+        AppComponent::class,
+        TimeComponent::class
+    ]
 )
 internal interface AboutComponent {
     fun viewModel(): AboutViewModel
@@ -19,6 +23,7 @@ internal interface AboutComponent {
         fun build(): AboutComponent =
             DaggerAboutComponent.builder()
                 .appComponent(AppComponent.instance)
+                .timeComponent(TimeComponent.instance)
                 .build()
     }
 }

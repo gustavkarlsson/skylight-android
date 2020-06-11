@@ -22,6 +22,7 @@ import se.gustavkarlsson.skylight.android.lib.reversegeocoder.LibReverseGeocoder
 import se.gustavkarlsson.skylight.android.lib.scopedservice.LibScopedServiceModule
 import se.gustavkarlsson.skylight.android.lib.settings.LibSettingsModule
 import se.gustavkarlsson.skylight.android.lib.time.LibTimeModule
+import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.lib.weather.LibWeatherModule
 
 @Singleton
@@ -50,4 +51,4 @@ import se.gustavkarlsson.skylight.android.lib.weather.LibWeatherModule
         FeatureBackgroundModule::class
     ]
 )
-internal interface ActualAppComponent : AppComponent, AnalyticsComponent
+internal interface ActualAppComponent : AppComponent, AnalyticsComponent, TimeComponent
