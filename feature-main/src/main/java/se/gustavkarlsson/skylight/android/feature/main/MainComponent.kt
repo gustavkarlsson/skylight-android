@@ -16,6 +16,7 @@ import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
+import se.gustavkarlsson.skylight.android.lib.darkness.DarknessComponent
 import se.gustavkarlsson.skylight.android.lib.location.LocationComponent
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
@@ -39,7 +40,8 @@ import se.gustavkarlsson.skylight.android.services.Formatter
         LocationComponent::class,
         AuroraComponent::class,
         PermissionsComponent::class,
-        PlacesComponent::class
+        PlacesComponent::class,
+        DarknessComponent::class
     ]
 )
 internal interface MainComponent {
@@ -55,6 +57,7 @@ internal interface MainComponent {
                 .auroraComponent(AuroraComponent.instance)
                 .permissionsComponent(PermissionsComponent.instance)
                 .placesComponent(PlacesComponent.instance)
+                .darknessComponent(DarknessComponent.instance)
                 .build()
     }
 }

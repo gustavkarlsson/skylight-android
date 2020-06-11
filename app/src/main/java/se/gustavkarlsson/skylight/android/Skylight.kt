@@ -8,6 +8,7 @@ import io.reactivex.plugins.RxJavaPlugins
 import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
+import se.gustavkarlsson.skylight.android.lib.darkness.DarknessComponent
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
 import se.gustavkarlsson.skylight.android.lib.location.LocationComponent
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
@@ -28,7 +29,7 @@ internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsC
     RunVersionComponent.Setter, WeatherComponent.Setter, GeocoderComponent.Setter,
     PlacesComponent.Setter, LocationComponent.Setter, AuroraComponent.Setter,
     PermissionsComponent.Setter, NavigationSetupComponent.Setter, ScopedServiceComponent.Setter,
-    NavigationComponent.Setter {
+    NavigationComponent.Setter, DarknessComponent.Setter {
 
     override fun onCreate() {
         super.onCreate()
@@ -72,6 +73,7 @@ internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsC
         setNavigationSetupComponent(component)
         setScopedServiceComponent(component)
         setNavigationComponent(component)
+        setDarknessComponent(component)
 
         component.moduleStarters().forEach(ModuleStarter::start)
     }

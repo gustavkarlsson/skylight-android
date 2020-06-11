@@ -32,6 +32,7 @@ dependencies {
     implementation(project(":lib-location"))
     implementation(project(":lib-aurora"))
     implementation(project(":lib-permissions"))
+    implementation(project(":lib-darkness"))
 
     implementation("androidx.cardview:cardview:${Versions.androidCardview}")
 
