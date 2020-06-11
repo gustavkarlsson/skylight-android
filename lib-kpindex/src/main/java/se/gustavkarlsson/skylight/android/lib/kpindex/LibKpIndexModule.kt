@@ -5,7 +5,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Singleton
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
@@ -17,7 +16,7 @@ import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
-import se.gustavkarlsson.skylight.android.services.KpIndexProvider
+import javax.inject.Singleton
 
 @Module
 class LibKpIndexModule {

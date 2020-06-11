@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":lib-weather"))
     implementation(project(":lib-darkness"))
+    implementation(project(":lib-kpindex"))
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 
