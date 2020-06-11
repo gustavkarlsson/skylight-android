@@ -17,6 +17,7 @@ import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.darkness.DarknessComponent
+import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexComponent
 import se.gustavkarlsson.skylight.android.lib.location.LocationComponent
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
@@ -41,7 +42,8 @@ import se.gustavkarlsson.skylight.android.services.Formatter
         AuroraComponent::class,
         PermissionsComponent::class,
         PlacesComponent::class,
-        DarknessComponent::class
+        DarknessComponent::class,
+        KpIndexComponent::class
     ]
 )
 internal interface MainComponent {
@@ -58,6 +60,7 @@ internal interface MainComponent {
                 .permissionsComponent(PermissionsComponent.instance)
                 .placesComponent(PlacesComponent.instance)
                 .darknessComponent(DarknessComponent.instance)
+                .kpIndexComponent(KpIndexComponent.instance)
                 .build()
     }
 }

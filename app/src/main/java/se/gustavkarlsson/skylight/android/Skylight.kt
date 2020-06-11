@@ -10,6 +10,7 @@ import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
 import se.gustavkarlsson.skylight.android.lib.darkness.DarknessComponent
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
+import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexComponent
 import se.gustavkarlsson.skylight.android.lib.location.LocationComponent
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.NavigationSetupComponent
@@ -29,7 +30,7 @@ internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsC
     RunVersionComponent.Setter, WeatherComponent.Setter, GeocoderComponent.Setter,
     PlacesComponent.Setter, LocationComponent.Setter, AuroraComponent.Setter,
     PermissionsComponent.Setter, NavigationSetupComponent.Setter, ScopedServiceComponent.Setter,
-    NavigationComponent.Setter, DarknessComponent.Setter {
+    NavigationComponent.Setter, DarknessComponent.Setter, KpIndexComponent.Setter {
 
     override fun onCreate() {
         super.onCreate()
@@ -74,6 +75,7 @@ internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsC
         setScopedServiceComponent(component)
         setNavigationComponent(component)
         setDarknessComponent(component)
+        setKpIndexComponent(component)
 
         component.moduleStarters().forEach(ModuleStarter::start)
     }
