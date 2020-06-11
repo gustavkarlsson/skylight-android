@@ -10,7 +10,6 @@ import io.reactivex.schedulers.Schedulers
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.lib.places.db.DbPlaceQueries
-import se.gustavkarlsson.skylight.android.services.PlacesRepository
 
 internal class SqlDelightPlacesRepository(
     private val queries: DbPlaceQueries,

@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.ScopedService
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.extensions.mapNotNull
-import se.gustavkarlsson.skylight.android.services.PlacesRepository
+import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 
 internal class AddPlaceViewModel(
     private val placesRepository: PlacesRepository,

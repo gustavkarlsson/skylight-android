@@ -15,7 +15,6 @@ import se.gustavkarlsson.skylight.android.services.LocationProvider
 import se.gustavkarlsson.skylight.android.services.NavigationInstaller
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import se.gustavkarlsson.skylight.android.services.PermissionRequester
-import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.services.ServiceRegistry
 import java.util.Locale
@@ -62,8 +61,6 @@ interface AppComponent {
 
     @Named("versionName")
     fun versionName(): String
-
-    fun placesRepository(): PlacesRepository
 
     fun navigationOverrides(): Set<NavigationOverride>
 

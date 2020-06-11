@@ -4,7 +4,7 @@ import android.content.Context
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Module
 import dagger.Provides
-import se.gustavkarlsson.skylight.android.services.PlacesRepository
+import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import javax.inject.Singleton
 
 @Module

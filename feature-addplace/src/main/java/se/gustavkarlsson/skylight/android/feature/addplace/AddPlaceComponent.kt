@@ -9,13 +9,15 @@ import se.gustavkarlsson.skylight.android.AppComponent
 import se.gustavkarlsson.skylight.android.extensions.seconds
 import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
-import se.gustavkarlsson.skylight.android.services.PlacesRepository
+import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
+import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 
 @Component(
     modules = [AddPlaceModule::class],
     dependencies = [
         AppComponent::class,
-        GeocoderComponent::class
+        GeocoderComponent::class,
+        PlacesComponent::class
     ]
 )
 internal interface AddPlaceComponent {
@@ -26,6 +28,7 @@ internal interface AddPlaceComponent {
             DaggerAddPlaceComponent.builder()
                 .appComponent(AppComponent.instance)
                 .geocoderComponent(GeocoderComponent.instance)
+                .placesComponent(PlacesComponent.instance)
                 .build()
     }
 }

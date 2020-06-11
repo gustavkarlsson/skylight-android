@@ -8,6 +8,7 @@ import io.reactivex.plugins.RxJavaPlugins
 import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
+import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionComponent
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
@@ -18,7 +19,8 @@ import timber.log.Timber.DebugTree
 @Suppress("unused")
 internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsComponent.Setter,
     BackgroundComponent.Setter, TimeComponent.Setter, SettingsComponent.Setter,
-    RunVersionComponent.Setter, WeatherComponent.Setter, GeocoderComponent.Setter {
+    RunVersionComponent.Setter, WeatherComponent.Setter, GeocoderComponent.Setter,
+    PlacesComponent.Setter {
 
     override fun onCreate() {
         super.onCreate()
@@ -55,6 +57,7 @@ internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsC
         setRunVersionComponent(component)
         setWeatherComponent(component)
         setGeocoderComponent(component)
+        setPlacesComponent(component)
 
         component.moduleStarters().forEach(ModuleStarter::start)
     }

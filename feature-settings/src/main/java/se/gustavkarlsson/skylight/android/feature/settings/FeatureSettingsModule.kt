@@ -10,8 +10,8 @@ import dagger.multibindings.IntoSet
 import io.reactivex.rxkotlin.toObservable
 import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
+import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
-import se.gustavkarlsson.skylight.android.services.PlacesRepository
 import javax.inject.Singleton
 
 @Module

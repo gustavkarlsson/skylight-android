@@ -10,7 +10,7 @@ import io.reactivex.rxkotlin.Observables
 import se.gustavkarlsson.skylight.android.ScopedService
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.feature.main.R
-import se.gustavkarlsson.skylight.android.services.PlacesRepository
+import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 
 internal class DrawerViewModel(

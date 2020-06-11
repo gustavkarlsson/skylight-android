@@ -10,8 +10,8 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.entities.TriggerLevel
+import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.settings.db.DbSettingsQueries
-import se.gustavkarlsson.skylight.android.services.PlacesRepository
 
 internal class SqlDelightSettings(
     private val queries: DbSettingsQueries,

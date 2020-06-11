@@ -28,6 +28,7 @@ dependencies {
     implementation(project(":lib-ui"))
     implementation(project(":lib-analytics"))
     implementation(project(":lib-settings"))
+    implementation(project(":lib-places"))
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }
