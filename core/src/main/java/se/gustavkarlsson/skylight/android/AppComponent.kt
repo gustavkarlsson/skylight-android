@@ -2,9 +2,24 @@ package se.gustavkarlsson.skylight.android
 
 import android.content.Context
 import io.reactivex.Single
-import se.gustavkarlsson.skylight.android.entities.*
+import se.gustavkarlsson.skylight.android.entities.ChanceLevel
+import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
+import se.gustavkarlsson.skylight.android.entities.Darkness
+import se.gustavkarlsson.skylight.android.entities.GeomagLocation
+import se.gustavkarlsson.skylight.android.entities.KpIndex
+import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
-import se.gustavkarlsson.skylight.android.services.*
+import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
+import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.services.Formatter
+import se.gustavkarlsson.skylight.android.services.Geocoder
+import se.gustavkarlsson.skylight.android.services.LocationProvider
+import se.gustavkarlsson.skylight.android.services.NavigationInstaller
+import se.gustavkarlsson.skylight.android.services.PermissionChecker
+import se.gustavkarlsson.skylight.android.services.PermissionRequester
+import se.gustavkarlsson.skylight.android.services.PlacesRepository
+import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
+import se.gustavkarlsson.skylight.android.services.ServiceRegistry
 import java.util.Locale
 import javax.inject.Named
 
@@ -57,8 +72,6 @@ interface AppComponent {
     fun placesRepository(): PlacesRepository
 
     fun geocoder(): Geocoder
-
-    fun runVersionManager(): RunVersionManager
 
     fun navigationOverrides(): Set<NavigationOverride>
 

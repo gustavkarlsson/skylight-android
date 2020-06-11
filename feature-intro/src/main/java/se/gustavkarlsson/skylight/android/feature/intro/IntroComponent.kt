@@ -4,11 +4,15 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import se.gustavkarlsson.skylight.android.AppComponent
-import se.gustavkarlsson.skylight.android.services.RunVersionManager
+import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionComponent
+import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionManager
 
 @Component(
     modules = [IntroModule::class],
-    dependencies = [AppComponent::class]
+    dependencies = [
+        AppComponent::class,
+        RunVersionComponent::class
+    ]
 )
 internal interface IntroComponent {
     fun viewModel(): IntroViewModel
@@ -17,6 +21,7 @@ internal interface IntroComponent {
         fun build(): IntroComponent =
             DaggerIntroComponent.builder()
                 .appComponent(AppComponent.instance)
+                .runVersionComponent(RunVersionComponent.instance)
                 .build()
     }
 }

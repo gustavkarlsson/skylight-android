@@ -1,4 +1,3 @@
-import kotlin.text.buildString
 import pl.allegro.tech.build.axion.release.domain.TagNameSerializationConfig
 
 plugins {
@@ -97,6 +96,7 @@ dependencies {
     implementation(project(":lib-navigationsetup"))
     implementation(project(":lib-scopedservice"))
     implementation(project(":lib-reversegeocoder"))
+    implementation(project(":lib-runversion"))
     implementation(project(":lib-permissions"))
     implementation(project(":lib-places"))
     implementation(project(":lib-time"))

@@ -1,25 +1,15 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
-import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.multibindings.IntoSet
+import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionManager
 import se.gustavkarlsson.skylight.android.navigation.Backstack
 import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
-import se.gustavkarlsson.skylight.android.services.RunVersionManager
-import javax.inject.Named
-import javax.inject.Singleton
 
 @Module
 class FeatureIntroModule {
-
-    @Provides
-    @Singleton
-    internal fun runVersionManager(
-        context: Context,
-        @Named("versionCode") versionCode: Int
-    ): RunVersionManager = SharedPreferencesRunVersionManager(context, versionCode)
 
     @Provides
     @Reusable

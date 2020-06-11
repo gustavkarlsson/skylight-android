@@ -19,6 +19,8 @@ import se.gustavkarlsson.skylight.android.lib.okhttp.LibOkHttpModule
 import se.gustavkarlsson.skylight.android.lib.permissions.LibPermissionsModule
 import se.gustavkarlsson.skylight.android.lib.places.LibPlacesModule
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.LibReverseGeocoderModule
+import se.gustavkarlsson.skylight.android.lib.runversion.LibRunVersionModule
+import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.LibScopedServiceModule
 import se.gustavkarlsson.skylight.android.lib.settings.LibSettingsModule
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
@@ -45,6 +47,7 @@ import javax.inject.Singleton
         LibSettingsModule::class,
         LibNavigationSetupModule::class,
         LibPermissionsModule::class,
+        LibRunVersionModule::class,
         LibScopedServiceModule::class,
         LibAuroraModule::class,
         FeatureGooglePlayServicesModule::class,
@@ -54,4 +57,4 @@ import javax.inject.Singleton
     ]
 )
 internal interface ActualAppComponent : AppComponent, AnalyticsComponent, BackgroundComponent,
-    TimeComponent, SettingsComponent
+    TimeComponent, SettingsComponent, RunVersionComponent

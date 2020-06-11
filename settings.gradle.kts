@@ -14,6 +14,7 @@ include(
     ":lib-settings",
     ":lib-permissions",
     ":lib-reversegeocoder",
+    ":lib-runversion",
     ":lib-time",
     ":lib-weather",
     ":lib-ui",

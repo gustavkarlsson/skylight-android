@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.feature.intro
 
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.ScopedService
-import se.gustavkarlsson.skylight.android.services.RunVersionManager
+import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionManager
 
 internal class IntroViewModel(
     private val versionManager: RunVersionManager
