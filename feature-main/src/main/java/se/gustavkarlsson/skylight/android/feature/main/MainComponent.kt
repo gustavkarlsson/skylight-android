@@ -16,6 +16,7 @@ import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
+import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
 import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
@@ -29,7 +30,8 @@ import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
     ],
     dependencies = [
         AppComponent::class,
-        TimeComponent::class
+        TimeComponent::class,
+        WeatherComponent::class
     ]
 )
 internal interface MainComponent {
@@ -40,6 +42,7 @@ internal interface MainComponent {
             DaggerMainComponent.builder()
                 .appComponent(AppComponent.instance)
                 .timeComponent(TimeComponent.instance)
+                .weatherComponent(WeatherComponent.instance)
                 .build()
     }
 }

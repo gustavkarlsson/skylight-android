@@ -7,7 +7,6 @@ import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
-import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
@@ -36,10 +35,6 @@ interface AppComponent {
     fun kpIndexChanceEvaluator(): ChanceEvaluator<KpIndex>
 
     fun kpIndexFormatter(): Formatter<KpIndex>
-
-    fun weatherChanceEvaluator(): ChanceEvaluator<Weather>
-
-    fun weatherFormatter(): Formatter<Weather>
 
     fun geomagLocationChanceEvaluator(): ChanceEvaluator<GeomagLocation>
 
