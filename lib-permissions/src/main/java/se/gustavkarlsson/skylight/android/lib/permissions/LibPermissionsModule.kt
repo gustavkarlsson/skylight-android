@@ -8,7 +8,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.entities.Access
-import se.gustavkarlsson.skylight.android.services.PermissionRequester
 
 @Module
 class LibPermissionsModule {

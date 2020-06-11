@@ -13,9 +13,9 @@ import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_main.*
-import se.gustavkarlsson.skylight.android.AppComponent
 import se.gustavkarlsson.skylight.android.feature.main.MainComponent
 import se.gustavkarlsson.skylight.android.feature.main.R
+import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
@@ -150,7 +150,8 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
     }
 
     private fun requestLocationPermission() {
-        AppComponent.instance.locationPermissionRequester().request(this).bind(this)
+        PermissionsComponent.instance.locationPermissionRequester().request(this)
+            .bind(this)
     }
 
     private fun openAppDetails() {

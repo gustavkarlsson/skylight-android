@@ -10,7 +10,6 @@ import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
-import se.gustavkarlsson.skylight.android.services.PermissionRequester
 import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 import java.util.Locale
 import javax.inject.Named
@@ -18,8 +17,6 @@ import javax.inject.Named
 interface AppComponent {
 
     fun context(): Context
-
-    fun locationPermissionRequester(): PermissionRequester
 
     fun singleLocale(): Single<Locale>
 
