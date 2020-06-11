@@ -12,7 +12,6 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":lib-analytics"))
-    implementation(project(":lib-geomaglocation"))
 
     implementation("com.squareup.sqldelight:android-driver:${Versions.sqldelight}")
     implementation("com.squareup.sqldelight:rxjava2-extensions:${Versions.sqldelight}")

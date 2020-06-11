@@ -18,7 +18,6 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib-geomaglocation"))
 
     implementation("com.mapbox.mapboxsdk:mapbox-sdk-services:${Versions.mapboxServices}")
 
