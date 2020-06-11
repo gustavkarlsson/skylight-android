@@ -5,7 +5,7 @@ import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import se.gustavkarlsson.skylight.android.ScopedService
-import se.gustavkarlsson.skylight.android.services.Time
+import se.gustavkarlsson.skylight.android.lib.time.Time
 
 internal class AboutViewModel(
     private val time: Time,

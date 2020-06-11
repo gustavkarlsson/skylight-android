@@ -11,6 +11,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":lib-time"))
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")

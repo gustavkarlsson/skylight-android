@@ -13,7 +13,7 @@ import org.threeten.bp.Instant
 import org.threeten.bp.ZoneOffset
 import org.threeten.bp.temporal.ChronoUnit.DAYS
 import org.threeten.bp.temporal.ChronoUnit.HOURS
-import se.gustavkarlsson.skylight.android.services.Time
+import se.gustavkarlsson.skylight.android.lib.time.Time
 
 @RunWith(MockitoJUnitRunner::class)
 internal class OutdatedEvaluatorTest {

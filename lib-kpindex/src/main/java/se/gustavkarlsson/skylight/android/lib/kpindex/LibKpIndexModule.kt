@@ -14,10 +14,10 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.extensions.seconds
+import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.KpIndexProvider
-import se.gustavkarlsson.skylight.android.services.Time
 
 @Module
 class LibKpIndexModule {

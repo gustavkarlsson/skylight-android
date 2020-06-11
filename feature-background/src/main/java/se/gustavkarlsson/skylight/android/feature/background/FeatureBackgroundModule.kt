@@ -37,7 +37,7 @@ import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.LocationProvider
 import se.gustavkarlsson.skylight.android.services.Settings
-import se.gustavkarlsson.skylight.android.services.Time
+import se.gustavkarlsson.skylight.android.lib.time.Time
 
 @Module
 class FeatureBackgroundModule {

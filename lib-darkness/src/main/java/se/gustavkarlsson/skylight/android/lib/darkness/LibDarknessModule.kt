@@ -5,10 +5,10 @@ import dagger.Provides
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.extensions.minutes
+import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.DarknessProvider
 import se.gustavkarlsson.skylight.android.services.Formatter
-import se.gustavkarlsson.skylight.android.services.Time
 
 @Module
 class LibDarknessModule {

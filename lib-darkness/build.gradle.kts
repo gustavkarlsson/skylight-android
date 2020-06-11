@@ -10,6 +10,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":lib-time"))
 
     implementation("net.e175.klaus:solarpositioning:${Versions.solarPositioning}")
 

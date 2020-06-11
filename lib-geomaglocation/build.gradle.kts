@@ -10,6 +10,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":lib-time"))
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 

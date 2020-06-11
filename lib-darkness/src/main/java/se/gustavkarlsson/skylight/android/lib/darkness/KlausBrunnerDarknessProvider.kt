@@ -14,8 +14,8 @@ import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.LocationResult
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.extensions.delay
+import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.services.DarknessProvider
-import se.gustavkarlsson.skylight.android.services.Time
 import timber.log.Timber
 
 internal class KlausBrunnerDarknessProvider(
