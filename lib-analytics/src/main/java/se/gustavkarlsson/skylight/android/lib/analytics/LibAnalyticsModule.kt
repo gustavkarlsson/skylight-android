@@ -5,7 +5,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import se.gustavkarlsson.skylight.android.services.Analytics
 
 @Module
 class LibAnalyticsModule {

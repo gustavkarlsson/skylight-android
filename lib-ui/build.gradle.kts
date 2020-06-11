@@ -9,6 +9,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":lib-analytics"))
     api(project(":lib-scopedservice"))
 
     api("com.google.android.material:material:${Versions.material}")

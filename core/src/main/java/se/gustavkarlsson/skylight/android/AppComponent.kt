@@ -12,7 +12,6 @@ import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
-import se.gustavkarlsson.skylight.android.services.Analytics
 import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
@@ -33,8 +32,6 @@ interface AppComponent {
     fun context(): Context
 
     fun time(): Time
-
-    fun analytics(): Analytics
 
     fun settings(): Settings
 

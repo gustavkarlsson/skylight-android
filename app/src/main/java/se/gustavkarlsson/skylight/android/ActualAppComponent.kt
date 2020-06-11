@@ -6,6 +6,7 @@ import se.gustavkarlsson.skylight.android.feature.background.FeatureBackgroundMo
 import se.gustavkarlsson.skylight.android.feature.googleplayservices.FeatureGooglePlayServicesModule
 import se.gustavkarlsson.skylight.android.feature.intro.FeatureIntroModule
 import se.gustavkarlsson.skylight.android.feature.settings.FeatureSettingsModule
+import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
 import se.gustavkarlsson.skylight.android.lib.analytics.LibAnalyticsModule
 import se.gustavkarlsson.skylight.android.lib.aurora.LibAuroraModule
 import se.gustavkarlsson.skylight.android.lib.darkness.LibDarknessModule
@@ -49,4 +50,4 @@ import se.gustavkarlsson.skylight.android.lib.weather.LibWeatherModule
         FeatureBackgroundModule::class
     ]
 )
-internal interface ActualAppComponent : AppComponent
+internal interface ActualAppComponent : AppComponent, AnalyticsComponent

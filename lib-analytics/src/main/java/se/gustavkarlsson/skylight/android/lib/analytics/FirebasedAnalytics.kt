@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.lib.analytics
 import android.app.Activity
 import androidx.core.os.bundleOf
 import com.google.firebase.analytics.FirebaseAnalytics
-import se.gustavkarlsson.skylight.android.services.Analytics
 
 internal class FirebasedAnalytics(
     private val firebaseAnalytics: FirebaseAnalytics

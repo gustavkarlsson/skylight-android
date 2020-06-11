@@ -11,6 +11,7 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":lib-ui")) // TODO only used for coloring notification?
+    implementation(project(":lib-analytics"))
 
     // WorkManager
     implementation("androidx.work:work-runtime-ktx:${Versions.androidWorkManager}")

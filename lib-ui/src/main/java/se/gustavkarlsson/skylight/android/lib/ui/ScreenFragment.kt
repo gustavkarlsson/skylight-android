@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import de.halfbit.edgetoedge.edgeToEdge
-import se.gustavkarlsson.skylight.android.AppComponent
+import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
 import se.gustavkarlsson.skylight.android.navigation.navigator
 
 abstract class ScreenFragment : BaseFragment() {
@@ -24,7 +24,7 @@ abstract class ScreenFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        AppComponent.instance.analytics().logScreen(requireActivity(), this::class.java.simpleName)
+        AnalyticsComponent.instance.analytics().logScreen(requireActivity(), this::class.java.simpleName)
     }
 
     protected open val toolbar: Toolbar? = null
