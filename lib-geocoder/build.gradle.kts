@@ -18,6 +18,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":lib-location"))
 
     implementation("com.mapbox.mapboxsdk:mapbox-sdk-services:${Versions.mapboxServices}")
 
