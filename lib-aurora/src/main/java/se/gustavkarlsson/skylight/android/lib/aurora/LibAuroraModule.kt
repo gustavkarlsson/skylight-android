@@ -12,10 +12,10 @@ import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.lib.darkness.DarknessProvider
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexProvider
+import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoder
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherProvider
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
-import se.gustavkarlsson.skylight.android.services.ReverseGeocoder
 
 @Module
 class LibAuroraModule {

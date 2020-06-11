@@ -6,7 +6,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.extensions.seconds
-import se.gustavkarlsson.skylight.android.services.ReverseGeocoder
 
 @Module
 class LibReverseGeocoderModule {
