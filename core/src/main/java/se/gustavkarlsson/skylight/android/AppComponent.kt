@@ -8,7 +8,6 @@ import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
-import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.NavigationInstaller
@@ -46,8 +45,6 @@ interface AppComponent {
     fun locationPermissionChecker(): PermissionChecker
 
     fun selectedPlaceRepository(): SelectedPlaceRepository
-
-    fun auroraReportProvider(): AuroraReportProvider
 
     fun navigationInstaller(): NavigationInstaller
 

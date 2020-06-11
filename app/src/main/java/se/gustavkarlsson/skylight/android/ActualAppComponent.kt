@@ -8,6 +8,7 @@ import se.gustavkarlsson.skylight.android.feature.intro.FeatureIntroModule
 import se.gustavkarlsson.skylight.android.feature.settings.FeatureSettingsModule
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
 import se.gustavkarlsson.skylight.android.lib.analytics.LibAnalyticsModule
+import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
 import se.gustavkarlsson.skylight.android.lib.aurora.LibAuroraModule
 import se.gustavkarlsson.skylight.android.lib.darkness.LibDarknessModule
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
@@ -62,4 +63,4 @@ import javax.inject.Singleton
 )
 internal interface ActualAppComponent : AppComponent, AnalyticsComponent, BackgroundComponent,
     TimeComponent, SettingsComponent, RunVersionComponent, WeatherComponent, GeocoderComponent,
-    PlacesComponent, LocationComponent
+    PlacesComponent, LocationComponent, AuroraComponent

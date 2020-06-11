@@ -29,10 +29,10 @@ import se.gustavkarlsson.skylight.android.feature.background.scheduling.NotifySc
 import se.gustavkarlsson.skylight.android.feature.background.scheduling.Scheduler
 import se.gustavkarlsson.skylight.android.feature.background.scheduling.createNotifyWork
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
+import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
 import se.gustavkarlsson.skylight.android.lib.time.Time
-import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 import java.io.File

@@ -15,6 +15,7 @@ dependencies {
     implementation(project(":lib-time"))
     implementation(project(":lib-settings"))
     implementation(project(":lib-location"))
+    implementation(project(":lib-aurora"))
 
     // WorkManager
     implementation("androidx.work:work-runtime-ktx:${Versions.androidWorkManager}")

@@ -14,12 +14,13 @@ import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.extensions.minutes
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
+import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
+import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.location.LocationComponent
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
-import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
@@ -33,7 +34,8 @@ import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
         AppComponent::class,
         TimeComponent::class,
         WeatherComponent::class,
-        LocationComponent::class
+        LocationComponent::class,
+        AuroraComponent::class
     ]
 )
 internal interface MainComponent {
@@ -46,6 +48,7 @@ internal interface MainComponent {
                 .timeComponent(TimeComponent.instance)
                 .weatherComponent(WeatherComponent.instance)
                 .locationComponent(LocationComponent.instance)
+                .auroraComponent(AuroraComponent.instance)
                 .build()
     }
 }

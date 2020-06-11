@@ -30,6 +30,7 @@ dependencies {
     implementation(project(":lib-weather"))
     implementation(project(":lib-places"))
     implementation(project(":lib-location"))
+    implementation(project(":lib-aurora"))
 
     implementation("androidx.cardview:cardview:${Versions.androidCardview}")
 

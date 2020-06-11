@@ -13,7 +13,6 @@ import se.gustavkarlsson.skylight.android.lib.darkness.DarknessProvider
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexProvider
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherProvider
-import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.ReverseGeocoder
 import timber.log.Timber
 

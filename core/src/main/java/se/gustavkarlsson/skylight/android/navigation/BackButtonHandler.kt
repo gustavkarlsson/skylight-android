@@ -6,5 +6,5 @@ interface BackButtonHandler {
 	 *
 	 * `false` - indicates that the caller should handle it
 	 */
-    fun onBackPressed(): Boolean
+    fun onBackPressed(): Boolean // FIXME use this or BackButtonController?
 }
