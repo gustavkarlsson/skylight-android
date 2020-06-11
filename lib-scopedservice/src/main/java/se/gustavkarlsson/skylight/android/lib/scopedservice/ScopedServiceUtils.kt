@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.scopedservice
 
 import androidx.fragment.app.Fragment
-import se.gustavkarlsson.skylight.android.ScopedService
 
 fun Fragment.registerService(id: String, service: ScopedService) {
     val tag = requireNotNull(tag) {

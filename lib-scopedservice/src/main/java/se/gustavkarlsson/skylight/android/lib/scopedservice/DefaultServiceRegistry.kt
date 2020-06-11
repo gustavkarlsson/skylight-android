@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.scopedservice
 
-import se.gustavkarlsson.skylight.android.ScopedService
 import timber.log.Timber
 
 internal class DefaultServiceRegistry : ServiceRegistry {

@@ -12,7 +12,6 @@ import se.gustavkarlsson.koptional.Absent
 import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.koptional.Present
 import se.gustavkarlsson.koptional.toOptional
-import se.gustavkarlsson.skylight.android.ScopedService
 import se.gustavkarlsson.skylight.android.entities.Access
 import se.gustavkarlsson.skylight.android.entities.Cause
 import se.gustavkarlsson.skylight.android.entities.Chance
@@ -35,6 +34,7 @@ import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.feature.main.State
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter

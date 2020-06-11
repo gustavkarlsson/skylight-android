@@ -1,7 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.scopedservice
 
-import se.gustavkarlsson.skylight.android.ScopedService
-
 interface ServiceRegistry {
     fun register(id: String, tag: String, service: ScopedService)
     operator fun get(id: String): ScopedService?
