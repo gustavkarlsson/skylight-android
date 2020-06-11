@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.weather
 
-import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 

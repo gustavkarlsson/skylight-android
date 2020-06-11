@@ -9,9 +9,8 @@ import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.LocationResult
 import se.gustavkarlsson.skylight.android.entities.Report
-import se.gustavkarlsson.skylight.android.entities.Weather
-import se.gustavkarlsson.skylight.android.utils.delay
 import se.gustavkarlsson.skylight.android.lib.time.Time
+import se.gustavkarlsson.skylight.android.utils.delay
 import timber.log.Timber
 import java.io.IOException
 

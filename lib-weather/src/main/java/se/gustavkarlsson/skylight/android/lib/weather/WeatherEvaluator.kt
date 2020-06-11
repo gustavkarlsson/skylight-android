@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.lib.weather
 
 import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.UNKNOWN
-import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 
 internal object WeatherEvaluator : ChanceEvaluator<Weather> {

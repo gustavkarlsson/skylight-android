@@ -6,8 +6,8 @@ import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.entities.ReverseGeocodingResult
-import se.gustavkarlsson.skylight.android.entities.Weather
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
+import se.gustavkarlsson.skylight.android.lib.weather.Weather
 
 data class LoadableAuroraReport(
     val locationName: Loadable<ReverseGeocodingResult>,
