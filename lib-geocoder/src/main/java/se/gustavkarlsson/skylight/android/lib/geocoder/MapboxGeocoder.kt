@@ -8,7 +8,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import se.gustavkarlsson.skylight.android.entities.Location
-import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
 import timber.log.Timber
 import java.io.IOException
 import java.util.Locale

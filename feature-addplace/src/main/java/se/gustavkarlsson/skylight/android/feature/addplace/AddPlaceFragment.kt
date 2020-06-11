@@ -16,7 +16,7 @@ import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_add_place.*
 import kotlinx.android.synthetic.main.layout_save_dialog.view.*
-import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
+import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.target
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
