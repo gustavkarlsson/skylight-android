@@ -4,7 +4,6 @@ import android.content.Context
 import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
-import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 import java.util.Locale
@@ -17,10 +16,6 @@ interface AppComponent {
     fun singleLocale(): Single<Locale>
 
     fun completeAuroraReportChanceEvaluator(): ChanceEvaluator<CompleteAuroraReport>
-
-    fun geomagLocationChanceEvaluator(): ChanceEvaluator<GeomagLocation>
-
-    fun geomagLocationFormatter(): Formatter<GeomagLocation>
 
     fun chanceLevelFormatter(): Formatter<ChanceLevel>
 

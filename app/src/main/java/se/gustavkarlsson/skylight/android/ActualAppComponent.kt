@@ -14,6 +14,7 @@ import se.gustavkarlsson.skylight.android.lib.darkness.DarknessComponent
 import se.gustavkarlsson.skylight.android.lib.darkness.LibDarknessModule
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
 import se.gustavkarlsson.skylight.android.lib.geocoder.LibGeocoderModule
+import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationComponent
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.LibGeomagLocationModule
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexComponent
 import se.gustavkarlsson.skylight.android.lib.kpindex.LibKpIndexModule
@@ -71,4 +72,4 @@ internal interface ActualAppComponent : AppComponent, AnalyticsComponent, Backgr
     TimeComponent, SettingsComponent, RunVersionComponent, WeatherComponent, GeocoderComponent,
     PlacesComponent, LocationComponent, AuroraComponent, PermissionsComponent,
     NavigationSetupComponent, ScopedServiceComponent, NavigationComponent, DarknessComponent,
-    KpIndexComponent
+    KpIndexComponent, GeomagLocationComponent
