@@ -3,7 +3,9 @@ package se.gustavkarlsson.skylight.android
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.NavigationSetupComponent
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedServiceComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceHost
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceRegistry
 import se.gustavkarlsson.skylight.android.navigation.Backstack
 import se.gustavkarlsson.skylight.android.navigation.BackstackListener
 import se.gustavkarlsson.skylight.android.navigation.Navigator
@@ -11,19 +13,16 @@ import se.gustavkarlsson.skylight.android.navigation.NavigatorHost
 import se.gustavkarlsson.skylight.android.navigation.Screen
 import se.gustavkarlsson.skylight.android.navigation.ScreensHost
 import se.gustavkarlsson.skylight.android.services.BackButtonController
-import se.gustavkarlsson.skylight.android.services.ServiceRegistry
 
-internal class MainActivity : AppCompatActivity(),
-    NavigatorHost,
-    ScreensHost,
-    ServiceHost,
+internal class MainActivity : AppCompatActivity(), NavigatorHost, ScreensHost, ServiceHost,
     BackstackListener {
 
     override lateinit var navigator: Navigator private set
 
     private lateinit var backButtonController: BackButtonController
 
-    override val serviceRegistry: ServiceRegistry = AppComponent.instance.serviceRegistry()
+    override val serviceRegistry: ServiceRegistry =
+        ScopedServiceComponent.instance.serviceRegistry()
 
     override val screens = DefaultScreens
 

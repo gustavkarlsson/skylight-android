@@ -14,6 +14,7 @@ import se.gustavkarlsson.skylight.android.lib.navigationsetup.NavigationSetupCom
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionComponent
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedServiceComponent
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
@@ -25,7 +26,7 @@ internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsC
     BackgroundComponent.Setter, TimeComponent.Setter, SettingsComponent.Setter,
     RunVersionComponent.Setter, WeatherComponent.Setter, GeocoderComponent.Setter,
     PlacesComponent.Setter, LocationComponent.Setter, AuroraComponent.Setter,
-    PermissionsComponent.Setter, NavigationSetupComponent.Setter {
+    PermissionsComponent.Setter, NavigationSetupComponent.Setter, ScopedServiceComponent.Setter {
 
     override fun onCreate() {
         super.onCreate()
@@ -67,6 +68,7 @@ internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsC
         setAuroraComponent(component)
         setPermissionsComponent(component)
         setNavigationSetupComponent(component)
+        setScopedServiceComponent(component)
 
         component.moduleStarters().forEach(ModuleStarter::start)
     }

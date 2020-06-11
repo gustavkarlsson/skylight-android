@@ -1,11 +1,9 @@
 package se.gustavkarlsson.skylight.android.lib.scopedservice
 
 import se.gustavkarlsson.skylight.android.ScopedService
-import se.gustavkarlsson.skylight.android.services.ServiceRegistry
 import timber.log.Timber
 
-internal class DefaultServiceRegistry :
-    ServiceRegistry {
+internal class DefaultServiceRegistry : ServiceRegistry {
     private var services = mapOf<String, ServiceEntry>()
 
     @Synchronized

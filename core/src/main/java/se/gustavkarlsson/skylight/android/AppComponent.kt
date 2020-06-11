@@ -12,7 +12,6 @@ import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.PermissionRequester
 import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
-import se.gustavkarlsson.skylight.android.services.ServiceRegistry
 import java.util.Locale
 import javax.inject.Named
 
@@ -41,8 +40,6 @@ interface AppComponent {
     fun chanceLevelFormatter(): Formatter<ChanceLevel>
 
     fun selectedPlaceRepository(): SelectedPlaceRepository
-
-    fun serviceRegistry(): ServiceRegistry
 
     @Named("versionCode")
     fun versionCode(): Int
