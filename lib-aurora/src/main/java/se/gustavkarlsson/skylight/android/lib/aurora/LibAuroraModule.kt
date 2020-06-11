@@ -9,10 +9,10 @@ import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Weather
+import se.gustavkarlsson.skylight.android.lib.darkness.DarknessProvider
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherProvider
 import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.services.DarknessProvider
 import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.services.KpIndexProvider

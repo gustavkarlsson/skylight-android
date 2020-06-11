@@ -11,6 +11,7 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":lib-weather"))
+    implementation(project(":lib-darkness"))
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 
