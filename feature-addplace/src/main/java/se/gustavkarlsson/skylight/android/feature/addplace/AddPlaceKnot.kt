@@ -9,7 +9,7 @@ import io.reactivex.functions.Consumer
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.GeocodingResult
 import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
-import se.gustavkarlsson.skylight.android.extensions.buffer
+import se.gustavkarlsson.skylight.android.utils.buffer
 import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 
 internal data class State(

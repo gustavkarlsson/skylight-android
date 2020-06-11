@@ -12,7 +12,7 @@ import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.LocationResult
 import se.gustavkarlsson.skylight.android.entities.Report
-import se.gustavkarlsson.skylight.android.extensions.delay
+import se.gustavkarlsson.skylight.android.utils.delay
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import timber.log.Timber
 import java.util.GregorianCalendar

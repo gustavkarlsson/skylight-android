@@ -5,7 +5,7 @@ import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.PlaceSuggestion
-import se.gustavkarlsson.skylight.android.extensions.mapNotNull
+import se.gustavkarlsson.skylight.android.utils.mapNotNull
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 

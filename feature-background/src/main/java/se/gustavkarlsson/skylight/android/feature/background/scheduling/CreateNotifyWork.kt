@@ -8,7 +8,7 @@ import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.LocationResult
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.entities.TriggerLevel
-import se.gustavkarlsson.skylight.android.extensions.mapNotNull
+import se.gustavkarlsson.skylight.android.utils.mapNotNull
 import se.gustavkarlsson.skylight.android.feature.background.notifications.AppVisibilityEvaluator
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notification
 import se.gustavkarlsson.skylight.android.feature.background.notifications.NotificationEvaluator

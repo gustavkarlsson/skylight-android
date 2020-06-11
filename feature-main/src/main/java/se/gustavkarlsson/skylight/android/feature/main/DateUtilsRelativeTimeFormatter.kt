@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.feature.main
 import android.text.format.DateUtils
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.extensions.until
+import se.gustavkarlsson.skylight.android.utils.until
 
 internal class DateUtilsRelativeTimeFormatter(
     private val rightNowText: CharSequence

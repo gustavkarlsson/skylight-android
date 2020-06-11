@@ -5,8 +5,8 @@ import com.google.android.gms.location.LocationRequest
 import com.patloew.rxlocation.RxLocation
 import dagger.Module
 import dagger.Provides
-import se.gustavkarlsson.skylight.android.extensions.minutes
-import se.gustavkarlsson.skylight.android.extensions.seconds
+import se.gustavkarlsson.skylight.android.utils.minutes
+import se.gustavkarlsson.skylight.android.utils.seconds
 import javax.inject.Singleton
 
 @Module
