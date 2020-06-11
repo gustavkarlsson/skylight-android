@@ -9,7 +9,6 @@ import se.gustavkarlsson.skylight.android.navigation.Backstack
 import se.gustavkarlsson.skylight.android.navigation.BackstackListener
 import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.navigation.Navigator
-import se.gustavkarlsson.skylight.android.services.BackButtonController
 import com.zhuinden.simplestack.Backstack as SSBackstack
 import com.zhuinden.simplestack.navigator.Navigator as SSNavigator
 

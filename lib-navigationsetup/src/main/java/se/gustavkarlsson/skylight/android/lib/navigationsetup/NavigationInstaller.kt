@@ -7,7 +7,6 @@ import se.gustavkarlsson.skylight.android.navigation.Backstack
 import se.gustavkarlsson.skylight.android.navigation.BackstackListener
 import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.navigation.Navigator
-import se.gustavkarlsson.skylight.android.services.BackButtonController
 
 interface NavigationInstaller {
     fun install(

@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import se.gustavkarlsson.skylight.android.lib.navigationsetup.BackButtonController
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.NavigationSetupComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedServiceComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceHost
@@ -12,7 +13,6 @@ import se.gustavkarlsson.skylight.android.navigation.Navigator
 import se.gustavkarlsson.skylight.android.navigation.NavigatorHost
 import se.gustavkarlsson.skylight.android.navigation.Screen
 import se.gustavkarlsson.skylight.android.navigation.ScreensHost
-import se.gustavkarlsson.skylight.android.services.BackButtonController
 
 internal class MainActivity : AppCompatActivity(), NavigatorHost, ScreensHost, ServiceHost,
     BackstackListener {
