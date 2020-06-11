@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":lib-weather"))
     implementation(project(":lib-darkness"))
     implementation(project(":lib-kpindex"))
+    implementation(project(":lib-geomaglocation"))
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 
