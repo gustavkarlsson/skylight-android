@@ -4,7 +4,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import io.reactivex.Single
-import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter

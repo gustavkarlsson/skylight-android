@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.lib.geomaglocation
 
 import io.reactivex.Observable
 import io.reactivex.Single
-import se.gustavkarlsson.skylight.android.entities.GeomagLocation
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.LocationResult
 import se.gustavkarlsson.skylight.android.entities.Report
