@@ -8,11 +8,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
 import io.reactivex.rxkotlin.toObservable
-import javax.inject.Singleton
 import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
+import se.gustavkarlsson.skylight.android.lib.settings.Settings
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
-import se.gustavkarlsson.skylight.android.services.Settings
+import javax.inject.Singleton
 
 @Module
 class FeatureSettingsModule {

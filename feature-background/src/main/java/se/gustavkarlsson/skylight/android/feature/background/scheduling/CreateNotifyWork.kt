@@ -14,11 +14,11 @@ import se.gustavkarlsson.skylight.android.feature.background.notifications.Notif
 import se.gustavkarlsson.skylight.android.feature.background.notifications.NotificationEvaluator
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notifier
 import se.gustavkarlsson.skylight.android.feature.background.notifications.PlaceWithChance
+import se.gustavkarlsson.skylight.android.lib.settings.Settings
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.LocationProvider
-import se.gustavkarlsson.skylight.android.services.Settings
 
 internal fun createNotifyWork(
     settings: Settings,

@@ -9,9 +9,6 @@ import dagger.Provides
 import dagger.Reusable
 import dagger.multibindings.IntoSet
 import io.reactivex.Completable
-import java.io.File
-import javax.inject.Named
-import javax.inject.Singleton
 import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
@@ -32,12 +29,15 @@ import se.gustavkarlsson.skylight.android.feature.background.scheduling.NotifySc
 import se.gustavkarlsson.skylight.android.feature.background.scheduling.Scheduler
 import se.gustavkarlsson.skylight.android.feature.background.scheduling.createNotifyWork
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
+import se.gustavkarlsson.skylight.android.lib.settings.Settings
+import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.LocationProvider
-import se.gustavkarlsson.skylight.android.services.Settings
-import se.gustavkarlsson.skylight.android.lib.time.Time
+import java.io.File
+import javax.inject.Named
+import javax.inject.Singleton
 
 @Module
 class FeatureBackgroundModule {

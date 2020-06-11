@@ -9,7 +9,7 @@ import io.reactivex.rxkotlin.plusAssign
 import se.gustavkarlsson.skylight.android.ScopedService
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.entities.TriggerLevel
-import se.gustavkarlsson.skylight.android.services.Settings
+import se.gustavkarlsson.skylight.android.lib.settings.Settings
 
 internal class SettingsViewModel(private val settings: Settings) :
     ScopedService {
