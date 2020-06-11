@@ -18,7 +18,6 @@ import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.entities.Report
-import se.gustavkarlsson.skylight.android.entities.ReverseGeocodingResult
 import se.gustavkarlsson.skylight.android.feature.main.ChanceToColorConverter
 import se.gustavkarlsson.skylight.android.feature.main.Change
 import se.gustavkarlsson.skylight.android.feature.main.R
@@ -31,6 +30,7 @@ import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
 import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
+import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingResult
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.weather.Weather

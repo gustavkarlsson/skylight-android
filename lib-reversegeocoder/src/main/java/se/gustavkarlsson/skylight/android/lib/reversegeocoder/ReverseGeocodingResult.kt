@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.entities
+package se.gustavkarlsson.skylight.android.lib.reversegeocoder
 
 import java.io.IOException
 

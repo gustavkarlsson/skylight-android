@@ -10,7 +10,6 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.entities.LocationResult
-import se.gustavkarlsson.skylight.android.entities.ReverseGeocodingResult
 import se.gustavkarlsson.skylight.android.utils.delay
 import timber.log.Timber
 import java.io.IOException

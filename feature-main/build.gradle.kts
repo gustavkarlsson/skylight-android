@@ -35,6 +35,7 @@ dependencies {
     implementation(project(":lib-darkness"))
     implementation(project(":lib-kpindex"))
     implementation(project(":lib-geomaglocation"))
+    implementation(project(":lib-reversegeocoder"))
 
     implementation("androidx.cardview:cardview:${Versions.androidCardview}")
 
