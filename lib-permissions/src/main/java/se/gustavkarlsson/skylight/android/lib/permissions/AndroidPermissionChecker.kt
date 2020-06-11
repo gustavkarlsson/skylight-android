@@ -6,7 +6,6 @@ import androidx.core.content.ContextCompat
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.Access
-import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import timber.log.Timber
 
 internal class AndroidPermissionChecker(

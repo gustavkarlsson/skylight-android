@@ -11,7 +11,7 @@ import se.gustavkarlsson.skylight.android.entities.LocationResult
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
-import se.gustavkarlsson.skylight.android.services.PermissionChecker
+import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 import timber.log.Timber
 

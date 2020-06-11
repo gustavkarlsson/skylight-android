@@ -18,12 +18,13 @@ import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.location.LocationComponent
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
+import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
+import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
-import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 
 @Component(
@@ -35,7 +36,8 @@ import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
         TimeComponent::class,
         WeatherComponent::class,
         LocationComponent::class,
-        AuroraComponent::class
+        AuroraComponent::class,
+        PermissionsComponent::class
     ]
 )
 internal interface MainComponent {
@@ -49,6 +51,7 @@ internal interface MainComponent {
                 .weatherComponent(WeatherComponent.instance)
                 .locationComponent(LocationComponent.instance)
                 .auroraComponent(AuroraComponent.instance)
+                .permissionsComponent(PermissionsComponent.instance)
                 .build()
     }
 }

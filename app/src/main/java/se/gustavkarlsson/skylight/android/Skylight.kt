@@ -10,6 +10,7 @@ import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
 import se.gustavkarlsson.skylight.android.lib.location.LocationComponent
+import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionComponent
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
@@ -22,7 +23,8 @@ import timber.log.Timber.DebugTree
 internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsComponent.Setter,
     BackgroundComponent.Setter, TimeComponent.Setter, SettingsComponent.Setter,
     RunVersionComponent.Setter, WeatherComponent.Setter, GeocoderComponent.Setter,
-    PlacesComponent.Setter, LocationComponent.Setter, AuroraComponent.Setter {
+    PlacesComponent.Setter, LocationComponent.Setter, AuroraComponent.Setter,
+    PermissionsComponent.Setter {
 
     override fun onCreate() {
         super.onCreate()
@@ -62,6 +64,7 @@ internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsC
         setPlacesComponent(component)
         setLocationComponent(component)
         setAuroraComponent(component)
+        setPermissionsComponent(component)
 
         component.moduleStarters().forEach(ModuleStarter::start)
     }

@@ -34,10 +34,10 @@ import se.gustavkarlsson.skylight.android.feature.main.Change
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.feature.main.State
+import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
-import se.gustavkarlsson.skylight.android.services.PermissionChecker
 
 internal class MainViewModel(
     private val mainKnot: Knot<State, Change>,

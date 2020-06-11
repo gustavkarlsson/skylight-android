@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services
+package se.gustavkarlsson.skylight.android.lib.permissions
 
 import io.reactivex.Observable
 import se.gustavkarlsson.skylight.android.entities.Access

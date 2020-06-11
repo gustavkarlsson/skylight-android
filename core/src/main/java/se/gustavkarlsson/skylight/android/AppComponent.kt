@@ -11,7 +11,6 @@ import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.services.NavigationInstaller
-import se.gustavkarlsson.skylight.android.services.PermissionChecker
 import se.gustavkarlsson.skylight.android.services.PermissionRequester
 import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.services.ServiceRegistry
@@ -41,8 +40,6 @@ interface AppComponent {
     fun darknessFormatter(): Formatter<Darkness>
 
     fun chanceLevelFormatter(): Formatter<ChanceLevel>
-
-    fun locationPermissionChecker(): PermissionChecker
 
     fun selectedPlaceRepository(): SelectedPlaceRepository
 
