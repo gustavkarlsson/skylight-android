@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.entities
+package se.gustavkarlsson.skylight.android.lib.navigationsetup
 
 import androidx.annotation.AnimRes
 import androidx.annotation.AnimatorRes
@@ -16,6 +16,11 @@ data class Animations(
 
     companion object {
         val NONE =
-            Animations(0, 0, 0, 0)
+            Animations(
+                0,
+                0,
+                0,
+                0
+            )
     }
 }
