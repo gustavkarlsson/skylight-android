@@ -11,7 +11,7 @@ import se.gustavkarlsson.skylight.android.ScopedService
 import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
-import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
+import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 
 internal class DrawerViewModel(
     private val placesRepository: PlacesRepository,

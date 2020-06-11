@@ -4,6 +4,8 @@ interface PlacesComponent {
 
     fun placesRepository(): PlacesRepository
 
+    fun selectedPlaceRepository(): SelectedPlaceRepository
+
     interface Setter {
         fun setPlacesComponent(component: PlacesComponent) {
             instance = component

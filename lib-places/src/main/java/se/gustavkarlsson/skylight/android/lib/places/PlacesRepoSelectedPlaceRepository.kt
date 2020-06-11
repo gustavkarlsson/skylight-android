@@ -4,7 +4,6 @@ import de.halfbit.knot.knot
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import se.gustavkarlsson.skylight.android.entities.Place
-import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 import timber.log.Timber
 
 internal class PlacesRepoSelectedPlaceRepository(

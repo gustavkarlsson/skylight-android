@@ -10,7 +10,6 @@ import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
-import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 import java.util.Locale
 import javax.inject.Named
 
@@ -35,8 +34,6 @@ interface AppComponent {
     fun darknessFormatter(): Formatter<Darkness>
 
     fun chanceLevelFormatter(): Formatter<ChanceLevel>
-
-    fun selectedPlaceRepository(): SelectedPlaceRepository
 
     @Named("versionCode")
     fun versionCode(): Int
