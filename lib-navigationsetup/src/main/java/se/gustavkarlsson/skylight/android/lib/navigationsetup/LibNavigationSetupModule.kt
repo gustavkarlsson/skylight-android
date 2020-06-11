@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.lib.navigationsetup
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import se.gustavkarlsson.skylight.android.services.NavigationInstaller
 
 @Module
 class LibNavigationSetupModule {

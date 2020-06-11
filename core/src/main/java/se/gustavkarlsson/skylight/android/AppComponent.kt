@@ -10,7 +10,6 @@ import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
-import se.gustavkarlsson.skylight.android.services.NavigationInstaller
 import se.gustavkarlsson.skylight.android.services.PermissionRequester
 import se.gustavkarlsson.skylight.android.services.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.services.ServiceRegistry
@@ -42,8 +41,6 @@ interface AppComponent {
     fun chanceLevelFormatter(): Formatter<ChanceLevel>
 
     fun selectedPlaceRepository(): SelectedPlaceRepository
-
-    fun navigationInstaller(): NavigationInstaller
 
     fun serviceRegistry(): ServiceRegistry
 

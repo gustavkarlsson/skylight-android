@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import se.gustavkarlsson.skylight.android.lib.navigationsetup.NavigationSetupComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceHost
 import se.gustavkarlsson.skylight.android.navigation.Backstack
 import se.gustavkarlsson.skylight.android.navigation.BackstackListener
@@ -33,7 +34,7 @@ internal class MainActivity : AppCompatActivity(),
     }
 
     private fun setupNavigation() {
-        val installer = AppComponent.instance.navigationInstaller()
+        val installer = NavigationSetupComponent.instance.navigationInstaller()
         val (navigator, backButtonController) = installer.install(
             this,
             R.id.fragmentContainer,
