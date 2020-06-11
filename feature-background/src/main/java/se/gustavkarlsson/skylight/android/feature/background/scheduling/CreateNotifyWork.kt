@@ -5,7 +5,6 @@ import io.reactivex.Single
 import io.reactivex.rxkotlin.toObservable
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.LocationResult
-import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.feature.background.notifications.AppVisibilityEvaluator
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notification
@@ -15,6 +14,7 @@ import se.gustavkarlsson.skylight.android.feature.background.notifications.Place
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
+import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator

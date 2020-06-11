@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.core.content.edit
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
-import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notification
 import se.gustavkarlsson.skylight.android.feature.background.notifications.PlaceWithChance
+import se.gustavkarlsson.skylight.android.lib.places.Place
 import timber.log.Timber
 
 internal class SharedPrefsLastNotificationRepository(

@@ -1,9 +1,9 @@
 package se.gustavkarlsson.skylight.android.feature.background.notifications
 
-import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.feature.background.persistence.LastNotificationRepository
 import se.gustavkarlsson.skylight.android.feature.background.persistence.NotificationRecord
 import se.gustavkarlsson.skylight.android.feature.background.persistence.PlaceRef
+import se.gustavkarlsson.skylight.android.lib.places.Place
 
 internal class NotificationEvaluatorImpl(
     private val lastNotificationRepository: LastNotificationRepository,

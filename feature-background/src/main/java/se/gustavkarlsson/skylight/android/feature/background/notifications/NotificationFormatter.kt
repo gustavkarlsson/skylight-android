@@ -2,8 +2,8 @@ package se.gustavkarlsson.skylight.android.feature.background.notifications
 
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
-import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.feature.background.R
+import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.services.Formatter
 
 internal class NotificationFormatter(

@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.lib.places
 import de.halfbit.knot.knot
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import se.gustavkarlsson.skylight.android.entities.Place
 import timber.log.Timber
 
 internal class PlacesRepoSelectedPlaceRepository(

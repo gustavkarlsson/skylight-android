@@ -8,8 +8,8 @@ import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import se.gustavkarlsson.skylight.android.entities.Place
 import se.gustavkarlsson.skylight.android.entities.TriggerLevel
+import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.settings.db.DbSettingsQueries
 
