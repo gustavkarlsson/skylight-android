@@ -10,13 +10,14 @@ import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
 import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionComponent
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
+import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
 import timber.log.Timber
 import timber.log.Timber.DebugTree
 
 @Suppress("unused")
 internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsComponent.Setter,
     BackgroundComponent.Setter, TimeComponent.Setter, SettingsComponent.Setter,
-    RunVersionComponent.Setter {
+    RunVersionComponent.Setter, WeatherComponent.Setter {
 
     override fun onCreate() {
         super.onCreate()
@@ -50,6 +51,7 @@ internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsC
         setTimeComponent(component)
         setSettingsComponent(component)
         setRunVersionComponent(component)
+        setWeatherComponent(component)
         component.moduleStarters().forEach(ModuleStarter::start)
     }
 }

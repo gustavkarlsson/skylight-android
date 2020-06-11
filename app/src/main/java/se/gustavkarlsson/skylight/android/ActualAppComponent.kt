@@ -27,6 +27,7 @@ import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
 import se.gustavkarlsson.skylight.android.lib.time.LibTimeModule
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.lib.weather.LibWeatherModule
+import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
 import javax.inject.Singleton
 
 @Singleton
@@ -57,4 +58,4 @@ import javax.inject.Singleton
     ]
 )
 internal interface ActualAppComponent : AppComponent, AnalyticsComponent, BackgroundComponent,
-    TimeComponent, SettingsComponent, RunVersionComponent
+    TimeComponent, SettingsComponent, RunVersionComponent, WeatherComponent

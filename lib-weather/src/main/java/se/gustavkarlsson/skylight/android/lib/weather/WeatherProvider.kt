@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services
+package se.gustavkarlsson.skylight.android.lib.weather
 
 import io.reactivex.Observable
 import io.reactivex.Single
