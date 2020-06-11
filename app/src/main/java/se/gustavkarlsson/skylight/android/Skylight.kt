@@ -7,6 +7,7 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import io.reactivex.plugins.RxJavaPlugins
 import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
+import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
 import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionComponent
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
@@ -17,7 +18,7 @@ import timber.log.Timber.DebugTree
 @Suppress("unused")
 internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsComponent.Setter,
     BackgroundComponent.Setter, TimeComponent.Setter, SettingsComponent.Setter,
-    RunVersionComponent.Setter, WeatherComponent.Setter {
+    RunVersionComponent.Setter, WeatherComponent.Setter, GeocoderComponent.Setter {
 
     override fun onCreate() {
         super.onCreate()
@@ -45,6 +46,7 @@ internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsC
         val component = DaggerActualAppComponent.builder()
             .appModule(AppModule(this))
             .build()
+
         setAppComponent(component)
         setAnalyticsComponent(component)
         setBackgroundComponent(component)
@@ -52,6 +54,8 @@ internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsC
         setSettingsComponent(component)
         setRunVersionComponent(component)
         setWeatherComponent(component)
+        setGeocoderComponent(component)
+
         component.moduleStarters().forEach(ModuleStarter::start)
     }
 }

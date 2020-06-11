@@ -11,7 +11,6 @@ import se.gustavkarlsson.skylight.android.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.services.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
-import se.gustavkarlsson.skylight.android.services.Geocoder
 import se.gustavkarlsson.skylight.android.services.LocationProvider
 import se.gustavkarlsson.skylight.android.services.NavigationInstaller
 import se.gustavkarlsson.skylight.android.services.PermissionChecker
@@ -65,8 +64,6 @@ interface AppComponent {
     fun versionName(): String
 
     fun placesRepository(): PlacesRepository
-
-    fun geocoder(): Geocoder
 
     fun navigationOverrides(): Set<NavigationOverride>
 

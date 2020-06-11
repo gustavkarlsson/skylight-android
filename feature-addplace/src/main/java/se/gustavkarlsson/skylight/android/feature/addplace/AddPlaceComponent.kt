@@ -7,12 +7,16 @@ import dagger.Module
 import dagger.Provides
 import se.gustavkarlsson.skylight.android.AppComponent
 import se.gustavkarlsson.skylight.android.extensions.seconds
-import se.gustavkarlsson.skylight.android.services.Geocoder
+import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
+import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
 import se.gustavkarlsson.skylight.android.services.PlacesRepository
 
 @Component(
     modules = [AddPlaceModule::class],
-    dependencies = [AppComponent::class]
+    dependencies = [
+        AppComponent::class,
+        GeocoderComponent::class
+    ]
 )
 internal interface AddPlaceComponent {
     fun viewModel(): AddPlaceViewModel
@@ -21,6 +25,7 @@ internal interface AddPlaceComponent {
         fun build(): AddPlaceComponent =
             DaggerAddPlaceComponent.builder()
                 .appComponent(AppComponent.instance)
+                .geocoderComponent(GeocoderComponent.instance)
                 .build()
     }
 }

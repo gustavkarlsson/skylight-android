@@ -5,7 +5,6 @@ import dagger.Provides
 import dagger.Reusable
 import io.reactivex.Single
 import java.util.Locale
-import se.gustavkarlsson.skylight.android.services.Geocoder
 
 @Module
 class LibGeocoderModule {

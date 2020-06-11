@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services
+package se.gustavkarlsson.skylight.android.lib.geocoder
 
 import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.entities.GeocodingResult
