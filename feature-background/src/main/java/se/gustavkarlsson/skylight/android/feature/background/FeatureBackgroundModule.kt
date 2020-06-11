@@ -11,9 +11,7 @@ import dagger.multibindings.IntoSet
 import io.reactivex.Completable
 import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
-import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.TriggerLevel
-import se.gustavkarlsson.skylight.android.utils.minutes
 import se.gustavkarlsson.skylight.android.feature.background.notifications.AppVisibilityEvaluator
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notification
 import se.gustavkarlsson.skylight.android.feature.background.notifications.NotificationChannelCreator
@@ -30,11 +28,13 @@ import se.gustavkarlsson.skylight.android.feature.background.scheduling.Schedule
 import se.gustavkarlsson.skylight.android.feature.background.scheduling.createNotifyWork
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
+import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
+import se.gustavkarlsson.skylight.android.utils.minutes
 import java.io.File
 import javax.inject.Named
 import javax.inject.Singleton

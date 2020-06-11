@@ -1,6 +1,13 @@
-package se.gustavkarlsson.skylight.android.entities
+package se.gustavkarlsson.skylight.android.lib.aurora
 
 import org.threeten.bp.Instant
+import se.gustavkarlsson.skylight.android.entities.Darkness
+import se.gustavkarlsson.skylight.android.entities.GeomagLocation
+import se.gustavkarlsson.skylight.android.entities.KpIndex
+import se.gustavkarlsson.skylight.android.entities.Loadable
+import se.gustavkarlsson.skylight.android.entities.Report
+import se.gustavkarlsson.skylight.android.entities.ReverseGeocodingResult
+import se.gustavkarlsson.skylight.android.entities.Weather
 
 data class LoadableAuroraReport(
     val locationName: Loadable<ReverseGeocodingResult>,

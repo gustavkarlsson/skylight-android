@@ -2,9 +2,7 @@ package se.gustavkarlsson.skylight.android.lib.aurora
 
 import io.reactivex.Observable
 import io.reactivex.Single
-import se.gustavkarlsson.skylight.android.entities.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.entities.Loadable
-import se.gustavkarlsson.skylight.android.entities.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.entities.LocationResult
 
 interface AuroraReportProvider {
