@@ -7,7 +7,6 @@ import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import se.gustavkarlsson.skylight.android.entities.Access
 
 @Module
 class LibPermissionsModule {

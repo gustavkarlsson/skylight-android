@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android
 
-import se.gustavkarlsson.skylight.android.entities.AnimationConfig
 import se.gustavkarlsson.skylight.android.entities.Animations
+import se.gustavkarlsson.skylight.android.lib.navigationsetup.AnimationConfig
 
 internal val animationConfig =
     AnimationConfig(
