@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.places
 
 import io.reactivex.Observable
-import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.lib.location.Location
 
 interface PlacesRepository {
     fun add(name: String, location: Location)

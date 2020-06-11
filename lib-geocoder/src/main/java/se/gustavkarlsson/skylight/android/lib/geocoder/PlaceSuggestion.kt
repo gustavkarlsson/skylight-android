@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.geocoder
 
-import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.lib.location.Location
 
 data class PlaceSuggestion(
     val location: Location,

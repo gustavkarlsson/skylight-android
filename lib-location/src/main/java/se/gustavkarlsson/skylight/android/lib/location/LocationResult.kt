@@ -1,7 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.location
 
-import se.gustavkarlsson.skylight.android.entities.Location
-
 sealed class LocationResult {
 
     fun <T> map(

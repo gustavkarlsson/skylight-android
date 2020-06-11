@@ -7,7 +7,7 @@ import com.squareup.sqldelight.runtime.rx.mapToList
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
-import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.db.DbPlaceQueries
 
 internal class SqlDelightPlacesRepository(

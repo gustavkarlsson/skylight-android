@@ -9,7 +9,6 @@ import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Loadable
-import se.gustavkarlsson.skylight.android.entities.Location
 import se.gustavkarlsson.skylight.android.utils.delay
 import se.gustavkarlsson.skylight.android.utils.timeout
 import timber.log.Timber

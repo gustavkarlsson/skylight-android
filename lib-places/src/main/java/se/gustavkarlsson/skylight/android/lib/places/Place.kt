@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.lib.places
 
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.core.R
-import se.gustavkarlsson.skylight.android.entities.Location
+import se.gustavkarlsson.skylight.android.lib.location.Location
 
 sealed class Place {
     abstract val name: TextRef
