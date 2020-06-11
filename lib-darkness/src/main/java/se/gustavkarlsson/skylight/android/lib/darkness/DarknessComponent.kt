@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.darkness
 
-import se.gustavkarlsson.skylight.android.entities.Darkness
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 
