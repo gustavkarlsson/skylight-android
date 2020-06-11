@@ -2,10 +2,10 @@ package se.gustavkarlsson.skylight.android.lib.aurora
 
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
-import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.entities.ReverseGeocodingResult
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
+import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 
 data class CompleteAuroraReport(

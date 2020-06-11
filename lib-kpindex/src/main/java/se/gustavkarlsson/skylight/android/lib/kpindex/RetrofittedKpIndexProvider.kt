@@ -5,11 +5,10 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Cause
-import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.Report
-import se.gustavkarlsson.skylight.android.utils.delay
 import se.gustavkarlsson.skylight.android.lib.time.Time
+import se.gustavkarlsson.skylight.android.utils.delay
 import timber.log.Timber
 import java.io.IOException
 

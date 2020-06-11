@@ -15,9 +15,9 @@ import se.gustavkarlsson.skylight.android.entities.Chance
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.IMPOSSIBLE
 import se.gustavkarlsson.skylight.android.entities.Chance.Companion.UNKNOWN
 import se.gustavkarlsson.skylight.android.entities.GeomagLocation
-import se.gustavkarlsson.skylight.android.entities.KpIndex
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
+import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 
