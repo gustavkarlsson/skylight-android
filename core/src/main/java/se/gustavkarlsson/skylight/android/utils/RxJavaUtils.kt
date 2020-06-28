@@ -4,8 +4,8 @@ import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
-import java.util.concurrent.TimeUnit
 import org.threeten.bp.Duration
+import java.util.concurrent.TimeUnit
 
 fun <T : Any> Single<T>.delay(delay: Duration): Single<T> =
     this.delay(delay.toMillis(), TimeUnit.MILLISECONDS)
@@ -21,6 +21,9 @@ fun <T : Any> Single<T>.timeout(timeout: Duration): Single<T> =
 
 fun <T : Any> Observable<T>.debounce(interval: Duration): Observable<T> =
     this.debounce(interval.toMillis(), TimeUnit.MILLISECONDS)
+
+fun <T : Any> Observable<T>.throttleLatest(duration: Duration): Observable<T> =
+    this.throttleLatest(duration.toMillis(), TimeUnit.MILLISECONDS)
 
 fun <T : Any> Single<T>.delaySubscription(delay: Duration): Single<T> =
     this.delaySubscription(delay.toMillis(), TimeUnit.MILLISECONDS)

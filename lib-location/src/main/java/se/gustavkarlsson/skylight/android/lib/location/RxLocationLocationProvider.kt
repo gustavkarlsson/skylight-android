@@ -10,9 +10,9 @@ import io.reactivex.schedulers.Schedulers
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.utils.delay
+import se.gustavkarlsson.skylight.android.utils.throttleLatest
 import se.gustavkarlsson.skylight.android.utils.timeout
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException
 
 internal class RxLocationLocationProvider(
@@ -93,7 +93,7 @@ internal class RxLocationLocationProvider(
         .subscribeOn(Schedulers.io())
         .map { Location(it.latitude, it.longitude) }
         .distinctUntilChanged()
-        .throttleLatest(throttleDuration.toMillis(), TimeUnit.MILLISECONDS)
+        .throttleLatest(throttleDuration)
         .map<LocationResult>(LocationResult::Success)
         .onErrorResumeNext { exception: Throwable ->
             val result = when (exception) {
