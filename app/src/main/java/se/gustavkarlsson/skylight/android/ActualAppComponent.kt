@@ -72,4 +72,7 @@ internal interface ActualAppComponent : AppComponent, AnalyticsComponent, Backgr
     TimeComponent, SettingsComponent, RunVersionComponent, WeatherComponent, GeocoderComponent,
     PlacesComponent, LocationComponent, AuroraComponent, PermissionsComponent,
     NavigationSetupComponent, ScopedServiceComponent, NavigationComponent, DarknessComponent,
-    KpIndexComponent, GeomagLocationComponent
+    KpIndexComponent, GeomagLocationComponent {
+
+    fun moduleStarters(): Set<ModuleStarter>
+}
