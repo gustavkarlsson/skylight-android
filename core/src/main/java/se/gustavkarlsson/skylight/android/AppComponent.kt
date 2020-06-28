@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android
 
 import android.content.Context
+import io.reactivex.Scheduler
 import javax.inject.Named
 
 interface AppComponent {
@@ -12,6 +13,15 @@ interface AppComponent {
 
     @Named("versionName")
     fun versionName(): String
+
+    @Main
+    fun mainThreadScheduler(): Scheduler
+
+    @Io
+    fun ioScheduler(): Scheduler
+
+    @Computation
+    fun computationScheduler(): Scheduler
 
     interface Setter {
         fun setAppComponent(component: AppComponent) {

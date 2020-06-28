@@ -10,8 +10,9 @@ import se.gustavkarlsson.skylight.android.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
+import javax.inject.Inject
 
-internal class SettingsViewModel(private val settings: Settings) :
+internal class SettingsViewModel @Inject constructor(private val settings: Settings) :
     ScopedService {
 
     private val disposables = CompositeDisposable()

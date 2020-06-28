@@ -5,9 +5,9 @@ import com.google.android.gms.common.GoogleApiAvailability
 import io.ashdavies.rx.rxtasks.toCompletable
 import io.reactivex.Completable
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
+import javax.inject.Inject
 
-internal class GooglePlayServicesViewModel :
-    ScopedService {
+internal class GooglePlayServicesViewModel @Inject constructor() : ScopedService {
     // TODO Extract to library module (together with GooglePlayServicesChecker)
     fun makeGooglePlayServicesAvailable(activity: Activity): Completable =
         GoogleApiAvailability.getInstance()

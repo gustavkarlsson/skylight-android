@@ -5,18 +5,19 @@ import com.ioki.textref.TextRef
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.Scheduler
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
+import se.gustavkarlsson.skylight.android.Main
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
+import javax.inject.Inject
 
-internal class DrawerViewModel(
+internal class DrawerViewModel @Inject constructor(
     private val placesRepository: PlacesRepository,
     private val selectedPlaceRepo: SelectedPlaceRepository,
-    observeScheduler: Scheduler = AndroidSchedulers.mainThread()
+    @Main observeScheduler: Scheduler
 ) : ScopedService {
     val drawerItems: Observable<List<DrawerItem>> =
         Observables.combineLatest(

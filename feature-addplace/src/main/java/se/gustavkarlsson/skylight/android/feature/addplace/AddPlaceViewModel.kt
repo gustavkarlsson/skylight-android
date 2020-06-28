@@ -8,8 +8,9 @@ import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.utils.mapNotNull
+import javax.inject.Inject
 
-internal class AddPlaceViewModel(
+internal class AddPlaceViewModel @Inject constructor(
     private val placesRepository: PlacesRepository,
     private val knot: AddPlaceKnot,
     val errorMessages: Observable<TextRef>

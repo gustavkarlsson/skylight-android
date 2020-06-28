@@ -7,7 +7,10 @@ import android.os.Build
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import io.reactivex.Scheduler
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import java.util.Locale
 import javax.inject.Named
 
@@ -47,4 +50,19 @@ internal class AppModule(private val application: Application) {
     @Reusable
     @Named("versionName")
     fun versionName(): String = BuildConfig.VERSION_NAME
+
+    @Provides
+    @Reusable
+    @Main
+    fun mainThreadScheduler(): Scheduler = AndroidSchedulers.mainThread()
+
+    @Provides
+    @Reusable
+    @Io
+    fun ioScheduler(): Scheduler = Schedulers.io()
+
+    @Provides
+    @Reusable
+    @Computation
+    fun computationScheduler(): Scheduler = Schedulers.computation()
 }

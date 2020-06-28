@@ -4,7 +4,6 @@ import android.content.Context
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import de.halfbit.knot.Knot
 import se.gustavkarlsson.skylight.android.AppComponent
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
@@ -77,7 +76,7 @@ internal class MainModule {
         selectedPlaceRepository: SelectedPlaceRepository,
         locationProvider: LocationProvider,
         auroraReportProvider: AuroraReportProvider
-    ): Knot<State, Change> = buildMainKnot(
+    ): MainKnot = buildMainKnot(
         permissionChecker,
         selectedPlaceRepository,
         locationProvider,
@@ -87,7 +86,7 @@ internal class MainModule {
     @Provides
     fun viewModel(
         context: Context,
-        mainKnot: Knot<State, Change>,
+        mainKnot: MainKnot,
         time: Time,
         auroraChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
         chanceLevelFormatter: Formatter<ChanceLevel>,

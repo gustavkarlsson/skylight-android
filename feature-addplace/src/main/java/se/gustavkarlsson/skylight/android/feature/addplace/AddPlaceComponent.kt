@@ -2,16 +2,21 @@ package se.gustavkarlsson.skylight.android.feature.addplace
 
 import com.ioki.textref.TextRef
 import com.jakewharton.rxrelay2.PublishRelay
+import com.jakewharton.rxrelay2.Relay
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
+import io.reactivex.Observable
+import io.reactivex.functions.Consumer
 import se.gustavkarlsson.skylight.android.AppComponent
-import se.gustavkarlsson.skylight.android.utils.seconds
+import se.gustavkarlsson.skylight.android.ViewModelScope
 import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
-import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
+import se.gustavkarlsson.skylight.android.utils.seconds
 
+@ViewModelScope
 @Component(
     modules = [AddPlaceModule::class],
     dependencies = [
@@ -37,17 +42,18 @@ internal interface AddPlaceComponent {
 internal class AddPlaceModule {
 
     @Provides
-    fun viewModel(
-        placesRepository: PlacesRepository,
-        geocoder: Geocoder
-    ): AddPlaceViewModel {
-        val errorsRelay = PublishRelay.create<TextRef>()
-        val knot = createKnot(geocoder, 1.seconds, errorsRelay)
+    @ViewModelScope
+    fun errorsRelay(): Relay<TextRef> = PublishRelay.create()
 
-        return AddPlaceViewModel(
-            placesRepository = placesRepository,
-            knot = knot,
-            errorMessages = errorsRelay
-        )
-    }
+    @Provides
+    @Reusable
+    fun errorsObservable(relay: Relay<TextRef>): Observable<TextRef> = relay
+
+    @Provides
+    @Reusable
+    fun errorsConsumer(relay: Relay<TextRef>): Consumer<TextRef> = relay
+
+    @Provides
+    fun knot(geocoder: Geocoder, errors: Consumer<TextRef>): AddPlaceKnot =
+        createKnot(geocoder, 1.seconds, errors)
 }

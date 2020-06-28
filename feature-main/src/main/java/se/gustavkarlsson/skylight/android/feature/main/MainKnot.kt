@@ -33,12 +33,14 @@ private sealed class Action {
     data class Stream(val stream: Boolean, val place: Place?) : Action()
 }
 
+internal typealias MainKnot = Knot<State, Change>
+
 internal fun buildMainKnot(
     permissionChecker: PermissionChecker,
     selectedPlaceRepo: SelectedPlaceRepository,
     locationProvider: LocationProvider,
     auroraReportProvider: AuroraReportProvider
-): Knot<State, Change> = knot<State, Change, Action> {
+): MainKnot = knot<State, Change, Action> {
 
     state {
         initial = State(
