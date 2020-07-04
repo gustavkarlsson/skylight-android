@@ -5,7 +5,6 @@ buildscript {
         jcenter()
         mavenCentral()
         google()
-        maven { setUrl("https://maven.fabric.io/public") }
         maven("https://plugins.gradle.org/m2/")
     }
 
@@ -13,7 +12,7 @@ buildscript {
         classpath("com.android.tools.build:gradle:${Versions.androidGradle}")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}")
         classpath("com.google.gms:google-services:${Versions.googleServices}")
-        classpath("io.fabric.tools:gradle:${Versions.fabric}")
+        classpath("com.google.firebase:firebase-crashlytics-gradle:${Versions.crashlyticsGradle}")
         classpath("com.akaita.android:easylauncher:${Versions.easylauncher}")
         classpath("org.eclipse.jgit:org.eclipse.jgit:${Versions.jgit}")
         classpath("pl.allegro.tech.build:axion-release-plugin:${Versions.axionRelease}")

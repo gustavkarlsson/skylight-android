@@ -12,7 +12,7 @@ dependencies {
     implementation(project(":core"))
 
     // Firebase
-    implementation("com.google.firebase:firebase-core:${Versions.firebase}")
+    implementation("com.google.firebase:firebase-analytics-ktx:${Versions.firebaseAnalytics}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

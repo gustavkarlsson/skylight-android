@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android
 
+import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.multidex.MultiDexApplication
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.jakewharton.threetenabp.AndroidThreeTen
 import io.reactivex.plugins.RxJavaPlugins
 import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
@@ -26,7 +26,7 @@ import timber.log.Timber
 import timber.log.Timber.DebugTree
 
 @Suppress("unused")
-internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsComponent.Setter,
+internal class Skylight : Application(), AppComponent.Setter, AnalyticsComponent.Setter,
     BackgroundComponent.Setter, TimeComponent.Setter, SettingsComponent.Setter,
     RunVersionComponent.Setter, WeatherComponent.Setter, GeocoderComponent.Setter,
     PlacesComponent.Setter, LocationComponent.Setter, AuroraComponent.Setter,
@@ -47,7 +47,7 @@ internal class Skylight : MultiDexApplication(), AppComponent.Setter, AnalyticsC
         if (BuildConfig.DEBUG) {
             Timber.plant(DebugTree())
         }
-        Timber.plant(CrashlyticsTree(Crashlytics.getInstance().core))
+        Timber.plant(CrashlyticsTree(FirebaseCrashlytics.getInstance()))
     }
 
     private fun initRxJavaErrorHandling() {

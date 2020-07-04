@@ -5,7 +5,7 @@ plugins {
     kotlin("android")
     kotlin("kapt")
     id("kotlin-android-extensions")
-    id("io.fabric")
+    id("com.google.firebase.crashlytics")
     id("com.akaita.android.easylauncher")
     id("pl.allegro.tech.build.axion-release")
     id("com.github.triplet.play") version Versions.playPublisher
@@ -110,7 +110,6 @@ dependencies {
     implementation(project(":feature-addplace"))
     implementation(project(":feature-main"))
 
-    implementation("androidx.multidex:multidex:${Versions.androidMultidex}")
     implementation("androidx.annotation:annotation:${Versions.androidAnnotation}")
 
     // Dagger
@@ -120,8 +119,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-extensions:${Versions.androidLifecycle}")
 
     // Crashlytics
-    implementation("com.google.firebase:firebase-core:${Versions.firebase}")
-    implementation("com.crashlytics.sdk.android:crashlytics:${Versions.crashlytics}")
+    implementation("com.google.firebase:firebase-crashlytics-ktx:${Versions.crashlytics}")
 
     // RxAndroid
     implementation("io.reactivex.rxjava2:rxandroid:${Versions.rxandroid}")
@@ -170,5 +168,5 @@ fun generateVersionCode(version: String): Int {
     return versionCode
 }
 
-// Recommended to be applied at bottom
+// Recommended to be applied at bottom (still?)
 apply(mapOf("plugin" to "com.google.gms.google-services"))
