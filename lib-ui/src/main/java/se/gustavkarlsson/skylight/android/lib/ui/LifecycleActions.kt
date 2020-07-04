@@ -12,7 +12,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.OnLifecycleEvent
 
-abstract class LifecycleAction(
+internal abstract class LifecycleAction(
     action: () -> Unit,
     lifecycleToRemoveFrom: Lifecycle?
 ) : LifecycleObserver {
@@ -27,7 +27,7 @@ abstract class LifecycleAction(
         }
 }
 
-class OnCreate(
+internal class OnCreate(
     action: () -> Unit,
     lifecycleToRemoveFrom: Lifecycle? = null
 ) : LifecycleAction(action, lifecycleToRemoveFrom), LifecycleObserver {
@@ -35,7 +35,7 @@ class OnCreate(
     fun invoke() = action()
 }
 
-class OnStart(
+internal class OnStart(
     action: () -> Unit,
     lifecycleToRemoveFrom: Lifecycle? = null
 ) : LifecycleAction(action, lifecycleToRemoveFrom), LifecycleObserver {
@@ -43,7 +43,7 @@ class OnStart(
     fun invoke() = action()
 }
 
-class OnResume(
+internal class OnResume(
     action: () -> Unit,
     lifecycleToRemoveFrom: Lifecycle? = null
 ) : LifecycleAction(action, lifecycleToRemoveFrom), LifecycleObserver {
@@ -51,7 +51,7 @@ class OnResume(
     fun invoke() = action()
 }
 
-class OnPause(
+internal class OnPause(
     action: () -> Unit,
     lifecycleToRemoveFrom: Lifecycle? = null
 ) : LifecycleAction(action, lifecycleToRemoveFrom), LifecycleObserver {
@@ -59,7 +59,7 @@ class OnPause(
     fun invoke() = action()
 }
 
-class OnStop(
+internal class OnStop(
     action: () -> Unit,
     lifecycleToRemoveFrom: Lifecycle? = null
 ) : LifecycleAction(action, lifecycleToRemoveFrom), LifecycleObserver {
@@ -67,7 +67,7 @@ class OnStop(
     fun invoke() = action()
 }
 
-class OnDestroy(
+internal class OnDestroy(
     action: () -> Unit,
     lifecycleToRemoveFrom: Lifecycle? = null
 ) : LifecycleAction(action, lifecycleToRemoveFrom), LifecycleObserver {
@@ -75,7 +75,7 @@ class OnDestroy(
     fun invoke() = action()
 }
 
-class OnAny(
+internal class OnAny(
     action: () -> Unit,
     lifecycleToRemoveFrom: Lifecycle? = null
 ) : LifecycleAction(action, lifecycleToRemoveFrom), LifecycleObserver {
@@ -83,7 +83,7 @@ class OnAny(
     fun invoke() = action()
 }
 
-fun doOnEvery(owner: LifecycleOwner, event: Lifecycle.Event, block: () -> Unit): LifecycleAction {
+fun doOnEvery(owner: LifecycleOwner, event: Lifecycle.Event, block: () -> Unit): LifecycleObserver {
     val onAction = when (event) {
         ON_CREATE -> OnCreate(block)
         ON_START -> OnStart(block)
@@ -101,7 +101,7 @@ fun <T> T.doOnEvery(
     owner: LifecycleOwner,
     event: Lifecycle.Event,
     block: (T) -> Unit
-): LifecycleAction = doOnEvery(owner, event) { -> block(this) }
+): LifecycleObserver = doOnEvery(owner, event) { -> block(this) }
 
 fun doOnNext(owner: LifecycleOwner, event: Lifecycle.Event, block: () -> Unit) {
     val lifecycle = owner.lifecycle
