@@ -115,8 +115,9 @@ dependencies {
     // Dagger
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 
-    // Lifecycle
-    implementation("androidx.lifecycle:lifecycle-extensions:${Versions.androidLifecycle}")
+    // Lifecycle // FIXME why does it compile without these?
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${Versions.androidLifecycle}")
+    kapt("androidx.lifecycle:lifecycle-compiler:${Versions.androidLifecycle}")
 
     // Crashlytics
     implementation("com.google.firebase:firebase-crashlytics-ktx:${Versions.crashlytics}")

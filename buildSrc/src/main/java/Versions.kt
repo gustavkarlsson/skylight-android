@@ -25,14 +25,14 @@ object Versions {
     val crashlytics = "17.1.0"
 
     val androidAppcompat = "1.1.0"
-    val androidFragment = "1.2.2"
+    val androidFragment = "1.2.5"
     val androidAnnotation = "1.1.0"
     val androidCardview = "1.0.0"
-    val androidPreferences = "1.1.0"
-    val androidWorkManager = "2.3.1"
+    val androidPreference = "1.1.1"
+    val androidWorkManager = "2.3.4"
     val androidConstraintLayout = "2.0.0-beta6"
-    val androidCoreKtx = "1.1.0"
-    val androidLifecycle = "2.0.0"
+    val androidCoreKtx = "1.3.0"
+    val androidLifecycle = "2.2.0"
 
     val material = "1.1.0"
 
