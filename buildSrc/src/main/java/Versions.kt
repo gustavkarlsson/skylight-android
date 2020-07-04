@@ -54,15 +54,15 @@ object Versions {
     val timber = "4.7.1"
     val solarPositioning = "0.0.9"
     val sqldelight = "1.2.2"
-    val leakcanary = "2.2"
+    val leakcanary = "2.4"
     val banner = "1.2.0"
-    val mapboxServices = "5.0.0"
-    val knot = "3.0.1" // 3.0.2 is broken (https://github.com/beworker/knot/issues/28)
-    val edgeToEdge = "0.8"
+    val mapboxServices = "5.3.0"
+    val knot = "3.0.3"
+    val edgeToEdge = "0.10"
     val koptional = "0.4.0"
-    val simpleStack = "2.3.0"
+    val simpleStack = "2.3.2"
     val rxtasks = "2.2.0"
-    val textref = "1.2.0"
+    val textref = "1.3.0"
 
     // Test
     val junit = "4.12"
