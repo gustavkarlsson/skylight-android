@@ -4,7 +4,9 @@ import android.content.Context
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import io.reactivex.Scheduler
 import se.gustavkarlsson.skylight.android.AppComponent
+import se.gustavkarlsson.skylight.android.Main
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
@@ -75,12 +77,14 @@ internal class MainModule {
         permissionChecker: PermissionChecker,
         selectedPlaceRepository: SelectedPlaceRepository,
         locationProvider: LocationProvider,
-        auroraReportProvider: AuroraReportProvider
+        auroraReportProvider: AuroraReportProvider,
+        @Main observeScheduler: Scheduler
     ): MainKnot = buildMainKnot(
         permissionChecker,
         selectedPlaceRepository,
         locationProvider,
-        auroraReportProvider
+        auroraReportProvider,
+        observeScheduler
     )
 
     @Provides
@@ -98,7 +102,8 @@ internal class MainModule {
         weatherFormatter: Formatter<Weather>,
         darknessEvaluator: ChanceEvaluator<Darkness>,
         darknessFormatter: Formatter<Darkness>,
-        locationPermissionChecker: PermissionChecker
+        locationPermissionChecker: PermissionChecker,
+        @Main observeScheduler: Scheduler
     ): MainViewModel {
         val rightNowText = context.getString(R.string.right_now)
         val relativeTimeFormatter = DateUtilsRelativeTimeFormatter(rightNowText)
@@ -118,7 +123,8 @@ internal class MainModule {
             locationPermissionChecker,
             ChanceToColorConverter(context),
             time,
-            1.minutes
+            1.minutes,
+            observeScheduler
         )
     }
 }

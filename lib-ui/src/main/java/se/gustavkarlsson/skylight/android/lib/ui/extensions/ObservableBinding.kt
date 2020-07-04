@@ -10,8 +10,8 @@ import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.Scheduler
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import se.gustavkarlsson.skylight.android.AppComponent
 
 fun Completable.bind(fragment: Fragment) = toObservable<Unit>()
     .bind(fragment) {}
@@ -34,7 +34,7 @@ private fun <T : Any> Observable<T>.bind(
         this,
         block,
         sourceName,
-        AndroidSchedulers.mainThread()
+        AppComponent.instance.mainThreadScheduler()
     )
 )
 

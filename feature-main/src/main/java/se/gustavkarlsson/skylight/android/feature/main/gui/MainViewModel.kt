@@ -5,7 +5,7 @@ import androidx.annotation.DrawableRes
 import com.ioki.textref.TextRef
 import de.halfbit.knot.Knot
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.Scheduler
 import io.reactivex.rxkotlin.Observables
 import org.threeten.bp.Duration
 import se.gustavkarlsson.koptional.Absent
@@ -55,7 +55,8 @@ internal class MainViewModel(
     private val permissionChecker: PermissionChecker,
     private val chanceToColorConverter: ChanceToColorConverter,
     time: Time,
-    nowTextThreshold: Duration
+    nowTextThreshold: Duration,
+    observeScheduler: Scheduler
 ) : ScopedService {
 
     override fun onCleared() {
@@ -111,7 +112,7 @@ internal class MainViewModel(
                 else -> TextRef(R.string.time_in_location, time, name)
             }
         }
-        .observeOn(AndroidSchedulers.mainThread())
+        .observeOn(observeScheduler)
 
     val darkness: Observable<FactorItem> = mainKnot.state
         .toFactorItems(

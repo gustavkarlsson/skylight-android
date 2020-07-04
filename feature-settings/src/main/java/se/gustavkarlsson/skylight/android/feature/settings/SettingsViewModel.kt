@@ -3,17 +3,20 @@ package se.gustavkarlsson.skylight.android.feature.settings
 import com.ioki.textref.TextRef
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
+import se.gustavkarlsson.skylight.android.Main
 import se.gustavkarlsson.skylight.android.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
 import javax.inject.Inject
 
-internal class SettingsViewModel @Inject constructor(private val settings: Settings) :
-    ScopedService {
+internal class SettingsViewModel @Inject constructor(
+    private val settings: Settings,
+    @Main observeScheduler: Scheduler
+) : ScopedService {
 
     private val disposables = CompositeDisposable()
 
@@ -33,7 +36,7 @@ internal class SettingsViewModel @Inject constructor(private val settings: Setti
                 }
                 listOf(SettingsItem.TitleItem) + triggerLevelItems
             }
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(observeScheduler)
 
     fun onTriggerLevelItemClicked(place: Place, triggerLevel: TriggerLevel) {
         showSelectTriggerLevelRelay.accept(place to triggerLevel)

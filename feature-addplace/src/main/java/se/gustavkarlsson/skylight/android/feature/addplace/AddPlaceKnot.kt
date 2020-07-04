@@ -4,7 +4,7 @@ import com.ioki.textref.TextRef
 import de.halfbit.knot.Knot
 import de.halfbit.knot.knot
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.Scheduler
 import io.reactivex.functions.Consumer
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
@@ -37,12 +37,13 @@ internal typealias AddPlaceKnot = Knot<State, Change>
 internal fun createKnot(
     geocoder: Geocoder,
     querySampleDelay: Duration,
-    errorMessageConsumer: Consumer<TextRef>
+    errorMessageConsumer: Consumer<TextRef>,
+    observeScheduler: Scheduler
 ): AddPlaceKnot = knot<State, Change, Action> {
 
     state {
         initial = State()
-        observeOn = AndroidSchedulers.mainThread()
+        observeOn = observeScheduler
     }
 
     changes {

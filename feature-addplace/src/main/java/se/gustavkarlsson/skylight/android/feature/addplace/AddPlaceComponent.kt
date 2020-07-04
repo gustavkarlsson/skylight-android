@@ -8,8 +8,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import io.reactivex.Observable
+import io.reactivex.Scheduler
 import io.reactivex.functions.Consumer
 import se.gustavkarlsson.skylight.android.AppComponent
+import se.gustavkarlsson.skylight.android.Main
 import se.gustavkarlsson.skylight.android.ViewModelScope
 import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
@@ -54,6 +56,9 @@ internal class AddPlaceModule {
     fun errorsConsumer(relay: Relay<TextRef>): Consumer<TextRef> = relay
 
     @Provides
-    fun knot(geocoder: Geocoder, errors: Consumer<TextRef>): AddPlaceKnot =
-        createKnot(geocoder, 1.seconds, errors)
+    fun knot(
+        geocoder: Geocoder,
+        errors: Consumer<TextRef>,
+        @Main observeScheduler: Scheduler
+    ): AddPlaceKnot = createKnot(geocoder, 1.seconds, errors, observeScheduler)
 }

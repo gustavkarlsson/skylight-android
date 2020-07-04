@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.feature.main
 import de.halfbit.knot.Knot
 import de.halfbit.knot.knot
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.Scheduler
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
@@ -39,14 +39,15 @@ internal fun buildMainKnot(
     permissionChecker: PermissionChecker,
     selectedPlaceRepo: SelectedPlaceRepository,
     locationProvider: LocationProvider,
-    auroraReportProvider: AuroraReportProvider
+    auroraReportProvider: AuroraReportProvider,
+    observeScheduler: Scheduler
 ): MainKnot = knot<State, Change, Action> {
 
     state {
         initial = State(
             selectedPlace = selectedPlaceRepo.get()
         )
-        observeOn = AndroidSchedulers.mainThread()
+        observeOn = observeScheduler
         if (BuildConfig.DEBUG) {
             watchAll { Timber.d("Got state: %s", it) }
         }

@@ -16,9 +16,6 @@ dependencies {
     api("com.google.android.material:material:${Versions.material}")
     api("androidx.constraintlayout:constraintlayout:${Versions.androidConstraintLayout}")
 
-    // Rx misc
-    api("io.reactivex.rxjava2:rxandroid:${Versions.rxandroid}")
-
     // RxBinding
     api("com.jakewharton.rxbinding2:rxbinding-kotlin:${Versions.rxbinding}")
     api("com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:${Versions.rxbinding}")
