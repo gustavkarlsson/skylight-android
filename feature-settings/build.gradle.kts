@@ -30,5 +30,7 @@ dependencies {
     implementation(project(":lib-settings"))
     implementation(project(":lib-places"))
 
+    implementation("androidx.preference:preference-ktx:${Versions.androidPreferences}")
+
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }
