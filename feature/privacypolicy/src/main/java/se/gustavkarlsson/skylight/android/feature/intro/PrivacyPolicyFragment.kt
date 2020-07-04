@@ -1,3 +1,33 @@
+package se.gustavkarlsson.skylight.android.feature.intro
+
+import com.google.android.material.appbar.MaterialToolbar
+import de.halfbit.edgetoedge.Edge
+import de.halfbit.edgetoedge.EdgeToEdgeBuilder
+import io.noties.markwon.Markwon
+import kotlinx.android.synthetic.main.fragment_privacypolicy.*
+import org.intellij.lang.annotations.Language
+import se.gustavkarlsson.skylight.android.feature.privacypolicy.R
+import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
+
+class PrivacyPolicyFragment : ScreenFragment() {
+
+    override val layoutId: Int = R.layout.fragment_privacypolicy
+
+    override val toolbar: MaterialToolbar get() = toolbarView
+
+    override fun setupEdgeToEdge(): EdgeToEdgeBuilder.() -> Unit = {
+        toolbarView.fit { Edge.Top }
+        scrollView.fit { Edge.Bottom }
+    }
+
+    override fun initView() {
+        Markwon.create(requireContext()).setMarkdown(markdownView, markdown)
+    }
+}
+
+// FIXME remove this. Use PRIVACY_POLICY.md instead
+@Language("Markdown")
+private const val markdown = """
 Gustav Karlsson built the Skylight app as an Open Source app. This SERVICE is provided by Gustav Karlsson at no cost and is intended for use as is.
 
 This page is used to inform visitors regarding my policies with the collection, use, and disclosure of Personal Information if anyone decided to use my Service.
@@ -60,3 +90,4 @@ This policy is effective as of 2020-07-04
 **Contact Me**
 
 If you have any questions or suggestions about my Privacy Policy, do not hesitate to contact me at [gustav.karlsson@gmail.com](mailto:gustav.karlsson@gmail.com).
+"""

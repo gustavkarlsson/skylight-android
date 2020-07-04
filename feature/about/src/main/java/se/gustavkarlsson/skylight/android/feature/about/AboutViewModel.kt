@@ -22,17 +22,17 @@ internal class AboutViewModel(
     private fun createDetailsText(): TextRef {
         val lines = getTextLines()
         val formatString = lines.joinToString(separator = "\n") { "%s" }
-        return TextRef(formatString, *lines.toTypedArray())
+        return TextRef.string(formatString, *lines.toTypedArray())
     }
 
     private fun getTextLines(): List<TextRef> =
         listOfNotNull(
-            TextRef(R.string.about_app_by, TextRef(R.string.author)),
-            TextRef(R.string.about_version_name, versionName),
-            ifDevelop { TextRef(R.string.about_version_code, versionCode) },
+            TextRef.stringRes(R.string.about_app_by, TextRef.stringRes(R.string.author)),
+            TextRef.stringRes(R.string.about_version_name, versionName),
+            ifDevelop { TextRef.stringRes(R.string.about_version_code, versionCode) },
             ifDevelop { getBuildTime() },
-            ifDevelop { TextRef(R.string.about_branch, gitBranch) },
-            ifDevelop { TextRef(R.string.about_sha1, gitSha1.substring(0, 7)) }
+            ifDevelop { TextRef.stringRes(R.string.about_branch, gitBranch) },
+            ifDevelop { TextRef.stringRes(R.string.about_sha1, gitSha1.substring(0, 7)) }
         )
 
     private fun ifDevelop(text: () -> TextRef): TextRef? = if (showDevelopData) text() else null
@@ -42,9 +42,6 @@ internal class AboutViewModel(
         val zoneId = time.zoneId()
         val localDateTime = LocalDateTime.ofInstant(buildTime, zoneId)
         val formattedTime = formatter.format(localDateTime)
-        return TextRef(R.string.about_built_on, formattedTime)
+        return TextRef.stringRes(R.string.about_built_on, formattedTime)
     }
-
-    val privacyPolicyLink: TextRef =
-        TextRef(R.string.html_privacy_policy_link, TextRef(R.string.privacy_policy))
 }

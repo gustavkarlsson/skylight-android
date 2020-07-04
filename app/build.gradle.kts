@@ -54,12 +54,12 @@ android {
 
     productFlavors {
         create("production") {
-            setDimension("environment")
+            dimension = "environment"
             buildConfigField("boolean", "DEVELOP", "false")
         }
 
         create("develop") {
-            setDimension("environment")
+            dimension = "environment"
             buildConfigField("boolean", "DEVELOP", "true")
             versionNameSuffix = "-develop"
             applicationIdSuffix = ".develop"
@@ -109,6 +109,7 @@ dependencies {
     implementation(project(":feature:background"))
     implementation(project(":feature:addplace"))
     implementation(project(":feature:main"))
+    implementation(project(":feature:privacypolicy"))
 
     implementation("androidx.annotation:annotation:${Versions.androidAnnotation}")
 
