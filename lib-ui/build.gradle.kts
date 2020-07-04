@@ -22,11 +22,8 @@ dependencies {
     kapt("androidx.lifecycle:lifecycle-compiler:${Versions.androidLifecycle}")
 
     // RxBinding
-    api("com.jakewharton.rxbinding2:rxbinding-kotlin:${Versions.rxbinding}")
-    api("com.jakewharton.rxbinding2:rxbinding-support-v4-kotlin:${Versions.rxbinding}")
-    api("com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:${Versions.rxbinding}")
-    api("com.jakewharton.rxbinding2:rxbinding-design-kotlin:${Versions.rxbinding}")
-    api("com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:${Versions.rxbinding}")
+    api("com.jakewharton.rxbinding3:rxbinding:${Versions.rxbinding}")
+    api("com.jakewharton.rxbinding3:rxbinding-appcompat:${Versions.rxbinding}")
 
     api("de.halfbit:edge-to-edge:${Versions.edgeToEdge}")
 }

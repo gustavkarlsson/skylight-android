@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
 import androidx.lifecycle.Lifecycle
-import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding3.view.clicks
 import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_google_play_services.*

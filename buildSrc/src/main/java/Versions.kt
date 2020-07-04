@@ -36,10 +36,10 @@ object Versions {
 
     val material = "1.1.0"
 
-    val rxjava = "2.2.18"
+    val rxjava = "2.2.19"
     val rxkotlin = "2.4.0"
     val rxandroid = "2.1.1"
-    val rxbinding = "2.2.0"
+    val rxbinding = "3.1.0"
     val rxrelay = "2.1.1"
     val rxReplayingShare = "2.2.0"
     val rxpermissions = "0.10.2"
@@ -49,8 +49,8 @@ object Versions {
     val retrofit = "2.7.1"
     val retrofitKotlinSerialization = "0.5.0"
 
-    val dagger = "2.26"
-    val threetenabp = "1.2.2"
+    val dagger = "2.28.1"
+    val threetenabp = "1.2.4"
     val timber = "4.7.1"
     val solarPositioning = "0.0.9"
     val sqldelight = "1.2.2"

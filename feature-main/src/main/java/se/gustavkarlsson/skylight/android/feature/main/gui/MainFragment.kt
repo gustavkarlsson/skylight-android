@@ -7,8 +7,8 @@ import android.view.View
 import androidx.annotation.StringRes
 import com.google.android.material.appbar.MaterialToolbar
 import com.ioki.textref.TextRef
-import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
-import com.jakewharton.rxbinding2.view.clicks
+import com.jakewharton.rxbinding3.appcompat.itemClicks
+import com.jakewharton.rxbinding3.view.clicks
 import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import io.reactivex.Observable
