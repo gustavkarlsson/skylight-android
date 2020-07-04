@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.about
 
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_about.*
@@ -16,8 +16,7 @@ class AboutFragment : ScreenFragment() {
         getOrRegisterService("aboutViewModel") { AboutComponent.build().viewModel() }
     }
 
-    override val toolbar: Toolbar?
-        get() = toolbarView
+    override val toolbar: MaterialToolbar get() = toolbarView
 
     override fun setupEdgeToEdge(): EdgeToEdgeBuilder.() -> Unit = {
         toolbarView.fit { Edge.Top }

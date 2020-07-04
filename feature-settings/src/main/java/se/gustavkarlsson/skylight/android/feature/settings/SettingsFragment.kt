@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.settings
 
 import android.content.DialogInterface
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.ioki.textref.TextRef
 import de.halfbit.edgetoedge.Edge
@@ -25,7 +25,7 @@ class SettingsFragment : ScreenFragment() {
 
     override val layoutId: Int = R.layout.fragment_settings
 
-    override val toolbar: Toolbar? get() = toolbarView
+    override val toolbar: MaterialToolbar get() = toolbarView
 
     private var triggerLevelDialog: DialogInterface? = null
 

@@ -5,7 +5,7 @@ import android.net.Uri
 import android.provider.Settings
 import android.view.View
 import androidx.annotation.StringRes
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import com.ioki.textref.TextRef
 import com.jakewharton.rxbinding2.support.v7.widget.itemClicks
 import com.jakewharton.rxbinding2.view.clicks
@@ -36,8 +36,7 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
         }
     }
 
-    override val toolbar: Toolbar?
-        get() = toolbarView
+    override val toolbar: MaterialToolbar get() = toolbarView
 
     override fun onStart() {
         super.onStart()
@@ -61,7 +60,7 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
         toolbarView.inflateMenu(R.menu.menu_main)
     }
 
-    private fun Toolbar.enableNavigationDrawer() {
+    private fun MaterialToolbar.enableNavigationDrawer() {
         setNavigationIcon(R.drawable.ic_menu)
         setNavigationOnClickListener {
             drawerLayout.openDrawer(navigationView)

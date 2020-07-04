@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.ui
 
 import android.os.Bundle
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import de.halfbit.edgetoedge.edgeToEdge
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
@@ -15,7 +15,7 @@ abstract class ScreenFragment : BaseFragment() {
         toolbar?.let(::setupBackNavigation)
     }
 
-    private fun setupBackNavigation(toolbar: Toolbar) {
+    private fun setupBackNavigation(toolbar: MaterialToolbar) {
         if (navigator.backstack.size > 1) {
             toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
             toolbar.setNavigationOnClickListener { navigator.closeScreen() }
@@ -27,7 +27,7 @@ abstract class ScreenFragment : BaseFragment() {
         AnalyticsComponent.instance.analytics().logScreen(requireActivity(), this::class.java.simpleName)
     }
 
-    protected open val toolbar: Toolbar? = null
+    protected open val toolbar: MaterialToolbar? = null
 
     protected abstract fun setupEdgeToEdge(): EdgeToEdgeBuilder.() -> Unit
 }

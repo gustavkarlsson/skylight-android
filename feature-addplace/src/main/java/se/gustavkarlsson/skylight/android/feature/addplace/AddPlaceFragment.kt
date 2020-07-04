@@ -6,7 +6,7 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -33,7 +33,7 @@ class AddPlaceFragment : ScreenFragment() {
         getOrRegisterService("addPlaceViewModel") { AddPlaceComponent.build().viewModel() }
     }
 
-    override val toolbar: Toolbar? get() = toolbarView
+    override val toolbar: MaterialToolbar get() = toolbarView
 
     private val searchView: SearchView
         get() = (toolbarView.menu.findItem(R.id.action_search).actionView as SearchView)
