@@ -1,11 +1,13 @@
 ## Soon
+* Show privacy policy in app (https://github.com/noties/Markwon ?)
+* Show permission screen when user first navigates to main without having decided on permission (keep banner)
 * Show banner when no connectivity (check for flight mode?)
 * Rework API responses.
 * Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
 * Use cases instead of repositories?
 * Add prettier detail screens
 * Improve feature graphics
-* Upgrade TextRef
+* Migrate TextRef
 
 ## Some day
 * Oversee text style usage (also use TextAppearance instead of style in XML)
@@ -16,9 +18,7 @@
 * Add develop settings
 * Add instrumentation testing to CI
 * Consider refresh after changing debug options
-* Add the thing that clears data between launches (check with Nick)
 * Separate debug menu instead of settings page
-* Add more KTX
 * Firebase performance monitoring
 * Hyperion?
 * Add manual clearing of "notification sent" in develop mode

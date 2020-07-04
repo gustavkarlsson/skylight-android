@@ -1,24 +1,4 @@
-# Gradle
-/.gradle/
-/*/.gradle/
-/build/
-/*/build/
-/*/gradle.properties
-
-# Eclipse
-/.classpath
-/.project
-/.settings/
-
-# IntelliJ
-.idea/
+**/.gradle/
+**/.idea/
 *.iml
-
-# Local properties
 /local.properties
-
-# Captures
-/captures
-
-google-services.json
-play-service-account.json
