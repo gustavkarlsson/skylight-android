@@ -7,8 +7,8 @@ class Chance(value: Double?) : Comparable<Chance> {
         if (value == null) {
             this.value = null
         } else {
-            val limitedValue = Math.max(LOWEST, Math.min(HIGHEST, value))
-            this.value = limitedValue
+            val coercedValue = value.coerceIn(LOWEST, HIGHEST)
+            this.value = coercedValue
         }
     }
 

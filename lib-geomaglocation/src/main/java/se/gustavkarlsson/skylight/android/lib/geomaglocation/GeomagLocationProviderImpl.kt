@@ -9,9 +9,9 @@ import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import timber.log.Timber
-import java.lang.Math.PI
 import java.lang.Math.toDegrees
 import java.lang.Math.toRadians
+import kotlin.math.PI
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.pow
