@@ -27,7 +27,6 @@ internal class IntroFragment : ScreenFragment() {
     }
 
     override fun initView() {
-        // FIXME navigation override will prevent this from working
         privacyPolicyLink.clicks()
             .bind(this) {
                 navigator.goTo(screens.privacyPolicy)
