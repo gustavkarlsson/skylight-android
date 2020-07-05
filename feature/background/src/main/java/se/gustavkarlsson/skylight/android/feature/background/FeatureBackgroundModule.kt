@@ -9,6 +9,9 @@ import dagger.Provides
 import dagger.Reusable
 import dagger.multibindings.IntoSet
 import io.reactivex.Completable
+import java.io.File
+import javax.inject.Named
+import javax.inject.Singleton
 import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.TriggerLevel
@@ -35,9 +38,6 @@ import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.utils.minutes
-import java.io.File
-import javax.inject.Named
-import javax.inject.Singleton
 
 @Module
 class FeatureBackgroundModule {

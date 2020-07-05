@@ -7,9 +7,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
 import io.reactivex.disposables.CompositeDisposable
+import javax.inject.Singleton
 import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
-import javax.inject.Singleton
 
 @Module
 class LibPlacesModule {

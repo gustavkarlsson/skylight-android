@@ -1,9 +1,9 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
 import com.ioki.textref.TextRef
+import javax.inject.Inject
 import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionManager
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
-import javax.inject.Inject
 
 internal class IntroViewModel @Inject constructor(
     private val versionManager: RunVersionManager

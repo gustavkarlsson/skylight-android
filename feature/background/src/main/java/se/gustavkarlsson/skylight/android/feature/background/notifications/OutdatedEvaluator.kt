@@ -2,8 +2,8 @@ package se.gustavkarlsson.skylight.android.feature.background.notifications
 
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalTime.NOON
-import se.gustavkarlsson.skylight.android.utils.until
 import se.gustavkarlsson.skylight.android.lib.time.Time
+import se.gustavkarlsson.skylight.android.utils.until
 
 internal class OutdatedEvaluator(
     private val time: Time

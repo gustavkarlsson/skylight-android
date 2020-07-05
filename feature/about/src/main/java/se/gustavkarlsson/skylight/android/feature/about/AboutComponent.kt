@@ -3,11 +3,11 @@ package se.gustavkarlsson.skylight.android.feature.about
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import javax.inject.Named
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.AppComponent
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
-import javax.inject.Named
 
 @Component(
     modules = [AboutModule::class],
