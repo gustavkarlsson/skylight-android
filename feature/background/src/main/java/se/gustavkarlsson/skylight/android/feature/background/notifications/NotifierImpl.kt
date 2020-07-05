@@ -9,8 +9,8 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.feature.background.R
-import se.gustavkarlsson.skylight.android.lib.ui.extensions.resolveColor
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
+import se.gustavkarlsson.skylight.android.lib.ui.extensions.resolveColor
 import se.gustavkarlsson.skylight.android.services.Formatter
 
 internal class NotifierImpl(

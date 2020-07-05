@@ -6,13 +6,13 @@ import com.jakewharton.rx.replayingShare
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import java.io.IOException
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.utils.delay
 import timber.log.Timber
-import java.io.IOException
 
 internal class AndroidReverseGeocoder(
     private val geocoder: Geocoder,

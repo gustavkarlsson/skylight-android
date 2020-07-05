@@ -4,12 +4,12 @@ import android.app.Activity
 import android.view.ViewGroup
 import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
+import com.zhuinden.simplestack.Backstack as SSBackstack
+import com.zhuinden.simplestack.navigator.Navigator as SSNavigator
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.BackstackListener
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
-import com.zhuinden.simplestack.Backstack as SSBackstack
-import com.zhuinden.simplestack.navigator.Navigator as SSNavigator
 
 internal class SimpleStackNavigationInstaller(
     private val directionsCalculator: DirectionsCalculator

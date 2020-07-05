@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.lib.weather
 import com.jakewharton.rx.replayingShare
 import io.reactivex.Observable
 import io.reactivex.Single
+import java.io.IOException
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Cause
 import se.gustavkarlsson.skylight.android.entities.Loadable
@@ -12,7 +13,6 @@ import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.utils.delay
 import timber.log.Timber
-import java.io.IOException
 
 internal class RetrofittedOpenWeatherMapWeatherProvider(
     private val api: OpenWeatherMapApi,
