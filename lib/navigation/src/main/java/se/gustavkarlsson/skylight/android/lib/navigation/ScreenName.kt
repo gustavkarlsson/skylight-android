@@ -6,5 +6,6 @@ enum class ScreenName {
     Main,
     AddPlace,
     Settings,
-    About
+    About,
+    PrivacyPolicy
 }

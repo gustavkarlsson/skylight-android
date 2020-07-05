@@ -1,5 +1,3 @@
-## Privacy Policy
-
 Gustav Karlsson built the Skylight app as an Open Source app. This SERVICE is provided by Gustav Karlsson at no cost and is intended for use as is.
 
 This page is used to inform visitors regarding my policies with the collection, use, and disclosure of Personal Information if anyone decided to use my Service.
@@ -61,4 +59,4 @@ This policy is effective as of 2020-07-04
 
 **Contact Me**
 
-If you have any questions or suggestions about my Privacy Policy, do not hesitate to contact me at gustav.karlsson@gmail.com.
+If you have any questions or suggestions about my Privacy Policy, do not hesitate to contact me at [gustav.karlsson@gmail.com](mailto:gustav.karlsson@gmail.com).

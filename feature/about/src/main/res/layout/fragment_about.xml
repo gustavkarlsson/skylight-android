@@ -57,13 +57,15 @@
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/privacyPolicyLink"
+            style="@style/AppTheme.TextBody2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/gutter"
+            android:text="@string/privacy_policy"
+            android:textColor="?attr/colorSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/detailsTextView"
-            tools:text="@string/privacy_policy" />
+            app:layout_constraintTop_toBottomOf="@id/detailsTextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

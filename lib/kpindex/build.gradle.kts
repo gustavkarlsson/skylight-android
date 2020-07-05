@@ -15,7 +15,8 @@ dependencies {
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:${Versions.retrofitKotlinSerialization}")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:" +
+        Versions.retrofitKotlinSerialization)
     implementation("com.squareup.retrofit2:adapter-rxjava2:${Versions.retrofit}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")

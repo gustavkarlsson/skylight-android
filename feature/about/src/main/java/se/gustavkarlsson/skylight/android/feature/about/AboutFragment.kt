@@ -1,12 +1,15 @@
 package se.gustavkarlsson.skylight.android.feature.about
 
 import com.google.android.material.appbar.MaterialToolbar
+import com.jakewharton.rxbinding3.view.clicks
 import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_about.*
+import se.gustavkarlsson.skylight.android.lib.navigation.navigator
+import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
-import se.gustavkarlsson.skylight.android.lib.ui.extensions.setHtml
+import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 
 class AboutFragment : ScreenFragment() {
 
@@ -25,6 +28,9 @@ class AboutFragment : ScreenFragment() {
     override fun initView() {
         val context = requireContext()
         detailsTextView.text = viewModel.detailsText.resolve(context)
-        privacyPolicyLink.setHtml(viewModel.privacyPolicyLink.resolve(context))
+        privacyPolicyLink.clicks()
+            .bind(this) {
+                navigator.goTo(screens.privacyPolicy)
+            }
     }
 }

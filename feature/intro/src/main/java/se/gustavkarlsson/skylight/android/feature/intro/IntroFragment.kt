@@ -10,7 +10,6 @@ import se.gustavkarlsson.skylight.android.lib.navigation.target
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
-import se.gustavkarlsson.skylight.android.lib.ui.extensions.setHtml
 
 internal class IntroFragment : ScreenFragment() {
 
@@ -28,7 +27,10 @@ internal class IntroFragment : ScreenFragment() {
     }
 
     override fun initView() {
-        privacyPolicyLink.setHtml(viewModel.privacyPolicyHtml.resolve(requireContext()))
+        privacyPolicyLink.clicks()
+            .bind(this) {
+                navigator.goTo(screens.privacyPolicy)
+            }
     }
 
     override fun bindData() {
