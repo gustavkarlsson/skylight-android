@@ -31,12 +31,12 @@ internal class RetrofittedKpIndexProvider(
         .toObservable()
         .onErrorResumeNext { throwable: Throwable ->
             val cause = getCause(throwable)
-            Observable.concat<Report<KpIndex>>(
-                Observable.just(Report.Error(cause, time.now())),
+            Observable.concat(
+                Observable.just(Report.error(cause, time.now())),
                 Observable.error(throwable)
             )
         }
-        .map<Loadable<Report<KpIndex>>> { Loadable.Loaded(it) }
+        .map { Loadable.loaded(it) }
         .retryWhen { it.delay(retryDelay) }
         .distinctUntilChanged()
         .doOnNext { Timber.i("Streamed Kp index: %s", it) }
@@ -47,9 +47,9 @@ internal class RetrofittedKpIndexProvider(
     private fun getReport(): Single<Report<KpIndex>> =
         api.get()
             .doOnError { Timber.w(it, "Failed to get Kp index from KpIndex API") }
-            .flatMap<Report<KpIndex>> { response ->
+            .flatMap { response ->
                 if (response.isSuccessful) {
-                    Single.just(Report.Success(KpIndex(response.body()!!.value), time.now()))
+                    Single.just(Report.success(KpIndex(response.body()!!.value), time.now()))
                 } else {
                     val exception = ServerResponseException(response.code(), response.errorBody()!!.string())
                     Timber.e(exception, "Failed to get Kp index from KpIndex API")

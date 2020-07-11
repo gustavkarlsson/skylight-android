@@ -16,4 +16,8 @@ sealed class Place {
         override val name: TextRef,
         val location: Location
     ) : Place()
+
+    companion object {
+        fun custom(id: Long, name: TextRef, location: Location): Place = Custom(id, name, location)
+    }
 }

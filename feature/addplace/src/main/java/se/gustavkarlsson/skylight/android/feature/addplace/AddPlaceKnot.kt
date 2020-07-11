@@ -90,6 +90,9 @@ internal fun createKnot(
                                         Change.SearchFailed(
                                             TextRef.stringRes(R.string.place_search_failed_io)
                                         )
+                                    GeocodingResult.Failure.ServerError -> Change.SearchFailed(
+                                        TextRef.stringRes(R.string.place_search_failed_server_response)
+                                    )
                                     GeocodingResult.Failure.Unknown ->
                                         Change.SearchFailed(
                                             TextRef.stringRes(R.string.place_search_failed_generic)

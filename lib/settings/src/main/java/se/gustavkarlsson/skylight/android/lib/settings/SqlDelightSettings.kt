@@ -41,7 +41,7 @@ internal class SqlDelightSettings(
 
     override fun streamNotificationTriggerLevels(): Observable<List<Pair<Place, TriggerLevel>>> =
         placesRepository.stream()
-            .switchMap<List<Pair<Place, TriggerLevel>>> { places ->
+            .switchMap { places ->
                 getTriggerLevelRecords()
                     .map { records ->
                         places.map { place ->
