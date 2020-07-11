@@ -15,7 +15,6 @@ fun <T> allowDiskReadsAndWritesInStrictMode(block: () -> T): T {
     return allow(allow, block)
 }
 
-
 @Synchronized
 private fun <T> allow(allow: () -> StrictMode.ThreadPolicy, block: () -> T): T {
     val oldThreadPolicy = allow()
