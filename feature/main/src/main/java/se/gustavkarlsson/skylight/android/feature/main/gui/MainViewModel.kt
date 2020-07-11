@@ -217,6 +217,7 @@ private fun format(cause: Cause): TextRef {
         Cause.LocationPermission -> R.string.cause_location_permission
         Cause.Location -> R.string.cause_location
         Cause.Connectivity -> R.string.cause_connectivity
+        Cause.ServerResponse -> R.string.cause_server_response
         Cause.Unknown -> R.string.cause_unknown
     }
     return TextRef(id)
