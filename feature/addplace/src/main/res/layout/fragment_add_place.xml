@@ -25,6 +25,18 @@
         app:layout_constraintTop_toBottomOf="@id/toolbarView" />
 
     <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/searchingView"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/searching"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbarView" />
+
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/noSuggestionsView"
         style="@style/TextAppearance.MaterialComponents.Body1"
         android:layout_width="wrap_content"

@@ -77,6 +77,10 @@ class AddPlaceFragment : ScreenFragment() {
             emptyView.fadeToVisible(visible)
         }
 
+        viewModel.isSearchingVisible.bind(this) { visible ->
+            searchingView.fadeToVisible(visible)
+        }
+
         viewModel.isNoSuggestionsVisible.bind(this) { visible ->
             noSuggestionsView.fadeToVisible(visible)
         }

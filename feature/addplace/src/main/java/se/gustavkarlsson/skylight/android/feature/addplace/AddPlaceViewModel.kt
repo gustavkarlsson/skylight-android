@@ -49,14 +49,18 @@ internal class AddPlaceViewModel @Inject constructor(
         .mapNotNull { state ->
             when {
                 state.query.isBlank() -> ResultState.EMPTY
-                state.isSearching -> null
+                state.isSearching && state.suggestions.isEmpty() -> ResultState.SEARCHING
                 state.suggestions.isEmpty() -> ResultState.NO_SUGGESTIONS
                 else -> ResultState.SUGGESTIONS
             }
         }
         .distinctUntilChanged()
 
-    val isEmptyVisible: Observable<Boolean> = resultState.map { it == ResultState.EMPTY }
+    val isEmptyVisible: Observable<Boolean> =
+        resultState.map { it == ResultState.EMPTY }
+
+    val isSearchingVisible: Observable<Boolean> =
+        resultState.map { it == ResultState.SEARCHING }
 
     val isNoSuggestionsVisible: Observable<Boolean> =
         resultState.map { it == ResultState.NO_SUGGESTIONS }
@@ -79,5 +83,5 @@ internal data class SuggestionItem(
 )
 
 internal enum class ResultState {
-    EMPTY, NO_SUGGESTIONS, SUGGESTIONS
+    EMPTY, SEARCHING, NO_SUGGESTIONS, SUGGESTIONS
 }
