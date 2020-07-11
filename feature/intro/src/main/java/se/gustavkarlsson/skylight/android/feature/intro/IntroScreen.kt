@@ -9,8 +9,12 @@ import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.navigation.withTarget
 
 @Parcelize
-internal data class IntroScreen(private val target: Backstack) :
-    Screen {
+internal data class IntroScreen(private val target: Backstack) : Screen {
+
+    init {
+        require(target.isNotEmpty()) { "Target backstack must not be empty" }
+    }
+
     @IgnoredOnParcel
     override val name = ScreenName.Intro
 
