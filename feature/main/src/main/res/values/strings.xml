@@ -35,7 +35,8 @@
     <string name="cause_location_permission">Location permission missing</string>
     <string name="cause_location">Could not determine the current location</string>
     <string name="cause_connectivity">No internet connection</string>
-    <string name="cause_unknown">Something has gone wrong ☹️</string>
+    <string name="cause_server_response">Server error. Try again later.</string>
+    <string name="cause_unknown">Something has gone wrong ☹</string>
 
     <string name="location_permission_denied_message">To determine aurora chances for your current
         location, please allow Skylight to access it.</string>

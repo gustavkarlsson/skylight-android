@@ -46,12 +46,25 @@ internal class RetrofittedKpIndexProvider(
 
     private fun getReport(): Single<Report<KpIndex>> =
         api.get()
-            .map<Report<KpIndex>> { Report.Success(KpIndex(it.value), time.now()) }
             .doOnError { Timber.w(it, "Failed to get Kp index from KpIndex API") }
+            .flatMap<Report<KpIndex>> { response ->
+                if (response.isSuccessful) {
+                    Single.just(Report.Success(KpIndex(response.body()!!.value), time.now()))
+                } else {
+                    val exception = ServerResponseException(response.code(), response.errorBody()!!.string())
+                    Timber.e(exception, "Failed to get Kp index from KpIndex API")
+                    Single.error(exception)
+                }
+            }
 }
 
+// TODO Fix duplication with RetrofittedOpenWeatherMapWeatherProvider
 private fun getCause(throwable: Throwable): Cause =
     when (throwable) {
         is IOException -> Cause.Connectivity
+        is ServerResponseException -> Cause.ServerResponse
         else -> Cause.Unknown
     }
+
+// TODO Fix duplication with RetrofittedOpenWeatherMapWeatherProvider
+private class ServerResponseException(code: Int, body: String) : Exception("Server error $code. Body: $body")
