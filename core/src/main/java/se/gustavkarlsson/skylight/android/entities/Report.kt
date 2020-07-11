@@ -16,7 +16,7 @@ sealed class Report<out T : Any> {
     ) : Report<Nothing>()
 
     companion object {
-        fun <T: Any> success(value: T, timestamp: Instant): Report<T> = Success(value, timestamp)
-        fun <T: Any> error(cause: Cause, timestamp: Instant): Report<T> = Error(cause, timestamp)
+        fun <T : Any> success(value: T, timestamp: Instant): Report<T> = Success(value, timestamp)
+        fun <T : Any> error(cause: Cause, timestamp: Instant): Report<T> = Error(cause, timestamp)
     }
 }
