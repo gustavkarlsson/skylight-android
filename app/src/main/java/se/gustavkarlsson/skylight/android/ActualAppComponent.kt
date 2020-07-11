@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android
 
 import dagger.Component
-import javax.inject.Singleton
 import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
 import se.gustavkarlsson.skylight.android.feature.background.FeatureBackgroundModule
 import se.gustavkarlsson.skylight.android.feature.googleplayservices.FeatureGooglePlayServicesModule
@@ -41,7 +40,7 @@ import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.lib.weather.LibWeatherModule
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
 
-@Singleton
+@AppScope
 @Component(
     modules = [
         AppModule::class,

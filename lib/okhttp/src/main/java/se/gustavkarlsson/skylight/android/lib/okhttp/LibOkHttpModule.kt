@@ -9,7 +9,7 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.utils.seconds
 
 @Module
-class LibOkHttpModule {
+object LibOkHttpModule {
 
     @Provides
     @Reusable

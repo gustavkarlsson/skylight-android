@@ -9,7 +9,7 @@ import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.utils.minutes
 
 @Module
-class LibDarknessModule {
+object LibDarknessModule {
 
     @Provides
     @Reusable

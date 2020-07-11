@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import androidx.core.app.NotificationCompat
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.feature.background.R
@@ -58,12 +57,7 @@ internal class NotifierImpl(
             ChanceLevel.NONE, ChanceLevel.UNKNOWN, null -> NotificationCompat.PRIORITY_MIN
         }
 
-    private fun createColor(): Int? =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.theme.resolveColor(R.attr.colorPrimary)
-        } else {
-            null
-        }
+    private fun createColor(): Int? = context.theme.resolveColor(R.attr.colorPrimary)
 
     private fun createText(notification: Notification) =
         notificationFormatter.format(notification).resolve(context)

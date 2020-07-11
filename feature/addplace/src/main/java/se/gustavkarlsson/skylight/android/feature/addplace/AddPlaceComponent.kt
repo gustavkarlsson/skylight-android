@@ -41,7 +41,7 @@ internal interface AddPlaceComponent {
 }
 
 @Module
-internal class AddPlaceModule {
+internal object AddPlaceModule {
 
     @Provides
     @ViewModelScope

@@ -10,7 +10,7 @@ import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
 
 @Module
-class LibGeomagLocationModule {
+object LibGeomagLocationModule {
 
     @Provides
     @Reusable

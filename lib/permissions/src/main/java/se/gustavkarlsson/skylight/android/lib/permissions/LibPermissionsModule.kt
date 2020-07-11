@@ -9,7 +9,7 @@ import dagger.Provides
 import dagger.Reusable
 
 @Module
-class LibPermissionsModule {
+object LibPermissionsModule {
 
     private val relay = BehaviorRelay.create<Access>()
 
