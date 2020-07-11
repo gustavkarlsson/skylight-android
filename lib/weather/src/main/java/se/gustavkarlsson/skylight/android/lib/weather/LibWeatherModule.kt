@@ -8,8 +8,6 @@ import io.reactivex.Scheduler
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
-import retrofit2.CallAdapter
-import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import se.gustavkarlsson.skylight.android.Io
@@ -32,30 +30,21 @@ class LibWeatherModule {
 
     @Provides
     @Reusable
-    internal fun converterFactory(): Converter.Factory {
-        @Suppress("EXPERIMENTAL_API_USAGE")
-        val json = Json { ignoreUnknownKeys = true }
-        return json.asConverterFactory(MediaType.get("application/json"))
-    }
-
-    @Provides
-    @Reusable
-    internal fun callAdapterFactory(@Io scheduler: Scheduler): CallAdapter.Factory =
-        RxJava2CallAdapterFactory.createWithScheduler(scheduler)
-
-    @Provides
-    @Reusable
     internal fun weatherProvider(
         okHttpClient: OkHttpClient,
-        callAdapterFactory: CallAdapter.Factory,
-        converterFactory: Converter.Factory,
+        @Io scheduler: Scheduler,
         time: Time
     ): WeatherProvider {
+        @Suppress("EXPERIMENTAL_API_USAGE")
+        val converterFactory = Json { ignoreUnknownKeys = true }
+            .asConverterFactory(MediaType.get("application/json"))
+        val callAdapterFactory = RxJava2CallAdapterFactory.createWithScheduler(scheduler)
+
         val api = Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("https://api.openweathermap.org/data/2.5/")
             .addConverterFactory(converterFactory)
             .addCallAdapterFactory(callAdapterFactory)
+            .baseUrl("https://api.openweathermap.org/data/2.5/")
             .build()
             .create(OpenWeatherMapApi::class.java)
 
