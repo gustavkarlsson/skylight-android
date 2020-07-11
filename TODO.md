@@ -6,6 +6,7 @@
 * Add prettier detail screens
 * Improve feature graphics
 * Migrate TextRef
+* Bug: If location is granted (while using app), then go to add place, and go back. Banner shows up again.
 
 ## Some day
 * Oversee text style usage (also use TextAppearance instead of style in XML)
