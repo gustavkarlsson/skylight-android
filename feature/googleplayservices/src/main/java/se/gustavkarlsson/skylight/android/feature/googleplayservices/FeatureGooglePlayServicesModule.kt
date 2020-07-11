@@ -7,6 +7,7 @@ import dagger.Reusable
 import dagger.multibindings.IntoSet
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
+import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 
 @Module
 class FeatureGooglePlayServicesModule {
@@ -22,8 +23,9 @@ class FeatureGooglePlayServicesModule {
 
             override fun override(oldBackstack: Backstack, targetBackstack: Backstack) =
                 when {
-                    oldBackstack.isNotEmpty() && targetBackstack.isEmpty() -> null
-                    !googlePlayServicesChecker.isAvailable ->
+                    targetBackstack.isNotEmpty() &&
+                        targetBackstack.none { it.name == ScreenName.Intro } &&
+                        !googlePlayServicesChecker.isAvailable ->
                         listOf(GooglePlayServicesScreen(targetBackstack))
                     else -> null
                 }
