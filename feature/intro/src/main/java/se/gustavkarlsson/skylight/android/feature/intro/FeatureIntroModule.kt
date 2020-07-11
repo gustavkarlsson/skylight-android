@@ -11,7 +11,7 @@ import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionManager
 import se.gustavkarlsson.skylight.android.utils.allowDiskReadsInStrictMode
 
 @Module
-class FeatureIntroModule {
+object FeatureIntroModule {
 
     @Provides
     @Reusable

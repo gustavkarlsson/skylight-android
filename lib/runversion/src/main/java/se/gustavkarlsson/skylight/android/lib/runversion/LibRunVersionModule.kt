@@ -4,13 +4,13 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named
-import javax.inject.Singleton
+import se.gustavkarlsson.skylight.android.AppScope
 
 @Module
-class LibRunVersionModule {
+object LibRunVersionModule {
 
     @Provides
-    @Singleton
+    @AppScope
     internal fun runVersionManager(
         context: Context,
         @Named("versionCode") versionCode: Int

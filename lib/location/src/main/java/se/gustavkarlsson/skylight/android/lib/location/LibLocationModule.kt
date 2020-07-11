@@ -5,15 +5,15 @@ import com.google.android.gms.location.LocationRequest
 import com.patloew.rxlocation.RxLocation
 import dagger.Module
 import dagger.Provides
-import javax.inject.Singleton
+import se.gustavkarlsson.skylight.android.AppScope
 import se.gustavkarlsson.skylight.android.utils.minutes
 import se.gustavkarlsson.skylight.android.utils.seconds
 
 @Module
-class LibLocationModule {
+object LibLocationModule {
 
     @Provides
-    @Singleton
+    @AppScope
     internal fun locationProvider(context: Context): LocationProvider =
         RxLocationLocationProvider(
             fusedLocation = RxLocation(context).location(),

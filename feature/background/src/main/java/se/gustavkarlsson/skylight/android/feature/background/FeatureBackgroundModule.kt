@@ -11,7 +11,7 @@ import dagger.multibindings.IntoSet
 import io.reactivex.Completable
 import java.io.File
 import javax.inject.Named
-import javax.inject.Singleton
+import se.gustavkarlsson.skylight.android.AppScope
 import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.entities.TriggerLevel
@@ -40,7 +40,7 @@ import se.gustavkarlsson.skylight.android.services.Formatter
 import se.gustavkarlsson.skylight.android.utils.minutes
 
 @Module
-class FeatureBackgroundModule {
+object FeatureBackgroundModule {
 
     @Provides
     @Reusable
@@ -67,7 +67,7 @@ class FeatureBackgroundModule {
         NotifyScheduler(context, scheduleInterval = 15.minutes)
 
     @Provides
-    @Singleton
+    @AppScope
     internal fun lastNotificationRepository(context: Context): LastNotificationRepository =
         SharedPrefsLastNotificationRepository(context)
 

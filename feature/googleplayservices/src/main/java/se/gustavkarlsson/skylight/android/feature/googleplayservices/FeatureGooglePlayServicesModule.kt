@@ -10,7 +10,7 @@ import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 
 @Module
-class FeatureGooglePlayServicesModule {
+object FeatureGooglePlayServicesModule {
 
     @Provides
     @Reusable

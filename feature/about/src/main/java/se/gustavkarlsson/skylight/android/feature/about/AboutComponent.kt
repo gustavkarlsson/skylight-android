@@ -29,7 +29,7 @@ internal interface AboutComponent {
 }
 
 @Module
-internal class AboutModule {
+internal object AboutModule {
 
     @Provides
     fun viewModel(

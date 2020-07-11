@@ -70,7 +70,7 @@ internal interface MainComponent {
 }
 
 @Module
-internal class MainModule {
+internal object MainModule {
 
     @Provides
     fun mainKnot(

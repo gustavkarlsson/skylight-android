@@ -8,7 +8,7 @@ import dagger.Reusable
 import se.gustavkarlsson.skylight.android.utils.seconds
 
 @Module
-class LibReverseGeocoderModule {
+object LibReverseGeocoderModule {
 
     @Provides
     @Reusable

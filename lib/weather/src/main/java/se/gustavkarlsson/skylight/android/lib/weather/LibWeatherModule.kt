@@ -4,12 +4,13 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.Scheduler
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import se.gustavkarlsson.skylight.android.Io
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.services.Formatter
@@ -17,7 +18,7 @@ import se.gustavkarlsson.skylight.android.utils.minutes
 import se.gustavkarlsson.skylight.android.utils.seconds
 
 @Module
-class LibWeatherModule {
+object LibWeatherModule {
 
     @Provides
     @Reusable
@@ -27,15 +28,23 @@ class LibWeatherModule {
     @Reusable
     internal fun weatherEvaluator(): ChanceEvaluator<Weather> = WeatherEvaluator
 
-    @Suppress("EXPERIMENTAL_API_USAGE") // Json.nonstrict
     @Provides
     @Reusable
-    internal fun weatherProvider(okHttpClient: OkHttpClient, time: Time): WeatherProvider {
+    internal fun weatherProvider(
+        okHttpClient: OkHttpClient,
+        @Io scheduler: Scheduler,
+        time: Time
+    ): WeatherProvider {
+        @Suppress("EXPERIMENTAL_API_USAGE")
+        val converterFactory = Json { ignoreUnknownKeys = true }
+            .asConverterFactory(MediaType.get("application/json"))
+        val callAdapterFactory = RxJava2CallAdapterFactory.createWithScheduler(scheduler)
+
         val api = Retrofit.Builder()
             .client(okHttpClient)
+            .addConverterFactory(converterFactory)
+            .addCallAdapterFactory(callAdapterFactory)
             .baseUrl("https://api.openweathermap.org/data/2.5/")
-            .addConverterFactory(Json.nonstrict.asConverterFactory(MediaType.get("application/json")))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .build()
             .create(OpenWeatherMapApi::class.java)
 

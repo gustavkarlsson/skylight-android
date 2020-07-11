@@ -7,15 +7,15 @@ import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
 import io.reactivex.disposables.CompositeDisposable
-import javax.inject.Singleton
+import se.gustavkarlsson.skylight.android.AppScope
 import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 
 @Module
-class LibPlacesModule {
+object LibPlacesModule {
 
     @Provides
-    @Singleton
+    @AppScope
     internal fun placesRepository(context: Context): PlacesRepository {
         val driver = AndroidSqliteDriver(Database.Schema, context, "places.db")
         val database = Database(driver)
@@ -23,7 +23,7 @@ class LibPlacesModule {
     }
 
     @Provides
-    @Singleton
+    @AppScope
     internal fun selectedPlaceRepository(
         context: Context,
         placesRepository: PlacesRepository
@@ -38,7 +38,7 @@ class LibPlacesModule {
     }
 
     @Provides
-    @Singleton
+    @AppScope
     @IntoSet
     fun moduleStarter(placesRepository: PlacesRepository, analytics: Analytics): ModuleStarter =
         object : ModuleStarter {

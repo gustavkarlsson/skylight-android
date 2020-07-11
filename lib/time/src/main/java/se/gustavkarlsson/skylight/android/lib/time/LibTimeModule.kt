@@ -5,7 +5,7 @@ import dagger.Provides
 import dagger.Reusable
 
 @Module
-class LibTimeModule {
+object LibTimeModule {
 
     @Provides
     @Reusable
