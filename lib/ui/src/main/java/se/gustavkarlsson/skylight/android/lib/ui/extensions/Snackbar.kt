@@ -1,9 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.ui.extensions
 
 import android.view.View
-import android.view.ViewTreeObserver
 import androidx.annotation.StringRes
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.snackbar.Snackbar
 import com.ioki.textref.TextRef
 import org.threeten.bp.Duration
@@ -59,14 +57,6 @@ class SnackbarBuilder internal constructor(view: View) {
 
     fun setErrorStyle() = snackbar.setErrorColors()
 
-    @Synchronized
-    fun disableSwipeToDismiss() {
-        if (canSwipeToDismiss) {
-            snackbar.disableSwipeToDismiss()
-            canSwipeToDismiss = false
-        }
-    }
-
     internal fun show(): Snackbar = snackbar.also(Snackbar::show)
 }
 
@@ -76,19 +66,4 @@ private fun Snackbar.setErrorColors() {
     val foregroundColor = context.theme.resolveColor(R.attr.colorOnError)
     setTextColor(foregroundColor)
     setActionTextColor(foregroundColor)
-}
-
-private fun Snackbar.disableSwipeToDismiss() =
-    view.viewTreeObserver.addOnPreDrawListener(SnackbarDisableSwipe(view))
-
-private class SnackbarDisableSwipe(private val snackbarView: View) :
-    ViewTreeObserver.OnPreDrawListener {
-    override fun onPreDraw(): Boolean {
-        snackbarView.viewTreeObserver.removeOnPreDrawListener(this)
-        val layoutParams = snackbarView.layoutParams
-        if (layoutParams is CoordinatorLayout.LayoutParams) {
-            layoutParams.behavior = null
-        }
-        return true
-    }
 }
