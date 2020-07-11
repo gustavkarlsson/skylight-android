@@ -65,7 +65,7 @@ private fun createSingle(
                     val code = response.code()
                     val error = response.errorBody()?.string() ?: "<empty>"
                     Timber.e("Geocoding failed with HTTP %d: %s", code, error)
-                    emitter.onSuccess(GeocodingResult.Failure.Unknown)
+                    emitter.onSuccess(GeocodingResult.Failure.ServerError)
                 }
             }
         })

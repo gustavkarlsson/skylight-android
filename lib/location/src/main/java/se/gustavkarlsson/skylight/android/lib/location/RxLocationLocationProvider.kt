@@ -49,7 +49,7 @@ internal class RxLocationLocationProvider(
             .subscribeOn(Schedulers.io())
             .firstOrError()
             .timeout(timeout)
-            .map<LocationResult> { LocationResult.Success(Location(it.latitude, it.longitude)) }
+            .map { LocationResult.success(Location(it.latitude, it.longitude)) }
             .onErrorReturn { exception ->
                 when (exception) {
                     is SecurityException -> {
@@ -94,7 +94,7 @@ internal class RxLocationLocationProvider(
         .map { Location(it.latitude, it.longitude) }
         .distinctUntilChanged()
         .throttleLatest(throttleDuration)
-        .map<LocationResult>(LocationResult::Success)
+        .map(LocationResult.Companion::success)
         .onErrorResumeNext { exception: Throwable ->
             val result = when (exception) {
                 is SecurityException -> {
@@ -115,7 +115,7 @@ internal class RxLocationLocationProvider(
                 Observable.error(exception)
             )
         }
-        .map<Loadable<LocationResult>> { Loadable.Loaded(it) }
+        .map { Loadable.loaded(it) }
         .retryWhen { it.delay(retryDelay) }
         .doOnNext { Timber.i("Streamed location: %s", it) }
         .replayingShare(Loadable.Loading)

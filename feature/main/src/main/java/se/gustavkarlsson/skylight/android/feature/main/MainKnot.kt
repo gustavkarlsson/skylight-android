@@ -83,9 +83,9 @@ internal fun buildMainKnot(
             distinctUntilChanged()
             switchMap { (stream, place) ->
                 if (stream && place != null) {
-                    val locationUpdates: Observable<Loadable<LocationResult>> =
+                    val locationUpdates =
                         if (place is Place.Custom) {
-                            Observable.just(Loadable.Loaded(LocationResult.Success(place.location)))
+                            Observable.just(Loadable.loaded(LocationResult.success(place.location)))
                         } else locationProvider.stream()
                     auroraReportProvider.stream(locationUpdates)
                         .map<Change> { result ->

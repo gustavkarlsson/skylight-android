@@ -77,8 +77,8 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
             .toObservable()
             .onErrorResumeNext { throwable: Throwable ->
                 Observable.concat(
-                    Observable.just(Report.Error(getCause(throwable), time.now())),
-                    Observable.error<Report<Weather>>(throwable)
+                    Observable.just(Report.error(getCause(throwable), time.now())),
+                    Observable.error(throwable)
                 )
             }
             .retryWhen { it.delay(retryDelay) }
@@ -86,9 +86,9 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
     private fun getReport(location: Location): Single<Report<Weather>> =
         api.get(location.latitude, location.longitude, "json", appId)
             .doOnError { Timber.w(it, "Failed to get Weather from OpenWeatherMap API") }
-            .flatMap<Report<Weather>> { response ->
+            .flatMap { response ->
                 if (response.isSuccessful) {
-                    Single.just(Report.Success(Weather(response.body()!!.clouds.all), time.now()))
+                    Single.just(Report.success(Weather(response.body()!!.clouds.all), time.now()))
                 } else {
                     val exception = ServerResponseException(response.code(), response.errorBody()!!.string())
                     Timber.e(exception, "Failed to get Weather from OpenWeatherMap API")

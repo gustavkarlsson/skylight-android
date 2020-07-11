@@ -17,4 +17,10 @@ sealed class LocationResult {
         object MissingPermission : Failure()
         object Unknown : Failure()
     }
+
+    companion object {
+        fun success(location: Location): LocationResult = Success(location)
+        fun errorMissingPermission(): LocationResult = Failure.MissingPermission
+        fun errorUnknown(): LocationResult = Failure.Unknown
+    }
 }

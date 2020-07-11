@@ -10,4 +10,9 @@ sealed class Loadable<out T> {
     data class Loaded<out T>(val value: T) : Loadable<T>() {
         override fun <R> map(mapper: (T) -> R): Loadable<R> = Loaded(mapper(value))
     }
+
+    companion object {
+        fun <T> loading(): Loadable<T> = Loading
+        fun <T> loaded(value: T): Loadable<T> = Loaded(value)
+    }
 }

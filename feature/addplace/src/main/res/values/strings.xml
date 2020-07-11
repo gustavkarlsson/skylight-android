@@ -7,5 +7,6 @@
     <string name="searching">Searching…</string>
     <string name="no_place_found">No place with that name :(</string>
     <string name="place_search_failed_generic">Place search failed</string>
+    <string name="place_search_failed_server_response">Place search failed. Server error.</string>
     <string name="place_search_failed_io">Place search failed. Are you connected to the internet?</string>
 </resources>
