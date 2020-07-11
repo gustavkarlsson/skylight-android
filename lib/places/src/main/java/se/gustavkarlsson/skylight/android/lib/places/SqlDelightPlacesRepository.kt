@@ -29,7 +29,7 @@ internal class SqlDelightPlacesRepository(
     private val stream =
         queries
             .selectAll<Place> { id, name, latitude, longitude ->
-                Place.Custom(id, TextRef(name), Location(latitude, longitude))
+                Place.Custom(id, TextRef.string(name), Location(latitude, longitude))
             }
             .asObservable(dbScheduler)
             .mapToList()

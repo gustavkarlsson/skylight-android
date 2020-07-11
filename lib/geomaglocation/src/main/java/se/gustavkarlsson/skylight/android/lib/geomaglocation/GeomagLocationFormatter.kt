@@ -10,6 +10,6 @@ internal class GeomagLocationFormatter(private val locale: Single<Locale>) :
     override fun format(value: GeomagLocation): TextRef {
         val latitude = value.latitude
         val text = String.format(locale.blockingGet(), "%.0f°", latitude)
-        return TextRef(text)
+        return TextRef.string(text)
     }
 }

@@ -74,8 +74,8 @@ class SettingsFragment : ScreenFragment() {
 
 private val TriggerLevel.shortText: TextRef
     get() = when (this) {
-        TriggerLevel.NEVER -> TextRef(R.string.pref_notifications_entry_never_short)
-        TriggerLevel.LOW -> TextRef(R.string.pref_notifications_entry_low_short)
-        TriggerLevel.MEDIUM -> TextRef(R.string.pref_notifications_entry_medium_short)
-        TriggerLevel.HIGH -> TextRef(R.string.pref_notifications_entry_high_short)
+        TriggerLevel.NEVER -> TextRef.stringRes(R.string.pref_notifications_entry_never_short)
+        TriggerLevel.LOW -> TextRef.stringRes(R.string.pref_notifications_entry_low_short)
+        TriggerLevel.MEDIUM -> TextRef.stringRes(R.string.pref_notifications_entry_medium_short)
+        TriggerLevel.HIGH -> TextRef.stringRes(R.string.pref_notifications_entry_high_short)
     }

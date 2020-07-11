@@ -88,11 +88,11 @@ internal fun createKnot(
                                         Change.SearchFinished(result.suggestions)
                                     GeocodingResult.Failure.Io ->
                                         Change.SearchFailed(
-                                            TextRef(R.string.place_search_failed_io)
+                                            TextRef.stringRes(R.string.place_search_failed_io)
                                         )
                                     GeocodingResult.Failure.Unknown ->
                                         Change.SearchFailed(
-                                            TextRef(R.string.place_search_failed_generic)
+                                            TextRef.stringRes(R.string.place_search_failed_generic)
                                         )
                                 }
                             }
