@@ -25,7 +25,7 @@ internal class SharedPrefsLastNotificationRepository(
     }
 
     private fun getTimestamp(): Instant? {
-        val value = sharedPreferences.getLong(KEY_TIMESTAMP, MISSING_LONG)
+        val value = sharedPreferences.getLong(TIMESTAMP_KEY, MISSING_LONG)
             .let { if (it == MISSING_LONG) null else it }
         return value?.let(Instant::ofEpochMilli)
     }
@@ -34,8 +34,8 @@ internal class SharedPrefsLastNotificationRepository(
         sharedPreferences.all.mapNotNull { (key, value) ->
             try {
                 when (key) {
-                    KEY_TIMESTAMP -> null
-                    KEY_CURRENT -> readAsCurrent(value)
+                    TIMESTAMP_KEY -> null
+                    CURRENT_KEY -> readAsCurrent(value)
                     else -> readAsCustom(key, value)
                 }
             } catch (e: Exception) {
@@ -68,7 +68,7 @@ internal class SharedPrefsLastNotificationRepository(
     override fun insert(data: Notification) {
         sharedPreferences.edit {
             clear()
-            putLong(KEY_TIMESTAMP, data.timestamp.toEpochMilli())
+            putLong(TIMESTAMP_KEY, data.timestamp.toEpochMilli())
             data.data.forEach { placeWithChance ->
                 val key = getKey(placeWithChance)
                 val value = getValue(placeWithChance)
@@ -79,7 +79,7 @@ internal class SharedPrefsLastNotificationRepository(
 
     private fun getKey(value: PlaceWithChance) =
         when (val place = value.place) {
-            Place.Current -> KEY_CURRENT
+            Place.Current -> CURRENT_KEY
             is Place.Custom -> place.id.toString()
         }
 
@@ -87,6 +87,6 @@ internal class SharedPrefsLastNotificationRepository(
 }
 
 private const val PREFS_FILE_NAME = "last_notification"
-private const val KEY_TIMESTAMP = "timestamp"
-private const val KEY_CURRENT = "current"
+private const val TIMESTAMP_KEY = "timestamp"
+private const val CURRENT_KEY = "current"
 private const val MISSING_LONG = Long.MIN_VALUE
