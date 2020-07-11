@@ -12,7 +12,7 @@ import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 
 @Module
-class LibPlacesModule {
+object LibPlacesModule {
 
     @Provides
     @AppScope

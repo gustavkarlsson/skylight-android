@@ -9,7 +9,7 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
 
 @Module
-class FeatureGooglePlayServicesModule {
+object FeatureGooglePlayServicesModule {
 
     @Provides
     @Reusable

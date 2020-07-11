@@ -7,7 +7,7 @@ import javax.inject.Named
 import se.gustavkarlsson.skylight.android.AppScope
 
 @Module
-class LibRunVersionModule {
+object LibRunVersionModule {
 
     @Provides
     @AppScope

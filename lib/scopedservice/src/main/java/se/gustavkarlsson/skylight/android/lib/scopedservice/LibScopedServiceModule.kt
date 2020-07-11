@@ -5,7 +5,7 @@ import dagger.Provides
 import se.gustavkarlsson.skylight.android.AppScope
 
 @Module
-class LibScopedServiceModule {
+object LibScopedServiceModule {
 
     @Provides
     @AppScope

@@ -5,7 +5,7 @@ import dagger.Provides
 import dagger.Reusable
 
 @Module
-class LibNavigationSetupModule {
+object LibNavigationSetupModule {
 
     @Provides
     @Reusable

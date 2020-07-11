@@ -15,7 +15,7 @@ import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
 
 @Module
-class FeatureSettingsModule {
+object FeatureSettingsModule {
 
     @Provides
     @AppScope

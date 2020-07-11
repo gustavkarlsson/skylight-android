@@ -7,7 +7,7 @@ import io.reactivex.Single
 import java.util.Locale
 
 @Module
-class LibGeocoderModule {
+object LibGeocoderModule {
 
     @Provides
     @Reusable

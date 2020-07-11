@@ -18,7 +18,7 @@ import se.gustavkarlsson.skylight.android.utils.minutes
 import se.gustavkarlsson.skylight.android.utils.seconds
 
 @Module
-class LibWeatherModule {
+object LibWeatherModule {
 
     @Provides
     @Reusable

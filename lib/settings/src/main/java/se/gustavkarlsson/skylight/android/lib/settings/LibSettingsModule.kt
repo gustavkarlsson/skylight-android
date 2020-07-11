@@ -8,7 +8,7 @@ import se.gustavkarlsson.skylight.android.AppScope
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 
 @Module
-class LibSettingsModule {
+object LibSettingsModule {
 
     @Provides
     @AppScope

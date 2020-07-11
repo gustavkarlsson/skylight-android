@@ -10,7 +10,7 @@ import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionManager
 
 @Module
-class FeatureIntroModule {
+object FeatureIntroModule {
 
     @Provides
     @Reusable
