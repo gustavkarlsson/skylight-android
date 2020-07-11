@@ -9,7 +9,9 @@ internal class SharedPreferencesRunVersionManager(
     private val currentVersionCode: Int
 ) : RunVersionManager {
 
-    private val prefs = context.getSharedPreferences(PREFS_FILE_NAME, MODE_PRIVATE)
+    private val prefs by lazy {
+        context.getSharedPreferences(PREFS_FILE_NAME, MODE_PRIVATE)
+    }
 
     override val isFirstRun: Boolean
         get() {

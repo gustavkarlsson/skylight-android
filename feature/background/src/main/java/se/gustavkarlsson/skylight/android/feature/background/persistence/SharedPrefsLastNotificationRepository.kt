@@ -13,8 +13,9 @@ internal class SharedPrefsLastNotificationRepository(
     context: Context
 ) : LastNotificationRepository {
 
-    private val sharedPreferences =
+    private val sharedPreferences by lazy {
         context.getSharedPreferences(PREFS_FILE_NAME, Context.MODE_PRIVATE)
+    }
 
     override fun get(): NotificationRecord? {
         return getTimestamp()?.let { timestamp ->

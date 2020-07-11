@@ -3,6 +3,8 @@ package se.gustavkarlsson.skylight.android.lib.places
 import de.halfbit.knot.knot
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import se.gustavkarlsson.skylight.android.utils.allowThreadDiskReadsInStrictMode
+import se.gustavkarlsson.skylight.android.utils.allowThreadDiskWritesInStrictMode
 import timber.log.Timber
 
 internal class PlacesRepoSelectedPlaceRepository(
@@ -35,11 +37,15 @@ private fun createKnot(
 ) = knot<State, Change, Nothing> {
 
     state {
-        initial = State.Initial(loadIndex())
+        initial = allowThreadDiskReadsInStrictMode {
+            State.Initial(loadIndex())
+        }
 
         watch<State.Loaded> {
             val index = it.places.indexOf(it.selected)
-            saveIndex(index)
+            allowThreadDiskWritesInStrictMode {
+                saveIndex(index)
+            }
         }
     }
 

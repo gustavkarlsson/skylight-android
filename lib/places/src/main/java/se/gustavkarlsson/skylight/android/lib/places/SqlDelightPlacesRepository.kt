@@ -9,16 +9,20 @@ import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.db.DbPlaceQueries
+import se.gustavkarlsson.skylight.android.utils.allowThreadDiskWritesInStrictMode
 
 internal class SqlDelightPlacesRepository(
     private val queries: DbPlaceQueries,
     dbScheduler: Scheduler = Schedulers.io()
 ) : PlacesRepository {
 
-    override fun add(name: String, location: Location) =
+    override fun add(name: String, location: Location) = allowThreadDiskWritesInStrictMode {
         queries.insert(name, location.latitude, location.longitude)
+    }
 
-    override fun remove(placeId: Long) = queries.delete(placeId)
+    override fun remove(placeId: Long) = allowThreadDiskWritesInStrictMode {
+        queries.delete(placeId)
+    }
 
     private val stream =
         queries
