@@ -85,12 +85,25 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
 
     private fun getReport(location: Location): Single<Report<Weather>> =
         api.get(location.latitude, location.longitude, "json", appId)
-            .map<Report<Weather>> { Report.Success(Weather(it.clouds.all), time.now()) }
             .doOnError { Timber.w(it, "Failed to get Weather from OpenWeatherMap API") }
+            .flatMap<Report<Weather>> { response ->
+                if (response.isSuccessful) {
+                    Single.just(Report.Success(Weather(response.body()!!.clouds.all), time.now()))
+                } else {
+                    val exception = ServerResponseException(response.code(), response.errorBody()!!.string())
+                    Timber.e(exception, "Failed to get Weather from OpenWeatherMap API")
+                    Single.error(exception)
+                }
+            }
 }
 
+// TODO Fix duplication with RetrofittedKpIndexProvider
 private fun getCause(throwable: Throwable): Cause =
     when (throwable) {
         is IOException -> Cause.Connectivity
+        is ServerResponseException -> Cause.ServerResponse
         else -> Cause.Unknown
     }
+
+// TODO Fix duplication with RetrofittedKpIndexProvider
+private class ServerResponseException(code: Int, body: String) : Exception("Server error $code. Body: $body")

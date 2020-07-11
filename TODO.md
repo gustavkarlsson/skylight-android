@@ -1,6 +1,5 @@
 ## Soon
 * Show banner when no connectivity (check for flight mode?)
-* Rework API responses.
 * Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
 * Use cases instead of repositories?
 * Add prettier detail screens
