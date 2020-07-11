@@ -2,10 +2,8 @@ package se.gustavkarlsson.skylight.android.feature.main.gui
 
 import android.content.Context
 import android.content.res.ColorStateList
-import android.os.Build
 import android.util.AttributeSet
 import android.widget.FrameLayout
-import androidx.annotation.RequiresApi
 import com.google.android.material.card.MaterialCardView
 import kotlin.math.roundToInt
 import kotlinx.android.synthetic.main.layout_factor_card.view.card
