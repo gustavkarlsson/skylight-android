@@ -12,7 +12,7 @@ internal class NotificationFormatter(
     override fun format(value: Notification): TextRef {
         val lines = formatLines(value)
         val string = lines.joinToString("\n") { "%s" }
-        return TextRef(string, *lines)
+        return TextRef.string(string, *lines)
     }
 
     private fun formatLines(value: Notification): Array<TextRef> =
@@ -21,8 +21,8 @@ internal class NotificationFormatter(
             .map {
                 val chanceText = chanceLevelFormatter.format(it.chanceLevel)
                 when (it.place) {
-                    Place.Current -> TextRef(R.string.x_at_your_current_location, chanceText)
-                    is Place.Custom -> TextRef(R.string.x_in_y, chanceText, it.place.name)
+                    Place.Current -> TextRef.stringRes(R.string.x_at_your_current_location, chanceText)
+                    is Place.Custom -> TextRef.stringRes(R.string.x_in_y, chanceText, it.place.name)
                 }
             }.toTypedArray()
 }

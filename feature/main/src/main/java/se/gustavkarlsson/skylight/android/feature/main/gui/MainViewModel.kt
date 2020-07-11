@@ -108,8 +108,8 @@ internal class MainViewModel(
         .combineLatest(timeSinceUpdate, locationName) { (time), (name) ->
             when {
                 time == null -> TextRef.EMPTY
-                name == null -> TextRef(time)
-                else -> TextRef(R.string.time_in_location, time, name)
+                name == null -> TextRef.string(time)
+                else -> TextRef.stringRes(R.string.time_in_location, time, name)
             }
         }
         .observeOn(observeScheduler)
@@ -148,16 +148,16 @@ internal class MainViewModel(
                 it.selectedPlace != Place.Current -> Absent
                 it.locationAccess == Access.Denied -> {
                     BannerData(
-                        TextRef(R.string.location_permission_denied_message),
-                        TextRef(R.string.fix),
+                        TextRef.stringRes(R.string.location_permission_denied_message),
+                        TextRef.stringRes(R.string.fix),
                         R.drawable.ic_location_on,
                         BannerData.Event.RequestLocationPermission
                     ).toOptional()
                 }
                 it.locationAccess == Access.DeniedForever -> {
                     BannerData(
-                        TextRef(R.string.location_permission_denied_forever_message),
-                        TextRef(R.string.fix),
+                        TextRef.stringRes(R.string.location_permission_denied_forever_message),
+                        TextRef.stringRes(R.string.fix),
                         R.drawable.ic_warning,
                         BannerData.Event.OpenAppDetails
                     ).toOptional()
@@ -198,7 +198,7 @@ internal class MainViewModel(
                         )
                     }
                     is Report.Error -> FactorItem(
-                        valueText = TextRef("?"),
+                        valueText = TextRef.string("?"),
                         valueTextColor = R.color.error,
                         progress = null,
                         progressColor = ChanceToColorConverter.UNKNOWN_COLOR,
@@ -219,7 +219,7 @@ private fun format(cause: Cause): TextRef {
         Cause.Connectivity -> R.string.cause_connectivity
         Cause.Unknown -> R.string.cause_unknown
     }
-    return TextRef(id)
+    return TextRef.stringRes(id)
 }
 
 internal data class FactorItem(
@@ -231,7 +231,7 @@ internal data class FactorItem(
 ) {
     companion object {
         val LOADING = FactorItem(
-            valueText = TextRef("…"),
+            valueText = TextRef.string("…"),
             valueTextColor = R.color.on_surface_weaker,
             progress = null,
             progressColor = ChanceToColorConverter.UNKNOWN_COLOR,

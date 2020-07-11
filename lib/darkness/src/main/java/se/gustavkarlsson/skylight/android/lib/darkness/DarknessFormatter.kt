@@ -14,6 +14,6 @@ internal object DarknessFormatter : Formatter<Darkness> {
         val darknessPercentage = (darknessFactor * 100.0)
             .roundToInt()
             .coerceIn(0..100)
-        return TextRef("$darknessPercentage%")
+        return TextRef.string("$darknessPercentage%")
     }
 }

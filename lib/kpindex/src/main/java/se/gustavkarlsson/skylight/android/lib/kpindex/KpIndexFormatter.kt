@@ -17,7 +17,7 @@ internal object KpIndexFormatter : Formatter<KpIndex> {
                 whole,
                 partString
             )
-        return TextRef(wholeString + partString)
+        return TextRef.string(wholeString + partString)
     }
 
     private fun parsePart(part: Double): String {

@@ -8,7 +8,7 @@ sealed class Place {
     abstract val name: TextRef
 
     object Current : Place() {
-        override val name = TextRef(R.string.your_location)
+        override val name = TextRef.stringRes(R.string.your_location)
     }
 
     data class Custom(
