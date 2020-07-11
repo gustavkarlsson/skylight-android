@@ -58,12 +58,7 @@ internal class NotifierImpl(
             ChanceLevel.NONE, ChanceLevel.UNKNOWN, null -> NotificationCompat.PRIORITY_MIN
         }
 
-    private fun createColor(): Int? =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            context.theme.resolveColor(R.attr.colorPrimary)
-        } else {
-            null
-        }
+    private fun createColor(): Int? = context.theme.resolveColor(R.attr.colorPrimary)
 
     private fun createText(notification: Notification) =
         notificationFormatter.format(notification).resolve(context)

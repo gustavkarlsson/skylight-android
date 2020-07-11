@@ -52,7 +52,6 @@ internal class FactorCard : FrameLayout {
     override fun setOnLongClickListener(listener: OnLongClickListener?) =
         card.setOnLongClickListener(listener)
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun setOnContextClickListener(listener: OnContextClickListener?) =
         card.setOnContextClickListener(listener)
 
