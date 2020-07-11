@@ -61,7 +61,7 @@ internal class DrawerViewModel @Inject constructor(
         DrawerItem(
             isActive = false,
             icon = R.drawable.ic_add,
-            text = TextRef(R.string.add_place),
+            text = TextRef.stringRes(R.string.add_place),
             clickEvent = DrawerEvent.AddPlaceClicked,
             longClickEvent = null
         )
@@ -83,7 +83,7 @@ internal class DrawerViewModel @Inject constructor(
 
     private fun showRemovePlaceDialog(place: Place.Custom) {
         val dialogData = RemovePlaceDialogData(
-            TextRef(R.string.remove_thing, place.name),
+            TextRef.stringRes(R.string.remove_thing, place.name),
             place.id
         )
         openRemovePlaceDialogRelay.accept(dialogData)

@@ -62,8 +62,8 @@ internal sealed class SettingsItem {
 
 private val TriggerLevel.longText: TextRef
     get() = when (this) {
-        TriggerLevel.NEVER -> TextRef(R.string.pref_notifications_entry_never_long)
-        TriggerLevel.LOW -> TextRef(R.string.pref_notifications_entry_low_long)
-        TriggerLevel.MEDIUM -> TextRef(R.string.pref_notifications_entry_medium_long)
-        TriggerLevel.HIGH -> TextRef(R.string.pref_notifications_entry_high_long)
+        TriggerLevel.NEVER -> TextRef.stringRes(R.string.pref_notifications_entry_never_long)
+        TriggerLevel.LOW -> TextRef.stringRes(R.string.pref_notifications_entry_low_long)
+        TriggerLevel.MEDIUM -> TextRef.stringRes(R.string.pref_notifications_entry_medium_long)
+        TriggerLevel.HIGH -> TextRef.stringRes(R.string.pref_notifications_entry_high_long)
     }
