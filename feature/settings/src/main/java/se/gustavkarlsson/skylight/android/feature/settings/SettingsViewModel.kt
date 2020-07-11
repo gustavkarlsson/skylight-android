@@ -46,7 +46,7 @@ internal class SettingsViewModel @Inject constructor(
         disposables += settings.setNotificationTriggerLevel(place, triggerLevel).subscribe()
     }
 
-    override fun onCleared() = disposables.clear()
+    override fun onCleared() = disposables.dispose()
 }
 
 internal sealed class SettingsItem {

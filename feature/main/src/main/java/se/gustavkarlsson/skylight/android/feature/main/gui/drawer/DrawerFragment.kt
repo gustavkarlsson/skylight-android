@@ -15,6 +15,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.findParentViewByType
 
+@Suppress("unused")
 internal class DrawerFragment : BaseFragment() {
 
     override val layoutId: Int = R.layout.fragment_drawer
