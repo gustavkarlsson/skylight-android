@@ -6,7 +6,6 @@ plugins {
     kotlin("kapt")
     id("kotlin-android-extensions")
     id("com.google.firebase.crashlytics")
-    id("com.akaita.android.easylauncher")
     id("pl.allegro.tech.build.axion-release")
     id("com.github.triplet.play") version Versions.playPublisher
 }

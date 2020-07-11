@@ -9,7 +9,6 @@ object Versions {
     val java = JavaVersion.VERSION_1_8
     val kotlin = "1.3.72"
     val androidGradle = "4.0.0" // Must also update in buildSrc/build.gradle.kts
-    val easylauncher = "1.3.1"
     val jgit = "5.6.1.202002131546-r"
     val axionRelease = "1.12.0"
     val playPublisher = "2.8.0"

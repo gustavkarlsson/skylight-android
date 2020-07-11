@@ -1,5 +1,4 @@
 ## Soon
-* Show privacy policy in app (https://github.com/noties/Markwon ?)
 * Show permission screen when user first navigates to main without having decided on permission (keep banner)
 * Show banner when no connectivity (check for flight mode?)
 * Rework API responses.
