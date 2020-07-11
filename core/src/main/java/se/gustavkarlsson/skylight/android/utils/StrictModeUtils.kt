@@ -2,17 +2,23 @@ package se.gustavkarlsson.skylight.android.utils
 
 import android.os.StrictMode
 
-// TODO Identify all usages of allowThreadDiskReadsInStrictMode and remove them
-@Deprecated("Using this indicates a bug where the main thread is allowed to read from disk")
-fun <T> allowThreadDiskReadsInStrictMode(block: () -> T): T = allow(StrictMode::allowThreadDiskReads, block)
+fun <T> allowDiskReadsInStrictMode(block: () -> T): T = allow(StrictMode::allowThreadDiskReads, block)
 
-// TODO Identify all usages of allowThreadDiskWritesInStrictMode and remove them
-@Deprecated("Using this indicates a bug where the main thread is allowed to write to disk")
-fun <T> allowThreadDiskWritesInStrictMode(block: () -> T): T = allow(StrictMode::allowThreadDiskWrites, block)
+fun <T> allowDiskWritesInStrictMode(block: () -> T): T = allow(StrictMode::allowThreadDiskWrites, block)
+
+fun <T> allowDiskReadsAndWritesInStrictMode(block: () -> T): T {
+    val allow = {
+        val oldThreadPolicy = StrictMode.allowThreadDiskReads()
+        StrictMode.allowThreadDiskWrites()
+        oldThreadPolicy
+    }
+    return allow(allow, block)
+}
+
 
 @Synchronized
-private fun <T> allow(allowCall: () -> StrictMode.ThreadPolicy, block: () -> T): T {
-    val oldThreadPolicy = allowCall()
+private fun <T> allow(allow: () -> StrictMode.ThreadPolicy, block: () -> T): T {
+    val oldThreadPolicy = allow()
     return try {
         block()
     } finally {

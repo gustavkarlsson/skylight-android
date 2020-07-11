@@ -8,7 +8,7 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionManager
-import se.gustavkarlsson.skylight.android.utils.allowThreadDiskReadsInStrictMode
+import se.gustavkarlsson.skylight.android.utils.allowDiskReadsInStrictMode
 
 @Module
 class FeatureIntroModule {
@@ -21,7 +21,8 @@ class FeatureIntroModule {
             override val priority = 10
 
             override fun override(oldBackstack: Backstack, targetBackstack: Backstack): List<IntroScreen>? =
-                allowThreadDiskReadsInStrictMode {
+                allowDiskReadsInStrictMode {
+                    // TODO This should not run on the main thread
                     when {
                         isExiting(oldBackstack, targetBackstack) -> null
                         isGoingFromIntroToPrivacyPolicy(oldBackstack, targetBackstack) -> null

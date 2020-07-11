@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android
 
 import dagger.Component
-import javax.inject.Singleton
 import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
 import se.gustavkarlsson.skylight.android.feature.background.FeatureBackgroundModule
 import se.gustavkarlsson.skylight.android.feature.googleplayservices.FeatureGooglePlayServicesModule
@@ -40,6 +39,7 @@ import se.gustavkarlsson.skylight.android.lib.time.LibTimeModule
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.lib.weather.LibWeatherModule
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
+import javax.inject.Singleton
 
 @Singleton
 @Component(
@@ -68,11 +68,25 @@ import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
         FeatureBackgroundModule::class
     ]
 )
-internal interface ActualAppComponent : AppComponent, AnalyticsComponent, BackgroundComponent,
-    TimeComponent, SettingsComponent, RunVersionComponent, WeatherComponent, GeocoderComponent,
-    PlacesComponent, LocationComponent, AuroraComponent, PermissionsComponent,
-    NavigationSetupComponent, ScopedServiceComponent, NavigationComponent, DarknessComponent,
-    KpIndexComponent, GeomagLocationComponent {
+internal interface ActualAppComponent :
+    AppComponent,
+    AnalyticsComponent,
+    BackgroundComponent,
+    TimeComponent,
+    SettingsComponent,
+    RunVersionComponent,
+    WeatherComponent,
+    GeocoderComponent,
+    PlacesComponent,
+    LocationComponent,
+    AuroraComponent,
+    PermissionsComponent,
+    NavigationSetupComponent,
+    ScopedServiceComponent,
+    NavigationComponent,
+    DarknessComponent,
+    KpIndexComponent,
+    GeomagLocationComponent {
 
     fun moduleStarters(): Set<ModuleStarter>
 }
