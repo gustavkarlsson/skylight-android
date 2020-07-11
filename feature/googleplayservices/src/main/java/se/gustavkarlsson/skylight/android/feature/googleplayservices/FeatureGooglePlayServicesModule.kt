@@ -24,7 +24,7 @@ object FeatureGooglePlayServicesModule {
             override fun override(oldBackstack: Backstack, targetBackstack: Backstack) =
                 when {
                     targetBackstack.isNotEmpty() &&
-                        targetBackstack.none { it.name == ScreenName.Intro } &&
+                        targetBackstack.none { it.name == ScreenName.GooglePlayServices } &&
                         !googlePlayServicesChecker.isAvailable ->
                         listOf(GooglePlayServicesScreen(targetBackstack))
                     else -> null

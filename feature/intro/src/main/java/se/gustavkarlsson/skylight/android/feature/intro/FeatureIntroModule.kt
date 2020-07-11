@@ -25,7 +25,7 @@ object FeatureIntroModule {
                     // TODO This should not run on the main thread
                     when {
                         targetBackstack.isNotEmpty() &&
-                            targetBackstack.none { it.name == ScreenName.GooglePlayServices } &&
+                            targetBackstack.none { it.name == ScreenName.Intro } &&
                             runVersionManager.isFirstRun ->
                             listOf(IntroScreen(targetBackstack))
                         else -> null
