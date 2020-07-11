@@ -1,5 +1,4 @@
 ## Soon
-* Show permission screen when user first navigates to main without having decided on permission (keep banner)
 * Show banner when no connectivity (check for flight mode?)
 * Rework API responses.
 * Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
