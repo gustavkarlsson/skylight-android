@@ -67,11 +67,25 @@ import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
         FeatureBackgroundModule::class
     ]
 )
-internal interface ActualAppComponent : AppComponent, AnalyticsComponent, BackgroundComponent,
-    TimeComponent, SettingsComponent, RunVersionComponent, WeatherComponent, GeocoderComponent,
-    PlacesComponent, LocationComponent, AuroraComponent, PermissionsComponent,
-    NavigationSetupComponent, ScopedServiceComponent, NavigationComponent, DarknessComponent,
-    KpIndexComponent, GeomagLocationComponent {
+internal interface ActualAppComponent :
+    AppComponent,
+    AnalyticsComponent,
+    BackgroundComponent,
+    TimeComponent,
+    SettingsComponent,
+    RunVersionComponent,
+    WeatherComponent,
+    GeocoderComponent,
+    PlacesComponent,
+    LocationComponent,
+    AuroraComponent,
+    PermissionsComponent,
+    NavigationSetupComponent,
+    ScopedServiceComponent,
+    NavigationComponent,
+    DarknessComponent,
+    KpIndexComponent,
+    GeomagLocationComponent {
 
     fun moduleStarters(): Set<ModuleStarter>
 }

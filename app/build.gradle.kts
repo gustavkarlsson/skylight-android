@@ -29,7 +29,6 @@ android {
         applicationId = "se.gustavkarlsson.skylight.android"
         versionCode = generateVersionCode(scmVersion.version)
         versionName = scmVersion.version
-        multiDexEnabled = true
     }
 
     signingConfigs {
