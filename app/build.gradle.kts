@@ -19,6 +19,7 @@ scmVersion {
 play {
     serviceAccountCredentials = file("play-service-account.json")
     track = "alpha"
+    defaultToAppBundles = true
 }
 
 android {

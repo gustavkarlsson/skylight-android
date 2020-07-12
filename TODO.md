@@ -11,7 +11,6 @@
 * Use Store lib?
 * Make testing use other settings
 * Add more tests
-* App bundles
 * Add develop settings
 * Add instrumentation testing to CI
 * Consider refresh after changing debug options
