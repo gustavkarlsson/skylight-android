@@ -34,12 +34,11 @@ internal class GooglePlayServicesFragment : ScreenFragment() {
     override fun bindData() {
         // TODO Make this nicer
         installButton.clicks()
-            .flatMapCompletable {
+            .flatMapSingle {
                 viewModel.makeGooglePlayServicesAvailable(requireActivity())
+                    .toSingleDefault(optionalOf<Throwable>(null))
+                    .onErrorReturn { optionalOf(it) }
             }
-            .toSingleDefault(optionalOf<Throwable>(null))
-            .onErrorReturn { optionalOf(it) }
-            .toObservable()
             .bind(this) { (error) ->
                 if (error == null) {
                     val target = requireNotNull(requireArguments().target)
