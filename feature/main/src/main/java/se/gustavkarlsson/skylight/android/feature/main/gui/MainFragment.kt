@@ -2,9 +2,11 @@ package se.gustavkarlsson.skylight.android.feature.main.gui
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import androidx.annotation.StringRes
+import androidx.fragment.app.commit
 import com.google.android.material.appbar.MaterialToolbar
 import com.ioki.textref.TextRef
 import com.jakewharton.rxbinding3.appcompat.itemClicks
@@ -15,6 +17,7 @@ import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_main.*
 import se.gustavkarlsson.skylight.android.feature.main.MainComponent
 import se.gustavkarlsson.skylight.android.feature.main.R
+import se.gustavkarlsson.skylight.android.feature.main.gui.drawer.DrawerFragment
 import se.gustavkarlsson.skylight.android.lib.navigation.BackButtonHandler
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
@@ -37,6 +40,14 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
     }
 
     override val toolbar: MaterialToolbar get() = toolbarView
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val drawerFragment = DrawerFragment()
+        childFragmentManager.commit {
+            add(R.id.drawerFragment, drawerFragment)
+        }
+    }
 
     override fun onStart() {
         super.onStart()
