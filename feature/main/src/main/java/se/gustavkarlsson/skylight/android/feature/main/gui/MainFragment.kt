@@ -45,7 +45,7 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
         super.onViewCreated(view, savedInstanceState)
         val drawerFragment = DrawerFragment()
         childFragmentManager.commit {
-            add(R.id.drawerFragment, drawerFragment)
+            add(R.id.drawerFragmentContainer, drawerFragment)
         }
     }
 
