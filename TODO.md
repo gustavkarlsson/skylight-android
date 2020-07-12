@@ -1,10 +1,18 @@
 ## Soon
+* Bug: If location is granted (while using app), then go to add place, and go back. Banner shows up again.
+* Readme
+* Simpler configuration of required keys (move to root? fail if not present?)
+* Retire ThreeTenABP
+* Change logger
+* Add Hyperion
+* Move some libs to coroutines
+* Android 11: https://developer.android.com/preview/privacy/permissions#one-time
+* Android 11: https://developer.android.com/preview/privacy/location#background-location
+* Use cases instead of repositories?
 * Show banner when no connectivity (check for flight mode?)
 * Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
-* Use cases instead of repositories?
 * Add prettier detail screens
 * Improve feature graphics
-* Bug: If location is granted (while using app), then go to add place, and go back. Banner shows up again.
 
 ## Some day
 * Oversee text style usage (also use TextAppearance instead of style in XML)
@@ -16,7 +24,6 @@
 * Consider refresh after changing debug options
 * Separate debug menu instead of settings page
 * Firebase performance monitoring
-* Hyperion?
 * Add manual clearing of "notification sent" in develop mode
 * Add more testing options (individual overrides for example)
 * Look into country changes while app running (Locale etc)
@@ -25,8 +32,6 @@
 * Integrate code coverage (Coveralls or Codecov)
 * Look into using Spek (problems with junit5 and android)
 * Firebase remote config, or move more stuff to backend?
-* Android 11: https://developer.android.com/preview/privacy/permissions#one-time
-* Android 11: https://developer.android.com/preview/privacy/location#background-location
 
 ## Never?
 * Rename chance to score?
