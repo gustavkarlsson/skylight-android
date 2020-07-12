@@ -202,7 +202,7 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
             FactorBottomSheetDialogFragment.newInstance(title, description, resolvedErrorText)
                 .apply {
                     onCancelListener = { currentBottomSheetTitle = null }
-                    show(it, javaClass.simpleName)
+                    show(it, javaClass.name)
                 }
             currentBottomSheetTitle = title
         }

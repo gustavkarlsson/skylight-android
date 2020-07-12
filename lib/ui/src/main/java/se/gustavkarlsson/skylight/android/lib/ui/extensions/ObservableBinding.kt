@@ -23,7 +23,7 @@ fun <T : Any> Single<T>.bind(fragment: Fragment, block: (value: T) -> Unit) = to
     .bind(fragment, block)
 
 fun <T : Any> Observable<T>.bind(fragment: Fragment, block: (value: T) -> Unit) =
-    bind(fragment.viewLifecycleOwner.lifecycle, javaClass.simpleName, block)
+    bind(fragment.viewLifecycleOwner.lifecycle, javaClass.name, block)
 
 private fun <T : Any> Observable<T>.bind(
     lifecycle: Lifecycle,
