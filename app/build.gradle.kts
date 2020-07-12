@@ -16,35 +16,11 @@ scmVersion {
     }
 }
 
-val validateVersionForPublishing = task("validateVersionForPublishing") {
-    description = "Validates that the app version follows SemVer and is not a snapshot"
-    group = "verification"
-
-    doFirst {
-        val version = version.toString()
-        val regex = Regex("\\d+\\.\\d+\\.\\d+(-.+)?")
-        if (!version.matches(regex)) {
-            throw GradleException("Version '$version' does not match regex '$regex'")
-        }
-        if (version.contains("snapshot", ignoreCase = true)) {
-            throw GradleException("Version '$version' is a snapshot version")
-        }
-    }
-}
-
 play {
     serviceAccountCredentials = file("play-service-account.json")
     track = "alpha"
     defaultToAppBundles = true
 }
-
-tasks
-    .matching { task ->
-        task.name.startsWith("publish")
-    }
-    .forEach { task ->
-        task.dependsOn(validateVersionForPublishing)
-    }
 
 android {
     commonConfig()
