@@ -3,9 +3,9 @@ package se.gustavkarlsson.skylight.android.lib.places
 import de.halfbit.knot.knot
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
+import se.gustavkarlsson.skylight.android.logging.logError
 import se.gustavkarlsson.skylight.android.utils.allowDiskReadsInStrictMode
 import se.gustavkarlsson.skylight.android.utils.allowDiskWritesInStrictMode
-import timber.log.Timber
 
 internal class PlacesRepoSelectedPlaceRepository(
     placesRepo: PlacesRepository,
@@ -68,21 +68,14 @@ private fun createKnot(
 private fun State.selectionChanged(newSelection: Place): State =
     when (this) {
         is State.Initial -> {
-            Timber.e(
-                "Cannot select a place before loading places. Place: %s",
-                newSelection
-            )
+            logError { "Cannot select a place before loading places. Place: $newSelection" }
             this
         }
         is State.Loaded -> {
             if (newSelection in places) {
                 copy(selected = newSelection)
             } else {
-                Timber.e(
-                    "Cannot select a place that is not loaded. Place: %s, Loaded: %s",
-                    newSelection,
-                    places
-                )
+                logError { "Cannot select a place that is not loaded. Place: $newSelection, Loaded: $places" }
                 this
             }
         }

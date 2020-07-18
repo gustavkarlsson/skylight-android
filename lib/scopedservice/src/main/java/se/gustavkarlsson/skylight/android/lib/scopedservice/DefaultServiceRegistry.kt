@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.scopedservice
 
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.logging.logInfo
 
 internal class DefaultServiceRegistry : ServiceRegistry {
     private var services = mapOf<String, ServiceEntry>()
@@ -8,7 +8,7 @@ internal class DefaultServiceRegistry : ServiceRegistry {
     @Synchronized
     override fun register(id: String, tag: String, service: ScopedService) {
         require(id !in services) { "Service already exists for $id" }
-        Timber.i("Registering service '$id' with tag '$tag'")
+        logInfo { "Registering service '$id' with tag '$tag'" }
         services = services + (id to ServiceEntry(
             tag,
             service
@@ -20,7 +20,7 @@ internal class DefaultServiceRegistry : ServiceRegistry {
         services.forEach { (id, entry) ->
             if (entry.tag !in tags) {
                 entry.service.onCleared()
-                Timber.i("Cleared service '$id' with tag '${entry.tag}'")
+                logInfo { "Cleared service '$id' with tag '${entry.tag}'" }
             }
         }
         services = services.filterValues { it.tag in tags }
@@ -37,7 +37,7 @@ internal class DefaultServiceRegistry : ServiceRegistry {
         val serviceDescription =
             if (entry == null) "null"
             else "service with tag '${entry.tag}'"
-        Timber.i("Requested service '$id' and got $serviceDescription")
+        logInfo { "Requested service '$id' and got $serviceDescription" }
     }
 }
 

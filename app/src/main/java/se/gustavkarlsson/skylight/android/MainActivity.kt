@@ -14,9 +14,10 @@ import se.gustavkarlsson.skylight.android.lib.navigationsetup.NavigationSetupCom
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedServiceComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceHost
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceRegistry
+import se.gustavkarlsson.skylight.android.navigation.DefaultScreens
+import se.gustavkarlsson.skylight.android.navigation.animationConfig
 
-internal class MainActivity : AppCompatActivity(), NavigatorHost, ScreensHost, ServiceHost,
-    BackstackListener {
+internal class MainActivity : AppCompatActivity(), NavigatorHost, ScreensHost, ServiceHost, BackstackListener {
 
     override lateinit var navigator: Navigator private set
 
@@ -25,7 +26,8 @@ internal class MainActivity : AppCompatActivity(), NavigatorHost, ScreensHost, S
     override val serviceRegistry: ServiceRegistry =
         ScopedServiceComponent.instance.serviceRegistry()
 
-    override val screens = DefaultScreens
+    override val screens =
+        DefaultScreens
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

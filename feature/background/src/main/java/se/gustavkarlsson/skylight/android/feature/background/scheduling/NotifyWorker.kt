@@ -5,7 +5,7 @@ import androidx.work.RxWorker
 import androidx.work.WorkerParameters
 import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.logging.logError
 
 internal class NotifyWorker(
     appContext: Context,
@@ -17,7 +17,7 @@ internal class NotifyWorker(
         val work = BackgroundComponent.instance.notifyWork()
         return work
             .toSingleDefault(Result.success())
-            .doOnError { Timber.e(it, "Failed to complete work") }
+            .doOnError { logError(it) { "Failed to complete work" } }
             .onErrorReturnItem(Result.retry())
     }
 }

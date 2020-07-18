@@ -7,7 +7,7 @@ import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.StateChanger
 import se.gustavkarlsson.skylight.android.lib.navigation.BackstackListener
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.logging.logInfo
 
 // Stolen from https://github.com/Zhuinden/simple-stack/blob/a9adb03/simple-stack-example-basic-kotlin-fragment/src/main/java/com/zhuinden/simplestackexamplekotlinfragment/core/navigation/FragmentStateChanger.kt
 internal class FragmentStateChanger(
@@ -100,7 +100,7 @@ private fun log(stateChange: StateChange) {
         StateChange.BACKWARD -> "backward"
         else -> "replace"
     }
-    Timber.i("Backstack set to ${stateChange.getNewKeys<Any>()} with direction: $direction")
+    logInfo { "Backstack set to ${stateChange.getNewKeys<Any>()} with direction: $direction" }
 }
 
 private fun FragmentTransaction.setAnimations(animations: Animations) {

@@ -1,5 +1,6 @@
-package se.gustavkarlsson.skylight.android
+package se.gustavkarlsson.skylight.android.navigation
 
+import se.gustavkarlsson.skylight.android.R
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.AnimationConfig
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.Animations
 

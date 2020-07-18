@@ -12,7 +12,7 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.showSnackbar
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.logging.logError
 
 internal class GooglePlayServicesFragment : ScreenFragment() {
 
@@ -34,18 +34,17 @@ internal class GooglePlayServicesFragment : ScreenFragment() {
     override fun bindData() {
         // TODO Make this nicer
         installButton.clicks()
-            .flatMapCompletable {
+            .flatMapSingle {
                 viewModel.makeGooglePlayServicesAvailable(requireActivity())
+                    .toSingleDefault(optionalOf<Throwable>(null))
+                    .onErrorReturn { optionalOf(it) }
             }
-            .toSingleDefault(optionalOf<Throwable>(null))
-            .onErrorReturn { optionalOf(it) }
-            .toObservable()
             .bind(this) { (error) ->
                 if (error == null) {
                     val target = requireNotNull(requireArguments().target)
                     navigator.setBackstack(target)
                 } else {
-                    Timber.e(error, "Failed to install Google Play Services")
+                    logError(error) { "Failed to install Google Play Services" }
                     view?.let { view ->
                         if (errorSnackbar == null) {
                             errorSnackbar = showSnackbar(

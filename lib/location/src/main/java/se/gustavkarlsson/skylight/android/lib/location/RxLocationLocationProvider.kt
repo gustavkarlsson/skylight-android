@@ -10,10 +10,13 @@ import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeoutException
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Loadable
+import se.gustavkarlsson.skylight.android.logging.logDebug
+import se.gustavkarlsson.skylight.android.logging.logError
+import se.gustavkarlsson.skylight.android.logging.logInfo
+import se.gustavkarlsson.skylight.android.logging.logWarn
 import se.gustavkarlsson.skylight.android.utils.delay
 import se.gustavkarlsson.skylight.android.utils.throttleLatest
 import se.gustavkarlsson.skylight.android.utils.timeout
-import timber.log.Timber
 
 internal class RxLocationLocationProvider(
     private val fusedLocation: FusedLocation,
@@ -53,36 +56,36 @@ internal class RxLocationLocationProvider(
             .onErrorReturn { exception ->
                 when (exception) {
                     is SecurityException -> {
-                        Timber.w(exception, "Missing location permission")
+                        logWarn(exception) { "Missing location permission" }
                         LocationResult.Failure.MissingPermission
                     }
                     is TimeoutException -> {
-                        Timber.w(exception, "Timed out while getting location")
+                        logWarn(exception) { "Timed out while getting location" }
                         LocationResult.Failure.Unknown
                     }
                     else -> {
-                        Timber.e(exception, "Failed to get location")
+                        logError(exception) { "Failed to get location" }
                         LocationResult.Failure.Unknown
                     }
                 }
             }
-            .doOnSuccess { Timber.i("Provided location: %s", it) }
+            .doOnSuccess { logInfo { "Provided location: $it" } }
 
     @SuppressLint("MissingPermission")
     private val lastLocation = fusedLocation
         .lastLocation()
-        .doOnSuccess { Timber.d("Last location: %s", it) }
+        .doOnSuccess { logDebug { "Last location: $it" } }
 
     @SuppressLint("MissingPermission")
     private val forcedLocation = fusedLocation
         .updates(forcedLocationRequest)
         .firstOrError()
-        .doOnSuccess { Timber.d("Forced location: %s", it) }
+        .doOnSuccess { logDebug { "Forced location: $it" } }
 
     @SuppressLint("MissingPermission")
     private val pollingLocations = fusedLocation
         .updates(pollingLocationRequest)
-        .doOnNext { Timber.d("Polled location: %s", it) }
+        .doOnNext { logDebug { "Polled location: $it" } }
 
     private val locations = lastLocation
         .switchIfEmpty(forcedLocation)
@@ -98,15 +101,15 @@ internal class RxLocationLocationProvider(
         .onErrorResumeNext { exception: Throwable ->
             val result = when (exception) {
                 is SecurityException -> {
-                    Timber.w(exception, "Missing location permission")
+                    logWarn(exception) { "Missing location permission" }
                     LocationResult.Failure.MissingPermission
                 }
                 is TimeoutException -> {
-                    Timber.w(exception, "Timed out while getting location")
+                    logWarn(exception) { "Timed out while getting location" }
                     LocationResult.Failure.Unknown
                 }
                 else -> {
-                    Timber.e(exception, "Failed to get location")
+                    logError(exception) { "Failed to get location" }
                     LocationResult.Failure.Unknown
                 }
             }
@@ -117,7 +120,7 @@ internal class RxLocationLocationProvider(
         }
         .map { Loadable.loaded(it) }
         .retryWhen { it.delay(retryDelay) }
-        .doOnNext { Timber.i("Streamed location: %s", it) }
+        .doOnNext { logInfo { "Streamed location: $it" } }
         .replayingShare(Loadable.Loading)
 
     override fun stream() = stream

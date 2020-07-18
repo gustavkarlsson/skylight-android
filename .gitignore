@@ -3,3 +3,6 @@
 *.iml
 /build/
 /local.properties
+
+# Bitrise cache creates this
+/gradle.deps

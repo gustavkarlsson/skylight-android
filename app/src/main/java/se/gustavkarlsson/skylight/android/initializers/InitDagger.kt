@@ -1,6 +1,10 @@
-package se.gustavkarlsson.skylight.android
+package se.gustavkarlsson.skylight.android.initializers
 
 import android.app.Application
+import se.gustavkarlsson.skylight.android.AppComponent
+import se.gustavkarlsson.skylight.android.AppModule
+import se.gustavkarlsson.skylight.android.DaggerActualAppComponent
+import se.gustavkarlsson.skylight.android.ModuleStarter
 import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent

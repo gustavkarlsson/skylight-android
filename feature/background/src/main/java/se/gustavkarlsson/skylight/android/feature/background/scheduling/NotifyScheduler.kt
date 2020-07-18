@@ -8,7 +8,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import java.util.concurrent.TimeUnit
 import org.threeten.bp.Duration
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.logging.logDebug
 
 internal class NotifyScheduler(
     private val appContext: Context,
@@ -24,12 +24,12 @@ internal class NotifyScheduler(
             ExistingPeriodicWorkPolicy.KEEP,
             request
         )
-        Timber.d("Scheduled periodic updates")
+        logDebug { "Scheduled periodic updates" }
     }
 
     override fun unschedule() {
         workManager.cancelUniqueWork(UNIQUE_NAME_NOTIFY)
-        Timber.d("Unscheduled periodic updates")
+        logDebug { "Unscheduled periodic updates" }
     }
 }
 
