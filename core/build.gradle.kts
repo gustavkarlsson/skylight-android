@@ -12,7 +12,6 @@ dependencies {
     api("org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}")
     api("androidx.core:core-ktx:${Versions.androidCoreKtx}")
     api("com.jakewharton.threetenabp:threetenabp:${Versions.threetenabp}")
-    api("com.jakewharton.timber:timber:${Versions.timber}")
     api("com.jakewharton.rxrelay2:rxrelay:${Versions.rxrelay}")
     api("com.jakewharton.rx2:replaying-share-kotlin:${Versions.rxReplayingShare}")
     api("com.github.gustavkarlsson:koptional:${Versions.koptional}")

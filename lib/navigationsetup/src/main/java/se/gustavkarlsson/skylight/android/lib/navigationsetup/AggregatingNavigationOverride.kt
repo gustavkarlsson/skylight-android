@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.lib.navigationsetup
 
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.logging.logInfo
 
 internal class AggregatingNavigationOverride(
     private val overrides: Iterable<NavigationOverride>
@@ -15,6 +15,6 @@ internal class AggregatingNavigationOverride(
             .mapNotNull { it.override(oldBackstack, targetBackstack) }
             .firstOrNull()
             ?.also {
-                Timber.i("Overrode $oldBackstack with $it instead of $targetBackstack")
+                logInfo { "Overrode $oldBackstack with $it instead of $targetBackstack" }
             }
 }

@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Completable
 import io.reactivex.functions.Consumer
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.logging.logInfo
 
 internal class RxPermissionRequester(
     private val permissionKeys: List<String>,
@@ -19,15 +19,15 @@ internal class RxPermissionRequester(
             .doOnNext {
                 when {
                     it.granted -> {
-                        Timber.i("Permission is granted")
+                        logInfo { "Permission is granted" }
                         accessChangeConsumer.accept(Access.Granted)
                     }
                     it.shouldShowRequestPermissionRationale -> {
-                        Timber.i("Permission is denied")
+                        logInfo { "Permission is denied" }
                         accessChangeConsumer.accept(Access.Denied)
                     }
                     else -> {
-                        Timber.i("Permission is denied forever")
+                        logInfo { "Permission is denied forever" }
                         accessChangeConsumer.accept(Access.DeniedForever)
                     }
                 }

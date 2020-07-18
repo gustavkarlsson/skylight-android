@@ -13,7 +13,7 @@ import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.logging.logDebug
 
 internal data class State(
     val isStreaming: Boolean = false,
@@ -49,7 +49,7 @@ internal fun buildMainKnot(
         )
         observeOn = observeScheduler
         if (BuildConfig.DEBUG) {
-            watchAll { Timber.d("Got state: %s", it) }
+            watchAll { logDebug { "Got state: $it" } }
         }
     }
 
@@ -74,7 +74,7 @@ internal fun buildMainKnot(
         }
 
         if (BuildConfig.DEBUG) {
-            watchAll { Timber.d("Got change: %s", it) }
+            watchAll { logDebug { "Got change: $it" } }
         }
     }
 
@@ -98,7 +98,7 @@ internal fun buildMainKnot(
         }
 
         if (BuildConfig.DEBUG) {
-            watchAll { Timber.d("Got action: %s", it) }
+            watchAll { logDebug { "Got action: $it" } }
         }
     }
 

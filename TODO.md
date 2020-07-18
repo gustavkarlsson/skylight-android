@@ -3,7 +3,6 @@
 * Readme
 * Simpler configuration of required keys (move to root? fail if not present?)
 * Retire ThreeTenABP
-* Change logger
 * Add Hyperion
 * Move some libs to coroutines
 * Android 11: https://developer.android.com/preview/privacy/permissions#one-time

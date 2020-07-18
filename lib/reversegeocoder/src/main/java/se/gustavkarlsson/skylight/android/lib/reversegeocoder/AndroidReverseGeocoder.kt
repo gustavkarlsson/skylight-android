@@ -11,8 +11,9 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
+import se.gustavkarlsson.skylight.android.logging.logInfo
+import se.gustavkarlsson.skylight.android.logging.logWarn
 import se.gustavkarlsson.skylight.android.utils.delay
-import timber.log.Timber
 
 internal class AndroidReverseGeocoder(
     private val geocoder: Geocoder,
@@ -22,7 +23,7 @@ internal class AndroidReverseGeocoder(
     override fun get(location: Single<LocationResult>): Single<ReverseGeocodingResult> =
         location
             .flatMap(::getSingleName)
-            .doOnSuccess { Timber.i("Provided location name: %s", it) }
+            .doOnSuccess { logInfo { "Provided location name: $it" } }
 
     override fun stream(
         locations: Observable<Loadable<LocationResult>>
@@ -35,7 +36,7 @@ internal class AndroidReverseGeocoder(
                 }
             }
             .distinctUntilChanged()
-            .doOnNext { Timber.i("Streamed location name: %s", it) }
+            .doOnNext { logInfo { "Streamed location name: $it" } }
             .replayingShare(Loadable.Loading)
 
     private fun getSingleNameWithRetry(
@@ -70,7 +71,7 @@ internal class AndroidReverseGeocoder(
                 if (bestName == null) ReverseGeocodingResult.Failure.NotFound
                 else ReverseGeocodingResult.Success(bestName)
             } catch (e: IOException) {
-                Timber.w(e, "Failed to reverse geocode: %s", location)
+                logWarn(e) { "Failed to reverse geocode: $location" }
                 ReverseGeocodingResult.Failure.Io(e)
             }
         }.subscribeOn(Schedulers.io())

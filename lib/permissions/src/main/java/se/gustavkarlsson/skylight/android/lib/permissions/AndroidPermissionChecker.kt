@@ -5,7 +5,7 @@ import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.logging.logDebug
 
 internal class AndroidPermissionChecker(
     private val permissionKey: String,
@@ -21,7 +21,7 @@ internal class AndroidPermissionChecker(
     override fun refresh() {
         val systemPermission = checkSystemPermission()
         if (systemPermission == Access.Denied && accessRelay.value == Access.DeniedForever) {
-            Timber.d("Won't change from %s to %s", Access.DeniedForever, Access.Denied)
+            logDebug { "Won't change from ${Access.DeniedForever} to ${Access.Denied}" }
             return
         }
         accessRelay.accept(systemPermission)
@@ -33,7 +33,7 @@ internal class AndroidPermissionChecker(
             Access.Granted
         else
             Access.Denied
-        Timber.d("%s = %s", permissionKey, access)
+        logDebug { "$permissionKey = $access" }
         return access
     }
 }

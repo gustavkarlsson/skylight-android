@@ -22,7 +22,7 @@ import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.logging.logDebug
 
 class MainFragment : ScreenFragment(), BackButtonHandler {
 
@@ -85,16 +85,16 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
             }
 
         viewModel.toolbarTitleText
-            .doOnNext { Timber.d("Updating toolbar title: %s", it) }
+            .doOnNext { logDebug { "Updating toolbar title: $it" } }
             .bind(this) { toolbarView.title = it.resolve(requireContext()) }
 
         viewModel.chanceLevelText
-            .doOnNext { Timber.d("Updating chanceLevel text: %s", it) }
+            .doOnNext { logDebug { "Updating chanceLevel text: $it" } }
             .map { it.resolve(requireContext()) }
             .bind(this, chance::setText)
 
         viewModel.chanceSubtitleText
-            .doOnNext { Timber.d("Updating chanceSubtitle text: %s", it) }
+            .doOnNext { logDebug { "Updating chanceSubtitle text: $it" } }
             .bind(this) { chanceSubtitle.text = it.resolve(requireContext()) }
 
         viewModel.darkness.bindToCard(
@@ -214,7 +214,7 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
         onCardClick: (errorText: TextRef?) -> Unit,
         factorDebugName: String
     ) {
-        doOnNext { Timber.d("Updating %s factor card: %s", factorDebugName, it) }
+        doOnNext { logDebug { "Updating $factorDebugName factor card: $it" } }
             .bind(fragment) { item ->
                 cardView.setItem(item)
                 cardView.clicks().bind(fragment) {

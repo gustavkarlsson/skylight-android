@@ -1,8 +1,9 @@
-package se.gustavkarlsson.skylight.android
+package se.gustavkarlsson.skylight.android.initializers
 
 import android.os.Build
 import android.os.StrictMode
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.BuildConfig
+import se.gustavkarlsson.skylight.android.logging.logError
 
 internal fun initStrictMode() {
     if (BuildConfig.DEBUG) {
@@ -19,7 +20,7 @@ internal fun initStrictMode() {
                     detectUnbufferedIo()
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    penaltyListener(Runnable::run, Timber::e)
+                    penaltyListener(Runnable::run) { logError(it) }
                 } else {
                     penaltyLog()
                 }
@@ -48,7 +49,7 @@ internal fun initStrictMode() {
                     detectImplicitDirectBoot()
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    penaltyListener(Runnable::run, Timber::e)
+                    penaltyListener(Runnable::run) { logError(it) }
                 } else {
                     penaltyLog()
                 }

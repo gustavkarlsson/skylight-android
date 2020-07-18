@@ -16,7 +16,7 @@ import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.time.Time
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.logging.logInfo
 
 internal class GeomagLocationProviderImpl(
     private val time: Time
@@ -25,7 +25,7 @@ internal class GeomagLocationProviderImpl(
     override fun get(location: Single<LocationResult>): Single<Report<GeomagLocation>> =
         location
             .map(::getSingleGeomagLocation)
-            .doOnSuccess { Timber.i("Provided geomag location: %s", it) }
+            .doOnSuccess { logInfo { "Provided geomag location: $it" } }
 
     override fun stream(
         locations: Observable<Loadable<LocationResult>>
@@ -41,7 +41,7 @@ internal class GeomagLocationProviderImpl(
                 }
             }
             .distinctUntilChanged()
-            .doOnNext { Timber.i("Streamed geomag location: %s", it) }
+            .doOnNext { logInfo { "Streamed geomag location: $it" } }
             .replayingShare(Loadable.Loading)
 
     private fun getSingleGeomagLocation(locationResult: LocationResult): Report<GeomagLocation> =

@@ -124,6 +124,9 @@ dependencies {
     // Leakcanary
     debugImplementation("com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}")
 
+    // Timber
+    implementation("com.jakewharton.timber:timber:${Versions.timber}")
+
     // Testing
     testImplementation("junit:junit:${Versions.junit}")
     testImplementation("org.mockito:mockito-inline:${Versions.mockito}")
