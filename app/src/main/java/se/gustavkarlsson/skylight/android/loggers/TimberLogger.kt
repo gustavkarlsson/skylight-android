@@ -1,10 +1,14 @@
-package se.gustavkarlsson.skylight.android.logging
+package se.gustavkarlsson.skylight.android.loggers
 
 import android.os.Build
 import android.util.Log
+import se.gustavkarlsson.skylight.android.logging.Logger
 import timber.log.Timber
 
-object TimberLogger : Logger {
+internal object TimberLogger : Logger {
+    init {
+        Timber.plant(Timber.DebugTree())
+    }
     override fun isEnabledFor(level: Logger.Level) = true
 
     override fun log(level: Logger.Level, tag: String, throwable: Throwable?, message: String?) {

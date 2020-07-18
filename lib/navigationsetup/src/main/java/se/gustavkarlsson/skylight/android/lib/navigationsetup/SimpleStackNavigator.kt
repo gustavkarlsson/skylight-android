@@ -5,7 +5,7 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.logging.logInfo
 
 internal class SimpleStackNavigator(
     private val simpleStackBackstack: SSBackstack,
@@ -17,34 +17,34 @@ internal class SimpleStackNavigator(
     override val backstack: Backstack get() = simpleStackBackstack.getHistory()
 
     override fun setBackstack(backstack: Backstack) = changeBackstack {
-        Timber.i("Setting backstack to $backstack")
+        logInfo { "Setting backstack to $backstack" }
         backstack
     }
 
     override fun goTo(screen: Screen) = changeBackstack { stack ->
-        Timber.i("Going to $screen")
+        logInfo { "Going to $screen" }
         stack + screen
     }
 
     override fun closeScreenAndGoTo(screen: Screen) = changeBackstack { stack ->
-        Timber.i("Closing screen and going to $screen")
+        logInfo { "Closing screen and going to $screen" }
         val remaining = stack.dropLast(1)
         remaining + screen
     }
 
     override fun closeScopeAndGoTo(scope: String, screen: Screen) = changeBackstack { stack ->
-        Timber.i("Closing scope '$scope' and going to $screen")
+        logInfo { "Closing scope '$scope' and going to $screen" }
         val remaining = stack.takeWhile { it.scopeStart != scope }
         remaining + screen
     }
 
     override fun closeScreen() = changeBackstack { stack ->
-        Timber.i("Closing screen")
+        logInfo { "Closing screen" }
         stack.dropLast(1)
     }
 
     override fun closeScope(scope: String) = changeBackstack { stack ->
-        Timber.i("Closing scope '$scope'")
+        logInfo { "Closing scope '$scope'" }
         stack.takeWhile { it.scopeStart != scope }
     }
 
@@ -54,7 +54,7 @@ internal class SimpleStackNavigator(
         val newBackstack =
             backstackOverride.override(oldBackstack, targetBackstack) ?: targetBackstack
         if (newBackstack.isEmpty()) {
-            Timber.i("Backstack is empty")
+            logInfo { "Backstack is empty" }
             onBackstackEmpty()
         } else {
             val direction = directionsCalculator.getDirection(oldBackstack, newBackstack)

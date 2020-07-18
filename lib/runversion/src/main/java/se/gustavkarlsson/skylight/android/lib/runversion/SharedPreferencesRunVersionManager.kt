@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.lib.runversion
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.logging.logDebug
 
 internal class SharedPreferencesRunVersionManager(
     context: Context,
@@ -16,13 +16,13 @@ internal class SharedPreferencesRunVersionManager(
     override val isFirstRun: Boolean
         get() {
             val lastRunVersion = prefs.getInt(LAST_RUN_VERSION_KEY, NO_VERSION)
-            Timber.d("Last run version: %d", lastRunVersion)
+            logDebug { "Last run version: $lastRunVersion" }
             return lastRunVersion == NO_VERSION
         }
 
     override fun signalRunCompleted() {
         prefs.edit().putInt(LAST_RUN_VERSION_KEY, currentVersionCode).apply()
-        Timber.d("Signalled run completed")
+        logDebug { "Signalled run completed" }
     }
 
     companion object {

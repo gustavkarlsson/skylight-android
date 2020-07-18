@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.lib.navigationsetup
 import androidx.fragment.app.FragmentManager
 import se.gustavkarlsson.skylight.android.lib.navigation.BackButtonHandler
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.logging.logInfo
 
 internal class NavigatorBackButtonController(
     private val navigator: Navigator,
@@ -14,9 +14,9 @@ internal class NavigatorBackButtonController(
         val topFragment = fragmentManager.fragments.lastOrNull()
         val consumed = (topFragment as? BackButtonHandler)?.onBackPressed()
         when (consumed) {
-            null -> Timber.i("Top fragment could not handle back press")
-            true -> Timber.i("Top fragment handled back press")
-            false -> Timber.i("Top fragment did not handle back press")
+            null -> logInfo { "Top fragment could not handle back press" }
+            true -> logInfo { "Top fragment handled back press" }
+            false -> logInfo { "Top fragment did not handle back press" }
         }
         if (consumed != true) navigator.closeScreen()
     }

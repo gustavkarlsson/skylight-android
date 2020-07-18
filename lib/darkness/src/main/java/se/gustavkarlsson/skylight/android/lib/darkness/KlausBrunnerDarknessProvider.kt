@@ -13,9 +13,8 @@ import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.time.Time
+import se.gustavkarlsson.skylight.android.logging.logInfo
 import se.gustavkarlsson.skylight.android.utils.delay
-import timber.log.Timber
-
 internal class KlausBrunnerDarknessProvider(
     private val time: Time,
     private val pollingInterval: Duration
@@ -24,7 +23,7 @@ internal class KlausBrunnerDarknessProvider(
     override fun get(location: Single<LocationResult>): Single<Report<Darkness>> =
         location
             .map { getDarkness(it, time.now()) }
-            .doOnSuccess { Timber.i("Provided darkness: %s", it) }
+            .doOnSuccess { logInfo { "Provided darkness: $it" } }
 
     override fun stream(
         locations: Observable<Loadable<LocationResult>>
@@ -45,7 +44,7 @@ internal class KlausBrunnerDarknessProvider(
                 }
             }
             .distinctUntilChanged()
-            .doOnNext { Timber.i("Streamed darkness: %s", it) }
+            .doOnNext { logInfo { "Streamed darkness: $it" } }
             .replayingShare(Loadable.Loading)
 
     private fun getDarkness(locationResult: LocationResult, timestamp: Instant): Report<Darkness> =

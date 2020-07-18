@@ -10,7 +10,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import se.gustavkarlsson.skylight.android.lib.location.Location
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.logging.logError
+import se.gustavkarlsson.skylight.android.logging.logWarn
 
 internal class MapboxGeocoder(
     private val accessToken: String,
@@ -36,7 +37,7 @@ private fun createSingle(
         val geocoding = try {
             createGeocoding(accessToken, locale, locationName)
         } catch (e: Exception) {
-            Timber.e(e, "Failed to create Geocoding request")
+            logError(e) { "Failed to create Geocoding request" }
             emitter.onSuccess(GeocodingResult.Failure.Unknown)
             return@create
         }
@@ -46,10 +47,10 @@ private fun createSingle(
         geocoding.enqueueCall(object : Callback<GeocodingResponse> {
             override fun onFailure(call: Call<GeocodingResponse>, t: Throwable) {
                 val result = if (t is IOException) {
-                    Timber.w(t, "Geocoding failed")
+                    logWarn(t) { "Geocoding failed" }
                     GeocodingResult.Failure.Io
                 } else {
-                    Timber.e(t, "Geocoding failed")
+                    logError(t) { "Geocoding failed" }
                     GeocodingResult.Failure.Unknown
                 }
                 emitter.onSuccess(result)
@@ -64,7 +65,7 @@ private fun createSingle(
                 } else {
                     val code = response.code()
                     val error = response.errorBody()?.string() ?: "<empty>"
-                    Timber.e("Geocoding failed with HTTP %d: %s", code, error)
+                    logError { "Geocoding failed with HTTP $code: $error" }
                     emitter.onSuccess(GeocodingResult.Failure.ServerError)
                 }
             }

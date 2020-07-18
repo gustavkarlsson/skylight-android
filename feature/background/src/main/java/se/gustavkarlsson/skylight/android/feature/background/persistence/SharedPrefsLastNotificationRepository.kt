@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notification
 import se.gustavkarlsson.skylight.android.feature.background.notifications.PlaceWithChance
 import se.gustavkarlsson.skylight.android.lib.places.Place
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.logging.logWarn
 
 internal class SharedPrefsLastNotificationRepository(
     context: Context
@@ -39,7 +39,7 @@ internal class SharedPrefsLastNotificationRepository(
                     else -> readAsCustom(key, value)
                 }
             } catch (e: Exception) {
-                Timber.w(e, "Failed to load notification record key %s from shared prefs", key)
+                logWarn(e) { "Failed to load notification record key $key from shared prefs" }
                 null
             }
         }.toSet()

@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android
+package se.gustavkarlsson.skylight.android.initializers
 
 import androidx.appcompat.app.AppCompatDelegate
 

@@ -9,9 +9,10 @@ import se.gustavkarlsson.skylight.android.entities.Cause
 import se.gustavkarlsson.skylight.android.entities.Loadable
 import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.lib.time.Time
+import se.gustavkarlsson.skylight.android.logging.logError
+import se.gustavkarlsson.skylight.android.logging.logInfo
+import se.gustavkarlsson.skylight.android.logging.logWarn
 import se.gustavkarlsson.skylight.android.utils.delay
-import timber.log.Timber
-
 internal class RetrofittedKpIndexProvider(
     private val api: KpIndexApi,
     private val time: Time,
@@ -24,7 +25,7 @@ internal class RetrofittedKpIndexProvider(
             .onErrorReturn { throwable ->
                 Report.Error(getCause(throwable), time.now())
             }
-            .doOnSuccess { Timber.i("Provided Kp index: %s", it) }
+            .doOnSuccess { logInfo { "Provided Kp index: $it" } }
 
     private val stream = getReport()
         .repeatWhen { it.delay(pollingInterval) }
@@ -39,20 +40,20 @@ internal class RetrofittedKpIndexProvider(
         .map { Loadable.loaded(it) }
         .retryWhen { it.delay(retryDelay) }
         .distinctUntilChanged()
-        .doOnNext { Timber.i("Streamed Kp index: %s", it) }
+        .doOnNext { logInfo { "Streamed Kp index: $it" } }
         .replayingShare(Loadable.Loading)
 
     override fun stream() = stream
 
     private fun getReport(): Single<Report<KpIndex>> =
         api.get()
-            .doOnError { Timber.w(it, "Failed to get Kp index from KpIndex API") }
+            .doOnError { logWarn(it) { "Failed to get Kp index from KpIndex API" } }
             .flatMap { response ->
                 if (response.isSuccessful) {
                     Single.just(Report.success(KpIndex(response.body()!!.value), time.now()))
                 } else {
                     val exception = ServerResponseException(response.code(), response.errorBody()!!.string())
-                    Timber.e(exception, "Failed to get Kp index from KpIndex API")
+                    logError(exception) { "Failed to get Kp index from KpIndex API" }
                     Single.error(exception)
                 }
             }

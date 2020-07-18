@@ -12,7 +12,7 @@ import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexProvider
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoder
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherProvider
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.logging.logInfo
 
 internal class CombiningAuroraReportProvider(
     private val reverseGeocoder: ReverseGeocoder,
@@ -23,7 +23,7 @@ internal class CombiningAuroraReportProvider(
 ) : AuroraReportProvider {
     override fun get(location: Single<LocationResult>): Single<CompleteAuroraReport> =
         zipToAuroraReport(location)
-            .doOnSuccess { Timber.i("Provided aurora report: %s", it) }
+            .doOnSuccess { logInfo { "Provided aurora report: $it" } }
 
     override fun stream(
         locations: Observable<Loadable<LocationResult>>
@@ -39,7 +39,7 @@ internal class CombiningAuroraReportProvider(
                 LoadableAuroraReport(locationName, kpIndex, geomagLocation, darkness, weather)
             }
             .distinctUntilChanged()
-            .doOnNext { Timber.i("Streamed aurora report: %s", it) }
+            .doOnNext { logInfo { "Streamed aurora report: $it" } }
             .replayingShare(LoadableAuroraReport.LOADING)
 
     private fun zipToAuroraReport(location: Single<LocationResult>): Single<CompleteAuroraReport> {

@@ -12,7 +12,7 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.showSnackbar
-import timber.log.Timber
+import se.gustavkarlsson.skylight.android.logging.logError
 
 internal class GooglePlayServicesFragment : ScreenFragment() {
 
@@ -44,7 +44,7 @@ internal class GooglePlayServicesFragment : ScreenFragment() {
                     val target = requireNotNull(requireArguments().target)
                     navigator.setBackstack(target)
                 } else {
-                    Timber.e(error, "Failed to install Google Play Services")
+                    logError(error) { "Failed to install Google Play Services" }
                     view?.let { view ->
                         if (errorSnackbar == null) {
                             errorSnackbar = showSnackbar(

@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android
+package se.gustavkarlsson.skylight.android.initializers
 
 import android.app.Application
 import com.jakewharton.threetenabp.AndroidThreeTen

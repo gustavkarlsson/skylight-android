@@ -11,8 +11,10 @@ import se.gustavkarlsson.skylight.android.entities.Report
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.time.Time
+import se.gustavkarlsson.skylight.android.logging.logError
+import se.gustavkarlsson.skylight.android.logging.logInfo
+import se.gustavkarlsson.skylight.android.logging.logWarn
 import se.gustavkarlsson.skylight.android.utils.delay
-import timber.log.Timber
 
 internal class RetrofittedOpenWeatherMapWeatherProvider(
     private val api: OpenWeatherMapApi,
@@ -40,7 +42,7 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
                     }
                 )
             }
-            .doOnSuccess { Timber.i("Provided weather: %s", it) }
+            .doOnSuccess { logInfo { "Provided weather: $it" } }
 
     override fun stream(
         locations: Observable<Loadable<LocationResult>>
@@ -68,7 +70,7 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
                 }
             }
             .distinctUntilChanged()
-            .doOnNext { Timber.i("Streamed weather: %s", it) }
+            .doOnNext { logInfo { "Streamed weather: $it" } }
             .replayingShare(Loadable.Loading)
 
     private fun streamReports(location: Location): Observable<Report<Weather>> =
@@ -85,13 +87,13 @@ internal class RetrofittedOpenWeatherMapWeatherProvider(
 
     private fun getReport(location: Location): Single<Report<Weather>> =
         api.get(location.latitude, location.longitude, "json", appId)
-            .doOnError { Timber.w(it, "Failed to get Weather from OpenWeatherMap API") }
+            .doOnError { logWarn(it) { "Failed to get Weather from OpenWeatherMap API" } }
             .flatMap { response ->
                 if (response.isSuccessful) {
                     Single.just(Report.success(Weather(response.body()!!.clouds.all), time.now()))
                 } else {
                     val exception = ServerResponseException(response.code(), response.errorBody()!!.string())
-                    Timber.e(exception, "Failed to get Weather from OpenWeatherMap API")
+                    logError(exception) { "Failed to get Weather from OpenWeatherMap API" }
                     Single.error(exception)
                 }
             }
