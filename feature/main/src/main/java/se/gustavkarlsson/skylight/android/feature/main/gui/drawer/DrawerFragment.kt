@@ -59,17 +59,17 @@ internal class DrawerFragment : BaseFragment() {
         }
 
         viewModel.openRemovePlaceDialog.bind(this) { dialogData ->
-                removePlaceDialog?.dismiss()
-                val context = requireContext()
-                val dialog = MaterialAlertDialogBuilder(context)
-                    .setTitle(dialogData.title.resolve(context))
-                    .setPositiveButton(R.string.remove) { _, _ ->
-                        viewModel.onRemovePlaceClicked(dialogData.placeId)
-                    }
-                    .setNegativeButton(R.string.cancel, null)
-                    .create()
-                removePlaceDialog = dialog
-                dialog.show()
-            }
+            removePlaceDialog?.dismiss()
+            val context = requireContext()
+            val dialog = MaterialAlertDialogBuilder(context)
+                .setTitle(dialogData.title.resolve(context))
+                .setPositiveButton(R.string.remove) { _, _ ->
+                    viewModel.onRemovePlaceClicked(dialogData.placeId)
+                }
+                .setNegativeButton(R.string.cancel, null)
+                .create()
+            removePlaceDialog = dialog
+            dialog.show()
+        }
     }
 }

@@ -14,7 +14,7 @@ object Versions {
     // Skip 1.12.0 as it has breaking bug: https://github.com/allegro/axion-release-plugin/issues/339
     val axionRelease = "1.10.3"
     val playPublisher = "2.8.0"
-    val ktlint = "9.2.1"
+    val ktlint = "9.3.0"
 
     // Dependencies
     val googleServices = "4.3.3"

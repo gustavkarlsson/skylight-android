@@ -15,18 +15,15 @@ import se.gustavkarlsson.skylight.android.lib.ui.extensions.toArgb
 
 internal class FactorCard : FrameLayout {
 
-    constructor(context: Context) :
-        super(context, null) {
+    constructor(context: Context) : super(context, null) {
         init(context, null)
     }
 
-    constructor(context: Context, attrs: AttributeSet?) :
-        super(context, attrs) {
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
         init(context, attrs)
     }
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
-        super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
         init(context, attrs)
     }
 
@@ -36,8 +33,10 @@ internal class FactorCard : FrameLayout {
             R.layout.layout_factor_card, null
         ) as MaterialCardView
         addView(view)
-        context.theme.obtainStyledAttributes(attrs,
-            R.styleable.FactorCard, 0, 0).apply {
+        context.theme.obtainStyledAttributes(
+            attrs,
+            R.styleable.FactorCard, 0, 0
+        ).apply {
             title.text = getString(R.styleable.FactorCard_title)
             recycle()
         }
