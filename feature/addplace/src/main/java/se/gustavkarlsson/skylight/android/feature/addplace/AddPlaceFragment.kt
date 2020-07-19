@@ -13,6 +13,7 @@ import com.ioki.textref.TextRef
 import com.jakewharton.rxbinding3.widget.textChanges
 import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
+import java.util.concurrent.atomic.AtomicReference
 import kotlinx.android.synthetic.main.fragment_add_place.*
 import kotlinx.android.synthetic.main.layout_save_dialog.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -25,7 +26,6 @@ import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.fadeToVisible
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.showSnackbar
-import java.util.concurrent.atomic.AtomicReference
 
 class AddPlaceFragment : ScreenFragment() {
 
