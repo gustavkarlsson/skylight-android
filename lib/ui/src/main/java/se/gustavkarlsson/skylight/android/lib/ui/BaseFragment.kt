@@ -20,7 +20,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        val viewScope = MainScope() + CoroutineName("ViewScope")
+        val viewScope = MainScope() + CoroutineName("viewScope")
         this.viewScope = viewScope
         initView(viewScope)
         bindData(viewScope)

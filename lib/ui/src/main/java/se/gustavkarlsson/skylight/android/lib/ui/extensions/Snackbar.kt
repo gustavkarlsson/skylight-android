@@ -5,6 +5,7 @@ import androidx.annotation.StringRes
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.ioki.textref.TextRef
+import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -25,7 +26,7 @@ suspend fun showSnackbar(view: View, text: TextRef, build: SnackbarBuilder.() ->
 suspend fun showSnackbar(
     buildSnackbar: () -> Snackbar
 ): Snackbar =
-    withContext(Dispatchers.IO) {
+    withContext(Dispatchers.IO + CoroutineName("showSnackbar")) {
         suspendCancellableCoroutine<Snackbar> { cont ->
             try {
                 val snackbar = buildSnackbar()

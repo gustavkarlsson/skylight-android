@@ -99,7 +99,7 @@ class AddPlaceFragment : ScreenFragment() {
         }
 
         viewModel.errorMessages.bind(this) { message ->
-            handleNewMessage(viewScope, message)
+            viewScope.launch { handleNewMessage(message) }
         }
     }
 
@@ -121,15 +121,13 @@ class AddPlaceFragment : ScreenFragment() {
         editText.requestFocus()
     }
 
-    private fun handleNewMessage(coroutineScope: CoroutineScope, message: TextRef) {
+    private suspend fun handleNewMessage(message: TextRef) {
         if (errorMessage.compareAndSet(null, message)) {
-            coroutineScope.launch {
-                showSnackbar(searchResultRecyclerView, message) {
-                    setIndefiniteDuration()
-                    setErrorStyle()
-                    setDismiss(R.string.dismiss) {
-                        errorMessage.set(null)
-                    }
+            showSnackbar(searchResultRecyclerView, message) {
+                setIndefiniteDuration()
+                setErrorStyle()
+                setDismiss(R.string.dismiss) {
+                    errorMessage.set(null)
                 }
             }
         }

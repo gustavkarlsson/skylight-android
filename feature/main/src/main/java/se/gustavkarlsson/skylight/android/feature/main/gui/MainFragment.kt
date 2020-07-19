@@ -14,11 +14,7 @@ import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
-import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.feature.main.MainComponent
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.navigation.BackButtonHandler
@@ -81,14 +77,6 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
         }
 
     override fun bindData(viewScope: CoroutineScope) {
-        viewScope.launch {
-            withContext(Dispatchers.IO) {
-                logInfo { "IO THREAD: ${Thread.currentThread()}" }
-                withContext(Dispatchers.Main) {
-                    logInfo { "MAIN THREAD: ${Thread.currentThread()}" }
-                }
-            }
-        }
         toolbarView.itemClicks()
             .bind(this) { item ->
                 when (item.itemId) {
