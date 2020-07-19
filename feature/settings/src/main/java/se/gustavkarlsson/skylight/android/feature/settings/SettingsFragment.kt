@@ -7,6 +7,7 @@ import com.ioki.textref.TextRef
 import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_settings.*
+import kotlinx.coroutines.CoroutineScope
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
@@ -34,11 +35,11 @@ class SettingsFragment : ScreenFragment() {
         itemsRecyclerView.fit { Edge.Bottom }
     }
 
-    override fun initView() {
+    override fun initView(viewScope: CoroutineScope) {
         itemsRecyclerView.adapter = adapter
     }
 
-    override fun bindData() {
+    override fun bindData(viewScope: CoroutineScope) {
         viewModel.settingsItems.bind(this, adapter::setItems)
 
         viewModel.showSelectTriggerLevel.bind(this) { (place, triggerLevel) ->

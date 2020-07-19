@@ -45,6 +45,7 @@ object Versions {
     val rxReplayingShare = "2.2.0"
     val rxpermissions = "0.10.2"
     val rxLocation = "1.0.5"
+    val kotlinxCoroutines = "1.3.8"
 
     val okHttp = "3.14.4"
     val retrofit = "2.7.1"
@@ -62,7 +63,6 @@ object Versions {
     val edgeToEdge = "0.10"
     val koptional = "0.4.0"
     val simpleStack = "2.3.2"
-    val rxtasks = "2.2.0"
     val textref = "1.3.0"
     val markwon = "4.4.0"
 

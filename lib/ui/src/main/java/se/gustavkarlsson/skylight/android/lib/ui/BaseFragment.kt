@@ -6,8 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import kotlinx.coroutines.*
 
 abstract class BaseFragment : Fragment() {
+
+    private var viewScope: CoroutineScope? = null
 
     final override fun onCreateView(
         inflater: LayoutInflater,
@@ -17,14 +20,22 @@ abstract class BaseFragment : Fragment() {
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        initView()
-        bindData()
+        val viewScope = MainScope() + CoroutineName("ViewScope")
+        this.viewScope = viewScope
+        initView(viewScope)
+        bindData(viewScope)
+    }
+
+    override fun onDestroyView() {
+        viewScope?.cancel()
+        viewScope = null
+        super.onDestroyView()
     }
 
     @get:LayoutRes
     protected abstract val layoutId: Int
 
-    protected open fun initView() = Unit
+    protected open fun initView(viewScope: CoroutineScope) = Unit
 
-    protected open fun bindData() = Unit
+    protected open fun bindData(viewScope: CoroutineScope) = Unit
 }

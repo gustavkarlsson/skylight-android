@@ -8,7 +8,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.ioki.textref.TextRef
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -16,6 +15,8 @@ import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_add_place.*
 import kotlinx.android.synthetic.main.layout_save_dialog.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.target
@@ -24,6 +25,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.fadeToVisible
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.showSnackbar
+import java.util.concurrent.atomic.AtomicReference
 
 class AddPlaceFragment : ScreenFragment() {
 
@@ -40,7 +42,7 @@ class AddPlaceFragment : ScreenFragment() {
 
     private val adapter by lazy { SearchResultAdapter(viewModel) }
 
-    private var errorSnackbarAndMessage: Pair<Snackbar, TextRef>? = null
+    private var errorMessage = AtomicReference<TextRef?>(null)
 
     private var savePlaceDialog: DialogInterface? = null
 
@@ -49,7 +51,7 @@ class AddPlaceFragment : ScreenFragment() {
         searchResultRecyclerView.fit { Edge.Bottom }
     }
 
-    override fun initView() {
+    override fun initView(viewScope: CoroutineScope) {
         toolbarView.inflateMenu(R.menu.add_place_menu)
         searchResultRecyclerView.adapter = adapter
         searchView.fixMargins()
@@ -58,15 +60,13 @@ class AddPlaceFragment : ScreenFragment() {
     }
 
     override fun onDestroyView() {
-        errorSnackbarAndMessage?.first?.dismiss()
-        errorSnackbarAndMessage = null
         savePlaceDialog?.dismiss()
         savePlaceDialog = null
         searchResultRecyclerView.adapter = null
         super.onDestroyView()
     }
 
-    override fun bindData() {
+    override fun bindData(viewScope: CoroutineScope) {
         searchView.setQueryTextChangeListener(viewModel::onSearchTextChanged)
 
         viewModel.placeSuggestions.bind(this, adapter::setItems)
@@ -99,7 +99,7 @@ class AddPlaceFragment : ScreenFragment() {
         }
 
         viewModel.errorMessages.bind(this) { message ->
-            errorSnackbarAndMessage.handleNewMessage(message)
+            handleNewMessage(viewScope, message)
         }
     }
 
@@ -121,15 +121,17 @@ class AddPlaceFragment : ScreenFragment() {
         editText.requestFocus()
     }
 
-    private fun Pair<Snackbar, TextRef>?.handleNewMessage(message: TextRef) {
-        val (oldSnackbar, oldMessage) = this ?: null to null
-        if (oldSnackbar == null || !oldSnackbar.isShown || oldMessage != message) {
-            oldSnackbar?.dismiss()
-            errorSnackbarAndMessage = showSnackbar(searchResultRecyclerView, message) {
-                setIndefiniteDuration()
-                setErrorStyle()
-                setDismiss(R.string.dismiss)
-            } to message
+    private fun handleNewMessage(coroutineScope: CoroutineScope, message: TextRef) {
+        if (errorMessage.compareAndSet(null, message)) {
+            coroutineScope.launch {
+                showSnackbar(searchResultRecyclerView, message) {
+                    setIndefiniteDuration()
+                    setErrorStyle()
+                    setDismiss(R.string.dismiss) {
+                        errorMessage.set(null)
+                    }
+                }
+            }
         }
     }
 }

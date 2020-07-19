@@ -6,6 +6,7 @@ import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.fragment_intro.*
+import kotlinx.coroutines.CoroutineScope
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.navigation.target
@@ -31,14 +32,14 @@ internal class IntroFragment : ScreenFragment() {
         myLocationButton.fit { Edge.Bottom }
     }
 
-    override fun initView() {
+    override fun initView(viewScope: CoroutineScope) {
         privacyPolicyLink.clicks()
             .bind(this) {
                 navigator.goTo(screens.privacyPolicy)
             }
     }
 
-    override fun bindData() {
+    override fun bindData(viewScope: CoroutineScope) {
         myLocationButton.clicks().bind(this) {
             permissionRequests += PermissionsComponent.instance.locationPermissionRequester()
                 .request(this)

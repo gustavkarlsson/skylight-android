@@ -5,6 +5,7 @@ import com.jakewharton.rxbinding3.view.clicks
 import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_about.*
+import kotlinx.coroutines.CoroutineScope
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
@@ -25,7 +26,7 @@ class AboutFragment : ScreenFragment() {
         toolbarView.fit { Edge.Top }
     }
 
-    override fun initView() {
+    override fun initView(viewScope: CoroutineScope) {
         val context = requireContext()
         detailsTextView.text = viewModel.detailsText.resolve(context)
         privacyPolicyLink.clicks()

@@ -14,7 +14,7 @@ dependencies {
     implementation(project(":lib:ui"))
 
     implementation("com.google.android.gms:play-services-gcm:${Versions.playServicesGcm}")
-    implementation("io.ashdavies.rx.rxtasks:rx-tasks:${Versions.rxtasks}")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.kotlinxCoroutines}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

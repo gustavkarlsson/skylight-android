@@ -2,32 +2,60 @@ package se.gustavkarlsson.skylight.android.lib.ui.extensions
 
 import android.view.View
 import androidx.annotation.StringRes
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.ioki.textref.TextRef
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.lib.ui.R
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
-fun showSnackbar(view: View, text: CharSequence, build: SnackbarBuilder.() -> Unit): Snackbar =
-    showSnackbar(view, build) { setText(text) }
+suspend fun showSnackbar(view: View, text: CharSequence, build: SnackbarBuilder.() -> Unit): Snackbar =
+    showSnackbar { buildSnackbar(view, build) { setText(text) } }
 
-fun showSnackbar(view: View, @StringRes text: Int, build: SnackbarBuilder.() -> Unit): Snackbar =
-    showSnackbar(view, build) { setText(text) }
+suspend fun showSnackbar(view: View, @StringRes text: Int, build: SnackbarBuilder.() -> Unit): Snackbar =
+    showSnackbar { buildSnackbar(view, build) { setText(text) } }
 
-fun showSnackbar(view: View, text: TextRef, build: SnackbarBuilder.() -> Unit): Snackbar =
-    showSnackbar(view, build) { setText(text) }
+suspend fun showSnackbar(view: View, text: TextRef, build: SnackbarBuilder.() -> Unit): Snackbar =
+    showSnackbar { buildSnackbar(view, build) { setText(text) } }
 
-private fun showSnackbar(
+suspend fun showSnackbar(
+    buildSnackbar: () -> Snackbar
+): Snackbar =
+    withContext(Dispatchers.IO) {
+        suspendCancellableCoroutine<Snackbar> { cont ->
+            try {
+                val snackbar = buildSnackbar()
+                snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                    override fun onDismissed(snackbar: Snackbar, event: Int) {
+                        cont.cancel()
+                    }
+                })
+                cont.invokeOnCancellation {
+                    snackbar.dismiss()
+                }
+                snackbar.show()
+                cont.resume(snackbar)
+            } catch (e: Exception) {
+                cont.resumeWithException(e)
+            }
+        }
+    }
+
+private fun buildSnackbar(
     view: View,
-    build: SnackbarBuilder.() -> Unit,
-    setText: SnackbarBuilder.() -> Unit
+    setText: SnackbarBuilder.() -> Unit,
+    build: SnackbarBuilder.() -> Unit
 ) = SnackbarBuilder(view)
     .also(setText)
     .also(build)
-    .show()
+    .build()
 
 class SnackbarBuilder internal constructor(view: View) {
     private val snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG)
-    private var canSwipeToDismiss = true
 
     fun setText(text: CharSequence) = snackbar.setText(text)
 
@@ -57,7 +85,7 @@ class SnackbarBuilder internal constructor(view: View) {
 
     fun setErrorStyle() = snackbar.setErrorColors()
 
-    internal fun show(): Snackbar = snackbar.also(Snackbar::show)
+    internal fun build(): Snackbar = snackbar
 }
 
 private fun Snackbar.setErrorColors() {

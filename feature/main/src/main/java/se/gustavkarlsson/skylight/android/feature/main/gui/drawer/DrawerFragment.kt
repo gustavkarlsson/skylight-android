@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.fragment_drawer.*
+import kotlinx.coroutines.CoroutineScope
 import se.gustavkarlsson.skylight.android.feature.main.DrawerComponent
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
@@ -36,7 +37,7 @@ internal class DrawerFragment : BaseFragment() {
 
     private var removePlaceDialog: DialogInterface? = null
 
-    override fun initView() {
+    override fun initView(viewScope: CoroutineScope) {
         placesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         placesRecyclerView.adapter = adapter
     }
@@ -48,7 +49,7 @@ internal class DrawerFragment : BaseFragment() {
         super.onDestroyView()
     }
 
-    override fun bindData() {
+    override fun bindData(viewScope: CoroutineScope) {
         viewModel.drawerItems.bind(this, adapter::setItems)
 
         viewModel.closeDrawer.bind(this) { closeDrawer() }

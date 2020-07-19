@@ -5,6 +5,7 @@ import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.fragment_privacypolicy.*
+import kotlinx.coroutines.CoroutineScope
 import se.gustavkarlsson.skylight.android.feature.privacypolicy.R
 import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 
@@ -19,7 +20,7 @@ class PrivacyPolicyFragment : ScreenFragment() {
         scrollView.fit { Edge.Bottom }
     }
 
-    override fun initView() {
+    override fun initView(viewScope: CoroutineScope) {
         val privacyPolicyMarkdown = resources.openRawResource(R.raw.privacy_policy)
             .bufferedReader()
             .readText()
