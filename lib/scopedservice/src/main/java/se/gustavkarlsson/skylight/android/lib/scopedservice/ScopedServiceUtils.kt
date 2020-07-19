@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 
 fun Fragment.registerService(id: String, service: ScopedService) {
     val tag = requireNotNull(tag) {
-        "Fragment does not have a tag: ${javaClass.simpleName}"
+        "Fragment does not have a tag: ${javaClass.name}"
     }
     val host = requireActivity() as? ServiceHost
         ?: error("Activity does not implement ${ScopedService::class.java.name}")

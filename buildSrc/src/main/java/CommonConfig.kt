@@ -1,4 +1,6 @@
+import com.android.build.gradle.AppExtension
 import com.android.build.gradle.BaseExtension
+import com.android.build.gradle.LibraryExtension
 
 fun BaseExtension.commonConfig() {
     compileSdkVersion(Versions.compileSdk)
@@ -24,5 +26,18 @@ fun BaseExtension.commonConfig() {
         targetSdkVersion(Versions.targetSdk)
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArgument("clearPackageData", "true")
+    }
+
+    buildTypes {
+        getByName("release") {
+            when (this@commonConfig) {
+                is AppExtension -> {
+                    proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+                }
+                is LibraryExtension -> {
+                    consumerProguardFiles("proguard-rules.pro")
+                }
+            }
+        }
     }
 }
