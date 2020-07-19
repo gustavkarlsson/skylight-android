@@ -11,15 +11,15 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.entities.Chance
-import se.gustavkarlsson.skylight.android.entities.Chance.Companion.IMPOSSIBLE
-import se.gustavkarlsson.skylight.android.entities.Chance.Companion.UNKNOWN
-import se.gustavkarlsson.skylight.android.entities.Report
+import se.gustavkarlsson.skylight.android.core.entities.Chance
+import se.gustavkarlsson.skylight.android.core.entities.Chance.Companion.IMPOSSIBLE
+import se.gustavkarlsson.skylight.android.core.entities.Chance.Companion.UNKNOWN
+import se.gustavkarlsson.skylight.android.core.entities.Report
+import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
-import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
 
 @RunWith(MockitoJUnitRunner::class)
 class CompleteAuroraReportEvaluatorTest {

@@ -7,8 +7,8 @@ import io.reactivex.Scheduler
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
-import se.gustavkarlsson.skylight.android.Main
-import se.gustavkarlsson.skylight.android.entities.TriggerLevel
+import se.gustavkarlsson.skylight.android.core.Main
+import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.lib.settings.Settings

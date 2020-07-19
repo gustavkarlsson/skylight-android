@@ -2,8 +2,8 @@ package se.gustavkarlsson.skylight.android.lib.aurora
 
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.core.R
-import se.gustavkarlsson.skylight.android.entities.ChanceLevel
-import se.gustavkarlsson.skylight.android.services.Formatter
+import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
+import se.gustavkarlsson.skylight.android.core.services.Formatter
 
 internal object ChanceLevelFormatter : Formatter<ChanceLevel> {
     override fun format(value: ChanceLevel): TextRef =

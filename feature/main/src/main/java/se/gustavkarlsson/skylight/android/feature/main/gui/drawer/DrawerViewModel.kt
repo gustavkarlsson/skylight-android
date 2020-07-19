@@ -7,7 +7,7 @@ import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.rxkotlin.Observables
 import javax.inject.Inject
-import se.gustavkarlsson.skylight.android.Main
+import se.gustavkarlsson.skylight.android.core.Main
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository

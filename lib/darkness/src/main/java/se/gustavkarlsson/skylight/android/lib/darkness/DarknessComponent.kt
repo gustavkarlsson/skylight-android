@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.darkness
 
-import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.services.Formatter
+import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.core.services.Formatter
 
 interface DarknessComponent {
 

@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android
+package se.gustavkarlsson.skylight.android.core
 
 import android.content.Context
 import io.reactivex.Scheduler

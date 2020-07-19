@@ -5,14 +5,14 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.Singles
-import se.gustavkarlsson.skylight.android.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.darkness.DarknessProvider
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexProvider
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoder
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherProvider
-import se.gustavkarlsson.skylight.android.logging.logInfo
 
 internal class CombiningAuroraReportProvider(
     private val reverseGeocoder: ReverseGeocoder,

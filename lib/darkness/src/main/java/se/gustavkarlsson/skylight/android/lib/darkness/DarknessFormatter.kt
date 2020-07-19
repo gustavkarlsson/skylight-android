@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.lib.darkness
 
 import com.ioki.textref.TextRef
 import kotlin.math.roundToInt
-import se.gustavkarlsson.skylight.android.services.Formatter
+import se.gustavkarlsson.skylight.android.core.services.Formatter
 
 /**
  * 0% at 90°. 100% at 108°

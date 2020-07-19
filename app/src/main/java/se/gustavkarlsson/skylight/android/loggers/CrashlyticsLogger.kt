@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.loggers
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import se.gustavkarlsson.skylight.android.logging.Logger
+import se.gustavkarlsson.skylight.android.core.logging.Logger
 
 internal class CrashlyticsLogger(private val crashlytics: FirebaseCrashlytics) : Logger {
     override fun isEnabledFor(level: Logger.Level) = level >= Logger.Level.INFO

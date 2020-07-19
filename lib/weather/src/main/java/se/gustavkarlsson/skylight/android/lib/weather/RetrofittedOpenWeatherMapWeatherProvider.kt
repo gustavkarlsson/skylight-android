@@ -5,16 +5,16 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import java.io.IOException
 import org.threeten.bp.Duration
-import se.gustavkarlsson.skylight.android.entities.Cause
-import se.gustavkarlsson.skylight.android.entities.Loadable
-import se.gustavkarlsson.skylight.android.entities.Report
+import se.gustavkarlsson.skylight.android.core.entities.Cause
+import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Report
+import se.gustavkarlsson.skylight.android.core.logging.logError
+import se.gustavkarlsson.skylight.android.core.logging.logInfo
+import se.gustavkarlsson.skylight.android.core.logging.logWarn
+import se.gustavkarlsson.skylight.android.core.utils.delay
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.time.Time
-import se.gustavkarlsson.skylight.android.logging.logError
-import se.gustavkarlsson.skylight.android.logging.logInfo
-import se.gustavkarlsson.skylight.android.logging.logWarn
-import se.gustavkarlsson.skylight.android.utils.delay
 
 internal class RetrofittedOpenWeatherMapWeatherProvider(
     private val api: OpenWeatherMapApi,

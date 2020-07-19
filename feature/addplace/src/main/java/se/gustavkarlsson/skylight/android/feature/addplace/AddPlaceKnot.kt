@@ -7,10 +7,10 @@ import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.functions.Consumer
 import org.threeten.bp.Duration
+import se.gustavkarlsson.skylight.android.core.utils.buffer
 import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocodingResult
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
-import se.gustavkarlsson.skylight.android.utils.buffer
 
 internal data class State(
     val query: String = "",

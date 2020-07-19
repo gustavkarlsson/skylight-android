@@ -4,11 +4,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.multibindings.IntoSet
+import se.gustavkarlsson.skylight.android.core.utils.allowDiskReadsInStrictMode
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionManager
-import se.gustavkarlsson.skylight.android.utils.allowDiskReadsInStrictMode
 
 @Module
 object FeatureIntroModule {

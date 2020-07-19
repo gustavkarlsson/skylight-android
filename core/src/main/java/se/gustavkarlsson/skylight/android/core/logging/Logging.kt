@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.logging
+package se.gustavkarlsson.skylight.android.core.logging
 
 import java.util.regex.Pattern
 

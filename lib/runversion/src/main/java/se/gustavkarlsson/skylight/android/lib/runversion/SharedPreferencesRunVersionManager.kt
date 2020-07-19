@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.lib.runversion
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
-import se.gustavkarlsson.skylight.android.logging.logDebug
+import se.gustavkarlsson.skylight.android.core.logging.logDebug
 
 internal class SharedPreferencesRunVersionManager(
     context: Context,

@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.services
+package se.gustavkarlsson.skylight.android.core.services
 
 import com.ioki.textref.TextRef
 

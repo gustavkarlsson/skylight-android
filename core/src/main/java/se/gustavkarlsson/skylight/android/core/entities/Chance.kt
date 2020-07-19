@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.entities
+package se.gustavkarlsson.skylight.android.core.entities
 
 class Chance(value: Double?) : Comparable<Chance> {
     val value: Double?

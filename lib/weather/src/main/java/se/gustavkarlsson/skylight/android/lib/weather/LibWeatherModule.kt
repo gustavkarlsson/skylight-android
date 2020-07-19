@@ -10,12 +10,12 @@ import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import se.gustavkarlsson.skylight.android.Io
+import se.gustavkarlsson.skylight.android.core.Io
+import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.core.services.Formatter
+import se.gustavkarlsson.skylight.android.core.utils.minutes
+import se.gustavkarlsson.skylight.android.core.utils.seconds
 import se.gustavkarlsson.skylight.android.lib.time.Time
-import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.services.Formatter
-import se.gustavkarlsson.skylight.android.utils.minutes
-import se.gustavkarlsson.skylight.android.utils.seconds
 
 @Module
 object LibWeatherModule {

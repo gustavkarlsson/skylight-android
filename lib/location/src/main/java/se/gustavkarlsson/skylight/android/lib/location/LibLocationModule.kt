@@ -5,9 +5,9 @@ import com.google.android.gms.location.LocationRequest
 import com.patloew.rxlocation.RxLocation
 import dagger.Module
 import dagger.Provides
-import se.gustavkarlsson.skylight.android.AppScope
-import se.gustavkarlsson.skylight.android.utils.minutes
-import se.gustavkarlsson.skylight.android.utils.seconds
+import se.gustavkarlsson.skylight.android.core.AppScope
+import se.gustavkarlsson.skylight.android.core.utils.minutes
+import se.gustavkarlsson.skylight.android.core.utils.seconds
 
 @Module
 object LibLocationModule {

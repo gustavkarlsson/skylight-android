@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.work.RxWorker
 import androidx.work.WorkerParameters
 import io.reactivex.Single
+import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
-import se.gustavkarlsson.skylight.android.logging.logError
 
 internal class NotifyWorker(
     appContext: Context,

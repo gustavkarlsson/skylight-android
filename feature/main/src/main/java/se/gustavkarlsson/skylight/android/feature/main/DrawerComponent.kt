@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.main
 
 import dagger.Component
-import se.gustavkarlsson.skylight.android.AppComponent
+import se.gustavkarlsson.skylight.android.core.AppComponent
 import se.gustavkarlsson.skylight.android.feature.main.gui.drawer.DrawerViewModel
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 

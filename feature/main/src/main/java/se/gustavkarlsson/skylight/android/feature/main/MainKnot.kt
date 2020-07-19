@@ -4,7 +4,8 @@ import de.halfbit.knot.Knot
 import de.halfbit.knot.knot
 import io.reactivex.Observable
 import io.reactivex.Scheduler
-import se.gustavkarlsson.skylight.android.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.logging.logDebug
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
@@ -13,7 +14,6 @@ import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
-import se.gustavkarlsson.skylight.android.logging.logDebug
 
 internal data class State(
     val isStreaming: Boolean = false,

@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.Provides
 import javax.inject.Named
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.AppComponent
+import se.gustavkarlsson.skylight.android.core.AppComponent
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 

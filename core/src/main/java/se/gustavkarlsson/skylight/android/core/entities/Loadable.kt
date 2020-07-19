@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.entities
+package se.gustavkarlsson.skylight.android.core.entities
 
 sealed class Loadable<out T> {
     abstract fun <R> map(mapper: (T) -> R): Loadable<R>

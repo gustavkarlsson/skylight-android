@@ -13,6 +13,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.Locale
 import javax.inject.Named
+import se.gustavkarlsson.skylight.android.core.Computation
+import se.gustavkarlsson.skylight.android.core.Io
+import se.gustavkarlsson.skylight.android.core.Main
 
 @Module
 internal class AppModule(private val application: Application) {

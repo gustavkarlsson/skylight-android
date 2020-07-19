@@ -5,7 +5,7 @@ import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import com.jakewharton.rxrelay2.BehaviorRelay
 import io.reactivex.Observable
-import se.gustavkarlsson.skylight.android.logging.logDebug
+import se.gustavkarlsson.skylight.android.core.logging.logDebug
 
 internal class AndroidPermissionChecker(
     private val permissionKey: String,

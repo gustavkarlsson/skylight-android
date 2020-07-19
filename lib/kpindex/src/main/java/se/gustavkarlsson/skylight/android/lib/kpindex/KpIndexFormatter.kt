@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.kpindex
 
 import com.ioki.textref.TextRef
-import se.gustavkarlsson.skylight.android.services.Formatter
+import se.gustavkarlsson.skylight.android.core.services.Formatter
 
 internal object KpIndexFormatter : Formatter<KpIndex> {
     override fun format(value: KpIndex): TextRef {

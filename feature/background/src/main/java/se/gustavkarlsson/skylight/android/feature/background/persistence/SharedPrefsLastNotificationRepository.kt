@@ -3,11 +3,11 @@ package se.gustavkarlsson.skylight.android.feature.background.persistence
 import android.content.Context
 import androidx.core.content.edit
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.entities.ChanceLevel
+import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
+import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notification
 import se.gustavkarlsson.skylight.android.feature.background.notifications.PlaceWithChance
 import se.gustavkarlsson.skylight.android.lib.places.Place
-import se.gustavkarlsson.skylight.android.logging.logWarn
 
 internal class SharedPrefsLastNotificationRepository(
     context: Context

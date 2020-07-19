@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.background.persistence
 
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.entities.ChanceLevel
+import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 
 internal data class NotificationRecord(
     val data: Set<PlaceRefWithChance>,

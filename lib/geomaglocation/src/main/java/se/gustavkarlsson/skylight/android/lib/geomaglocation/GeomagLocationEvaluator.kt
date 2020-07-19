@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.lib.geomaglocation
 
 import kotlin.math.abs
-import se.gustavkarlsson.skylight.android.entities.Chance
-import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.core.entities.Chance
+import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 
 internal object GeomagLocationEvaluator : ChanceEvaluator<GeomagLocation> {
 

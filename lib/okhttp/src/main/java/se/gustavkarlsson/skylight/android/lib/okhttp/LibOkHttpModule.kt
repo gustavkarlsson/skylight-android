@@ -6,7 +6,7 @@ import dagger.Reusable
 import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
 import org.threeten.bp.Duration
-import se.gustavkarlsson.skylight.android.utils.seconds
+import se.gustavkarlsson.skylight.android.core.utils.seconds
 
 @Module
 object LibOkHttpModule {

@@ -9,9 +9,9 @@ import java.util.Locale
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import se.gustavkarlsson.skylight.android.core.logging.logError
+import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.lib.location.Location
-import se.gustavkarlsson.skylight.android.logging.logError
-import se.gustavkarlsson.skylight.android.logging.logWarn
 
 internal class MapboxGeocoder(
     private val accessToken: String,

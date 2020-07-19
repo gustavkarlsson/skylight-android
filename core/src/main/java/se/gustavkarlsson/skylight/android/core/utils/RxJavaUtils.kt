@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.utils
+package se.gustavkarlsson.skylight.android.core.utils
 
 import io.reactivex.Flowable
 import io.reactivex.Maybe

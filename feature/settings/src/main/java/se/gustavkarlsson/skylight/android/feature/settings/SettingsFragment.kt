@@ -7,7 +7,7 @@ import com.ioki.textref.TextRef
 import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_settings.*
-import se.gustavkarlsson.skylight.android.entities.TriggerLevel
+import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment

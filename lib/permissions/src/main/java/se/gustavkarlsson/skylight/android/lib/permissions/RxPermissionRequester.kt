@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Completable
 import io.reactivex.functions.Consumer
-import se.gustavkarlsson.skylight.android.logging.logInfo
+import se.gustavkarlsson.skylight.android.core.logging.logInfo
 
 internal class RxPermissionRequester(
     private val permissionKeys: List<String>,

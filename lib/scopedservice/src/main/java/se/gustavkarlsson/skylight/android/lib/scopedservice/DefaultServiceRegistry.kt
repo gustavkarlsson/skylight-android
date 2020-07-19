@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.scopedservice
 
-import se.gustavkarlsson.skylight.android.logging.logInfo
+import se.gustavkarlsson.skylight.android.core.logging.logInfo
 
 internal class DefaultServiceRegistry : ServiceRegistry {
     private var services = mapOf<String, ServiceEntry>()

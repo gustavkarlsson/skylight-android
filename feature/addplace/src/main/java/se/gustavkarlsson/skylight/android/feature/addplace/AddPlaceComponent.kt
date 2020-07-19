@@ -10,13 +10,13 @@ import dagger.Reusable
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.functions.Consumer
-import se.gustavkarlsson.skylight.android.AppComponent
-import se.gustavkarlsson.skylight.android.Main
-import se.gustavkarlsson.skylight.android.ViewModelScope
+import se.gustavkarlsson.skylight.android.core.AppComponent
+import se.gustavkarlsson.skylight.android.core.Main
+import se.gustavkarlsson.skylight.android.core.ViewModelScope
+import se.gustavkarlsson.skylight.android.core.utils.seconds
 import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
-import se.gustavkarlsson.skylight.android.utils.seconds
 
 @ViewModelScope
 @Component(

@@ -3,9 +3,9 @@ package se.gustavkarlsson.skylight.android.lib.places
 import de.halfbit.knot.knot
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
-import se.gustavkarlsson.skylight.android.logging.logError
-import se.gustavkarlsson.skylight.android.utils.allowDiskReadsInStrictMode
-import se.gustavkarlsson.skylight.android.utils.allowDiskWritesInStrictMode
+import se.gustavkarlsson.skylight.android.core.logging.logError
+import se.gustavkarlsson.skylight.android.core.utils.allowDiskReadsInStrictMode
+import se.gustavkarlsson.skylight.android.core.utils.allowDiskWritesInStrictMode
 
 internal class PlacesRepoSelectedPlaceRepository(
     placesRepo: PlacesRepository,

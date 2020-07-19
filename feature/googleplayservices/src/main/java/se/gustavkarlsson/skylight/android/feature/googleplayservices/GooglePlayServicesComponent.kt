@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
 import dagger.Component
-import se.gustavkarlsson.skylight.android.AppComponent
+import se.gustavkarlsson.skylight.android.core.AppComponent
 
 @Component(
     dependencies = [AppComponent::class]

@@ -7,8 +7,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
 import io.reactivex.disposables.CompositeDisposable
-import se.gustavkarlsson.skylight.android.AppScope
-import se.gustavkarlsson.skylight.android.ModuleStarter
+import se.gustavkarlsson.skylight.android.core.AppScope
+import se.gustavkarlsson.skylight.android.core.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 
 @Module

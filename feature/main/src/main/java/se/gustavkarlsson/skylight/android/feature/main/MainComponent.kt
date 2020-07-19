@@ -5,9 +5,12 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import io.reactivex.Scheduler
-import se.gustavkarlsson.skylight.android.AppComponent
-import se.gustavkarlsson.skylight.android.Main
-import se.gustavkarlsson.skylight.android.entities.ChanceLevel
+import se.gustavkarlsson.skylight.android.core.AppComponent
+import se.gustavkarlsson.skylight.android.core.Main
+import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
+import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.core.services.Formatter
+import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
@@ -28,9 +31,6 @@ import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
-import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.services.Formatter
-import se.gustavkarlsson.skylight.android.utils.minutes
 
 @Component(
     modules = [

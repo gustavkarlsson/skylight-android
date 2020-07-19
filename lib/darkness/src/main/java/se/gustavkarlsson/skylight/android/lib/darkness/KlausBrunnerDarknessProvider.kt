@@ -7,14 +7,14 @@ import java.util.GregorianCalendar
 import net.e175.klaus.solarpositioning.Grena3
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.entities.Cause
-import se.gustavkarlsson.skylight.android.entities.Loadable
-import se.gustavkarlsson.skylight.android.entities.Report
+import se.gustavkarlsson.skylight.android.core.entities.Cause
+import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Report
+import se.gustavkarlsson.skylight.android.core.logging.logInfo
+import se.gustavkarlsson.skylight.android.core.utils.delay
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.time.Time
-import se.gustavkarlsson.skylight.android.logging.logInfo
-import se.gustavkarlsson.skylight.android.utils.delay
 internal class KlausBrunnerDarknessProvider(
     private val time: Time,
     private val pollingInterval: Duration

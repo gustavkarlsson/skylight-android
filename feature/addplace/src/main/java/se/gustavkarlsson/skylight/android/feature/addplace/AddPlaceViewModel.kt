@@ -4,11 +4,11 @@ import com.ioki.textref.TextRef
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import javax.inject.Inject
+import se.gustavkarlsson.skylight.android.core.utils.mapNotNull
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
-import se.gustavkarlsson.skylight.android.utils.mapNotNull
 
 internal class AddPlaceViewModel @Inject constructor(
     private val placesRepository: PlacesRepository,

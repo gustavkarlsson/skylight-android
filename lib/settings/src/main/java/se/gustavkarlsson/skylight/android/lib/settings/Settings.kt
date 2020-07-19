@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.lib.settings
 
 import io.reactivex.Completable
 import io.reactivex.Observable
-import se.gustavkarlsson.skylight.android.entities.TriggerLevel
+import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
 
 interface Settings {

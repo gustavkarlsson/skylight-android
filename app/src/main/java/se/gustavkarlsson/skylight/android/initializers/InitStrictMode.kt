@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.initializers
 import android.os.Build
 import android.os.StrictMode
 import se.gustavkarlsson.skylight.android.BuildConfig
-import se.gustavkarlsson.skylight.android.logging.logError
+import se.gustavkarlsson.skylight.android.core.logging.logError
 
 internal fun initStrictMode() {
     if (BuildConfig.DEBUG) {

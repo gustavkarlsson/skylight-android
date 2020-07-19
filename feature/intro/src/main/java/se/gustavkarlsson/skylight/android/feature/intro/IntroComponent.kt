@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
 import dagger.Component
-import se.gustavkarlsson.skylight.android.AppComponent
+import se.gustavkarlsson.skylight.android.core.AppComponent
 import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionComponent
 
 @Component(

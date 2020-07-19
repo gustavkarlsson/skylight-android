@@ -4,7 +4,7 @@ import android.content.Context
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named
-import se.gustavkarlsson.skylight.android.AppScope
+import se.gustavkarlsson.skylight.android.core.AppScope
 
 @Module
 object LibRunVersionModule {

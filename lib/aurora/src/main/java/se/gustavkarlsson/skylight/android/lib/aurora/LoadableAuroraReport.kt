@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.lib.aurora
 
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.entities.Loadable
-import se.gustavkarlsson.skylight.android.entities.Report
+import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex

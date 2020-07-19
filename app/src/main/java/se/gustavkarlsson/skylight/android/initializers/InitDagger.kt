@@ -1,10 +1,11 @@
 package se.gustavkarlsson.skylight.android.initializers
 
 import android.app.Application
-import se.gustavkarlsson.skylight.android.AppComponent
 import se.gustavkarlsson.skylight.android.AppModule
 import se.gustavkarlsson.skylight.android.DaggerActualAppComponent
-import se.gustavkarlsson.skylight.android.ModuleStarter
+import se.gustavkarlsson.skylight.android.core.AppComponent
+import se.gustavkarlsson.skylight.android.core.ModuleStarter
+import se.gustavkarlsson.skylight.android.core.utils.allowDiskReadsAndWritesInStrictMode
 import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
@@ -22,7 +23,6 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedServiceCompone
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
-import se.gustavkarlsson.skylight.android.utils.allowDiskReadsAndWritesInStrictMode
 
 private object Setter :
     AppComponent.Setter,

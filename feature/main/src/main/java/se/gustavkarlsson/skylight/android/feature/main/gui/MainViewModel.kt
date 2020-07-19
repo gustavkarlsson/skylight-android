@@ -12,11 +12,15 @@ import se.gustavkarlsson.koptional.Absent
 import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.koptional.Present
 import se.gustavkarlsson.koptional.toOptional
-import se.gustavkarlsson.skylight.android.entities.Cause
-import se.gustavkarlsson.skylight.android.entities.Chance
-import se.gustavkarlsson.skylight.android.entities.ChanceLevel
-import se.gustavkarlsson.skylight.android.entities.Loadable
-import se.gustavkarlsson.skylight.android.entities.Report
+import se.gustavkarlsson.skylight.android.core.entities.Cause
+import se.gustavkarlsson.skylight.android.core.entities.Chance
+import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
+import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Report
+import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.core.services.Formatter
+import se.gustavkarlsson.skylight.android.core.utils.delay
+import se.gustavkarlsson.skylight.android.core.utils.seconds
 import se.gustavkarlsson.skylight.android.feature.main.ChanceToColorConverter
 import se.gustavkarlsson.skylight.android.feature.main.Change
 import se.gustavkarlsson.skylight.android.feature.main.R
@@ -34,10 +38,6 @@ import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingRe
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
-import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.services.Formatter
-import se.gustavkarlsson.skylight.android.utils.delay
-import se.gustavkarlsson.skylight.android.utils.seconds
 
 internal class MainViewModel(
     private val mainKnot: Knot<State, Change>,

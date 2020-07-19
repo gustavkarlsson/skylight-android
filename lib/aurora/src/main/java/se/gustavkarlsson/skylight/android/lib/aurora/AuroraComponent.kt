@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.lib.aurora
 
-import se.gustavkarlsson.skylight.android.entities.ChanceLevel
-import se.gustavkarlsson.skylight.android.services.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.services.Formatter
+import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
+import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.core.services.Formatter
 
 interface AuroraComponent {
 

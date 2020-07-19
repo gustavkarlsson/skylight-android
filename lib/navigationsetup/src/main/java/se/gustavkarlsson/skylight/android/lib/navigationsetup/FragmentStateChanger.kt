@@ -5,9 +5,9 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.zhuinden.simplestack.StateChange
 import com.zhuinden.simplestack.StateChanger
+import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.navigation.BackstackListener
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
-import se.gustavkarlsson.skylight.android.logging.logInfo
 
 // Stolen from https://github.com/Zhuinden/simple-stack/blob/a9adb03/simple-stack-example-basic-kotlin-fragment/src/main/java/com/zhuinden/simplestackexamplekotlinfragment/core/navigation/FragmentStateChanger.kt
 internal class FragmentStateChanger(

@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.lib.navigationsetup
 
+import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
-import se.gustavkarlsson.skylight.android.logging.logInfo
 
 internal class AggregatingNavigationOverride(
     private val overrides: Iterable<NavigationOverride>

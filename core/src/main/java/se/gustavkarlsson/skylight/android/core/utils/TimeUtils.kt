@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.utils
+package se.gustavkarlsson.skylight.android.core.utils
 
 import org.threeten.bp.Duration
 import org.threeten.bp.temporal.Temporal

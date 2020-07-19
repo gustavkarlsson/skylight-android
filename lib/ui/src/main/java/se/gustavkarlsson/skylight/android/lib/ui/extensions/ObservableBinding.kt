@@ -11,7 +11,7 @@ import io.reactivex.Observer
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
-import se.gustavkarlsson.skylight.android.AppComponent
+import se.gustavkarlsson.skylight.android.core.AppComponent
 
 fun Completable.bind(fragment: Fragment) = toObservable<Unit>()
     .bind(fragment) {}
