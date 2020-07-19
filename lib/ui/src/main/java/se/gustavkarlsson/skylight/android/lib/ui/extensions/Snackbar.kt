@@ -5,14 +5,14 @@ import androidx.annotation.StringRes
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.ioki.textref.TextRef
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.lib.ui.R
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
 suspend fun showSnackbar(view: View, text: CharSequence, build: SnackbarBuilder.() -> Unit): Snackbar =
     showSnackbar { buildSnackbar(view, build) { setText(text) } }
