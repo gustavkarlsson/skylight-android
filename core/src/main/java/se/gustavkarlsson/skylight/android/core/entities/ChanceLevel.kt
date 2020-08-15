@@ -13,11 +13,7 @@ enum class ChanceLevel {
             UNKNOWN, NONE -> false
             LOW -> triggerLevel == TriggerLevel.LOW
             MEDIUM -> triggerLevel in (listOf(TriggerLevel.LOW, TriggerLevel.MEDIUM))
-            HIGH -> triggerLevel in (listOf(
-                TriggerLevel.LOW,
-                TriggerLevel.MEDIUM,
-                TriggerLevel.HIGH
-            ))
+            HIGH -> triggerLevel in (listOf(TriggerLevel.LOW, TriggerLevel.MEDIUM, TriggerLevel.HIGH))
         }
 
     companion object {

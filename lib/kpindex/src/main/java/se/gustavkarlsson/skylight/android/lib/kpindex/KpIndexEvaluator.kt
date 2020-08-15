@@ -1,9 +1,9 @@
 package se.gustavkarlsson.skylight.android.lib.kpindex
 
-import kotlin.math.pow
 import se.gustavkarlsson.skylight.android.core.entities.Chance
 import se.gustavkarlsson.skylight.android.core.entities.Chance.Companion.UNKNOWN
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
+import kotlin.math.pow
 
 internal object KpIndexEvaluator : ChanceEvaluator<KpIndex> {
 
