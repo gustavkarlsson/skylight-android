@@ -4,8 +4,8 @@ import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.Single
-import java.util.concurrent.TimeUnit
 import org.threeten.bp.Duration
+import java.util.concurrent.TimeUnit
 
 fun <T : Any> Single<T>.delay(delay: Duration): Single<T> =
     this.delay(delay.toMillis(), TimeUnit.MILLISECONDS)

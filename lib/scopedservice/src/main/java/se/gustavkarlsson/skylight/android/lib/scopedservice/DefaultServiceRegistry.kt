@@ -9,10 +9,7 @@ internal class DefaultServiceRegistry : ServiceRegistry {
     override fun register(id: String, tag: String, service: ScopedService) {
         require(id !in services) { "Service already exists for $id" }
         logInfo { "Registering service '$id' with tag '$tag'" }
-        services = services + (id to ServiceEntry(
-            tag,
-            service
-        ))
+        services = services + (id to ServiceEntry(tag, service))
     }
 
     @Synchronized
