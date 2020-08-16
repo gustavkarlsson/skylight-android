@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.core
 
 import android.content.Context
 import io.reactivex.Scheduler
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Named
 
 interface AppComponent {
@@ -19,6 +20,12 @@ interface AppComponent {
 
     @Io
     fun ioScheduler(): Scheduler
+
+    @Main
+    fun mainDispatcher(): CoroutineDispatcher
+
+    @Io
+    fun ioDispatcher(): CoroutineDispatcher
 
     @Computation
     fun computationScheduler(): Scheduler

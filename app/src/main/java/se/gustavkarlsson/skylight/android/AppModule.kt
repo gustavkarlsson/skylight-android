@@ -11,6 +11,8 @@ import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import java.util.Locale
 import javax.inject.Named
 import se.gustavkarlsson.skylight.android.core.Computation
@@ -63,6 +65,16 @@ internal class AppModule(private val application: Application) {
     @Reusable
     @Io
     fun ioScheduler(): Scheduler = Schedulers.io()
+
+    @Provides
+    @Reusable
+    @Main
+    fun mainDispatcher(): CoroutineDispatcher = Dispatchers.Main
+
+    @Provides
+    @Reusable
+    @Io
+    fun ioDispatcher(): CoroutineDispatcher = Dispatchers.IO
 
     @Provides
     @Reusable

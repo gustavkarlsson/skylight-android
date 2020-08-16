@@ -65,6 +65,7 @@ object Versions {
     val simpleStack = "2.3.2"
     val textref = "1.3.0"
     val markwon = "4.4.0"
+    val store = "4.0.0-alpha06"
 
     // Test
     val junit = "4.12"

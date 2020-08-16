@@ -5,6 +5,11 @@ import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.rxkotlin.Singles
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.rx2.asObservable
+import kotlinx.coroutines.rx2.await
+import kotlinx.coroutines.rx2.rxSingle
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.darkness.DarknessProvider
@@ -25,6 +30,7 @@ internal class CombiningAuroraReportProvider(
         zipToAuroraReport(location)
             .doOnSuccess { logInfo { "Provided aurora report: $it" } }
 
+    @ExperimentalCoroutinesApi
     override fun stream(
         locations: Observable<Loadable<LocationResult>>
     ): Observable<LoadableAuroraReport> =
@@ -34,7 +40,7 @@ internal class CombiningAuroraReportProvider(
                 kpIndexProvider.stream(),
                 geomagLocationProvider.stream(locations),
                 darknessProvider.stream(locations),
-                weatherProvider.stream(locations)
+                weatherProvider.stream(locations.asFlow()).asObservable()
             ) { locationName, kpIndex, geomagLocation, darkness, weather ->
                 LoadableAuroraReport(locationName, kpIndex, geomagLocation, darkness, weather)
             }
@@ -50,7 +56,7 @@ internal class CombiningAuroraReportProvider(
                 kpIndexProvider.get(),
                 geomagLocationProvider.get(cachedLocation),
                 darknessProvider.get(cachedLocation),
-                weatherProvider.get(cachedLocation)
+                rxSingle { weatherProvider.get(cachedLocation.await()) }
             ) { locationName, kpIndex, geomagLocation, darkness, weather ->
                 CompleteAuroraReport(locationName, kpIndex, geomagLocation, darkness, weather)
             }
