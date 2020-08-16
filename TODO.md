@@ -1,5 +1,7 @@
 ## Soon
 * Bug: If location is granted (while using app), then go to add place, and go back. Banner shows up again.
+* Migrate to coroutines
+* Rework location inputs to "ApproximateLocation" so store can cache ressults from nearby locations
 * Readme
 * Simpler configuration of required keys (move to root? fail if not present?)
 * Retire ThreeTenABP
