@@ -6,6 +6,7 @@ import de.halfbit.knot.knot
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.functions.Consumer
+import kotlinx.coroutines.rx2.rxSingle
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.core.utils.buffer
 import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
@@ -81,7 +82,7 @@ internal fun createKnot(
                 .flatMap { texts ->
                     Observable.concat(
                         Observable.just(Change.SearchesSkipped(texts.size - 1)),
-                        geocoder.geocode(texts.last())
+                        rxSingle { geocoder.geocode(texts.last()) }
                             .map {
                                 when (val result = it) {
                                     is GeocodingResult.Success ->
