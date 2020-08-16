@@ -4,14 +4,14 @@ import com.mapbox.api.geocoding.v5.MapboxGeocoding
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
-import java.io.IOException
-import java.util.Locale
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.lib.location.Location
+import java.io.IOException
+import java.util.Locale
 
 internal class MapboxGeocoder(
     private val accessToken: String,

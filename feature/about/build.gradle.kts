@@ -1,6 +1,6 @@
-import java.io.File
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.RepositoryBuilder
+import java.io.File
 
 plugins {
     id("com.android.library")

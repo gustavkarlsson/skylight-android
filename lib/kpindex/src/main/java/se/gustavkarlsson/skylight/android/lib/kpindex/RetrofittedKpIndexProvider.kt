@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.lib.kpindex
 import com.jakewharton.rx.replayingShare
 import io.reactivex.Observable
 import io.reactivex.Single
-import java.io.IOException
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
@@ -13,6 +12,8 @@ import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.core.utils.delay
 import se.gustavkarlsson.skylight.android.lib.time.Time
+import java.io.IOException
+
 internal class RetrofittedKpIndexProvider(
     private val api: KpIndexApi,
     private val time: Time,

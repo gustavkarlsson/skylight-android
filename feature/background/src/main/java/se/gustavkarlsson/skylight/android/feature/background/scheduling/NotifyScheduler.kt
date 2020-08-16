@@ -6,9 +6,9 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import java.util.concurrent.TimeUnit
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
+import java.util.concurrent.TimeUnit
 
 internal class NotifyScheduler(
     private val appContext: Context,

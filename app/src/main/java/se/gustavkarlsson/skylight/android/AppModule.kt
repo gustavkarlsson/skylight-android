@@ -13,11 +13,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import java.util.Locale
-import javax.inject.Named
 import se.gustavkarlsson.skylight.android.core.Computation
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.Main
+import java.util.Locale
+import javax.inject.Named
 
 @Module
 internal class AppModule(private val application: Application) {

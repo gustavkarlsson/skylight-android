@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.lib.darkness
 import com.jakewharton.rx.replayingShare
 import io.reactivex.Observable
 import io.reactivex.Single
-import java.util.GregorianCalendar
 import net.e175.klaus.solarpositioning.Grena3
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
@@ -15,6 +14,8 @@ import se.gustavkarlsson.skylight.android.core.utils.delay
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.time.Time
+import java.util.GregorianCalendar
+
 internal class KlausBrunnerDarknessProvider(
     private val time: Time,
     private val pollingInterval: Duration
