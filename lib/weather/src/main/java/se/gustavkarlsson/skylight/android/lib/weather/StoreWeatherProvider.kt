@@ -26,11 +26,14 @@ internal class StoreWeatherProvider(
     private val time: Time
 ) : WeatherProvider {
 
-    override suspend fun get(location: LocationResult): Report<Weather> =
-        getSingleReport(location) { get(it) }
-
-    override suspend fun fresh(location: LocationResult): Report<Weather> =
-        getSingleReport(location) { fresh(it) }
+    override suspend fun get(location: LocationResult, fresh: Boolean): Report<Weather> =
+        getSingleReport(location) {
+            if (fresh) {
+                fresh(it)
+            } else {
+                get(it)
+            }
+        }
 
     private suspend fun getSingleReport(
         location: LocationResult,
