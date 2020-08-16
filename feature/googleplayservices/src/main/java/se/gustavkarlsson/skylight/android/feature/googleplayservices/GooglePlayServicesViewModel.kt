@@ -2,8 +2,6 @@ package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
 import android.app.Activity
 import com.google.android.gms.common.GoogleApiAvailability
-import io.ashdavies.rx.rxtasks.toCompletable
-import io.reactivex.Completable
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
