@@ -45,7 +45,7 @@ private suspend fun OpenWeatherMapApi.requestWeather(location: Location, appId: 
         } else {
             val code = response.code()
             @Suppress("BlockingMethodInNonBlockingContext")
-            val body = response.errorBody()!!.string()
+            val body = response.errorBody()?.string() ?: "<empty>"
             logError { "Failed to get Weather from OpenWeatherMap API. HTTP $code: $body" }
             throw ServerResponseException(code, body)
         }

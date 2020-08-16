@@ -53,7 +53,9 @@ internal class RetrofittedKpIndexProvider(
                 if (response.isSuccessful) {
                     Single.just(Report.success(KpIndex(response.body()!!.value), time.now()))
                 } else {
-                    val exception = ServerResponseException(response.code(), response.errorBody()!!.string())
+                    val code = response.code()
+                    val body = response.errorBody()?.string() ?: "<empty>"
+                    val exception = ServerResponseException(code, body)
                     logError(exception) { "Failed to get Kp index from KpIndex API" }
                     Single.error(exception)
                 }
