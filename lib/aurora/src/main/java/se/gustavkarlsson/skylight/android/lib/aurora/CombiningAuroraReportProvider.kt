@@ -36,7 +36,7 @@ internal class CombiningAuroraReportProvider(
     ): Observable<LoadableAuroraReport> =
         Observables
             .combineLatest(
-                reverseGeocoder.stream(locations),
+                reverseGeocoder.stream(locations.asFlow()).asObservable(),
                 kpIndexProvider.stream(),
                 geomagLocationProvider.stream(locations),
                 darknessProvider.stream(locations),
@@ -52,7 +52,7 @@ internal class CombiningAuroraReportProvider(
         val cachedLocation = location.cache()
         return Singles
             .zip(
-                reverseGeocoder.get(cachedLocation),
+                rxSingle { reverseGeocoder.get(cachedLocation.await()) },
                 kpIndexProvider.get(),
                 geomagLocationProvider.get(cachedLocation),
                 darknessProvider.get(cachedLocation),
