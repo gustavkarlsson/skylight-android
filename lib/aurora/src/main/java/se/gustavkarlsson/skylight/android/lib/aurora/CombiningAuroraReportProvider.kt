@@ -38,7 +38,7 @@ internal class CombiningAuroraReportProvider(
             .combineLatest(
                 reverseGeocoder.stream(locations.asFlow()).asObservable(),
                 kpIndexProvider.stream(),
-                geomagLocationProvider.stream(locations),
+                geomagLocationProvider.stream(locations.asFlow()).asObservable(),
                 darknessProvider.stream(locations.asFlow()).asObservable(),
                 weatherProvider.stream(locations.asFlow()).asObservable()
             ) { locationName, kpIndex, geomagLocation, darkness, weather ->
@@ -54,7 +54,7 @@ internal class CombiningAuroraReportProvider(
             .zip(
                 rxSingle { reverseGeocoder.get(cachedLocation.await()) },
                 kpIndexProvider.get(),
-                geomagLocationProvider.get(cachedLocation),
+                rxSingle { geomagLocationProvider.get(cachedLocation.await()) },
                 rxSingle { darknessProvider.get(cachedLocation.await()) },
                 rxSingle { weatherProvider.get(cachedLocation.await()) }
             ) { locationName, kpIndex, geomagLocation, darkness, weather ->

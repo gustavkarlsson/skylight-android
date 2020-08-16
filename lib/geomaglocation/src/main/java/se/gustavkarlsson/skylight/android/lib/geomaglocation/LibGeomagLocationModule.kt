@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.lib.geomaglocation
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.lib.time.Time
@@ -14,7 +13,7 @@ object LibGeomagLocationModule {
 
     @Provides
     @Reusable
-    internal fun geomagLocationFormatter(locale: Single<Locale>): Formatter<GeomagLocation> =
+    internal fun geomagLocationFormatter(locale: () -> Locale): Formatter<GeomagLocation> =
         GeomagLocationFormatter(locale)
 
     @Provides

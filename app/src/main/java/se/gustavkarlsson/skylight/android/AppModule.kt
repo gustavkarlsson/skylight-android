@@ -48,6 +48,18 @@ internal class AppModule(private val application: Application) {
 
     @Provides
     @Reusable
+    fun getLocale(context: Context): () -> Locale =
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                context.resources.configuration.locales[0]
+            } else {
+                @Suppress("DEPRECATION")
+                context.resources.configuration.locale
+            }
+        }
+
+    @Provides
+    @Reusable
     @Named("versionCode")
     fun versionCode(): Int = BuildConfig.VERSION_CODE
 
