@@ -7,7 +7,7 @@ object Versions {
     val targetSdk = 29
     val buildTools = "29.0.3"
     val java = JavaVersion.VERSION_1_8
-    val kotlin = "1.3.72"
+    val kotlin = "1.4.0"
     val androidGradle = "4.0.1" // Must also update in buildSrc/build.gradle.kts
     val jgit = "5.6.1.202002131546-r"
     // Skip 1.11.0 as it has breaking bug: https://github.com/allegro/axion-release-plugin/issues/332
@@ -48,7 +48,7 @@ object Versions {
 
     val okHttp = "3.14.4"
     val retrofit = "2.7.1"
-    val retrofitKotlinSerialization = "0.5.0"
+    val retrofitKotlinSerialization = "0.6.0" // FIXME 0.6.0 does not exist as of now...
 
     val dagger = "2.28.1"
     val threetenabp = "1.2.4"
