@@ -1,63 +1,64 @@
 package se.gustavkarlsson.skylight.android.lib.kpindex
 
-import com.jakewharton.rx.replayingShare
-import io.reactivex.Observable
-import io.reactivex.Single
-import org.threeten.bp.Duration
+import com.dropbox.android.external.store4.Store
+import com.dropbox.android.external.store4.StoreRequest
+import com.dropbox.android.external.store4.StoreResponse
+import com.dropbox.android.external.store4.fresh
+import com.dropbox.android.external.store4.get
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Report
-import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
-import se.gustavkarlsson.skylight.android.core.logging.logWarn
-import se.gustavkarlsson.skylight.android.core.utils.delay
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.io.IOException
 
 internal class RetrofittedKpIndexProvider(
-    private val api: KpIndexApi,
-    private val time: Time,
-    retryDelay: Duration,
-    pollingInterval: Duration
+    private val store: Store<Unit, KpIndex>,
+    private val time: Time
 ) : KpIndexProvider {
 
-    override fun get(): Single<Report<KpIndex>> =
-        getReport()
-            .onErrorReturn { throwable ->
-                Report.Error(getCause(throwable), time.now())
+    override suspend fun get(fresh: Boolean): Report<KpIndex> =
+        getSingleReport {
+            if (fresh) {
+                fresh(Unit)
+            } else {
+                get(Unit)
             }
-            .doOnSuccess { logInfo { "Provided Kp index: $it" } }
-
-    private val stream = getReport()
-        .repeatWhen { it.delay(pollingInterval) }
-        .toObservable()
-        .onErrorResumeNext { throwable: Throwable ->
-            val cause = getCause(throwable)
-            Observable.concat(
-                Observable.just(Report.error(cause, time.now())),
-                Observable.error(throwable)
-            )
         }
-        .map { Loadable.loaded(it) }
-        .retryWhen { it.delay(retryDelay) }
-        .distinctUntilChanged()
-        .doOnNext { logInfo { "Streamed Kp index: $it" } }
-        .replayingShare(Loadable.Loading)
 
-    override fun stream() = stream
+    private suspend fun getSingleReport(
+        getWeather: suspend Store<Unit, KpIndex>.() -> KpIndex
+    ): Report<KpIndex> {
+        val report = try {
+            val weather = store.getWeather()
+            Report.Success(weather, time.now())
+        } catch (e: Exception) {
+            Report.Error(getCause(e), time.now())
+        }
+        logInfo { "Provided Kp index: $report" }
+        return report
+    }
 
-    private fun getReport(): Single<Report<KpIndex>> =
-        api.get()
-            .doOnError { logWarn(it) { "Failed to get Kp index from KpIndex API" } }
-            .flatMap { response ->
-                if (response.isSuccessful) {
-                    Single.just(Report.success(KpIndex(response.body()!!.value), time.now()))
-                } else {
-                    val code = response.code()
-                    val body = response.errorBody()?.string() ?: "<empty>"
-                    val exception = ServerResponseException(code, body)
-                    logError(exception) { "Failed to get Kp index from KpIndex API" }
-                    Single.error(exception)
+    @ExperimentalCoroutinesApi
+    override fun stream(): Flow<Loadable<Report<KpIndex>>> =
+        streamReports()
+            .distinctUntilChanged()
+            .onEach { logInfo { "Streamed Kp index: $it" } }
+
+    private fun streamReports(): Flow<Loadable<Report<KpIndex>>> =
+        store.stream(StoreRequest.cached(Unit, refresh = false))
+            .map { response ->
+                when (response) {
+                    is StoreResponse.Loading -> Loadable.loading()
+                    is StoreResponse.Data -> Loadable.loaded(Report.success(response.value, time.now()))
+                    is StoreResponse.Error.Exception ->
+                        Loadable.loaded(Report.error(getCause(response.error), time.now()))
+                    is StoreResponse.Error.Message -> error("Unsupported response type: $response")
                 }
             }
 }
@@ -69,6 +70,3 @@ private fun getCause(throwable: Throwable): Cause =
         is ServerResponseException -> Cause.ServerResponse
         else -> Cause.Unknown
     }
-
-// TODO Fix duplication with RetrofittedOpenWeatherMapWeatherProvider
-private class ServerResponseException(code: Int, body: String) : Exception("Server error $code. Body: $body")
