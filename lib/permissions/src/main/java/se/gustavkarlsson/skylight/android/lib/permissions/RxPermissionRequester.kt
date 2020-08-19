@@ -1,37 +1,30 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
 import androidx.fragment.app.Fragment
-import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.Completable
-import io.reactivex.functions.Consumer
+import com.eazypermissions.common.model.PermissionResult
+import com.eazypermissions.coroutinespermission.PermissionManager
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 
 internal class RxPermissionRequester(
     private val permissionKeys: List<String>,
-    private val accessChangeConsumer: Consumer<Access>
+    private val accessChangeConsumer: (Access) -> Unit
 ) : PermissionRequester {
 
-    override fun request(fragment: Fragment): Completable {
-        val rxPermissions = RxPermissions(fragment)
-            .apply { setLogging(BuildConfig.DEBUG) }
-
-        return rxPermissions.requestEach(*permissionKeys.toTypedArray())
-            .doOnNext {
-                when {
-                    it.granted -> {
-                        logInfo { "Permission is granted" }
-                        accessChangeConsumer.accept(Access.Granted)
-                    }
-                    it.shouldShowRequestPermissionRationale -> {
-                        logInfo { "Permission is denied" }
-                        accessChangeConsumer.accept(Access.Denied)
-                    }
-                    else -> {
-                        logInfo { "Permission is denied forever" }
-                        accessChangeConsumer.accept(Access.DeniedForever)
-                    }
-                }
-            }
-            .ignoreElements()
+    override suspend fun request(fragment: Fragment) {
+        val access = when (fragment.requestPermissions(permissionKeys)) {
+            is PermissionResult.PermissionGranted -> Access.Granted
+            is PermissionResult.PermissionDenied -> Access.Denied
+            is PermissionResult.ShowRational -> Access.DeniedShowRationale
+            is PermissionResult.PermissionDeniedPermanently -> Access.DeniedForever
+        }
+        logInfo { "Permission is $access" }
+        accessChangeConsumer(access)
     }
 }
+
+private suspend fun Fragment.requestPermissions(permissionKeys: List<String>): PermissionResult {
+    val permissionKeysArray = permissionKeys.toTypedArray()
+    return PermissionManager.requestPermissions(this, REQUEST_ID, *permissionKeysArray)
+}
+
+private const val REQUEST_ID = 28345

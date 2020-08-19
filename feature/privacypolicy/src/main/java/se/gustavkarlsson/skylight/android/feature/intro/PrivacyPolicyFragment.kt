@@ -20,10 +20,12 @@ class PrivacyPolicyFragment : ScreenFragment() {
         scrollView.fit { Edge.Bottom }
     }
 
-    override fun initView(viewScope: CoroutineScope) {
+    override fun initView() {
         val privacyPolicyMarkdown = resources.openRawResource(R.raw.privacy_policy)
             .bufferedReader()
             .readText()
         Markwon.create(requireContext()).setMarkdown(markdownView, privacyPolicyMarkdown)
     }
+
+    override fun bindView(scope: CoroutineScope) = Unit
 }

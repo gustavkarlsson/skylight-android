@@ -51,7 +51,7 @@ class AddPlaceFragment : ScreenFragment() {
         searchResultRecyclerView.fit { Edge.Bottom }
     }
 
-    override fun initView(viewScope: CoroutineScope) {
+    override fun initView() {
         toolbarView.inflateMenu(R.menu.add_place_menu)
         searchResultRecyclerView.adapter = adapter
         searchView.fixMargins()
@@ -66,7 +66,7 @@ class AddPlaceFragment : ScreenFragment() {
         super.onDestroyView()
     }
 
-    override fun bindData(viewScope: CoroutineScope) {
+    override fun bindView(scope: CoroutineScope) {
         searchView.setQueryTextChangeListener(viewModel::onSearchTextChanged)
 
         viewModel.placeSuggestions.bind(this, adapter::setItems)
@@ -99,7 +99,7 @@ class AddPlaceFragment : ScreenFragment() {
         }
 
         viewModel.errorMessages.bind(this) { message ->
-            viewScope.launch { handleNewMessage(message) }
+            scope.launch { handleNewMessage(message) }
         }
     }
 

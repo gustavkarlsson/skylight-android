@@ -23,7 +23,7 @@ object LibPermissionsModule {
     @Provides
     @Reusable
     internal fun locationPermissionRequester(): PermissionRequester =
-        RxPermissionRequester(allLocationPermissionKeys, relay)
+        RxPermissionRequester(allLocationPermissionKeys, relay::accept)
 }
 
 private const val locationPermissionKey = Manifest.permission.ACCESS_FINE_LOCATION

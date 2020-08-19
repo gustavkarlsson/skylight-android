@@ -37,7 +37,7 @@ internal class DrawerFragment : BaseFragment() {
 
     private var removePlaceDialog: DialogInterface? = null
 
-    override fun initView(viewScope: CoroutineScope) {
+    override fun initView() {
         placesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         placesRecyclerView.adapter = adapter
     }
@@ -49,7 +49,7 @@ internal class DrawerFragment : BaseFragment() {
         super.onDestroyView()
     }
 
-    override fun bindData(viewScope: CoroutineScope) {
+    override fun bindView(scope: CoroutineScope) {
         viewModel.drawerItems.bind(this, adapter::setItems)
 
         viewModel.closeDrawer.bind(this) { closeDrawer() }

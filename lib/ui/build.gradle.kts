@@ -25,5 +25,9 @@ dependencies {
     api("com.jakewharton.rxbinding3:rxbinding:${Versions.rxbinding}")
     api("com.jakewharton.rxbinding3:rxbinding-appcompat:${Versions.rxbinding}")
 
+    // FlowBinding
+    api("io.github.reactivecircus.flowbinding:flowbinding-android:${Versions.flowbinding}")
+    api("io.github.reactivecircus.flowbinding:flowbinding-appcompat:${Versions.flowbinding}")
+
     api("de.halfbit:edge-to-edge:${Versions.edgeToEdge}")
 }

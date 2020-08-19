@@ -24,22 +24,26 @@ abstract class BaseFragment : Fragment() {
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
-        val viewScope = MainScope() + CoroutineName("viewScope")
-        this.viewScope = viewScope
-        initView(viewScope)
-        bindData(viewScope)
+        initView()
     }
 
-    override fun onDestroyView() {
+    override fun onStart() {
+        super.onStart()
+        val viewScope = MainScope() + CoroutineName("viewScope")
+        this.viewScope = viewScope
+        bindView(viewScope)
+    }
+
+    override fun onStop() {
         viewScope?.cancel()
         viewScope = null
-        super.onDestroyView()
+        super.onStop()
     }
 
     @get:LayoutRes
     protected abstract val layoutId: Int
 
-    protected open fun initView(viewScope: CoroutineScope) = Unit
+    protected abstract fun initView()
 
-    protected open fun bindData(viewScope: CoroutineScope) = Unit
+    protected abstract fun bindView(scope: CoroutineScope)
 }

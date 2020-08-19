@@ -26,9 +26,12 @@ class AboutFragment : ScreenFragment() {
         toolbarView.fit { Edge.Top }
     }
 
-    override fun initView(viewScope: CoroutineScope) {
+    override fun initView() {
         val context = requireContext()
         detailsTextView.text = viewModel.detailsText.resolve(context)
+    }
+
+    override fun bindView(scope: CoroutineScope) {
         privacyPolicyLink.clicks()
             .bind(this) {
                 navigator.goTo(screens.privacyPolicy)

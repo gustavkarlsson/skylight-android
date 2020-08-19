@@ -4,12 +4,13 @@ import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_google_play_services.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import reactivecircus.flowbinding.android.view.clicks
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.target
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.showSnackbar
 
 internal class GooglePlayServicesFragment : ScreenFragment() {
@@ -27,14 +28,14 @@ internal class GooglePlayServicesFragment : ScreenFragment() {
         installButton.fit { Edge.Bottom }
     }
 
-    override fun bindData(viewScope: CoroutineScope) {
-        installButton.setOnClickListener {
-            viewScope.launch {
-                try {
-                    makeAvailable()
-                } catch (e: Exception) {
-                    showError(e)
-                }
+    override fun initView() = Unit
+
+    override fun bindView(scope: CoroutineScope) {
+        installButton.clicks().bind(scope) {
+            try {
+                makeAvailable()
+            } catch (e: Exception) {
+                showError(e)
             }
         }
     }

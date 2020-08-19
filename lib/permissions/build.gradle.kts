@@ -11,7 +11,7 @@ android {
 dependencies {
     implementation(project(":core"))
 
-    implementation("com.github.tbruyelle:rxpermissions:${Versions.rxpermissions}")
+    implementation("com.sagar:coroutinespermission:${Versions.coroutinespermission}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

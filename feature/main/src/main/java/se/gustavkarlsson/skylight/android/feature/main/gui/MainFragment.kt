@@ -14,6 +14,7 @@ import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
 import se.gustavkarlsson.skylight.android.feature.main.MainComponent
 import se.gustavkarlsson.skylight.android.feature.main.R
@@ -56,7 +57,7 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
         navigationView.fit { Edge.Top + Edge.Bottom }
     }
 
-    override fun initView(viewScope: CoroutineScope) {
+    override fun initView() {
         toolbarView.enableNavigationDrawer()
         toolbarView.inflateMenu(R.menu.menu_main)
     }
@@ -76,14 +77,13 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
             false
         }
 
-    override fun bindData(viewScope: CoroutineScope) {
-        toolbarView.itemClicks()
-            .bind(this) { item ->
-                when (item.itemId) {
-                    R.id.action_settings -> navigator.goTo(screens.settings)
-                    R.id.action_about -> navigator.goTo(screens.about)
-                }
+    override fun bindView(scope: CoroutineScope) {
+        toolbarView.itemClicks().bind(this) { item ->
+            when (item.itemId) {
+                R.id.action_settings -> navigator.goTo(screens.settings)
+                R.id.action_about -> navigator.goTo(screens.about)
             }
+        }
 
         viewModel.toolbarTitleText
             .doOnNext { logDebug { "Updating toolbar title: $it" } }
@@ -126,16 +126,16 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
             "weather"
         )
 
-        viewModel.errorBannerData.bind(this) { updateBanner(it.value) }
+        viewModel.errorBannerData.bind(this) { updateBanner(scope, it.value) }
     }
 
-    private fun updateBanner(data: BannerData?) {
+    private fun updateBanner(scope: CoroutineScope, data: BannerData?) {
         errorBanner.run {
             if (data != null) {
                 setMessage(data.message.resolve(requireContext()))
                 setRightButton(data.buttonText.resolve(requireContext())) {
                     when (data.buttonEvent) {
-                        BannerData.Event.RequestLocationPermission -> requestLocationPermission()
+                        BannerData.Event.RequestLocationPermission -> requestLocationPermission(scope)
                         BannerData.Event.OpenAppDetails -> openAppDetails()
                     }
                 }
@@ -149,9 +149,10 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
         }
     }
 
-    private fun requestLocationPermission() {
-        PermissionsComponent.instance.locationPermissionRequester().request(this)
-            .bind(this)
+    private fun requestLocationPermission(scope: CoroutineScope) {
+        scope.launch {
+            PermissionsComponent.instance.locationPermissionRequester().request(this@MainFragment)
+        }
     }
 
     private fun openAppDetails() {

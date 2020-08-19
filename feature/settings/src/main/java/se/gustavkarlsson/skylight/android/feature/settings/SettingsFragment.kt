@@ -35,11 +35,11 @@ class SettingsFragment : ScreenFragment() {
         itemsRecyclerView.fit { Edge.Bottom }
     }
 
-    override fun initView(viewScope: CoroutineScope) {
+    override fun initView() {
         itemsRecyclerView.adapter = adapter
     }
 
-    override fun bindData(viewScope: CoroutineScope) {
+    override fun bindView(scope: CoroutineScope) {
         viewModel.settingsItems.bind(this, adapter::setItems)
 
         viewModel.showSelectTriggerLevel.bind(this) { (place, triggerLevel) ->
