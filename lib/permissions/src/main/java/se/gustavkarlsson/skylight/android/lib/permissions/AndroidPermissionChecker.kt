@@ -3,31 +3,38 @@ package se.gustavkarlsson.skylight.android.lib.permissions
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
-import com.jakewharton.rxrelay2.BehaviorRelay
-import io.reactivex.Observable
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
 
+@ExperimentalCoroutinesApi
 internal class AndroidPermissionChecker(
     private val permissionKey: String,
     private val context: Context,
-    private val accessRelay: BehaviorRelay<Access>
+    private val channel: ConflatedBroadcastChannel<Access>
 ) : PermissionChecker {
 
-    override val access: Observable<Access>
+    @FlowPreview
+    override val access: Flow<Access>
         get() {
             refresh()
-            return accessRelay
+            return channel
+                .asFlow()
                 .distinctUntilChanged()
         }
 
     override fun refresh() {
-        val currentValue = accessRelay.value
+        val currentValue = channel.valueOrNull ?: Access.Unknown
         val systemPermission = checkSystemPermission()
-        if (currentValue.isSpecialCaseDenied && systemPermission == Access.Denied) {
+        if (currentValue == Access.DeniedForever && systemPermission == Access.Denied) {
             logDebug { "Won't change from $currentValue to $systemPermission" }
             return
         }
-        accessRelay.accept(systemPermission)
+        channel.offer(systemPermission)
     }
 
     private fun checkSystemPermission(): Access {
@@ -40,6 +47,3 @@ internal class AndroidPermissionChecker(
         return access
     }
 }
-
-private val Access?.isSpecialCaseDenied: Boolean
-    get() = this == Access.DeniedShowRationale || this == Access.DeniedForever

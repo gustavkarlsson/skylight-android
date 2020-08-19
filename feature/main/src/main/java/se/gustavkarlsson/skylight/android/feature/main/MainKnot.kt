@@ -4,6 +4,8 @@ import de.halfbit.knot.Knot
 import de.halfbit.knot.knot
 import io.reactivex.Observable
 import io.reactivex.Scheduler
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.rx2.asObservable
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
@@ -35,6 +37,7 @@ private sealed class Action {
 
 internal typealias MainKnot = Knot<State, Change>
 
+@ExperimentalCoroutinesApi
 internal fun buildMainKnot(
     permissionChecker: PermissionChecker,
     selectedPlaceRepo: SelectedPlaceRepository,
@@ -105,6 +108,7 @@ internal fun buildMainKnot(
     events {
         source {
             permissionChecker.access
+                .asObservable()
                 .map(Change::LocationPermission)
         }
         source {

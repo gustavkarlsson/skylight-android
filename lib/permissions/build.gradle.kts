@@ -11,7 +11,7 @@ android {
 dependencies {
     implementation(project(":core"))
 
-    implementation("com.sagar:coroutinespermission:${Versions.coroutinespermission}")
+    implementation("com.github.florent37:runtime-permission-kotlin:${Versions.runtimePermissionKotlin}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

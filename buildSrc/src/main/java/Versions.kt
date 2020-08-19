@@ -44,7 +44,7 @@ object Versions {
     val flowbinding = "1.0.0-alpha02"
     val rxrelay = "2.1.1"
     val rxReplayingShare = "2.2.0"
-    val coroutinespermission = "2.0.2"
+    val runtimePermissionKotlin = "1.1.2"
     val rxLocation = "1.0.5"
     val kotlinxCoroutines = "1.3.8"
 
