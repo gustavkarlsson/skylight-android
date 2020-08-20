@@ -11,6 +11,7 @@ import io.reactivex.Observer
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
+import java.util.concurrent.atomic.AtomicReference
 import se.gustavkarlsson.skylight.android.core.AppComponent
 
 fun Completable.bind(fragment: Fragment) = toObservable<Unit>()
@@ -45,7 +46,7 @@ private class ObservableBinding<T>(
     private val scheduler: Scheduler
 ) : LifecycleEventObserver, Observer<T> {
 
-    private var disposable: Disposable? = null
+    private var disposable = AtomicReference<Disposable?>()
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
         @Suppress("NON_EXHAUSTIVE_WHEN")
@@ -56,20 +57,20 @@ private class ObservableBinding<T>(
                     .subscribe(this)
             }
             Lifecycle.Event.ON_STOP -> {
-                synchronized(this) {
-                    disposable?.dispose()
-                    disposable = null
-                }
+                disposable.getAndSet(null)?.dispose()
             }
         }
     }
 
-    override fun onSubscribe(disposable: Disposable) =
-        synchronized(this) { this.disposable = disposable }
+    override fun onSubscribe(disposable: Disposable) {
+        this.disposable.set(disposable)
+    }
 
     override fun onNext(value: T) = block(value)
 
-    override fun onComplete() = synchronized(this) { disposable = null }
+    override fun onComplete() {
+        this.disposable.set(null)
+    }
 
     override fun onError(throwable: Throwable) = throw BindingException(sourceName, throwable)
 }
