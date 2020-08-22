@@ -89,7 +89,7 @@ internal fun buildMainKnot(
                     val locationUpdates =
                         if (place is Place.Custom) {
                             Observable.just(Loadable.loaded(LocationResult.success(place.location)))
-                        } else locationProvider.stream()
+                        } else locationProvider.stream().asObservable()
                     auroraReportProvider.stream(locationUpdates)
                         .map<Change> { result ->
                             Change.AuroraReportSuccess(place, result)

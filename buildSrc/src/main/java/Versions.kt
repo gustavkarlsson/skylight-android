@@ -45,7 +45,6 @@ object Versions {
     val rxrelay = "2.1.1"
     val rxReplayingShare = "2.2.0"
     val runtimePermissionKotlin = "1.1.2"
-    val rxLocation = "1.0.5"
     val kotlinxCoroutines = "1.3.8"
 
     val okHttp = "3.14.4"

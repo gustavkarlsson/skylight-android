@@ -12,7 +12,9 @@ dependencies {
     implementation(project(":core"))
 
     implementation("com.google.android.gms:play-services-location:${Versions.playServicesLocation}")
-    implementation("com.patloew.rxlocation:rxlocation:${Versions.rxLocation}")
+    implementation(
+        "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.kotlinxCoroutines}"
+    )
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

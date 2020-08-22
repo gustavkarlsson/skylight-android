@@ -2,10 +2,11 @@ package se.gustavkarlsson.skylight.android.lib.location
 
 import android.content.Context
 import com.google.android.gms.location.LocationRequest
-import com.patloew.rxlocation.RxLocation
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.CoroutineDispatcher
 import se.gustavkarlsson.skylight.android.core.AppScope
+import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.core.utils.seconds
 
@@ -14,14 +15,16 @@ object LibLocationModule {
 
     @Provides
     @AppScope
-    internal fun locationProvider(context: Context): LocationProvider =
-        RxLocationLocationProvider(
-            fusedLocation = RxLocation(context).location(),
-            timeout = 30.seconds,
+    internal fun locationProvider(
+        context: Context,
+        @Io dispatcher: CoroutineDispatcher
+    ): LocationProvider =
+        FusedLocationProviderProvider(
+            context = context,
             requestAccuracy = LocationRequest.PRIORITY_HIGH_ACCURACY,
-            throttleDuration = 1.minutes,
-            firstPollingInterval = 10.seconds,
-            restPollingInterval = 10.minutes,
-            retryDelay = 30.seconds
+            requestInterval = 10.minutes,
+            timeout = 30.seconds,
+            retryDelay = 15.seconds,
+            dispatcher = dispatcher
         )
 }

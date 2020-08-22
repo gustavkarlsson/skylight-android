@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.feature.background.scheduling
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.toObservable
+import kotlinx.coroutines.rx2.rxSingle
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
@@ -33,7 +34,7 @@ internal fun createNotifyWork(
 
     fun getLocation(place: Place): Single<LocationResult> =
         when (place) {
-            Place.Current -> locationProvider.get()
+            Place.Current -> rxSingle { locationProvider.get() }
             is Place.Custom -> Single.just(LocationResult.Success(place.location))
         }
 
