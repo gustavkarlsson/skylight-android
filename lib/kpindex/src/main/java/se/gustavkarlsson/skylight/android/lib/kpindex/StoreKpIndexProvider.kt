@@ -17,7 +17,7 @@ import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.io.IOException
 
-internal class RetrofittedKpIndexProvider(
+internal class StoreKpIndexProvider(
     private val store: Store<Unit, KpIndex>,
     private val time: Time
 ) : KpIndexProvider {

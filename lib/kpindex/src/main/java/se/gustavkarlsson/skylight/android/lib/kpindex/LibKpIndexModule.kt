@@ -71,7 +71,7 @@ object LibKpIndexModule {
             .cachePolicy(cachePolicy)
             .build()
 
-        return RetrofittedKpIndexProvider(
+        return StoreKpIndexProvider(
             store = store,
             time = time
         )
