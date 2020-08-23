@@ -22,8 +22,6 @@ dependencies {
     implementation("androidx.work:work-runtime-ktx:${Versions.androidWorkManager}")
     implementation("androidx.work:work-rxjava2:${Versions.androidWorkManager}")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:${Versions.kotlinxCoroutines}")
-
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 
     // Testing

@@ -9,6 +9,9 @@ import dagger.Provides
 import dagger.Reusable
 import dagger.multibindings.IntoSet
 import io.reactivex.Completable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.await
 import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
@@ -179,10 +182,11 @@ object FeatureBackgroundModule {
         @Named("scheduleBackgroundNotifications") scheduleBackgroundNotifications: Completable
     ): ModuleStarter =
         object : ModuleStarter {
-            override fun start() {
+            override fun start(scope: CoroutineScope) {
                 deleteOldNotifiedPrefsFile(context)
-                scheduleBackgroundNotifications.subscribe()
-                // TODO Handle disposable
+                scope.launch {
+                    scheduleBackgroundNotifications.await()
+                }
             }
         }
 }

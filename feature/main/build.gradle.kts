@@ -42,7 +42,6 @@ dependencies {
     // TODO replace with google material banner when available
     implementation("com.sergivonavi:materialbanner:${Versions.banner}")
     implementation("de.halfbit:knot:${Versions.knot}")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:${Versions.kotlinxCoroutines}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

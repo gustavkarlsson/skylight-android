@@ -9,6 +9,7 @@ fun BaseExtension.commonConfig() {
     packagingOptions {
         exclude("META-INF/LICENSE")
         exclude("META-INF/NOTICE")
+        exclude("META-INF/*.kotlin_module")
     }
 
     testOptions {

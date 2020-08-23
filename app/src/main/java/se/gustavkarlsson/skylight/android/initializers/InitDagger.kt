@@ -1,10 +1,10 @@
 package se.gustavkarlsson.skylight.android.initializers
 
 import android.app.Application
+import kotlinx.coroutines.GlobalScope
 import se.gustavkarlsson.skylight.android.AppModule
 import se.gustavkarlsson.skylight.android.DaggerActualAppComponent
 import se.gustavkarlsson.skylight.android.core.AppComponent
-import se.gustavkarlsson.skylight.android.core.ModuleStarter
 import se.gustavkarlsson.skylight.android.core.utils.allowDiskReadsAndWritesInStrictMode
 import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
@@ -44,7 +44,7 @@ private object Setter :
     KpIndexComponent.Setter,
     GeomagLocationComponent.Setter
 
-internal fun Application.initDagger() {
+internal fun Application.initDagger(scope: GlobalScope) {
     val component = DaggerActualAppComponent.builder()
         .appModule(AppModule(this))
         .build()
@@ -71,6 +71,8 @@ internal fun Application.initDagger() {
     }
 
     allowDiskReadsAndWritesInStrictMode {
-        component.moduleStarters().forEach(ModuleStarter::start)
+        component.moduleStarters().forEach {
+            it.start(scope)
+        }
     }
 }

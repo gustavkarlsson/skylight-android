@@ -6,6 +6,8 @@ import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.rxkotlin.Observables
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.rx2.asObservable
 import se.gustavkarlsson.skylight.android.core.Main
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.places.Place
@@ -19,10 +21,11 @@ internal class DrawerViewModel @Inject constructor(
     private val selectedPlaceRepo: SelectedPlaceRepository,
     @Main observeScheduler: Scheduler
 ) : ScopedService {
+    @ExperimentalCoroutinesApi
     val drawerItems: Observable<List<DrawerItem>> =
         Observables.combineLatest(
-            placesRepository.stream(),
-            selectedPlaceRepo.stream(),
+            placesRepository.stream().asObservable(),
+            selectedPlaceRepo.stream().asObservable(),
             ::createPlaceItems
         ).observeOn(observeScheduler)
 

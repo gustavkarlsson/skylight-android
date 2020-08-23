@@ -112,7 +112,7 @@ internal fun buildMainKnot(
                 .map(Change::LocationPermission)
         }
         source {
-            selectedPlaceRepo.stream()
+            selectedPlaceRepo.stream().asObservable()
                 .map(Change::PlaceSelected)
         }
     }

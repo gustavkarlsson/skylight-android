@@ -17,8 +17,6 @@ dependencies {
     implementation(project(":lib:reversegeocoder"))
     implementation(project(":lib:location"))
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:${Versions.kotlinxCoroutines}")
-
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 
     // Testing

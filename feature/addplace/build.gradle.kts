@@ -17,7 +17,6 @@ dependencies {
     implementation(project(":lib:location"))
 
     implementation("de.halfbit:knot:${Versions.knot}")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:${Versions.kotlinxCoroutines}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

@@ -8,6 +8,8 @@ import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.rx2.asObservable
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
@@ -39,8 +41,9 @@ internal class SqlDelightSettings(
 
     override fun clearNotificationTriggerLevel(place: Place) = queries.delete(place.getId())
 
+    @ExperimentalCoroutinesApi
     override fun streamNotificationTriggerLevels(): Observable<List<Pair<Place, TriggerLevel>>> =
-        placesRepository.stream()
+        placesRepository.stream().asObservable()
             .switchMap { places ->
                 getTriggerLevelRecords()
                     .map { records ->

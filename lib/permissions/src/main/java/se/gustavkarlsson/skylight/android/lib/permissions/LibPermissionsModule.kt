@@ -9,12 +9,13 @@ import dagger.Reusable
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 
-@ExperimentalCoroutinesApi
 @Module
 object LibPermissionsModule {
 
+    @ExperimentalCoroutinesApi
     private val channel = ConflatedBroadcastChannel(Access.Unknown)
 
+    @ExperimentalCoroutinesApi
     @Provides
     @Reusable
     internal fun locationPermissionChecker(
@@ -22,6 +23,7 @@ object LibPermissionsModule {
     ): PermissionChecker =
         AndroidPermissionChecker(locationPermissionKey, context, channel)
 
+    @ExperimentalCoroutinesApi
     @Provides
     @Reusable
     internal fun locationPermissionRequester(): PermissionRequester =

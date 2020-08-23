@@ -1,23 +1,41 @@
 package se.gustavkarlsson.skylight.android.lib.places
 
 import de.halfbit.knot.knot
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.rx2.asObservable
+import kotlinx.coroutines.suspendCancellableCoroutine
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.utils.allowDiskReadsInStrictMode
 import se.gustavkarlsson.skylight.android.core.utils.allowDiskWritesInStrictMode
 
+@ExperimentalCoroutinesApi
 internal class PlacesRepoSelectedPlaceRepository(
     placesRepo: PlacesRepository,
     placeSelectionStorage: PlaceSelectionStorage,
-    disposables: CompositeDisposable
+    scope: CoroutineScope
 ) : SelectedPlaceRepository {
     private val knot =
         createKnot(
             placesRepo.stream(),
             placeSelectionStorage::saveIndex,
             placeSelectionStorage::loadIndex
-        ).apply { disposables.add(this) }
+        )
+
+    init {
+        scope.launch {
+            suspendCancellableCoroutine { continuation ->
+                continuation.invokeOnCancellation {
+                    knot.dispose()
+                }
+            }
+        }
+    }
 
     override fun set(place: Place) = knot.change.accept(Change.SelectionChanged(place))
 
@@ -25,13 +43,15 @@ internal class PlacesRepoSelectedPlaceRepository(
         .map(State::selected)
         .blockingFirst()
 
-    override fun stream(): Observable<Place> = knot.state
-        .map(State::selected)
+    override fun stream(): Flow<Place> = knot.state
+        .asFlow()
+        .map { it.selected }
         .distinctUntilChanged()
 }
 
+@ExperimentalCoroutinesApi
 private fun createKnot(
-    placesStream: Observable<List<Place>>,
+    placesStream: Flow<List<Place>>,
     saveIndex: (Int) -> Unit,
     loadIndex: () -> Int?
 ) = knot<State, Change, Nothing> {
@@ -52,7 +72,7 @@ private fun createKnot(
     }
 
     events {
-        source { placesStream.map(Change::PlacesUpdated) }
+        source { placesStream.asObservable().map(Change::PlacesUpdated) }
     }
 
     changes {
