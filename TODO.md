@@ -1,4 +1,6 @@
 ## Soon
+* Migrate libraries using sqldelight to use store
+* Migrate location to store
 * Bug: If location is granted (while using app), then go to add place, and go back. Banner shows up again.
 * Migrate to coroutines
 * Rework location inputs to "ApproximateLocation" so store can cache ressults from nearby locations

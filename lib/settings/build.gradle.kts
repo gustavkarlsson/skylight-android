@@ -14,7 +14,7 @@ dependencies {
     implementation(project(":lib:places"))
 
     implementation("com.squareup.sqldelight:android-driver:${Versions.sqldelight}")
-    implementation("com.squareup.sqldelight:rxjava2-extensions:${Versions.sqldelight}")
+    implementation("com.squareup.sqldelight:coroutines-extensions:${Versions.sqldelight}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

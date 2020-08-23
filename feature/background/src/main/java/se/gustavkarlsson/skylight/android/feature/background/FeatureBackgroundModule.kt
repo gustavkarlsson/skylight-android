@@ -10,7 +10,9 @@ import dagger.Reusable
 import dagger.multibindings.IntoSet
 import io.reactivex.Completable
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asObservable
 import kotlinx.coroutines.rx2.await
 import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
@@ -118,6 +120,7 @@ object FeatureBackgroundModule {
             analytics
         )
 
+    @ExperimentalCoroutinesApi
     @Provides
     @Reusable
     @Named("notify")
@@ -142,6 +145,7 @@ object FeatureBackgroundModule {
             time
         )
 
+    @ExperimentalCoroutinesApi
     @Provides
     @Reusable
     @Named("scheduleBasedOnSettings")
@@ -149,7 +153,7 @@ object FeatureBackgroundModule {
         scheduler: Scheduler,
         settings: Settings
     ): Completable =
-        settings.streamNotificationTriggerLevels()
+        settings.streamNotificationTriggerLevels().asObservable()
             .map {
                 it.any { (_, triggerLevel) ->
                     triggerLevel != TriggerLevel.NEVER

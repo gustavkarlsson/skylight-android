@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.rx2.asObservable
 import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
@@ -66,7 +65,7 @@ private fun clearSettingsForDeletedPlaces(placesRepository: PlacesRepository, se
 @ExperimentalCoroutinesApi
 private fun getTriggerLevels(settings: Settings) =
     settings
-        .streamNotificationTriggerLevels().asFlow()
+        .streamNotificationTriggerLevels()
         .map { it.unzip().second }
         .map { triggerLevels ->
             val min = triggerLevels.minBy { it.ordinal }

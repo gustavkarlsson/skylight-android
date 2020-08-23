@@ -4,8 +4,12 @@ import com.ioki.textref.TextRef
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.Scheduler
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.plusAssign
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asObservable
 import se.gustavkarlsson.skylight.android.core.Main
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
@@ -18,13 +22,14 @@ internal class SettingsViewModel @Inject constructor(
     @Main observeScheduler: Scheduler
 ) : ScopedService {
 
-    private val disposables = CompositeDisposable()
+    private val scope = CoroutineScope(SupervisorJob())
 
     private val showSelectTriggerLevelRelay = PublishRelay.create<Pair<Place, TriggerLevel>>()
     val showSelectTriggerLevel: Observable<Pair<Place, TriggerLevel>> = showSelectTriggerLevelRelay
 
+    @ExperimentalCoroutinesApi
     val settingsItems: Observable<List<SettingsItem>> =
-        settings.streamNotificationTriggerLevels()
+        settings.streamNotificationTriggerLevels().asObservable()
             .map { levels ->
                 val triggerLevelItems = levels.map { (place, triggerLevel) ->
                     SettingsItem.TriggerLevelItem(
@@ -43,10 +48,12 @@ internal class SettingsViewModel @Inject constructor(
     }
 
     fun onTriggerLevelSelected(place: Place, triggerLevel: TriggerLevel) {
-        disposables += settings.setNotificationTriggerLevel(place, triggerLevel).subscribe()
+        scope.launch {
+            settings.setNotificationTriggerLevel(place, triggerLevel)
+        }
     }
 
-    override fun onCleared() = disposables.dispose()
+    override fun onCleared() = scope.cancel("ViewModel cleared")
 }
 
 internal sealed class SettingsItem {

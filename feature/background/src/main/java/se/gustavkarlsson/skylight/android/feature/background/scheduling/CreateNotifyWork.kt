@@ -3,6 +3,8 @@ package se.gustavkarlsson.skylight.android.feature.background.scheduling
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.rxkotlin.toObservable
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.rx2.asObservable
 import kotlinx.coroutines.rx2.rxSingle
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
@@ -21,6 +23,7 @@ import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
 import se.gustavkarlsson.skylight.android.lib.time.Time
 
+@ExperimentalCoroutinesApi
 internal fun createNotifyWork(
     settings: Settings,
     appVisibilityEvaluator: AppVisibilityEvaluator,
@@ -47,7 +50,7 @@ internal fun createNotifyWork(
     }
 
     fun getPlacesToCheck() =
-        settings.streamNotificationTriggerLevels()
+        settings.streamNotificationTriggerLevels().asObservable()
             .firstOrError()
             .flatMapObservable { it.toObservable() }
             .mapNotNull(::onlyEnabled)

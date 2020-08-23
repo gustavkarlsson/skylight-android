@@ -6,7 +6,6 @@ import com.squareup.sqldelight.runtime.coroutines.mapToList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.utils.allowDiskWritesInStrictMode
@@ -34,8 +33,7 @@ internal class SqlDelightPlacesRepository(
                 Place.custom(id, TextRef.string(name), Location(latitude, longitude))
             }
             .asFlow()
-            .mapToList()
+            .mapToList(dispatcher)
             .map { listOf(Place.Current) + it }
             .distinctUntilChanged()
-            .flowOn(dispatcher)
 }
