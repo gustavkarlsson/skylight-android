@@ -8,16 +8,11 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.multibindings.IntoSet
-import io.reactivex.Completable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asObservable
-import kotlinx.coroutines.rx2.await
+import kotlinx.coroutines.CoroutineDispatcher
 import se.gustavkarlsson.skylight.android.core.AppScope
+import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
-import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.core.utils.minutes
@@ -32,17 +27,16 @@ import se.gustavkarlsson.skylight.android.feature.background.notifications.Notif
 import se.gustavkarlsson.skylight.android.feature.background.notifications.OutdatedEvaluator
 import se.gustavkarlsson.skylight.android.feature.background.persistence.LastNotificationRepository
 import se.gustavkarlsson.skylight.android.feature.background.persistence.SharedPrefsLastNotificationRepository
+import se.gustavkarlsson.skylight.android.feature.background.scheduling.BackgroundWork
+import se.gustavkarlsson.skylight.android.feature.background.scheduling.BackgroundWorkImpl
 import se.gustavkarlsson.skylight.android.feature.background.scheduling.NotifyScheduler
 import se.gustavkarlsson.skylight.android.feature.background.scheduling.Scheduler
-import se.gustavkarlsson.skylight.android.feature.background.scheduling.createNotifyWork
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
 import se.gustavkarlsson.skylight.android.lib.time.Time
-import java.io.File
-import javax.inject.Named
 
 @Module
 object FeatureBackgroundModule {
@@ -84,7 +78,7 @@ object FeatureBackgroundModule {
     ): NotificationChannelCreator =
         NotificationChannelCreator(
             notificationManager,
-            notificationChannelId,
+            NOTIFICATION_CHANNEL_ID,
             context.getString(R.string.aurora_alerts_channel_name)
         )
 
@@ -116,88 +110,50 @@ object FeatureBackgroundModule {
             notificationManager,
             notificationFormatter,
             activityClass,
-            notificationChannelId,
+            NOTIFICATION_CHANNEL_ID,
             analytics
         )
-
-    @ExperimentalCoroutinesApi
-    @Provides
-    @Reusable
-    @Named("notify")
-    internal fun notify(
-        settings: Settings,
-        appVisibilityEvaluator: AppVisibilityEvaluator,
-        locationProvider: LocationProvider,
-        auroraReportProvider: AuroraReportProvider,
-        notificationEvaluator: NotificationEvaluator,
-        chanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
-        notifier: Notifier,
-        time: Time
-    ): Completable =
-        createNotifyWork(
-            settings,
-            appVisibilityEvaluator,
-            locationProvider,
-            auroraReportProvider,
-            chanceEvaluator,
-            notificationEvaluator,
-            notifier,
-            time
-        )
-
-    @ExperimentalCoroutinesApi
-    @Provides
-    @Reusable
-    @Named("scheduleBasedOnSettings")
-    internal fun scheduleBasedOnSettings(
-        scheduler: Scheduler,
-        settings: Settings
-    ): Completable =
-        settings.streamNotificationTriggerLevels().asObservable()
-            .map {
-                it.any { (_, triggerLevel) ->
-                    triggerLevel != TriggerLevel.NEVER
-                }
-            }
-            .distinctUntilChanged()
-            .doOnNext { enable -> if (enable) scheduler.schedule() else scheduler.unschedule() }
-            .ignoreElements()
-
-    @Provides
-    @Reusable
-    @Named("createNotificationChannel")
-    internal fun createNotificationChannel(
-        notificationChannelCreator: NotificationChannelCreator
-    ): Completable = Completable.fromAction { notificationChannelCreator.createChannel() }
-
-    @Provides
-    @Reusable
-    @Named("scheduleBackgroundNotifications")
-    internal fun scheduleBackgroundNotifications(
-        @Named("createNotificationChannel") createNotificationChannel: Completable,
-        @Named("scheduleBasedOnSettings") scheduleBasedOnSettings: Completable
-    ): Completable = createNotificationChannel.andThen(scheduleBasedOnSettings)
 
     @Provides
     @Reusable
     @IntoSet
     internal fun moduleStarter(
         context: Context,
-        @Named("scheduleBackgroundNotifications") scheduleBackgroundNotifications: Completable
+        scheduler: Scheduler,
+        settings: Settings,
+        notificationChannelCreator: NotificationChannelCreator,
+        @Io dispatcher: CoroutineDispatcher
     ): ModuleStarter =
-        object : ModuleStarter {
-            override fun start(scope: CoroutineScope) {
-                deleteOldNotifiedPrefsFile(context)
-                scope.launch {
-                    scheduleBackgroundNotifications.await()
-                }
-            }
-        }
+        BackgroundModuleStarter(
+            context = context,
+            scheduler = scheduler,
+            settings = settings,
+            notificationChannelCreator = notificationChannelCreator,
+            ioDispatcher = dispatcher
+        )
+
+    @Provides
+    @Reusable
+    internal fun backgroundWork(
+        settings: Settings,
+        appVisibilityEvaluator: AppVisibilityEvaluator,
+        locationProvider: LocationProvider,
+        reportProvider: AuroraReportProvider,
+        notificationEvaluator: NotificationEvaluator,
+        chanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
+        notifier: Notifier,
+        time: Time
+    ): BackgroundWork =
+        BackgroundWorkImpl(
+            settings = settings,
+            appVisibilityEvaluator = appVisibilityEvaluator,
+            locationProvider = locationProvider,
+            reportProvider = reportProvider,
+            notificationEvaluator = notificationEvaluator,
+            chanceEvaluator = chanceEvaluator,
+            notifier = notifier,
+            time = time
+        )
 }
 
-private fun deleteOldNotifiedPrefsFile(context: Context) {
-    val file = File(context.applicationInfo.dataDir, "shared_prefs/notified_chance.xml")
-    file.delete()
-}
-
-private const val notificationChannelId = "aurora"
+private const val NOTIFICATION_CHANNEL_ID = "aurora"

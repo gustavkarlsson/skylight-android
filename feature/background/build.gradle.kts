@@ -20,7 +20,6 @@ dependencies {
 
     // WorkManager
     implementation("androidx.work:work-runtime-ktx:${Versions.androidWorkManager}")
-    implementation("androidx.work:work-rxjava2:${Versions.androidWorkManager}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 

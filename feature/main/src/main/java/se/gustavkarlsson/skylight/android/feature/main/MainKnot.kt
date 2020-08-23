@@ -2,9 +2,14 @@ package se.gustavkarlsson.skylight.android.feature.main
 
 import de.halfbit.knot.Knot
 import de.halfbit.knot.knot
-import io.reactivex.Observable
 import io.reactivex.Scheduler
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.rx2.asObservable
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
@@ -83,21 +88,21 @@ internal fun buildMainKnot(
 
     actions {
         perform<Action.Stream> {
-            distinctUntilChanged()
-            switchMap { (stream, place) ->
-                if (stream && place != null) {
-                    val locationUpdates =
-                        if (place is Place.Custom) {
-                            Observable.just(Loadable.loaded(LocationResult.success(place.location)))
-                        } else locationProvider.stream().asObservable()
-                    auroraReportProvider.stream(locationUpdates)
-                        .map<Change> { result ->
-                            Change.AuroraReportSuccess(place, result)
-                        }
-                } else {
-                    Observable.empty()
+            asFlow()
+                .distinctUntilChanged()
+                .flatMapLatest { (stream, place) ->
+                    if (stream && place != null) {
+                        val locationUpdates =
+                            if (place is Place.Custom) {
+                                flowOf(Loadable.loaded(LocationResult.success(place.location)))
+                            } else locationProvider.stream()
+                        auroraReportProvider.stream(locationUpdates)
+                            .map { result -> Change.AuroraReportSuccess(place, result) }
+                    } else {
+                        emptyFlow()
+                    }
                 }
-            }
+                .asObservable()
         }
 
         if (BuildConfig.DEBUG) {
@@ -108,12 +113,13 @@ internal fun buildMainKnot(
     events {
         source {
             permissionChecker.access
+                .map { Change.LocationPermission(it) }
                 .asObservable()
-                .map(Change::LocationPermission)
         }
         source {
-            selectedPlaceRepo.stream().asObservable()
-                .map(Change::PlaceSelected)
+            selectedPlaceRepo.stream()
+                .map { Change.PlaceSelected(it) }
+                .asObservable()
         }
     }
 }
