@@ -7,13 +7,16 @@ import androidx.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
-import io.reactivex.rxkotlin.toObservable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.asFlow
 import kotlinx.coroutines.rx2.asObservable
 import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
@@ -24,6 +27,7 @@ import se.gustavkarlsson.skylight.android.lib.settings.Settings
 @Module
 object FeatureSettingsModule {
 
+    @FlowPreview
     @ExperimentalCoroutinesApi
     @Provides
     @AppScope
@@ -37,8 +41,11 @@ object FeatureSettingsModule {
         object : ModuleStarter {
             @SuppressLint("CheckResult")
             override fun start(scope: CoroutineScope) {
-                clearSettingsForDeletedPlaces(placesRepository, settings)
                 scope.launch {
+                    clearSettingsForDeletedPlaces(placesRepository)
+                        .collect {
+                            settings.clearNotificationTriggerLevel(it)
+                        }
                     getTriggerLevels(settings)
                         .collect { (min, max) ->
                             analytics.setProperty("trigger_lvl_min", min)
@@ -50,17 +57,18 @@ object FeatureSettingsModule {
         }
 }
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 @SuppressLint("CheckResult")
-private fun clearSettingsForDeletedPlaces(placesRepository: PlacesRepository, settings: Settings) {
-    placesRepository.stream().asObservable()
+private fun clearSettingsForDeletedPlaces(placesRepository: PlacesRepository) =
+    placesRepository.stream()
+        .asObservable()
         .buffer(2, 1)
-        .flatMap { (old, new) ->
+        .asFlow()
+        .flatMapConcat { (old, new) ->
             val remaining = old - new
-            remaining.toObservable()
+            remaining.asFlow()
         }
-        .subscribe(settings::clearNotificationTriggerLevel)
-}
 
 @ExperimentalCoroutinesApi
 private fun getTriggerLevels(settings: Settings) =
