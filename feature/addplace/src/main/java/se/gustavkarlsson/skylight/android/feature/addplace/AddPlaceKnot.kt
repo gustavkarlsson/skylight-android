@@ -5,7 +5,6 @@ import de.halfbit.knot.Knot
 import de.halfbit.knot.knot
 import io.reactivex.Observable
 import io.reactivex.Scheduler
-import io.reactivex.functions.Consumer
 import kotlinx.coroutines.rx2.rxSingle
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.core.utils.buffer
@@ -38,7 +37,7 @@ internal typealias AddPlaceKnot = Knot<State, Change>
 internal fun createKnot(
     geocoder: Geocoder,
     querySampleDelay: Duration,
-    errorMessageConsumer: Consumer<TextRef>,
+    onError: (TextRef) -> Unit,
     observeScheduler: Scheduler
 ): AddPlaceKnot = knot<State, Change, Action> {
 
@@ -105,7 +104,7 @@ internal fun createKnot(
                 }
         }
         watch<Action.ShowError> {
-            errorMessageConsumer.accept(it.message)
+            onError(it.message)
         }
     }
 }
