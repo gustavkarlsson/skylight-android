@@ -29,7 +29,7 @@ abstract class BaseFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        val viewScope = MainScope() + CoroutineName("viewScope")
+        val viewScope = MainScope() + CoroutineName("BaseFragment viewScope")
         this.viewScope = viewScope
         bindView(viewScope)
     }

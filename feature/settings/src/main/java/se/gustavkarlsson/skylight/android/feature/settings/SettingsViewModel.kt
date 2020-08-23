@@ -4,11 +4,13 @@ import com.ioki.textref.TextRef
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
 import io.reactivex.Scheduler
+import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import kotlinx.coroutines.rx2.asObservable
 import se.gustavkarlsson.skylight.android.core.Main
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
@@ -22,7 +24,8 @@ internal class SettingsViewModel @Inject constructor(
     @Main observeScheduler: Scheduler
 ) : ScopedService {
 
-    private val scope = CoroutineScope(SupervisorJob())
+    // TODO move to base ScopedService?
+    private val scope = CoroutineScope(SupervisorJob()) + CoroutineName("SettingsViewModel scope")
 
     private val showSelectTriggerLevelRelay = PublishRelay.create<Pair<Place, TriggerLevel>>()
     val showSelectTriggerLevel: Observable<Pair<Place, TriggerLevel>> = showSelectTriggerLevelRelay
