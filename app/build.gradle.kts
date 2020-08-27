@@ -119,9 +119,6 @@ dependencies {
     // Crashlytics
     implementation("com.google.firebase:firebase-crashlytics-ktx:${Versions.crashlytics}")
 
-    // RxAndroid
-    implementation("io.reactivex.rxjava2:rxandroid:${Versions.rxandroid}")
-
     // Leakcanary
     debugImplementation("com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}")
 

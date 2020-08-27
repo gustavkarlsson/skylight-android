@@ -16,6 +16,8 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 class SettingsFragment : ScreenFragment() {
 
     private val viewModel by lazy {
@@ -41,8 +43,6 @@ class SettingsFragment : ScreenFragment() {
         itemsRecyclerView.adapter = adapter
     }
 
-    @FlowPreview
-    @ExperimentalCoroutinesApi
     override fun bindView(scope: CoroutineScope) {
         viewModel.settingsItems.bind(scope) { items ->
             adapter.setItems(items)

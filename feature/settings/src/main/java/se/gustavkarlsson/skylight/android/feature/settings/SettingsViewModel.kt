@@ -20,6 +20,8 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 internal class SettingsViewModel @Inject constructor(
     private val settings: Settings
 ) : ScopedService {
@@ -27,14 +29,9 @@ internal class SettingsViewModel @Inject constructor(
     // TODO move to base ScopedService?
     private val scope = CoroutineScope(SupervisorJob()) + CoroutineName("SettingsViewModel scope")
 
-    @ExperimentalCoroutinesApi
     private val showSelectTriggerLevelChannel = BroadcastChannel<Pair<Place, TriggerLevel>>(Channel.BUFFERED)
-
-    @ExperimentalCoroutinesApi
-    @FlowPreview
     val showSelectTriggerLevel: Flow<Pair<Place, TriggerLevel>> = showSelectTriggerLevelChannel.asFlow()
 
-    @ExperimentalCoroutinesApi
     val settingsItems: Flow<List<SettingsItem>> =
         settings.streamNotificationTriggerLevels()
             .map { levels ->
@@ -49,7 +46,6 @@ internal class SettingsViewModel @Inject constructor(
                 listOf(SettingsItem.TitleItem) + triggerLevelItems
             }
 
-    @ExperimentalCoroutinesApi
     fun onTriggerLevelItemClicked(place: Place, triggerLevel: TriggerLevel) {
         showSelectTriggerLevelChannel.offer(place to triggerLevel)
     }

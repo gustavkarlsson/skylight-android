@@ -5,6 +5,7 @@ import com.google.android.gms.location.LocationRequest
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.utils.minutes
@@ -13,6 +14,7 @@ import se.gustavkarlsson.skylight.android.core.utils.seconds
 @Module
 object LibLocationModule {
 
+    @ExperimentalCoroutinesApi
     @Provides
     @AppScope
     internal fun locationProvider(

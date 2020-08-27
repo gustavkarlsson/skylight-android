@@ -4,9 +4,15 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import com.ioki.textref.TextRef
 import de.halfbit.knot.Knot
-import io.reactivex.Observable
-import io.reactivex.Scheduler
-import io.reactivex.rxkotlin.Observables
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.rx2.asFlow
 import org.threeten.bp.Duration
 import se.gustavkarlsson.koptional.Absent
 import se.gustavkarlsson.koptional.Optional
@@ -19,8 +25,6 @@ import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
-import se.gustavkarlsson.skylight.android.core.utils.delay
-import se.gustavkarlsson.skylight.android.core.utils.seconds
 import se.gustavkarlsson.skylight.android.feature.main.ChanceToColorConverter
 import se.gustavkarlsson.skylight.android.feature.main.Change
 import se.gustavkarlsson.skylight.android.feature.main.R
@@ -39,6 +43,7 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 
+@ExperimentalCoroutinesApi
 internal class MainViewModel(
     private val mainKnot: Knot<State, Change>,
     auroraChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
@@ -55,8 +60,7 @@ internal class MainViewModel(
     private val permissionChecker: PermissionChecker,
     private val chanceToColorConverter: ChanceToColorConverter,
     time: Time,
-    nowTextThreshold: Duration,
-    observeScheduler: Scheduler
+    nowTextThreshold: Duration
 ) : ScopedService {
 
     override fun onCleared() {
@@ -67,27 +71,33 @@ internal class MainViewModel(
 
     fun pauseStreaming() = mainKnot.change.accept(Change.StreamToggle(false))
 
-    val toolbarTitleText: Observable<TextRef> = mainKnot.state
+    private val stateFlow = mainKnot.state.asFlow()
+
+    val toolbarTitleText: Flow<TextRef> = stateFlow
         .map {
             it.selectedPlace.name
         }
         .distinctUntilChanged()
 
-    val chanceLevelText: Observable<TextRef> = mainKnot.state
+    val chanceLevelText: Flow<TextRef> = stateFlow
         .map {
             it.selectedAuroraReport.toCompleteAuroraReport()
                 ?.let(auroraChanceEvaluator::evaluate)
                 ?: Chance.UNKNOWN
         }
-        .map(ChanceLevel.Companion::fromChance)
-        .map(chanceLevelFormatter::format)
+        .map { ChanceLevel.fromChance(it) }
+        .map { chanceLevelFormatter.format(it) }
         .distinctUntilChanged()
 
-    private val timeSinceUpdate: Observable<Optional<String>> = mainKnot.state
+    private val timeSinceUpdate: Flow<Optional<String>> = stateFlow
         .map { it.selectedAuroraReport.timestamp.toOptional() }
-        .switchMap { time ->
-            Observable.just(time)
-                .repeatWhen { it.delay(1.seconds) }
+        .flatMapLatest { time ->
+            flow {
+                while (true) {
+                    emit(time)
+                    delay(1000)
+                }
+            }
         }
         .map {
             it.map { timeSince ->
@@ -96,7 +106,7 @@ internal class MainViewModel(
         }
         .distinctUntilChanged()
 
-    private val locationName: Observable<Optional<String>> = mainKnot.state
+    private val locationName: Flow<Optional<String>> = stateFlow
         .map {
             when (val name = (it.selectedAuroraReport.locationName as? Loadable.Loaded)?.value) {
                 is ReverseGeocodingResult.Success -> Present(name.name)
@@ -104,45 +114,44 @@ internal class MainViewModel(
             }
         }
 
-    val chanceSubtitleText: Observable<TextRef> = Observables
-        .combineLatest(timeSinceUpdate, locationName) { (time), (name) ->
+    val chanceSubtitleText: Flow<TextRef> =
+        combine(timeSinceUpdate, locationName) { (time), (name) ->
             when {
                 time == null -> TextRef.EMPTY
                 name == null -> TextRef.string(time)
                 else -> TextRef.stringRes(R.string.time_in_location, time, name)
             }
         }
-        .observeOn(observeScheduler)
 
-    val darkness: Observable<FactorItem> = mainKnot.state
+    val darkness: Flow<FactorItem> = stateFlow
         .toFactorItems(
             LoadableAuroraReport::darkness,
             darknessChanceEvaluator::evaluate,
             darknessFormatter::format
         )
 
-    val geomagLocation: Observable<FactorItem> = mainKnot.state
+    val geomagLocation: Flow<FactorItem> = stateFlow
         .toFactorItems(
             LoadableAuroraReport::geomagLocation,
             geomagLocationChanceEvaluator::evaluate,
             geomagLocationFormatter::format
         )
 
-    val kpIndex: Observable<FactorItem> = mainKnot.state
+    val kpIndex: Flow<FactorItem> = stateFlow
         .toFactorItems(
             LoadableAuroraReport::kpIndex,
             kpIndexChanceEvaluator::evaluate,
             kpIndexFormatter::format
         )
 
-    val weather: Observable<FactorItem> = mainKnot.state
+    val weather: Flow<FactorItem> = stateFlow
         .toFactorItems(
             LoadableAuroraReport::weather,
             weatherChanceEvaluator::evaluate,
             weatherFormatter::format
         )
 
-    val errorBannerData: Observable<Optional<BannerData>> = mainKnot.state
+    val errorBannerData: Flow<Optional<BannerData>> = stateFlow
         .map {
             when {
                 it.selectedPlace != Place.Current -> Absent
@@ -170,11 +179,11 @@ internal class MainViewModel(
                 a.value?.buttonText == b.value?.buttonText
         }
 
-    private fun <T : Any> Observable<State>.toFactorItems(
+    private fun <T : Any> Flow<State>.toFactorItems(
         selectFactor: LoadableAuroraReport.() -> Loadable<Report<T>>,
         evaluate: (T) -> Chance,
         format: (T) -> TextRef
-    ): Observable<FactorItem> =
+    ): Flow<FactorItem> =
         distinctUntilChanged()
             .map { it.selectedAuroraReport.selectFactor().toFactorItem(evaluate, format) }
 

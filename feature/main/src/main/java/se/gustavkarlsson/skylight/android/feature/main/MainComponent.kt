@@ -4,9 +4,8 @@ import android.content.Context
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import io.reactivex.Scheduler
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import se.gustavkarlsson.skylight.android.core.AppComponent
-import se.gustavkarlsson.skylight.android.core.Main
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
@@ -50,6 +49,7 @@ import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
     ]
 )
 internal interface MainComponent {
+    @ExperimentalCoroutinesApi
     fun viewModel(): MainViewModel
 
     companion object {
@@ -72,21 +72,21 @@ internal interface MainComponent {
 @Module
 internal object MainModule {
 
+    @ExperimentalCoroutinesApi
     @Provides
     fun mainKnot(
         permissionChecker: PermissionChecker,
         selectedPlaceRepository: SelectedPlaceRepository,
         locationProvider: LocationProvider,
-        auroraReportProvider: AuroraReportProvider,
-        @Main observeScheduler: Scheduler
+        auroraReportProvider: AuroraReportProvider
     ): MainKnot = buildMainKnot(
         permissionChecker,
         selectedPlaceRepository,
         locationProvider,
-        auroraReportProvider,
-        observeScheduler
+        auroraReportProvider
     )
 
+    @ExperimentalCoroutinesApi
     @Provides
     fun viewModel(
         context: Context,
@@ -102,8 +102,7 @@ internal object MainModule {
         weatherFormatter: Formatter<Weather>,
         darknessEvaluator: ChanceEvaluator<Darkness>,
         darknessFormatter: Formatter<Darkness>,
-        locationPermissionChecker: PermissionChecker,
-        @Main observeScheduler: Scheduler
+        locationPermissionChecker: PermissionChecker
     ): MainViewModel {
         val rightNowText = context.getString(R.string.right_now)
         val relativeTimeFormatter = DateUtilsRelativeTimeFormatter(rightNowText)
@@ -123,8 +122,7 @@ internal object MainModule {
             locationPermissionChecker,
             ChanceToColorConverter(context),
             time,
-            1.minutes,
-            observeScheduler
+            1.minutes
         )
     }
 }

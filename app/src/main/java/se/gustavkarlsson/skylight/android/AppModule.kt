@@ -7,13 +7,9 @@ import android.os.Build
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import io.reactivex.Scheduler
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import se.gustavkarlsson.skylight.android.core.Computation
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.Main
 import java.util.Locale
@@ -71,25 +67,10 @@ internal class AppModule(private val application: Application) {
     @Provides
     @Reusable
     @Main
-    fun mainThreadScheduler(): Scheduler = AndroidSchedulers.mainThread()
-
-    @Provides
-    @Reusable
-    @Io
-    fun ioScheduler(): Scheduler = Schedulers.io()
-
-    @Provides
-    @Reusable
-    @Main
     fun mainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 
     @Provides
     @Reusable
     @Io
     fun ioDispatcher(): CoroutineDispatcher = Dispatchers.IO
-
-    @Provides
-    @Reusable
-    @Computation
-    fun computationScheduler(): Scheduler = Schedulers.computation()
 }

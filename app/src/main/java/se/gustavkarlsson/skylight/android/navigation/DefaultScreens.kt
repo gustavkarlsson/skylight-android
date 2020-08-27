@@ -39,6 +39,7 @@ private data class MainScreen(private val dummy: Unit = Unit) : Screen {
     @IgnoredOnParcel
     override val scopeStart: String = "main"
 
+    @ExperimentalCoroutinesApi
     override fun createFragment() = MainFragment()
 }
 
@@ -61,6 +62,8 @@ private data class SettingsScreen(private val dummy: Unit = Unit) : Screen {
     @IgnoredOnParcel
     override val name = ScreenName.Settings
 
+    @FlowPreview
+    @ExperimentalCoroutinesApi
     override fun createFragment() = SettingsFragment()
 }
 

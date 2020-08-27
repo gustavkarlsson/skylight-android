@@ -2,13 +2,13 @@ package se.gustavkarlsson.skylight.android.feature.main.gui.drawer
 
 import androidx.annotation.DrawableRes
 import com.ioki.textref.TextRef
-import com.jakewharton.rxrelay2.PublishRelay
-import io.reactivex.Observable
-import io.reactivex.Scheduler
-import io.reactivex.rxkotlin.Observables
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.rx2.asObservable
-import se.gustavkarlsson.skylight.android.core.Main
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.combine
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
@@ -16,27 +16,28 @@ import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 internal class DrawerViewModel @Inject constructor(
     private val placesRepository: PlacesRepository,
-    private val selectedPlaceRepo: SelectedPlaceRepository,
-    @Main observeScheduler: Scheduler
+    private val selectedPlaceRepo: SelectedPlaceRepository
 ) : ScopedService {
-    @ExperimentalCoroutinesApi
-    val drawerItems: Observable<List<DrawerItem>> =
-        Observables.combineLatest(
-            placesRepository.stream().asObservable(),
-            selectedPlaceRepo.stream().asObservable(),
-            ::createPlaceItems
-        ).observeOn(observeScheduler)
+    val drawerItems: Flow<List<DrawerItem>> =
+        combine(
+            placesRepository.stream(),
+            selectedPlaceRepo.stream()
+        ) { places, selectedPlace ->
+            createPlaceItems(places, selectedPlace)
+        }
 
-    private val closeDrawerRelay = PublishRelay.create<Unit>()
-    val closeDrawer: Observable<Unit> = closeDrawerRelay
+    private val closeDrawerChannel = BroadcastChannel<Unit>(Channel.BUFFERED)
+    val closeDrawer: Flow<Unit> = closeDrawerChannel.asFlow()
 
-    private val openRemovePlaceDialogRelay = PublishRelay.create<RemovePlaceDialogData>()
-    val openRemovePlaceDialog: Observable<RemovePlaceDialogData> = openRemovePlaceDialogRelay
+    private val openRemovePlaceDialogChannel = BroadcastChannel<RemovePlaceDialogData>(Channel.BUFFERED)
+    val openRemovePlaceDialog: Flow<RemovePlaceDialogData> = openRemovePlaceDialogChannel.asFlow()
 
-    private val navigateToAddPlaceRelay = PublishRelay.create<Unit>()
-    val navigateToAddPlace: Observable<Unit> = navigateToAddPlaceRelay
+    private val navigateToAddPlaceChannel = BroadcastChannel<Unit>(Channel.BUFFERED)
+    val navigateToAddPlace: Flow<Unit> = navigateToAddPlaceChannel.asFlow()
 
     private fun createPlaceItems(places: List<Place>, selected: Place) =
         places.map { place ->
@@ -81,7 +82,7 @@ internal class DrawerViewModel @Inject constructor(
 
     private fun selectPlace(place: Place) {
         selectedPlaceRepo.set(place)
-        closeDrawerRelay.accept(Unit)
+        closeDrawerChannel.offer(Unit)
     }
 
     private fun showRemovePlaceDialog(place: Place.Custom) {
@@ -89,12 +90,12 @@ internal class DrawerViewModel @Inject constructor(
             TextRef.stringRes(R.string.remove_thing, place.name),
             place.id
         )
-        openRemovePlaceDialogRelay.accept(dialogData)
+        openRemovePlaceDialogChannel.offer(dialogData)
     }
 
     private fun navigateToAddPlace() {
-        closeDrawerRelay.accept(Unit)
-        navigateToAddPlaceRelay.accept(Unit)
+        closeDrawerChannel.offer(Unit)
+        navigateToAddPlaceChannel.offer(Unit)
     }
 }
 

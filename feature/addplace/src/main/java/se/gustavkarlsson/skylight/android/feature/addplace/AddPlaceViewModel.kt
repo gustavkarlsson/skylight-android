@@ -51,11 +51,9 @@ internal class AddPlaceViewModel @Inject constructor(
     }
 
     private val navigateAwayChannel = BroadcastChannel<Unit>(Channel.BUFFERED)
-
     val navigateAway: Flow<Unit> = navigateAwayChannel.asFlow()
 
     private val openSaveDialogChannel = BroadcastChannel<PlaceSuggestion>(Channel.BUFFERED)
-
     val openSaveDialog: Flow<PlaceSuggestion> = openSaveDialogChannel.asFlow()
 
     fun onSearchTextChanged(newText: String) = knot.change.accept(Change.Query(newText))

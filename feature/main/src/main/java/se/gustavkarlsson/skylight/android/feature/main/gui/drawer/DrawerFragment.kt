@@ -7,6 +7,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.fragment_drawer.*
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import se.gustavkarlsson.skylight.android.feature.main.DrawerComponent
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
@@ -16,6 +18,8 @@ import se.gustavkarlsson.skylight.android.lib.ui.BaseFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.findParentViewByType
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 @Suppress("unused")
 internal class DrawerFragment : BaseFragment() {
 
@@ -50,15 +54,17 @@ internal class DrawerFragment : BaseFragment() {
     }
 
     override fun bindView(scope: CoroutineScope) {
-        viewModel.drawerItems.bind(this, adapter::setItems)
+        viewModel.drawerItems.bind(scope) { items ->
+            adapter.setItems(items)
+        }
 
-        viewModel.closeDrawer.bind(this) { closeDrawer() }
+        viewModel.closeDrawer.bind(scope) { closeDrawer() }
 
-        viewModel.navigateToAddPlace.bind(this) {
+        viewModel.navigateToAddPlace.bind(scope) {
             navigator.goTo(screens.addPlace())
         }
 
-        viewModel.openRemovePlaceDialog.bind(this) { dialogData ->
+        viewModel.openRemovePlaceDialog.bind(scope) { dialogData ->
             removePlaceDialog?.dismiss()
             val context = requireContext()
             val dialog = MaterialAlertDialogBuilder(context)

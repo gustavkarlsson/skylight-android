@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.feature.main
 
 import de.halfbit.knot.Knot
 import de.halfbit.knot.knot
-import io.reactivex.Scheduler
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
@@ -47,15 +46,13 @@ internal fun buildMainKnot(
     permissionChecker: PermissionChecker,
     selectedPlaceRepo: SelectedPlaceRepository,
     locationProvider: LocationProvider,
-    auroraReportProvider: AuroraReportProvider,
-    observeScheduler: Scheduler
+    auroraReportProvider: AuroraReportProvider
 ): MainKnot = knot<State, Change, Action> {
 
     state {
         initial = State(
             selectedPlace = selectedPlaceRepo.get()
         )
-        observeOn = observeScheduler
         if (BuildConfig.DEBUG) {
             watchAll { logDebug { "Got state: $it" } }
         }

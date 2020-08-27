@@ -38,12 +38,7 @@ object Versions {
     val material = "1.1.0"
 
     val rxjava = "2.2.19"
-    val rxkotlin = "2.4.0"
-    val rxandroid = "2.1.1"
-    val rxbinding = "3.1.0"
     val flowbinding = "1.0.0-alpha02"
-    val rxrelay = "2.1.1"
-    val rxReplayingShare = "2.2.0"
     val runtimePermissionKotlin = "1.1.2"
     val kotlinxCoroutines = "1.3.8"
 
