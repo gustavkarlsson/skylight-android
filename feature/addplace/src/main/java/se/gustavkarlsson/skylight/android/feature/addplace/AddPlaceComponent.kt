@@ -61,6 +61,8 @@ internal object AddPlaceModule {
     @Reusable
     fun onError(channel: BroadcastChannel<TextRef>): (TextRef) -> Unit = { channel.offer(it) }
 
+    @ExperimentalCoroutinesApi
+    @FlowPreview
     @Provides
     @JvmSuppressWildcards
     fun knot(

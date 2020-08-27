@@ -3,8 +3,13 @@ package se.gustavkarlsson.skylight.android.feature.addplace
 import com.ioki.textref.TextRef
 import de.halfbit.knot.Knot
 import de.halfbit.knot.knot
-import io.reactivex.Observable
-import kotlinx.coroutines.rx2.rxSingle
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.rx2.asObservable
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocodingResult
@@ -33,6 +38,8 @@ internal sealed class Action {
 
 internal typealias AddPlaceKnot = Knot<State, Change>
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 internal fun createKnot(
     geocoder: Geocoder,
     querySampleDelay: Duration,
@@ -74,31 +81,27 @@ internal fun createKnot(
         perform<Action.Search> {
             map(Action.Search::query)
                 .buffer(querySampleDelay.toMillis(), TimeUnit.MILLISECONDS)
+                .asFlow()
                 .filter { it.isNotEmpty() }
-                .flatMap { texts ->
-                    Observable.concat(
-                        Observable.just(Change.SearchesSkipped(texts.size - 1)),
-                        rxSingle { geocoder.geocode(texts.last()) }
-                            .map {
-                                when (val result = it) {
-                                    is GeocodingResult.Success ->
-                                        Change.SearchFinished(result.suggestions)
-                                    GeocodingResult.Failure.Io ->
-                                        Change.SearchFailed(
-                                            TextRef.stringRes(R.string.place_search_failed_io)
-                                        )
-                                    GeocodingResult.Failure.ServerError -> Change.SearchFailed(
-                                        TextRef.stringRes(R.string.place_search_failed_server_response)
-                                    )
-                                    GeocodingResult.Failure.Unknown ->
-                                        Change.SearchFailed(
-                                            TextRef.stringRes(R.string.place_search_failed_generic)
-                                        )
-                                }
-                            }
-                            .toObservable()
-                    )
+                .flatMapConcat { texts ->
+                    flow {
+                        emit(Change.SearchesSkipped(texts.size - 1))
+
+                        val change = when (val result = geocoder.geocode(texts.last())) {
+                            is GeocodingResult.Success ->
+                                Change.SearchFinished(result.suggestions)
+                            GeocodingResult.Failure.Io ->
+                                Change.SearchFailed(TextRef.stringRes(R.string.place_search_failed_io))
+                            GeocodingResult.Failure.ServerError ->
+                                Change.SearchFailed(TextRef.stringRes(R.string.place_search_failed_server_response))
+                            GeocodingResult.Failure.Unknown ->
+                                Change.SearchFailed(TextRef.stringRes(R.string.place_search_failed_generic))
+                        }
+
+                        emit(change)
+                    }
                 }
+                .asObservable()
         }
         watch<Action.ShowError> {
             onError(it.message)
