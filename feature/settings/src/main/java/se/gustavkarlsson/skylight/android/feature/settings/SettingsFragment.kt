@@ -9,6 +9,7 @@ import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
@@ -40,11 +41,14 @@ class SettingsFragment : ScreenFragment() {
         itemsRecyclerView.adapter = adapter
     }
 
+    @FlowPreview
     @ExperimentalCoroutinesApi
     override fun bindView(scope: CoroutineScope) {
-        viewModel.settingsItems.bind(this, adapter::setItems)
+        viewModel.settingsItems.bind(scope) { items ->
+            adapter.setItems(items)
+        }
 
-        viewModel.showSelectTriggerLevel.bind(this) { (place, triggerLevel) ->
+        viewModel.showSelectTriggerLevel.bind(scope) { (place, triggerLevel) ->
             showTriggerLevelDialog(place, triggerLevel)
         }
     }
