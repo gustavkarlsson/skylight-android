@@ -7,7 +7,6 @@ import android.os.Build
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import io.reactivex.Single
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import se.gustavkarlsson.skylight.android.core.Io
@@ -29,18 +28,6 @@ internal class AppModule(private val application: Application) {
     @Provides
     @Reusable
     fun activityClass(): Class<out Activity> = MainActivity::class.java
-
-    @Provides
-    @Reusable
-    fun singleLocale(context: Context): Single<Locale> =
-        Single.fromCallable {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                context.resources.configuration.locales[0]
-            } else {
-                @Suppress("DEPRECATION")
-                context.resources.configuration.locale
-            }
-        }
 
     @Provides
     @Reusable

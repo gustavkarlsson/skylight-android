@@ -6,10 +6,10 @@ import de.halfbit.knot.knot
 import io.reactivex.Observable
 import kotlinx.coroutines.rx2.rxSingle
 import org.threeten.bp.Duration
-import se.gustavkarlsson.skylight.android.core.utils.buffer
 import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocodingResult
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
+import java.util.concurrent.TimeUnit
 
 internal data class State(
     val query: String = "",
@@ -73,7 +73,7 @@ internal fun createKnot(
     actions {
         perform<Action.Search> {
             map(Action.Search::query)
-                .buffer(querySampleDelay)
+                .buffer(querySampleDelay.toMillis(), TimeUnit.MILLISECONDS)
                 .filter { it.isNotEmpty() }
                 .flatMap { texts ->
                     Observable.concat(
