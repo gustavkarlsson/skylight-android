@@ -78,7 +78,7 @@ internal class DrawerViewModel @Inject constructor(
         }
     }
 
-    fun onRemovePlaceClicked(placeId: Long) = placesRepository.remove(placeId)
+    suspend fun onRemovePlaceClicked(placeId: Long) = placesRepository.remove(placeId)
 
     private fun selectPlace(place: Place) {
         selectedPlaceRepo.set(place)

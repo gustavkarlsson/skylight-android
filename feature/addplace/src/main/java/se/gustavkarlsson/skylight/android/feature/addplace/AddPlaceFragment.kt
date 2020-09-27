@@ -123,7 +123,9 @@ class AddPlaceFragment : ScreenFragment() {
         }
         val dialog = createDialog(customView) {
             val name = editText.text.toString().trim()
-            viewModel.onSavePlaceClicked(name, placeSuggestion.location)
+            scope.launch {
+                viewModel.onSavePlaceClicked(name, placeSuggestion.location)
+            }
         }
         savePlaceDialog = dialog
         dialog.show()

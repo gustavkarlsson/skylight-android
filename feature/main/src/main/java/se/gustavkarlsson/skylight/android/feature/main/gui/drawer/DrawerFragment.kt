@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.fragment_drawer.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.feature.main.DrawerComponent
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
@@ -70,7 +71,9 @@ internal class DrawerFragment : BaseFragment() {
             val dialog = MaterialAlertDialogBuilder(context)
                 .setTitle(dialogData.title.resolve(context))
                 .setPositiveButton(R.string.remove) { _, _ ->
-                    viewModel.onRemovePlaceClicked(dialogData.placeId)
+                    scope.launch {
+                        viewModel.onRemovePlaceClicked(dialogData.placeId)
+                    }
                 }
                 .setNegativeButton(R.string.cancel, null)
                 .create()

@@ -50,6 +50,8 @@ internal class AddPlaceViewModel @Inject constructor(
         scope.cancel("ViewModel cleared")
     }
 
+    private val stateFlow = knot.state.asFlow()
+
     private val navigateAwayChannel = BroadcastChannel<Unit>(Channel.BUFFERED)
     val navigateAway: Flow<Unit> = navigateAwayChannel.asFlow()
 
@@ -58,8 +60,7 @@ internal class AddPlaceViewModel @Inject constructor(
 
     fun onSearchTextChanged(newText: String) = knot.change.accept(Change.Query(newText))
 
-    val placeSuggestions: Flow<List<SuggestionItem>> = knot.state
-        .asFlow()
+    val placeSuggestions: Flow<List<SuggestionItem>> = stateFlow
         .map { it.suggestions }
         .distinctUntilChanged()
         .filter { it.isNotEmpty() }
@@ -71,13 +72,12 @@ internal class AddPlaceViewModel @Inject constructor(
 
     fun onSuggestionClicked(suggestion: PlaceSuggestion) = openSaveDialogChannel.offer(suggestion)
 
-    fun onSavePlaceClicked(name: String, location: Location) {
+    suspend fun onSavePlaceClicked(name: String, location: Location) {
         placesRepository.add(name, location)
         navigateAwayChannel.offer(Unit)
     }
 
-    private val resultState: Flow<ResultState> = knot.state
-        .asFlow()
+    private val resultState: Flow<ResultState> = stateFlow
         .mapNotNull { state ->
             when {
                 state.query.isBlank() -> ResultState.EMPTY
