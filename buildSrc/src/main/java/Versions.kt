@@ -55,6 +55,7 @@ object Versions {
     val banner = "1.2.0"
     val mapboxServices = "5.3.0"
     val knot = "3.0.3"
+    val conveyor = "496ed735c8" // FIXME use release version
     val edgeToEdge = "0.10"
     val koptional = "0.4.0"
     val simpleStack = "2.3.2"

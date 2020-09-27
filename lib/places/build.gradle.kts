@@ -16,7 +16,7 @@ dependencies {
 
     implementation("com.squareup.sqldelight:android-driver:${Versions.sqldelight}")
     implementation("com.squareup.sqldelight:coroutines-extensions:${Versions.sqldelight}")
-    implementation("de.halfbit:knot:${Versions.knot}")
+    implementation("com.github.gustavkarlsson.conveyor:conveyor-core:${Versions.conveyor}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }
