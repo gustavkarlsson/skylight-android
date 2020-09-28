@@ -63,7 +63,7 @@ object LibKpIndexModule {
         )
 
         val expiry = (pollingInterval.toMillis() / 2).kotlinMilliseconds
-        val cachePolicy = MemoryPolicy.builder()
+        val cachePolicy = MemoryPolicy.builder<Unit, KpIndex>()
             .setExpireAfterWrite(expiry)
             .build()
 

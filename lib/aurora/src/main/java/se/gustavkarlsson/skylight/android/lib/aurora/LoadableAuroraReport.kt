@@ -24,7 +24,7 @@ data class LoadableAuroraReport(
                 else
                     emptyList()
             }
-            .max()
+            .maxOrNull()
 
     fun toCompleteAuroraReport(): CompleteAuroraReport? =
         if (locationName is Loadable.Loaded &&

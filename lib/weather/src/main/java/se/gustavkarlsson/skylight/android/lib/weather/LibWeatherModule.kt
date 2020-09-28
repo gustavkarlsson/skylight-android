@@ -18,6 +18,7 @@ import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.core.utils.seconds
+import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import kotlin.time.ExperimentalTime
 import kotlin.time.milliseconds as kotlinMilliseconds
@@ -64,9 +65,9 @@ object LibWeatherModule {
         )
 
         val expiry = (pollingInterval.toMillis() / 2).kotlinMilliseconds
-        val cachePolicy = MemoryPolicy.builder()
+        val cachePolicy = MemoryPolicy.builder<Location, Weather>()
             .setExpireAfterWrite(expiry)
-            .setMemorySize(16)
+            .setMaxSize(16)
             .build()
 
         val store = StoreBuilder.from(createFetcher)

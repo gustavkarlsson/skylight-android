@@ -18,5 +18,5 @@ data class CompleteAuroraReport(
     val timestamp: Instant
         get() = listOf(kpIndex, geomagLocation, darkness, weather)
             .map { it.timestamp }
-            .max()!!
+            .maxOrNull()!!
 }

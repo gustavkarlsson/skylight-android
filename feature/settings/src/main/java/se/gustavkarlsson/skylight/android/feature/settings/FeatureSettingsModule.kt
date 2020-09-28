@@ -76,8 +76,8 @@ private fun getTriggerLevels(settings: Settings) =
         .streamNotificationTriggerLevels()
         .map { it.unzip().second }
         .map { triggerLevels ->
-            val min = triggerLevels.minBy { it.ordinal }
-            val max = triggerLevels.maxBy { it.ordinal }
+            val min = triggerLevels.minByOrNull { it.ordinal }
+            val max = triggerLevels.maxByOrNull { it.ordinal }
             min to max
         }
         .distinctUntilChanged()

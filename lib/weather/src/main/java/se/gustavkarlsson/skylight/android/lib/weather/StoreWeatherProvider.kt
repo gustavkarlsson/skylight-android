@@ -86,7 +86,8 @@ internal class StoreWeatherProvider(
                     is StoreResponse.Data -> Loadable.loaded(Report.success(response.value, time.now()))
                     is StoreResponse.Error.Exception ->
                         Loadable.loaded(Report.error(getCause(response.error), time.now()))
-                    is StoreResponse.Error.Message -> error("Unsupported response type: $response")
+                    is StoreResponse.Error.Message, is StoreResponse.NoNewData ->
+                        error("Unsupported response type: $response")
                 }
             }
 }

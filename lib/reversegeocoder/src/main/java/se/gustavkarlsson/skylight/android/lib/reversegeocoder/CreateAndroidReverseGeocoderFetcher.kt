@@ -4,7 +4,6 @@ import android.location.Address
 import android.location.Geocoder
 import com.dropbox.android.external.store4.Fetcher
 import com.dropbox.android.external.store4.FetcherResult
-import com.dropbox.android.external.store4.nonFlowFetcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.withContext
@@ -18,7 +17,7 @@ import java.io.IOException
 internal fun createAndroidReverseGeocoderFetcher(
     geocoder: Geocoder,
     dispatcher: CoroutineDispatcher
-): Fetcher<Location, Optional<String>> = nonFlowFetcher { location ->
+): Fetcher<Location, Optional<String>> = Fetcher.ofResult { location ->
     withContext(dispatcher + CoroutineName("reverseGeocoderFetcher")) {
         try {
             @Suppress("BlockingMethodInNonBlockingContext")
@@ -28,7 +27,7 @@ internal fun createAndroidReverseGeocoderFetcher(
             FetcherResult.Data(bestName.toOptional())
         } catch (e: IOException) {
             logWarn(e) { "Failed to reverse geocode: $location" }
-            FetcherResult.Error.Exception<Optional<String>>(e)
+            FetcherResult.Error.Exception(e)
         }
     }
 }

@@ -40,7 +40,7 @@ object Versions {
     val rxjava = "2.2.19"
     val flowbinding = "1.0.0-alpha02"
     val runtimePermissionKotlin = "1.1.2"
-    val kotlinxCoroutines = "1.3.8"
+    val kotlinxCoroutines = "1.3.9"
 
     val okHttp = "3.14.4"
     val retrofit = "2.7.1"
@@ -55,13 +55,13 @@ object Versions {
     val banner = "1.2.0"
     val mapboxServices = "5.3.0"
     val knot = "3.0.3"
-    val conveyor = "496ed735c8" // FIXME use release version
+    val conveyor = "496ed735c8" // TODO use release version
     val edgeToEdge = "0.10"
     val koptional = "0.4.0"
     val simpleStack = "2.3.2"
     val textref = "1.3.0"
     val markwon = "4.4.0"
-    val store = "4.0.0-alpha06"
+    val store = "4.0.0-beta01"
 
     // Test
     val junit = "4.12"

@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.lib.kpindex
 
 import com.dropbox.android.external.store4.Fetcher
 import com.dropbox.android.external.store4.FetcherResult
-import com.dropbox.android.external.store4.fetcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -19,8 +18,8 @@ internal fun createKpIndexFetcher(
     retryDelay: Duration,
     pollingInterval: Duration,
     dispatcher: CoroutineDispatcher
-): Fetcher<Unit, KpIndex> = fetcher {
-    channelFlow<FetcherResult<KpIndex>> {
+): Fetcher<Unit, KpIndex> = Fetcher.ofResultFlow {
+    channelFlow {
         while (!isClosedForSend) {
             try {
                 val kpIndex = api.requestKpIndex()

@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.lib.weather
 
 import com.dropbox.android.external.store4.Fetcher
 import com.dropbox.android.external.store4.FetcherResult
-import com.dropbox.android.external.store4.fetcher
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -21,7 +20,7 @@ internal fun createOpenWeatherMapFetcher(
     retryDelay: Duration,
     pollingInterval: Duration,
     dispatcher: CoroutineDispatcher
-): Fetcher<Location, Weather> = fetcher { location ->
+): Fetcher<Location, Weather> = Fetcher.ofResultFlow { location ->
     channelFlow<FetcherResult<Weather>> {
         while (!isClosedForSend) {
             try {
