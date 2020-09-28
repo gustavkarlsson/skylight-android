@@ -11,6 +11,8 @@ import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
+import se.gustavkarlsson.conveyor.Store
+import se.gustavkarlsson.conveyor.buildStore
 import se.gustavkarlsson.skylight.android.core.AppComponent
 import se.gustavkarlsson.skylight.android.core.ViewModelScope
 import se.gustavkarlsson.skylight.android.core.utils.seconds
@@ -68,5 +70,8 @@ internal object AddPlaceModule {
     fun knot(
         geocoder: Geocoder,
         onError: (TextRef) -> Unit
-    ): AddPlaceKnot = createKnot(geocoder, 1.seconds, onError)
+    ): Store<State> = buildStore(
+        initialState = State(),
+        openActions = listOf(ContinuouslySearchAction(geocoder, onError, 1.seconds))
+    )
 }

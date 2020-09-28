@@ -16,7 +16,7 @@ dependencies {
     implementation(project(":lib:places"))
     implementation(project(":lib:location"))
 
-    implementation("de.halfbit:knot:${Versions.knot}")
+    implementation("com.github.gustavkarlsson.conveyor:conveyor-core:${Versions.conveyor}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

@@ -9,16 +9,17 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
-import kotlinx.coroutines.rx2.asFlow
-import kotlinx.coroutines.suspendCancellableCoroutine
+import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
@@ -29,28 +30,20 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 internal class AddPlaceViewModel @Inject constructor(
     private val placesRepository: PlacesRepository,
-    private val knot: AddPlaceKnot,
-    val errorMessages: Flow<TextRef>
+    private val store: Store<State>,
+    val errorMessages: Flow<TextRef>,
 ) : ScopedService {
 
     // TODO move to base ScopedService?
     private val scope = CoroutineScope(SupervisorJob()) + CoroutineName("AddPlaceViewModel scope")
 
-    init {
-        scope.launch {
-            suspendCancellableCoroutine { continuation ->
-                continuation.invokeOnCancellation {
-                    knot.dispose()
-                }
-            }
-        }
-    }
+    init { store.open(scope) }
 
     override fun onCleared() {
         scope.cancel("ViewModel cleared")
     }
 
-    private val stateFlow = knot.state.asFlow()
+    private val stateFlow = store.state
 
     private val navigateAwayChannel = BroadcastChannel<Unit>(Channel.BUFFERED)
     val navigateAway: Flow<Unit> = navigateAwayChannel.asFlow()
@@ -58,10 +51,10 @@ internal class AddPlaceViewModel @Inject constructor(
     private val openSaveDialogChannel = BroadcastChannel<PlaceSuggestion>(Channel.BUFFERED)
     val openSaveDialog: Flow<PlaceSuggestion> = openSaveDialogChannel.asFlow()
 
-    fun onSearchTextChanged(newText: String) = knot.change.accept(Change.Query(newText))
+    fun onSearchTextChanged(newText: String) = store.issue(SetQueryCommand(newText))
 
     val placeSuggestions: Flow<List<SuggestionItem>> = stateFlow
-        .map { it.suggestions }
+        .map { it.suggestions.items }
         .distinctUntilChanged()
         .filter { it.isNotEmpty() }
         .map { suggestions ->
@@ -78,12 +71,16 @@ internal class AddPlaceViewModel @Inject constructor(
     }
 
     private val resultState: Flow<ResultState> = stateFlow
-        .mapNotNull { state ->
+        .flatMapLatest { state ->
             when {
-                state.query.isBlank() -> ResultState.EMPTY
-                state.isSearching && state.suggestions.isEmpty() -> ResultState.SEARCHING
-                state.suggestions.isEmpty() -> ResultState.NO_SUGGESTIONS
-                else -> ResultState.SUGGESTIONS
+                state.query.isBlank() -> flowOf(ResultState.EMPTY)
+                !state.isSuggestionsUpToDate && state.suggestions.items.isEmpty() ->
+                    flow {
+                        delay(1000)
+                        emit(ResultState.SEARCHING)
+                    }
+                state.suggestions.items.isEmpty() -> flowOf(ResultState.NO_SUGGESTIONS)
+                else -> flowOf(ResultState.SUGGESTIONS)
             }
         }
         .distinctUntilChanged()
