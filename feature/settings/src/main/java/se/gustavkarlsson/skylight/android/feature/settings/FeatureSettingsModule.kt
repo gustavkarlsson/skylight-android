@@ -63,7 +63,7 @@ object FeatureSettingsModule {
 @SuppressLint("CheckResult")
 private fun getRemovedPlaces(placesRepository: PlacesRepository) =
     placesRepository.stream()
-        .chunked(2)
+        .windowed(2)
         .flatMapConcat { (old, new) ->
             val remaining = old - new
             remaining.asFlow()
@@ -90,7 +90,7 @@ private fun clearOldSharedPreferences(context: Context) =
 
 // TODO Replace with built-in once available
 @ExperimentalCoroutinesApi
-private fun <T> Flow<T>.chunked(size: Int): Flow<List<T>> {
+private fun <T> Flow<T>.windowed(size: Int): Flow<List<T>> {
     require(size > 0) { "Requested size $size is non-positive." }
     return scan(emptyList<T>()) { oldItems, newItem ->
         oldItems.takeLast(size - 1) + newItem
