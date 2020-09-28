@@ -19,7 +19,6 @@ internal class Skylight : Application() {
         initStrictMode()
         initDarkMode()
         initThreeThen()
-        initRxJavaErrorHandling()
         initDagger(scope)
     }
 }
