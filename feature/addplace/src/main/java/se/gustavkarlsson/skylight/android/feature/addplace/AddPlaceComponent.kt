@@ -67,7 +67,7 @@ internal object AddPlaceModule {
     @FlowPreview
     @Provides
     @JvmSuppressWildcards
-    fun knot(
+    fun store(
         geocoder: Geocoder,
         onError: (TextRef) -> Unit
     ): Store<State> = buildStore(

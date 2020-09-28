@@ -10,14 +10,15 @@ import dagger.multibindings.IntoSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.rx2.asFlow
-import kotlinx.coroutines.rx2.asObservable
 import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
@@ -42,7 +43,7 @@ object FeatureSettingsModule {
             @SuppressLint("CheckResult")
             override fun start(scope: CoroutineScope) {
                 scope.launch {
-                    clearSettingsForDeletedPlaces(placesRepository)
+                    getRemovedPlaces(placesRepository)
                         .collect {
                             settings.clearNotificationTriggerLevel(it)
                         }
@@ -60,11 +61,9 @@ object FeatureSettingsModule {
 @FlowPreview
 @ExperimentalCoroutinesApi
 @SuppressLint("CheckResult")
-private fun clearSettingsForDeletedPlaces(placesRepository: PlacesRepository) =
+private fun getRemovedPlaces(placesRepository: PlacesRepository) =
     placesRepository.stream()
-        .asObservable()
-        .buffer(2, 1)
-        .asFlow()
+        .chunked(2)
         .flatMapConcat { (old, new) ->
             val remaining = old - new
             remaining.asFlow()
@@ -88,3 +87,12 @@ private fun clearOldSharedPreferences(context: Context) =
             putString("pref_notifications_key", null)
             putString("pref_trigger_level_key", null)
         }
+
+// TODO Replace with built-in once available
+@ExperimentalCoroutinesApi
+private fun <T> Flow<T>.chunked(size: Int): Flow<List<T>> {
+    require(size > 0) { "Requested size $size is non-positive." }
+    return scan(emptyList<T>()) { oldItems, newItem ->
+        oldItems.takeLast(size - 1) + newItem
+    }.filter { it.size == size }
+}
