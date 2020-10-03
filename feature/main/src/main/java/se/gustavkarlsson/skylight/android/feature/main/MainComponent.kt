@@ -83,11 +83,16 @@ internal object MainModule {
         selectedPlaceRepository: SelectedPlaceRepository,
         locationProvider: LocationProvider,
         auroraReportProvider: AuroraReportProvider
-    ): Store<State> = buildStore(
-        initialState = State(selectedPlace = selectedPlaceRepository.get()),
-        openActions = listOf(LocationPermissionAction(permissionChecker.access)),
-        liveActions = listOf(ToggleStreamAction(locationProvider.stream(), auroraReportProvider::stream)),
-    )
+    ): Store<State> {
+        val locationPermissionAction = LocationPermissionAction(permissionChecker.access)
+        val toggleStreamAction = ToggleStreamAction(locationProvider.stream(), auroraReportProvider::stream)
+        val placeSelectionAction = PlaceSelectionAction(selectedPlaceRepository.stream(), toggleStreamAction)
+        return buildStore(
+            initialState = State(selectedPlace = selectedPlaceRepository.get()),
+            openActions = listOf(locationPermissionAction, placeSelectionAction),
+            liveActions = listOf(toggleStreamAction),
+        )
+    }
 
     @ExperimentalCoroutinesApi
     @Provides
