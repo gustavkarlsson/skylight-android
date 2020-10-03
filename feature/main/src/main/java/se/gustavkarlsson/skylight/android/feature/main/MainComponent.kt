@@ -5,6 +5,9 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import se.gustavkarlsson.conveyor.Store
+import se.gustavkarlsson.conveyor.buildStore
 import se.gustavkarlsson.skylight.android.core.AppComponent
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
@@ -72,25 +75,25 @@ internal interface MainComponent {
 @Module
 internal object MainModule {
 
+    @FlowPreview
     @ExperimentalCoroutinesApi
     @Provides
-    fun mainKnot(
+    fun mainStore(
         permissionChecker: PermissionChecker,
         selectedPlaceRepository: SelectedPlaceRepository,
         locationProvider: LocationProvider,
         auroraReportProvider: AuroraReportProvider
-    ): MainKnot = buildMainKnot(
-        permissionChecker,
-        selectedPlaceRepository,
-        locationProvider,
-        auroraReportProvider
+    ): Store<State> = buildStore(
+        initialState = State(selectedPlace = selectedPlaceRepository.get()),
+        openActions = listOf(LocationPermissionAction(permissionChecker.access)),
+        liveActions = listOf(ToggleStreamAction(locationProvider.stream(), auroraReportProvider::stream)),
     )
 
     @ExperimentalCoroutinesApi
     @Provides
     fun viewModel(
         context: Context,
-        mainKnot: MainKnot,
+        mainStore: Store<State>,
         time: Time,
         auroraChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
         chanceLevelFormatter: Formatter<ChanceLevel>,
@@ -107,7 +110,7 @@ internal object MainModule {
         val rightNowText = context.getString(R.string.right_now)
         val relativeTimeFormatter = DateUtilsRelativeTimeFormatter(rightNowText)
         return MainViewModel(
-            mainKnot,
+            mainStore,
             auroraChanceEvaluator,
             relativeTimeFormatter,
             chanceLevelFormatter,

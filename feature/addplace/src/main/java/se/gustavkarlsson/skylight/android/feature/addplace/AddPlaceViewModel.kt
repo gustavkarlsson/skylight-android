@@ -40,7 +40,7 @@ internal class AddPlaceViewModel @Inject constructor(
     init { store.open(scope) }
 
     override fun onCleared() {
-        scope.cancel("ViewModel cleared")
+        scope.cancel("AddPlaceViewModel cleared")
     }
 
     private val stateFlow = store.state
@@ -51,7 +51,7 @@ internal class AddPlaceViewModel @Inject constructor(
     private val openSaveDialogChannel = BroadcastChannel<PlaceSuggestion>(Channel.BUFFERED)
     val openSaveDialog: Flow<PlaceSuggestion> = openSaveDialogChannel.asFlow()
 
-    fun onSearchTextChanged(newText: String) = store.issue(SetQueryCommand(newText))
+    fun onSearchTextChanged(newText: String) = store.issue(SetQueryAction(newText))
 
     val placeSuggestions: Flow<List<SuggestionItem>> = stateFlow
         .map { it.suggestions.items }

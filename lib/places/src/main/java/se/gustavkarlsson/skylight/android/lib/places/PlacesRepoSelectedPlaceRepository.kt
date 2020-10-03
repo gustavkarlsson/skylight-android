@@ -8,11 +8,9 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import se.gustavkarlsson.conveyor.Change
-import se.gustavkarlsson.conveyor.Command
-import se.gustavkarlsson.conveyor.actions.FlowAction
+import se.gustavkarlsson.conveyor.Action
+import se.gustavkarlsson.conveyor.UpdateState
 import se.gustavkarlsson.conveyor.buildStore
-import se.gustavkarlsson.conveyor.only
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.utils.allowDiskReadsInStrictMode
 
@@ -43,7 +41,7 @@ internal class PlacesRepoSelectedPlaceRepository(
         }
     }
 
-    override fun set(place: Place) = store.issue(SelectionChangedCommand(place))
+    override fun set(place: Place) = store.issue(SelectionChangedAction(place))
 
     override fun get(): Place = store.currentState.selected
 
@@ -62,13 +60,15 @@ private sealed class State {
     data class Loaded(override val selected: Place, val places: List<Place>) : State()
 }
 
-private class StreamPlacesAction(placesStream: Flow<List<Place>>) : FlowAction<State>() {
-    override val flow: Flow<Command<State>> =
-        placesStream.map { PlacesUpdatedCommand(it) }
-}
+private class StreamPlacesAction(private val placesStream: Flow<List<Place>>) : Action<State> {
+    override suspend fun execute(updateState: UpdateState<State>) {
+        placesStream
+            .collect { newPlaces ->
+                updateState { state -> createNewState(state, newPlaces) }
+            }
+    }
 
-private data class PlacesUpdatedCommand(private val newPlaces: List<Place>) : Command<State> {
-    override fun reduce(state: State): Change<State> {
+    private fun createNewState(state: State, newPlaces: List<Place>): State {
         val selected = when (state) {
             is State.Initial -> {
                 if (state.selectedIndex != null) {
@@ -89,26 +89,27 @@ private data class PlacesUpdatedCommand(private val newPlaces: List<Place>) : Co
                 }
             }
         }
-        return State.Loaded(selected = selected, places = newPlaces).only()
+        return State.Loaded(selected = selected, places = newPlaces)
     }
 }
 
-private data class SelectionChangedCommand(val selectedPlace: Place) : Command<State> {
-    override fun reduce(state: State): Change<State> {
-        val newState = when (state) {
-            is State.Initial -> {
-                logError { "Cannot select a place before loading places. Place: $selectedPlace" }
-                state
-            }
-            is State.Loaded -> {
-                if (selectedPlace in state.places) {
-                    state.copy(selected = selectedPlace)
-                } else {
-                    logError { "Cannot select a place that is not loaded. Place: $selectedPlace, Loaded: ${state.places}" }
+private data class SelectionChangedAction(val selectedPlace: Place) : Action<State> {
+    override suspend fun execute(updateState: UpdateState<State>) {
+        updateState { state ->
+            when (state) {
+                is State.Initial -> {
+                    logError { "Cannot select a place before loading places. Place: $selectedPlace" }
                     state
+                }
+                is State.Loaded -> {
+                    if (selectedPlace in state.places) {
+                        state.copy(selected = selectedPlace)
+                    } else {
+                        logError { "Cannot select a place that is not loaded. Place: $selectedPlace, Loaded: ${state.places}" }
+                        state
+                    }
                 }
             }
         }
-        return newState.only()
     }
 }

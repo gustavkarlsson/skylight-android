@@ -3,8 +3,11 @@ package se.gustavkarlsson.skylight.android.feature.main.gui
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import com.ioki.textref.TextRef
-import de.halfbit.knot.Knot
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -12,8 +15,9 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.rx2.asFlow
+import kotlinx.coroutines.plus
 import org.threeten.bp.Duration
+import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.koptional.Absent
 import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.koptional.Present
@@ -26,7 +30,6 @@ import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.feature.main.ChanceToColorConverter
-import se.gustavkarlsson.skylight.android.feature.main.Change
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.feature.main.State
@@ -45,7 +48,7 @@ import se.gustavkarlsson.skylight.android.lib.weather.Weather
 
 @ExperimentalCoroutinesApi
 internal class MainViewModel(
-    private val mainKnot: Knot<State, Change>,
+    store: Store<State>,
     auroraChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
     relativeTimeFormatter: RelativeTimeFormatter,
     chanceLevelFormatter: Formatter<ChanceLevel>,
@@ -63,15 +66,16 @@ internal class MainViewModel(
     nowTextThreshold: Duration
 ) : ScopedService {
 
+    // TODO move to base ScopedService?
+    private val scope = CoroutineScope(SupervisorJob()) + CoroutineName("MainViewModel scope")
+
+    init { store.open(scope) }
+
     override fun onCleared() {
-        mainKnot.dispose()
+        scope.cancel("MainViewModel cleared")
     }
 
-    fun resumeStreaming() = mainKnot.change.accept(Change.StreamToggle(true))
-
-    fun pauseStreaming() = mainKnot.change.accept(Change.StreamToggle(false))
-
-    private val stateFlow = mainKnot.state.asFlow()
+    private val stateFlow = store.state
 
     val toolbarTitleText: Flow<TextRef> = stateFlow
         .map {

@@ -37,7 +37,6 @@ object Versions {
 
     val material = "1.1.0"
 
-    val rxjava = "2.2.19"
     val flowbinding = "1.0.0-alpha02"
     val runtimePermissionKotlin = "1.1.2"
     val kotlinxCoroutines = "1.3.9"
@@ -54,8 +53,7 @@ object Versions {
     val leakcanary = "2.4"
     val banner = "1.2.0"
     val mapboxServices = "5.3.0"
-    val knot = "3.0.3"
-    val conveyor = "496ed735c8" // TODO use release version
+    val conveyor = "41c0ada4e9" // TODO use release version
     val edgeToEdge = "0.10"
     val koptional = "0.4.0"
     val simpleStack = "2.3.2"
