@@ -10,17 +10,15 @@ import dagger.multibindings.IntoSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
+import se.gustavkarlsson.skylight.android.core.utils.windowed
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
@@ -87,12 +85,3 @@ private fun clearOldSharedPreferences(context: Context) =
             putString("pref_notifications_key", null)
             putString("pref_trigger_level_key", null)
         }
-
-// TODO Replace with built-in once available
-@ExperimentalCoroutinesApi
-private fun <T> Flow<T>.windowed(size: Int): Flow<List<T>> {
-    require(size > 0) { "Requested size $size is non-positive." }
-    return scan(emptyList<T>()) { oldItems, newItem ->
-        oldItems.takeLast(size - 1) + newItem
-    }.filter { it.size == size }
-}

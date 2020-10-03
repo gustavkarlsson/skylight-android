@@ -28,6 +28,7 @@ import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import android.location.Location as AndroidLocation
 import com.google.android.gms.location.LocationResult as GmsLocationResult
 
+// TODO Use store?
 @ExperimentalCoroutinesApi
 internal class FusedLocationProviderProvider(
     context: Context,
@@ -45,11 +46,7 @@ internal class FusedLocationProviderProvider(
         interval = requestInterval.toMillis()
     }
 
-    // FIXME share stream between subscribers.
-    //  Try https://github.com/Kotlin/kotlinx.coroutines/issues/1261#issuecomment-669904086
-    //  And what about other providers?
-
-    private val stream = channelFlow<Loadable<LocationResult>> {
+    private val stream = channelFlow {
         offer(Loadable.loading())
 
         tryGetLastLocation()?.let { result ->
