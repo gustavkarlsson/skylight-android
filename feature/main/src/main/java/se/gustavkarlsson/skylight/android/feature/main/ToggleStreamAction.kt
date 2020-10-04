@@ -8,9 +8,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import se.gustavkarlsson.conveyor.Action
-import se.gustavkarlsson.conveyor.UpdateState
+import se.gustavkarlsson.conveyor.StateAccess
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
-import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.places.Place
@@ -19,9 +18,9 @@ internal class ToggleStreamAction(
     private val currentLocation: Flow<Loadable<LocationResult>>,
     private val streamAuroraReports: (Flow<Loadable<LocationResult>>) -> Flow<LoadableAuroraReport>
 ) : Action<State> {
-    override suspend fun execute(updateState: UpdateState<State>) {
+    override suspend fun execute(stateAccess: StateAccess<State>) {
         val scope = CoroutineScope(Job())
-        val newState = updateState { state ->
+        val newState = stateAccess.update { state ->
             state.streamScope?.cancel("Streaming toggled")
             state.copy(streamScope = scope)
         }
@@ -36,7 +35,7 @@ internal class ToggleStreamAction(
         scope.launch {
             reportStream
                 .collect { report ->
-                    updateState { state ->
+                    stateAccess.update { state ->
                         if (state.selectedPlace == selectedPlace) {
                             state.copy(selectedAuroraReport = report)
                         } else {

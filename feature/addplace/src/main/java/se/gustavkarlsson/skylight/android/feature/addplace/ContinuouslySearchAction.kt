@@ -4,7 +4,7 @@ import com.ioki.textref.TextRef
 import kotlinx.coroutines.delay
 import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
-import se.gustavkarlsson.conveyor.UpdateState
+import se.gustavkarlsson.conveyor.StateAccess
 import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocodingResult
 
@@ -13,16 +13,16 @@ internal class ContinuouslySearchAction(
     private val onError: (TextRef) -> Unit,
     private val querySampleDelay: Duration,
 ) : Action<State> {
-    override suspend fun execute(updateState: UpdateState<State>) {
+    override suspend fun execute(stateAccess: StateAccess<State>) {
         while (true) {
-            trySearch(updateState)
+            trySearch(stateAccess)
             delay(querySampleDelay.toMillis())
         }
     }
 
-    private suspend fun trySearch(updateState: UpdateState<State>) {
+    private suspend fun trySearch(stateAccess: StateAccess<State>) {
         var shouldSearch = false
-        val state = updateState { state ->
+        val state = stateAccess.update { state ->
             if (state.isSuggestionsUpToDate || state.isSearchingForQuery) {
                 state
             } else {
@@ -31,14 +31,14 @@ internal class ContinuouslySearchAction(
             }
         }
         if (shouldSearch) {
-            doSearch(state.query, updateState)
+            doSearch(state.query, stateAccess)
         }
     }
 
-    private suspend fun doSearch(query: String, updateState: UpdateState<State>) {
+    private suspend fun doSearch(query: String, stateAccess: StateAccess<State>) {
         var errorMessage: TextRef? = null
         val result = geocoder.geocode(query)
-        updateState { state ->
+        stateAccess.update { state ->
             when (result) {
                 is GeocodingResult.Success -> {
                     if (state.query == query) {

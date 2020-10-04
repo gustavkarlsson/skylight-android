@@ -69,7 +69,7 @@ internal class MainViewModel(
     // TODO move to base ScopedService?
     private val scope = CoroutineScope(SupervisorJob()) + CoroutineName("MainViewModel scope")
 
-    init { store.open(scope) }
+    init { store.start(scope) }
 
     override fun onCleared() {
         scope.cancel("MainViewModel cleared")

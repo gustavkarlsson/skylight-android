@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.lib.places
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -9,17 +10,19 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import se.gustavkarlsson.conveyor.Action
-import se.gustavkarlsson.conveyor.UpdateState
+import se.gustavkarlsson.conveyor.StateAccess
 import se.gustavkarlsson.conveyor.buildStore
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.utils.allowDiskReadsInStrictMode
 
+@FlowPreview
 @ExperimentalCoroutinesApi
 internal class PlacesRepoSelectedPlaceRepository(
     placesRepo: PlacesRepository,
     placeSelectionStorage: PlaceSelectionStorage,
     scope: CoroutineScope
 ) : SelectedPlaceRepository {
+    @FlowPreview
     private val store = buildStore(
         initialState = allowDiskReadsInStrictMode {
             // TODO This should not run on the main thread
@@ -29,7 +32,7 @@ internal class PlacesRepoSelectedPlaceRepository(
     )
 
     init {
-        store.open(scope)
+        store.start(scope)
         // TODO Replace with store watcher when available
         scope.launch {
             store.state
@@ -61,10 +64,12 @@ private sealed class State {
 }
 
 private class StreamPlacesAction(private val placesStream: Flow<List<Place>>) : Action<State> {
-    override suspend fun execute(updateState: UpdateState<State>) {
+    override suspend fun execute(stateAccess: StateAccess<State>) {
         placesStream
             .collect { newPlaces ->
-                updateState { state -> createNewState(state, newPlaces) }
+                stateAccess.update { state ->
+                    createNewState(state, newPlaces)
+                }
             }
     }
 
@@ -94,8 +99,8 @@ private class StreamPlacesAction(private val placesStream: Flow<List<Place>>) : 
 }
 
 private data class SelectionChangedAction(val selectedPlace: Place) : Action<State> {
-    override suspend fun execute(updateState: UpdateState<State>) {
-        updateState { state ->
+    override suspend fun execute(stateAccess: StateAccess<State>) {
+        stateAccess.update { state ->
             when (state) {
                 is State.Initial -> {
                     logError { "Cannot select a place before loading places. Place: $selectedPlace" }

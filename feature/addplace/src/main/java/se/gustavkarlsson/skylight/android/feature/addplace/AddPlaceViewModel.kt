@@ -37,7 +37,7 @@ internal class AddPlaceViewModel @Inject constructor(
     // TODO move to base ScopedService?
     private val scope = CoroutineScope(SupervisorJob()) + CoroutineName("AddPlaceViewModel scope")
 
-    init { store.open(scope) }
+    init { store.start(scope) }
 
     override fun onCleared() {
         scope.cancel("AddPlaceViewModel cleared")
