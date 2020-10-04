@@ -44,7 +44,7 @@ private object Setter :
     KpIndexComponent.Setter,
     GeomagLocationComponent.Setter
 
-internal fun Application.initDagger(scope: GlobalScope) {
+internal fun Application.initDagger() {
     val component = DaggerActualAppComponent.builder()
         .appModule(AppModule(this))
         .build()
@@ -72,7 +72,7 @@ internal fun Application.initDagger(scope: GlobalScope) {
 
     allowDiskReadsAndWritesInStrictMode {
         component.moduleStarters().forEach {
-            it.start(scope)
+            it.start(GlobalScope)
         }
     }
 }

@@ -15,7 +15,7 @@ import kotlinx.coroutines.plus
 
 abstract class BaseFragment : Fragment() {
 
-    private var viewScope: CoroutineScope? = null
+    private var liveScope: CoroutineScope? = null
 
     final override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,15 +32,15 @@ abstract class BaseFragment : Fragment() {
     @CallSuper
     override fun onStart() {
         super.onStart()
-        val viewScope = MainScope() + CoroutineName("BaseFragment viewScope")
-        this.viewScope = viewScope
-        bindView(viewScope)
+        val liveScope = MainScope() + CoroutineName("liveScope")
+        this.liveScope = liveScope
+        bindView(liveScope)
     }
 
     @CallSuper
     override fun onStop() {
-        viewScope?.cancel()
-        viewScope = null
+        liveScope?.cancel()
+        liveScope = null
         super.onStop()
     }
 
