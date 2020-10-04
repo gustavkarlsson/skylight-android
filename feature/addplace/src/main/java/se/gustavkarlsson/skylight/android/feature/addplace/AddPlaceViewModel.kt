@@ -1,12 +1,8 @@
 package se.gustavkarlsson.skylight.android.feature.addplace
 
 import com.ioki.textref.TextRef
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
@@ -18,12 +14,11 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.plus
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
-import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
+import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
 import javax.inject.Inject
 
 @FlowPreview
@@ -32,16 +27,9 @@ internal class AddPlaceViewModel @Inject constructor(
     private val placesRepository: PlacesRepository,
     private val store: Store<State>,
     val errorMessages: Flow<TextRef>,
-) : ScopedService {
-
-    // TODO move to base ScopedService?
-    private val scope = CoroutineScope(SupervisorJob()) + CoroutineName("AddPlaceViewModel scope")
+) : CoroutineScopedService() {
 
     init { store.start(scope) }
-
-    override fun onCleared() {
-        scope.cancel("AddPlaceViewModel cleared")
-    }
 
     private val stateFlow = store.state
 

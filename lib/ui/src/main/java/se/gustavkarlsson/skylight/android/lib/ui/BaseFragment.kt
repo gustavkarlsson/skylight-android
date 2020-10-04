@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import kotlinx.coroutines.CoroutineName
@@ -22,11 +23,13 @@ abstract class BaseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? = inflater.inflate(layoutId, container, false)
 
+    @CallSuper
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         initView()
     }
 
+    @CallSuper
     override fun onStart() {
         super.onStart()
         val viewScope = MainScope() + CoroutineName("BaseFragment viewScope")
@@ -34,6 +37,7 @@ abstract class BaseFragment : Fragment() {
         bindView(viewScope)
     }
 
+    @CallSuper
     override fun onStop() {
         viewScope?.cancel()
         viewScope = null

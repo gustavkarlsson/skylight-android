@@ -1,33 +1,25 @@
 package se.gustavkarlsson.skylight.android.feature.settings
 
 import com.ioki.textref.TextRef
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.plus
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
-import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
+import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @FlowPreview
 internal class SettingsViewModel @Inject constructor(
     private val settings: Settings
-) : ScopedService {
-
-    // TODO move to base ScopedService?
-    private val scope = CoroutineScope(SupervisorJob()) + CoroutineName("SettingsViewModel scope")
+) : CoroutineScopedService() {
 
     private val showSelectTriggerLevelChannel = BroadcastChannel<Pair<Place, TriggerLevel>>(Channel.BUFFERED)
     val showSelectTriggerLevel: Flow<Pair<Place, TriggerLevel>> = showSelectTriggerLevelChannel.asFlow()
@@ -55,8 +47,6 @@ internal class SettingsViewModel @Inject constructor(
             settings.setNotificationTriggerLevel(place, triggerLevel)
         }
     }
-
-    override fun onCleared() = scope.cancel("ViewModel cleared")
 }
 
 internal sealed class SettingsItem {

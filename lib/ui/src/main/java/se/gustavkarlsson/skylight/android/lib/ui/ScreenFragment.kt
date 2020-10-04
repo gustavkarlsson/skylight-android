@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.ui
 
 import android.os.Bundle
+import androidx.annotation.CallSuper
 import com.google.android.material.appbar.MaterialToolbar
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import de.halfbit.edgetoedge.edgeToEdge
@@ -9,6 +10,7 @@ import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 
 abstract class ScreenFragment : BaseFragment() {
 
+    @CallSuper
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         edgeToEdge(setupEdgeToEdge())
@@ -22,6 +24,7 @@ abstract class ScreenFragment : BaseFragment() {
         }
     }
 
+    @CallSuper
     override fun onStart() {
         super.onStart()
         AnalyticsComponent.instance.analytics().logScreen(requireActivity(), this::class.java.simpleName)

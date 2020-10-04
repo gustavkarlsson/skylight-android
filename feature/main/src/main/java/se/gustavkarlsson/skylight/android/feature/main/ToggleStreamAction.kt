@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main
 
+import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
@@ -19,7 +20,7 @@ internal class ToggleStreamAction(
     private val streamAuroraReports: (Flow<Loadable<LocationResult>>) -> Flow<LoadableAuroraReport>
 ) : Action<State> {
     override suspend fun execute(stateAccess: StateAccess<State>) {
-        val scope = CoroutineScope(Job())
+        val scope = CoroutineScope(Job() + CoroutineName("ToggleStreamAction"))
         val newState = stateAccess.update { state ->
             state.streamScope?.cancel("Streaming toggled")
             state.copy(streamScope = scope)

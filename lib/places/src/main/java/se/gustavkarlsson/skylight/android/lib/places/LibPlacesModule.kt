@@ -48,7 +48,7 @@ object LibPlacesModule {
             placeSelectionStorage = storage,
             scope = CoroutineScope(Dispatchers.Unconfined)
         )
-        // TODO activity local coroutine scope?
+        // TODO activity local coroutine scope? GlobalScope
     }
 
     @Provides

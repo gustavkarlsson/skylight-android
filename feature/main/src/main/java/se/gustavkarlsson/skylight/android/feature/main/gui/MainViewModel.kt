@@ -3,11 +3,7 @@ package se.gustavkarlsson.skylight.android.feature.main.gui
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import com.ioki.textref.TextRef
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -15,7 +11,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.plus
 import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.koptional.Absent
@@ -42,8 +37,8 @@ import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingResult
-import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.lib.time.Time
+import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 
 @ExperimentalCoroutinesApi
@@ -64,16 +59,9 @@ internal class MainViewModel(
     private val chanceToColorConverter: ChanceToColorConverter,
     time: Time,
     nowTextThreshold: Duration
-) : ScopedService {
-
-    // TODO move to base ScopedService?
-    private val scope = CoroutineScope(SupervisorJob()) + CoroutineName("MainViewModel scope")
+) : CoroutineScopedService() {
 
     init { store.start(scope) }
-
-    override fun onCleared() {
-        scope.cancel("MainViewModel cleared")
-    }
 
     private val stateFlow = store.state
 

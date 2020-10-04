@@ -26,7 +26,7 @@ internal class CombiningAuroraReportProvider(
 ) : AuroraReportProvider {
     override suspend fun get(getLocation: suspend () -> LocationResult): CompleteAuroraReport {
         val location = getLocation()
-        val scope = CoroutineScope(currentCoroutineContext())
+        val scope = CoroutineScope(currentCoroutineContext()) // TODO Is this correct?
         return scope.run {
             val locationName = async {  reverseGeocoder.get(location) }
             val kpIndex = async { kpIndexProvider.get() }
