@@ -13,7 +13,6 @@ import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.StateAccess
 import se.gustavkarlsson.conveyor.buildStore
 import se.gustavkarlsson.skylight.android.core.logging.logError
-import se.gustavkarlsson.skylight.android.core.utils.allowDiskReadsInStrictMode
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -24,25 +23,22 @@ internal class PlacesRepoSelectedPlaceRepository(
 ) : SelectedPlaceRepository {
     @FlowPreview
     private val store = buildStore(
-        initialState = allowDiskReadsInStrictMode {
-            // TODO This should not run on the main thread
-            State.Initial(placeSelectionStorage.loadIndex())
-        },
-        openActions = listOf(StreamPlacesAction(placesRepo.stream()))
+        initialState = State.Initial,
+        openActions = listOf(StreamPlacesAction(placeSelectionStorage::loadIndex, placesRepo.stream()))
     )
 
     init {
         store.start(scope)
-        // TODO Replace with store watcher when available
-        scope.launch {
-            store.state
-                .filterIsInstance<State.Loaded>()
-                .collect { state ->
-                    val index = state.places.indexOf(state.selected)
-                    placeSelectionStorage.saveIndex(index)
-                }
-        }
+        scope.launch { continuouslySaveSelectedPlace(placeSelectionStorage::saveIndex) }
     }
+
+    private suspend fun continuouslySaveSelectedPlace(saveIndex: (Int) -> Unit) =
+        store.state // TODO Replace with store watcher when available
+            .filterIsInstance<State.Loaded>()
+            .collect { state ->
+                val index = state.places.indexOf(state.selected)
+                saveIndex(index)
+            }
 
     override fun set(place: Place) = store.issue(SelectionChangedAction(place))
 
@@ -56,28 +52,32 @@ internal class PlacesRepoSelectedPlaceRepository(
 private sealed class State {
     abstract val selected: Place
 
-    data class Initial(val selectedIndex: Int?) : State() {
+    object Initial : State() {
         override val selected = Place.Current
     }
 
     data class Loaded(override val selected: Place, val places: List<Place>) : State()
 }
 
-private class StreamPlacesAction(private val placesStream: Flow<List<Place>>) : Action<State> {
+private class StreamPlacesAction(
+    private val loadIndex: suspend () -> Int?,
+    private val placesStream: Flow<List<Place>>,
+) : Action<State> {
     override suspend fun execute(stateAccess: StateAccess<State>) {
+        val initialSelectedIndex = loadIndex()
         placesStream
             .collect { newPlaces ->
                 stateAccess.update { state ->
-                    createNewState(state, newPlaces)
+                    createNewState(initialSelectedIndex, state, newPlaces)
                 }
             }
     }
 
-    private fun createNewState(state: State, newPlaces: List<Place>): State {
+    private fun createNewState(initialSelectedIndex: Int?, state: State, newPlaces: List<Place>): State {
         val selected = when (state) {
             is State.Initial -> {
-                if (state.selectedIndex != null) {
-                    val index = state.selectedIndex.coerceIn(newPlaces.indices)
+                if (initialSelectedIndex != null) {
+                    val index = initialSelectedIndex.coerceIn(newPlaces.indices)
                     newPlaces[index]
                 } else newPlaces.last()
             }
