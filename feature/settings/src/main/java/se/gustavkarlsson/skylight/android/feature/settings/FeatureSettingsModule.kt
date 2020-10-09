@@ -7,7 +7,6 @@ import androidx.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.asFlow
@@ -37,22 +36,19 @@ object FeatureSettingsModule {
         placesRepository: PlacesRepository,
         analytics: Analytics
     ): ModuleStarter =
-        object : ModuleStarter {
-            @SuppressLint("CheckResult")
-            override fun start(scope: CoroutineScope) {
-                scope.launch {
-                    getRemovedPlaces(placesRepository)
-                        .collect {
-                            settings.clearNotificationTriggerLevel(it)
-                        }
-                    getTriggerLevels(settings)
-                        .collect { (min, max) ->
-                            analytics.setProperty("trigger_lvl_min", min)
-                            analytics.setProperty("trigger_lvl_max", max)
-                        }
-                }
-                clearOldSharedPreferences(context)
+        ModuleStarter { scope ->
+            scope.launch {
+                getRemovedPlaces(placesRepository)
+                    .collect {
+                        settings.clearNotificationTriggerLevel(it)
+                    }
+                getTriggerLevels(settings)
+                    .collect { (min, max) ->
+                        analytics.setProperty("trigger_lvl_min", min)
+                        analytics.setProperty("trigger_lvl_max", max)
+                    }
             }
+            clearOldSharedPreferences(context)
         }
 }
 

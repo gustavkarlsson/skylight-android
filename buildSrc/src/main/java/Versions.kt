@@ -53,7 +53,7 @@ object Versions {
     val leakcanary = "2.4"
     val banner = "1.2.0"
     val mapboxServices = "5.3.0"
-    val conveyor = "166ca231df" // TODO use release version
+    val conveyor = "67195ea086" // TODO use release version
     val edgeToEdge = "0.10"
     val koptional = "0.4.0"
     val simpleStack = "2.3.2"

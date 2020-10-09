@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.places
 
-import android.annotation.SuppressLint
 import android.content.Context
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Module
@@ -8,7 +7,6 @@ import dagger.Provides
 import dagger.multibindings.IntoSet
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
@@ -55,17 +53,14 @@ object LibPlacesModule {
     @AppScope
     @IntoSet
     fun moduleStarter(placesRepository: PlacesRepository, analytics: Analytics): ModuleStarter =
-        object : ModuleStarter {
-            @SuppressLint("CheckResult")
-            override fun start(scope: CoroutineScope) {
-                scope.launch {
-                    placesRepository.stream()
-                        .map { it.count() }
-                        .distinctUntilChanged()
-                        .collect { placesCount ->
-                            analytics.setProperty("places_count", placesCount)
-                        }
-                }
+        ModuleStarter { scope ->
+            scope.launch {
+                placesRepository.stream()
+                    .map { it.count() }
+                    .distinctUntilChanged()
+                    .collect { placesCount ->
+                        analytics.setProperty("places_count", placesCount)
+                    }
             }
         }
 }
