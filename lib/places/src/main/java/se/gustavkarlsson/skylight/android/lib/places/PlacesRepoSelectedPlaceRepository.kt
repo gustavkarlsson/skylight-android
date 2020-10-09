@@ -6,9 +6,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.StateAccess
 import se.gustavkarlsson.conveyor.buildStore
@@ -18,7 +16,7 @@ import se.gustavkarlsson.skylight.android.core.logging.logError
 @ExperimentalCoroutinesApi
 internal class PlacesRepoSelectedPlaceRepository(
     placesRepo: PlacesRepository,
-    placeSelectionStorage: PlaceSelectionStorage,
+    private val placeSelectionStorage: PlaceSelectionStorage,
     scope: CoroutineScope
 ) : SelectedPlaceRepository {
     @FlowPreview
@@ -27,20 +25,9 @@ internal class PlacesRepoSelectedPlaceRepository(
         openActions = listOf(StreamPlacesAction(placeSelectionStorage::loadIndex, placesRepo.stream()))
     )
 
-    init {
-        store.start(scope)
-        scope.launch { continuouslySaveSelectedPlace(placeSelectionStorage::saveIndex) }
-    }
+    init { store.start(scope) }
 
-    private suspend fun continuouslySaveSelectedPlace(saveIndex: (Int) -> Unit) =
-        store.state // TODO Replace with store watcher when available
-            .filterIsInstance<State.Loaded>()
-            .collect { state ->
-                val index = state.places.indexOf(state.selected)
-                saveIndex(index)
-            }
-
-    override fun set(place: Place) = store.issue(SelectionChangedAction(place))
+    override fun set(place: Place) = store.issue(SelectionChangedAction(place, placeSelectionStorage::saveIndex))
 
     override fun get(): Place = store.currentState.selected
 
@@ -98,9 +85,12 @@ private class StreamPlacesAction(
     }
 }
 
-private data class SelectionChangedAction(val selectedPlace: Place) : Action<State> {
+private class SelectionChangedAction(
+    private val selectedPlace: Place,
+    private val saveIndex: (Int) -> Unit,
+) : Action<State> {
     override suspend fun execute(stateAccess: StateAccess<State>) {
-        stateAccess.update { state ->
+        val newState = stateAccess.update { state ->
             when (state) {
                 is State.Initial -> {
                     logError { "Cannot select a place before loading places. Place: $selectedPlace" }
@@ -115,6 +105,10 @@ private data class SelectionChangedAction(val selectedPlace: Place) : Action<Sta
                     }
                 }
             }
+        }
+        if (newState is State.Loaded) {
+            val index = newState.places.indexOf(newState.selected)
+            saveIndex(index)
         }
     }
 }
