@@ -10,12 +10,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
+import se.gustavkarlsson.skylight.android.lib.time.Time
+import java.io.IOException
 
 internal class StoreKpIndexProvider(
-    private val store: Store<Unit, Report<KpIndex>>,
+    private val store: Store<Unit, KpIndex>,
+    private val time: Time
 ) : KpIndexProvider {
 
     override suspend fun get(fresh: Boolean): Report<KpIndex> =
@@ -28,9 +32,14 @@ internal class StoreKpIndexProvider(
         }
 
     private suspend fun getSingleReport(
-        getKpIndex: suspend Store<Unit, Report<KpIndex>>.() -> Report<KpIndex>
+        getWeather: suspend Store<Unit, KpIndex>.() -> KpIndex
     ): Report<KpIndex> {
-        val report = store.getKpIndex()
+        val report = try {
+            val weather = store.getWeather()
+            Report.Success(weather, time.now())
+        } catch (e: Exception) {
+            Report.Error(getCause(e), time.now())
+        }
         logInfo { "Provided Kp index: $report" }
         return report
     }
@@ -46,9 +55,19 @@ internal class StoreKpIndexProvider(
             .map { response ->
                 when (response) {
                     is StoreResponse.Loading -> Loadable.loading()
-                    is StoreResponse.Data -> Loadable.loaded(response.value)
-                    is StoreResponse.Error.Exception, is StoreResponse.Error.Message, is StoreResponse.NoNewData ->
+                    is StoreResponse.Data -> Loadable.loaded(Report.success(response.value, time.now()))
+                    is StoreResponse.Error.Exception ->
+                        Loadable.loaded(Report.error(getCause(response.error), time.now()))
+                    is StoreResponse.Error.Message, is StoreResponse.NoNewData ->
                         error("Unsupported response type: $response")
                 }
             }
 }
+
+// TODO Fix duplication with RetrofittedOpenWeatherMapWeatherProvider
+private fun getCause(throwable: Throwable): Cause =
+    when (throwable) {
+        is IOException -> Cause.Connectivity
+        is ServerResponseException -> Cause.ServerResponse
+        else -> Cause.Unknown
+    }

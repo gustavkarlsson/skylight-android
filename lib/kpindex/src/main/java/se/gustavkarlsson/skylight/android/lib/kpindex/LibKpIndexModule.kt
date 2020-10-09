@@ -14,7 +14,6 @@ import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import se.gustavkarlsson.skylight.android.core.Io
-import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.core.utils.minutes
@@ -60,12 +59,11 @@ object LibKpIndexModule {
             api = api,
             retryDelay = 15.seconds,
             pollingInterval = pollingInterval,
-            dispatcher = dispatcher,
-            time = time,
+            dispatcher = dispatcher
         )
 
         val expiry = (pollingInterval.toMillis() / 2).kotlinMilliseconds
-        val cachePolicy = MemoryPolicy.builder<Unit, Report<KpIndex>>()
+        val cachePolicy = MemoryPolicy.builder<Unit, KpIndex>()
             .setExpireAfterWrite(expiry)
             .build()
 
@@ -74,7 +72,8 @@ object LibKpIndexModule {
             .build()
 
         return StoreKpIndexProvider(
-            store = store
+            store = store,
+            time = time
         )
     }
 }
