@@ -8,7 +8,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.Main
 import java.util.Locale
@@ -16,6 +19,10 @@ import javax.inject.Named
 
 @Module
 internal class AppModule(private val application: Application) {
+
+    @Provides
+    @AppScope
+    fun scope(): CoroutineScope = GlobalScope
 
     @Provides
     @Reusable

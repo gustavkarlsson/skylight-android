@@ -40,15 +40,15 @@ object LibPlacesModule {
     @AppScope
     internal fun selectedPlaceRepository(
         context: Context,
-        placesRepository: PlacesRepository
+        placesRepository: PlacesRepository,
+        scope: CoroutineScope,
     ): SelectedPlaceRepository {
         val storage = SharedPrefsPlaceSelectionStorage(context)
         return PlacesRepoSelectedPlaceRepository(
             placesRepo = placesRepository,
             placeSelectionStorage = storage,
-            scope = CoroutineScope(Dispatchers.Unconfined)
+            scope = scope
         )
-        // TODO activity local coroutine scope? GlobalScope
     }
 
     @Provides

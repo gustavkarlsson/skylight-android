@@ -1,9 +1,8 @@
 package se.gustavkarlsson.skylight.android.lib.aurora
 
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
-import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -24,15 +23,14 @@ internal class CombiningAuroraReportProvider(
     private val kpIndexProvider: KpIndexProvider,
     private val weatherProvider: WeatherProvider
 ) : AuroraReportProvider {
-    override suspend fun get(getLocation: suspend () -> LocationResult): CompleteAuroraReport {
-        val location = getLocation()
-        val scope = CoroutineScope(currentCoroutineContext()) // TODO Is this correct?
-        return scope.run {
-            val locationName = async {  reverseGeocoder.get(location) }
+    override suspend fun get(getLocation: suspend () -> LocationResult): CompleteAuroraReport =
+        coroutineScope {
+            val location = async { getLocation() }
+            val locationName = async { reverseGeocoder.get(location.await()) }
             val kpIndex = async { kpIndexProvider.get() }
-            val geomagLocation = async { geomagLocationProvider.get(location) }
-            val darkness = async { darknessProvider.get(location) }
-            val weather = async { weatherProvider.get(location) }
+            val geomagLocation = async { geomagLocationProvider.get(location.await()) }
+            val darkness = async { darknessProvider.get(location.await()) }
+            val weather = async { weatherProvider.get(location.await()) }
             val report = CompleteAuroraReport(
                 locationName.await(),
                 kpIndex.await(),
@@ -43,7 +41,6 @@ internal class CombiningAuroraReportProvider(
             logInfo { "Provided aurora report: $report" }
             report
         }
-    }
 
     @ExperimentalCoroutinesApi
     override fun stream(
