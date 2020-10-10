@@ -109,7 +109,7 @@ class AddPlaceFragment : ScreenFragment() {
         }
 
         viewModel.errorMessages.bind(scope) { message ->
-            handleNewMessage(message)
+            scope.showErrorMessage(message)
         }
     }
 
@@ -133,7 +133,7 @@ class AddPlaceFragment : ScreenFragment() {
         editText.requestFocus()
     }
 
-    private suspend fun handleNewMessage(message: TextRef) {
+    private fun CoroutineScope.showErrorMessage(message: TextRef) {
         if (errorMessage.compareAndSet(null, message)) {
             showSnackbar(searchResultRecyclerView, message) {
                 setIndefiniteDuration()

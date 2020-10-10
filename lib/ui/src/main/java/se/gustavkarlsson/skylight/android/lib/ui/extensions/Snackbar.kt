@@ -2,47 +2,35 @@ package se.gustavkarlsson.skylight.android.lib.ui.extensions
 
 import android.view.View
 import androidx.annotation.StringRes
-import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.ioki.textref.TextRef
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.lib.ui.R
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
 
-suspend fun showSnackbar(view: View, text: CharSequence, build: SnackbarBuilder.() -> Unit): Snackbar =
+fun CoroutineScope.showSnackbar(view: View, text: CharSequence, build: SnackbarBuilder.() -> Unit): Snackbar =
     showSnackbar { buildSnackbar(view, build) { setText(text) } }
 
-suspend fun showSnackbar(view: View, @StringRes text: Int, build: SnackbarBuilder.() -> Unit): Snackbar =
+fun CoroutineScope.showSnackbar(view: View, @StringRes text: Int, build: SnackbarBuilder.() -> Unit): Snackbar =
     showSnackbar { buildSnackbar(view, build) { setText(text) } }
 
-suspend fun showSnackbar(view: View, text: TextRef, build: SnackbarBuilder.() -> Unit): Snackbar =
+fun CoroutineScope.showSnackbar(view: View, text: TextRef, build: SnackbarBuilder.() -> Unit): Snackbar =
     showSnackbar { buildSnackbar(view, build) { setText(text) } }
 
-suspend fun showSnackbar(
+private fun CoroutineScope.showSnackbar(
     buildSnackbar: () -> Snackbar
-): Snackbar =
-    suspendCancellableCoroutine { cont -> // FIXME verify that this works, lifecycle wise
-        try {
-            val snackbar = buildSnackbar()
-            snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                override fun onDismissed(snackbar: Snackbar, event: Int) {
-                    cont.cancel()
-                }
-            })
-            cont.invokeOnCancellation {
-                snackbar.dismiss()
-            }
-            snackbar.show()
-            cont.resume(snackbar)
-        } catch (e: Exception) {
-            cont.resumeWithException(e)
-        }
+): Snackbar {
+    val snackbar = buildSnackbar()
+    launch {
+        snackbar.show()
+        delay(Long.MAX_VALUE)
+    }.invokeOnCompletion {
+        snackbar.dismiss()
     }
+    return snackbar
+}
 
 private fun buildSnackbar(
     view: View,

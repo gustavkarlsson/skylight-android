@@ -35,7 +35,8 @@ internal class GooglePlayServicesFragment : ScreenFragment() {
             try {
                 makeAvailable()
             } catch (e: Exception) {
-                showError(e)
+                logError(e) { "Failed to install Google Play Services" }
+                scope.showErrorMessage()
             }
         }
     }
@@ -46,8 +47,7 @@ internal class GooglePlayServicesFragment : ScreenFragment() {
         navigator.setBackstack(target)
     }
 
-    private suspend fun showError(error: Exception) {
-        logError(error) { "Failed to install Google Play Services" }
+    private fun CoroutineScope.showErrorMessage() {
         view?.let { view ->
             showSnackbar(
                 view,
