@@ -40,12 +40,13 @@ object LibPlacesModule {
         context: Context,
         placesRepository: PlacesRepository,
         scope: CoroutineScope,
+        @Io dispatcher: CoroutineDispatcher,
     ): SelectedPlaceRepository {
-        val storage = SharedPrefsPlaceSelectionStorage(context)
+        val storage = SharedPrefsPlaceSelectionStorage(context, dispatcher)
         return PlacesRepoSelectedPlaceRepository(
             placesRepo = placesRepository,
             placeSelectionStorage = storage,
-            scope = scope
+            scope = scope,
         )
     }
 

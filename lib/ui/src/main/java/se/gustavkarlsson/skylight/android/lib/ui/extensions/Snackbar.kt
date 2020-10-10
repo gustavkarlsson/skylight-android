@@ -26,23 +26,21 @@ suspend fun showSnackbar(view: View, text: TextRef, build: SnackbarBuilder.() ->
 suspend fun showSnackbar(
     buildSnackbar: () -> Snackbar
 ): Snackbar =
-    withContext(Dispatchers.IO + CoroutineName("showSnackbar")) {
-        suspendCancellableCoroutine<Snackbar> { cont ->
-            try {
-                val snackbar = buildSnackbar()
-                snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                    override fun onDismissed(snackbar: Snackbar, event: Int) {
-                        cont.cancel()
-                    }
-                })
-                cont.invokeOnCancellation {
-                    snackbar.dismiss()
+    suspendCancellableCoroutine { cont -> // FIXME verify that this works, lifecycle wise
+        try {
+            val snackbar = buildSnackbar()
+            snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                override fun onDismissed(snackbar: Snackbar, event: Int) {
+                    cont.cancel()
                 }
-                snackbar.show()
-                cont.resume(snackbar)
-            } catch (e: Exception) {
-                cont.resumeWithException(e)
+            })
+            cont.invokeOnCancellation {
+                snackbar.dismiss()
             }
+            snackbar.show()
+            cont.resume(snackbar)
+        } catch (e: Exception) {
+            cont.resumeWithException(e)
         }
     }
 
