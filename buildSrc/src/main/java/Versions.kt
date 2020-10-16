@@ -8,7 +8,7 @@ object Versions {
     val buildTools = "29.0.3"
     val java = JavaVersion.VERSION_1_8
     val kotlin = "1.4.10"
-    val androidGradle = "4.0.1" // Must also update in buildSrc/build.gradle.kts
+    val androidGradle = "4.1.0" // Must also update in buildSrc/build.gradle.kts
     val jgit = "5.6.1.202002131546-r"
     // Skip 1.11.0 as it has breaking bug: https://github.com/allegro/axion-release-plugin/issues/332
     // Skip 1.12.0 as it has breaking bug: https://github.com/allegro/axion-release-plugin/issues/339
