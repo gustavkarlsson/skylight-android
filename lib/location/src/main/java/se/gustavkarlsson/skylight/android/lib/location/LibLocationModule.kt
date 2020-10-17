@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.location
 
 import android.content.Context
+import android.os.Looper
 import com.dropbox.android.external.store4.MemoryPolicy
 import com.dropbox.android.external.store4.StoreBuilder
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -41,6 +42,7 @@ object LibLocationModule {
         val fetcher = createLocationFetcher(
             client = client,
             locationRequest = locationRequest,
+            looper = Looper.getMainLooper(),
             retryDelay = 15.seconds,
             dispatcher = dispatcher,
         )
