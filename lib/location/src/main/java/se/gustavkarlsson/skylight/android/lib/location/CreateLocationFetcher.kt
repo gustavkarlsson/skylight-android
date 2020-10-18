@@ -7,13 +7,15 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationAvailability
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.tasks.await
 import org.threeten.bp.Duration
@@ -32,40 +34,34 @@ internal fun createLocationFetcher(
     dispatcher: CoroutineDispatcher,
 ): Fetcher<Unit, LocationResult> =
     Fetcher.ofFlow {
-        channelFlow {
-            tryLastLocation(client)
-            streamUntilClosed(client, looper, locationRequest, retryDelay)
+        flow {
+            emitAll(lastLocation(client))
+            emitAll(stream(client, looper, locationRequest, retryDelay))
         }.flowOn(dispatcher)
     }
 
 @ExperimentalCoroutinesApi
-private suspend fun ProducerScope<LocationResult>.tryLastLocation(client: FusedLocationProviderClient) {
-    val result = try {
-        logDebug { "Trying to get last location" }
-        val locationAvailable = client.awaitIsLocationAvailable()
-        if (locationAvailable) {
-            val location = client.awaitLastLocation()
-            val result = LocationResult.success(location)
-            logDebug { "Got last location $result" }
-            result
-        } else {
-            logDebug { "Last location not available" }
-            null
+private fun lastLocation(client: FusedLocationProviderClient): Flow<LocationResult> =
+    flow {
+        try {
+            logDebug { "Trying to get last location" }
+            val locationAvailable = client.awaitIsLocationAvailable()
+            if (locationAvailable) {
+                val location = client.awaitLastLocation()
+                val result = LocationResult.success(location)
+                logDebug { "Got last location $result" }
+                emit(result)
+            } else {
+                logDebug { "Last location not available" }
+            }
+        } catch (e: SecurityException) {
+            logWarn(e) { "Failed to get last location" }
+            emit(LocationResult.errorMissingPermission())
+        } catch (e: Exception) {
+            logError(e) { "Failed to get last location" }
+            emit(LocationResult.errorUnknown())
         }
-    } catch (e: CancellationException) {
-        logDebug(e) { "Channel cancelled" }
-        null
-    } catch (e: SecurityException) {
-        logWarn(e) { "Failed to get last location" }
-        LocationResult.errorMissingPermission()
-    } catch (e: Exception) {
-        logError(e) { "Failed to get last location" }
-        LocationResult.errorUnknown()
     }
-    if (result != null) {
-        offerCatching(result)
-    }
-}
 
 @RequiresPermission(anyOf = ["android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"])
 private suspend fun FusedLocationProviderClient.awaitIsLocationAvailable(): Boolean =
@@ -75,65 +71,64 @@ private suspend fun FusedLocationProviderClient.awaitIsLocationAvailable(): Bool
 private suspend fun FusedLocationProviderClient.awaitLastLocation(): Location = lastLocation.await().toLocation()
 
 @ExperimentalCoroutinesApi
-private suspend fun ProducerScope<LocationResult>.streamUntilClosed(
+private fun stream(
     client: FusedLocationProviderClient,
     looper: Looper,
     locationRequest: LocationRequest,
     retryDelay: Duration,
-) {
-    while (!isClosedForSend) {
-        stream(client, looper, locationRequest)
-        if (!isClosedForSend) {
-            logDebug { "Stream ended prematurely. Retrying in $retryDelay" }
+): Flow<LocationResult> =
+    flow {
+        do {
+            emitAll(streamUntilError(client, looper, locationRequest))
+            logDebug { "Stream ended. Retrying in $retryDelay" }
             delay(retryDelay.toMillis())
-        } else {
-            logDebug { "Stream ended and channel is closed" }
-        }
+        } while (true)
     }
-    logDebug { "Closing location flow" }
-}
 
 @ExperimentalCoroutinesApi
-private suspend fun ProducerScope<LocationResult>.stream(
+private fun streamUntilError(
     client: FusedLocationProviderClient,
     looper: Looper,
     locationRequest: LocationRequest,
-) {
-    val callback = LatestLocationCallback { location ->
-        val result = LocationResult.success(location)
-        logDebug { "Got location from callback: $result" }
-        offerCatching(result)
-    }
-
-    try {
-        logDebug { "Streaming location" }
-        val task = client.requestLocationUpdates(locationRequest, callback, looper)
-        task.addOnFailureListener { e ->
-            val result = if (e is SecurityException) {
-                logWarn(e) { "Failed to get location." }
-                LocationResult.errorMissingPermission()
-            } else {
-                logError(e) { "Failed to get location." }
-                LocationResult.errorUnknown()
-            }
+): Flow<LocationResult> =
+    channelFlow {
+        val callback = LatestLocationCallback { location ->
+            val result = LocationResult.success(location)
+            logDebug { "Got location update: $result" }
             offerCatching(result)
         }
-        task.await() // FIXME this completes prematurely. Why?
-    } catch (e: CancellationException) {
-        logDebug(e) { "Channel cancelled" }
-    } catch (e: SecurityException) {
-        logWarn(e) { "Failed to get location" }
-        val result = LocationResult.errorMissingPermission()
-        offerCatching(result)
-    } catch (e: Exception) {
-        logError(e) { "Failed to get location" }
-        val result = LocationResult.errorUnknown()
-        offerCatching(result)
-    } finally {
-        logDebug { "Stream stopped. Removing callback" }
-        client.removeLocationUpdates(callback)
+
+        try {
+            logDebug { "Requesting location updates" }
+            val task = client.requestLocationUpdates(locationRequest, callback, looper)
+            task.addOnFailureListener { e ->
+                val result = if (e is SecurityException) {
+                    logWarn(e) { "Failed to get location update" }
+                    LocationResult.errorMissingPermission()
+                } else {
+                    logError(e) { "Failed to get location update" }
+                    LocationResult.errorUnknown()
+                }
+                offerCatching(result)
+                close(e)
+            }
+        } catch (e: SecurityException) {
+            logWarn(e) { "Failed to request location updates" }
+            val result = LocationResult.errorMissingPermission()
+            offerCatching(result)
+            close(e)
+        } catch (e: Exception) {
+            logError(e) { "Failed to request location updates" }
+            val result = LocationResult.errorUnknown()
+            offerCatching(result)
+            close(e)
+        } finally {
+            awaitClose {
+                logDebug { "Channel closing. Removing callback" }
+                client.removeLocationUpdates(callback)
+            }
+        }
     }
-}
 
 private class LatestLocationCallback(
     private val onLocation: (Location) -> Unit
