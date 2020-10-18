@@ -15,6 +15,7 @@ import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.places.Place
 
+//FIXME This is called both from PlaceSelectionAction and live actions
 internal class ToggleStreamAction(
     private val currentLocation: Flow<Loadable<LocationResult>>,
     private val streamAuroraReports: (Flow<Loadable<LocationResult>>) -> Flow<LoadableAuroraReport>
