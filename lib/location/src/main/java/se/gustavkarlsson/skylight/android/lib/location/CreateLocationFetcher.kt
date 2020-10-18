@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.location
 
 import android.os.Looper
+import androidx.annotation.RequiresPermission
 import com.dropbox.android.external.store4.Fetcher
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationAvailability
@@ -41,10 +42,9 @@ internal fun createLocationFetcher(
 private suspend fun ProducerScope<LocationResult>.tryLastLocation(client: FusedLocationProviderClient) {
     val result = try {
         logDebug { "Trying to get last location" }
-        val available = client.locationAvailability.await<LocationAvailability?>()?.isLocationAvailable ?: false
-        if (available) {
-            val androidLocation = client.lastLocation.await()
-            val location = androidLocation.toLocation()
+        val locationAvailable = client.awaitIsLocationAvailable()
+        if (locationAvailable) {
+            val location = client.awaitLastLocation()
             val result = LocationResult.success(location)
             logDebug { "Got last location $result" }
             result
@@ -66,6 +66,13 @@ private suspend fun ProducerScope<LocationResult>.tryLastLocation(client: FusedL
         offerCatching(result)
     }
 }
+
+@RequiresPermission(anyOf = ["android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"])
+private suspend fun FusedLocationProviderClient.awaitIsLocationAvailable(): Boolean =
+    locationAvailability.await<LocationAvailability?>()?.isLocationAvailable ?: false
+
+@RequiresPermission(anyOf = ["android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"])
+private suspend fun FusedLocationProviderClient.awaitLastLocation(): Location = lastLocation.await().toLocation()
 
 @ExperimentalCoroutinesApi
 private suspend fun ProducerScope<LocationResult>.streamUntilClosed(
