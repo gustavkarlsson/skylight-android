@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.UpdatableStateFlow
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
@@ -24,7 +25,8 @@ import se.gustavkarlsson.skylight.android.lib.places.Place
 @ExperimentalCoroutinesApi
 internal class StreamReportsLiveAction(
     private val currentLocation: Flow<Loadable<LocationResult>>,
-    private val streamAuroraReports: (Flow<Loadable<LocationResult>>) -> Flow<LoadableAuroraReport>
+    private val streamAuroraReports: (Flow<Loadable<LocationResult>>) -> Flow<LoadableAuroraReport>,
+    private val throttleDuration: Duration,
 ) : Action<State> {
     override suspend fun execute(state: UpdatableStateFlow<State>) {
         isStoreLive(state).collectLatest { live ->
@@ -42,7 +44,7 @@ internal class StreamReportsLiveAction(
     private suspend fun streamAndUpdateReports(state: UpdatableStateFlow<State>) {
         selectedPlace(state).collectLatest { selectedPlace ->
             streamAuroraReports(locationUpdates(selectedPlace))
-                .throttle(500)
+                .throttle(throttleDuration.toMillis())
                 .collectLatest { report ->
                     state.update(selectedPlace, report)
                 }

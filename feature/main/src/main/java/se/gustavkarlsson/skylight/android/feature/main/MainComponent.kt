@@ -11,6 +11,7 @@ import se.gustavkarlsson.skylight.android.core.AppComponent
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
+import se.gustavkarlsson.skylight.android.core.utils.millis
 import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
@@ -84,7 +85,11 @@ internal object MainModule {
         auroraReportProvider: AuroraReportProvider
     ): Store<State> {
         val locationPermissionAction = LocationPermissionAction(permissionChecker.access)
-        val streamReportsAction = StreamReportsLiveAction(locationProvider.stream(), auroraReportProvider::stream)
+        val streamReportsAction = StreamReportsLiveAction(
+            currentLocation = locationProvider.stream(),
+            streamAuroraReports = auroraReportProvider::stream,
+            throttleDuration = 500.millis
+        )
         val placeSelectionAction = PlaceSelectionAction(selectedPlaceRepository.stream())
         return Store(
             initialState = State(selectedPlace = selectedPlaceRepository.get()),
