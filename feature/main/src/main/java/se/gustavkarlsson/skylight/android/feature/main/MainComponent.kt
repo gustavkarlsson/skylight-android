@@ -7,7 +7,6 @@ import dagger.Provides
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import se.gustavkarlsson.conveyor.Store
-import se.gustavkarlsson.conveyor.buildStore
 import se.gustavkarlsson.skylight.android.core.AppComponent
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
@@ -85,12 +84,11 @@ internal object MainModule {
         auroraReportProvider: AuroraReportProvider
     ): Store<State> {
         val locationPermissionAction = LocationPermissionAction(permissionChecker.access)
-        val toggleStreamAction = ToggleStreamAction(locationProvider.stream(), auroraReportProvider::stream)
-        val placeSelectionAction = PlaceSelectionAction(selectedPlaceRepository.stream(), toggleStreamAction)
-        return buildStore(
+        val streamReportsAction = StreamReportsLiveAction(locationProvider.stream(), auroraReportProvider::stream)
+        val placeSelectionAction = PlaceSelectionAction(selectedPlaceRepository.stream())
+        return Store(
             initialState = State(selectedPlace = selectedPlaceRepository.get()),
-            openActions = listOf(locationPermissionAction, placeSelectionAction),
-            liveActions = listOf(toggleStreamAction),
+            startActions = listOf(locationPermissionAction, placeSelectionAction, streamReportsAction),
         )
     }
 

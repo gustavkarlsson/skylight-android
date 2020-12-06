@@ -3,23 +3,21 @@ package se.gustavkarlsson.skylight.android.feature.main
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import se.gustavkarlsson.conveyor.Action
-import se.gustavkarlsson.conveyor.StateAccess
+import se.gustavkarlsson.conveyor.UpdatableStateFlow
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.places.Place
 
 internal class PlaceSelectionAction(
     private val places: Flow<Place>,
-    private val toggleStreamAction: ToggleStreamAction,
 ) : Action<State> {
-    override suspend fun execute(stateAccess: StateAccess<State>) {
+    override suspend fun execute(state: UpdatableStateFlow<State>) {
         places.collect { place ->
-            stateAccess.update { state ->
-                state.copy(
+            state.update {
+                copy(
                     selectedPlace = place,
                     selectedAuroraReport = LoadableAuroraReport.LOADING // TODO Get from cache?
                 )
             }
-            toggleStreamAction.execute(stateAccess)
         }
     }
 }

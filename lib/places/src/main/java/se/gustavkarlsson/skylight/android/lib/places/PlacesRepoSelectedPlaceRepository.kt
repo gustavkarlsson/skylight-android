@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import se.gustavkarlsson.conveyor.Action
-import se.gustavkarlsson.conveyor.StateAccess
-import se.gustavkarlsson.conveyor.buildStore
+import se.gustavkarlsson.conveyor.Store
+import se.gustavkarlsson.conveyor.UpdatableStateFlow
 import se.gustavkarlsson.skylight.android.core.logging.logError
 
 @FlowPreview
@@ -20,16 +20,16 @@ internal class PlacesRepoSelectedPlaceRepository(
     scope: CoroutineScope
 ) : SelectedPlaceRepository {
     @FlowPreview
-    private val store = buildStore(
+    private val store = Store(
         initialState = State.Initial,
-        openActions = listOf(StreamPlacesAction(placeSelectionStorage::loadIndex, placesRepo.stream()))
+        startActions = listOf(StreamPlacesAction(placeSelectionStorage::loadIndex, placesRepo.stream()))
     )
 
     init { store.start(scope) }
 
     override fun set(place: Place) = store.issue(SelectionChangedAction(place, placeSelectionStorage::saveIndex))
 
-    override fun get(): Place = store.currentState.selected
+    override fun get(): Place = store.state.value.selected
 
     override fun stream(): Flow<Place> = store.state
         .map { it.selected }
@@ -50,12 +50,12 @@ private class StreamPlacesAction(
     private val loadIndex: suspend () -> Int?,
     private val placesStream: Flow<List<Place>>,
 ) : Action<State> {
-    override suspend fun execute(stateAccess: StateAccess<State>) {
+    override suspend fun execute(state: UpdatableStateFlow<State>) {
         val initialSelectedIndex = loadIndex()
         placesStream
             .collect { newPlaces ->
-                stateAccess.update { state ->
-                    createNewState(initialSelectedIndex, state, newPlaces)
+                state.update {
+                    createNewState(initialSelectedIndex, this, newPlaces)
                 }
             }
     }
@@ -89,19 +89,19 @@ private class SelectionChangedAction(
     private val selectedPlace: Place,
     private val saveIndex: (Int) -> Unit,
 ) : Action<State> {
-    override suspend fun execute(stateAccess: StateAccess<State>) {
-        val newState = stateAccess.update { state ->
-            when (state) {
+    override suspend fun execute(state: UpdatableStateFlow<State>) {
+        val newState = state.update {
+            when (this) {
                 is State.Initial -> {
                     logError { "Cannot select a place before loading places. Place: $selectedPlace" }
-                    state
+                    this
                 }
                 is State.Loaded -> {
-                    if (selectedPlace in state.places) {
-                        state.copy(selected = selectedPlace)
+                    if (selectedPlace in places) {
+                        copy(selected = selectedPlace)
                     } else {
-                        logError { "Cannot select a place that is not loaded. Place: $selectedPlace, Loaded: ${state.places}" }
-                        state
+                        logError { "Cannot select a place that is not loaded. Place: $selectedPlace, Loaded: $places" }
+                        this
                     }
                 }
             }

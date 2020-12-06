@@ -12,7 +12,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import se.gustavkarlsson.conveyor.Store
-import se.gustavkarlsson.conveyor.buildStore
 import se.gustavkarlsson.skylight.android.core.AppComponent
 import se.gustavkarlsson.skylight.android.core.ViewModelScope
 import se.gustavkarlsson.skylight.android.core.utils.seconds
@@ -70,8 +69,8 @@ internal object AddPlaceModule {
     fun store(
         geocoder: Geocoder,
         onError: (TextRef) -> Unit
-    ): Store<State> = buildStore(
+    ): Store<State> = Store(
         initialState = State(),
-        openActions = listOf(ContinuouslySearchAction(geocoder, onError, 1.seconds))
+        startActions = listOf(ContinuouslySearchAction(geocoder, onError, 1.seconds))
     )
 }

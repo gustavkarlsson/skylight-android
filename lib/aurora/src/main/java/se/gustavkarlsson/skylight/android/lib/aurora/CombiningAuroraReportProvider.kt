@@ -42,6 +42,7 @@ internal class CombiningAuroraReportProvider(
             report
         }
 
+    //TODO Share?
     @ExperimentalCoroutinesApi
     override fun stream(
         locations: Flow<Loadable<LocationResult>>
