@@ -5,13 +5,14 @@ import com.dropbox.android.external.store4.FetcherResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.lib.location.Location
+import java.io.IOException
 
 @ExperimentalCoroutinesApi
 internal fun createOpenWeatherMapFetcher(
@@ -21,14 +22,14 @@ internal fun createOpenWeatherMapFetcher(
     pollingInterval: Duration,
     dispatcher: CoroutineDispatcher
 ): Fetcher<Location, Weather> = Fetcher.ofResultFlow { location ->
-    channelFlow<FetcherResult<Weather>> { // FIXME is channel flow the right one?
-        while (!isClosedForSend) {
+    flow {
+        while (true) {
             try {
                 val weather = api.requestWeather(location, appId)
-                send(FetcherResult.Data(weather))
+                emit(FetcherResult.Data(weather))
                 delay(pollingInterval.toMillis())
-            } catch (e: Exception) { // FIXME what about cancellation exception?
-                send(FetcherResult.Error.Exception(e))
+            } catch (e: IOException) {
+                emit(FetcherResult.Error.Exception(e))
                 delay(retryDelay.toMillis())
             }
         }
@@ -43,12 +44,13 @@ private suspend fun OpenWeatherMapApi.requestWeather(location: Location, appId: 
             Weather(response.body()!!.clouds.all)
         } else {
             val code = response.code()
+
             @Suppress("BlockingMethodInNonBlockingContext")
             val body = response.errorBody()?.string() ?: "<empty>"
             logError { "Failed to get Weather from OpenWeatherMap API. HTTP $code: $body" }
             throw ServerResponseException(code, body)
         }
-    } catch (e: Exception) { // FIXME what about cancellation exception?
+    } catch (e: IOException) {
         logWarn(e) { "Failed to get Weather from OpenWeatherMap API" }
         throw e
     }
