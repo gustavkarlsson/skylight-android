@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -100,7 +101,7 @@ private fun streamUntilError(
         val callback = LatestLocationCallback { location ->
             val result = LocationResult.success(location)
             logDebug { "Got location update: $result" }
-            offerCatching(result)
+            sendCatching(result)
         }
 
         try {
@@ -114,18 +115,20 @@ private fun streamUntilError(
                     logError(e) { "Failed to get location update" }
                     LocationResult.errorUnknown()
                 }
-                offerCatching(result)
+                sendCatching(result)
                 close(e)
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: SecurityException) {
             logWarn(e) { "Failed to request location updates" }
             val result = LocationResult.errorMissingPermission()
-            offerCatching(result)
+            sendCatching(result)
             close(e)
-        } catch (e: Exception) { // FIXME what about cancellation exception?
+        } catch (e: Exception) {
             logError(e) { "Failed to request location updates" }
             val result = LocationResult.errorUnknown()
-            offerCatching(result)
+            sendCatching(result)
             close(e)
         } finally {
             awaitClose {
@@ -147,11 +150,10 @@ private class LatestLocationCallback(
     }
 }
 
-private fun <T> SendChannel<T>.offerCatching(element: T): Boolean =
+private fun <T> SendChannel<T>.sendCatching(element: T) =
     try {
-        offer(element)
-    } catch (e: Exception) { // FIXME what about cancellation exception?
-        false
+        sendBlocking(element)
+    } catch (e: Exception) {
     }
 
 private fun AndroidLocation.toLocation(): Location = Location(latitude, longitude)
