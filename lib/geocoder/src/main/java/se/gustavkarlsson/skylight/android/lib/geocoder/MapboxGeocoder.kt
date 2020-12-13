@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.lib.geocoder
 
 import com.mapbox.api.geocoding.v5.MapboxGeocoding
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -30,7 +31,9 @@ internal class MapboxGeocoder(
             try {
                 val geocoding = createGeocoding(accessToken, getLocale(), locationName)
                 doGeocode(geocoding)
-            } catch (e: Exception) { // FIXME what about cancellation exception?
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
                 logError(e) { "Failed to create Geocoding request" }
                 GeocodingResult.Failure.Unknown
             }

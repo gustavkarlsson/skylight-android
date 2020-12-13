@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.feature.googleplayservices
 import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_google_play_services.*
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import reactivecircus.flowbinding.android.view.clicks
 import se.gustavkarlsson.skylight.android.core.logging.logError
@@ -34,7 +35,9 @@ internal class GooglePlayServicesFragment : ScreenFragment() {
         installButton.clicks().bind(scope) {
             try {
                 makeAvailable()
-            } catch (e: Exception) { // FIXME what about cancellation exception?
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
                 logError(e) { "Failed to install Google Play Services" }
                 scope.showErrorMessage()
             }

@@ -5,6 +5,7 @@ import com.dropbox.android.external.store4.StoreRequest
 import com.dropbox.android.external.store4.StoreResponse
 import com.dropbox.android.external.store4.fresh
 import com.dropbox.android.external.store4.get
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -44,7 +45,9 @@ internal class StoreWeatherProvider(
                 try {
                     val weather = store.getWeather(location.location)
                     Report.Success(weather, time.now())
-                } catch (e: Exception) { // FIXME what about cancellation exception?
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
                     Report.Error(getCause(e), time.now())
                 }
             LocationResult.Failure.MissingPermission -> Report.Error(Cause.LocationPermission, time.now())

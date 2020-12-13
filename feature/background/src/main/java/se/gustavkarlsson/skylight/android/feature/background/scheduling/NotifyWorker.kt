@@ -17,7 +17,7 @@ internal class NotifyWorker(
         return try {
             work()
             Result.success()
-        } catch (e: Exception) { // FIXME what about cancellation exception?
+        } catch (e: Exception) {
             logError(e) { "Failed to complete work" }
             Result.retry()
         }
