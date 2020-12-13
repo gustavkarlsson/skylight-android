@@ -30,7 +30,7 @@ internal class MapboxGeocoder(
             try {
                 val geocoding = createGeocoding(accessToken, getLocale(), locationName)
                 doGeocode(geocoding)
-            } catch (e: Exception) {
+            } catch (e: Exception) { // FIXME what about cancellation exception?
                 logError(e) { "Failed to create Geocoding request" }
                 GeocodingResult.Failure.Unknown
             }

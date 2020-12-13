@@ -21,13 +21,13 @@ internal fun createOpenWeatherMapFetcher(
     pollingInterval: Duration,
     dispatcher: CoroutineDispatcher
 ): Fetcher<Location, Weather> = Fetcher.ofResultFlow { location ->
-    channelFlow<FetcherResult<Weather>> {
+    channelFlow<FetcherResult<Weather>> { // FIXME is channel flow the right one?
         while (!isClosedForSend) {
             try {
                 val weather = api.requestWeather(location, appId)
                 send(FetcherResult.Data(weather))
                 delay(pollingInterval.toMillis())
-            } catch (e: Exception) {
+            } catch (e: Exception) { // FIXME what about cancellation exception?
                 send(FetcherResult.Error.Exception(e))
                 delay(retryDelay.toMillis())
             }
@@ -48,7 +48,7 @@ private suspend fun OpenWeatherMapApi.requestWeather(location: Location, appId: 
             logError { "Failed to get Weather from OpenWeatherMap API. HTTP $code: $body" }
             throw ServerResponseException(code, body)
         }
-    } catch (e: Exception) {
+    } catch (e: Exception) { // FIXME what about cancellation exception?
         logWarn(e) { "Failed to get Weather from OpenWeatherMap API" }
         throw e
     }

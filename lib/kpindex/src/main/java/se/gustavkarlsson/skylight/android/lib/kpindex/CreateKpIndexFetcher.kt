@@ -19,13 +19,13 @@ internal fun createKpIndexFetcher(
     pollingInterval: Duration,
     dispatcher: CoroutineDispatcher
 ): Fetcher<Unit, KpIndex> = Fetcher.ofResultFlow {
-    channelFlow {
+    channelFlow { // FIXME is channel flow the right one?
         while (!isClosedForSend) {
             try {
                 val kpIndex = api.requestKpIndex()
                 send(FetcherResult.Data(kpIndex))
                 delay(pollingInterval.toMillis())
-            } catch (e: Exception) {
+            } catch (e: Exception) { // FIXME what about cancellation exception?
                 send(FetcherResult.Error.Exception(e))
                 delay(retryDelay.toMillis())
             }
@@ -46,7 +46,7 @@ private suspend fun KpIndexApi.requestKpIndex(): KpIndex =
             logError { "Failed to get KpIndex from KpIndex API. HTTP $code: $body" }
             throw ServerResponseException(code, body)
         }
-    } catch (e: Exception) {
+    } catch (e: Exception) { // FIXME what about cancellation exception?
         logWarn(e) { "Failed to get KpIndex from KpIndex API" }
         throw e
     }

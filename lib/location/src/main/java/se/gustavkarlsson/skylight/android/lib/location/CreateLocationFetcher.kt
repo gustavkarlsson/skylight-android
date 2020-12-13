@@ -59,7 +59,7 @@ private fun lastLocation(client: FusedLocationProviderClient): Flow<LocationResu
         } catch (e: SecurityException) {
             logWarn(e) { "Failed to get last location" }
             emit(LocationResult.errorMissingPermission())
-        } catch (e: Exception) {
+        } catch (e: Exception) { // FIXME what about cancellation exception?
             logError(e) { "Failed to get last location" }
             emit(LocationResult.errorUnknown())
         }
@@ -93,7 +93,7 @@ private fun streamUntilError(
     looper: Looper,
     locationRequest: LocationRequest,
 ): Flow<LocationResult> =
-    channelFlow {
+    channelFlow { // FIXME is channel flow the right one?
         val callback = LatestLocationCallback { location ->
             val result = LocationResult.success(location)
             logDebug { "Got location update: $result" }
@@ -119,7 +119,7 @@ private fun streamUntilError(
             val result = LocationResult.errorMissingPermission()
             offerCatching(result)
             close(e)
-        } catch (e: Exception) {
+        } catch (e: Exception) { // FIXME what about cancellation exception?
             logError(e) { "Failed to request location updates" }
             val result = LocationResult.errorUnknown()
             offerCatching(result)
@@ -147,7 +147,7 @@ private class LatestLocationCallback(
 private fun <T> SendChannel<T>.offerCatching(element: T): Boolean =
     try {
         offer(element)
-    } catch (e: Exception) {
+    } catch (e: Exception) { // FIXME what about cancellation exception?
         false
     }
 

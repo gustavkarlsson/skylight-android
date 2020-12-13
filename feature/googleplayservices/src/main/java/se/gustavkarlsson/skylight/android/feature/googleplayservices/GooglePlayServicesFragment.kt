@@ -34,7 +34,7 @@ internal class GooglePlayServicesFragment : ScreenFragment() {
         installButton.clicks().bind(scope) {
             try {
                 makeAvailable()
-            } catch (e: Exception) {
+            } catch (e: Exception) { // FIXME what about cancellation exception?
                 logError(e) { "Failed to install Google Play Services" }
                 scope.showErrorMessage()
             }

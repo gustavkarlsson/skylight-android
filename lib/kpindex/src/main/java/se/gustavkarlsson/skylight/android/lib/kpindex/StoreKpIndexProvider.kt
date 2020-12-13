@@ -37,7 +37,7 @@ internal class StoreKpIndexProvider(
         val report = try {
             val weather = store.getWeather()
             Report.Success(weather, time.now())
-        } catch (e: Exception) {
+        } catch (e: Exception) { // FIXME what about cancellation exception?
             Report.Error(getCause(e), time.now())
         }
         logInfo { "Provided Kp index: $report" }

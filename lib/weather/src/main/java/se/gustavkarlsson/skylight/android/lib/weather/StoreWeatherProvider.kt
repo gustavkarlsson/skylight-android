@@ -44,7 +44,7 @@ internal class StoreWeatherProvider(
                 try {
                     val weather = store.getWeather(location.location)
                     Report.Success(weather, time.now())
-                } catch (e: Exception) {
+                } catch (e: Exception) { // FIXME what about cancellation exception?
                     Report.Error(getCause(e), time.now())
                 }
             LocationResult.Failure.MissingPermission -> Report.Error(Cause.LocationPermission, time.now())
