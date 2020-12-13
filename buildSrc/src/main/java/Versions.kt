@@ -37,9 +37,9 @@ object Versions {
 
     val material = "1.1.0"
 
-    val flowbinding = "1.0.0-alpha02"
+    val flowbinding = "1.0.0-beta02"
     val runtimePermissionKotlin = "1.1.2"
-    val kotlinxCoroutines = "1.3.9"
+    val kotlinxCoroutines = "1.4.2"
 
     val okHttp = "3.14.4"
     val retrofit = "2.7.1"
