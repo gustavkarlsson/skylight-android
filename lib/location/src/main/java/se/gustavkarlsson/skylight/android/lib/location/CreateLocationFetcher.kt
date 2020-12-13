@@ -7,13 +7,14 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationAvailability
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
@@ -56,10 +57,12 @@ private fun lastLocation(client: FusedLocationProviderClient): Flow<LocationResu
             } else {
                 logDebug { "Last location not available" }
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: SecurityException) {
             logWarn(e) { "Failed to get last location" }
             emit(LocationResult.errorMissingPermission())
-        } catch (e: Exception) { // FIXME what about cancellation exception?
+        } catch (e: Exception) {
             logError(e) { "Failed to get last location" }
             emit(LocationResult.errorUnknown())
         }
@@ -93,7 +96,7 @@ private fun streamUntilError(
     looper: Looper,
     locationRequest: LocationRequest,
 ): Flow<LocationResult> =
-    channelFlow { // FIXME is channel flow the right one?
+    callbackFlow {
         val callback = LatestLocationCallback { location ->
             val result = LocationResult.success(location)
             logDebug { "Got location update: $result" }
@@ -126,7 +129,7 @@ private fun streamUntilError(
             close(e)
         } finally {
             awaitClose {
-                logDebug { "Channel closing. Removing callback" }
+                logDebug { "Flow closing. Removing callback" }
                 client.removeLocationUpdates(callback)
             }
         }
