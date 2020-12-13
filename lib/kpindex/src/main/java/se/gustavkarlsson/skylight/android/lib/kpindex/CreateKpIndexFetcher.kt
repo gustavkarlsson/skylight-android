@@ -5,12 +5,13 @@ import com.dropbox.android.external.store4.FetcherResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
+import java.io.IOException
 
 @ExperimentalCoroutinesApi
 internal fun createKpIndexFetcher(
@@ -19,14 +20,14 @@ internal fun createKpIndexFetcher(
     pollingInterval: Duration,
     dispatcher: CoroutineDispatcher
 ): Fetcher<Unit, KpIndex> = Fetcher.ofResultFlow {
-    channelFlow { // FIXME is channel flow the right one?
-        while (!isClosedForSend) {
+    flow {
+        while (true) {
             try {
                 val kpIndex = api.requestKpIndex()
-                send(FetcherResult.Data(kpIndex))
+                emit(FetcherResult.Data(kpIndex))
                 delay(pollingInterval.toMillis())
-            } catch (e: Exception) { // FIXME what about cancellation exception?
-                send(FetcherResult.Error.Exception(e))
+            } catch (e: IOException) {
+                emit(FetcherResult.Error.Exception(e))
                 delay(retryDelay.toMillis())
             }
         }
@@ -41,12 +42,13 @@ private suspend fun KpIndexApi.requestKpIndex(): KpIndex =
             KpIndex(response.body()!!.value)
         } else {
             val code = response.code()
+
             @Suppress("BlockingMethodInNonBlockingContext")
             val body = response.errorBody()?.string() ?: "<empty>"
             logError { "Failed to get KpIndex from KpIndex API. HTTP $code: $body" }
             throw ServerResponseException(code, body)
         }
-    } catch (e: Exception) { // FIXME what about cancellation exception?
+    } catch (e: IOException) {
         logWarn(e) { "Failed to get KpIndex from KpIndex API" }
         throw e
     }
