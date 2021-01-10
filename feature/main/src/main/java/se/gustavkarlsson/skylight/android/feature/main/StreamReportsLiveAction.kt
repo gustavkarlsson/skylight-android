@@ -77,8 +77,8 @@ internal class StreamReportsLiveAction(
     }
 }
 
-//TODO replace with
-fun <T> Flow<T>.throttle(waitMillis: Long): Flow<T> = flow {
+//TODO replace with built-in
+private fun <T> Flow<T>.throttle(waitMillis: Long): Flow<T> = flow {
     coroutineScope {
         val context = coroutineContext
         var nextMillis = 0L
