@@ -5,7 +5,6 @@ import android.content.Context.MODE_PRIVATE
 import androidx.core.content.edit
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import se.gustavkarlsson.skylight.android.core.Io
 
 internal class SharedPrefsPlaceSelectionStorage(
     context: Context,

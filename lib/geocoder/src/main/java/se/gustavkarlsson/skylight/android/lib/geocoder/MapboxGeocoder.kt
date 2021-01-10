@@ -44,33 +44,35 @@ internal class MapboxGeocoder(
         suspendCancellableCoroutine { continuation ->
             continuation.invokeOnCancellation { geocoding.cancelCall() }
 
-            geocoding.enqueueCall(object : Callback<GeocodingResponse> {
-                override fun onFailure(call: Call<GeocodingResponse>, t: Throwable) {
-                    val result = if (t is IOException) {
-                        logWarn(t) { "Geocoding failed" }
-                        GeocodingResult.Failure.Io
-                    } else {
-                        logError(t) { "Geocoding failed" }
-                        GeocodingResult.Failure.Unknown
-                    }
-                    continuation.resume(result)
-                }
-
-                override fun onResponse(
-                    call: Call<GeocodingResponse>,
-                    response: Response<GeocodingResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val result = response.body()!!.toGeocodingResultSuccess()
+            geocoding.enqueueCall(
+                object : Callback<GeocodingResponse> {
+                    override fun onFailure(call: Call<GeocodingResponse>, t: Throwable) {
+                        val result = if (t is IOException) {
+                            logWarn(t) { "Geocoding failed" }
+                            GeocodingResult.Failure.Io
+                        } else {
+                            logError(t) { "Geocoding failed" }
+                            GeocodingResult.Failure.Unknown
+                        }
                         continuation.resume(result)
-                    } else {
-                        val code = response.code()
-                        val error = response.errorBody()?.string() ?: "<empty>"
-                        logError { "Geocoding failed with HTTP $code: $error" }
-                        continuation.resume(GeocodingResult.Failure.ServerError)
+                    }
+
+                    override fun onResponse(
+                        call: Call<GeocodingResponse>,
+                        response: Response<GeocodingResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val result = response.body()!!.toGeocodingResultSuccess()
+                            continuation.resume(result)
+                        } else {
+                            val code = response.code()
+                            val error = response.errorBody()?.string() ?: "<empty>"
+                            logError { "Geocoding failed with HTTP $code: $error" }
+                            continuation.resume(GeocodingResult.Failure.ServerError)
+                        }
                     }
                 }
-            })
+            )
         }
 }
 

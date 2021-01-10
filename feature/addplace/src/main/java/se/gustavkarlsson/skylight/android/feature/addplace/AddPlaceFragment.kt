@@ -153,14 +153,16 @@ private fun SearchView.fixMargins() {
 }
 
 private fun SearchView.setQueryTextChangeListener(callback: (String) -> Unit) {
-    setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-        override fun onQueryTextSubmit(query: String) = false
+    setOnQueryTextListener(
+        object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String) = false
 
-        override fun onQueryTextChange(newText: String): Boolean {
-            callback(newText)
-            return true
+            override fun onQueryTextChange(newText: String): Boolean {
+                callback(newText)
+                return true
+            }
         }
-    })
+    )
 }
 
 private fun createDialog(view: View, onClick: () -> Unit) =

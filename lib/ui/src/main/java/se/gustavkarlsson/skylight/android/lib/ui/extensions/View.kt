@@ -35,9 +35,11 @@ fun View.fadeOut(invisibility: Int = View.GONE) {
     animate()
         .alpha(0f)
         .setDuration(duration)
-        .setListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator) {
-                visibility = invisibility
+        .setListener(
+            object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    visibility = invisibility
+                }
             }
-        })
+        )
 }

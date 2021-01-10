@@ -18,19 +18,21 @@ object FeatureIntroModule {
     @Provides
     @Reusable
     @IntoSet
-    internal fun navigationOverride(runVersionManager: RunVersionManager, @Io dispatcher: CoroutineDispatcher): NavigationOverride =
-        object : NavigationOverride {
-            override val priority = 10
+    internal fun navigationOverride(
+        runVersionManager: RunVersionManager,
+        @Io dispatcher: CoroutineDispatcher,
+    ): NavigationOverride = object : NavigationOverride {
+        override val priority = 10
 
-            override fun override(oldBackstack: Backstack, targetBackstack: Backstack): List<IntroScreen>? =
-                runBlocking(dispatcher) {
-                    when {
-                        targetBackstack.isNotEmpty() &&
-                            targetBackstack.none { it.name == ScreenName.Intro } &&
-                            runVersionManager.isFirstRun ->
-                            listOf(IntroScreen(targetBackstack))
-                        else -> null
-                    }
+        override fun override(oldBackstack: Backstack, targetBackstack: Backstack): List<IntroScreen>? =
+            runBlocking(dispatcher) {
+                when {
+                    targetBackstack.isNotEmpty() &&
+                        targetBackstack.none { it.name == ScreenName.Intro } &&
+                        runVersionManager.isFirstRun ->
+                        listOf(IntroScreen(targetBackstack))
+                    else -> null
                 }
-        }
+            }
+    }
 }

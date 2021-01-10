@@ -30,7 +30,7 @@ internal class BackgroundWorkImpl(
     private val chanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
     private val notifier: Notifier,
     private val time: Time
-): BackgroundWork {
+) : BackgroundWork {
     override suspend operator fun invoke() {
         if (appVisibilityEvaluator.isVisible()) return
         val notificationData = getNotificationData()
