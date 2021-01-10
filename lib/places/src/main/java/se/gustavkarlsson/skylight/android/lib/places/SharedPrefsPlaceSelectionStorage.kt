@@ -3,8 +3,13 @@ package se.gustavkarlsson.skylight.android.lib.places
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import androidx.core.content.edit
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 
-internal class SharedPrefsPlaceSelectionStorage(context: Context) : PlaceSelectionStorage {
+internal class SharedPrefsPlaceSelectionStorage(
+    context: Context,
+    private val dispatcher: CoroutineDispatcher,
+) : PlaceSelectionStorage {
 
     private val sharedPreferences by lazy {
         context.getSharedPreferences(PREFS_FILE_NAME, MODE_PRIVATE)
@@ -16,10 +21,11 @@ internal class SharedPrefsPlaceSelectionStorage(context: Context) : PlaceSelecti
         }
     }
 
-    override fun loadIndex(): Int? {
-        val index = sharedPreferences.getInt(PLACE_INDEX_KEY, NULL_VALUE)
-        return if (index == NULL_VALUE) null else index
-    }
+    override suspend fun loadIndex(): Int? =
+        withContext(dispatcher) {
+            val index = sharedPreferences.getInt(PLACE_INDEX_KEY, NULL_VALUE)
+            if (index == NULL_VALUE) null else index
+        }
 }
 
 private const val PREFS_FILE_NAME = "selected_place"

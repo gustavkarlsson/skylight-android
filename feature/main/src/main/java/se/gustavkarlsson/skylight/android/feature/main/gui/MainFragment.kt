@@ -7,12 +7,17 @@ import android.view.View
 import androidx.annotation.StringRes
 import com.google.android.material.appbar.MaterialToolbar
 import com.ioki.textref.TextRef
-import com.jakewharton.rxbinding3.appcompat.itemClicks
-import com.jakewharton.rxbinding3.view.clicks
 import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
-import io.reactivex.Observable
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import reactivecircus.flowbinding.android.view.clicks
+import reactivecircus.flowbinding.appcompat.itemClicks
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
 import se.gustavkarlsson.skylight.android.feature.main.MainComponent
 import se.gustavkarlsson.skylight.android.feature.main.R
@@ -24,6 +29,7 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 
+@ExperimentalCoroutinesApi
 class MainFragment : ScreenFragment(), BackButtonHandler {
 
     override val layoutId: Int = R.layout.fragment_main
@@ -40,13 +46,7 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
 
     override fun onStart() {
         super.onStart()
-        viewModel.resumeStreaming()
         viewModel.refreshLocationPermission()
-    }
-
-    override fun onStop() {
-        viewModel.pauseStreaming()
-        super.onStop()
     }
 
     override fun setupEdgeToEdge(): EdgeToEdgeBuilder.() -> Unit = {
@@ -75,66 +75,67 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
             false
         }
 
-    override fun bindData() {
-        toolbarView.itemClicks()
-            .bind(this) { item ->
-                when (item.itemId) {
-                    R.id.action_settings -> navigator.goTo(screens.settings)
-                    R.id.action_about -> navigator.goTo(screens.about)
-                }
+    override fun bindView(scope: CoroutineScope) {
+        toolbarView.itemClicks().bind(scope) { item ->
+            when (item.itemId) {
+                R.id.action_settings -> navigator.goTo(screens.settings)
+                R.id.action_about -> navigator.goTo(screens.about)
             }
+        }
 
         viewModel.toolbarTitleText
-            .doOnNext { logDebug { "Updating toolbar title: $it" } }
-            .bind(this) { toolbarView.title = it.resolve(requireContext()) }
+            .onEach { logDebug { "Updating toolbar title: $it" } }
+            .bind(scope) { toolbarView.title = it.resolve(requireContext()) }
 
         viewModel.chanceLevelText
-            .doOnNext { logDebug { "Updating chanceLevel text: $it" } }
+            .onEach { logDebug { "Updating chanceLevel text: $it" } }
             .map { it.resolve(requireContext()) }
-            .bind(this, chance::setText)
+            .bind(scope) { text ->
+                chance.text = text
+            }
 
         viewModel.chanceSubtitleText
-            .doOnNext { logDebug { "Updating chanceSubtitle text: $it" } }
-            .bind(this) { chanceSubtitle.text = it.resolve(requireContext()) }
+            .onEach { logDebug { "Updating chanceSubtitle text: $it" } }
+            .bind(scope) { chanceSubtitle.text = it.resolve(requireContext()) }
 
         viewModel.darkness.bindToCard(
-            this,
+            scope,
             darknessCard,
             ::showDarknessDetails,
             "darkness"
         )
 
         viewModel.geomagLocation.bindToCard(
-            this,
+            scope,
             geomagLocationCard,
             ::showGeomagLocationDetails,
             "geomagLocation"
         )
 
         viewModel.kpIndex.bindToCard(
-            this,
+            scope,
             kpIndexCard,
             ::showKpIndexDetails,
             "kpIndex"
         )
 
         viewModel.weather.bindToCard(
-            this,
+            scope,
             weatherCard,
             ::showWeatherDetails,
             "weather"
         )
 
-        viewModel.errorBannerData.bind(this) { updateBanner(it.value) }
+        viewModel.errorBannerData.bind(scope) { updateBanner(scope, it.value) }
     }
 
-    private fun updateBanner(data: BannerData?) {
+    private fun updateBanner(scope: CoroutineScope, data: BannerData?) {
         errorBanner.run {
             if (data != null) {
                 setMessage(data.message.resolve(requireContext()))
                 setRightButton(data.buttonText.resolve(requireContext())) {
                     when (data.buttonEvent) {
-                        BannerData.Event.RequestLocationPermission -> requestLocationPermission()
+                        BannerData.Event.RequestLocationPermission -> requestLocationPermission(scope)
                         BannerData.Event.OpenAppDetails -> openAppDetails()
                     }
                 }
@@ -148,9 +149,10 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
         }
     }
 
-    private fun requestLocationPermission() {
-        PermissionsComponent.instance.locationPermissionRequester().request(this)
-            .bind(this)
+    private fun requestLocationPermission(scope: CoroutineScope) {
+        scope.launch {
+            PermissionsComponent.instance.locationPermissionRequester().request(this@MainFragment)
+        }
     }
 
     private fun openAppDetails() {
@@ -208,16 +210,16 @@ class MainFragment : ScreenFragment(), BackButtonHandler {
         }
     }
 
-    private fun Observable<FactorItem>.bindToCard(
-        fragment: MainFragment,
+    private fun Flow<FactorItem>.bindToCard(
+        scope: CoroutineScope,
         cardView: FactorCard,
         onCardClick: (errorText: TextRef?) -> Unit,
         factorDebugName: String
     ) {
-        doOnNext { logDebug { "Updating $factorDebugName factor card: $it" } }
-            .bind(fragment) { item ->
+        onEach { logDebug { "Updating $factorDebugName factor card: $it" } }
+            .bind(scope) { item ->
                 cardView.setItem(item)
-                cardView.clicks().bind(fragment) {
+                cardView.clicks().bind(scope) {
                     onCardClick(item.errorText)
                 }
             }

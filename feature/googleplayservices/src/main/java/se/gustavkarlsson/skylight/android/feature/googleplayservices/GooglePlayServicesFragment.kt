@@ -1,11 +1,11 @@
 package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
-import com.google.android.material.snackbar.Snackbar
-import com.jakewharton.rxbinding3.view.clicks
 import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_google_play_services.*
-import se.gustavkarlsson.koptional.optionalOf
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import reactivecircus.flowbinding.android.view.clicks
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.target
@@ -18,8 +18,6 @@ internal class GooglePlayServicesFragment : ScreenFragment() {
 
     override val layoutId: Int = R.layout.fragment_google_play_services
 
-    private var errorSnackbar: Snackbar? = null
-
     private val viewModel by lazy {
         getOrRegisterService("googlePlayServicesViewModel") {
             GooglePlayServicesComponent.build().viewModel()
@@ -31,39 +29,37 @@ internal class GooglePlayServicesFragment : ScreenFragment() {
         installButton.fit { Edge.Bottom }
     }
 
-    override fun bindData() {
-        // TODO Make this nicer
-        installButton.clicks()
-            .flatMapSingle {
-                viewModel.makeGooglePlayServicesAvailable(requireActivity())
-                    .toSingleDefault(optionalOf<Throwable>(null))
-                    .onErrorReturn { optionalOf(it) }
+    override fun initView() = Unit
+
+    override fun bindView(scope: CoroutineScope) {
+        installButton.clicks().bind(scope) {
+            try {
+                makeAvailable()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                logError(e) { "Failed to install Google Play Services" }
+                scope.showErrorMessage()
             }
-            .bind(this) { (error) ->
-                if (error == null) {
-                    val target = requireNotNull(requireArguments().target)
-                    navigator.setBackstack(target)
-                } else {
-                    logError(error) { "Failed to install Google Play Services" }
-                    view?.let { view ->
-                        if (errorSnackbar == null) {
-                            errorSnackbar = showSnackbar(
-                                view,
-                                R.string.google_play_services_install_failed
-                            ) {
-                                setIndefiniteDuration()
-                                setErrorStyle()
-                                setDismiss(R.string.dismiss)
-                            }
-                        }
-                    }
-                }
-            }
+        }
     }
 
-    override fun onDestroyView() {
-        errorSnackbar?.dismiss()
-        errorSnackbar = null
-        super.onDestroyView()
+    private suspend fun makeAvailable() {
+        viewModel.makeGooglePlayServicesAvailable(requireActivity())
+        val target = requireNotNull(requireArguments().target)
+        navigator.setBackstack(target)
+    }
+
+    private fun CoroutineScope.showErrorMessage() {
+        view?.let { view ->
+            showSnackbar(
+                view,
+                R.string.google_play_services_install_failed
+            ) {
+                setIndefiniteDuration()
+                setErrorStyle()
+                setDismiss(R.string.dismiss)
+            }
+        }
     }
 }

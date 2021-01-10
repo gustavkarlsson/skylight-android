@@ -1,8 +1,10 @@
 package se.gustavkarlsson.skylight.android.lib.geomaglocation
 
-import com.jakewharton.rx.replayingShare
-import io.reactivex.Observable
-import io.reactivex.Single
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Report
@@ -22,27 +24,28 @@ internal class GeomagLocationProviderImpl(
     private val time: Time
 ) : GeomagLocationProvider {
 
-    override fun get(location: Single<LocationResult>): Single<Report<GeomagLocation>> =
-        location
-            .map(::getSingleGeomagLocation)
-            .doOnSuccess { logInfo { "Provided geomag location: $it" } }
+    override fun get(location: LocationResult): Report<GeomagLocation> {
+        val report = getSingleGeomagLocation(location)
+        logInfo { "Provided geomag location: $report" }
+        return report
+    }
 
+    @ExperimentalCoroutinesApi
     override fun stream(
-        locations: Observable<Loadable<LocationResult>>
-    ): Observable<Loadable<Report<GeomagLocation>>> =
+        locations: Flow<Loadable<LocationResult>>
+    ): Flow<Loadable<Report<GeomagLocation>>> =
         locations
-            .switchMapSingle { loadableLocation ->
+            .map { loadableLocation ->
                 when (loadableLocation) {
-                    Loadable.Loading -> Single.just(Loadable.Loading)
+                    Loadable.Loading -> Loadable.Loading
                     is Loadable.Loaded -> {
-                        Single.fromCallable { getSingleGeomagLocation(loadableLocation.value) }
-                            .map { Loadable.Loaded(it) }
+                        val report = getSingleGeomagLocation(loadableLocation.value)
+                        Loadable.Loaded(report)
                     }
                 }
             }
             .distinctUntilChanged()
-            .doOnNext { logInfo { "Streamed geomag location: $it" } }
-            .replayingShare(Loadable.Loading)
+            .onEach { logInfo { "Streamed geomag location: $it" } }
 
     private fun getSingleGeomagLocation(locationResult: LocationResult): Report<GeomagLocation> =
         locationResult.map(

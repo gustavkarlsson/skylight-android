@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
-import io.reactivex.Observable
+import kotlinx.coroutines.flow.Flow
 
 interface PermissionChecker {
-    val access: Observable<Access>
+    val access: Flow<Access>
     fun refresh()
 }

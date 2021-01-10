@@ -20,15 +20,15 @@ internal class FactorCard : FrameLayout {
         init(context, attrs)
     }
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
-        super(context, attrs, defStyleAttr) {
-            init(context, attrs)
-        }
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+        init(context, attrs)
+    }
 
     private fun init(context: Context, attrs: AttributeSet?) {
         val view = inflate(
             getContext(),
-            R.layout.layout_factor_card, null
+            R.layout.layout_factor_card,
+            null,
         ) as MaterialCardView
         addView(view)
         context.theme.obtainStyledAttributes(attrs, R.styleable.FactorCard, 0, 0)

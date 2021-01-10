@@ -42,6 +42,6 @@ internal fun createRequest(interval: Duration) =
         .build()
 
 private fun buildConstraints() = Constraints.Builder()
-    .setRequiredNetworkType(NetworkType.CONNECTED) // TODO Make roaming configurable?
+    .setRequiredNetworkType(NetworkType.CONNECTED)
     .setRequiresBatteryNotLow(true)
     .build()

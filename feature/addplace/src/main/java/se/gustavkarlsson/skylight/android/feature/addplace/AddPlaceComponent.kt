@@ -1,17 +1,18 @@
 package se.gustavkarlsson.skylight.android.feature.addplace
 
 import com.ioki.textref.TextRef
-import com.jakewharton.rxrelay2.PublishRelay
-import com.jakewharton.rxrelay2.Relay
 import dagger.Component
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import io.reactivex.Observable
-import io.reactivex.Scheduler
-import io.reactivex.functions.Consumer
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.skylight.android.core.AppComponent
-import se.gustavkarlsson.skylight.android.core.Main
 import se.gustavkarlsson.skylight.android.core.ViewModelScope
 import se.gustavkarlsson.skylight.android.core.utils.seconds
 import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
@@ -28,6 +29,8 @@ import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
     ]
 )
 internal interface AddPlaceComponent {
+    @ExperimentalCoroutinesApi
+    @FlowPreview
     fun viewModel(): AddPlaceViewModel
 
     companion object {
@@ -43,22 +46,31 @@ internal interface AddPlaceComponent {
 @Module
 internal object AddPlaceModule {
 
+    @ExperimentalCoroutinesApi
     @Provides
     @ViewModelScope
-    fun errorsRelay(): Relay<TextRef> = PublishRelay.create()
+    fun errorsChannel(): BroadcastChannel<TextRef> = BroadcastChannel(Channel.BUFFERED)
 
+    @ExperimentalCoroutinesApi
+    @FlowPreview
     @Provides
     @Reusable
-    fun errorsObservable(relay: Relay<TextRef>): Observable<TextRef> = relay
+    fun errors(channel: BroadcastChannel<TextRef>): Flow<TextRef> = channel.asFlow()
 
+    @ExperimentalCoroutinesApi
     @Provides
     @Reusable
-    fun errorsConsumer(relay: Relay<TextRef>): Consumer<TextRef> = relay
+    fun onError(channel: BroadcastChannel<TextRef>): (TextRef) -> Unit = { channel.offer(it) }
 
+    @ExperimentalCoroutinesApi
+    @FlowPreview
     @Provides
-    fun knot(
+    @JvmSuppressWildcards
+    fun store(
         geocoder: Geocoder,
-        errors: Consumer<TextRef>,
-        @Main observeScheduler: Scheduler
-    ): AddPlaceKnot = createKnot(geocoder, 1.seconds, errors, observeScheduler)
+        onError: (TextRef) -> Unit
+    ): Store<State> = Store(
+        initialState = State(),
+        startActions = listOf(ContinuouslySearchAction(geocoder, onError, 1.seconds))
+    )
 }

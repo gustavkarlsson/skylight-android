@@ -7,12 +7,17 @@ import com.ioki.textref.TextRef
 import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_settings.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 class SettingsFragment : ScreenFragment() {
 
     private val viewModel by lazy {
@@ -38,10 +43,12 @@ class SettingsFragment : ScreenFragment() {
         itemsRecyclerView.adapter = adapter
     }
 
-    override fun bindData() {
-        viewModel.settingsItems.bind(this, adapter::setItems)
+    override fun bindView(scope: CoroutineScope) {
+        viewModel.settingsItems.bind(scope) { items ->
+            adapter.setItems(items)
+        }
 
-        viewModel.showSelectTriggerLevel.bind(this) { (place, triggerLevel) ->
+        viewModel.showSelectTriggerLevel.bind(scope) { (place, triggerLevel) ->
             showTriggerLevelDialog(place, triggerLevel)
         }
     }

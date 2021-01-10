@@ -1,29 +1,30 @@
 package se.gustavkarlsson.skylight.android.feature.settings
 
 import com.ioki.textref.TextRef
-import com.jakewharton.rxrelay2.PublishRelay
-import io.reactivex.Observable
-import io.reactivex.Scheduler
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.plusAssign
-import se.gustavkarlsson.skylight.android.core.Main
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
-import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
+import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 internal class SettingsViewModel @Inject constructor(
-    private val settings: Settings,
-    @Main observeScheduler: Scheduler
-) : ScopedService {
+    private val settings: Settings
+) : CoroutineScopedService() {
 
-    private val disposables = CompositeDisposable()
+    private val showSelectTriggerLevelChannel = BroadcastChannel<Pair<Place, TriggerLevel>>(Channel.BUFFERED)
+    val showSelectTriggerLevel: Flow<Pair<Place, TriggerLevel>> = showSelectTriggerLevelChannel.asFlow()
 
-    private val showSelectTriggerLevelRelay = PublishRelay.create<Pair<Place, TriggerLevel>>()
-    val showSelectTriggerLevel: Observable<Pair<Place, TriggerLevel>> = showSelectTriggerLevelRelay
-
-    val settingsItems: Observable<List<SettingsItem>> =
+    val settingsItems: Flow<List<SettingsItem>> =
         settings.streamNotificationTriggerLevels()
             .map { levels ->
                 val triggerLevelItems = levels.map { (place, triggerLevel) ->
@@ -36,17 +37,16 @@ internal class SettingsViewModel @Inject constructor(
                 }
                 listOf(SettingsItem.TitleItem) + triggerLevelItems
             }
-            .observeOn(observeScheduler)
 
     fun onTriggerLevelItemClicked(place: Place, triggerLevel: TriggerLevel) {
-        showSelectTriggerLevelRelay.accept(place to triggerLevel)
+        showSelectTriggerLevelChannel.offer(place to triggerLevel)
     }
 
     fun onTriggerLevelSelected(place: Place, triggerLevel: TriggerLevel) {
-        disposables += settings.setNotificationTriggerLevel(place, triggerLevel).subscribe()
+        scope.launch {
+            settings.setNotificationTriggerLevel(place, triggerLevel)
+        }
     }
-
-    override fun onCleared() = disposables.dispose()
 }
 
 internal sealed class SettingsItem {

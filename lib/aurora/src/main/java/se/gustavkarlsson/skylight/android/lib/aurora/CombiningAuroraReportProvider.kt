@@ -1,10 +1,12 @@
 package se.gustavkarlsson.skylight.android.lib.aurora
 
-import com.jakewharton.rx.replayingShare
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.rxkotlin.Observables
-import io.reactivex.rxkotlin.Singles
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.onEach
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.darkness.DarknessProvider
@@ -21,38 +23,38 @@ internal class CombiningAuroraReportProvider(
     private val kpIndexProvider: KpIndexProvider,
     private val weatherProvider: WeatherProvider
 ) : AuroraReportProvider {
-    override fun get(location: Single<LocationResult>): Single<CompleteAuroraReport> =
-        zipToAuroraReport(location)
-            .doOnSuccess { logInfo { "Provided aurora report: $it" } }
+    override suspend fun get(getLocation: suspend () -> LocationResult): CompleteAuroraReport =
+        coroutineScope {
+            val location = async { getLocation() }
+            val locationName = async { reverseGeocoder.get(location.await()) }
+            val kpIndex = async { kpIndexProvider.get() }
+            val geomagLocation = async { geomagLocationProvider.get(location.await()) }
+            val darkness = async { darknessProvider.get(location.await()) }
+            val weather = async { weatherProvider.get(location.await()) }
+            val report = CompleteAuroraReport(
+                locationName.await(),
+                kpIndex.await(),
+                geomagLocation.await(),
+                darkness.await(),
+                weather.await()
+            )
+            logInfo { "Provided aurora report: $report" }
+            report
+        }
 
+    @ExperimentalCoroutinesApi
     override fun stream(
-        locations: Observable<Loadable<LocationResult>>
-    ): Observable<LoadableAuroraReport> =
-        Observables
-            .combineLatest(
-                reverseGeocoder.stream(locations),
-                kpIndexProvider.stream(),
-                geomagLocationProvider.stream(locations),
-                darknessProvider.stream(locations),
-                weatherProvider.stream(locations)
-            ) { locationName, kpIndex, geomagLocation, darkness, weather ->
-                LoadableAuroraReport(locationName, kpIndex, geomagLocation, darkness, weather)
-            }
+        locations: Flow<Loadable<LocationResult>>
+    ): Flow<LoadableAuroraReport> =
+        combine(
+            reverseGeocoder.stream(locations),
+            kpIndexProvider.stream(),
+            geomagLocationProvider.stream(locations),
+            darknessProvider.stream(locations),
+            weatherProvider.stream(locations)
+        ) { locationName, kpIndex, geomagLocation, darkness, weather ->
+            LoadableAuroraReport(locationName, kpIndex, geomagLocation, darkness, weather)
+        }
             .distinctUntilChanged()
-            .doOnNext { logInfo { "Streamed aurora report: $it" } }
-            .replayingShare(LoadableAuroraReport.LOADING)
-
-    private fun zipToAuroraReport(location: Single<LocationResult>): Single<CompleteAuroraReport> {
-        val cachedLocation = location.cache()
-        return Singles
-            .zip(
-                reverseGeocoder.get(cachedLocation),
-                kpIndexProvider.get(),
-                geomagLocationProvider.get(cachedLocation),
-                darknessProvider.get(cachedLocation),
-                weatherProvider.get(cachedLocation)
-            ) { locationName, kpIndex, geomagLocation, darkness, weather ->
-                CompleteAuroraReport(locationName, kpIndex, geomagLocation, darkness, weather)
-            }
-    }
+            .onEach { logInfo { "Streamed aurora report: $it" } }
 }

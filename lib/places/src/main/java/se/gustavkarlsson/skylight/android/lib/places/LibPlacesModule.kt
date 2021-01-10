@@ -1,13 +1,20 @@
 package se.gustavkarlsson.skylight.android.lib.places
 
-import android.annotation.SuppressLint
 import android.content.Context
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.core.AppScope
+import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 
@@ -16,39 +23,43 @@ object LibPlacesModule {
 
     @Provides
     @AppScope
-    internal fun placesRepository(context: Context): PlacesRepository {
+    internal fun placesRepository(
+        context: Context,
+        @Io dispatcher: CoroutineDispatcher
+    ): PlacesRepository {
         val driver = AndroidSqliteDriver(Database.Schema, context, "places.db")
         val database = Database(driver)
-        return SqlDelightPlacesRepository(database.dbPlaceQueries)
+        return SqlDelightPlacesRepository(database.dbPlaceQueries, dispatcher)
     }
 
+    @FlowPreview
+    @ExperimentalCoroutinesApi
     @Provides
     @AppScope
     internal fun selectedPlaceRepository(
         context: Context,
-        placesRepository: PlacesRepository
+        placesRepository: PlacesRepository,
+        scope: CoroutineScope,
+        @Io dispatcher: CoroutineDispatcher,
     ): SelectedPlaceRepository {
-        val storage = SharedPrefsPlaceSelectionStorage(context)
+        val storage = SharedPrefsPlaceSelectionStorage(context, dispatcher)
         return PlacesRepoSelectedPlaceRepository(
             placesRepo = placesRepository,
             placeSelectionStorage = storage,
-            disposables = CompositeDisposable()
+            scope = scope,
         )
-        // TODO activity local composite disposable?
     }
 
     @Provides
     @AppScope
     @IntoSet
     fun moduleStarter(placesRepository: PlacesRepository, analytics: Analytics): ModuleStarter =
-        object : ModuleStarter {
-            @SuppressLint("CheckResult")
-            override fun start() {
-                // TODO deal with disposable
+        ModuleStarter { scope ->
+            scope.launch {
                 placesRepository.stream()
                     .map { it.count() }
                     .distinctUntilChanged()
-                    .subscribe { placesCount ->
+                    .collect { placesCount ->
                         analytics.setProperty("places_count", placesCount)
                     }
             }

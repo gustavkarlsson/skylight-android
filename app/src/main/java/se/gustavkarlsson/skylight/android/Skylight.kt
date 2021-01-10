@@ -4,7 +4,6 @@ import android.app.Application
 import se.gustavkarlsson.skylight.android.initializers.initDagger
 import se.gustavkarlsson.skylight.android.initializers.initDarkMode
 import se.gustavkarlsson.skylight.android.initializers.initLogging
-import se.gustavkarlsson.skylight.android.initializers.initRxJavaErrorHandling
 import se.gustavkarlsson.skylight.android.initializers.initStrictMode
 import se.gustavkarlsson.skylight.android.initializers.initThreeThen
 
@@ -17,7 +16,6 @@ internal class Skylight : Application() {
         initStrictMode()
         initDarkMode()
         initThreeThen()
-        initRxJavaErrorHandling()
         initDagger()
     }
 }

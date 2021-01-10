@@ -1,12 +1,10 @@
 package se.gustavkarlsson.skylight.android.feature.background
 
-import io.reactivex.Completable
-import javax.inject.Named
+import se.gustavkarlsson.skylight.android.feature.background.scheduling.BackgroundWork
 
 interface BackgroundComponent {
 
-    @Named("notify")
-    fun notifyWork(): Completable
+    fun backgroundWork(): BackgroundWork
 
     interface Setter {
         fun setBackgroundComponent(component: BackgroundComponent) {

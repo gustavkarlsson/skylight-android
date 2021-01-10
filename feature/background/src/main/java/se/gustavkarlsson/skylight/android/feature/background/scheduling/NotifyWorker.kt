@@ -1,23 +1,25 @@
 package se.gustavkarlsson.skylight.android.feature.background.scheduling
 
 import android.content.Context
-import androidx.work.RxWorker
+import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import io.reactivex.Single
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
 
 internal class NotifyWorker(
     appContext: Context,
     workerParams: WorkerParameters
-) : RxWorker(appContext, workerParams) {
+) : CoroutineWorker(appContext, workerParams) {
 
-    override fun createWork(): Single<Result> {
+    override suspend fun doWork(): Result {
         // TODO Look into creating factory
-        val work = BackgroundComponent.instance.notifyWork()
-        return work
-            .toSingleDefault(Result.success())
-            .doOnError { logError(it) { "Failed to complete work" } }
-            .onErrorReturnItem(Result.retry())
+        val work = BackgroundComponent.instance.backgroundWork()
+        return try {
+            work()
+            Result.success()
+        } catch (e: Exception) {
+            logError(e) { "Failed to complete work" }
+            Result.retry()
+        }
     }
 }

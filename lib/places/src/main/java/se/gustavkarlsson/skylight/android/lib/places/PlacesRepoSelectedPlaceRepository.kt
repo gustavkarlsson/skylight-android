@@ -1,121 +1,114 @@
 package se.gustavkarlsson.skylight.android.lib.places
 
-import de.halfbit.knot.knot
-import io.reactivex.Observable
-import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import se.gustavkarlsson.conveyor.Action
+import se.gustavkarlsson.conveyor.Store
+import se.gustavkarlsson.conveyor.UpdatableStateFlow
 import se.gustavkarlsson.skylight.android.core.logging.logError
-import se.gustavkarlsson.skylight.android.core.utils.allowDiskReadsInStrictMode
-import se.gustavkarlsson.skylight.android.core.utils.allowDiskWritesInStrictMode
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 internal class PlacesRepoSelectedPlaceRepository(
     placesRepo: PlacesRepository,
-    placeSelectionStorage: PlaceSelectionStorage,
-    disposables: CompositeDisposable
+    private val placeSelectionStorage: PlaceSelectionStorage,
+    scope: CoroutineScope
 ) : SelectedPlaceRepository {
-    private val knot =
-        createKnot(
-            placesRepo.stream(),
-            placeSelectionStorage::saveIndex,
-            placeSelectionStorage::loadIndex
-        ).apply { disposables.add(this) }
+    @FlowPreview
+    private val store = Store(
+        initialState = State.Initial,
+        startActions = listOf(StreamPlacesAction(placeSelectionStorage::loadIndex, placesRepo.stream()))
+    )
 
-    override fun set(place: Place) = knot.change.accept(Change.SelectionChanged(place))
+    init { store.start(scope) }
 
-    override fun get(): Place = knot.state
-        .map(State::selected)
-        .blockingFirst()
+    override fun set(place: Place) = store.issue(SelectionChangedAction(place, placeSelectionStorage::saveIndex))
 
-    override fun stream(): Observable<Place> = knot.state
-        .map(State::selected)
+    override fun get(): Place = store.state.value.selected
+
+    override fun stream(): Flow<Place> = store.state
+        .map { it.selected }
         .distinctUntilChanged()
-}
-
-private fun createKnot(
-    placesStream: Observable<List<Place>>,
-    saveIndex: (Int) -> Unit,
-    loadIndex: () -> Int?
-) = knot<State, Change, Nothing> {
-
-    state {
-        initial = allowDiskReadsInStrictMode {
-            // TODO This should not run on the main thread
-            State.Initial(loadIndex())
-        }
-
-        watch<State.Loaded> {
-            val index = it.places.indexOf(it.selected)
-            allowDiskWritesInStrictMode {
-                // TODO This should not run on the main thread
-                saveIndex(index)
-            }
-        }
-    }
-
-    events {
-        source { placesStream.map(Change::PlacesUpdated) }
-    }
-
-    changes {
-        reduce { change ->
-            when (change) {
-                is Change.SelectionChanged -> selectionChanged(change.place).only
-                is Change.PlacesUpdated -> placesUpdated(change.places).only
-            }
-        }
-    }
-}
-
-private fun State.selectionChanged(newSelection: Place): State =
-    when (this) {
-        is State.Initial -> {
-            logError { "Cannot select a place before loading places. Place: $newSelection" }
-            this
-        }
-        is State.Loaded -> {
-            if (newSelection in places) {
-                copy(selected = newSelection)
-            } else {
-                logError { "Cannot select a place that is not loaded. Place: $newSelection, Loaded: $places" }
-                this
-            }
-        }
-    }
-
-private fun State.placesUpdated(newPlaces: List<Place>): State {
-    val selected = when (this) {
-        is State.Initial -> {
-            if (selectedIndex != null) {
-                val index = selectedIndex.coerceIn(newPlaces.indices)
-                newPlaces[index]
-            } else newPlaces.last()
-        }
-        is State.Loaded -> when {
-            newPlaces.size > places.size -> {
-                (newPlaces - places).first()
-            }
-            selected in newPlaces -> {
-                selected
-            }
-            else -> {
-                val newIndex = places.indexOf(selected).coerceIn(newPlaces.indices)
-                newPlaces[newIndex]
-            }
-        }
-    }
-    return State.Loaded(selected = selected, places = newPlaces)
 }
 
 private sealed class State {
     abstract val selected: Place
 
-    data class Initial(val selectedIndex: Int?) : State() {
+    object Initial : State() {
         override val selected = Place.Current
     }
 
     data class Loaded(override val selected: Place, val places: List<Place>) : State()
 }
 
-private sealed class Change {
-    data class SelectionChanged(val place: Place) : Change()
-    data class PlacesUpdated(val places: List<Place>) : Change()
+private class StreamPlacesAction(
+    private val loadIndex: suspend () -> Int?,
+    private val placesStream: Flow<List<Place>>,
+) : Action<State> {
+    override suspend fun execute(state: UpdatableStateFlow<State>) {
+        val initialSelectedIndex = loadIndex()
+        placesStream
+            .collect { newPlaces ->
+                state.update {
+                    createNewState(initialSelectedIndex, this, newPlaces)
+                }
+            }
+    }
+
+    private fun createNewState(initialSelectedIndex: Int?, state: State, newPlaces: List<Place>): State {
+        val selected = when (state) {
+            is State.Initial -> {
+                if (initialSelectedIndex != null) {
+                    val index = initialSelectedIndex.coerceIn(newPlaces.indices)
+                    newPlaces[index]
+                } else newPlaces.last()
+            }
+            is State.Loaded -> when {
+                newPlaces.size > state.places.size -> {
+                    (newPlaces - state.places).first()
+                }
+                state.selected in newPlaces -> {
+                    state.selected
+                }
+                else -> {
+                    val newIndex = state.places.indexOf(state.selected).coerceIn(newPlaces.indices)
+                    newPlaces[newIndex]
+                }
+            }
+        }
+        return State.Loaded(selected = selected, places = newPlaces)
+    }
+}
+
+private class SelectionChangedAction(
+    private val selectedPlace: Place,
+    private val saveIndex: (Int) -> Unit,
+) : Action<State> {
+    override suspend fun execute(state: UpdatableStateFlow<State>) {
+        val newState = state.update {
+            when (this) {
+                is State.Initial -> {
+                    logError { "Cannot select a place before loading places. Place: $selectedPlace" }
+                    this
+                }
+                is State.Loaded -> {
+                    if (selectedPlace in places) {
+                        copy(selected = selectedPlace)
+                    } else {
+                        logError { "Cannot select a place that is not loaded. Place: $selectedPlace, Loaded: $places" }
+                        this
+                    }
+                }
+            }
+        }
+        if (newState is State.Loaded) {
+            val index = newState.places.indexOf(newState.selected)
+            saveIndex(index)
+        }
+    }
 }

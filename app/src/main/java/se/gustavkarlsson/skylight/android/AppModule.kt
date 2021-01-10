@@ -7,11 +7,11 @@ import android.os.Build
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import io.reactivex.Scheduler
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import se.gustavkarlsson.skylight.android.core.Computation
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.Main
 import java.util.Locale
@@ -19,6 +19,10 @@ import javax.inject.Named
 
 @Module
 internal class AppModule(private val application: Application) {
+
+    @Provides
+    @AppScope
+    fun scope(): CoroutineScope = GlobalScope
 
     @Provides
     @Reusable
@@ -34,8 +38,8 @@ internal class AppModule(private val application: Application) {
 
     @Provides
     @Reusable
-    fun singleLocale(context: Context): Single<Locale> =
-        Single.fromCallable {
+    fun getLocale(context: Context): () -> Locale =
+        {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 context.resources.configuration.locales[0]
             } else {
@@ -57,15 +61,10 @@ internal class AppModule(private val application: Application) {
     @Provides
     @Reusable
     @Main
-    fun mainThreadScheduler(): Scheduler = AndroidSchedulers.mainThread()
+    fun mainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 
     @Provides
     @Reusable
     @Io
-    fun ioScheduler(): Scheduler = Schedulers.io()
-
-    @Provides
-    @Reusable
-    @Computation
-    fun computationScheduler(): Scheduler = Schedulers.computation()
+    fun ioDispatcher(): CoroutineDispatcher = Dispatchers.IO
 }

@@ -8,14 +8,19 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.ioki.textref.TextRef
-import com.jakewharton.rxbinding3.widget.textChanges
 import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_add_place.*
 import kotlinx.android.synthetic.main.layout_save_dialog.view.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import reactivecircus.flowbinding.android.widget.textChanges
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.target
@@ -24,7 +29,10 @@ import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.fadeToVisible
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.showSnackbar
+import java.util.concurrent.atomic.AtomicReference
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 class AddPlaceFragment : ScreenFragment() {
 
     override val layoutId: Int = R.layout.fragment_add_place
@@ -40,7 +48,7 @@ class AddPlaceFragment : ScreenFragment() {
 
     private val adapter by lazy { SearchResultAdapter(viewModel) }
 
-    private var errorSnackbarAndMessage: Pair<Snackbar, TextRef>? = null
+    private var errorMessage = AtomicReference<TextRef?>(null)
 
     private var savePlaceDialog: DialogInterface? = null
 
@@ -58,38 +66,40 @@ class AddPlaceFragment : ScreenFragment() {
     }
 
     override fun onDestroyView() {
-        errorSnackbarAndMessage?.first?.dismiss()
-        errorSnackbarAndMessage = null
         savePlaceDialog?.dismiss()
         savePlaceDialog = null
         searchResultRecyclerView.adapter = null
         super.onDestroyView()
     }
 
-    override fun bindData() {
+    override fun bindView(scope: CoroutineScope) {
         searchView.setQueryTextChangeListener(viewModel::onSearchTextChanged)
 
-        viewModel.placeSuggestions.bind(this, adapter::setItems)
+        viewModel.placeSuggestions.bind(scope) { items ->
+            adapter.setItems(items)
+        }
 
-        viewModel.openSaveDialog.bind(this, ::openSaveDialog)
+        viewModel.openSaveDialog.bind(scope) {
+            openSaveDialog(scope, it)
+        }
 
-        viewModel.isEmptyVisible.bind(this) { visible ->
+        viewModel.isEmptyVisible.bind(scope) { visible ->
             emptyView.fadeToVisible(visible)
         }
 
-        viewModel.isSearchingVisible.bind(this) { visible ->
+        viewModel.isSearchingVisible.bind(scope) { visible ->
             searchingView.fadeToVisible(visible)
         }
 
-        viewModel.isNoSuggestionsVisible.bind(this) { visible ->
+        viewModel.isNoSuggestionsVisible.bind(scope) { visible ->
             noSuggestionsView.fadeToVisible(visible)
         }
 
-        viewModel.isSuggestionsVisible.bind(this) { visible ->
+        viewModel.isSuggestionsVisible.bind(scope) { visible ->
             searchResultRecyclerView.fadeToVisible(visible, View.INVISIBLE)
         }
 
-        viewModel.navigateAway.bind(this) {
+        viewModel.navigateAway.bind(scope) {
             val target = arguments?.target
             if (target != null) {
                 navigator.setBackstack(target)
@@ -98,13 +108,13 @@ class AddPlaceFragment : ScreenFragment() {
             }
         }
 
-        viewModel.errorMessages.bind(this) { message ->
-            errorSnackbarAndMessage.handleNewMessage(message)
+        viewModel.errorMessages.bind(scope) { message ->
+            scope.showErrorMessage(message)
         }
     }
 
     @SuppressLint("InflateParams")
-    private fun openSaveDialog(placeSuggestion: PlaceSuggestion) {
+    private fun openSaveDialog(scope: CoroutineScope, placeSuggestion: PlaceSuggestion) {
         savePlaceDialog?.dismiss()
         val customView = layoutInflater.inflate(R.layout.layout_save_dialog, null)
         val editText = customView.placeNameEditText.apply {
@@ -113,23 +123,25 @@ class AddPlaceFragment : ScreenFragment() {
         }
         val dialog = createDialog(customView) {
             val name = editText.text.toString().trim()
-            viewModel.onSavePlaceClicked(name, placeSuggestion.location)
+            scope.launch {
+                viewModel.onSavePlaceClicked(name, placeSuggestion.location)
+            }
         }
         savePlaceDialog = dialog
         dialog.show()
-        dialog.initView(editText)
+        dialog.initView(scope, editText)
         editText.requestFocus()
     }
 
-    private fun Pair<Snackbar, TextRef>?.handleNewMessage(message: TextRef) {
-        val (oldSnackbar, oldMessage) = this ?: null to null
-        if (oldSnackbar == null || !oldSnackbar.isShown || oldMessage != message) {
-            oldSnackbar?.dismiss()
-            errorSnackbarAndMessage = showSnackbar(searchResultRecyclerView, message) {
+    private fun CoroutineScope.showErrorMessage(message: TextRef) {
+        if (errorMessage.compareAndSet(null, message)) {
+            showSnackbar(searchResultRecyclerView, message) {
                 setIndefiniteDuration()
                 setErrorStyle()
-                setDismiss(R.string.dismiss)
-            } to message
+                setDismiss(R.string.dismiss) {
+                    errorMessage.set(null)
+                }
+            }
         }
     }
 }
@@ -141,14 +153,16 @@ private fun SearchView.fixMargins() {
 }
 
 private fun SearchView.setQueryTextChangeListener(callback: (String) -> Unit) {
-    setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-        override fun onQueryTextSubmit(query: String) = false
+    setOnQueryTextListener(
+        object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String) = false
 
-        override fun onQueryTextChange(newText: String): Boolean {
-            callback(newText)
-            return true
+            override fun onQueryTextChange(newText: String): Boolean {
+                callback(newText)
+                return true
+            }
         }
-    })
+    )
 }
 
 private fun createDialog(view: View, onClick: () -> Unit) =
@@ -159,10 +173,12 @@ private fun createDialog(view: View, onClick: () -> Unit) =
         setPositiveButton(R.string.save) { _, _ -> onClick() }
     }.create()
 
-private fun AlertDialog.initView(editText: TextInputEditText) {
+private fun AlertDialog.initView(scope: CoroutineScope, editText: TextInputEditText) {
     val positiveButton = getButton(AlertDialog.BUTTON_POSITIVE)
-    val textChangeDisposable = editText.textChanges()
-        .map(CharSequence::isNotBlank)
-        .subscribe { positiveButton.isEnabled = it }
-    setOnDismissListener { textChangeDisposable.dispose() }
+    val job = scope.launch {
+        editText.textChanges()
+            .map { it.isNotBlank() }
+            .collect { positiveButton.isEnabled = it }
+    }
+    setOnDismissListener { job.cancel() }
 }

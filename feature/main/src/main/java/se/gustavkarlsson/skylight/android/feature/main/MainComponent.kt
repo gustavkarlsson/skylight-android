@@ -4,12 +4,14 @@ import android.content.Context
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import io.reactivex.Scheduler
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.skylight.android.core.AppComponent
-import se.gustavkarlsson.skylight.android.core.Main
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
+import se.gustavkarlsson.skylight.android.core.utils.millis
 import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
@@ -50,6 +52,7 @@ import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
     ]
 )
 internal interface MainComponent {
+    @ExperimentalCoroutinesApi
     fun viewModel(): MainViewModel
 
     companion object {
@@ -72,25 +75,33 @@ internal interface MainComponent {
 @Module
 internal object MainModule {
 
+    @FlowPreview
+    @ExperimentalCoroutinesApi
     @Provides
-    fun mainKnot(
+    fun mainStore(
         permissionChecker: PermissionChecker,
         selectedPlaceRepository: SelectedPlaceRepository,
         locationProvider: LocationProvider,
-        auroraReportProvider: AuroraReportProvider,
-        @Main observeScheduler: Scheduler
-    ): MainKnot = buildMainKnot(
-        permissionChecker,
-        selectedPlaceRepository,
-        locationProvider,
-        auroraReportProvider,
-        observeScheduler
-    )
+        auroraReportProvider: AuroraReportProvider
+    ): Store<State> {
+        val locationPermissionAction = LocationPermissionAction(permissionChecker.access)
+        val streamReportsAction = StreamReportsLiveAction(
+            currentLocation = locationProvider.stream(),
+            streamAuroraReports = auroraReportProvider::stream,
+            throttleDuration = 500.millis
+        )
+        val placeSelectionAction = PlaceSelectionAction(selectedPlaceRepository.stream())
+        return Store(
+            initialState = State(selectedPlace = selectedPlaceRepository.get()),
+            startActions = listOf(locationPermissionAction, placeSelectionAction, streamReportsAction),
+        )
+    }
 
+    @ExperimentalCoroutinesApi
     @Provides
     fun viewModel(
         context: Context,
-        mainKnot: MainKnot,
+        mainStore: Store<State>,
         time: Time,
         auroraChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
         chanceLevelFormatter: Formatter<ChanceLevel>,
@@ -102,13 +113,12 @@ internal object MainModule {
         weatherFormatter: Formatter<Weather>,
         darknessEvaluator: ChanceEvaluator<Darkness>,
         darknessFormatter: Formatter<Darkness>,
-        locationPermissionChecker: PermissionChecker,
-        @Main observeScheduler: Scheduler
+        locationPermissionChecker: PermissionChecker
     ): MainViewModel {
         val rightNowText = context.getString(R.string.right_now)
         val relativeTimeFormatter = DateUtilsRelativeTimeFormatter(rightNowText)
         return MainViewModel(
-            mainKnot,
+            mainStore,
             auroraChanceEvaluator,
             relativeTimeFormatter,
             chanceLevelFormatter,
@@ -123,8 +133,7 @@ internal object MainModule {
             locationPermissionChecker,
             ChanceToColorConverter(context),
             time,
-            1.minutes,
-            observeScheduler
+            1.minutes
         )
     }
 }

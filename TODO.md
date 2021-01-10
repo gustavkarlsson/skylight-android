@@ -1,12 +1,13 @@
 ## Soon
+* Make location take phone location on/off into account
+* Make location auto-refresh on permission granted
+* Migrate libraries using sqldelight to use store
 * Bug: If location is granted (while using app), then go to add place, and go back. Banner shows up again.
-* Migrate to coroutines
-* Rework location inputs to "ApproximateLocation" so store can cache ressults from nearby locations
+* Rework location inputs to "ApproximateLocation" so store can cache results from nearby locations
 * Readme
 * Simpler configuration of required keys (move to root? fail if not present?)
 * Retire ThreeTenABP
 * Add Hyperion
-* Move some libs to coroutines
 * Android 11: https://developer.android.com/preview/privacy/permissions#one-time
 * Android 11: https://developer.android.com/preview/privacy/location#background-location
 * Use cases instead of repositories?
@@ -17,7 +18,6 @@
 
 ## Some day
 * Oversee text style usage (also use TextAppearance instead of style in XML)
-* Use Store lib?
 * Make testing use other settings
 * Add more tests
 * Add develop settings

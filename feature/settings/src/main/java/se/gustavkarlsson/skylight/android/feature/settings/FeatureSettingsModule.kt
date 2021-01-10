@@ -7,9 +7,17 @@ import androidx.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
-import io.reactivex.rxkotlin.toObservable
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
+import se.gustavkarlsson.skylight.android.core.utils.windowed
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
@@ -17,6 +25,8 @@ import se.gustavkarlsson.skylight.android.lib.settings.Settings
 @Module
 object FeatureSettingsModule {
 
+    @FlowPreview
+    @ExperimentalCoroutinesApi
     @Provides
     @AppScope
     @IntoSet
@@ -26,38 +36,41 @@ object FeatureSettingsModule {
         placesRepository: PlacesRepository,
         analytics: Analytics
     ): ModuleStarter =
-        object : ModuleStarter {
-            @SuppressLint("CheckResult")
-            override fun start() {
-                clearSettingsForDeletedPlaces(placesRepository, settings)
+        ModuleStarter { scope ->
+            scope.launch {
+                getRemovedPlaces(placesRepository)
+                    .collect {
+                        settings.clearNotificationTriggerLevel(it)
+                    }
                 getTriggerLevels(settings)
-                    .subscribe { (min, max) ->
+                    .collect { (min, max) ->
                         analytics.setProperty("trigger_lvl_min", min)
                         analytics.setProperty("trigger_lvl_max", max)
                     }
-                clearOldSharedPreferences(context)
             }
+            clearOldSharedPreferences(context)
         }
 }
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 @SuppressLint("CheckResult")
-private fun clearSettingsForDeletedPlaces(placesRepository: PlacesRepository, settings: Settings) {
+private fun getRemovedPlaces(placesRepository: PlacesRepository) =
     placesRepository.stream()
-        .buffer(2, 1)
-        .flatMap { (old, new) ->
+        .windowed(2)
+        .flatMapConcat { (old, new) ->
             val remaining = old - new
-            remaining.toObservable()
+            remaining.asFlow()
         }
-        .subscribe(settings::clearNotificationTriggerLevel)
-}
 
+@ExperimentalCoroutinesApi
 private fun getTriggerLevels(settings: Settings) =
     settings
         .streamNotificationTriggerLevels()
         .map { it.unzip().second }
         .map { triggerLevels ->
-            val min = triggerLevels.minBy { it.ordinal }
-            val max = triggerLevels.maxBy { it.ordinal }
+            val min = triggerLevels.minByOrNull { it.ordinal }
+            val max = triggerLevels.maxByOrNull { it.ordinal }
             min to max
         }
         .distinctUntilChanged()

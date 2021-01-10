@@ -5,6 +5,7 @@ import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.fragment_privacypolicy.*
+import kotlinx.coroutines.CoroutineScope
 import se.gustavkarlsson.skylight.android.feature.privacypolicy.R
 import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
 
@@ -25,4 +26,6 @@ class PrivacyPolicyFragment : ScreenFragment() {
             .readText()
         Markwon.create(requireContext()).setMarkdown(markdownView, privacyPolicyMarkdown)
     }
+
+    override fun bindView(scope: CoroutineScope) = Unit
 }

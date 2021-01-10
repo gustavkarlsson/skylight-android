@@ -4,30 +4,45 @@ import android.view.View
 import androidx.annotation.StringRes
 import com.google.android.material.snackbar.Snackbar
 import com.ioki.textref.TextRef
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.lib.ui.R
 
-fun showSnackbar(view: View, text: CharSequence, build: SnackbarBuilder.() -> Unit): Snackbar =
-    showSnackbar(view, build) { setText(text) }
+fun CoroutineScope.showSnackbar(view: View, text: CharSequence, build: SnackbarBuilder.() -> Unit): Snackbar =
+    showSnackbar { buildSnackbar(view, build) { setText(text) } }
 
-fun showSnackbar(view: View, @StringRes text: Int, build: SnackbarBuilder.() -> Unit): Snackbar =
-    showSnackbar(view, build) { setText(text) }
+fun CoroutineScope.showSnackbar(view: View, @StringRes text: Int, build: SnackbarBuilder.() -> Unit): Snackbar =
+    showSnackbar { buildSnackbar(view, build) { setText(text) } }
 
-fun showSnackbar(view: View, text: TextRef, build: SnackbarBuilder.() -> Unit): Snackbar =
-    showSnackbar(view, build) { setText(text) }
+fun CoroutineScope.showSnackbar(view: View, text: TextRef, build: SnackbarBuilder.() -> Unit): Snackbar =
+    showSnackbar { buildSnackbar(view, build) { setText(text) } }
 
-private fun showSnackbar(
+private fun CoroutineScope.showSnackbar(
+    buildSnackbar: () -> Snackbar
+): Snackbar {
+    val snackbar = buildSnackbar()
+    launch {
+        snackbar.show()
+        delay(Long.MAX_VALUE)
+    }.invokeOnCompletion {
+        snackbar.dismiss()
+    }
+    return snackbar
+}
+
+private fun buildSnackbar(
     view: View,
-    build: SnackbarBuilder.() -> Unit,
-    setText: SnackbarBuilder.() -> Unit
+    setText: SnackbarBuilder.() -> Unit,
+    build: SnackbarBuilder.() -> Unit
 ) = SnackbarBuilder(view)
     .also(setText)
     .also(build)
-    .show()
+    .build()
 
 class SnackbarBuilder internal constructor(view: View) {
     private val snackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG)
-    private var canSwipeToDismiss = true
 
     fun setText(text: CharSequence) = snackbar.setText(text)
 
@@ -57,7 +72,7 @@ class SnackbarBuilder internal constructor(view: View) {
 
     fun setErrorStyle() = snackbar.setErrorColors()
 
-    internal fun show(): Snackbar = snackbar.also(Snackbar::show)
+    internal fun build(): Snackbar = snackbar
 }
 
 private fun Snackbar.setErrorColors() {

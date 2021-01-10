@@ -1,11 +1,10 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
-import com.jakewharton.rxbinding3.view.clicks
 import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.plusAssign
 import kotlinx.android.synthetic.main.fragment_intro.*
+import kotlinx.coroutines.CoroutineScope
+import reactivecircus.flowbinding.android.view.clicks
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.navigation.target
@@ -17,8 +16,6 @@ import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 internal class IntroFragment : ScreenFragment() {
 
     override val layoutId: Int = R.layout.fragment_intro
-
-    private val permissionRequests = CompositeDisposable()
 
     private val viewModel by lazy {
         getOrRegisterService("introViewModel") {
@@ -32,31 +29,24 @@ internal class IntroFragment : ScreenFragment() {
     }
 
     override fun initView() {
-        privacyPolicyLink.clicks()
-            .bind(this) {
-                navigator.goTo(screens.privacyPolicy)
-            }
     }
 
-    override fun bindData() {
-        myLocationButton.clicks().bind(this) {
-            permissionRequests += PermissionsComponent.instance.locationPermissionRequester()
-                .request(this)
-                .subscribe {
-                    viewModel.registerScreenSeen()
-                    navigator.closeScreenAndGoTo(screens.main)
-                }
+    override fun bindView(scope: CoroutineScope) {
+        privacyPolicyLink.clicks().bind(scope) {
+            navigator.goTo(screens.privacyPolicy)
         }
 
-        pickLocationButton.clicks().bind(this) {
+        myLocationButton.clicks().bind(scope) {
+            PermissionsComponent.instance.locationPermissionRequester()
+                .request(this)
+            viewModel.registerScreenSeen()
+            navigator.closeScreenAndGoTo(screens.main)
+        }
+
+        pickLocationButton.clicks().bind(scope) {
             viewModel.registerScreenSeen()
             val target = requireNotNull(requireArguments().target)
             navigator.goTo(screens.addPlace(target))
         }
-    }
-
-    override fun onDestroyView() {
-        permissionRequests.clear()
-        super.onDestroyView()
     }
 }

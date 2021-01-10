@@ -2,8 +2,11 @@ package se.gustavkarlsson.skylight.android.lib.geocoder
 
 import com.mapbox.api.geocoding.v5.MapboxGeocoding
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -12,65 +15,66 @@ import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import java.io.IOException
 import java.util.Locale
+import kotlin.coroutines.resume
 
 internal class MapboxGeocoder(
     private val accessToken: String,
-    private val getLocale: () -> Locale
+    private val getLocale: () -> Locale,
+    private val dispatcher: CoroutineDispatcher
 ) : Geocoder {
 
-    override fun geocode(locationName: String): Single<GeocodingResult> {
-        return if (locationName.length <= 1) {
-            Single.just(GeocodingResult.Success(emptyList()))
-        } else {
-            createSingle(accessToken, getLocale(), locationName)
-                .subscribeOn(Schedulers.io())
+    override suspend fun geocode(locationName: String): GeocodingResult {
+        if (locationName.length <= 1) {
+            return GeocodingResult.Success(emptyList())
+        }
+        return withContext(dispatcher + CoroutineName("geocode")) {
+            try {
+                val geocoding = createGeocoding(accessToken, getLocale(), locationName)
+                doGeocode(geocoding)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                logError(e) { "Failed to create Geocoding request" }
+                GeocodingResult.Failure.Unknown
+            }
         }
     }
+
+    private suspend fun doGeocode(geocoding: MapboxGeocoding): GeocodingResult =
+        suspendCancellableCoroutine { continuation ->
+            continuation.invokeOnCancellation { geocoding.cancelCall() }
+
+            geocoding.enqueueCall(
+                object : Callback<GeocodingResponse> {
+                    override fun onFailure(call: Call<GeocodingResponse>, t: Throwable) {
+                        val result = if (t is IOException) {
+                            logWarn(t) { "Geocoding failed" }
+                            GeocodingResult.Failure.Io
+                        } else {
+                            logError(t) { "Geocoding failed" }
+                            GeocodingResult.Failure.Unknown
+                        }
+                        continuation.resume(result)
+                    }
+
+                    override fun onResponse(
+                        call: Call<GeocodingResponse>,
+                        response: Response<GeocodingResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val result = response.body()!!.toGeocodingResultSuccess()
+                            continuation.resume(result)
+                        } else {
+                            val code = response.code()
+                            val error = response.errorBody()?.string() ?: "<empty>"
+                            logError { "Geocoding failed with HTTP $code: $error" }
+                            continuation.resume(GeocodingResult.Failure.ServerError)
+                        }
+                    }
+                }
+            )
+        }
 }
-
-private fun createSingle(
-    accessToken: String,
-    locale: Locale,
-    locationName: String
-) =
-    Single.create<GeocodingResult> { emitter ->
-        val geocoding = try {
-            createGeocoding(accessToken, locale, locationName)
-        } catch (e: Exception) {
-            logError(e) { "Failed to create Geocoding request" }
-            emitter.onSuccess(GeocodingResult.Failure.Unknown)
-            return@create
-        }
-
-        emitter.setCancellable(geocoding::cancelCall)
-
-        geocoding.enqueueCall(object : Callback<GeocodingResponse> {
-            override fun onFailure(call: Call<GeocodingResponse>, t: Throwable) {
-                val result = if (t is IOException) {
-                    logWarn(t) { "Geocoding failed" }
-                    GeocodingResult.Failure.Io
-                } else {
-                    logError(t) { "Geocoding failed" }
-                    GeocodingResult.Failure.Unknown
-                }
-                emitter.onSuccess(result)
-            }
-
-            override fun onResponse(
-                call: Call<GeocodingResponse>,
-                response: Response<GeocodingResponse>
-            ) {
-                if (response.isSuccessful) {
-                    emitter.onSuccess(response.body()!!.toGeocodingResultSuccess())
-                } else {
-                    val code = response.code()
-                    val error = response.errorBody()?.string() ?: "<empty>"
-                    logError { "Geocoding failed with HTTP $code: $error" }
-                    emitter.onSuccess(GeocodingResult.Failure.ServerError)
-                }
-            }
-        })
-    }
 
 // TODO Add proximity bias
 private fun createGeocoding(

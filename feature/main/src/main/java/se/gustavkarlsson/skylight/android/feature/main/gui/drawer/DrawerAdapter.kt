@@ -5,8 +5,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import se.gustavkarlsson.skylight.android.feature.main.R
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 internal class DrawerAdapter(
     private val viewModel: DrawerViewModel
 ) : RecyclerView.Adapter<ViewHolder>() {

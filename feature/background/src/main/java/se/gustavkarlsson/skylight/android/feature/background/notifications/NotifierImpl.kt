@@ -50,7 +50,7 @@ internal class NotifierImpl(
     }
 
     private fun createPriority(notification: Notification): Int =
-        when (notification.data.map { it.chanceLevel }.max()) {
+        when (notification.data.map { it.chanceLevel }.maxOrNull()) {
             ChanceLevel.HIGH -> NotificationCompat.PRIORITY_HIGH
             ChanceLevel.MEDIUM -> NotificationCompat.PRIORITY_DEFAULT
             ChanceLevel.LOW -> NotificationCompat.PRIORITY_LOW

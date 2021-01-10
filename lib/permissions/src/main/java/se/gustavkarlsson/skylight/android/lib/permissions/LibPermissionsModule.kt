@@ -3,35 +3,41 @@ package se.gustavkarlsson.skylight.android.lib.permissions
 import android.Manifest
 import android.content.Context
 import android.os.Build
-import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 
 @Module
 object LibPermissionsModule {
 
-    private val relay = BehaviorRelay.create<Access>()
+    @ExperimentalCoroutinesApi
+    private val channel = ConflatedBroadcastChannel(Access.Unknown)
 
+    @ExperimentalCoroutinesApi
     @Provides
     @Reusable
     internal fun locationPermissionChecker(
         context: Context
     ): PermissionChecker =
-        AndroidPermissionChecker(locationPermissionKey, context, relay)
+        AndroidPermissionChecker(locationPermissionKey, context, channel)
 
+    @ExperimentalCoroutinesApi
     @Provides
     @Reusable
     internal fun locationPermissionRequester(): PermissionRequester =
-        RxPermissionRequester(allLocationPermissionKeys, relay)
+        RuntimePermissionRequester(
+            requiredPermissionKeys = listOf(locationPermissionKey),
+            extraPermissionKeys = listOfNotNull(backgroundLocationPermissionKey)
+        ) { channel.offer(it) }
 }
 
 private const val locationPermissionKey = Manifest.permission.ACCESS_FINE_LOCATION
 
-// TODO Show dialog if background permission not given but notifications are on.
-private val allLocationPermissionKeys = listOfNotNull(
-    locationPermissionKey,
+private val backgroundLocationPermissionKey =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         Manifest.permission.ACCESS_BACKGROUND_LOCATION
     } else null
-)
+
+// TODO Show dialog if background permission not given but notifications are on.

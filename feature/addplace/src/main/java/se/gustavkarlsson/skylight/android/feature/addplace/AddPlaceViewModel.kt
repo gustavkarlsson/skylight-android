@@ -1,35 +1,48 @@
 package se.gustavkarlsson.skylight.android.feature.addplace
 
 import com.ioki.textref.TextRef
-import com.jakewharton.rxrelay2.PublishRelay
-import io.reactivex.Observable
-import se.gustavkarlsson.skylight.android.core.utils.mapNotNull
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
-import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
+import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
 import javax.inject.Inject
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 internal class AddPlaceViewModel @Inject constructor(
     private val placesRepository: PlacesRepository,
-    private val knot: AddPlaceKnot,
-    val errorMessages: Observable<TextRef>
-) : ScopedService {
+    private val store: Store<State>,
+    val errorMessages: Flow<TextRef>,
+) : CoroutineScopedService() {
 
-    override fun onCleared() {
-        knot.dispose()
-    }
+    init { store.start(scope) }
 
-    private val navigateAwayRelay = PublishRelay.create<Unit>()
-    val navigateAway: Observable<Unit> = navigateAwayRelay
+    private val stateFlow = store.state
 
-    private val openSaveDialogRelay = PublishRelay.create<PlaceSuggestion>()
-    val openSaveDialog: Observable<PlaceSuggestion> = openSaveDialogRelay
+    private val navigateAwayChannel = BroadcastChannel<Unit>(Channel.BUFFERED)
+    val navigateAway: Flow<Unit> = navigateAwayChannel.asFlow()
 
-    fun onSearchTextChanged(newText: String) = knot.change.accept(Change.Query(newText))
+    private val openSaveDialogChannel = BroadcastChannel<PlaceSuggestion>(Channel.BUFFERED)
+    val openSaveDialog: Flow<PlaceSuggestion> = openSaveDialogChannel.asFlow()
 
-    val placeSuggestions: Observable<List<SuggestionItem>> = knot.state
-        .map(State::suggestions)
+    fun onSearchTextChanged(newText: String) = store.issue(SetQueryAction(newText))
+
+    val placeSuggestions: Flow<List<SuggestionItem>> = stateFlow
+        .map { it.suggestions.items }
         .distinctUntilChanged()
         .filter { it.isNotEmpty() }
         .map { suggestions ->
@@ -38,34 +51,38 @@ internal class AddPlaceViewModel @Inject constructor(
             }
         }
 
-    fun onSuggestionClicked(suggestion: PlaceSuggestion) = openSaveDialogRelay.accept(suggestion)
+    fun onSuggestionClicked(suggestion: PlaceSuggestion) = openSaveDialogChannel.offer(suggestion)
 
-    fun onSavePlaceClicked(name: String, location: Location) {
+    suspend fun onSavePlaceClicked(name: String, location: Location) {
         placesRepository.add(name, location)
-        navigateAwayRelay.accept(Unit)
+        navigateAwayChannel.offer(Unit)
     }
 
-    private val resultState: Observable<ResultState> = knot.state
-        .mapNotNull { state ->
+    private val resultState: Flow<ResultState> = stateFlow
+        .flatMapLatest { state ->
             when {
-                state.query.isBlank() -> ResultState.EMPTY
-                state.isSearching && state.suggestions.isEmpty() -> ResultState.SEARCHING
-                state.suggestions.isEmpty() -> ResultState.NO_SUGGESTIONS
-                else -> ResultState.SUGGESTIONS
+                state.query.isBlank() -> flowOf(ResultState.EMPTY)
+                !state.isSuggestionsUpToDate && state.suggestions.items.isEmpty() ->
+                    flow {
+                        delay(1000)
+                        emit(ResultState.SEARCHING)
+                    }
+                state.suggestions.items.isEmpty() -> flowOf(ResultState.NO_SUGGESTIONS)
+                else -> flowOf(ResultState.SUGGESTIONS)
             }
         }
         .distinctUntilChanged()
 
-    val isEmptyVisible: Observable<Boolean> =
+    val isEmptyVisible: Flow<Boolean> =
         resultState.map { it == ResultState.EMPTY }
 
-    val isSearchingVisible: Observable<Boolean> =
+    val isSearchingVisible: Flow<Boolean> =
         resultState.map { it == ResultState.SEARCHING }
 
-    val isNoSuggestionsVisible: Observable<Boolean> =
+    val isNoSuggestionsVisible: Flow<Boolean> =
         resultState.map { it == ResultState.NO_SUGGESTIONS }
 
-    val isSuggestionsVisible: Observable<Boolean> =
+    val isSuggestionsVisible: Flow<Boolean> =
         resultState.map { it == ResultState.SUGGESTIONS }
 }
 

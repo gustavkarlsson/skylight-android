@@ -1,13 +1,14 @@
 package se.gustavkarlsson.skylight.android.lib.settings
 
-import com.jakewharton.rx.replayingShare
-import com.squareup.sqldelight.runtime.rx.asObservable
-import com.squareup.sqldelight.runtime.rx.mapToList
-import io.reactivex.Completable
-import io.reactivex.Observable
-import io.reactivex.Scheduler
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import com.squareup.sqldelight.runtime.coroutines.asFlow
+import com.squareup.sqldelight.runtime.coroutines.mapToList
+import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
@@ -16,32 +17,29 @@ import se.gustavkarlsson.skylight.android.lib.settings.db.DbSettingsQueries
 internal class SqlDelightSettings(
     private val queries: DbSettingsQueries,
     private val placesRepository: PlacesRepository,
-    private val dbScheduler: Scheduler = Schedulers.io()
+    private val dispatcher: CoroutineDispatcher
 ) : Settings {
 
-    override fun setNotificationTriggerLevel(place: Place, level: TriggerLevel): Completable {
+    override suspend fun setNotificationTriggerLevel(place: Place, level: TriggerLevel) {
         val placeId = place.getId()
-        return queries.getById(placeId)
-            .asObservable(dbScheduler)
-            .mapToList()
-            .firstElement()
-            .map { it.isNotEmpty() }
-            .switchIfEmpty(Single.just(false))
-            .doOnSuccess { exists ->
-                val levelIndex = level.ordinal.toLong()
-                if (exists)
-                    queries.update(levelIndex, placeId)
-                else
-                    queries.insert(placeId, levelIndex)
-            }
-            .ignoreElement()
+        val exists = queries.getById(placeId)
+            .asFlow()
+            .mapToOneOrNull(dispatcher)
+            .first() != null
+
+        val levelIndex = level.ordinal.toLong()
+        if (exists)
+            queries.update(levelIndex, placeId)
+        else
+            queries.insert(placeId, levelIndex)
     }
 
     override fun clearNotificationTriggerLevel(place: Place) = queries.delete(place.getId())
 
-    override fun streamNotificationTriggerLevels(): Observable<List<Pair<Place, TriggerLevel>>> =
+    @ExperimentalCoroutinesApi
+    override fun streamNotificationTriggerLevels(): Flow<List<Pair<Place, TriggerLevel>>> =
         placesRepository.stream()
-            .switchMap { places ->
+            .flatMapLatest { places ->
                 getTriggerLevelRecords()
                     .map { records ->
                         places.map { place ->
@@ -49,12 +47,11 @@ internal class SqlDelightSettings(
                         }
                     }
             }
-            .replayingShare()
 
-    private fun getTriggerLevelRecords(): Observable<List<TriggerLevelRecord>> =
+    private fun getTriggerLevelRecords(): Flow<List<TriggerLevelRecord>> =
         queries
             .selectAll { id, levelIndex -> TriggerLevelRecord(id, levelIndex) }
-            .asObservable(dbScheduler)
+            .asFlow()
             .mapToList()
 }
 

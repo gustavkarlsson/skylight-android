@@ -1,5 +1,7 @@
 package se.gustavkarlsson.skylight.android.core
 
-interface ModuleStarter {
-    fun start()
+import kotlinx.coroutines.CoroutineScope
+
+fun interface ModuleStarter {
+    fun start(scope: CoroutineScope)
 }

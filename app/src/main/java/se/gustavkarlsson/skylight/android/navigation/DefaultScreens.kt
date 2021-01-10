@@ -3,6 +3,8 @@ package se.gustavkarlsson.skylight.android.navigation
 import android.os.Bundle
 import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import se.gustavkarlsson.skylight.android.feature.about.AboutFragment
 import se.gustavkarlsson.skylight.android.feature.addplace.AddPlaceFragment
 import se.gustavkarlsson.skylight.android.feature.intro.PrivacyPolicyFragment
@@ -17,8 +19,10 @@ import se.gustavkarlsson.skylight.android.lib.navigation.withTarget
 internal object DefaultScreens : Screens {
     override val main: Screen =
         MainScreen()
+
     override fun addPlace(target: Backstack?): Screen =
         AddPlaceScreen(target)
+
     override val settings: Screen =
         SettingsScreen()
     override val about: Screen =
@@ -35,6 +39,7 @@ private data class MainScreen(private val dummy: Unit = Unit) : Screen {
     @IgnoredOnParcel
     override val scopeStart: String = "main"
 
+    @ExperimentalCoroutinesApi
     override fun createFragment() = MainFragment()
 }
 
@@ -43,6 +48,8 @@ private data class AddPlaceScreen(private val target: Backstack?) : Screen {
     @IgnoredOnParcel
     override val name = ScreenName.AddPlace
 
+    @FlowPreview
+    @ExperimentalCoroutinesApi
     override fun createFragment() = AddPlaceFragment().apply {
         if (target != null) {
             arguments = Bundle().withTarget(target)
@@ -55,6 +62,8 @@ private data class SettingsScreen(private val dummy: Unit = Unit) : Screen {
     @IgnoredOnParcel
     override val name = ScreenName.Settings
 
+    @FlowPreview
+    @ExperimentalCoroutinesApi
     override fun createFragment() = SettingsFragment()
 }
 

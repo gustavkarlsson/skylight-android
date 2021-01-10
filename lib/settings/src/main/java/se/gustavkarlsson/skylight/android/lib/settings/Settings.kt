@@ -1,16 +1,15 @@
 package se.gustavkarlsson.skylight.android.lib.settings
 
-import io.reactivex.Completable
-import io.reactivex.Observable
+import kotlinx.coroutines.flow.Flow
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
 
 interface Settings {
-    fun setNotificationTriggerLevel(place: Place, level: TriggerLevel): Completable
+    suspend fun setNotificationTriggerLevel(place: Place, level: TriggerLevel)
 
     fun clearNotificationTriggerLevel(place: Place)
 
-    fun streamNotificationTriggerLevels(): Observable<List<Pair<Place, TriggerLevel>>>
+    fun streamNotificationTriggerLevels(): Flow<List<Pair<Place, TriggerLevel>>>
 
     companion object {
         val DEFAULT_TRIGGER_LEVEL = TriggerLevel.MEDIUM

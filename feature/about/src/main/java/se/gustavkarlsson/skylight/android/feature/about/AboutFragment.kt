@@ -1,10 +1,11 @@
 package se.gustavkarlsson.skylight.android.feature.about
 
 import com.google.android.material.appbar.MaterialToolbar
-import com.jakewharton.rxbinding3.view.clicks
 import de.halfbit.edgetoedge.Edge
 import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import kotlinx.android.synthetic.main.fragment_about.*
+import kotlinx.coroutines.CoroutineScope
+import reactivecircus.flowbinding.android.view.clicks
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
@@ -28,9 +29,11 @@ class AboutFragment : ScreenFragment() {
     override fun initView() {
         val context = requireContext()
         detailsTextView.text = viewModel.detailsText.resolve(context)
-        privacyPolicyLink.clicks()
-            .bind(this) {
-                navigator.goTo(screens.privacyPolicy)
-            }
+    }
+
+    override fun bindView(scope: CoroutineScope) {
+        privacyPolicyLink.clicks().bind(scope) {
+            navigator.goTo(screens.privacyPolicy)
+        }
     }
 }

@@ -31,7 +31,7 @@ internal class CompleteAuroraReportEvaluator(
             return Chance.IMPOSSIBLE
         }
 
-        return listOf(weatherChance, darknessChance, activityChance * locationChance).min()!!
+        return listOf(weatherChance, darknessChance, activityChance * locationChance).minOrNull()!!
     }
 }
 

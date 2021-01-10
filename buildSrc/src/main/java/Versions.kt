@@ -14,7 +14,7 @@ object Versions {
     // Skip 1.12.0 as it has breaking bug: https://github.com/allegro/axion-release-plugin/issues/339
     val axionRelease = "1.10.3"
     val playPublisher = "2.8.0"
-    val ktlint = "9.3.0"
+    val ktlint = "9.4.1"
 
     // Dependencies
     val googleServices = "4.3.3"
@@ -37,14 +37,9 @@ object Versions {
 
     val material = "1.1.0"
 
-    val rxjava = "2.2.19"
-    val rxkotlin = "2.4.0"
-    val rxandroid = "2.1.1"
-    val rxbinding = "3.1.0"
-    val rxrelay = "2.1.1"
-    val rxReplayingShare = "2.2.0"
-    val rxpermissions = "0.10.2"
-    val rxLocation = "1.0.5"
+    val flowbinding = "1.0.0-beta02"
+    val runtimePermissionKotlin = "1.1.2"
+    val kotlinxCoroutines = "1.4.2"
 
     val okHttp = "3.14.4"
     val retrofit = "2.7.1"
@@ -58,13 +53,13 @@ object Versions {
     val leakcanary = "2.4"
     val banner = "1.2.0"
     val mapboxServices = "5.3.0"
-    val knot = "3.0.3"
+    val conveyor = "70a6938fa0" // TODO use release version
     val edgeToEdge = "0.10"
     val koptional = "0.4.0"
     val simpleStack = "2.3.2"
-    val rxtasks = "2.2.0"
     val textref = "1.3.0"
     val markwon = "4.4.0"
+    val store = "4.0.0-beta01"
 
     // Test
     val junit = "4.12"
