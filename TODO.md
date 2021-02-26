@@ -1,4 +1,5 @@
 ## Soon
+* Single-use permission doesn't really work
 * Make location take phone location on/off into account
 * Make location auto-refresh on permission granted
 * Migrate libraries using sqldelight to use store
@@ -17,6 +18,10 @@
 * Improve feature graphics
 
 ## Some day
+* Put more info in bottom sheet. Images, text, links, CTA for missing location
+* Use favorites instead of saving? If so: Change map icon (in menu) to favorite icon?
+* Change "FIX" to "ALLOW/GRANT" in banner?
+* Main screen: Tell a story, one or a few sentences.
 * Oversee text style usage (also use TextAppearance instead of style in XML)
 * Make testing use other settings
 * Add more tests
@@ -41,3 +46,17 @@
 * Instant app
 * Wear OS App, Tablet, Chrome OS, Leanback apps
 * Allow reporting of false negatives/positives
+
+Factor card ideas:
+Change question mark to warning icon. Add CTA for fixing location problem, with same action name as in banner
+Put warning icon
+Make them bigger
+Add graphics
+
+Graphics ideas for factors:
+Kp: Show a scale with the values pointed out
+Location: globe with latitude lines/scale
+Weather: Clouds/Sun
+Darkness: Sunset/Sunrise, maybe with a globe, and a line showing the movement of sun
+
+Idea: Map in top, with bottom sheet that contains all factors
