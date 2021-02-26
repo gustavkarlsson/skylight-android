@@ -3,12 +3,12 @@ import org.gradle.api.JavaVersion
 object Versions {
     // Config
     val minSdk = 23
-    val compileSdk = 29
-    val targetSdk = 29
-    val buildTools = "29.0.3"
+    val compileSdk = 30
+    val targetSdk = 30
+    val buildTools = "30.0.2"
     val java = JavaVersion.VERSION_1_8
-    val kotlin = "1.4.10"
-    val androidGradle = "4.1.0" // Must also update in buildSrc/build.gradle.kts
+    val kotlin = "1.4.31"
+    val androidGradle = "7.0.0-alpha08" // Must also update in buildSrc/build.gradle.kts
     val jgit = "5.6.1.202002131546-r"
     // Skip 1.11.0 as it has breaking bug: https://github.com/allegro/axion-release-plugin/issues/332
     // Skip 1.12.0 as it has breaking bug: https://github.com/allegro/axion-release-plugin/issues/339
@@ -41,7 +41,7 @@ object Versions {
     val runtimePermissionKotlin = "1.1.2"
     val kotlinxCoroutines = "1.4.2"
 
-    val okHttp = "3.14.4"
+    val okHttp = "4.9.1"
     val retrofit = "2.7.1"
     val retrofitKotlinSerialization = "0.7.0"
 
@@ -57,7 +57,7 @@ object Versions {
     val edgeToEdge = "0.10"
     val koptional = "0.4.0"
     val simpleStack = "2.3.2"
-    val textref = "1.3.0"
+    val textref = "fix-arity-issue-SNAPSHOT"
     val markwon = "4.4.0"
     val store = "4.0.0-beta01"
 

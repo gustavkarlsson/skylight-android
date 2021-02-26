@@ -7,9 +7,9 @@ fun BaseExtension.commonConfig() {
     buildToolsVersion(Versions.buildTools)
 
     packagingOptions {
-        exclude("META-INF/LICENSE")
-        exclude("META-INF/NOTICE")
-        exclude("META-INF/*.kotlin_module")
+        resources.excludes += "META-INF/LICENSE"
+        resources.excludes += "META-INF/NOTICE"
+        resources.excludes += "META-INF/*.kotlin_module"
     }
 
     testOptions {

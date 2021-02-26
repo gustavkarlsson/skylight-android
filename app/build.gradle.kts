@@ -7,7 +7,7 @@ plugins {
     id("kotlin-android-extensions")
     id("com.google.firebase.crashlytics")
     id("pl.allegro.tech.build.axion-release")
-    id("com.github.triplet.play") version Versions.playPublisher
+    // id("com.github.triplet.play") version Versions.playPublisher // FIXME Re-enable when play plugin works
 }
 
 scmVersion {
@@ -15,13 +15,14 @@ scmVersion {
         prefix = ""
     }
 }
-
+/*
+FIXME Re-enable when play plugin works
 play {
     serviceAccountCredentials = file("play-service-account.json")
     track = "alpha"
     defaultToAppBundles = true
 }
-
+*/
 android {
     commonConfig()
 
