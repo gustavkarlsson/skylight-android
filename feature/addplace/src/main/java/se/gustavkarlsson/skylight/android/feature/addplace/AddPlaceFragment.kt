@@ -25,7 +25,7 @@ import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.target
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
-import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.LegacyScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.fadeToVisible
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.showSnackbar
@@ -33,7 +33,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-class AddPlaceFragment : ScreenFragment() {
+class AddPlaceFragment : LegacyScreenFragment() {
 
     override val layoutId: Int = R.layout.fragment_add_place
 

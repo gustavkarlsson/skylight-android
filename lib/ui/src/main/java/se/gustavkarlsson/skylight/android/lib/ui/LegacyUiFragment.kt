@@ -13,7 +13,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.plus
 
-abstract class BaseFragment : Fragment() {
+abstract class LegacyUiFragment : Fragment() {
 
     private var liveScope: CoroutineScope? = null
 

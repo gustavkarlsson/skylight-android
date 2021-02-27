@@ -10,10 +10,10 @@ import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.navigation.target
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
-import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.LegacyScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 
-internal class IntroFragment : ScreenFragment() {
+internal class IntroFragment : LegacyScreenFragment() {
 
     override val layoutId: Int = R.layout.fragment_intro
 

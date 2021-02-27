@@ -7,9 +7,9 @@ import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.fragment_privacypolicy.*
 import kotlinx.coroutines.CoroutineScope
 import se.gustavkarlsson.skylight.android.feature.privacypolicy.R
-import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.LegacyScreenFragment
 
-class PrivacyPolicyFragment : ScreenFragment() {
+class PrivacyPolicyFragment : LegacyScreenFragment() {
 
     override val layoutId: Int = R.layout.fragment_privacypolicy
 

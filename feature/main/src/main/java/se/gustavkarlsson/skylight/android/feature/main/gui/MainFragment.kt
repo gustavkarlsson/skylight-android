@@ -26,11 +26,11 @@ import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
-import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.LegacyScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 
 @ExperimentalCoroutinesApi
-class MainFragment : ScreenFragment(), BackButtonHandler {
+class MainFragment : LegacyScreenFragment(), BackButtonHandler {
 
     override val layoutId: Int = R.layout.fragment_main
 

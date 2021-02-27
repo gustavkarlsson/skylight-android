@@ -13,12 +13,12 @@ import kotlinx.coroutines.FlowPreview
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
-import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.LegacyScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-class SettingsFragment : ScreenFragment() {
+class SettingsFragment : LegacyScreenFragment() {
 
     private val viewModel by lazy {
         getOrRegisterService("settingsViewModel") {

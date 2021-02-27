@@ -9,10 +9,10 @@ import reactivecircus.flowbinding.android.view.clicks
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
-import se.gustavkarlsson.skylight.android.lib.ui.ScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.LegacyScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
 
-class AboutFragment : ScreenFragment() {
+class AboutFragment : LegacyScreenFragment() {
 
     override val layoutId: Int = R.layout.fragment_about
 

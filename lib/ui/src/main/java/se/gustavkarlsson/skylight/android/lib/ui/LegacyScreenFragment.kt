@@ -8,7 +8,7 @@ import de.halfbit.edgetoedge.edgeToEdge
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 
-abstract class ScreenFragment : BaseFragment() {
+abstract class LegacyScreenFragment : LegacyUiFragment() {
 
     @CallSuper
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
