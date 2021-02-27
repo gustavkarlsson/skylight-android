@@ -35,6 +35,7 @@ allprojects {
 
     tasks.withType<KotlinCompile> {
         kotlinOptions.jvmTarget = Versions.java.toString()
+        kotlinOptions.useIR = true
     }
 }
 

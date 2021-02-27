@@ -60,6 +60,7 @@ object Versions {
     val textref = "fix-arity-issue-SNAPSHOT"
     val markwon = "4.4.0"
     val store = "4.0.0-beta01"
+    val compose = "1.0.0-beta01"
 
     // Test
     val junit = "4.12"
