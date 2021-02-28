@@ -57,7 +57,7 @@ object Versions {
     val edgeToEdge = "0.10"
     val koptional = "0.4.0"
     val simpleStack = "2.3.2"
-    val textref = "fix-arity-issue-SNAPSHOT"
+    val textref = "fix-arity-issue-SNAPSHOT" // TODO use release version
     val markwon = "4.4.0"
     val store = "4.0.0-beta01"
     val compose = "1.0.0-beta01"
