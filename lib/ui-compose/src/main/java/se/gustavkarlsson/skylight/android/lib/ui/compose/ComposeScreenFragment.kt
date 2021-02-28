@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.lib.compose
+package se.gustavkarlsson.skylight.android.lib.ui.compose
 
 import android.os.Bundle
 import android.view.LayoutInflater

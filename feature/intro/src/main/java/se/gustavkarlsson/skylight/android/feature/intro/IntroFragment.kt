@@ -22,8 +22,8 @@ import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 import dev.chrisbanes.accompanist.insets.systemBarsPadding
 import kotlinx.android.synthetic.main.fragment_intro.*
 import kotlinx.coroutines.launch
-import se.gustavkarlsson.skylight.android.lib.compose.ComposeScreenFragment
-import se.gustavkarlsson.skylight.android.lib.compose.SkylightTheme
+import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.compose.SkylightTheme
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.navigation.target

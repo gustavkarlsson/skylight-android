@@ -21,7 +21,7 @@ include(
     ":lib:time",
     ":lib:ui",
     ":lib:ui-legacy",
-    ":lib:compose",
+    ":lib:ui-compose",
     ":lib:weather",
 
     ":feature:about",

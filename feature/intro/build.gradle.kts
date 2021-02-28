@@ -12,7 +12,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:compose"))
+    implementation(project(":lib:ui-compose"))
     implementation(project(":lib:runversion"))
     implementation(project(":lib:permissions"))
 

@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.lib.compose
+package se.gustavkarlsson.skylight.android.lib.ui.compose
 
 import androidx.compose.runtime.Composable
 import com.google.android.material.composethemeadapter.MdcTheme
