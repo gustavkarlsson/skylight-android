@@ -17,7 +17,7 @@ object FeatureGooglePlayServicesModule {
     @IntoSet
     internal fun navigationOverride(context: Context): NavigationOverride =
         object : NavigationOverride {
-            val googlePlayServicesChecker = GmsGooglePlayServicesChecker(context)
+            val googlePlayServicesChecker = GmsGooglePlayServicesChecker(context) // FIXME fix leak
 
             override val priority = 8
 
