@@ -22,14 +22,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import reactivecircus.flowbinding.android.widget.textChanges
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
+import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
+import se.gustavkarlsson.skylight.android.lib.ui.legacy.LegacyScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.legacy.extensions.showSnackbar
+import java.util.concurrent.atomic.AtomicReference
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.target
-import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
-import se.gustavkarlsson.skylight.android.lib.ui.LegacyScreenFragment
-import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
-import se.gustavkarlsson.skylight.android.lib.ui.extensions.fadeToVisible
-import se.gustavkarlsson.skylight.android.lib.ui.extensions.showSnackbar
-import java.util.concurrent.atomic.AtomicReference
+import se.gustavkarlsson.skylight.android.lib.ui.legacy.extensions.bind
+import se.gustavkarlsson.skylight.android.lib.ui.legacy.extensions.fadeToVisible
 
 @ExperimentalCoroutinesApi
 @FlowPreview

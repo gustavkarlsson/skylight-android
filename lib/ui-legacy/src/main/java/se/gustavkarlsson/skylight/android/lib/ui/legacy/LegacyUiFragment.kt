@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.lib.ui
+package se.gustavkarlsson.skylight.android.lib.ui.legacy
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import kotlinx.coroutines.CoroutineScope
+import se.gustavkarlsson.skylight.android.lib.ui.ScopeFragment
 
 abstract class LegacyUiFragment : ScopeFragment() {
 

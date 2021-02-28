@@ -10,7 +10,7 @@ import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.feature.background.R
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
-import se.gustavkarlsson.skylight.android.lib.ui.extensions.resolveColor
+import se.gustavkarlsson.skylight.android.lib.ui.legacy.extensions.resolveColor
 
 internal class NotifierImpl(
     private val context: Context,

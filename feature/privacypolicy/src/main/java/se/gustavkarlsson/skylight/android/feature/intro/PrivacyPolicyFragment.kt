@@ -7,7 +7,7 @@ import io.noties.markwon.Markwon
 import kotlinx.android.synthetic.main.fragment_privacypolicy.*
 import kotlinx.coroutines.CoroutineScope
 import se.gustavkarlsson.skylight.android.feature.privacypolicy.R
-import se.gustavkarlsson.skylight.android.lib.ui.LegacyScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.legacy.LegacyScreenFragment
 
 class PrivacyPolicyFragment : LegacyScreenFragment() {
 

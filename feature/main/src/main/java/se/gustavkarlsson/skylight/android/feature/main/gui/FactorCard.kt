@@ -7,7 +7,7 @@ import android.widget.FrameLayout
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.layout_factor_card.view.*
 import se.gustavkarlsson.skylight.android.feature.main.R
-import se.gustavkarlsson.skylight.android.lib.ui.extensions.toArgb
+import se.gustavkarlsson.skylight.android.lib.ui.legacy.extensions.toArgb
 import kotlin.math.roundToInt
 
 internal class FactorCard : FrameLayout {

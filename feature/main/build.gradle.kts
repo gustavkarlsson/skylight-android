@@ -25,7 +25,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:ui"))
+    implementation(project(":lib:ui-legacy"))
     implementation(project(":lib:time"))
     implementation(project(":lib:weather"))
     implementation(project(":lib:places"))

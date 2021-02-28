@@ -9,8 +9,8 @@ import reactivecircus.flowbinding.android.view.clicks
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
-import se.gustavkarlsson.skylight.android.lib.ui.LegacyScreenFragment
-import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
+import se.gustavkarlsson.skylight.android.lib.ui.legacy.LegacyScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.legacy.extensions.bind
 
 class AboutFragment : LegacyScreenFragment() {
 

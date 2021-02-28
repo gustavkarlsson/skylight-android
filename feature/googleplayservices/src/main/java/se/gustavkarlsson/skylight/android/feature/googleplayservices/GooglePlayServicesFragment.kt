@@ -10,9 +10,9 @@ import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.target
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
-import se.gustavkarlsson.skylight.android.lib.ui.LegacyScreenFragment
-import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
-import se.gustavkarlsson.skylight.android.lib.ui.extensions.showSnackbar
+import se.gustavkarlsson.skylight.android.lib.ui.legacy.LegacyScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.legacy.extensions.bind
+import se.gustavkarlsson.skylight.android.lib.ui.legacy.extensions.showSnackbar
 
 internal class GooglePlayServicesFragment : LegacyScreenFragment() {
 

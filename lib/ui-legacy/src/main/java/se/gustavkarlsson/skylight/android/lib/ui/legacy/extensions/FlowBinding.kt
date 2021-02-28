@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.lib.ui.extensions
+package se.gustavkarlsson.skylight.android.lib.ui.legacy.extensions
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope

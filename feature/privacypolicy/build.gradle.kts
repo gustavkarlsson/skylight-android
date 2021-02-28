@@ -11,7 +11,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:ui"))
+    implementation(project(":lib:ui-legacy"))
 
     implementation("io.noties.markwon:core:${Versions.markwon}")
 }

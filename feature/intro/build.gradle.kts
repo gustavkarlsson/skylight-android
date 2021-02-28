@@ -12,7 +12,6 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:ui"))
     implementation(project(":lib:compose"))
     implementation(project(":lib:runversion"))
     implementation(project(":lib:permissions"))

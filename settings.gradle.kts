@@ -20,6 +20,7 @@ include(
     ":lib:settings",
     ":lib:time",
     ":lib:ui",
+    ":lib:ui-legacy",
     ":lib:compose",
     ":lib:weather",
 

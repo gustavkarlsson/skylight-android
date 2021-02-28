@@ -10,7 +10,6 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.plus
 
-// TODO extract into new ui base module? then we can remove ui dependency in compose module
 abstract class ScopeFragment : Fragment() {
 
     // Create Destroy

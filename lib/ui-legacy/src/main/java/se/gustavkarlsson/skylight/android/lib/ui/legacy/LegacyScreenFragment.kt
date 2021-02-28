@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.lib.ui
+package se.gustavkarlsson.skylight.android.lib.ui.legacy
 
 import android.os.Bundle
 import androidx.annotation.CallSuper
@@ -7,6 +7,7 @@ import de.halfbit.edgetoedge.EdgeToEdgeBuilder
 import de.halfbit.edgetoedge.edgeToEdge
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
+import se.gustavkarlsson.skylight.android.lib.ui.R
 
 abstract class LegacyScreenFragment : LegacyUiFragment() {
 

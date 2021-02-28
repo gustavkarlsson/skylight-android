@@ -15,9 +15,9 @@ import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
-import se.gustavkarlsson.skylight.android.lib.ui.LegacyUiFragment
-import se.gustavkarlsson.skylight.android.lib.ui.extensions.bind
-import se.gustavkarlsson.skylight.android.lib.ui.findParentViewByType
+import se.gustavkarlsson.skylight.android.lib.ui.legacy.LegacyUiFragment
+import se.gustavkarlsson.skylight.android.lib.ui.legacy.extensions.bind
+import se.gustavkarlsson.skylight.android.lib.ui.legacy.findParentViewByType
 
 @FlowPreview
 @ExperimentalCoroutinesApi

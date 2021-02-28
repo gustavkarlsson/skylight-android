@@ -10,7 +10,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:ui")) // TODO only used for coloring notification?
+    implementation(project(":lib:ui-legacy")) // TODO only used for coloring notification?
     implementation(project(":lib:analytics"))
     implementation(project(":lib:time"))
     implementation(project(":lib:settings"))

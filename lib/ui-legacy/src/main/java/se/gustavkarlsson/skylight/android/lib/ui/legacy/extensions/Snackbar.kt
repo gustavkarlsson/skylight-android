@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.lib.ui.extensions
+package se.gustavkarlsson.skylight.android.lib.ui.legacy.extensions
 
 import android.view.View
 import androidx.annotation.StringRes
@@ -8,7 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.threeten.bp.Duration
-import se.gustavkarlsson.skylight.android.lib.ui.R
+import se.gustavkarlsson.skylight.android.lib.ui.legacy.R
 
 fun CoroutineScope.showSnackbar(view: View, text: CharSequence, build: SnackbarBuilder.() -> Unit): Snackbar =
     showSnackbar { buildSnackbar(view, build) { setText(text) } }

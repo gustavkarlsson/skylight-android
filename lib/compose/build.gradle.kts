@@ -10,8 +10,8 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:ui"))
     implementation(project(":lib:analytics"))
+    api(project(":lib:ui"))
 
     api("androidx.compose.ui:ui:${Versions.compose}")
     api("androidx.compose.ui:ui-tooling:${Versions.compose}")

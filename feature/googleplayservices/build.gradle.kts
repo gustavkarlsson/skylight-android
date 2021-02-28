@@ -11,7 +11,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:ui"))
+    implementation(project(":lib:ui-legacy"))
 
     implementation("com.google.android.gms:play-services-gcm:${Versions.playServicesGcm}")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.kotlinxCoroutines}")
