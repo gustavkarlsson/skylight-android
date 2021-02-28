@@ -7,15 +7,7 @@ plugins {
 
 android {
     commonConfig()
-
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerVersion = Versions.kotlin
-        kotlinCompilerExtensionVersion = Versions.compose
-    }
+    composeConfig()
 }
 
 dependencies {
