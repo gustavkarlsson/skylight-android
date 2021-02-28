@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
@@ -18,17 +17,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 import dev.chrisbanes.accompanist.insets.systemBarsPadding
 import kotlinx.android.synthetic.main.fragment_intro.*
 import kotlinx.coroutines.launch
-import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
-import se.gustavkarlsson.skylight.android.lib.ui.compose.SkylightTheme
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.navigation.target
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
+import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 
 internal class IntroFragment : ComposeScreenFragment() {
 
@@ -74,50 +72,46 @@ private fun Content(
     onPickLocationClicked: () -> Unit = {},
     onUseMyLocationClicked: () -> Unit = {},
 ) {
-    SkylightTheme {
-        ProvideWindowInsets {
-            Surface(modifier = Modifier.fillMaxSize()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp)
-                        .systemBarsPadding(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
+    ScreenBackground {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+                .systemBarsPadding(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Spacer(modifier = Modifier.height(64.dp))
+            Text(
+                text = stringResource(id = R.string.intro_title),
+                style = MaterialTheme.typography.h4,
+            )
+            Spacer(modifier = Modifier.height(32.dp))
+            Text(
+                text = stringResource(id = R.string.intro_desc),
+                style = MaterialTheme.typography.body1,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                modifier = Modifier.clickable(onClick = onPrivacyPolicyClicked),
+                color = MaterialTheme.colors.primary,
+                text = stringResource(R.string.privacy_policy),
+            )
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.End,
+            ) {
+                TextButton(
+                    onClick = onPickLocationClicked
                 ) {
-                    Spacer(modifier = Modifier.height(64.dp))
-                    Text(
-                        text = stringResource(id = R.string.intro_title),
-                        style = MaterialTheme.typography.h4,
-                    )
-                    Spacer(modifier = Modifier.height(32.dp))
-                    Text(
-                        text = stringResource(id = R.string.intro_desc),
-                        style = MaterialTheme.typography.body1,
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        modifier = Modifier.clickable(onClick = onPrivacyPolicyClicked),
-                        color = MaterialTheme.colors.primary,
-                        text = stringResource(R.string.privacy_policy),
-                    )
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Bottom,
-                        horizontalAlignment = Alignment.End,
-                    ) {
-                        TextButton(
-                            onClick = onPickLocationClicked
-                        ) {
-                            Text(stringResource(id = R.string.intro_pick_location))
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
-                        ExtendedFloatingActionButton(
-                            backgroundColor = MaterialTheme.colors.primary,
-                            text = { Text(stringResource(id = R.string.intro_use_my_location)) },
-                            onClick = onUseMyLocationClicked
-                        )
-                    }
+                    Text(stringResource(id = R.string.intro_pick_location))
                 }
+                Spacer(modifier = Modifier.height(8.dp))
+                ExtendedFloatingActionButton(
+                    backgroundColor = MaterialTheme.colors.primary,
+                    text = { Text(stringResource(id = R.string.intro_use_my_location)) },
+                    onClick = onUseMyLocationClicked
+                )
             }
         }
     }
