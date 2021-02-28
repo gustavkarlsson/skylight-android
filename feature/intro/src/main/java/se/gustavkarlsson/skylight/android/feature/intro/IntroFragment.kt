@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -101,11 +100,12 @@ private fun Content(
                 verticalArrangement = Arrangement.Bottom,
                 horizontalAlignment = Alignment.End,
             ) {
-                TextButton(
+                ExtendedFloatingActionButton(
+                    backgroundColor = MaterialTheme.colors.background,
+                    contentColor = MaterialTheme.colors.primary,
+                    text = { Text(stringResource(id = R.string.intro_pick_location)) },
                     onClick = onPickLocationClicked
-                ) {
-                    Text(stringResource(id = R.string.intro_pick_location))
-                }
+                )
                 Spacer(modifier = Modifier.height(8.dp))
                 ExtendedFloatingActionButton(
                     backgroundColor = MaterialTheme.colors.primary,
