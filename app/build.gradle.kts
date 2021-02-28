@@ -15,6 +15,7 @@ scmVersion {
         prefix = ""
     }
 }
+
 /*
 FIXME Re-enable when play plugin works
 play {
@@ -23,6 +24,7 @@ play {
     defaultToAppBundles = true
 }
 */
+
 android {
     commonConfig()
 
