@@ -6,16 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
-import androidx.fragment.app.Fragment
-import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.plus
 
-abstract class LegacyUiFragment : Fragment() {
-
-    private var liveScope: CoroutineScope? = null
+abstract class LegacyUiFragment : ScopeFragment() {
 
     final override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,18 +23,8 @@ abstract class LegacyUiFragment : Fragment() {
     }
 
     @CallSuper
-    override fun onStart() {
-        super.onStart()
-        val liveScope = MainScope() + CoroutineName("liveScope")
-        this.liveScope = liveScope
-        bindView(liveScope)
-    }
-
-    @CallSuper
-    override fun onStop() {
-        liveScope?.cancel()
-        liveScope = null
-        super.onStop()
+    override fun onNewStartStopScope(scope: CoroutineScope) {
+        bindView(scope)
     }
 
     @get:LayoutRes

@@ -5,13 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
-import androidx.fragment.app.Fragment
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
+import se.gustavkarlsson.skylight.android.lib.ui.ScopeFragment
 
-abstract class ComposeScreenFragment : Fragment() {
+abstract class ComposeScreenFragment : ScopeFragment() {
 
     final override fun onCreateView(
         inflater: LayoutInflater,
@@ -19,11 +18,7 @@ abstract class ComposeScreenFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         val composeView = ComposeView(requireContext())
-        composeView.setContent {
-            MaterialTheme {
-                ScreenContent()
-            }
-        }
+        composeView.setContent { ScreenContent() }
         return composeView
     }
 
