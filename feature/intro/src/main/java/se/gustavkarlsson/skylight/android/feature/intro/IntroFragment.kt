@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +24,7 @@ import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.navigation.target
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
+import se.gustavkarlsson.skylight.android.lib.ui.compose.ClickableText
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 
@@ -78,11 +78,11 @@ private fun Content(
                 .fillMaxSize()
                 .padding(16.dp)
                 .systemBarsPadding(),
-            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(64.dp))
             Text(
                 text = stringResource(id = R.string.intro_title),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = MaterialTheme.typography.h4,
             )
             Spacer(modifier = Modifier.height(32.dp))
@@ -91,10 +91,10 @@ private fun Content(
                 style = MaterialTheme.typography.body1,
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                modifier = Modifier.clickable(onClick = onPrivacyPolicyClicked),
-                color = MaterialTheme.colors.primary,
+            ClickableText(
                 text = stringResource(R.string.privacy_policy),
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                onClick = onPrivacyPolicyClicked,
             )
             Column(
                 modifier = Modifier.fillMaxSize(),
