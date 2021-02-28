@@ -62,15 +62,16 @@ internal class IntroFragment : ComposeScreenFragment() {
         }
     }
 
-    override fun ComposeView.render() = setContent {
+    @Composable
+    override fun ScreenContent() {
         MaterialTheme {
-            ScreenContent(navigator, screens)
+            Content(navigator, screens)
         }
     }
 }
 
 @Composable
-private fun ScreenContent(navigator: Navigator, screens: Screens) {
+private fun Content(navigator: Navigator, screens: Screens) {
     Column(
         modifier = Modifier.fillMaxHeight(),
         horizontalAlignment = Alignment.CenterHorizontally,
