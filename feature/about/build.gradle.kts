@@ -11,6 +11,7 @@ plugins {
 
 android {
     commonConfig()
+    composeConfig()
 
     defaultConfig {
         val repo = RepositoryBuilder().run {
@@ -48,7 +49,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:ui-legacy"))
+    implementation(project(":lib:ui-compose"))
     implementation(project(":lib:time"))
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
