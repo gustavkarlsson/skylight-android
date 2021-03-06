@@ -1,113 +1,82 @@
 package se.gustavkarlsson.skylight.android.feature.addplace
 
-import android.annotation.SuppressLint
-import android.content.DialogInterface
-import android.view.View
-import android.widget.LinearLayout
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.SearchView
-import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputEditText
-import com.ioki.textref.TextRef
-import de.halfbit.edgetoedge.Edge
-import de.halfbit.edgetoedge.EdgeToEdgeBuilder
-import kotlinx.android.synthetic.main.fragment_add_place.*
-import kotlinx.android.synthetic.main.layout_save_dialog.view.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.ListItem
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import dev.chrisbanes.accompanist.insets.LocalWindowInsets
+import dev.chrisbanes.accompanist.insets.navigationBarsWithImePadding
+import dev.chrisbanes.accompanist.insets.toPaddingValues
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import reactivecircus.flowbinding.android.widget.textChanges
-import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
-import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
-import se.gustavkarlsson.skylight.android.lib.ui.legacy.LegacyScreenFragment
-import se.gustavkarlsson.skylight.android.lib.ui.legacy.extensions.showSnackbar
-import java.util.concurrent.atomic.AtomicReference
+import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.target
-import se.gustavkarlsson.skylight.android.lib.ui.legacy.extensions.bind
-import se.gustavkarlsson.skylight.android.lib.ui.legacy.extensions.fadeToVisible
+import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
+import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
+import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
+import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-class AddPlaceFragment : LegacyScreenFragment() {
-
-    override val layoutId: Int = R.layout.fragment_add_place
+class AddPlaceFragment : ComposeScreenFragment() {
 
     private val viewModel by lazy {
         getOrRegisterService("addPlaceViewModel") { AddPlaceComponent.build().viewModel() }
     }
 
-    override val toolbar: MaterialToolbar get() = toolbarView
-
-    private val searchView: SearchView
-        get() = (toolbarView.menu.findItem(R.id.action_search).actionView as SearchView)
-
-    private val adapter by lazy { SearchResultAdapter(viewModel) }
+    override fun onNewCreateDestroyScope(scope: CoroutineScope) {
+        scope.launch {
+            viewModel.navigateAway.collect {
+                val target = arguments?.target
+                if (target != null) {
+                    navigator.setBackstack(target)
+                } else {
+                    navigator.closeScreen()
+                }
+            }
+        }
+    }
+/*
+// FIXME deal with errors
+// FIXME Add dialog
 
     private var errorMessage = AtomicReference<TextRef?>(null)
 
-    private var savePlaceDialog: DialogInterface? = null
-
-    override fun setupEdgeToEdge(): EdgeToEdgeBuilder.() -> Unit = {
-        toolbarView.fit { Edge.Top }
-        searchResultRecyclerView.fit { Edge.Bottom }
-    }
-
-    override fun initView() {
-        toolbarView.inflateMenu(R.menu.add_place_menu)
-        searchResultRecyclerView.adapter = adapter
-        searchView.fixMargins()
-        searchView.setIconifiedByDefault(false)
-        searchView.queryHint = getString(R.string.place_name)
-    }
-
-    override fun onDestroyView() {
-        savePlaceDialog?.dismiss()
-        savePlaceDialog = null
-        searchResultRecyclerView.adapter = null
-        super.onDestroyView()
-    }
-
     override fun bindView(scope: CoroutineScope) {
-        searchView.setQueryTextChangeListener(viewModel::onSearchTextChanged)
-
-        viewModel.placeSuggestions.bind(scope) { items ->
-            adapter.setItems(items)
-        }
-
-        viewModel.openSaveDialog.bind(scope) {
-            openSaveDialog(scope, it)
-        }
-
-        viewModel.isEmptyVisible.bind(scope) { visible ->
-            emptyView.fadeToVisible(visible)
-        }
-
-        viewModel.isSearchingVisible.bind(scope) { visible ->
-            searchingView.fadeToVisible(visible)
-        }
-
-        viewModel.isNoSuggestionsVisible.bind(scope) { visible ->
-            noSuggestionsView.fadeToVisible(visible)
-        }
-
-        viewModel.isSuggestionsVisible.bind(scope) { visible ->
-            searchResultRecyclerView.fadeToVisible(visible, View.INVISIBLE)
-        }
-
-        viewModel.navigateAway.bind(scope) {
-            val target = arguments?.target
-            if (target != null) {
-                navigator.setBackstack(target)
-            } else {
-                navigator.closeScreen()
-            }
-        }
-
         viewModel.errorMessages.bind(scope) { message ->
             scope.showErrorMessage(message)
         }
@@ -144,41 +113,177 @@ class AddPlaceFragment : LegacyScreenFragment() {
             }
         }
     }
+
+    private fun createDialog(view: View, onClick: () -> Unit) =
+        MaterialAlertDialogBuilder(view.context).apply {
+            setView(view)
+            setTitle(R.string.save_place)
+            setNegativeButton(R.string.cancel, null)
+            setPositiveButton(R.string.save) { _, _ -> onClick() }
+        }.create()
+
+    private fun AlertDialog.initView(scope: CoroutineScope, editText: TextInputEditText) {
+        val positiveButton = getButton(AlertDialog.BUTTON_POSITIVE)
+        val job = scope.launch {
+            editText.textChanges()
+                .map { it.isNotBlank() }
+                .collect { positiveButton.isEnabled = it }
+        }
+        setOnDismissListener { job.cancel() }
+    }
+}
+*/
+
+    @ExperimentalMaterialApi
+    @Composable
+    override fun ScreenContent() {
+        val state = viewModel.viewState.collectAsState(ViewState.Empty)
+        Content(
+            state = state.value,
+            onBackClicked = { navigator.closeScreen() },
+            onQueryChanged = { text -> viewModel.onSearchTextChanged(text) },
+            onClickItem = { name, location -> viewModel.onSavePlaceClicked(name, location) },
+        )
+    }
 }
 
-private fun SearchView.fixMargins() {
-    val linearLayout = findViewById<LinearLayout>(R.id.search_edit_frame)
-    val params = linearLayout.layoutParams
-    (params as LinearLayout.LayoutParams).leftMargin = -32
-}
-
-private fun SearchView.setQueryTextChangeListener(callback: (String) -> Unit) {
-    setOnQueryTextListener(
-        object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String) = false
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                callback(newText)
-                return true
+@ExperimentalMaterialApi
+@Composable
+@Preview
+private fun Content(
+    state: ViewState = ViewState.Empty,
+    onBackClicked: () -> Unit = {},
+    onQueryChanged: (String) -> Unit = {},
+    onClickItem: (name: String, Location) -> Unit = { _, _ -> },
+) {
+    ScreenBackground {
+        Scaffold(
+            topBar = { TopAppBar(state.query, onBackClicked, onQueryChanged) },
+        ) {
+            when (state) {
+                ViewState.Empty -> Empty()
+                is ViewState.Searching -> Searching()
+                is ViewState.NoSuggestions -> NoSuggestions()
+                is ViewState.Suggestions -> SuggestionsList(state.suggestions, onClickItem)
             }
         }
+    }
+}
+
+@Composable
+private fun TopAppBar(
+    query: String,
+    onBackClicked: () -> Unit,
+    onQueryChanged: (String) -> Unit,
+) {
+    TopAppBar(
+        contentPadding = LocalWindowInsets.current.statusBars
+            .toPaddingValues(additionalHorizontal = AppBarHorizontalPadding),
+        navigationIcon = {
+            IconButton(onClick = onBackClicked) {
+                Icon(Icons.Default.ArrowBack, contentDescription = null)
+            }
+        },
+        title = {
+            val focusRequester = remember { FocusRequester() }
+            SideEffect {
+                focusRequester.requestFocus()
+            }
+            TextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester),
+                value = query,
+                onValueChange = onQueryChanged,
+                singleLine = true,
+                textStyle = MaterialTheme.typography.body1,
+                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                trailingIcon = {
+                    IconButton(onClick = { onQueryChanged("") }) {
+                        Icon(Icons.Default.Close, contentDescription = null)
+                    }
+                },
+                placeholder = { Text(stringResource(R.string.place_name)) },
+                colors = TextFieldDefaults.textFieldColors(
+                    backgroundColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent,
+                    cursorColor = MaterialTheme.colors.secondary,
+                ),
+            )
+        },
     )
 }
 
-private fun createDialog(view: View, onClick: () -> Unit) =
-    MaterialAlertDialogBuilder(view.context).apply {
-        setView(view)
-        setTitle(R.string.save_place)
-        setNegativeButton(R.string.cancel, null)
-        setPositiveButton(R.string.save) { _, _ -> onClick() }
-    }.create()
+@Composable
+private fun Empty() {
+    Text(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.7f)
+            .wrapContentSize(Alignment.Center),
+        text = stringResource(R.string.search_for_place_to_save),
+    )
+}
 
-private fun AlertDialog.initView(scope: CoroutineScope, editText: TextInputEditText) {
-    val positiveButton = getButton(AlertDialog.BUTTON_POSITIVE)
-    val job = scope.launch {
-        editText.textChanges()
-            .map { it.isNotBlank() }
-            .collect { positiveButton.isEnabled = it }
+@Composable
+private fun Searching() {
+    Text(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.7f)
+            .wrapContentSize(Alignment.Center),
+        text = stringResource(R.string.searching),
+    )
+}
+
+@Composable
+private fun NoSuggestions() {
+    Text(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.7f)
+            .wrapContentSize(Alignment.Center),
+        text = stringResource(R.string.no_place_found),
+    )
+}
+
+@ExperimentalMaterialApi
+@Composable
+private fun SuggestionsList(
+    items: List<SuggestionItem>,
+    onClickItem: (name: String, Location) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .navigationBarsWithImePadding(),
+    ) {
+        items(items) { item ->
+            PlaceItem(item, onClick = onClickItem)
+        }
     }
-    setOnDismissListener { job.cancel() }
+}
+
+@ExperimentalMaterialApi
+@Composable
+private fun PlaceItem(
+    item: SuggestionItem,
+    onClick: (name: String, Location) -> Unit,
+) {
+    ListItem(
+        modifier = Modifier.clickable { onClick(item.saveName, item.location) },
+        icon = { Icon(Icons.Default.Map, contentDescription = null) },
+        secondaryText = {
+            Text(
+                text = item.secondaryText, maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+    ) {
+        Text(
+            text = item.primaryText, maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
 }

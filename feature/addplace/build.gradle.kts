@@ -2,16 +2,16 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
-    id("kotlin-android-extensions")
 }
 
 android {
     commonConfig()
+    composeConfig()
 }
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:ui-legacy"))
+    implementation(project(":lib:ui-compose"))
     implementation(project(":lib:geocoder"))
     implementation(project(":lib:places"))
     implementation(project(":lib:location"))
