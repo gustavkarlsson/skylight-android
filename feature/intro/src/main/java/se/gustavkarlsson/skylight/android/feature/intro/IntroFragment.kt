@@ -1,5 +1,9 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -34,6 +38,7 @@ internal class IntroFragment : ComposeScreenFragment() {
         }
     }
 
+    @ExperimentalAnimationApi
     @Composable
     override fun ScreenContent() {
         Content(
@@ -63,6 +68,7 @@ internal class IntroFragment : ComposeScreenFragment() {
     }
 }
 
+@ExperimentalAnimationApi
 @Composable
 @Preview
 private fun Content(
@@ -99,18 +105,36 @@ private fun Content(
                 verticalArrangement = Arrangement.Bottom,
                 horizontalAlignment = Alignment.End,
             ) {
-                ExtendedFloatingActionButton(
-                    backgroundColor = MaterialTheme.colors.background,
-                    contentColor = MaterialTheme.colors.primary,
-                    text = { Text(stringResource(id = R.string.intro_pick_location)) },
-                    onClick = onPickLocationClicked
-                )
+                AnimatedVisibility(
+                    visible = true,
+                    initiallyVisible = false,
+                    enter = slideInHorizontally(
+                        initialOffsetX = { x -> x },
+                        animationSpec = spring(stiffness = 100f),
+                    ),
+                ) {
+                    ExtendedFloatingActionButton(
+                        backgroundColor = MaterialTheme.colors.background,
+                        contentColor = MaterialTheme.colors.primary,
+                        text = { Text(stringResource(id = R.string.intro_pick_location)) },
+                        onClick = onPickLocationClicked,
+                    )
+                }
                 Spacer(modifier = Modifier.height(8.dp))
-                ExtendedFloatingActionButton(
-                    backgroundColor = MaterialTheme.colors.primary,
-                    text = { Text(stringResource(id = R.string.intro_use_my_location)) },
-                    onClick = onUseMyLocationClicked
-                )
+                AnimatedVisibility(
+                    visible = true,
+                    initiallyVisible = false,
+                    enter = slideInHorizontally(
+                        initialOffsetX = { x -> x },
+                        animationSpec = spring(stiffness = 200f),
+                    ),
+                ) {
+                    ExtendedFloatingActionButton(
+                        backgroundColor = MaterialTheme.colors.primary,
+                        text = { Text(stringResource(id = R.string.intro_use_my_location)) },
+                        onClick = onUseMyLocationClicked,
+                    )
+                }
             }
         }
     }
