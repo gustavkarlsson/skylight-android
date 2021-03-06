@@ -13,6 +13,10 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -22,6 +26,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
@@ -33,6 +38,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import com.ioki.textref.TextRef
 import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 import dev.chrisbanes.accompanist.insets.navigationBarsWithImePadding
 import dev.chrisbanes.accompanist.insets.toPaddingValues
@@ -49,6 +55,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
+import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -71,16 +78,7 @@ class AddPlaceFragment : ComposeScreenFragment() {
         }
     }
 /*
-// FIXME deal with errors
 // FIXME Add dialog
-
-    private var errorMessage = AtomicReference<TextRef?>(null)
-
-    override fun bindView(scope: CoroutineScope) {
-        viewModel.errorMessages.bind(scope) { message ->
-            scope.showErrorMessage(message)
-        }
-    }
 
     @SuppressLint("InflateParams")
     private fun openSaveDialog(scope: CoroutineScope, placeSuggestion: PlaceSuggestion) {
@@ -100,18 +98,6 @@ class AddPlaceFragment : ComposeScreenFragment() {
         dialog.show()
         dialog.initView(scope, editText)
         editText.requestFocus()
-    }
-
-    private fun CoroutineScope.showErrorMessage(message: TextRef) {
-        if (errorMessage.compareAndSet(null, message)) {
-            showSnackbar(searchResultRecyclerView, message) {
-                setIndefiniteDuration()
-                setErrorStyle()
-                setDismiss(R.string.dismiss) {
-                    errorMessage.set(null)
-                }
-            }
-        }
     }
 
     private fun createDialog(view: View, onClick: () -> Unit) =
@@ -137,12 +123,13 @@ class AddPlaceFragment : ComposeScreenFragment() {
     @ExperimentalMaterialApi
     @Composable
     override fun ScreenContent() {
-        val state = viewModel.viewState.collectAsState(ViewState.Empty)
+        val state = viewModel.viewState.collectAsState(ViewState.default)
         Content(
-            state = state.value,
+            viewState = state.value,
             onBackClicked = { navigator.closeScreen() },
             onQueryChanged = { text -> viewModel.onSearchTextChanged(text) },
             onClickItem = { name, location -> viewModel.onSavePlaceClicked(name, location) },
+            onSnackbarDismissed = { viewModel.onSnackbarDismissed() }
         )
     }
 }
@@ -151,20 +138,22 @@ class AddPlaceFragment : ComposeScreenFragment() {
 @Composable
 @Preview
 private fun Content(
-    state: ViewState = ViewState.Empty,
+    viewState: ViewState = ViewState.default,
     onBackClicked: () -> Unit = {},
     onQueryChanged: (String) -> Unit = {},
     onClickItem: (name: String, Location) -> Unit = { _, _ -> },
+    onSnackbarDismissed: () -> Unit = {},
 ) {
     ScreenBackground {
         Scaffold(
-            topBar = { TopAppBar(state.query, onBackClicked, onQueryChanged) },
+            topBar = { TopAppBar(viewState.query, onBackClicked, onQueryChanged) },
+            snackbarHost = { state -> ErrorSnackbar(state, viewState.error, onSnackbarDismissed = onSnackbarDismissed) }
         ) {
-            when (state) {
-                ViewState.Empty -> Empty()
-                is ViewState.Searching -> Searching()
+            when (viewState) {
+                is ViewState.Empty -> Empty()
+                is ViewState.Searching -> Searching() // FIXME debounce searching state, or show progress bar instead?
                 is ViewState.NoSuggestions -> NoSuggestions()
-                is ViewState.Suggestions -> SuggestionsList(state.suggestions, onClickItem)
+                is ViewState.Suggestions -> SuggestionsList(viewState.suggestions, onClickItem)
             }
         }
     }
@@ -213,6 +202,36 @@ private fun TopAppBar(
             )
         },
     )
+}
+
+@Composable
+private fun ErrorSnackbar(
+    hostState: SnackbarHostState,
+    error: TextRef?,
+    onSnackbarDismissed: () -> Unit,
+) {
+    val messageText = error?.let { textRef(it) }
+    val dismissText = stringResource(R.string.dismiss)
+    if (messageText != null) {
+        LaunchedEffect(key1 = messageText) {
+            hostState.showSnackbar(
+                message = messageText,
+                actionLabel = dismissText,
+                duration = SnackbarDuration.Long,
+            )
+            onSnackbarDismissed()
+        }
+    }
+    SnackbarHost(
+        modifier = Modifier.navigationBarsWithImePadding(),
+        hostState = hostState,
+    ) { snackbarData ->
+        Snackbar(
+            snackbarData = snackbarData,
+            backgroundColor = MaterialTheme.colors.error,
+            actionColor = MaterialTheme.colors.onError,
+        )
+    }
 }
 
 @Composable

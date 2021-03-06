@@ -107,6 +107,7 @@ private fun Content(
                     enter = fadeIn(),
                     exit = fadeOut(),
                 ) {
+                    // FIXME Replace with scaffold/snackbarhost
                     Snackbar(
                         backgroundColor = MaterialTheme.colors.error,
                         contentColor = contentColorFor(backgroundColor = MaterialTheme.colors.error),

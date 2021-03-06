@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import se.gustavkarlsson.conveyor.Store
+import se.gustavkarlsson.conveyor.issue
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
@@ -21,7 +22,6 @@ import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
 internal class AddPlaceViewModel @Inject constructor(
     private val placesRepository: PlacesRepository,
     private val store: Store<State>,
-    val errorMessages: Flow<TextRef>,
 ) : CoroutineScopedService() {
 
     init {
@@ -37,15 +37,15 @@ internal class AddPlaceViewModel @Inject constructor(
         .map { state ->
             val resultState = when {
                 state.query.isBlank() -> ResultState.EMPTY
-                !state.isSuggestionsUpToDate && state.suggestions.items.isEmpty() -> ResultState.SEARCHING
+                state.isSearchingForQuery && state.suggestions.items.isEmpty() -> ResultState.SEARCHING
                 state.suggestions.items.isEmpty() -> ResultState.NO_SUGGESTIONS
                 else -> ResultState.SUGGESTIONS
             }
 
             when (resultState) {
-                ResultState.EMPTY -> ViewState.Empty
-                ResultState.SEARCHING -> ViewState.Searching(state.query)
-                ResultState.NO_SUGGESTIONS -> ViewState.NoSuggestions(state.query)
+                ResultState.EMPTY -> ViewState.Empty(error = state.error)
+                ResultState.SEARCHING -> ViewState.Searching(state.query, error = state.error)
+                ResultState.NO_SUGGESTIONS -> ViewState.NoSuggestions(state.query, error = state.error)
                 ResultState.SUGGESTIONS -> {
                     val suggestions = state.suggestions.items.map { suggestion ->
                         val title = createTitle(suggestion)
@@ -59,12 +59,19 @@ internal class AddPlaceViewModel @Inject constructor(
                     ViewState.Suggestions(
                         query = state.query,
                         suggestions = suggestions,
+                        error = state.error,
                     )
                 }
             }
         }
 
     fun onSearchTextChanged(newText: String) = store.issue(SetQueryAction(newText))
+
+    fun onSnackbarDismissed() = store.issue { state ->
+        state.update {
+            copy(error = null)
+        }
+    }
 
     fun onSavePlaceClicked(name: String, location: Location) {
         scope.launch {
@@ -76,17 +83,23 @@ internal class AddPlaceViewModel @Inject constructor(
 
 internal sealed class ViewState {
     abstract val query: String
+    abstract val error: TextRef?
 
-    object Empty : ViewState() {
+    data class Empty(override val error: TextRef?) : ViewState() {
         override val query = ""
     }
 
-    data class Searching(override val query: String) : ViewState()
-    data class NoSuggestions(override val query: String) : ViewState()
+    data class Searching(override val query: String, override val error: TextRef?) : ViewState()
+    data class NoSuggestions(override val query: String, override val error: TextRef?) : ViewState()
     data class Suggestions(
         override val query: String,
         val suggestions: List<SuggestionItem>,
+        override val error: TextRef?,
     ) : ViewState()
+
+    companion object {
+        val default: Empty = Empty(error = null)
+    }
 }
 
 private fun createTitle(suggestion: PlaceSuggestion) = suggestion.simpleName

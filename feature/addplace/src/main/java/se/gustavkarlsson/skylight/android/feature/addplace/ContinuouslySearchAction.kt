@@ -10,12 +10,15 @@ import se.gustavkarlsson.skylight.android.lib.geocoder.GeocodingResult
 
 internal class ContinuouslySearchAction(
     private val geocoder: Geocoder,
-    private val onError: (TextRef) -> Unit,
     private val querySampleDelay: Duration,
 ) : Action<State> {
     override suspend fun execute(state: UpdatableStateFlow<State>) {
+        var lastQuery: String? = null
         while (true) {
-            trySearch(state)
+            if (state.value.query != lastQuery) {
+                trySearch(state)
+            }
+            lastQuery = state.value.query
             delay(querySampleDelay.toMillis())
         }
     }
@@ -36,39 +39,43 @@ internal class ContinuouslySearchAction(
     }
 
     private suspend fun doSearch(query: String, stateAccess: UpdatableStateFlow<State>) {
-        var errorMessage: TextRef? = null
         val result = geocoder.geocode(query)
         stateAccess.update {
             when (result) {
                 is GeocodingResult.Success -> {
                     if (this.query == query) {
                         val suggestions = State.Suggestions(query, result.suggestions)
-                        updateCurrentSearch(query).copy(suggestions = suggestions)
+                        updateState(query, suggestionsToSet = suggestions)
                     } else {
-                        updateCurrentSearch(query)
+                        updateState(query)
                     }
                 }
                 GeocodingResult.Failure.Io -> {
-                    errorMessage = TextRef.stringRes(R.string.place_search_failed_io)
-                    updateCurrentSearch(query)
+                    val error = TextRef.stringRes(R.string.place_search_failed_io)
+                    updateState(query, errorToSet = error)
                 }
                 GeocodingResult.Failure.ServerError -> {
-                    errorMessage = TextRef.stringRes(R.string.place_search_failed_server_response)
-                    updateCurrentSearch(query)
+                    val error = TextRef.stringRes(R.string.place_search_failed_server_response)
+                    updateState(query, errorToSet = error)
                 }
                 GeocodingResult.Failure.Unknown -> {
-                    errorMessage = TextRef.stringRes(R.string.place_search_failed_generic)
-                    updateCurrentSearch(query)
+                    val error = TextRef.stringRes(R.string.place_search_failed_generic)
+                    updateState(query, errorToSet = error)
                 }
             }
         }
-        errorMessage?.let(onError)
     }
 
-    private fun State.updateCurrentSearch(query: String): State =
-        if (currentSearch == query) {
-            copy(currentSearch = null)
-        } else {
-            this
-        }
+    private fun State.updateState(
+        completedSearch: String,
+        suggestionsToSet: State.Suggestions? = null,
+        errorToSet: TextRef? = null,
+    ): State {
+        val currentSearch = if (completedSearch == currentSearch) {
+            null
+        } else currentSearch
+        val error = errorToSet ?: error
+        val suggestions = suggestionsToSet ?: suggestions
+        return copy(currentSearch = currentSearch, error = error, suggestions = suggestions)
+    }
 }

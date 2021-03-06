@@ -47,30 +47,13 @@ internal interface AddPlaceComponent {
 internal object AddPlaceModule {
 
     @ExperimentalCoroutinesApi
-    @Provides
-    @ViewModelScope
-    fun errorsChannel(): BroadcastChannel<TextRef> = BroadcastChannel(Channel.BUFFERED)
-
-    @ExperimentalCoroutinesApi
-    @FlowPreview
-    @Provides
-    @Reusable
-    fun errors(channel: BroadcastChannel<TextRef>): Flow<TextRef> = channel.asFlow()
-
-    @ExperimentalCoroutinesApi
-    @Provides
-    @Reusable
-    fun onError(channel: BroadcastChannel<TextRef>): (TextRef) -> Unit = { channel.offer(it) }
-
-    @ExperimentalCoroutinesApi
     @FlowPreview
     @Provides
     @JvmSuppressWildcards
     fun store(
         geocoder: Geocoder,
-        onError: (TextRef) -> Unit
     ): Store<State> = Store(
         initialState = State(),
-        startActions = listOf(ContinuouslySearchAction(geocoder, onError, 1.seconds))
+        startActions = listOf(ContinuouslySearchAction(geocoder, 1.seconds))
     )
 }
