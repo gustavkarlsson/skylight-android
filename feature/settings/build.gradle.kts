@@ -2,22 +2,22 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
-    id("kotlin-android-extensions")
 }
 
 android {
     commonConfig()
+    composeConfig()
 
     flavorDimensions("environment")
 
     productFlavors {
         create("production") {
-            setDimension("environment")
+            dimension("environment")
             buildConfigField("boolean", "DEVELOP", "false")
         }
 
         create("develop") {
-            setDimension("environment")
+            dimension("environment")
             buildConfigField("boolean", "DEVELOP", "true")
         }
     }
@@ -25,7 +25,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:ui-legacy"))
+    implementation(project(":lib:ui-compose"))
     implementation(project(":lib:analytics"))
     implementation(project(":lib:settings"))
     implementation(project(":lib:places"))
