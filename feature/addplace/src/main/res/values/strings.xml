@@ -4,7 +4,6 @@
     <string name="save_place">Save place</string>
     <string name="place_name">Place name</string>
     <string name="search_for_place_to_save">Search for a place to save</string>
-    <string name="searching">Searching…</string>
     <string name="no_place_found">No place with that name :(</string>
     <string name="place_search_failed_generic">Place search failed</string>
     <string name="place_search_failed_server_response">Place search failed. Server error.</string>

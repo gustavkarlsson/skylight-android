@@ -35,34 +35,22 @@ internal class AddPlaceViewModel @Inject constructor(
 
     val viewState = stateFlow
         .map { state ->
-            val resultState = when {
-                state.query.isBlank() -> ResultState.EMPTY
-                state.isSearchingForQuery && state.suggestions.items.isEmpty() -> ResultState.SEARCHING
-                state.suggestions.items.isEmpty() -> ResultState.NO_SUGGESTIONS
-                else -> ResultState.SUGGESTIONS
+            val suggestions = when {
+                state.suggestions.items.isNotEmpty() -> {
+                    state.suggestions.items.map { suggestion ->
+                        suggestion.toSuggestionItem()
+                    }
+                }
+                state.isSuggestionsUpToDate -> emptyList()
+                else -> null
             }
 
-            when (resultState) {
-                ResultState.EMPTY -> ViewState.Empty(error = state.error)
-                ResultState.SEARCHING -> ViewState.Searching(state.query, error = state.error)
-                ResultState.NO_SUGGESTIONS -> ViewState.NoSuggestions(state.query, error = state.error)
-                ResultState.SUGGESTIONS -> {
-                    val suggestions = state.suggestions.items.map { suggestion ->
-                        val title = createTitle(suggestion)
-                        SuggestionItem(
-                            primaryText = title,
-                            secondaryText = createSubtitle(suggestion),
-                            saveName = title,
-                            location = suggestion.location,
-                        )
-                    }
-                    ViewState.Suggestions(
-                        query = state.query,
-                        suggestions = suggestions,
-                        error = state.error,
-                    )
-                }
-            }
+            ViewState(
+                query = state.query,
+                searching = !state.isSuggestionsUpToDate,
+                suggestions = suggestions,
+                error = state.error,
+            )
         }
 
     fun onSearchTextChanged(newText: String) = store.issue(SetQueryAction(newText))
@@ -81,28 +69,21 @@ internal class AddPlaceViewModel @Inject constructor(
     }
 }
 
-internal sealed class ViewState {
-    abstract val query: String
-    abstract val error: TextRef?
+internal data class ViewState(
+    val query: String = "",
+    val searching: Boolean = false,
+    val suggestions: List<SuggestionItem>? = null,
+    val error: TextRef? = null,
+)
 
-    data class Empty(override val error: TextRef?) : ViewState() {
-        override val query = ""
-    }
-
-    data class Searching(override val query: String, override val error: TextRef?) : ViewState()
-    data class NoSuggestions(override val query: String, override val error: TextRef?) : ViewState()
-    data class Suggestions(
-        override val query: String,
-        val suggestions: List<SuggestionItem>,
-        override val error: TextRef?,
-    ) : ViewState()
-
-    companion object {
-        val default: Empty = Empty(error = null)
-    }
+private fun PlaceSuggestion.toSuggestionItem(): SuggestionItem {
+    return SuggestionItem(
+        primaryText = simpleName,
+        secondaryText = createSubtitle(this),
+        suggestedName = simpleName,
+        location = location,
+    )
 }
-
-private fun createTitle(suggestion: PlaceSuggestion) = suggestion.simpleName
 
 private fun createSubtitle(suggestion: PlaceSuggestion) =
     suggestion.fullName
@@ -112,10 +93,6 @@ private fun createSubtitle(suggestion: PlaceSuggestion) =
 internal data class SuggestionItem(
     val primaryText: String,
     val secondaryText: String,
-    val saveName: String,
+    val suggestedName: String,
     val location: Location,
 )
-
-internal enum class ResultState {
-    EMPTY, SEARCHING, NO_SUGGESTIONS, SUGGESTIONS
-}

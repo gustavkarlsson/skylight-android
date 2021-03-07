@@ -1,5 +1,10 @@
 package se.gustavkarlsson.skylight.android.feature.addplace
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +16,7 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
@@ -84,10 +90,11 @@ class AddPlaceFragment : ComposeScreenFragment() {
         }
     }
 
+    @ExperimentalAnimationApi
     @ExperimentalMaterialApi
     @Composable
     override fun ScreenContent() {
-        val state = viewModel.viewState.collectAsState(ViewState.default)
+        val state = viewModel.viewState.collectAsState(ViewState())
         Content(
             viewState = state.value,
             onBackClicked = { navigator.closeScreen() },
@@ -98,11 +105,12 @@ class AddPlaceFragment : ComposeScreenFragment() {
     }
 }
 
+@ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @Composable
 @Preview
 private fun Content(
-    viewState: ViewState = ViewState.default,
+    viewState: ViewState = ViewState(),
     onBackClicked: () -> Unit = {},
     onQueryChanged: (String) -> Unit = {},
     onSaveClicked: (name: String, Location) -> Unit = { _, _ -> },
@@ -110,29 +118,24 @@ private fun Content(
 ) {
     ScreenBackground {
         val dialogData = remember { mutableStateOf<DialogData?>(null) }
+        val updateDialogData = { name: String, location: Location ->
+            dialogData.value = DialogData(name, location)
+        }
         AlertDialog(
             data = dialogData.value,
             onDismiss = { dialogData.value = null },
-            onTextChanged = { name, location ->
-                dialogData.value = DialogData(name, location)
-            },
+            onTextChanged = updateDialogData,
             onSaveClicked = onSaveClicked,
         )
         Scaffold(
             topBar = { TopAppBar(viewState.query, onBackClicked, onQueryChanged) },
             snackbarHost = { state -> ErrorSnackbar(state, viewState.error, onSnackbarDismissed = onSnackbarDismissed) }
         ) {
-            when (viewState) {
-                is ViewState.Empty -> Empty()
-                is ViewState.Searching -> Searching() // FIXME debounce searching state, or show progress bar instead?
-                is ViewState.NoSuggestions -> NoSuggestions()
-                is ViewState.Suggestions -> SuggestionsList(
-                    items = viewState.suggestions,
-                    onClickItem = { name, location ->
-                        dialogData.value = DialogData(name, location)
-                    },
-                )
-            }
+            MainContent(
+                suggestions = viewState.suggestions,
+                searching = viewState.searching,
+                onClickItem = updateDialogData,
+            )
         }
     }
 }
@@ -274,6 +277,31 @@ private fun ErrorSnackbar(
     }
 }
 
+@ExperimentalAnimationApi
+@ExperimentalMaterialApi
+@Composable
+private fun MainContent(
+    suggestions: List<SuggestionItem>?,
+    searching: Boolean,
+    onClickItem: (String, Location) -> Unit,
+) {
+    when {
+        suggestions == null -> Empty()
+        suggestions.isEmpty() -> NoSuggestions()
+        else -> SuggestionsList(
+            items = suggestions,
+            onClickItem = onClickItem,
+        )
+    }
+    AnimatedVisibility(
+        visible = searching,
+        enter = fadeIn(animationSpec = tween(durationMillis = 1000, delayMillis = 2000)),
+        exit = fadeOut(animationSpec = tween()),
+    ) {
+        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+    }
+}
+
 @Composable
 private fun Empty() {
     Text(
@@ -282,17 +310,6 @@ private fun Empty() {
             .fillMaxHeight(0.7f)
             .wrapContentSize(Alignment.Center),
         text = stringResource(R.string.search_for_place_to_save),
-    )
-}
-
-@Composable
-private fun Searching() {
-    Text(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.7f)
-            .wrapContentSize(Alignment.Center),
-        text = stringResource(R.string.searching),
     )
 }
 
@@ -331,18 +348,28 @@ private fun PlaceItem(
     onClick: (name: String, Location) -> Unit,
 ) {
     ListItem(
-        modifier = Modifier.clickable { onClick(item.saveName, item.location) },
+        modifier = Modifier.clickable { onClick(item.suggestedName, item.location) },
         icon = { Icon(Icons.Default.Map, contentDescription = null) },
-        secondaryText = {
-            Text(
-                text = item.secondaryText, maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
+        secondaryText = if (item.secondaryText.isNotBlank()) {
+            { SecondaryText(item.secondaryText) }
+        } else null
     ) {
-        Text(
-            text = item.primaryText, maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
+        PrimaryText(item.primaryText)
     }
+}
+
+@Composable
+private fun PrimaryText(text: String) {
+    Text(
+        text = text, maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+    )
+}
+
+@Composable
+private fun SecondaryText(text: String) {
+    Text(
+        text = text, maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+    )
 }

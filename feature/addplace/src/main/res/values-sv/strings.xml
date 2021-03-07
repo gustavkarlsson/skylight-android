@@ -4,7 +4,6 @@
     <string name="save_place">Spara plats</string>
     <string name="place_name">Namn på plats</string>
     <string name="search_for_place_to_save">Sök efter en plats att spara</string>
-    <string name="searching">Söker…</string>
     <string name="no_place_found">Ingen plats med det namnet :(</string>
     <string name="place_search_failed_generic">Platssökningen misslyckades</string>
     <string name="place_search_failed_server_response">Platssökningen misslyckades. Serverfel.</string>
