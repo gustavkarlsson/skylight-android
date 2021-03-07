@@ -12,12 +12,12 @@ android {
 
     productFlavors {
         create("production") {
-            setDimension("environment")
+            dimension("environment")
             buildConfigField("boolean", "DEVELOP", "false")
         }
 
         create("develop") {
-            setDimension("environment")
+            dimension("environment")
             buildConfigField("boolean", "DEVELOP", "true")
         }
     }
