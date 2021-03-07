@@ -1,11 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,10 +11,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Snackbar
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
-import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -50,11 +50,11 @@ internal class GooglePlayServicesFragment : ComposeScreenFragment() {
         Content(
             errorSnackbarVisible = errorSnackbarVisible.value,
             onInstallClicked = { viewModel.installGooglePlayServices(requireActivity()) },
-            onErrorSnackbarDismissClicked = viewModel::clearError,
+            onErrorSnackbarDismissed = viewModel::clearError,
         )
     }
 
-    override fun onNewStartStopScope(scope: CoroutineScope) {
+    override fun onNewCreateDestroyScope(scope: CoroutineScope) {
         scope.launch {
             viewModel.success.collect {
                 val target = requireNotNull(requireArguments().target)
@@ -70,7 +70,7 @@ internal class GooglePlayServicesFragment : ComposeScreenFragment() {
 private fun Content(
     errorSnackbarVisible: Boolean = true,
     onInstallClicked: () -> Unit = {},
-    onErrorSnackbarDismissClicked: () -> Unit = {},
+    onErrorSnackbarDismissed: () -> Unit = {},
 ) {
     ScreenBackground {
         Column(
@@ -102,27 +102,7 @@ private fun Content(
                 verticalArrangement = Arrangement.Bottom,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                AnimatedVisibility(
-                    visible = errorSnackbarVisible,
-                    enter = fadeIn(),
-                    exit = fadeOut(),
-                ) {
-                    // FIXME Replace with scaffold/snackbarhost
-                    Snackbar(
-                        backgroundColor = MaterialTheme.colors.error,
-                        contentColor = contentColorFor(backgroundColor = MaterialTheme.colors.error),
-                        content = {
-                            Text(text = stringResource(id = R.string.google_play_services_install_failed))
-                        },
-                        action = {
-                            Text(
-                                modifier = Modifier.clickable(onClick = onErrorSnackbarDismissClicked),
-                                text = stringResource(id = R.string.dismiss),
-                            )
-                        }
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
+                ErrorSnackbar(errorSnackbarVisible, onErrorSnackbarDismissed)
                 ExtendedFloatingActionButton(
                     backgroundColor = MaterialTheme.colors.primary,
                     text = { Text(stringResource(id = R.string.google_play_services_install)) },
@@ -130,5 +110,33 @@ private fun Content(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun ErrorSnackbar(
+    errorSnackbarVisible: Boolean,
+    onDismissed: () -> Unit,
+) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val messageText = stringResource(R.string.google_play_services_install_failed)
+    val dismissText = stringResource(R.string.dismiss)
+    LaunchedEffect(key1 = errorSnackbarVisible) {
+        if (errorSnackbarVisible && snackbarHostState.currentSnackbarData == null) {
+            snackbarHostState.showSnackbar(
+                message = messageText,
+                actionLabel = dismissText,
+                duration = SnackbarDuration.Long,
+            )
+            onDismissed()
+        }
+    }
+    SnackbarHost(hostState = snackbarHostState) { snackbarData ->
+        Snackbar(
+            snackbarData = snackbarData,
+            backgroundColor = MaterialTheme.colors.error,
+            contentColor = MaterialTheme.colors.onError,
+            actionColor = MaterialTheme.colors.onError,
+        )
     }
 }

@@ -272,6 +272,7 @@ private fun ErrorSnackbar(
         Snackbar(
             snackbarData = snackbarData,
             backgroundColor = MaterialTheme.colors.error,
+            contentColor = MaterialTheme.colors.onError,
             actionColor = MaterialTheme.colors.onError,
         )
     }
