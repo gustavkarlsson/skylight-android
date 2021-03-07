@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
@@ -33,6 +32,7 @@ import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.target
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.compose.ErrorSnackbar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 
 internal class GooglePlayServicesFragment : ComposeScreenFragment() {
@@ -132,11 +132,6 @@ private fun ErrorSnackbar(
         }
     }
     SnackbarHost(hostState = snackbarHostState) { snackbarData ->
-        Snackbar(
-            snackbarData = snackbarData,
-            backgroundColor = MaterialTheme.colors.error,
-            contentColor = MaterialTheme.colors.onError,
-            actionColor = MaterialTheme.colors.onError,
-        )
+        ErrorSnackbar(snackbarData)
     }
 }

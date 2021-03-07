@@ -21,7 +21,6 @@ import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
@@ -65,6 +64,7 @@ import se.gustavkarlsson.skylight.android.lib.navigation.target
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.compose.ErrorSnackbar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
@@ -269,12 +269,7 @@ private fun ErrorSnackbar(
         modifier = Modifier.navigationBarsWithImePadding(),
         hostState = hostState,
     ) { snackbarData ->
-        Snackbar(
-            snackbarData = snackbarData,
-            backgroundColor = MaterialTheme.colors.error,
-            contentColor = MaterialTheme.colors.onError,
-            actionColor = MaterialTheme.colors.onError,
-        )
+        ErrorSnackbar(snackbarData)
     }
 }
 
