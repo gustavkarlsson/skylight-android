@@ -7,17 +7,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
@@ -29,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,6 +40,8 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.ioki.textref.TextRef
@@ -77,48 +83,6 @@ class AddPlaceFragment : ComposeScreenFragment() {
             }
         }
     }
-/*
-// FIXME Add dialog
-
-    @SuppressLint("InflateParams")
-    private fun openSaveDialog(scope: CoroutineScope, placeSuggestion: PlaceSuggestion) {
-        savePlaceDialog?.dismiss()
-        val customView = layoutInflater.inflate(R.layout.layout_save_dialog, null)
-        val editText = customView.placeNameEditText.apply {
-            setText(placeSuggestion.simpleName)
-            setSelection(0, placeSuggestion.simpleName.length)
-        }
-        val dialog = createDialog(customView) {
-            val name = editText.text.toString().trim()
-            scope.launch {
-                viewModel.onSavePlaceClicked(name, placeSuggestion.location)
-            }
-        }
-        savePlaceDialog = dialog
-        dialog.show()
-        dialog.initView(scope, editText)
-        editText.requestFocus()
-    }
-
-    private fun createDialog(view: View, onClick: () -> Unit) =
-        MaterialAlertDialogBuilder(view.context).apply {
-            setView(view)
-            setTitle(R.string.save_place)
-            setNegativeButton(R.string.cancel, null)
-            setPositiveButton(R.string.save) { _, _ -> onClick() }
-        }.create()
-
-    private fun AlertDialog.initView(scope: CoroutineScope, editText: TextInputEditText) {
-        val positiveButton = getButton(AlertDialog.BUTTON_POSITIVE)
-        val job = scope.launch {
-            editText.textChanges()
-                .map { it.isNotBlank() }
-                .collect { positiveButton.isEnabled = it }
-        }
-        setOnDismissListener { job.cancel() }
-    }
-}
-*/
 
     @ExperimentalMaterialApi
     @Composable
@@ -128,7 +92,7 @@ class AddPlaceFragment : ComposeScreenFragment() {
             viewState = state.value,
             onBackClicked = { navigator.closeScreen() },
             onQueryChanged = { text -> viewModel.onSearchTextChanged(text) },
-            onClickItem = { name, location -> viewModel.onSavePlaceClicked(name, location) },
+            onSaveClicked = { name, location -> viewModel.onSavePlaceClicked(name, location) },
             onSnackbarDismissed = { viewModel.onSnackbarDismissed() }
         )
     }
@@ -141,10 +105,19 @@ private fun Content(
     viewState: ViewState = ViewState.default,
     onBackClicked: () -> Unit = {},
     onQueryChanged: (String) -> Unit = {},
-    onClickItem: (name: String, Location) -> Unit = { _, _ -> },
+    onSaveClicked: (name: String, Location) -> Unit = { _, _ -> },
     onSnackbarDismissed: () -> Unit = {},
 ) {
     ScreenBackground {
+        val dialogData = remember { mutableStateOf<DialogData?>(null) }
+        AlertDialog(
+            data = dialogData.value,
+            onDismiss = { dialogData.value = null },
+            onTextChanged = { name, location ->
+                dialogData.value = DialogData(name, location)
+            },
+            onSaveClicked = onSaveClicked,
+        )
         Scaffold(
             topBar = { TopAppBar(viewState.query, onBackClicked, onQueryChanged) },
             snackbarHost = { state -> ErrorSnackbar(state, viewState.error, onSnackbarDismissed = onSnackbarDismissed) }
@@ -153,11 +126,78 @@ private fun Content(
                 is ViewState.Empty -> Empty()
                 is ViewState.Searching -> Searching() // FIXME debounce searching state, or show progress bar instead?
                 is ViewState.NoSuggestions -> NoSuggestions()
-                is ViewState.Suggestions -> SuggestionsList(viewState.suggestions, onClickItem)
+                is ViewState.Suggestions -> SuggestionsList(
+                    items = viewState.suggestions,
+                    onClickItem = { name, location ->
+                        dialogData.value = DialogData(name, location)
+                    },
+                )
             }
         }
     }
 }
+
+// TODO This looks ugly. Padding doesn't work for text field. Use custom dialog instead?
+@Composable
+private fun AlertDialog(
+    data: DialogData?,
+    onDismiss: () -> Unit,
+    onTextChanged: (name: String, Location) -> Unit,
+    onSaveClicked: (name: String, Location) -> Unit,
+) {
+    if (data != null) {
+        AlertDialog(
+            onDismissRequest = onDismiss,
+            title = {
+                Text(stringResource(R.string.save_place))
+            },
+            text = {
+                val focusRequester = remember { FocusRequester() }
+                val focus = remember { mutableStateOf(true) }
+                if (focus.value) {
+                    SideEffect {
+                        focusRequester.requestFocus()
+                    }
+                }
+                val textFieldValue = remember {
+                    mutableStateOf(TextFieldValue(text = data.name, selection = TextRange(0, data.name.length)))
+                }
+                OutlinedTextField(
+                    modifier = Modifier.focusRequester(focusRequester),
+                    value = textFieldValue.value,
+                    onValueChange = { value ->
+                        focus.value = false
+                        textFieldValue.value = value
+                        onTextChanged(value.text, data.location)
+                    },
+                )
+            },
+            confirmButton = {
+                TextButton(
+                    enabled = data.name.isNotBlank(),
+                    onClick = {
+                        onSaveClicked(data.name, data.location)
+                        onDismiss()
+                    },
+                ) {
+                    Text(stringResource(R.string.save))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { onDismiss() },
+                ) {
+                    Text(stringResource(R.string.cancel))
+                }
+            },
+        )
+    }
+}
+
+private data class DialogData(
+    val name: String,
+    val location: Location,
+)
 
 @Composable
 private fun TopAppBar(
