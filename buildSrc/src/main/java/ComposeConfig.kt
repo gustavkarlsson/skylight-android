@@ -6,7 +6,6 @@ fun CommonExtension<*, *, *, *, *, *, *, *>.composeConfig() {
     }
 
     composeOptions {
-        kotlinCompilerVersion = Versions.kotlin
         kotlinCompilerExtensionVersion = Versions.compose
     }
 }
