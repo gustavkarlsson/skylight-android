@@ -1,31 +1,110 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
-import com.google.android.material.appbar.MaterialToolbar
-import de.halfbit.edgetoedge.Edge
-import de.halfbit.edgetoedge.EdgeToEdgeBuilder
+import android.widget.FrameLayout
+import android.widget.ScrollView
+import android.widget.TextView
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.view.setPadding
+import dev.chrisbanes.accompanist.insets.LocalWindowInsets
+import dev.chrisbanes.accompanist.insets.navigationBarsPadding
+import dev.chrisbanes.accompanist.insets.toPaddingValues
 import io.noties.markwon.Markwon
-import kotlinx.android.synthetic.main.fragment_privacypolicy.*
-import kotlinx.coroutines.CoroutineScope
+import kotlin.math.roundToInt
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import se.gustavkarlsson.skylight.android.feature.privacypolicy.R
-import se.gustavkarlsson.skylight.android.lib.ui.legacy.LegacyScreenFragment
+import se.gustavkarlsson.skylight.android.lib.navigation.navigator
+import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
+import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
+import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 
-class PrivacyPolicyFragment : LegacyScreenFragment() {
+class PrivacyPolicyFragment : ComposeScreenFragment() {
 
-    override val layoutId: Int = R.layout.fragment_privacypolicy
-
-    override val toolbar: MaterialToolbar get() = toolbarView
-
-    override fun setupEdgeToEdge(): EdgeToEdgeBuilder.() -> Unit = {
-        toolbarView.fit { Edge.Top }
-        scrollView.fit { Edge.Bottom }
+    @Composable
+    override fun ScreenContent() {
+        var text by remember { mutableStateOf("") }
+        LaunchedEffect(key1 = null) {
+            withContext(Dispatchers.IO) {
+                val privacyPolicyMarkdown = resources.openRawResource(R.raw.privacy_policy)
+                    .bufferedReader()
+                    .readText()
+                text = privacyPolicyMarkdown
+            }
+        }
+        Content(
+            text = text,
+            onBackClicked = { navigator.closeScreen() }
+        )
     }
+}
 
-    override fun initView() {
-        val privacyPolicyMarkdown = resources.openRawResource(R.raw.privacy_policy)
-            .bufferedReader()
-            .readText()
-        Markwon.create(requireContext()).setMarkdown(markdownView, privacyPolicyMarkdown)
+@Composable
+@Preview
+private fun Content(
+    text: String = "Line1\nLine2",
+    onBackClicked: () -> Unit = {},
+) {
+    ScreenBackground {
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    contentPadding = LocalWindowInsets.current.statusBars
+                        .toPaddingValues(additionalHorizontal = AppBarHorizontalPadding),
+                    navigationIcon = {
+                        IconButton(onClick = onBackClicked) {
+                            Icon(Icons.Default.ArrowBack, contentDescription = null)
+                        }
+                    },
+                    title = {
+                        Text(stringResource(R.string.privacy_policy))
+                    },
+                )
+            },
+        ) {
+            val padding = with(LocalDensity.current) { 16.dp.toPx() }
+            AndroidView(
+                modifier = Modifier.navigationBarsPadding(),
+                factory = { context ->
+                    val scrollView = ScrollView(context)
+                    scrollView.layoutParams = FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                    )
+
+                    val textView = TextView(context)
+                    textView.layoutParams = FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT,
+                    )
+                    textView.setPadding(padding.roundToInt())
+                    textView.tag = "markdown"
+
+                    scrollView.addView(textView)
+                    scrollView
+                },
+                update = { scrollView ->
+                    val textView = scrollView.findViewWithTag<TextView>("markdown")
+                    Markwon.create(scrollView.context).setMarkdown(textView, text)
+                }
+            )
+        }
     }
-
-    override fun bindView(scope: CoroutineScope) = Unit
 }
