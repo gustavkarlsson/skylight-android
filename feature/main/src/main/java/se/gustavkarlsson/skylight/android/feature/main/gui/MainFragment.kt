@@ -16,7 +16,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,7 +36,6 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -61,6 +59,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.ioki.textref.TextRef
 import dev.chrisbanes.accompanist.insets.LocalWindowInsets
+import dev.chrisbanes.accompanist.insets.navigationBarsPadding
+import dev.chrisbanes.accompanist.insets.systemBarsPadding
 import dev.chrisbanes.accompanist.insets.toPaddingValues
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -75,10 +75,11 @@ import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Banner
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.onSurfaceDisabled
 import se.gustavkarlsson.skylight.android.lib.ui.compose.onSurfaceDivider
 import se.gustavkarlsson.skylight.android.lib.ui.compose.onSurfaceWeaker
@@ -191,6 +192,7 @@ private fun Content(
             drawerScrimColor = Color.Black.copy(alpha = ScrimOpacity),
             drawerContent = {
                 Drawer(
+                    modifier = Modifier.systemBarsPadding(),
                     drawerItems = drawerItems,
                     onItemClick = { event ->
                         onDrawerItemClick(event)
@@ -208,7 +210,9 @@ private fun Content(
             },
         ) {
             MainContent(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .navigationBarsPadding(),
                 viewState = viewState,
                 onBannerActionClicked = onBannerActionClicked,
             )
@@ -267,29 +271,32 @@ private fun TopAppBar(
 @ExperimentalFoundationApi
 @Composable
 private fun Drawer(
+    modifier: Modifier = Modifier,
     drawerItems: List<DrawerItem>,
     onItemClick: (DrawerClickEvent) -> Unit,
     onItemLongClick: (DrawerLongClickEvent) -> Unit,
 ) {
-    Text(
-        modifier = Modifier.padding(16.dp),
-        text = stringResource(R.string.places),
-        style = Typography.h5,
-    )
-    Spacer(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(1.dp)
-            .padding(16.dp)
-            .background(Colors.onSurfaceDivider),
-    )
-    LazyColumn {
-        items(drawerItems) { item ->
-            DrawerItem(
-                item = item,
-                onItemClick = onItemClick,
-                onItemLongClick = onItemLongClick,
-            )
+    Column(modifier = modifier) {
+        Text(
+            modifier = Modifier.padding(16.dp),
+            text = stringResource(R.string.places),
+            style = Typography.h5,
+        )
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .padding(16.dp)
+                .background(Colors.onSurfaceDivider),
+        )
+        LazyColumn {
+            items(drawerItems) { item ->
+                DrawerItem(
+                    item = item,
+                    onItemClick = onItemClick,
+                    onItemLongClick = onItemLongClick,
+                )
+            }
         }
     }
 }
@@ -351,41 +358,38 @@ private fun MainContent(
 @ExperimentalAnimationApi
 @Composable
 private fun ErrorBanner(
-    modifier: Modifier = Modifier,
     errorBannerData: BannerData?,
     onBannerActionClicked: (BannerData.Event) -> Unit
 ) {
-    Box(modifier = modifier) {
-        AnimatedVisibility(visible = errorBannerData != null) {
-            if (errorBannerData != null) {
-                Banner(
-                    backgroundColor = Colors.error,
-                    icon = {
-                        Icon(
-                            modifier = Modifier.size(40.dp),
-                            imageVector = errorBannerData.icon,
-                            contentDescription = null,
+    AnimatedVisibility(visible = errorBannerData != null) {
+        if (errorBannerData != null) {
+            Banner(
+                backgroundColor = Colors.error,
+                icon = {
+                    Icon(
+                        modifier = Modifier.size(40.dp),
+                        imageVector = errorBannerData.icon,
+                        contentDescription = null,
+                    )
+                },
+                actions = {
+                    TextButton(
+                        colors = ButtonDefaults.textButtonColors(
+                            contentColor = Colors.onError,
+                            disabledContentColor = Colors.onError
+                                .copy(alpha = ContentAlpha.disabled),
+                        ),
+                        onClick = {
+                            onBannerActionClicked(errorBannerData.buttonEvent)
+                        },
+                    ) {
+                        Text(
+                            text = textRef(errorBannerData.buttonText).toUpperCase(),
                         )
-                    },
-                    actions = {
-                        TextButton(
-                            colors = ButtonDefaults.textButtonColors(
-                                contentColor = Colors.onError,
-                                disabledContentColor = Colors.onError
-                                    .copy(alpha = ContentAlpha.disabled),
-                            ),
-                            onClick = {
-                                onBannerActionClicked(errorBannerData.buttonEvent)
-                            },
-                        ) {
-                            Text(
-                                text = textRef(errorBannerData.buttonText).toUpperCase(),
-                            )
-                        }
-                    },
-                ) {
-                    Text(textRef(errorBannerData.message))
-                }
+                    }
+                },
+            ) {
+                Text(textRef(errorBannerData.message))
             }
         }
     }

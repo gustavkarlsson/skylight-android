@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.BackstackListener
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
@@ -32,6 +33,7 @@ internal class MainActivity : AppCompatActivity(), NavigatorHost, ScreensHost, S
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setupNavigation()
     }
 

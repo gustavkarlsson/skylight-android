@@ -327,10 +327,14 @@ private fun SuggestionsList(
     items: List<SuggestionItem>,
     onClickItem: (name: String, Location) -> Unit
 ) {
+    val ime = LocalWindowInsets.current.ime
+    val navigationBars = LocalWindowInsets.current.navigationBars
+    val insets = if (ime.isVisible) {
+        ime
+    } else navigationBars
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .navigationBarsWithImePadding(),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = insets.toPaddingValues(),
     ) {
         items(items) { item ->
             PlaceItem(item, onClick = onClickItem)
