@@ -1,10 +1,10 @@
 package se.gustavkarlsson.skylight.android.navigation
 
 import android.os.Bundle
-import kotlinx.android.parcel.IgnoredOnParcel
-import kotlinx.android.parcel.Parcelize
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.parcelize.IgnoredOnParcel
+import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.feature.about.AboutFragment
 import se.gustavkarlsson.skylight.android.feature.addplace.AddPlaceFragment
 import se.gustavkarlsson.skylight.android.feature.intro.PrivacyPolicyFragment
@@ -17,18 +17,11 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Screens
 import se.gustavkarlsson.skylight.android.lib.navigation.withTarget
 
 internal object DefaultScreens : Screens {
-    override val main: Screen =
-        MainScreen()
-
-    override fun addPlace(target: Backstack?): Screen =
-        AddPlaceScreen(target)
-
-    override val settings: Screen =
-        SettingsScreen()
-    override val about: Screen =
-        AboutScreen()
-    override val privacyPolicy: Screen =
-        PrivacyPolicyScreen()
+    override val main: Screen = MainScreen()
+    override fun addPlace(target: Backstack?): Screen = AddPlaceScreen(target)
+    override val settings: Screen = SettingsScreen()
+    override val about: Screen = AboutScreen()
+    override val privacyPolicy: Screen = PrivacyPolicyScreen()
 }
 
 @Parcelize

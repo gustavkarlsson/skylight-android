@@ -4,7 +4,7 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
-    id("kotlin-android-extensions")
+    id("kotlin-parcelize")
     id("com.google.firebase.crashlytics")
     id("pl.allegro.tech.build.axion-release")
     // id("com.github.triplet.play") version Versions.playPublisher // FIXME Re-enable when play plugin works
