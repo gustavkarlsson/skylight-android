@@ -18,6 +18,7 @@ import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
 
+// FIXME merge with main view model?
 @ExperimentalCoroutinesApi
 @FlowPreview
 internal class DrawerViewModel @Inject constructor(
