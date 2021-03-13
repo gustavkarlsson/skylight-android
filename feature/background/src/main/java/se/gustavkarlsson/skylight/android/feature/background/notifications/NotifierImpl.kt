@@ -5,12 +5,15 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
+import android.util.TypedValue
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import androidx.core.app.NotificationCompat
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.feature.background.R
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
-import se.gustavkarlsson.skylight.android.lib.ui.legacy.extensions.resolveColor
 
 internal class NotifierImpl(
     private val context: Context,
@@ -57,7 +60,7 @@ internal class NotifierImpl(
             ChanceLevel.NONE, ChanceLevel.UNKNOWN, null -> NotificationCompat.PRIORITY_MIN
         }
 
-    private fun createColor(): Int? = context.theme.resolveColor(R.attr.colorPrimary)
+    private fun createColor(): Int = context.theme.resolveColor(R.attr.colorPrimary)
 
     private fun createText(notification: Notification) =
         notificationFormatter.format(notification).resolve(context)
@@ -72,4 +75,11 @@ internal class NotifierImpl(
             PendingIntent.FLAG_UPDATE_CURRENT
         )
     }
+}
+
+@ColorInt
+private fun Resources.Theme.resolveColor(@AttrRes attr: Int): Int {
+    val typedValue = TypedValue()
+    resolveAttribute(attr, typedValue, true)
+    return typedValue.data
 }

@@ -104,7 +104,6 @@ dependencies {
     implementation(project(":lib:places"))
     implementation(project(":lib:time"))
     implementation(project(":lib:ui"))
-    implementation(project(":lib:ui-legacy"))
     implementation(project(":lib:ui-compose"))
     implementation(project(":lib:settings"))
     implementation(project(":feature:googleplayservices"))
