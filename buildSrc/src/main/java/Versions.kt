@@ -30,13 +30,11 @@ object Versions {
     val androidAnnotation = "1.1.0"
     val androidPreference = "1.1.1"
     val androidWorkManager = "2.3.4"
-    val androidConstraintLayout = "2.0.0-beta6"
     val androidCoreKtx = "1.3.0"
     val androidLifecycle = "2.2.0"
 
     val material = "1.1.0"
 
-    val flowbinding = "1.0.0-beta02"
     val runtimePermissionKotlin = "1.1.2"
     val kotlinxCoroutines = "1.4.2"
 
@@ -52,7 +50,6 @@ object Versions {
     val leakcanary = "2.4"
     val mapboxServices = "5.3.0"
     val conveyor = "ae2111d8df" // TODO use release version
-    val edgeToEdge = "0.10"
     val koptional = "0.4.0"
     val simpleStack = "2.3.2"
     val textref = "fix-arity-issue-SNAPSHOT" // TODO use release version
