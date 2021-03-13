@@ -56,7 +56,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -318,7 +317,7 @@ private fun DrawerItem(
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(painter = painterResource(item.icon), contentDescription = null)
+        Icon(imageVector = item.icon, contentDescription = null)
         Spacer(modifier = Modifier.width(8.dp))
         Text(textRef(item.text))
     }
@@ -361,7 +360,7 @@ private fun ErrorBanner(
                     icon = {
                         Icon(
                             modifier = Modifier.size(40.dp),
-                            painter = painterResource(errorBannerData.icon),
+                            imageVector = errorBannerData.icon,
                             contentDescription = null,
                         )
                     },

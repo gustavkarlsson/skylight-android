@@ -131,7 +131,6 @@ internal object MainModule {
             weatherEvaluator,
             weatherFormatter,
             locationPermissionChecker,
-            ChanceToColorConverter(context),
             time,
             1.minutes
         )

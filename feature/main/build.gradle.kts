@@ -2,7 +2,6 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
-    id("kotlin-android-extensions") // FIXME remove
 }
 
 android {
@@ -26,7 +25,6 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:ui-legacy")) // FIXME remove
     implementation(project(":lib:ui-compose"))
     implementation(project(":lib:time"))
     implementation(project(":lib:weather"))

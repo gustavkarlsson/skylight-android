@@ -1,3 +1,10 @@
+## ASAP Compose
+* Create base theme
+* Include icon set in base theme
+* Include extra colors
+* Include extra text styles
+* Include standard dimensions
+
 ## Soon
 * Single-use permission doesn't really work
 * Make location take phone location on/off into account

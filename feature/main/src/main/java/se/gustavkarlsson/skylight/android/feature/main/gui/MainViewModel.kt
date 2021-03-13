@@ -1,9 +1,12 @@
 package se.gustavkarlsson.skylight.android.feature.main.gui
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.material.Colors
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.ioki.textref.TextRef
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
@@ -51,7 +54,6 @@ internal class MainViewModel(
     private val weatherChanceEvaluator: ChanceEvaluator<Weather>,
     private val weatherFormatter: Formatter<Weather>,
     private val permissionChecker: PermissionChecker,
-    private val chanceToColorConverter: ChanceToColorConverter,
     private val time: Time,
     private val nowTextThreshold: Duration
 ) : CoroutineScopedService() {
@@ -96,7 +98,7 @@ internal class MainViewModel(
                 BannerData(
                     TextRef.stringRes(R.string.location_permission_denied_message),
                     TextRef.stringRes(R.string.fix),
-                    R.drawable.ic_location_on,
+                    Icons.Default.LocationOn,
                     BannerData.Event.RequestLocationPermission
                 )
             }
@@ -104,7 +106,7 @@ internal class MainViewModel(
                 BannerData(
                     TextRef.stringRes(R.string.location_permission_denied_forever_message),
                     TextRef.stringRes(R.string.fix),
-                    R.drawable.ic_warning,
+                    Icons.Default.Warning,
                     BannerData.Event.OpenAppDetails
                 )
             }
@@ -161,7 +163,7 @@ internal class MainViewModel(
                             descriptionText = TextRef.stringRes(texts.description),
                             valueTextColor = { onSurface },
                             progress = chance,
-                            progressColor = Color(chanceToColorConverter.convert(chance)),
+                            progressColor = ChanceToColorConverter.convert(chance),
                             errorText = null
                         )
                     }
@@ -171,7 +173,7 @@ internal class MainViewModel(
                         descriptionText = TextRef.stringRes(texts.description),
                         valueTextColor = { error },
                         progress = null,
-                        progressColor = Color(ChanceToColorConverter.UNKNOWN_COLOR),
+                        progressColor = ChanceToColorConverter.UNKNOWN_COLOR,
                         errorText = format(report.cause)
                     )
                     else -> error("Invalid report: $report")
@@ -212,7 +214,7 @@ internal data class FactorItem(
                 descriptionText = TextRef.stringRes(texts.description),
                 valueTextColor = { onSurface.copy(alpha = 0.7F) },
                 progress = null,
-                progressColor = Color(ChanceToColorConverter.UNKNOWN_COLOR),
+                progressColor = ChanceToColorConverter.UNKNOWN_COLOR,
                 errorText = null
             )
         }
@@ -222,7 +224,7 @@ internal data class FactorItem(
 internal data class BannerData(
     val message: TextRef,
     val buttonText: TextRef,
-    @DrawableRes val icon: Int,
+    val icon: ImageVector,
     val buttonEvent: Event
 ) {
     enum class Event {

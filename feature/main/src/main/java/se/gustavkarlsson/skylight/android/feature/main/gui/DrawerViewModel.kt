@@ -1,6 +1,10 @@
 package se.gustavkarlsson.skylight.android.feature.main.gui
 
-import androidx.annotation.DrawableRes
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Map
+import androidx.compose.ui.graphics.vector.ImageVector
 import com.ioki.textref.TextRef
 import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -41,8 +45,8 @@ internal class DrawerViewModel @Inject constructor(
 
     private fun createIcon(place: Place) =
         when (place) {
-            is Place.Current -> R.drawable.ic_location_on
-            is Place.Custom -> R.drawable.ic_map
+            is Place.Current -> Icons.Default.LocationOn
+            is Place.Custom -> Icons.Default.Map
         }
 
     private fun createLongClickEvent(place: Place) =
@@ -53,7 +57,7 @@ internal class DrawerViewModel @Inject constructor(
     private fun createAddPlaceItem() =
         DrawerItem(
             isActive = false,
-            icon = R.drawable.ic_add,
+            icon = Icons.Default.Add,
             text = TextRef.stringRes(R.string.add_place),
             clickEvent = DrawerClickEvent.AddPlaceClicked,
             longClickEvent = null
@@ -72,7 +76,7 @@ internal class DrawerViewModel @Inject constructor(
 
 internal data class DrawerItem(
     val isActive: Boolean,
-    @DrawableRes val icon: Int,
+    val icon: ImageVector,
     val text: TextRef,
     val clickEvent: DrawerClickEvent?,
     val longClickEvent: DrawerLongClickEvent?
