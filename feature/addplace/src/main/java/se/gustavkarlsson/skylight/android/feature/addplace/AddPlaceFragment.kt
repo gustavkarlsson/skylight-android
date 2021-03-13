@@ -18,7 +18,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.ListItem
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarDuration
@@ -63,11 +62,13 @@ import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.target
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ErrorSnackbar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
+import se.gustavkarlsson.skylight.android.lib.ui.compose.navigationBarsWithIme
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
 @ExperimentalCoroutinesApi
@@ -327,14 +328,9 @@ private fun SuggestionsList(
     items: List<SuggestionItem>,
     onClickItem: (name: String, Location) -> Unit
 ) {
-    val ime = LocalWindowInsets.current.ime
-    val navigationBars = LocalWindowInsets.current.navigationBars
-    val insets = if (ime.isVisible) {
-        ime
-    } else navigationBars
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = insets.toPaddingValues(),
+        contentPadding = LocalWindowInsets.current.navigationBarsWithIme.toPaddingValues(),
     ) {
         items(items) { item ->
             PlaceItem(item, onClick = onClickItem)
