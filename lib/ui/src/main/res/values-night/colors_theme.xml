@@ -7,6 +7,8 @@
     <color name="surface">#161616</color>
     <color name="on_surface">#FFFFFF</color>
     <color name="on_surface_weaker">#B3FFFFFF</color>
+    <color name="on_surface_disabled">#61FFFFFF</color>
+    <color name="on_surface_divider">#52FFFFFF</color>
 
     <color name="error">#CF6679</color>
     <color name="on_error">#000000</color>

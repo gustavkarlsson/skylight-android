@@ -38,7 +38,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ProgressIndicatorDefaults.IndicatorBackgroundOpacity
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -79,6 +78,9 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Banner
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
+import se.gustavkarlsson.skylight.android.lib.ui.compose.onSurfaceDisabled
+import se.gustavkarlsson.skylight.android.lib.ui.compose.onSurfaceDivider
+import se.gustavkarlsson.skylight.android.lib.ui.compose.onSurfaceWeaker
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
 @FlowPreview
@@ -278,7 +280,7 @@ private fun Drawer(
             .fillMaxWidth()
             .height(1.dp)
             .padding(16.dp)
-            .background(MaterialTheme.colors.onSurface.copy(alpha = 0.25F)),
+            .background(MaterialTheme.colors.onSurfaceDivider),
     )
     LazyColumn {
         items(drawerItems) { item ->
@@ -402,7 +404,7 @@ private fun CenterText(
         )
         Text(
             text = textRef(textRef = viewState.chanceSubtitleText),
-            color = MaterialTheme.colors.onBackground.copy(alpha = 0.65F),
+            color = MaterialTheme.colors.onSurfaceWeaker,
             style = MaterialTheme.typography.body1,
         )
     }
@@ -470,7 +472,7 @@ private fun Card(
                 LinearProgressIndicator(
                     modifier = Modifier.weight(0.3f),
                     color = item.progressColor,
-                    backgroundColor = MaterialTheme.colors.onSurface.copy(alpha = IndicatorBackgroundOpacity),
+                    backgroundColor = MaterialTheme.colors.onSurfaceDisabled,
                     progress = animatedProgress,
                 )
             }
