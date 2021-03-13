@@ -2,11 +2,12 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
-    id("kotlin-android-extensions")
+    id("kotlin-android-extensions") // FIXME remove
 }
 
 android {
     commonConfig()
+    composeConfig()
 
     flavorDimensions("environment")
 
@@ -25,7 +26,8 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:ui-legacy"))
+    implementation(project(":lib:ui-legacy")) // FIXME remove
+    implementation(project(":lib:ui-compose"))
     implementation(project(":lib:time"))
     implementation(project(":lib:weather"))
     implementation(project(":lib:places"))
@@ -37,10 +39,6 @@ dependencies {
     implementation(project(":lib:geomaglocation"))
     implementation(project(":lib:reversegeocoder"))
 
-    implementation("androidx.cardview:cardview:${Versions.androidCardview}")
-
-    // TODO replace with google material banner when available
-    implementation("com.sergivonavi:materialbanner:${Versions.banner}")
     implementation("com.github.gustavkarlsson.conveyor:conveyor-core:${Versions.conveyor}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")

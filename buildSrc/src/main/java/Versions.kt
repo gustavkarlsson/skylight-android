@@ -25,10 +25,9 @@ object Versions {
     val crashlyticsGradle = "2.2.0"
     val crashlytics = "17.1.0"
 
-    val androidAppcompat = "1.1.0"
-    val androidFragment = "1.2.5"
+    val androidAppcompat = "1.3.0-beta01"
+    val androidFragment = "1.3.1"
     val androidAnnotation = "1.1.0"
-    val androidCardview = "1.0.0"
     val androidPreference = "1.1.1"
     val androidWorkManager = "2.3.4"
     val androidConstraintLayout = "2.0.0-beta6"
@@ -51,7 +50,6 @@ object Versions {
     val solarPositioning = "0.0.9"
     val sqldelight = "1.2.2"
     val leakcanary = "2.4"
-    val banner = "1.2.0"
     val mapboxServices = "5.3.0"
     val conveyor = "ae2111d8df" // TODO use release version
     val edgeToEdge = "0.10"
@@ -61,6 +59,7 @@ object Versions {
     val markwon = "4.4.0"
     val store = "4.0.0-beta01"
     val compose = "1.0.0-beta01"
+    val composeConstraintLayout = "1.0.0-alpha04"
     val accompanist = "0.6.1"
     val composeThemeAdapter = "1.0.0-beta01"
 

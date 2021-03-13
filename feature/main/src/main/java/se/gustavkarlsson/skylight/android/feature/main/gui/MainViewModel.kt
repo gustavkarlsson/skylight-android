@@ -1,22 +1,18 @@
 package se.gustavkarlsson.skylight.android.feature.main.gui
 
-import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.compose.material.Colors
+import androidx.compose.ui.graphics.Color
 import com.ioki.textref.TextRef
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Store
-import se.gustavkarlsson.koptional.Absent
-import se.gustavkarlsson.koptional.Optional
-import se.gustavkarlsson.koptional.Present
-import se.gustavkarlsson.koptional.toOptional
+import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Chance
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
@@ -29,7 +25,6 @@ import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.feature.main.State
 import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
-import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
@@ -44,165 +39,139 @@ import se.gustavkarlsson.skylight.android.lib.weather.Weather
 @ExperimentalCoroutinesApi
 internal class MainViewModel(
     store: Store<State>,
-    auroraChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
-    relativeTimeFormatter: RelativeTimeFormatter,
-    chanceLevelFormatter: Formatter<ChanceLevel>,
-    darknessChanceEvaluator: ChanceEvaluator<Darkness>,
-    darknessFormatter: Formatter<Darkness>,
-    geomagLocationChanceEvaluator: ChanceEvaluator<GeomagLocation>,
-    geomagLocationFormatter: Formatter<GeomagLocation>,
-    kpIndexChanceEvaluator: ChanceEvaluator<KpIndex>,
-    kpIndexFormatter: Formatter<KpIndex>,
-    weatherChanceEvaluator: ChanceEvaluator<Weather>,
-    weatherFormatter: Formatter<Weather>,
+    private val auroraChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
+    private val relativeTimeFormatter: RelativeTimeFormatter,
+    private val chanceLevelFormatter: Formatter<ChanceLevel>,
+    private val darknessChanceEvaluator: ChanceEvaluator<Darkness>,
+    private val darknessFormatter: Formatter<Darkness>,
+    private val geomagLocationChanceEvaluator: ChanceEvaluator<GeomagLocation>,
+    private val geomagLocationFormatter: Formatter<GeomagLocation>,
+    private val kpIndexChanceEvaluator: ChanceEvaluator<KpIndex>,
+    private val kpIndexFormatter: Formatter<KpIndex>,
+    private val weatherChanceEvaluator: ChanceEvaluator<Weather>,
+    private val weatherFormatter: Formatter<Weather>,
     private val permissionChecker: PermissionChecker,
     private val chanceToColorConverter: ChanceToColorConverter,
-    time: Time,
-    nowTextThreshold: Duration
+    private val time: Time,
+    private val nowTextThreshold: Duration
 ) : CoroutineScopedService() {
 
-    init { store.start(scope) }
+    init {
+        store.start(scope)
+    }
 
-    private val stateFlow = store.state
+    val viewState: StateFlow<ViewState> = store.state
+        .map { state -> state.toViewState() }
+        .stateIn(scope, started = SharingStarted.Eagerly, store.state.value.toViewState())
 
-    val toolbarTitleText: Flow<TextRef> = stateFlow
-        .map {
-            it.selectedPlace.name
-        }
-        .distinctUntilChanged()
-
-    val chanceLevelText: Flow<TextRef> = stateFlow
-        .map {
-            it.selectedAuroraReport.toCompleteAuroraReport()
+    // FIXME clean up
+    private fun State.toViewState(): ViewState {
+        val state = this
+        val changeLevelText = let {
+            val chance = state.selectedAuroraReport.toCompleteAuroraReport()
                 ?.let(auroraChanceEvaluator::evaluate)
                 ?: Chance.UNKNOWN
+            val level = ChanceLevel.fromChance(chance)
+            chanceLevelFormatter.format(level)
         }
-        .map { ChanceLevel.fromChance(it) }
-        .map { chanceLevelFormatter.format(it) }
-        .distinctUntilChanged()
-
-    private val timeSinceUpdate: Flow<Optional<String>> = stateFlow
-        .map { it.selectedAuroraReport.timestamp.toOptional() }
-        .flatMapLatest { time ->
-            flow {
-                while (true) {
-                    emit(time)
-                    delay(1000)
-                }
+        val chanceSubtitleText = let {
+            val name = optionalOf(state.selectedAuroraReport.locationName)
+                .map { it as? Loadable.Loaded<ReverseGeocodingResult> }
+                .map { it.value as? ReverseGeocodingResult.Success }
+                .map { it.name }
+                .value
+            val relativeTime = state.selectedAuroraReport.timestamp?.let { timestamp ->
+                // FIXME emit new time every sec
+                relativeTimeFormatter.format(timestamp, time.now(), nowTextThreshold).toString()
             }
-        }
-        .map {
-            it.map { timeSince ->
-                relativeTimeFormatter.format(timeSince, time.now(), nowTextThreshold).toString()
-            }
-        }
-        .distinctUntilChanged()
-
-    private val locationName: Flow<Optional<String>> = stateFlow
-        .map {
-            when (val name = (it.selectedAuroraReport.locationName as? Loadable.Loaded)?.value) {
-                is ReverseGeocodingResult.Success -> Present(name.name)
-                else -> Absent
-            }
-        }
-
-    val chanceSubtitleText: Flow<TextRef> =
-        combine(timeSinceUpdate, locationName) { (time), (name) ->
             when {
-                time == null -> TextRef.EMPTY
-                name == null -> TextRef.string(time)
-                else -> TextRef.stringRes(R.string.time_in_location, time, name)
+                relativeTime == null -> TextRef.EMPTY
+                name == null -> TextRef.string(relativeTime)
+                else -> TextRef.stringRes(R.string.time_in_location, relativeTime, name)
             }
         }
-
-    val darkness: Flow<FactorItem> = stateFlow
-        .toFactorItems(
-            LoadableAuroraReport::darkness,
-            darknessChanceEvaluator::evaluate,
-            darknessFormatter::format
-        )
-
-    val geomagLocation: Flow<FactorItem> = stateFlow
-        .toFactorItems(
-            LoadableAuroraReport::geomagLocation,
-            geomagLocationChanceEvaluator::evaluate,
-            geomagLocationFormatter::format
-        )
-
-    val kpIndex: Flow<FactorItem> = stateFlow
-        .toFactorItems(
-            LoadableAuroraReport::kpIndex,
-            kpIndexChanceEvaluator::evaluate,
-            kpIndexFormatter::format
-        )
-
-    val weather: Flow<FactorItem> = stateFlow
-        .toFactorItems(
-            LoadableAuroraReport::weather,
-            weatherChanceEvaluator::evaluate,
-            weatherFormatter::format
-        )
-
-    val errorBannerData: Flow<Optional<BannerData>> = stateFlow
-        .map {
-            when {
-                it.selectedPlace != Place.Current -> Absent
-                it.locationAccess == Access.Denied -> {
-                    BannerData(
-                        TextRef.stringRes(R.string.location_permission_denied_message),
-                        TextRef.stringRes(R.string.fix),
-                        R.drawable.ic_location_on,
-                        BannerData.Event.RequestLocationPermission
-                    ).toOptional()
-                }
-                it.locationAccess == Access.DeniedForever -> {
-                    BannerData(
-                        TextRef.stringRes(R.string.location_permission_denied_forever_message),
-                        TextRef.stringRes(R.string.fix),
-                        R.drawable.ic_warning,
-                        BannerData.Event.OpenAppDetails
-                    ).toOptional()
-                }
-                else -> Absent
+        val errorBannerData = when {
+            state.selectedPlace != Place.Current -> null
+            state.locationAccess == Access.Denied -> {
+                BannerData(
+                    TextRef.stringRes(R.string.location_permission_denied_message),
+                    TextRef.stringRes(R.string.fix),
+                    R.drawable.ic_location_on,
+                    BannerData.Event.RequestLocationPermission
+                )
             }
+            state.locationAccess == Access.DeniedForever -> {
+                BannerData(
+                    TextRef.stringRes(R.string.location_permission_denied_forever_message),
+                    TextRef.stringRes(R.string.fix),
+                    R.drawable.ic_warning,
+                    BannerData.Event.OpenAppDetails
+                )
+            }
+            else -> null
         }
-        .distinctUntilChanged { a, b ->
-            a.value?.message == b.value?.message &&
-                a.value?.buttonText == b.value?.buttonText
-        }
-
-    private fun <T : Any> Flow<State>.toFactorItems(
-        selectFactor: LoadableAuroraReport.() -> Loadable<Report<T>>,
-        evaluate: (T) -> Chance,
-        format: (T) -> TextRef
-    ): Flow<FactorItem> =
-        distinctUntilChanged()
-            .map { it.selectedAuroraReport.selectFactor().toFactorItem(evaluate, format) }
+        val kpIndexItem = state.selectedAuroraReport.kpIndex
+            .toFactorItem(
+                texts = ItemTexts.kpIndex,
+                evaluate = kpIndexChanceEvaluator::evaluate,
+                format = kpIndexFormatter::format,
+            )
+        val geomagLocationItem = state.selectedAuroraReport.geomagLocation
+            .toFactorItem(
+                texts = ItemTexts.geomagLocation,
+                evaluate = geomagLocationChanceEvaluator::evaluate,
+                format = geomagLocationFormatter::format,
+            )
+        val darknessItem = state.selectedAuroraReport.darkness
+            .toFactorItem(
+                texts = ItemTexts.darkness,
+                evaluate = darknessChanceEvaluator::evaluate,
+                format = darknessFormatter::format,
+            )
+        val weatherItem = state.selectedAuroraReport.weather
+            .toFactorItem(
+                texts = ItemTexts.weather,
+                evaluate = weatherChanceEvaluator::evaluate,
+                format = weatherFormatter::format,
+            )
+        return ViewState(
+            toolbarTitleName = state.selectedPlace.name,
+            chanceLevelText = changeLevelText,
+            chanceSubtitleText = chanceSubtitleText,
+            errorBannerData = errorBannerData,
+            factorItems = listOf(kpIndexItem, geomagLocationItem, darknessItem, weatherItem),
+        )
+    }
 
     private fun <T : Any> Loadable<Report<T>>.toFactorItem(
+        texts: ItemTexts,
         evaluate: (T) -> Chance,
         format: (T) -> TextRef
     ): FactorItem =
         when (this) {
-            Loadable.Loading -> FactorItem.LOADING
+            Loadable.Loading -> FactorItem.loading(texts)
             is Loadable.Loaded -> {
                 when (val report = value) {
                     is Report.Success -> {
                         val valueText = format(report.value)
                         val chance = evaluate(report.value).value
                         FactorItem(
-                            valueText,
-                            R.color.on_surface,
-                            chance,
-                            chanceToColorConverter.convert(chance),
+                            title = TextRef.stringRes(texts.shortTitle),
+                            valueText = valueText,
+                            descriptionText = TextRef.stringRes(texts.description),
+                            valueTextColor = { onSurface },
+                            progress = chance,
+                            progressColor = Color(chanceToColorConverter.convert(chance)),
                             errorText = null
                         )
                     }
                     is Report.Error -> FactorItem(
+                        title = TextRef.stringRes(texts.shortTitle),
                         valueText = TextRef.string("?"),
-                        valueTextColor = R.color.error,
+                        descriptionText = TextRef.stringRes(texts.description),
+                        valueTextColor = { error },
                         progress = null,
-                        progressColor = ChanceToColorConverter.UNKNOWN_COLOR,
+                        progressColor = Color(ChanceToColorConverter.UNKNOWN_COLOR),
                         errorText = format(report.cause)
                     )
                     else -> error("Invalid report: $report")
@@ -225,20 +194,28 @@ private fun format(cause: Cause): TextRef {
 }
 
 internal data class FactorItem(
+    val title: TextRef,
     val valueText: TextRef,
-    @ColorRes val valueTextColor: Int,
+    val descriptionText: TextRef,
+    val valueTextColor: Colors.() -> Color,
     val progress: Double?,
-    val progressColor: Int,
+    val progressColor: Color,
     val errorText: TextRef?
 ) {
     companion object {
-        val LOADING = FactorItem(
-            valueText = TextRef.string("…"),
-            valueTextColor = R.color.on_surface_weaker,
-            progress = null,
-            progressColor = ChanceToColorConverter.UNKNOWN_COLOR,
-            errorText = null
-        )
+        fun loading(
+            texts: ItemTexts,
+        ): FactorItem {
+            return FactorItem(
+                title = TextRef.stringRes(texts.shortTitle),
+                valueText = TextRef.string("…"),
+                descriptionText = TextRef.stringRes(texts.description),
+                valueTextColor = { onSurface.copy(alpha = 0.7F) },
+                progress = null,
+                progressColor = Color(ChanceToColorConverter.UNKNOWN_COLOR),
+                errorText = null
+            )
+        }
     }
 }
 
@@ -250,5 +227,42 @@ internal data class BannerData(
 ) {
     enum class Event {
         RequestLocationPermission, OpenAppDetails
+    }
+}
+
+internal data class ViewState(
+    val toolbarTitleName: TextRef,
+    val chanceLevelText: TextRef,
+    val chanceSubtitleText: TextRef,
+    val errorBannerData: BannerData?,
+    val factorItems: List<FactorItem>,
+)
+
+internal data class ItemTexts(
+    @StringRes val shortTitle: Int,
+    @StringRes val longTitle: Int,
+    @StringRes val description: Int,
+) {
+    companion object {
+        val kpIndex = ItemTexts(
+            shortTitle = R.string.factor_kp_index_title_compact,
+            longTitle = R.string.factor_kp_index_title_full,
+            description = R.string.factor_kp_index_desc,
+        )
+        val geomagLocation = ItemTexts(
+            shortTitle = R.string.factor_geomag_location_title_compact,
+            longTitle = R.string.factor_geomag_location_title_full,
+            description = R.string.factor_geomag_location_desc,
+        )
+        val darkness = ItemTexts(
+            shortTitle = R.string.factor_darkness_title_compact,
+            longTitle = R.string.factor_darkness_title_full,
+            description = R.string.factor_darkness_desc,
+        )
+        val weather = ItemTexts(
+            shortTitle = R.string.factor_weather_title_compact,
+            longTitle = R.string.factor_weather_title_full,
+            description = R.string.factor_weather_desc,
+        )
     }
 }

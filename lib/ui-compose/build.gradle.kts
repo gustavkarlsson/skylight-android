@@ -21,6 +21,7 @@ dependencies {
     api("androidx.compose.material:material-icons-core:${Versions.compose}")
     api("androidx.compose.material:material-icons-extended:${Versions.compose}") // TODO do we need 'em?
     api("androidx.compose.animation:animation:${Versions.compose}")
+    api("androidx.constraintlayout:constraintlayout-compose:${Versions.composeConstraintLayout}")
 
     api("dev.chrisbanes.accompanist:accompanist-insets:${Versions.accompanist}")
     api("com.google.android.material:compose-theme-adapter:${Versions.composeThemeAdapter}")

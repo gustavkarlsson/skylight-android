@@ -3,38 +3,88 @@ package se.gustavkarlsson.skylight.android.feature.main.gui
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import android.view.View
-import androidx.annotation.StringRes
-import com.google.android.material.appbar.MaterialToolbar
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.DrawerDefaults.ScrimOpacity
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ProgressIndicatorDefaults.IndicatorBackgroundOpacity
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.ioki.textref.TextRef
-import de.halfbit.edgetoedge.Edge
-import de.halfbit.edgetoedge.EdgeToEdgeBuilder
-import kotlinx.android.synthetic.main.fragment_main.*
+import dev.chrisbanes.accompanist.insets.LocalWindowInsets
+import dev.chrisbanes.accompanist.insets.toPaddingValues
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
-import reactivecircus.flowbinding.android.view.clicks
-import reactivecircus.flowbinding.appcompat.itemClicks
-import se.gustavkarlsson.skylight.android.core.logging.logDebug
+import se.gustavkarlsson.skylight.android.feature.main.DrawerComponent
 import se.gustavkarlsson.skylight.android.feature.main.MainComponent
 import se.gustavkarlsson.skylight.android.feature.main.R
-import se.gustavkarlsson.skylight.android.lib.navigation.BackButtonHandler
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
-import se.gustavkarlsson.skylight.android.lib.ui.legacy.LegacyScreenFragment
-import se.gustavkarlsson.skylight.android.lib.ui.legacy.extensions.bind
+import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Banner
+import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
+import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
+import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
+@FlowPreview
 @ExperimentalCoroutinesApi
-class MainFragment : LegacyScreenFragment(), BackButtonHandler {
-
-    override val layoutId: Int = R.layout.fragment_main
-
-    private var currentBottomSheetTitle: Int? = null
+class MainFragment : ComposeScreenFragment() {
 
     private val viewModel by lazy {
         getOrRegisterService("mainViewModel") {
@@ -42,111 +92,49 @@ class MainFragment : LegacyScreenFragment(), BackButtonHandler {
         }
     }
 
-    override val toolbar: MaterialToolbar get() = toolbarView
+    private val drawerViewModel by lazy {
+        getOrRegisterService("drawerViewModel") {
+            DrawerComponent.build().viewModel()
+        }
+    }
 
     override fun onStart() {
         super.onStart()
         viewModel.refreshLocationPermission()
     }
 
-    override fun setupEdgeToEdge(): EdgeToEdgeBuilder.() -> Unit = {
-        toolbarView.fit { Edge.Top }
-        darknessCard.fit { Edge.Bottom }
-        navigationView.fit { Edge.Top + Edge.Bottom }
-    }
+    // TODO Close drawer on back button
 
-    override fun initView() {
-        toolbarView.enableNavigationDrawer()
-        toolbarView.inflateMenu(R.menu.menu_main)
-    }
-
-    private fun MaterialToolbar.enableNavigationDrawer() {
-        setNavigationIcon(R.drawable.ic_menu)
-        setNavigationOnClickListener {
-            drawerLayout.openDrawer(navigationView)
-        }
-    }
-
-    override fun onBackPressed(): Boolean =
-        if (drawerLayout.isDrawerOpen(navigationView)) {
-            drawerLayout.closeDrawer(navigationView)
-            true
-        } else {
-            false
-        }
-
-    override fun bindView(scope: CoroutineScope) {
-        toolbarView.itemClicks().bind(scope) { item ->
-            when (item.itemId) {
-                R.id.action_settings -> navigator.goTo(screens.settings)
-                R.id.action_about -> navigator.goTo(screens.about)
+    @ExperimentalFoundationApi
+    @ExperimentalAnimationApi
+    @Composable
+    override fun ScreenContent() {
+        val state by viewModel.viewState.collectAsState()
+        val scope = rememberCoroutineScope()
+        val onBannerActionClicked: (BannerData.Event) -> Unit = { event ->
+            when (event) {
+                BannerData.Event.RequestLocationPermission -> requestLocationPermission(scope)
+                BannerData.Event.OpenAppDetails -> openAppDetails()
             }
         }
-
-        viewModel.toolbarTitleText
-            .onEach { logDebug { "Updating toolbar title: $it" } }
-            .bind(scope) { toolbarView.title = it.resolve(requireContext()) }
-
-        viewModel.chanceLevelText
-            .onEach { logDebug { "Updating chanceLevel text: $it" } }
-            .map { it.resolve(requireContext()) }
-            .bind(scope) { text ->
-                chance.text = text
-            }
-
-        viewModel.chanceSubtitleText
-            .onEach { logDebug { "Updating chanceSubtitle text: $it" } }
-            .bind(scope) { chanceSubtitle.text = it.resolve(requireContext()) }
-
-        viewModel.darkness.bindToCard(
-            scope,
-            darknessCard,
-            ::showDarknessDetails,
-            "darkness"
-        )
-
-        viewModel.geomagLocation.bindToCard(
-            scope,
-            geomagLocationCard,
-            ::showGeomagLocationDetails,
-            "geomagLocation"
-        )
-
-        viewModel.kpIndex.bindToCard(
-            scope,
-            kpIndexCard,
-            ::showKpIndexDetails,
-            "kpIndex"
-        )
-
-        viewModel.weather.bindToCard(
-            scope,
-            weatherCard,
-            ::showWeatherDetails,
-            "weather"
-        )
-
-        viewModel.errorBannerData.bind(scope) { updateBanner(scope, it.value) }
-    }
-
-    private fun updateBanner(scope: CoroutineScope, data: BannerData?) {
-        errorBanner.run {
-            if (data != null) {
-                setMessage(data.message.resolve(requireContext()))
-                setRightButton(data.buttonText.resolve(requireContext())) {
-                    when (data.buttonEvent) {
-                        BannerData.Event.RequestLocationPermission -> requestLocationPermission(scope)
-                        BannerData.Event.OpenAppDetails -> openAppDetails()
-                    }
+        val drawerItems by drawerViewModel.drawerItems.collectAsState(initial = emptyList())
+        Content(
+            viewState = state,
+            drawerItems = drawerItems,
+            onBannerActionClicked = onBannerActionClicked,
+            onSettingsClicked = { navigator.goTo(screens.settings) },
+            onAboutClicked = { navigator.goTo(screens.about) },
+            onDrawerItemClick = { event ->
+                when (event) {
+                    DrawerClickEvent.AddPlaceClicked -> navigator.goTo(screens.addPlace())
+                    is DrawerClickEvent.PlaceClicked -> drawerViewModel.onEvent(event)
                 }
-            }
-            val isVisible = visibility == View.VISIBLE
-            val shouldShow = data != null
-            if (!isVisible && shouldShow)
-                show()
-            else if (isVisible && !shouldShow)
-                dismiss()
-        }
+            },
+            onDrawerItemLongClick = { event ->
+                // FIXME show dialog
+                drawerViewModel.onEvent(event)
+            },
+        )
     }
 
     private fun requestLocationPermission(scope: CoroutineScope) {
@@ -160,68 +148,350 @@ class MainFragment : LegacyScreenFragment(), BackButtonHandler {
         intent.data = Uri.fromParts("package", requireContext().packageName, null)
         startActivity(intent)
     }
+}
 
-    private fun showKpIndexDetails(errorText: TextRef?) {
-        showFactorBottomSheetDialogFragment(
-            R.string.factor_kp_index_title_full,
-            R.string.factor_kp_index_desc,
-            errorText
-        )
-    }
-
-    private fun showGeomagLocationDetails(errorText: TextRef?) {
-        showFactorBottomSheetDialogFragment(
-            R.string.factor_geomag_location_title_full,
-            R.string.factor_geomag_location_desc,
-            errorText
-        )
-    }
-
-    private fun showWeatherDetails(errorText: TextRef?) {
-        showFactorBottomSheetDialogFragment(
-            R.string.factor_weather_title_full,
-            R.string.factor_weather_desc,
-            errorText
-        )
-    }
-
-    private fun showDarknessDetails(errorText: TextRef?) {
-        showFactorBottomSheetDialogFragment(
-            R.string.factor_darkness_title_full,
-            R.string.factor_darkness_desc,
-            errorText
-        )
-    }
-
-    private fun showFactorBottomSheetDialogFragment(
-        @StringRes title: Int,
-        @StringRes description: Int,
-        errorText: TextRef?
-    ) {
-        if (currentBottomSheetTitle == title) return
-        parentFragmentManager.let {
-            val resolvedErrorText = errorText?.resolve(requireContext())
-            FactorBottomSheetDialogFragment.newInstance(title, description, resolvedErrorText)
-                .apply {
-                    onCancelListener = { currentBottomSheetTitle = null }
-                    show(it, javaClass.name)
-                }
-            currentBottomSheetTitle = title
+@ExperimentalFoundationApi
+@ExperimentalAnimationApi
+@Composable
+@Preview
+private fun Content(
+    viewState: ViewState = ViewState(
+        toolbarTitleName = TextRef.EMPTY,
+        chanceLevelText = TextRef.EMPTY,
+        chanceSubtitleText = TextRef.EMPTY,
+        errorBannerData = null,
+        factorItems = emptyList(),
+    ),
+    drawerItems: List<DrawerItem> = emptyList(),
+    onBannerActionClicked: (BannerData.Event) -> Unit = {},
+    onSettingsClicked: () -> Unit = {},
+    onAboutClicked: () -> Unit = {},
+    onDrawerItemClick: (DrawerClickEvent) -> Unit = {},
+    onDrawerItemLongClick: (DrawerLongClickEvent) -> Unit = {},
+) {
+    ScreenBackground {
+        val scope = rememberCoroutineScope()
+        val scaffoldState = rememberScaffoldState()
+        Scaffold(
+            scaffoldState = scaffoldState,
+            topBar = {
+                TopAppBar(
+                    title = textRef(viewState.toolbarTitleName),
+                    onMenuClicked = {
+                        scope.launch {
+                            scaffoldState.drawerState.open()
+                        }
+                    },
+                    onSettingsClicked = onSettingsClicked,
+                    onAboutClicked = onAboutClicked,
+                )
+            },
+            drawerScrimColor = Color.Black.copy(alpha = ScrimOpacity),
+            drawerContent = {
+                Drawer(
+                    drawerItems = drawerItems,
+                    onItemClick = { event ->
+                        onDrawerItemClick(event)
+                        scope.launch {
+                            scaffoldState.drawerState.close()
+                        }
+                    },
+                    onItemLongClick = { event ->
+                        onDrawerItemLongClick(event)
+                        scope.launch {
+                            scaffoldState.drawerState.close()
+                        }
+                    },
+                )
+            },
+        ) {
+            MainContent(
+                modifier = Modifier.fillMaxSize(),
+                viewState = viewState,
+                onBannerActionClicked = onBannerActionClicked,
+            )
         }
     }
+}
 
-    private fun Flow<FactorItem>.bindToCard(
-        scope: CoroutineScope,
-        cardView: FactorCard,
-        onCardClick: (errorText: TextRef?) -> Unit,
-        factorDebugName: String
-    ) {
-        onEach { logDebug { "Updating $factorDebugName factor card: $it" } }
-            .bind(scope) { item ->
-                cardView.setItem(item)
-                cardView.clicks().bind(scope) {
-                    onCardClick(item.errorText)
+@Composable
+private fun TopAppBar(
+    title: String,
+    onSettingsClicked: () -> Unit,
+    onAboutClicked: () -> Unit,
+    onMenuClicked: () -> Unit,
+) {
+    TopAppBar(
+        contentPadding = LocalWindowInsets.current.statusBars
+            .toPaddingValues(additionalHorizontal = AppBarHorizontalPadding),
+        navigationIcon = {
+            IconButton(
+                onClick = onMenuClicked,
+            ) {
+                Icon(Icons.Default.Menu, contentDescription = null)
+            }
+        },
+        title = {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = title,
+                overflow = TextOverflow.Ellipsis,
+            )
+        },
+        actions = {
+            var menuExpanded by remember { mutableStateOf(false) }
+            IconButton(
+                onClick = { menuExpanded = !menuExpanded },
+            ) {
+                Icon(Icons.Default.MoreVert, contentDescription = null)
+            }
+            DropdownMenu(
+                expanded = menuExpanded,
+                onDismissRequest = {
+                    menuExpanded = false
+                },
+            ) {
+                DropdownMenuItem(onClick = onSettingsClicked) {
+                    Text(stringResource(R.string.settings))
+                }
+                DropdownMenuItem(onClick = onAboutClicked) {
+                    Text(stringResource(R.string.about))
                 }
             }
+        }
+    )
+}
+
+@ExperimentalFoundationApi
+@Composable
+private fun Drawer(
+    drawerItems: List<DrawerItem>,
+    onItemClick: (DrawerClickEvent) -> Unit,
+    onItemLongClick: (DrawerLongClickEvent) -> Unit,
+) {
+    Text(
+        modifier = Modifier.padding(16.dp),
+        text = stringResource(R.string.places),
+        style = MaterialTheme.typography.h5,
+    )
+    Spacer(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(1.dp)
+            .padding(16.dp)
+            .background(MaterialTheme.colors.onSurface.copy(alpha = 0.25F)),
+    )
+    LazyColumn {
+        items(drawerItems) { item ->
+            DrawerItem(
+                item = item,
+                onItemClick = onItemClick,
+                onItemLongClick = onItemLongClick,
+            )
+        }
+    }
+}
+
+@ExperimentalFoundationApi
+@Composable
+private fun DrawerItem(
+    item: DrawerItem,
+    onItemClick: (DrawerClickEvent) -> Unit,
+    onItemLongClick: (DrawerLongClickEvent) -> Unit
+) {
+    // FIXME show item.isActive
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .combinedClickable(
+                onClick = {
+                    if (item.clickEvent != null) {
+                        onItemClick(item.clickEvent)
+                    }
+                },
+                onLongClick = {
+                    if (item.longClickEvent != null) {
+                        onItemLongClick(item.longClickEvent)
+                    }
+                }
+            )
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(painter = painterResource(item.icon), contentDescription = null)
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(textRef(item.text))
+    }
+}
+
+@ExperimentalAnimationApi
+@Composable
+private fun MainContent(
+    modifier: Modifier = Modifier,
+    viewState: ViewState,
+    onBannerActionClicked: (BannerData.Event) -> Unit,
+) {
+    Column(modifier = modifier) {
+        ErrorBanner(
+            errorBannerData = viewState.errorBannerData,
+            onBannerActionClicked = onBannerActionClicked,
+        )
+        Spacer(Modifier.weight(1.0f))
+        CenterText(viewState = viewState)
+        Spacer(Modifier.weight(1.0f))
+        Cards(
+            modifier = Modifier.fillMaxWidth(),
+            items = viewState.factorItems,
+        )
+    }
+}
+
+@ExperimentalAnimationApi
+@Composable
+private fun ErrorBanner(
+    modifier: Modifier = Modifier,
+    errorBannerData: BannerData?,
+    onBannerActionClicked: (BannerData.Event) -> Unit
+) {
+    Box(modifier = modifier) {
+        AnimatedVisibility(visible = errorBannerData != null) {
+            if (errorBannerData != null) {
+                Banner(
+                    backgroundColor = MaterialTheme.colors.error,
+                    icon = {
+                        Icon(
+                            modifier = Modifier.size(40.dp),
+                            painter = painterResource(errorBannerData.icon),
+                            contentDescription = null,
+                        )
+                    },
+                    actions = {
+                        TextButton(
+                            colors = ButtonDefaults.textButtonColors(
+                                contentColor = MaterialTheme.colors.onError,
+                                disabledContentColor = MaterialTheme.colors.onError
+                                    .copy(alpha = ContentAlpha.disabled),
+                            ),
+                            onClick = {
+                                onBannerActionClicked(errorBannerData.buttonEvent)
+                            },
+                        ) {
+                            Text(
+                                text = textRef(errorBannerData.buttonText).toUpperCase(),
+                            )
+                        }
+                    },
+                ) {
+                    Text(textRef(errorBannerData.message))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CenterText(
+    viewState: ViewState,
+) {
+    Column(
+        modifier = Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            text = textRef(textRef = viewState.chanceLevelText),
+            style = MaterialTheme.typography.h4,
+        )
+        Text(
+            text = textRef(textRef = viewState.chanceSubtitleText),
+            color = MaterialTheme.colors.onBackground.copy(alpha = 0.65F),
+            style = MaterialTheme.typography.body1,
+        )
+    }
+}
+
+@ExperimentalAnimationApi
+@Composable
+private fun Cards(
+    modifier: Modifier,
+    items: List<FactorItem>,
+) {
+    Column(
+        modifier = modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        var expandedIndex by remember { mutableStateOf<Int?>(null) }
+        items.forEachIndexed { index, item ->
+            val expanded = index == expandedIndex
+            Card(
+                item = item,
+                expanded = expanded,
+                onClick = {
+                    expandedIndex = if (expanded) {
+                        null
+                    } else index
+                },
+            )
+        }
+    }
+}
+
+@ExperimentalAnimationApi
+@Composable
+private fun Card(
+    item: FactorItem,
+    expanded: Boolean,
+    onClick: () -> Unit,
+) {
+    // FIXME re-arrange when expanded
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .animateContentSize()
+            .clickable(onClick = onClick),
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+            ) {
+                Text(
+                    modifier = Modifier.weight(0.35f),
+                    text = textRef(item.title),
+                    style = MaterialTheme.typography.body1,
+                )
+                val getValueTextColor = item.valueTextColor
+                Text(
+                    modifier = Modifier.weight(0.35f),
+                    text = textRef(item.valueText),
+                    color = MaterialTheme.colors.getValueTextColor(),
+                    style = MaterialTheme.typography.body1,
+                )
+                val progress = item.progress?.toFloat()?.coerceAtLeast(0.02F) ?: 0F
+                val animatedProgress by animateFloatAsState(progress)
+                LinearProgressIndicator(
+                    modifier = Modifier.weight(0.3f),
+                    color = item.progressColor,
+                    backgroundColor = MaterialTheme.colors.onSurface.copy(alpha = IndicatorBackgroundOpacity),
+                    progress = animatedProgress,
+                )
+            }
+            AnimatedVisibility(
+                visible = expanded,
+                enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
+                exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top),
+            ) {
+                // FIXME add formatting and make links clickable
+                Text(
+                    text = textRef(item.descriptionText),
+                    style = MaterialTheme.typography.body2,
+                )
+                if (item.errorText != null) {
+                    Text(
+                        text = textRef(item.errorText),
+                        style = MaterialTheme.typography.body2,
+                    )
+                }
+            }
+        }
     }
 }

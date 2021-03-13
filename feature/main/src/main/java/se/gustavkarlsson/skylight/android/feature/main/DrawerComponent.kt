@@ -4,7 +4,7 @@ import dagger.Component
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import se.gustavkarlsson.skylight.android.core.AppComponent
-import se.gustavkarlsson.skylight.android.feature.main.gui.drawer.DrawerViewModel
+import se.gustavkarlsson.skylight.android.feature.main.gui.DrawerViewModel
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 
 @Component(
