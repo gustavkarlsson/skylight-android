@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExtendedFloatingActionButton
-import androidx.compose.material.MaterialTheme
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
@@ -35,6 +35,7 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ErrorSnackbar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 
 internal class GooglePlayServicesFragment : ComposeScreenFragment() {
 
@@ -87,17 +88,17 @@ private fun Content(
                     .align(Alignment.CenterHorizontally),
                 painter = painterResource(R.drawable.ic_google_play_store),
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(MaterialTheme.colors.onBackground)
+                colorFilter = ColorFilter.tint(Colors.onBackground)
             )
             Spacer(modifier = Modifier.height(32.dp))
             Text(
                 text = stringResource(R.string.google_play_services_title),
-                style = MaterialTheme.typography.h5,
+                style = Typography.h5,
             )
             Spacer(modifier = Modifier.height(32.dp))
             Text(
                 text = stringResource(R.string.google_play_services_desc),
-                style = MaterialTheme.typography.body1,
+                style = Typography.body1,
             )
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -106,7 +107,7 @@ private fun Content(
             ) {
                 ErrorSnackbar(errorSnackbarVisible, onErrorSnackbarDismissed)
                 ExtendedFloatingActionButton(
-                    backgroundColor = MaterialTheme.colors.primary,
+                    backgroundColor = Colors.primary,
                     text = { Text(stringResource(id = R.string.google_play_services_install)) },
                     onClick = onInstallClicked,
                 )

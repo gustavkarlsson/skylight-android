@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -31,6 +30,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ClickableText
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 
 class AboutFragment : ComposeScreenFragment() {
@@ -91,7 +91,7 @@ private fun Content(
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(
                     text = "Skylight", // FIXME use res R.string.app_name
-                    style = MaterialTheme.typography.h4,
+                    style = Typography.h4,
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(text = text, textAlign = TextAlign.Center)

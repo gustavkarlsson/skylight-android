@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.contentColorFor
@@ -30,7 +29,7 @@ fun TopAppBar(
     modifier: Modifier = Modifier,
     navigationIcon: @Composable (() -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {},
-    backgroundColor: Color = MaterialTheme.colors.primarySurface,
+    backgroundColor: Color = Colors.primarySurface,
     contentColor: Color = contentColorFor(backgroundColor),
     elevation: Dp = AppBarDefaults.TopAppBarElevation,
     contentPadding: PaddingValues = AppBarDefaults.ContentPadding,
@@ -62,7 +61,7 @@ fun TopAppBar(
                 .weight(1f),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            ProvideTextStyle(value = MaterialTheme.typography.h6) {
+            ProvideTextStyle(value = Typography.h6) {
                 CompositionLocalProvider(
                     LocalContentAlpha provides ContentAlpha.high,
                     content = title,

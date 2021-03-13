@@ -11,7 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExtendedFloatingActionButton
-import androidx.compose.material.MaterialTheme
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,6 +29,7 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ClickableText
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 
 internal class IntroFragment : ComposeScreenFragment() {
 
@@ -87,12 +88,12 @@ private fun Content(
             Text(
                 text = stringResource(id = R.string.intro_title),
                 modifier = Modifier.align(Alignment.CenterHorizontally),
-                style = MaterialTheme.typography.h4,
+                style = Typography.h4,
             )
             Spacer(modifier = Modifier.height(32.dp))
             Text(
                 text = stringResource(id = R.string.intro_desc),
-                style = MaterialTheme.typography.body1,
+                style = Typography.body1,
             )
             Spacer(modifier = Modifier.height(16.dp))
             ClickableText(
@@ -114,8 +115,8 @@ private fun Content(
                     ),
                 ) {
                     ExtendedFloatingActionButton(
-                        backgroundColor = MaterialTheme.colors.background,
-                        contentColor = MaterialTheme.colors.primary,
+                        backgroundColor = Colors.background,
+                        contentColor = Colors.primary,
                         text = { Text(stringResource(id = R.string.intro_pick_location)) },
                         onClick = onPickLocationClicked,
                     )
@@ -130,7 +131,7 @@ private fun Content(
                     ),
                 ) {
                     ExtendedFloatingActionButton(
-                        backgroundColor = MaterialTheme.colors.primary,
+                        backgroundColor = Colors.primary,
                         text = { Text(stringResource(id = R.string.intro_use_my_location)) },
                         onClick = onUseMyLocationClicked,
                     )

@@ -15,7 +15,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
-import androidx.compose.material.MaterialTheme
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -42,6 +42,7 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
@@ -180,8 +181,8 @@ private fun SettingsHeader() {
     Text(
         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
         text = stringResource(R.string.pref_notifications_category_title),
-        style = MaterialTheme.typography.caption,
-        color = MaterialTheme.colors.secondary,
+        style = Typography.caption,
+        color = Colors.secondary,
     )
 }
 

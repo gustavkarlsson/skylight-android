@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable
@@ -20,7 +19,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun Banner(
     modifier: Modifier = Modifier,
-    backgroundColor: Color = MaterialTheme.colors.surface,
+    backgroundColor: Color = Colors.surface,
     contentColor: Color = contentColorFor(backgroundColor),
     icon: @Composable (() -> Unit)? = null,
     actions: @Composable (RowScope) -> Unit,

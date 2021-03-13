@@ -37,7 +37,7 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.MaterialTheme
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -77,6 +77,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Banner
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.onSurfaceDisabled
 import se.gustavkarlsson.skylight.android.lib.ui.compose.onSurfaceDivider
@@ -273,14 +274,14 @@ private fun Drawer(
     Text(
         modifier = Modifier.padding(16.dp),
         text = stringResource(R.string.places),
-        style = MaterialTheme.typography.h5,
+        style = Typography.h5,
     )
     Spacer(
         modifier = Modifier
             .fillMaxWidth()
             .height(1.dp)
             .padding(16.dp)
-            .background(MaterialTheme.colors.onSurfaceDivider),
+            .background(Colors.onSurfaceDivider),
     )
     LazyColumn {
         items(drawerItems) { item ->
@@ -358,7 +359,7 @@ private fun ErrorBanner(
         AnimatedVisibility(visible = errorBannerData != null) {
             if (errorBannerData != null) {
                 Banner(
-                    backgroundColor = MaterialTheme.colors.error,
+                    backgroundColor = Colors.error,
                     icon = {
                         Icon(
                             modifier = Modifier.size(40.dp),
@@ -369,8 +370,8 @@ private fun ErrorBanner(
                     actions = {
                         TextButton(
                             colors = ButtonDefaults.textButtonColors(
-                                contentColor = MaterialTheme.colors.onError,
-                                disabledContentColor = MaterialTheme.colors.onError
+                                contentColor = Colors.onError,
+                                disabledContentColor = Colors.onError
                                     .copy(alpha = ContentAlpha.disabled),
                             ),
                             onClick = {
@@ -400,12 +401,12 @@ private fun CenterText(
     ) {
         Text(
             text = textRef(textRef = viewState.chanceLevelText),
-            style = MaterialTheme.typography.h4,
+            style = Typography.h4,
         )
         Text(
             text = textRef(textRef = viewState.chanceSubtitleText),
-            color = MaterialTheme.colors.onSurfaceWeaker,
-            style = MaterialTheme.typography.body1,
+            color = Colors.onSurfaceWeaker,
+            style = Typography.body1,
         )
     }
 }
@@ -458,21 +459,21 @@ private fun Card(
                 Text(
                     modifier = Modifier.weight(0.35f),
                     text = textRef(item.title),
-                    style = MaterialTheme.typography.body1,
+                    style = Typography.body1,
                 )
                 val getValueTextColor = item.valueTextColor
                 Text(
                     modifier = Modifier.weight(0.35f),
                     text = textRef(item.valueText),
-                    color = MaterialTheme.colors.getValueTextColor(),
-                    style = MaterialTheme.typography.body1,
+                    color = Colors.getValueTextColor(),
+                    style = Typography.body1,
                 )
                 val progress = item.progress?.toFloat()?.coerceAtLeast(0.02F) ?: 0F
                 val animatedProgress by animateFloatAsState(progress)
                 LinearProgressIndicator(
                     modifier = Modifier.weight(0.3f),
                     color = item.progressColor,
-                    backgroundColor = MaterialTheme.colors.onSurfaceDisabled,
+                    backgroundColor = Colors.onSurfaceDisabled,
                     progress = animatedProgress,
                 )
             }
@@ -484,12 +485,12 @@ private fun Card(
                 // FIXME add formatting and make links clickable
                 Text(
                     text = textRef(item.descriptionText),
-                    style = MaterialTheme.typography.body2,
+                    style = Typography.body2,
                 )
                 if (item.errorText != null) {
                     Text(
                         text = textRef(item.errorText),
-                        style = MaterialTheme.typography.body2,
+                        style = Typography.body2,
                     )
                 }
             }

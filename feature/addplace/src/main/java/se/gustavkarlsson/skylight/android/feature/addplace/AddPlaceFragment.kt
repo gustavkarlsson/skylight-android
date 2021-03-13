@@ -18,7 +18,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.ListItem
-import androidx.compose.material.MaterialTheme
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarDuration
@@ -66,6 +66,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ErrorSnackbar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
@@ -228,7 +229,7 @@ private fun TopAppBar(
                 value = query,
                 onValueChange = onQueryChanged,
                 singleLine = true,
-                textStyle = MaterialTheme.typography.body1,
+                textStyle = Typography.body1,
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                 trailingIcon = {
                     IconButton(onClick = { onQueryChanged("") }) {
@@ -240,7 +241,7 @@ private fun TopAppBar(
                     backgroundColor = Color.Transparent,
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent,
-                    cursorColor = MaterialTheme.colors.secondary,
+                    cursorColor = Colors.secondary,
                 ),
             )
         },
