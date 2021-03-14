@@ -6,6 +6,9 @@ plugins {
 
 android {
     commonConfig()
+    defaultConfig {
+        resValue("string", "app_name", APP_NAME)
+    }
 }
 
 dependencies {

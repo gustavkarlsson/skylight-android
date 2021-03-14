@@ -90,7 +90,7 @@ private fun Content(
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(
-                    text = "Skylight", // FIXME use res R.string.app_name
+                    text = stringResource(R.string.app_name),
                     style = Typography.h4,
                 )
                 Spacer(modifier = Modifier.height(32.dp))

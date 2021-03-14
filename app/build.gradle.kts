@@ -71,17 +71,17 @@ android {
 
     applicationVariants.all {
         val isProductionRelease = buildType.name == "release" && flavorName == "production"
-        val appName = buildString {
+        val manifestAName = buildString {
             if (isProductionRelease) {
-                append("Skylight")
+                append(APP_NAME)
             } else {
-                append("SL")
+                append(APP_INITIALS)
                 append(' ')
                 append(flavorName.take(3).capitalize())
                 append(buildType.name.take(3).capitalize())
             }
         }
-        resValue("string", "app_name", appName)
+        resValue("string", "app_name_manifest", manifestAName)
     }
 }
 
