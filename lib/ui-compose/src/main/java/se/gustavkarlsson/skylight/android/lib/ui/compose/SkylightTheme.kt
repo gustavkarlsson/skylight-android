@@ -40,3 +40,12 @@ val Colors.onSurfaceDisabled: Color
 val Colors.onSurfaceDivider: Color
     @Composable
     get() = colorResource(R.color.on_surface_divider)
+
+val Colors.progressLowest: Color
+    get() = Color(0xFFF44336)
+
+val Colors.progressMedium: Color
+    get() = Color(0xFFF0F436)
+
+val Colors.progressHighest: Color
+    get() = Color(0xFF34B4E2)

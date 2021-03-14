@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.feature.main.gui
 
 import androidx.annotation.StringRes
 import androidx.compose.material.Colors
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.ui.graphics.Color
@@ -23,7 +22,6 @@ import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
-import se.gustavkarlsson.skylight.android.feature.main.ChanceToColorConverter
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.feature.main.State
@@ -37,6 +35,7 @@ import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingResult
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 
 @ExperimentalCoroutinesApi
@@ -163,8 +162,7 @@ internal class MainViewModel(
                             descriptionText = TextRef.stringRes(texts.description),
                             valueTextColor = { onSurface },
                             progress = chance,
-                            progressColor = ChanceToColorConverter.convert(chance),
-                            errorText = null
+                            errorText = null,
                         )
                     }
                     is Report.Error -> FactorItem(
@@ -173,8 +171,7 @@ internal class MainViewModel(
                         descriptionText = TextRef.stringRes(texts.description),
                         valueTextColor = { error },
                         progress = null,
-                        progressColor = ChanceToColorConverter.UNKNOWN_COLOR,
-                        errorText = format(report.cause)
+                        errorText = format(report.cause),
                     )
                     else -> error("Invalid report: $report")
                 }
@@ -201,7 +198,6 @@ internal data class FactorItem(
     val descriptionText: TextRef,
     val valueTextColor: Colors.() -> Color,
     val progress: Double?,
-    val progressColor: Color,
     val errorText: TextRef?
 ) {
     companion object {
@@ -214,8 +210,7 @@ internal data class FactorItem(
                 descriptionText = TextRef.stringRes(texts.description),
                 valueTextColor = { onSurface.copy(alpha = 0.7F) },
                 progress = null,
-                progressColor = ChanceToColorConverter.UNKNOWN_COLOR,
-                errorText = null
+                errorText = null,
             )
         }
     }

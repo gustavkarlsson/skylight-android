@@ -35,11 +35,9 @@ import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.rememberScaffoldState
@@ -62,6 +60,7 @@ import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 import dev.chrisbanes.accompanist.insets.navigationBarsPadding
 import dev.chrisbanes.accompanist.insets.systemBarsPadding
 import dev.chrisbanes.accompanist.insets.toPaddingValues
+import java.util.Locale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -77,10 +76,11 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Banner
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
+import se.gustavkarlsson.skylight.android.lib.ui.compose.MultiColorLinearProgressIndicator
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
-import se.gustavkarlsson.skylight.android.lib.ui.compose.onSurfaceDisabled
 import se.gustavkarlsson.skylight.android.lib.ui.compose.onSurfaceDivider
 import se.gustavkarlsson.skylight.android.lib.ui.compose.onSurfaceWeaker
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
@@ -384,7 +384,7 @@ private fun ErrorBanner(
                         },
                     ) {
                         Text(
-                            text = textRef(errorBannerData.buttonText).toUpperCase(),
+                            text = textRef(errorBannerData.buttonText).toUpperCase(Locale.ROOT),
                         )
                     }
                 },
@@ -472,13 +472,12 @@ private fun Card(
                     color = Colors.getValueTextColor(),
                     style = Typography.body1,
                 )
-                val progress = item.progress?.toFloat()?.coerceAtLeast(0.02F) ?: 0F
-                val animatedProgress by animateFloatAsState(progress)
-                LinearProgressIndicator(
+                val progress = item.progress?.toFloat()
+                val animatedProgress by animateFloatAsState(progress?.coerceAtLeast(0.02F) ?: 0F)
+                val progressToRender = if (progress == null) null else animatedProgress
+                MultiColorLinearProgressIndicator(
                     modifier = Modifier.weight(0.3f),
-                    color = item.progressColor,
-                    backgroundColor = Colors.onSurfaceDisabled,
-                    progress = animatedProgress,
+                    progress = progressToRender,
                 )
             }
             AnimatedVisibility(
@@ -486,16 +485,18 @@ private fun Card(
                 enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
                 exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top),
             ) {
-                // FIXME add formatting and make links clickable
-                Text(
-                    text = textRef(item.descriptionText),
-                    style = Typography.body2,
-                )
-                if (item.errorText != null) {
+                Column {
+                    // FIXME add formatting and make links clickable
                     Text(
-                        text = textRef(item.errorText),
+                        text = textRef(item.descriptionText),
                         style = Typography.body2,
                     )
+                    if (item.errorText != null) {
+                        Text(
+                            text = textRef(item.errorText),
+                            style = Typography.body2,
+                        )
+                    }
                 }
             }
         }
