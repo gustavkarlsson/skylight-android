@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.gui
 
-import androidx.compose.material.icons.Icons
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Map
@@ -46,8 +46,8 @@ internal class DrawerViewModel @Inject constructor(
 
     private fun createIcon(place: Place) =
         when (place) {
-            is Place.Current -> Icons.Default.LocationOn
-            is Place.Custom -> Icons.Default.Map
+            is Place.Current -> Icons.LocationOn
+            is Place.Custom -> Icons.Map
         }
 
     private fun createLongClickEvent(place: Place) =
@@ -58,7 +58,7 @@ internal class DrawerViewModel @Inject constructor(
     private fun createAddPlaceItem() =
         DrawerItem(
             isActive = false,
-            icon = Icons.Default.Add,
+            icon = Icons.Add,
             text = TextRef.stringRes(R.string.add_place),
             clickEvent = DrawerClickEvent.AddPlaceClicked,
             longClickEvent = null

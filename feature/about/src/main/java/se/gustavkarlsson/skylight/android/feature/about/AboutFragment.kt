@@ -11,7 +11,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -65,7 +65,7 @@ private fun Content(
                         .toPaddingValues(additionalHorizontal = AppBarHorizontalPadding),
                     navigationIcon = {
                         IconButton(onClick = onBackClicked) {
-                            Icon(Icons.Default.ArrowBack, contentDescription = null)
+                            Icon(Icons.ArrowBack, contentDescription = null)
                         }
                     },
                     title = {

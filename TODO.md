@@ -1,6 +1,5 @@
 ## ASAP Compose
 * Create base theme
-* Include icon set in base theme
 * Include extra colors
 * Include extra text styles
 * Include standard dimensions

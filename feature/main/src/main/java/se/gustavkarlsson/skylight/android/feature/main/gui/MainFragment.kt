@@ -39,7 +39,7 @@ import androidx.compose.material.LinearProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.material.icons.Icons
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.rememberScaffoldState
@@ -234,7 +234,7 @@ private fun TopAppBar(
             IconButton(
                 onClick = onMenuClicked,
             ) {
-                Icon(Icons.Default.Menu, contentDescription = null)
+                Icon(Icons.Menu, contentDescription = null)
             }
         },
         title = {
@@ -249,7 +249,7 @@ private fun TopAppBar(
             IconButton(
                 onClick = { menuExpanded = !menuExpanded },
             ) {
-                Icon(Icons.Default.MoreVert, contentDescription = null)
+                Icon(Icons.MoreVert, contentDescription = null)
             }
             DropdownMenu(
                 expanded = menuExpanded,

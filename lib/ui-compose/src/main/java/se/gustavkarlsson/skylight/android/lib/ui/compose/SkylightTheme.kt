@@ -4,6 +4,7 @@ import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Shapes
 import androidx.compose.material.Typography
+import androidx.compose.material.icons.Icons
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
@@ -25,6 +26,8 @@ val Shapes: Shapes
 val Typography: Typography
     @Composable
     get() = MaterialTheme.typography
+
+val Icons: Icons.Filled = Icons.Default
 
 val Colors.onSurfaceWeaker: Color
     @Composable

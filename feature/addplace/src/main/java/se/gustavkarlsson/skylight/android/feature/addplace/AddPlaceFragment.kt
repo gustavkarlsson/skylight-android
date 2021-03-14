@@ -27,7 +27,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.icons.Icons
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Map
@@ -215,7 +215,7 @@ private fun TopAppBar(
             .toPaddingValues(additionalHorizontal = AppBarHorizontalPadding),
         navigationIcon = {
             IconButton(onClick = onBackClicked) {
-                Icon(Icons.Default.ArrowBack, contentDescription = null)
+                Icon(Icons.ArrowBack, contentDescription = null)
             }
         },
         title = {
@@ -231,10 +231,10 @@ private fun TopAppBar(
                 onValueChange = onQueryChanged,
                 singleLine = true,
                 textStyle = Typography.body1,
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+                leadingIcon = { Icon(Icons.Search, contentDescription = null) },
                 trailingIcon = {
                     IconButton(onClick = { onQueryChanged("") }) {
-                        Icon(Icons.Default.Close, contentDescription = null)
+                        Icon(Icons.Close, contentDescription = null)
                     }
                 },
                 placeholder = { Text(stringResource(R.string.place_name)) },
@@ -346,7 +346,7 @@ private fun PlaceItem(
 ) {
     ListItem(
         modifier = Modifier.clickable { onClick(item.suggestedName, item.location) },
-        icon = { Icon(Icons.Default.Map, contentDescription = null) },
+        icon = { Icon(Icons.Map, contentDescription = null) },
         secondaryText = if (item.secondaryText.isNotBlank()) {
             { SecondaryText(item.secondaryText) }
         } else null

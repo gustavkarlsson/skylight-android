@@ -19,7 +19,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -147,7 +147,7 @@ private fun TopAppBar(onBackClicked: () -> Unit) {
             .toPaddingValues(additionalHorizontal = AppBarHorizontalPadding),
         navigationIcon = {
             IconButton(onClick = onBackClicked) {
-                Icon(Icons.Default.ArrowBack, contentDescription = null)
+                Icon(Icons.ArrowBack, contentDescription = null)
             }
         },
         title = {

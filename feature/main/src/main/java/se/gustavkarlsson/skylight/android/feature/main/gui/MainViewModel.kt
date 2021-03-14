@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.feature.main.gui
 
 import androidx.annotation.StringRes
 import androidx.compose.material.Colors
-import androidx.compose.material.icons.Icons
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.ui.graphics.Color
@@ -98,7 +98,7 @@ internal class MainViewModel(
                 BannerData(
                     TextRef.stringRes(R.string.location_permission_denied_message),
                     TextRef.stringRes(R.string.fix),
-                    Icons.Default.LocationOn,
+                    Icons.LocationOn,
                     BannerData.Event.RequestLocationPermission
                 )
             }
@@ -106,7 +106,7 @@ internal class MainViewModel(
                 BannerData(
                     TextRef.stringRes(R.string.location_permission_denied_forever_message),
                     TextRef.stringRes(R.string.fix),
-                    Icons.Default.Warning,
+                    Icons.Warning,
                     BannerData.Event.OpenAppDetails
                 )
             }
