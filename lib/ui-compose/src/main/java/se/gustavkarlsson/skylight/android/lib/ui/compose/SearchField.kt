@@ -16,8 +16,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.isFocused
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
@@ -33,15 +31,17 @@ fun SearchField(
     onTextChanged: (String?) -> Unit = {},
 ) {
     var state by remember { mutableStateOf<SearchFieldState>(SearchFieldState.Unfocused) }
-    val focusRequester = FocusRequester()
+    LaunchedEffect(key1 = state) {
+        onTextChanged(state.text)
+    }
     TextField(
-        modifier = modifier
-            .focusRequester(focusRequester)
-            .onFocusChanged { focus ->
-                state = if (focus.isFocused) {
-                    SearchFieldState.Focused("")
-                } else SearchFieldState.Unfocused
-            },
+        modifier = modifier.onFocusChanged { focus ->
+            state = if (focus.isFocused) {
+                SearchFieldState.Focused("")
+            } else {
+                SearchFieldState.Unfocused
+            }
+        },
         value = (state as? SearchFieldState.Focused)?.text ?: unfocusedText,
         leadingIcon = {
             val focusManager = LocalFocusManager.current
@@ -75,7 +75,6 @@ fun SearchField(
         },
         onValueChange = { newText ->
             state = SearchFieldState.Focused(newText)
-            onTextChanged(newText)
         },
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = Color.Transparent,
@@ -84,21 +83,18 @@ fun SearchField(
             cursorColor = Colors.secondary,
         ),
     )
-    LaunchedEffect(key1 = null) {
-        if (state is SearchFieldState.Focused) {
-            focusRequester.requestFocus()
-        }
-    }
 }
 
 sealed class SearchFieldState {
     abstract val isFocused: Boolean
+    abstract val text: String?
 
     object Unfocused : SearchFieldState() {
-        override val isFocused = false
+        override val isFocused: Boolean = false
+        override val text: String? = null
     }
 
-    data class Focused(val text: String) : SearchFieldState() {
-        override val isFocused = true
+    data class Focused(override val text: String) : SearchFieldState() {
+        override val isFocused: Boolean = true
     }
 }
