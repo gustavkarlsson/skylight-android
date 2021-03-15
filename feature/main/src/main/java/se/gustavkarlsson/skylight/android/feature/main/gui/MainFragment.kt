@@ -79,6 +79,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.MultiColorLinearProgressIndicator
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
+import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchField
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.onSurfaceDivider
@@ -238,10 +239,8 @@ private fun TopAppBar(
             }
         },
         title = {
-            Text(
+            SearchField(
                 modifier = Modifier.fillMaxWidth(),
-                text = title,
-                overflow = TextOverflow.Ellipsis,
             )
         },
         actions = {
