@@ -64,7 +64,7 @@ internal class MainViewModel(
 
     val viewState: StateFlow<ViewState> = store.state
         .map { state -> state.toViewState() }
-        .stateIn(scope, started = SharingStarted.Eagerly, store.state.value.toViewState())
+        .stateIn(scope, SharingStarted.Eagerly, store.state.value.toViewState())
 
     // FIXME clean up
     private fun State.toViewState(): ViewState {

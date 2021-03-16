@@ -48,7 +48,7 @@ internal class GooglePlayServicesFragment : ComposeScreenFragment() {
     @ExperimentalAnimationApi
     @Composable
     override fun ScreenContent() {
-        val errorSnackbarVisible = viewModel.error.collectAsState(initial = false)
+        val errorSnackbarVisible = viewModel.error.collectAsState()
         Content(
             errorSnackbarVisible = errorSnackbarVisible.value,
             onInstallClicked = { viewModel.installGooglePlayServices(requireActivity()) },

@@ -7,8 +7,10 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.issue
@@ -34,24 +36,27 @@ internal class AddPlaceViewModel @Inject constructor(
     val navigateAway: Flow<Unit> = navigateAwayChannel.asFlow()
 
     val viewState = stateFlow
-        .map { state ->
-            val suggestions = when {
-                state.suggestions.items.isNotEmpty() -> {
-                    state.suggestions.items.map { suggestion ->
-                        suggestion.toSuggestionItem()
-                    }
-                }
-                state.isSuggestionsUpToDate -> emptyList()
-                else -> null
-            }
+        .map { state -> state.toViewState() }
+        .stateIn(scope, SharingStarted.Eagerly, stateFlow.value.toViewState())
 
-            ViewState(
-                query = state.query,
-                searching = !state.isSuggestionsUpToDate,
-                suggestions = suggestions,
-                error = state.error,
-            )
+    private fun State.toViewState(): ViewState {
+        val suggestions = when {
+            suggestions.items.isNotEmpty() -> {
+                suggestions.items.map { suggestion ->
+                    suggestion.toSuggestionItem()
+                }
+            }
+            isSuggestionsUpToDate -> emptyList()
+            else -> null
         }
+
+        return ViewState(
+            query = query,
+            searching = !isSuggestionsUpToDate,
+            suggestions = suggestions,
+            error = error,
+        )
+    }
 
     fun onSearchTextChanged(newText: String) = store.issue(SetQueryAction(newText))
 

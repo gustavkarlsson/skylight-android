@@ -27,7 +27,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Map
@@ -36,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -65,6 +65,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ErrorSnackbar
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
@@ -96,9 +97,9 @@ class AddPlaceFragment : ComposeScreenFragment() {
     @ExperimentalMaterialApi
     @Composable
     override fun ScreenContent() {
-        val state = viewModel.viewState.collectAsState(ViewState())
+        val viewState by viewModel.viewState.collectAsState()
         Content(
-            viewState = state.value,
+            viewState = viewState,
             onBackClicked = { navigator.closeScreen() },
             onQueryChanged = { text -> viewModel.onSearchTextChanged(text) },
             onSaveClicked = { name, location -> viewModel.onSavePlaceClicked(name, location) },
