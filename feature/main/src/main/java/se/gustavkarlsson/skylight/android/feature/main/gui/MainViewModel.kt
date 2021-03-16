@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Store
+import se.gustavkarlsson.conveyor.issue
 import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Chance
@@ -40,7 +41,7 @@ import se.gustavkarlsson.skylight.android.lib.weather.Weather
 
 @ExperimentalCoroutinesApi
 internal class MainViewModel(
-    store: Store<State>,
+    private val store: Store<State>,
     private val auroraChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
     private val relativeTimeFormatter: RelativeTimeFormatter,
     private val chanceLevelFormatter: Formatter<ChanceLevel>,
@@ -135,12 +136,17 @@ internal class MainViewModel(
                 evaluate = weatherChanceEvaluator::evaluate,
                 format = weatherFormatter::format,
             )
+        val searchResults = if (state.searchFocused) {
+            listOf(state.searchText, "Res2", "Res3", "Res4", "Res5", "Res6", "Res7", "Res8")
+        } else null
         return ViewState(
             toolbarTitleName = state.selectedPlace.name,
             chanceLevelText = changeLevelText,
             chanceSubtitleText = chanceSubtitleText,
             errorBannerData = errorBannerData,
             factorItems = listOf(kpIndexItem, geomagLocationItem, darknessItem, weatherItem),
+            searchText = state.searchText,
+            searchResults = searchResults,
         )
     }
 
@@ -179,6 +185,14 @@ internal class MainViewModel(
         }
 
     fun refreshLocationPermission() = permissionChecker.refresh()
+
+    fun onSearchTextChanged(text: String) = store.issue { state ->
+        state.update { copy(searchText = text) }
+    }
+
+    fun onSearchFocusChanged(focused: Boolean) = store.issue { state ->
+        state.update { copy(searchFocused = focused) }
+    }
 }
 
 private fun format(cause: Cause): TextRef {
@@ -233,6 +247,8 @@ internal data class ViewState(
     val chanceSubtitleText: TextRef,
     val errorBannerData: BannerData?,
     val factorItems: List<FactorItem>,
+    val searchText: String,
+    val searchResults: List<String>?,
 )
 
 internal data class ItemTexts(

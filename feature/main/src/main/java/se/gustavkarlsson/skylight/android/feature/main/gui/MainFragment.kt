@@ -7,40 +7,45 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.expandIn
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.DrawerDefaults.ScrimOpacity
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.ListItem
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -52,20 +57,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.ioki.textref.TextRef
 import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 import dev.chrisbanes.accompanist.insets.navigationBarsPadding
-import dev.chrisbanes.accompanist.insets.systemBarsPadding
 import dev.chrisbanes.accompanist.insets.toPaddingValues
 import java.util.Locale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
-import se.gustavkarlsson.skylight.android.feature.main.DrawerComponent
+import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.feature.main.MainComponent
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
@@ -82,7 +87,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchField
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
-import se.gustavkarlsson.skylight.android.lib.ui.compose.onSurfaceDivider
+import se.gustavkarlsson.skylight.android.lib.ui.compose.navigationBarsWithIme
 import se.gustavkarlsson.skylight.android.lib.ui.compose.onSurfaceWeaker
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
@@ -96,19 +101,12 @@ class MainFragment : ComposeScreenFragment() {
         }
     }
 
-    private val drawerViewModel by lazy {
-        getOrRegisterService("drawerViewModel") {
-            DrawerComponent.build().viewModel()
-        }
-    }
-
     override fun onStart() {
         super.onStart()
         viewModel.refreshLocationPermission()
     }
 
-    // TODO Close drawer on back button
-
+    @ExperimentalMaterialApi
     @ExperimentalFoundationApi
     @ExperimentalAnimationApi
     @Composable
@@ -121,23 +119,13 @@ class MainFragment : ComposeScreenFragment() {
                 BannerData.Event.OpenAppDetails -> openAppDetails()
             }
         }
-        val drawerItems by drawerViewModel.drawerItems.collectAsState(initial = emptyList())
         Content(
             viewState = state,
-            drawerItems = drawerItems,
             onBannerActionClicked = onBannerActionClicked,
             onSettingsClicked = { navigator.goTo(screens.settings) },
             onAboutClicked = { navigator.goTo(screens.about) },
-            onDrawerItemClick = { event ->
-                when (event) {
-                    DrawerClickEvent.AddPlaceClicked -> navigator.goTo(screens.addPlace())
-                    is DrawerClickEvent.PlaceClicked -> drawerViewModel.onEvent(event)
-                }
-            },
-            onDrawerItemLongClick = { event ->
-                // FIXME show dialog
-                drawerViewModel.onEvent(event)
-            },
+            onSearchTextChanged = { viewModel.onSearchTextChanged(it) },
+            onSearchFocusChanged = { viewModel.onSearchFocusChanged(it) },
         )
     }
 
@@ -154,6 +142,7 @@ class MainFragment : ComposeScreenFragment() {
     }
 }
 
+@ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @ExperimentalAnimationApi
 @Composable
@@ -165,48 +154,29 @@ private fun Content(
         chanceSubtitleText = TextRef.EMPTY,
         errorBannerData = null,
         factorItems = emptyList(),
+        searchText = "",
+        searchResults = null,
     ),
-    drawerItems: List<DrawerItem> = emptyList(),
     onBannerActionClicked: (BannerData.Event) -> Unit = {},
     onSettingsClicked: () -> Unit = {},
     onAboutClicked: () -> Unit = {},
-    onDrawerItemClick: (DrawerClickEvent) -> Unit = {},
-    onDrawerItemLongClick: (DrawerLongClickEvent) -> Unit = {},
+    onSearchTextChanged: (String) -> Unit = {},
+    onSearchFocusChanged: (Boolean) -> Unit = {},
 ) {
     ScreenBackground {
-        val scope = rememberCoroutineScope()
-        val scaffoldState = rememberScaffoldState()
+        val topBarElevation = AppBarDefaults.TopAppBarElevation
+        val topBarBackgroundColor = Colors.primarySurface
         Scaffold(
-            scaffoldState = scaffoldState,
             topBar = {
                 TopAppBar(
+                    searchText = viewState.searchText,
                     title = textRef(viewState.toolbarTitleName),
-                    onMenuClicked = {
-                        scope.launch {
-                            scaffoldState.drawerState.open()
-                        }
-                    },
                     onSettingsClicked = onSettingsClicked,
                     onAboutClicked = onAboutClicked,
-                )
-            },
-            drawerScrimColor = Color.Black.copy(alpha = ScrimOpacity),
-            drawerContent = {
-                Drawer(
-                    modifier = Modifier.systemBarsPadding(),
-                    drawerItems = drawerItems,
-                    onItemClick = { event ->
-                        onDrawerItemClick(event)
-                        scope.launch {
-                            scaffoldState.drawerState.close()
-                        }
-                    },
-                    onItemLongClick = { event ->
-                        onDrawerItemLongClick(event)
-                        scope.launch {
-                            scaffoldState.drawerState.close()
-                        }
-                    },
+                    onSearchTextChanged = onSearchTextChanged,
+                    onSearchFocusChanged = onSearchFocusChanged,
+                    backgroundColor = topBarBackgroundColor,
+                    elevation = topBarElevation,
                 )
             },
         ) {
@@ -214,6 +184,8 @@ private fun Content(
                 modifier = Modifier
                     .fillMaxSize()
                     .navigationBarsPadding(),
+                searchElevation = topBarElevation / 2,
+                searchBackgroundColor = topBarBackgroundColor,
                 viewState = viewState,
                 onBannerActionClicked = onBannerActionClicked,
             )
@@ -223,24 +195,28 @@ private fun Content(
 
 @Composable
 private fun TopAppBar(
+    searchText: String,
     title: String,
     onSettingsClicked: () -> Unit,
     onAboutClicked: () -> Unit,
-    onMenuClicked: () -> Unit,
+    onSearchTextChanged: (String) -> Unit,
+    onSearchFocusChanged: (Boolean) -> Unit,
+    backgroundColor: Color,
+    elevation: Dp,
 ) {
     TopAppBar(
+        backgroundColor = backgroundColor,
+        elevation = elevation,
         contentPadding = LocalWindowInsets.current.statusBars
             .toPaddingValues(additionalHorizontal = AppBarHorizontalPadding),
-        navigationIcon = {
-            IconButton(
-                onClick = onMenuClicked,
-            ) {
-                Icon(Icons.Menu, contentDescription = null)
-            }
-        },
         title = {
             SearchField(
                 modifier = Modifier.fillMaxWidth(),
+                text = searchText,
+                unfocusedText = title,
+                placeholderText = "Search", // FIXME,
+                onTextChanged = onSearchTextChanged,
+                onFocusChanged = onSearchFocusChanged,
             )
         },
         actions = {
@@ -267,90 +243,70 @@ private fun TopAppBar(
     )
 }
 
-@ExperimentalFoundationApi
-@Composable
-private fun Drawer(
-    modifier: Modifier = Modifier,
-    drawerItems: List<DrawerItem>,
-    onItemClick: (DrawerClickEvent) -> Unit,
-    onItemLongClick: (DrawerLongClickEvent) -> Unit,
-) {
-    Column(modifier = modifier) {
-        Text(
-            modifier = Modifier.padding(16.dp),
-            text = stringResource(R.string.places),
-            style = Typography.h5,
-        )
-        Spacer(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(1.dp)
-                .padding(16.dp)
-                .background(Colors.onSurfaceDivider),
-        )
-        LazyColumn {
-            items(drawerItems) { item ->
-                DrawerItem(
-                    item = item,
-                    onItemClick = onItemClick,
-                    onItemLongClick = onItemLongClick,
-                )
-            }
-        }
-    }
-}
-
-@ExperimentalFoundationApi
-@Composable
-private fun DrawerItem(
-    item: DrawerItem,
-    onItemClick: (DrawerClickEvent) -> Unit,
-    onItemLongClick: (DrawerLongClickEvent) -> Unit
-) {
-    // FIXME show item.isActive
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .combinedClickable(
-                onClick = {
-                    if (item.clickEvent != null) {
-                        onItemClick(item.clickEvent)
-                    }
-                },
-                onLongClick = {
-                    if (item.longClickEvent != null) {
-                        onItemLongClick(item.longClickEvent)
-                    }
-                }
-            )
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(imageVector = item.icon, contentDescription = null)
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(textRef(item.text))
-    }
-}
-
+@ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @Composable
 private fun MainContent(
     modifier: Modifier = Modifier,
     viewState: ViewState,
+    searchElevation: Dp,
+    searchBackgroundColor: Color,
     onBannerActionClicked: (BannerData.Event) -> Unit,
 ) {
-    Column(modifier = modifier) {
-        ErrorBanner(
-            errorBannerData = viewState.errorBannerData,
-            onBannerActionClicked = onBannerActionClicked,
-        )
-        Spacer(Modifier.weight(1.0f))
-        CenterText(viewState = viewState)
-        Spacer(Modifier.weight(1.0f))
-        Cards(
-            modifier = Modifier.fillMaxWidth(),
-            items = viewState.factorItems,
-        )
+    Box {
+        Column(modifier = modifier) {
+            ErrorBanner(
+                errorBannerData = viewState.errorBannerData,
+                onBannerActionClicked = onBannerActionClicked,
+            )
+            Spacer(Modifier.weight(1.0f))
+            CenterText(viewState = viewState)
+            Spacer(Modifier.weight(1.0f))
+            Cards(
+                modifier = Modifier.fillMaxWidth(),
+                items = viewState.factorItems,
+            )
+        }
+        AnimatedVisibility(
+            visible = viewState.searchResults != null,
+            enter = expandIn(
+                expandFrom = Alignment.TopCenter,
+                initialSize = { initial -> IntSize(initial.width, 0) }
+            )
+        ) {
+            Surface(
+                modifier = Modifier.align(Alignment.Center),
+                elevation = searchElevation,
+                color = searchBackgroundColor,
+            ) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxHeight(),
+                    contentPadding = LocalWindowInsets.current.navigationBarsWithIme.toPaddingValues(),
+                ) {
+                    itemsIndexed(viewState.searchResults.orEmpty()) { i, item ->
+                        ListItem(
+                            modifier = Modifier.clickable { /* FIXME do stuff */ },
+                            icon = {
+                                when (i) {
+                                    0 -> Icon(Icons.Place, contentDescription = null)
+                                    1 -> Icon(Icons.Favorite, contentDescription = null)
+                                    2 -> Icon(Icons.History, contentDescription = null)
+                                    else -> Icon(Icons.Map, contentDescription = null)
+                                }
+                            },
+                            secondaryText = {
+                                Text(item.reversed())
+                            },
+                        ) {
+                            Text(
+                                text = item,
+                                color = Colors.onSurface,
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -358,7 +314,7 @@ private fun MainContent(
 @Composable
 private fun ErrorBanner(
     errorBannerData: BannerData?,
-    onBannerActionClicked: (BannerData.Event) -> Unit
+    onBannerActionClicked: (BannerData.Event) -> Unit,
 ) {
     AnimatedVisibility(visible = errorBannerData != null) {
         if (errorBannerData != null) {

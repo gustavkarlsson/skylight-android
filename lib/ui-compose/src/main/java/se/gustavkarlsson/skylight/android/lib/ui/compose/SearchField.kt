@@ -26,31 +26,32 @@ import androidx.compose.ui.tooling.preview.Preview
 @Preview
 fun SearchField(
     modifier: Modifier = Modifier,
+    text: String = "",
     unfocusedText: String = "Current location",
     placeholderText: String = "Enter your search term",
-    onTextChanged: (String?) -> Unit = {},
+    onTextChanged: (String) -> Unit = {},
+    onFocusChanged: (Boolean) -> Unit = {},
 ) {
-    var state by remember { mutableStateOf<SearchFieldState>(SearchFieldState.Unfocused) }
-    LaunchedEffect(key1 = state) {
-        onTextChanged(state.text)
+    var focused by remember { mutableStateOf(false) }
+    LaunchedEffect(key1 = focused) {
+        onFocusChanged(focused)
     }
     TextField(
         modifier = modifier.onFocusChanged { focus ->
-            state = if (focus.isFocused) {
-                SearchFieldState.Focused("")
-            } else {
-                SearchFieldState.Unfocused
+            if (focus.isFocused) {
+                onTextChanged("")
             }
+            focused = focus.isFocused
         },
-        value = (state as? SearchFieldState.Focused)?.text ?: unfocusedText,
+        value = if (focused) text else unfocusedText,
         leadingIcon = {
             val focusManager = LocalFocusManager.current
             IconButton(
-                enabled = state.isFocused,
+                enabled = focused,
                 onClick = { focusManager.clearFocus() }
             ) {
-                Crossfade(targetState = state.isFocused) { isFocused ->
-                    val imageVector = if (isFocused) {
+                Crossfade(targetState = focused) { focused ->
+                    val imageVector = if (focused) {
                         Icons.ArrowBack
                     } else Icons.Search
                     Icon(
@@ -60,9 +61,9 @@ fun SearchField(
                 }
             }
         },
-        trailingIcon = if ((state as? SearchFieldState.Focused)?.text?.isEmpty() == false) {
+        trailingIcon = if (focused && text.isNotEmpty()) {
             {
-                IconButton(onClick = { state = SearchFieldState.Focused("") }) {
+                IconButton(onClick = { onTextChanged("") }) {
                     Icon(
                         imageVector = Icons.Close,
                         contentDescription = null,
@@ -74,7 +75,7 @@ fun SearchField(
             Text(placeholderText)
         },
         onValueChange = { newText ->
-            state = SearchFieldState.Focused(newText)
+            onTextChanged(newText)
         },
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = Color.Transparent,
@@ -83,18 +84,4 @@ fun SearchField(
             cursorColor = Colors.secondary,
         ),
     )
-}
-
-sealed class SearchFieldState {
-    abstract val isFocused: Boolean
-    abstract val text: String?
-
-    object Unfocused : SearchFieldState() {
-        override val isFocused: Boolean = false
-        override val text: String? = null
-    }
-
-    data class Focused(override val text: String) : SearchFieldState() {
-        override val isFocused: Boolean = true
-    }
 }

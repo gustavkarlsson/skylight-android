@@ -35,11 +35,11 @@ fun TopAppBar(
     contentPadding: PaddingValues = AppBarDefaults.ContentPadding,
 ) {
     TopAppBar(
-        modifier,
-        backgroundColor,
-        contentColor,
-        elevation,
-        contentPadding,
+        modifier = modifier,
+        backgroundColor = backgroundColor,
+        contentColor = contentColor,
+        elevation = elevation,
+        contentPadding = contentPadding,
     ) {
         if (navigationIcon == null) {
             Spacer(TitleInsetWithoutIcon)
