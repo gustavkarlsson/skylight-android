@@ -112,12 +112,25 @@ class AddPlaceFragment : ComposeScreenFragment() {
 @ExperimentalMaterialApi
 @Composable
 @Preview
+private fun PreviewContent() {
+    Content(
+        viewState = ViewState(),
+        onBackClicked = {},
+        onQueryChanged = {},
+        onSaveClicked = { _, _ -> },
+        onSnackbarDismissed = {},
+    )
+}
+
+@ExperimentalAnimationApi
+@ExperimentalMaterialApi
+@Composable
 private fun Content(
-    viewState: ViewState = ViewState(),
-    onBackClicked: () -> Unit = {},
-    onQueryChanged: (String) -> Unit = {},
-    onSaveClicked: (name: String, Location) -> Unit = { _, _ -> },
-    onSnackbarDismissed: () -> Unit = {},
+    viewState: ViewState,
+    onBackClicked: () -> Unit,
+    onQueryChanged: (String) -> Unit,
+    onSaveClicked: (name: String, Location) -> Unit,
+    onSnackbarDismissed: () -> Unit,
 ) {
     ScreenBackground {
         val dialogData = remember { mutableStateOf<DialogData?>(null) }

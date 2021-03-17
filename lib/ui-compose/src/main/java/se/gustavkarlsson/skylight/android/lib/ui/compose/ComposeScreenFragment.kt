@@ -18,7 +18,9 @@ abstract class ComposeScreenFragment : ScopeFragment() {
         savedInstanceState: Bundle?,
     ): View {
         val composeView = ComposeView(requireContext())
-        composeView.setContent { ScreenContent() }
+        composeView.setContent {
+            ScreenContent()
+        }
         return composeView
     }
 

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExtendedFloatingActionButton
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
@@ -32,6 +31,7 @@ import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.target
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ErrorSnackbar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
@@ -69,10 +69,20 @@ internal class GooglePlayServicesFragment : ComposeScreenFragment() {
 @ExperimentalAnimationApi
 @Composable
 @Preview
+private fun PreviewContent() {
+    Content(
+        errorSnackbarVisible = true,
+        onInstallClicked = {},
+        onErrorSnackbarDismissed = {},
+    )
+}
+
+@ExperimentalAnimationApi
+@Composable
 private fun Content(
-    errorSnackbarVisible: Boolean = true,
-    onInstallClicked: () -> Unit = {},
-    onErrorSnackbarDismissed: () -> Unit = {},
+    errorSnackbarVisible: Boolean,
+    onInstallClicked: () -> Unit,
+    onErrorSnackbarDismissed: () -> Unit,
 ) {
     ScreenBackground {
         Column(

@@ -52,10 +52,19 @@ class AboutFragment : ComposeScreenFragment() {
 
 @Composable
 @Preview
+private fun PreviewContent() {
+    Content(
+        text = "Line1\nLine2",
+        onBackClicked = {},
+        onPrivacyPolicyClicked = {},
+    )
+}
+
+@Composable
 private fun Content(
-    text: String = "Line1\nLine2",
-    onBackClicked: () -> Unit = {},
-    onPrivacyPolicyClicked: () -> Unit = {},
+    text: String,
+    onBackClicked: () -> Unit,
+    onPrivacyPolicyClicked: () -> Unit,
 ) {
     ScreenBackground {
         Scaffold(

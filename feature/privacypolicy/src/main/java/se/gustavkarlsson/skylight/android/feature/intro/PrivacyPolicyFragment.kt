@@ -7,7 +7,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,6 +32,7 @@ import se.gustavkarlsson.skylight.android.feature.privacypolicy.R
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 
@@ -58,9 +58,17 @@ class PrivacyPolicyFragment : ComposeScreenFragment() {
 
 @Composable
 @Preview
+private fun PreviewContent() {
+    Content(
+        text = "Line1\nLine2",
+        onBackClicked = {},
+    )
+}
+
+@Composable
 private fun Content(
-    text: String = "Line1\nLine2",
-    onBackClicked: () -> Unit = {},
+    text: String,
+    onBackClicked: () -> Unit,
 ) {
     ScreenBackground {
         Scaffold(

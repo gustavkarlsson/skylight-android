@@ -70,7 +70,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
-import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.feature.main.MainComponent
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
@@ -147,21 +146,36 @@ class MainFragment : ComposeScreenFragment() {
 @ExperimentalAnimationApi
 @Composable
 @Preview
+private fun PreviewContent() {
+    Content(
+        viewState = ViewState(
+            toolbarTitleName = TextRef.EMPTY,
+            chanceLevelText = TextRef.EMPTY,
+            chanceSubtitleText = TextRef.EMPTY,
+            errorBannerData = null,
+            factorItems = emptyList(),
+            searchText = "",
+            searchResults = null,
+        ),
+        onBannerActionClicked = {},
+        onSettingsClicked = {},
+        onAboutClicked = {},
+        onSearchTextChanged = {},
+        onSearchFocusChanged = {},
+    )
+}
+
+@ExperimentalMaterialApi
+@ExperimentalFoundationApi
+@ExperimentalAnimationApi
+@Composable
 private fun Content(
-    viewState: ViewState = ViewState(
-        toolbarTitleName = TextRef.EMPTY,
-        chanceLevelText = TextRef.EMPTY,
-        chanceSubtitleText = TextRef.EMPTY,
-        errorBannerData = null,
-        factorItems = emptyList(),
-        searchText = "",
-        searchResults = null,
-    ),
-    onBannerActionClicked: (BannerData.Event) -> Unit = {},
-    onSettingsClicked: () -> Unit = {},
-    onAboutClicked: () -> Unit = {},
-    onSearchTextChanged: (String) -> Unit = {},
-    onSearchFocusChanged: (Boolean) -> Unit = {},
+    viewState: ViewState,
+    onBannerActionClicked: (BannerData.Event) -> Unit,
+    onSettingsClicked: () -> Unit,
+    onAboutClicked: () -> Unit,
+    onSearchTextChanged: (String) -> Unit,
+    onSearchFocusChanged: (Boolean) -> Unit,
 ) {
     ScreenBackground {
         val topBarElevation = AppBarDefaults.TopAppBarElevation

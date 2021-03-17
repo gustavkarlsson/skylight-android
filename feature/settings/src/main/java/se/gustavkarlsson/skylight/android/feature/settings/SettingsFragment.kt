@@ -15,11 +15,9 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -40,10 +38,12 @@ import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
 @ExperimentalCoroutinesApi
@@ -73,10 +73,21 @@ class SettingsFragment : ComposeScreenFragment() {
 @ExperimentalMaterialApi
 @Composable
 @Preview
+private fun PreviewContent() {
+    Content(
+        settings = emptyList(),
+        onBackClicked = {},
+        onTriggerLevelChanged = { _, _ -> },
+    )
+}
+
+@ExperimentalFoundationApi
+@ExperimentalMaterialApi
+@Composable
 private fun Content(
-    settings: List<SettingsItem> = emptyList(),
-    onBackClicked: () -> Unit = {},
-    onTriggerLevelChanged: (Place, TriggerLevel) -> Unit = { _, _ -> },
+    settings: List<SettingsItem>,
+    onBackClicked: () -> Unit,
+    onTriggerLevelChanged: (Place, TriggerLevel) -> Unit,
 ) {
     ScreenBackground {
         val alertDialogState = remember { mutableStateOf<AlertDialogData?>(null) }

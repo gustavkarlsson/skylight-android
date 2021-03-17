@@ -24,13 +24,25 @@ import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
+private fun PreviewSearchField() {
+    SearchField(
+        modifier = Modifier,
+        text = "",
+        unfocusedText = "Current location",
+        placeholderText = "Enter your search term",
+        onTextChanged = {},
+        onFocusChanged = {},
+    )
+}
+
+@Composable
 fun SearchField(
     modifier: Modifier = Modifier,
-    text: String = "",
-    unfocusedText: String = "Current location",
-    placeholderText: String = "Enter your search term",
-    onTextChanged: (String) -> Unit = {},
-    onFocusChanged: (Boolean) -> Unit = {},
+    text: String,
+    unfocusedText: String,
+    placeholderText: String,
+    onTextChanged: (String) -> Unit,
+    onFocusChanged: (Boolean) -> Unit,
 ) {
     var focused by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = focused) {

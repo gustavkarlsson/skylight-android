@@ -72,10 +72,20 @@ internal class IntroFragment : ComposeScreenFragment() {
 @ExperimentalAnimationApi
 @Composable
 @Preview
+private fun PreviewContent() {
+    Content(
+        onPrivacyPolicyClicked = {},
+        onPickLocationClicked = {},
+        onUseMyLocationClicked = {},
+    )
+}
+
+@ExperimentalAnimationApi
+@Composable
 private fun Content(
-    onPrivacyPolicyClicked: () -> Unit = {},
-    onPickLocationClicked: () -> Unit = {},
-    onUseMyLocationClicked: () -> Unit = {},
+    onPrivacyPolicyClicked: () -> Unit,
+    onPickLocationClicked: () -> Unit,
+    onUseMyLocationClicked: () -> Unit,
 ) {
     ScreenBackground {
         Column(
