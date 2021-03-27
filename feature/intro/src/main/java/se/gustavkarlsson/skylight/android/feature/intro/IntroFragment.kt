@@ -1,17 +1,16 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.animation.slideInVertically
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExtendedFloatingActionButton
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,10 +22,10 @@ import dev.chrisbanes.accompanist.insets.systemBarsPadding
 import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
-import se.gustavkarlsson.skylight.android.lib.navigation.target
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ClickableText
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
@@ -44,8 +43,7 @@ internal class IntroFragment : ComposeScreenFragment() {
     override fun ScreenContent() {
         Content(
             onPrivacyPolicyClicked = ::onPrivacyPolicyClicked,
-            onPickLocationClicked = ::onPickLocationClicked,
-            onUseMyLocationClicked = ::onUseMyLocationClicked,
+            onContinueClicked = ::onContinueClicked,
         )
     }
 
@@ -53,13 +51,7 @@ internal class IntroFragment : ComposeScreenFragment() {
         navigator.goTo(screens.privacyPolicy)
     }
 
-    private fun onPickLocationClicked() {
-        viewModel.registerScreenSeen()
-        val target = requireNotNull(requireArguments().target)
-        navigator.goTo(screens.addPlace(target))
-    }
-
-    private fun onUseMyLocationClicked() {
+    private fun onContinueClicked() {
         startStopScope?.launch {
             PermissionsComponent.instance.locationPermissionRequester()
                 .request(this@IntroFragment)
@@ -75,8 +67,7 @@ internal class IntroFragment : ComposeScreenFragment() {
 private fun PreviewContent() {
     Content(
         onPrivacyPolicyClicked = {},
-        onPickLocationClicked = {},
-        onUseMyLocationClicked = {},
+        onContinueClicked = {},
     )
 }
 
@@ -84,8 +75,7 @@ private fun PreviewContent() {
 @Composable
 private fun Content(
     onPrivacyPolicyClicked: () -> Unit,
-    onPickLocationClicked: () -> Unit,
-    onUseMyLocationClicked: () -> Unit,
+    onContinueClicked: () -> Unit,
 ) {
     ScreenBackground {
         Column(
@@ -111,39 +101,22 @@ private fun Content(
                 modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = onPrivacyPolicyClicked,
             )
-            Column(
+            Box(
                 modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Bottom,
-                horizontalAlignment = Alignment.End,
+                contentAlignment = Alignment.BottomCenter,
             ) {
-                AnimatedVisibility(
+                androidx.compose.animation.AnimatedVisibility(
                     visible = true,
                     initiallyVisible = false,
-                    enter = slideInHorizontally(
-                        initialOffsetX = { x -> x },
-                        animationSpec = spring(stiffness = 100f),
-                    ),
-                ) {
-                    ExtendedFloatingActionButton(
-                        backgroundColor = Colors.background,
-                        contentColor = Colors.primary,
-                        text = { Text(stringResource(id = R.string.intro_pick_location)) },
-                        onClick = onPickLocationClicked,
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                AnimatedVisibility(
-                    visible = true,
-                    initiallyVisible = false,
-                    enter = slideInHorizontally(
-                        initialOffsetX = { x -> x },
+                    enter = slideInVertically(
+                        initialOffsetY = { y -> y },
                         animationSpec = spring(stiffness = 200f),
                     ),
                 ) {
                     ExtendedFloatingActionButton(
                         backgroundColor = Colors.primary,
-                        text = { Text(stringResource(id = R.string.intro_use_my_location)) },
-                        onClick = onUseMyLocationClicked,
+                        text = { Text(stringResource(id = R.string.intro_continue)) },
+                        onClick = onContinueClicked,
                     )
                 }
             }

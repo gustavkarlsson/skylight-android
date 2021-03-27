@@ -111,7 +111,6 @@ dependencies {
     implementation(project(":feature:intro"))
     implementation(project(":feature:settings"))
     implementation(project(":feature:background"))
-    implementation(project(":feature:addplace"))
     implementation(project(":feature:main"))
     implementation(project(":feature:privacypolicy"))
 

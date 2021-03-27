@@ -10,11 +10,11 @@ internal data class State(
     val locationAccess: Access,
     val selectedPlace: Place,
     val selectedAuroraReport: LoadableAuroraReport,
-    // FIXME combine search into one object
     val search: Search,
     val places: List<Place>,
 )
 
+// FIXME handle errors
 internal sealed class Search {
     object Closed : Search()
     data class Open(val query: String, val suggestions: Suggestions, val error: TextRef?) : Search()

@@ -152,9 +152,23 @@ internal class MainViewModel(
             )
         val searchText = (state.search as? Search.Open)?.query.orEmpty()
         val searchResults = if (state.search is Search.Open) {
-            val placesResults = state.places.map { place -> SearchResult.Known(place) }
-            val searchResults = state.search.suggestions.items.map { suggestion -> suggestion.toSearchResult() }
-            placesResults + searchResults
+            val placesResults = state.places
+                .map { place ->
+                    SearchResult.Known(place)
+                }
+                .filter { result ->
+                    val query = state.search.query
+                    if (query.isBlank()) {
+                        true
+                    } else {
+                        result.place.nameString.orEmpty().contains(query, ignoreCase = true)
+                    }
+                }
+            val searchResults = state.search.suggestions.items
+                .map { suggestion ->
+                    suggestion.toSearchResult()
+                }
+            (placesResults + searchResults)
         } else null
         return ViewState(
             toolbarTitleName = state.selectedPlace.name,
@@ -305,6 +319,7 @@ internal data class ViewState(
     val chanceSubtitleText: TextRef,
     val errorBannerData: BannerData?,
     val factorItems: List<FactorItem>,
+    // FIXME combine into one search object?
     val searchText: String,
     val searchResults: List<SearchResult>?,
 )
@@ -316,7 +331,7 @@ internal sealed class SearchResult {
 
     data class Known(val place: Place) : SearchResult() {
         override val title: TextRef get() = place.name
-        override val icon: ImageVector = when (place) {
+        override val icon: ImageVector get() = when (place) {
             Place.Current -> Icons.MyLocation
             is Place.Favorite -> Icons.Star
             is Place.Recent -> Icons.History
@@ -328,8 +343,8 @@ internal sealed class SearchResult {
         val details: String,
         val location: Location,
     ) : SearchResult() {
-        override val title: TextRef = TextRef.string(name)
-        override val subtitle: TextRef = TextRef.string(details)
+        override val title: TextRef get() = TextRef.string(name)
+        override val subtitle: TextRef get() = TextRef.string(details)
         override val icon: ImageVector = Icons.Map
     }
 }

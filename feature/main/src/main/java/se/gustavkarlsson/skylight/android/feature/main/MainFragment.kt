@@ -296,13 +296,12 @@ private fun MainContent(
             )
         ) {
             Surface(
-                modifier = Modifier.align(Alignment.Center),
+                modifier = Modifier.fillMaxSize(),
                 elevation = searchElevation,
                 color = searchBackgroundColor,
             ) {
                 val focusManager = LocalFocusManager.current
                 LazyColumn(
-                    modifier = Modifier.fillMaxHeight(),
                     contentPadding = LocalWindowInsets.current.navigationBarsWithIme.toPaddingValues(),
                 ) {
                     items(viewState.searchResults.orEmpty()) { item ->

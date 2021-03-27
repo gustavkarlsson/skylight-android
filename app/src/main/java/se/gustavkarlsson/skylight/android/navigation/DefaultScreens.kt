@@ -1,24 +1,19 @@
 package se.gustavkarlsson.skylight.android.navigation
 
-import android.os.Bundle
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.feature.about.AboutFragment
-import se.gustavkarlsson.skylight.android.feature.addplace.AddPlaceFragment
 import se.gustavkarlsson.skylight.android.feature.intro.PrivacyPolicyFragment
-import se.gustavkarlsson.skylight.android.feature.main.gui.MainFragment
+import se.gustavkarlsson.skylight.android.feature.main.MainFragment
 import se.gustavkarlsson.skylight.android.feature.settings.SettingsFragment
-import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.navigation.Screens
-import se.gustavkarlsson.skylight.android.lib.navigation.withTarget
 
 internal object DefaultScreens : Screens {
     override val main: Screen = MainScreen()
-    override fun addPlace(target: Backstack?): Screen = AddPlaceScreen(target)
     override val settings: Screen = SettingsScreen()
     override val about: Screen = AboutScreen()
     override val privacyPolicy: Screen = PrivacyPolicyScreen()
@@ -33,21 +28,8 @@ private data class MainScreen(private val dummy: Unit = Unit) : Screen {
     override val scopeStart: String = "main"
 
     @ExperimentalCoroutinesApi
-    override fun createFragment() = MainFragment()
-}
-
-@Parcelize
-private data class AddPlaceScreen(private val target: Backstack?) : Screen {
-    @IgnoredOnParcel
-    override val name = ScreenName.AddPlace
-
     @FlowPreview
-    @ExperimentalCoroutinesApi
-    override fun createFragment() = AddPlaceFragment().apply {
-        if (target != null) {
-            arguments = Bundle().withTarget(target)
-        }
-    }
+    override fun createFragment() = MainFragment()
 }
 
 @Parcelize
