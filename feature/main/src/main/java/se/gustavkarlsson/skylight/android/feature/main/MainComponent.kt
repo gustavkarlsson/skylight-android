@@ -13,6 +13,7 @@ import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.core.utils.millis
 import se.gustavkarlsson.skylight.android.core.utils.minutes
+import se.gustavkarlsson.skylight.android.core.utils.seconds
 import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
@@ -20,6 +21,8 @@ import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
 import se.gustavkarlsson.skylight.android.lib.darkness.DarknessComponent
+import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
+import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationComponent
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
@@ -51,7 +54,8 @@ import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
         PlacesComponent::class,
         DarknessComponent::class,
         KpIndexComponent::class,
-        GeomagLocationComponent::class
+        GeomagLocationComponent::class,
+        GeocoderComponent::class,
     ]
 )
 internal interface MainComponent {
@@ -71,6 +75,7 @@ internal interface MainComponent {
                 .darknessComponent(DarknessComponent.instance)
                 .kpIndexComponent(KpIndexComponent.instance)
                 .geomagLocationComponent(GeomagLocationComponent.instance)
+                .geocoderComponent(GeocoderComponent.instance)
                 .build()
     }
 }
@@ -86,7 +91,8 @@ internal object MainModule {
         selectedPlaceRepository: SelectedPlaceRepository,
         placesRepository: PlacesRepository,
         locationProvider: LocationProvider,
-        auroraReportProvider: AuroraReportProvider
+        auroraReportProvider: AuroraReportProvider,
+        geocoder: Geocoder,
     ): Store<State> {
         val locationPermissionAction = LocationPermissionAction(permissionChecker.access)
         val streamReportsAction = StreamReportsLiveAction(
@@ -96,12 +102,13 @@ internal object MainModule {
         )
         val placeSelectionAction = PlaceSelectionAction(selectedPlaceRepository.stream())
         val streamPlacesAction = StreamPlacesAction(placesRepository.stream())
+        val continuouslySearchAction = ContinuouslySearchAction(geocoder, 1.seconds)
         return Store(
             initialState = State(
                 locationAccess = Access.Unknown,
                 selectedPlace = selectedPlaceRepository.get(),
                 selectedAuroraReport = LoadableAuroraReport.LOADING,
-                search = Search.Unfocused,
+                search = Search.Closed,
                 places = emptyList(),
             ),
             startActions = listOf(
@@ -109,6 +116,7 @@ internal object MainModule {
                 placeSelectionAction,
                 streamPlacesAction,
                 streamReportsAction,
+                continuouslySearchAction,
             ),
         )
     }

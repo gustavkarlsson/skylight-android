@@ -1,6 +1,8 @@
 package se.gustavkarlsson.skylight.android.feature.main
 
+import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
+import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.places.Place
 
@@ -14,6 +16,8 @@ internal data class State(
 )
 
 internal sealed class Search {
-    object Unfocused : Search()
-    data class Focused(val text: String) : Search()
+    object Closed : Search()
+    data class Open(val query: String, val suggestions: Suggestions, val error: TextRef?) : Search()
 }
+
+internal data class Suggestions(val query: String, val items: List<PlaceSuggestion>)

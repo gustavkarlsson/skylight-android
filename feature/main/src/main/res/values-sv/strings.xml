@@ -42,4 +42,7 @@
         din nuvarande plats, var vänlig ge Skylight åtkomst till den.</string>
     <string name="location_permission_denied_forever_message">Åtkomst till din plats är nekad
         permanent.</string>
+    <string name="place_search_failed_generic">Platssökningen misslyckades</string>
+    <string name="place_search_failed_server_response">Platssökningen misslyckades. Serverfel.</string>
+    <string name="place_search_failed_io">Platssökningen misslyckades. Är du ansluten till internet?</string>
 </resources>

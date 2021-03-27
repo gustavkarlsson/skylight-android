@@ -53,6 +53,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
@@ -68,7 +69,6 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.feature.main.MainComponent
 import se.gustavkarlsson.skylight.android.feature.main.R
-import se.gustavkarlsson.skylight.android.feature.main.Search
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
@@ -121,7 +121,7 @@ class MainFragment : ComposeScreenFragment() {
             onBannerActionClicked = onBannerActionClicked,
             onSettingsClicked = { navigator.goTo(screens.settings) },
             onAboutClicked = { navigator.goTo(screens.about) },
-            onSearchFieldStateChanged = { viewModel.onSearchChanged(it.toSearch()) },
+            onSearchFieldStateChanged = { viewModel.onSearchChanged(it) },
             onSearchResultClicked = { viewModel.onSearchResultClicked(it) },
             onRecentFavorited = {},
             onFavoriteRemoved = {},
@@ -138,13 +138,6 @@ class MainFragment : ComposeScreenFragment() {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
         intent.data = Uri.fromParts("package", requireContext().packageName, null)
         startActivity(intent)
-    }
-}
-
-private fun SearchFieldState.toSearch(): Search {
-    return when (this) {
-        is SearchFieldState.Focused -> Search.Focused(text)
-        SearchFieldState.Unfocused -> Search.Unfocused
     }
 }
 
@@ -320,10 +313,20 @@ private fun MainContent(
                                 Icon(item.icon, contentDescription = null)
                             },
                             secondaryText = item.subtitle?.let { subtitle ->
-                                { Text(textRef(subtitle)) }
+                                {
+                                    Text(
+                                        text = textRef(subtitle),
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Ellipsis,
+                                    )
+                                }
                             },
                         ) {
-                            Text(textRef(item.title))
+                            Text(
+                                text = textRef(item.title),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                            )
                         }
                     }
                 }

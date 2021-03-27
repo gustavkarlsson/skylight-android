@@ -36,6 +36,7 @@ dependencies {
     implementation(project(":lib:kpindex"))
     implementation(project(":lib:geomaglocation"))
     implementation(project(":lib:reversegeocoder"))
+    implementation(project(":lib:geocoder"))
 
     implementation("com.github.gustavkarlsson.conveyor:conveyor-core:${Versions.conveyor}")
 

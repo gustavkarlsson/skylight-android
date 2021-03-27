@@ -42,4 +42,7 @@
         location, please allow Skylight to access it.</string>
     <string name="location_permission_denied_forever_message">Location access is permanently denied.
     </string>
+    <string name="place_search_failed_generic">Place search failed</string>
+    <string name="place_search_failed_server_response">Place search failed. Server error.</string>
+    <string name="place_search_failed_io">Place search failed. Are you connected to the internet?</string>
 </resources>

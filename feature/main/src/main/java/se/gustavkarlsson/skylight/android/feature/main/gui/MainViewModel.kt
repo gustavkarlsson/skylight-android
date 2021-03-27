@@ -32,8 +32,10 @@ import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.feature.main.Search
 import se.gustavkarlsson.skylight.android.feature.main.State
+import se.gustavkarlsson.skylight.android.feature.main.Suggestions
 import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
+import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
 import se.gustavkarlsson.skylight.android.lib.location.Location
@@ -46,6 +48,7 @@ import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingRe
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
+import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 
 @ExperimentalCoroutinesApi
@@ -147,9 +150,11 @@ internal class MainViewModel(
                 evaluate = weatherChanceEvaluator::evaluate,
                 format = weatherFormatter::format,
             )
-        val searchText = (state.search as? Search.Focused)?.text.orEmpty()
-        val searchResults = if (!(state.search as? Search.Focused)?.text.isNullOrBlank()) {
-            state.places.map { place -> SearchResult.Known(place) }
+        val searchText = (state.search as? Search.Open)?.query.orEmpty()
+        val searchResults = if (state.search is Search.Open) {
+            val placesResults = state.places.map { place -> SearchResult.Known(place) }
+            val searchResults = state.search.suggestions.items.map { suggestion -> suggestion.toSearchResult() }
+            placesResults + searchResults
         } else null
         return ViewState(
             toolbarTitleName = state.selectedPlace.name,
@@ -198,8 +203,24 @@ internal class MainViewModel(
 
     fun refreshLocationPermission() = permissionChecker.refresh()
 
-    fun onSearchChanged(search: Search) = store.issue { state ->
-        state.update { copy(search = search) }
+    fun onSearchChanged(searchFieldState: SearchFieldState) = store.issue { state ->
+        state.update {
+            val search = when (searchFieldState) {
+                SearchFieldState.Unfocused -> Search.Closed
+                is SearchFieldState.Focused -> {
+                    val query = searchFieldState.text.trim()
+                    when (search) {
+                        Search.Closed -> Search.Open(
+                            query = query,
+                            suggestions = Suggestions("", emptyList()),
+                            error = null,
+                        )
+                        is Search.Open -> search.copy(query = query)
+                    }
+                }
+            }
+            copy(search = search)
+        }
     }
 
     fun onSearchResultClicked(result: SearchResult) {
@@ -216,10 +237,20 @@ internal class MainViewModel(
             }
             selectedPlaceRepository.set(place)
             store.issue { state ->
-                state.update { copy(search = Search.Unfocused) }
+                state.update { copy(search = Search.Closed) }
             }
         }
     }
+}
+
+private fun PlaceSuggestion.toSearchResult(): SearchResult.New {
+    return SearchResult.New(simpleName, this.toDetailsString(), location)
+}
+
+private fun PlaceSuggestion.toDetailsString(): String {
+    return fullName
+        .removePrefix(simpleName)
+        .dropWhile { !it.isLetterOrDigit() }
 }
 
 private fun format(cause: Cause): TextRef {
@@ -294,11 +325,11 @@ internal sealed class SearchResult {
 
     data class New(
         val name: String,
-        val caption: String,
+        val details: String,
         val location: Location,
     ) : SearchResult() {
         override val title: TextRef = TextRef.string(name)
-        override val subtitle: TextRef = TextRef.string(caption)
+        override val subtitle: TextRef = TextRef.string(details)
         override val icon: ImageVector = Icons.Map
     }
 }
