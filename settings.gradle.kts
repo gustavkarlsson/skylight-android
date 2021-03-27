@@ -24,7 +24,6 @@ include(
     ":lib:weather",
 
     ":feature:about",
-    ":feature:addplace",
     ":feature:background",
     ":feature:googleplayservices",
     ":feature:intro",

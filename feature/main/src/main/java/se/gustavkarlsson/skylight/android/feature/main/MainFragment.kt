@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main.gui
+package se.gustavkarlsson.skylight.android.feature.main
 
 import android.content.Intent
 import android.net.Uri
@@ -67,8 +67,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
-import se.gustavkarlsson.skylight.android.feature.main.MainComponent
-import se.gustavkarlsson.skylight.android.feature.main.R
+import se.gustavkarlsson.skylight.android.feature.main.gui.BannerData
+import se.gustavkarlsson.skylight.android.feature.main.gui.FactorItem
+import se.gustavkarlsson.skylight.android.feature.main.gui.SearchResult
+import se.gustavkarlsson.skylight.android.feature.main.gui.ViewState
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
