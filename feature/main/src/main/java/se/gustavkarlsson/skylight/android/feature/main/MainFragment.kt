@@ -21,7 +21,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -56,12 +55,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintSet
+import androidx.constraintlayout.compose.Dimension
 import com.ioki.textref.TextRef
 import dev.chrisbanes.accompanist.insets.LocalWindowInsets
 import dev.chrisbanes.accompanist.insets.navigationBarsPadding
@@ -447,49 +450,93 @@ private fun Card(
             .animateContentSize()
             .clickable(onClick = onClick),
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
-            ) {
+        ConstraintLayout(
+            modifier = Modifier.padding(16.dp),
+            constraintSet = cardConstraints(expanded),
+        ) {
+            Text(
+                modifier = Modifier.layoutId("title"),
+                text = textRef(item.title),
+                style = Typography.body1,
+            )
+
+            val getValueTextColor = item.valueTextColor
+            Text(
+                modifier = Modifier.layoutId("valueText"),
+                text = textRef(item.valueText),
+                color = Colors.getValueTextColor(),
+                style = Typography.body1,
+            )
+
+            val progress = item.progress?.toFloat()
+            val animatedProgress by animateFloatAsState(progress?.coerceAtLeast(0.02F) ?: 0F)
+            val progressToRender = if (progress == null) null else animatedProgress
+            MultiColorLinearProgressIndicator(
+                modifier = Modifier.layoutId("progressIndicator"),
+                progress = progressToRender,
+            )
+
+            if (expanded) {
                 Text(
-                    modifier = Modifier.weight(0.35f),
-                    text = textRef(item.title),
-                    style = Typography.body1,
+                    modifier = Modifier.layoutId("description"),
+                    text = textRef(item.descriptionText),
+                    style = Typography.body2,
                 )
-                val getValueTextColor = item.valueTextColor
-                Text(
-                    modifier = Modifier.weight(0.35f),
-                    text = textRef(item.valueText),
-                    color = Colors.getValueTextColor(),
-                    style = Typography.body1,
-                )
-                val progress = item.progress?.toFloat()
-                val animatedProgress by animateFloatAsState(progress?.coerceAtLeast(0.02F) ?: 0F)
-                val progressToRender = if (progress == null) null else animatedProgress
-                MultiColorLinearProgressIndicator(
-                    modifier = Modifier.weight(0.3f),
-                    progress = progressToRender,
-                )
-            }
-            AnimatedVisibility(
-                visible = expanded,
-                enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
-                exit = shrinkVertically(shrinkTowards = Alignment.Top) + fadeOut(),
-            ) {
-                Column {
-                    // FIXME add formatting and make links clickable
+
+                if (item.errorText != null) {
                     Text(
-                        text = textRef(item.descriptionText),
+                        modifier = Modifier.layoutId("error"),
+                        text = textRef(item.errorText),
                         style = Typography.body2,
+                        color = Colors.error,
                     )
-                    if (item.errorText != null) {
-                        Text(
-                            text = textRef(item.errorText),
-                            style = Typography.body2,
-                        )
-                    }
                 }
+            }
+        }
+    }
+}
+
+private fun cardConstraints(expanded: Boolean): ConstraintSet {
+    return ConstraintSet {
+        val title = createRefFor("title")
+        val valueText = createRefFor("valueText")
+        val progressIndicator = createRefFor("progressIndicator")
+        val description = createRefFor("description")
+        val error = createRefFor("error")
+
+        if (expanded) {
+            constrain(title) {
+                linkTo(parent.start, parent.top, valueText.start, description.top)
+                width = Dimension.percent(0.35f)
+            }
+            constrain(valueText) {
+                linkTo(title.end, parent.top, progressIndicator.start, description.top)
+                width = Dimension.percent(0.35f)
+            }
+            constrain(progressIndicator) {
+                linkTo(valueText.end, parent.top, parent.end, description.top)
+                width = Dimension.percent(0.30f)
+            }
+            constrain(description) {
+                linkTo(parent.start, title.bottom, parent.end, error.top)
+                width = Dimension.fillToConstraints
+            }
+            constrain(error) {
+                linkTo(parent.start, description.bottom, parent.end, parent.bottom)
+                width = Dimension.fillToConstraints
+            }
+        } else {
+            constrain(title) {
+                linkTo(parent.start, parent.top, valueText.start, parent.bottom)
+                width = Dimension.percent(0.35f)
+            }
+            constrain(valueText) {
+                linkTo(title.end, parent.top, progressIndicator.start, parent.bottom)
+                width = Dimension.percent(0.35f)
+            }
+            constrain(progressIndicator) {
+                linkTo(valueText.end, parent.top, parent.end, parent.bottom)
+                width = Dimension.percent(0.30f)
             }
         }
     }
