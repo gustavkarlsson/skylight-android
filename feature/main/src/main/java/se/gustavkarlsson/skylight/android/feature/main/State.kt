@@ -9,7 +9,11 @@ internal data class State(
     val selectedPlace: Place,
     val selectedAuroraReport: LoadableAuroraReport,
     // FIXME combine search into one object
-    val searchText: String,
-    val searchFocused: Boolean,
+    val search: Search,
     val places: List<Place>,
 )
+
+internal sealed class Search {
+    object Unfocused : Search()
+    data class Focused(val text: String) : Search()
+}

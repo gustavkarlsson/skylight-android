@@ -30,8 +30,7 @@ private fun PreviewSearchField() {
         text = "",
         unfocusedText = "Current location",
         placeholderText = "Enter your search term",
-        onTextChanged = {},
-        onFocusChanged = {},
+        onStateChanged = {},
     )
 }
 
@@ -41,18 +40,17 @@ fun SearchField(
     text: String,
     unfocusedText: String,
     placeholderText: String,
-    onTextChanged: (String) -> Unit,
-    onFocusChanged: (Boolean) -> Unit,
+    onStateChanged: (SearchFieldState) -> Unit,
 ) {
     var focused by remember { mutableStateOf(false) }
-    LaunchedEffect(key1 = focused) {
-        onFocusChanged(focused)
+    LaunchedEffect(key1 = focused, key2 = text) {
+        val state = if (focused) {
+            SearchFieldState.Focused(text)
+        } else SearchFieldState.Unfocused
+        onStateChanged(state)
     }
     TextField(
         modifier = modifier.onFocusChanged { focus ->
-            if (focus.isFocused) {
-                onTextChanged("")
-            }
             focused = focus.isFocused
         },
         value = if (focused) text else unfocusedText,
@@ -75,7 +73,12 @@ fun SearchField(
         },
         trailingIcon = if (focused && text.isNotEmpty()) {
             {
-                IconButton(onClick = { onTextChanged("") }) {
+                IconButton(
+                    onClick = {
+                        val state = SearchFieldState.Focused("")
+                        onStateChanged(state)
+                    },
+                ) {
                     Icon(
                         imageVector = Icons.Close,
                         contentDescription = null,
@@ -87,7 +90,10 @@ fun SearchField(
             Text(placeholderText)
         },
         onValueChange = { newText ->
-            onTextChanged(newText)
+            val state = if (focused) {
+                SearchFieldState.Focused(newText)
+            } else SearchFieldState.Unfocused
+            onStateChanged(state)
         },
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = Color.Transparent,
@@ -96,4 +102,9 @@ fun SearchField(
             cursorColor = Colors.secondary,
         ),
     )
+}
+
+sealed class SearchFieldState {
+    object Unfocused : SearchFieldState()
+    data class Focused(val text: String) : SearchFieldState()
 }

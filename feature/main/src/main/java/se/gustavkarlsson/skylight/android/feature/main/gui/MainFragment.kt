@@ -12,7 +12,6 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -52,6 +51,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -68,6 +68,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.feature.main.MainComponent
 import se.gustavkarlsson.skylight.android.feature.main.R
+import se.gustavkarlsson.skylight.android.feature.main.Search
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
@@ -81,6 +82,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.MultiColorLinearProgressIndicator
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchField
+import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.navigationBarsWithIme
@@ -103,7 +105,6 @@ class MainFragment : ComposeScreenFragment() {
     }
 
     @ExperimentalMaterialApi
-    @ExperimentalFoundationApi
     @ExperimentalAnimationApi
     @Composable
     override fun ScreenContent() {
@@ -120,8 +121,7 @@ class MainFragment : ComposeScreenFragment() {
             onBannerActionClicked = onBannerActionClicked,
             onSettingsClicked = { navigator.goTo(screens.settings) },
             onAboutClicked = { navigator.goTo(screens.about) },
-            onSearchTextChanged = { viewModel.onSearchTextChanged(it) },
-            onSearchFocusChanged = { viewModel.onSearchFocusChanged(it) },
+            onSearchFieldStateChanged = { viewModel.onSearchChanged(it.toSearch()) },
             onSearchResultClicked = { viewModel.onSearchResultClicked(it) },
             onRecentFavorited = {},
             onFavoriteRemoved = {},
@@ -141,8 +141,14 @@ class MainFragment : ComposeScreenFragment() {
     }
 }
 
+private fun SearchFieldState.toSearch(): Search {
+    return when (this) {
+        is SearchFieldState.Focused -> Search.Focused(text)
+        SearchFieldState.Unfocused -> Search.Unfocused
+    }
+}
+
 @ExperimentalMaterialApi
-@ExperimentalFoundationApi
 @ExperimentalAnimationApi
 @Composable
 @Preview
@@ -160,8 +166,7 @@ private fun PreviewContent() {
         onBannerActionClicked = {},
         onSettingsClicked = {},
         onAboutClicked = {},
-        onSearchTextChanged = {},
-        onSearchFocusChanged = {},
+        onSearchFieldStateChanged = {},
         onSearchResultClicked = {},
         onRecentFavorited = {},
         onFavoriteRemoved = {},
@@ -169,7 +174,6 @@ private fun PreviewContent() {
 }
 
 @ExperimentalMaterialApi
-@ExperimentalFoundationApi
 @ExperimentalAnimationApi
 @Composable
 private fun Content(
@@ -177,8 +181,7 @@ private fun Content(
     onBannerActionClicked: (BannerData.Event) -> Unit,
     onSettingsClicked: () -> Unit,
     onAboutClicked: () -> Unit,
-    onSearchTextChanged: (String) -> Unit,
-    onSearchFocusChanged: (Boolean) -> Unit,
+    onSearchFieldStateChanged: (SearchFieldState) -> Unit,
     onSearchResultClicked: (SearchResult) -> Unit,
     onRecentFavorited: (Place.Recent) -> Unit,
     onFavoriteRemoved: (Place.Favorite) -> Unit,
@@ -193,8 +196,7 @@ private fun Content(
                     title = textRef(viewState.toolbarTitleName),
                     onSettingsClicked = onSettingsClicked,
                     onAboutClicked = onAboutClicked,
-                    onSearchTextChanged = onSearchTextChanged,
-                    onSearchFocusChanged = onSearchFocusChanged,
+                    onSearchFieldStateChanged = onSearchFieldStateChanged,
                     backgroundColor = topBarBackgroundColor,
                     elevation = topBarElevation,
                 )
@@ -222,8 +224,7 @@ private fun TopAppBar(
     title: String,
     onSettingsClicked: () -> Unit,
     onAboutClicked: () -> Unit,
-    onSearchTextChanged: (String) -> Unit,
-    onSearchFocusChanged: (Boolean) -> Unit,
+    onSearchFieldStateChanged: (SearchFieldState) -> Unit,
     backgroundColor: Color,
     elevation: Dp,
 ) {
@@ -238,8 +239,7 @@ private fun TopAppBar(
                 text = searchText,
                 unfocusedText = title,
                 placeholderText = "Search", // FIXME,
-                onTextChanged = onSearchTextChanged,
-                onFocusChanged = onSearchFocusChanged,
+                onStateChanged = onSearchFieldStateChanged,
             )
         },
         actions = {
@@ -305,13 +305,17 @@ private fun MainContent(
                 elevation = searchElevation,
                 color = searchBackgroundColor,
             ) {
+                val focusManager = LocalFocusManager.current
                 LazyColumn(
                     modifier = Modifier.fillMaxHeight(),
                     contentPadding = LocalWindowInsets.current.navigationBarsWithIme.toPaddingValues(),
                 ) {
                     items(viewState.searchResults.orEmpty()) { item ->
                         ListItem(
-                            modifier = Modifier.clickable { onSearchResultClicked(item) },
+                            modifier = Modifier.clickable {
+                                focusManager.clearFocus()
+                                onSearchResultClicked(item)
+                            },
                             icon = {
                                 Icon(item.icon, contentDescription = null)
                             },

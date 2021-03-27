@@ -101,8 +101,7 @@ internal object MainModule {
                 locationAccess = Access.Unknown,
                 selectedPlace = selectedPlaceRepository.get(),
                 selectedAuroraReport = LoadableAuroraReport.LOADING,
-                searchText = "",
-                searchFocused = false,
+                search = Search.Unfocused,
                 places = emptyList(),
             ),
             startActions = listOf(

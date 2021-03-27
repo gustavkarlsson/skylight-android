@@ -30,6 +30,7 @@ import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.RelativeTimeFormatter
+import se.gustavkarlsson.skylight.android.feature.main.Search
 import se.gustavkarlsson.skylight.android.feature.main.State
 import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
@@ -146,7 +147,8 @@ internal class MainViewModel(
                 evaluate = weatherChanceEvaluator::evaluate,
                 format = weatherFormatter::format,
             )
-        val searchResults = if (state.searchFocused) {
+        val searchText = (state.search as? Search.Focused)?.text.orEmpty()
+        val searchResults = if (!(state.search as? Search.Focused)?.text.isNullOrBlank()) {
             state.places.map { place -> SearchResult.Known(place) }
         } else null
         return ViewState(
@@ -155,7 +157,7 @@ internal class MainViewModel(
             chanceSubtitleText = chanceSubtitleText,
             errorBannerData = errorBannerData,
             factorItems = listOf(kpIndexItem, geomagLocationItem, darknessItem, weatherItem),
-            searchText = state.searchText,
+            searchText = searchText,
             searchResults = searchResults,
         )
     }
@@ -196,12 +198,8 @@ internal class MainViewModel(
 
     fun refreshLocationPermission() = permissionChecker.refresh()
 
-    fun onSearchTextChanged(text: String) = store.issue { state ->
-        state.update { copy(searchText = text) }
-    }
-
-    fun onSearchFocusChanged(focused: Boolean) = store.issue { state ->
-        state.update { copy(searchFocused = focused) }
+    fun onSearchChanged(search: Search) = store.issue { state ->
+        state.update { copy(search = search) }
     }
 
     fun onSearchResultClicked(result: SearchResult) {
@@ -212,10 +210,14 @@ internal class MainViewModel(
                     placesRepository.addRecent(result.name, result.location)
                 }
             }
-            if (place is Place.Recent) {
-                placesRepository.setLastChanged(place.id, time.now())
+            val placeId = place.id
+            if (placeId != null) {
+                placesRepository.setLastChanged(placeId, time.now())
             }
             selectedPlaceRepository.set(place)
+            store.issue { state ->
+                state.update { copy(search = Search.Unfocused) }
+            }
         }
     }
 }
