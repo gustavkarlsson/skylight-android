@@ -36,6 +36,7 @@ internal class SqlDelightSettings(
 
     override fun clearNotificationTriggerLevel(place: Place) = queries.delete(place.getId())
 
+    // FIXME only take favorites
     @ExperimentalCoroutinesApi
     override fun streamNotificationTriggerLevels(): Flow<List<Pair<Place, TriggerLevel>>> =
         placesRepository.stream()
@@ -66,10 +67,7 @@ private fun getTriggerLevel(
         ?: Settings.DEFAULT_TRIGGER_LEVEL
 }
 
-private fun Place.getId(): Long = when (this) {
-    Place.Current -> CURRENT_ID
-    is Place.Custom -> id
-}
+private fun Place.getId(): Long = id ?: CURRENT_ID
 
 private fun findTriggerLevelByIndex(levelIndex: Long): TriggerLevel? =
     if (levelIndex in TriggerLevel.values().indices)

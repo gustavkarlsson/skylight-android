@@ -68,7 +68,7 @@ internal class AddPlaceViewModel @Inject constructor(
 
     fun onSavePlaceClicked(name: String, location: Location) {
         scope.launch {
-            placesRepository.add(name, location)
+            // placesRepository.add(name, location)
             navigateAwayChannel.offer(Unit)
         }
     }

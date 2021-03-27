@@ -22,12 +22,14 @@ internal class PlacesRepoSelectedPlaceRepository(
     @FlowPreview
     private val store = Store(
         initialState = State.Initial,
-        startActions = listOf(StreamPlacesAction(placeSelectionStorage::loadIndex, placesRepo.stream()))
+        startActions = listOf(StreamPlacesAction(placeSelectionStorage::loadId, placesRepo.stream()))
     )
 
-    init { store.start(scope) }
+    init {
+        store.start(scope)
+    }
 
-    override fun set(place: Place) = store.issue(SelectionChangedAction(place, placeSelectionStorage::saveIndex))
+    override fun set(place: Place) = store.issue(SelectionChangedAction(place, placeSelectionStorage::saveId))
 
     override fun get(): Place = store.state.value.selected
 
@@ -47,38 +49,29 @@ private sealed class State {
 }
 
 private class StreamPlacesAction(
-    private val loadIndex: suspend () -> Int?,
+    private val loadId: suspend () -> Long?,
     private val placesStream: Flow<List<Place>>,
 ) : Action<State> {
     override suspend fun execute(state: UpdatableStateFlow<State>) {
-        val initialSelectedIndex = loadIndex()
+        val initialSelectedId = loadId()
         placesStream
             .collect { newPlaces ->
                 state.update {
-                    createNewState(initialSelectedIndex, this, newPlaces)
+                    createState(this, newPlaces, initialSelectedId)
                 }
             }
     }
 
-    private fun createNewState(initialSelectedIndex: Int?, state: State, newPlaces: List<Place>): State {
+    private fun createState(state: State, newPlaces: List<Place>, initialSelectedId: Long?): State {
         val selected = when (state) {
             is State.Initial -> {
-                if (initialSelectedIndex != null) {
-                    val index = initialSelectedIndex.coerceIn(newPlaces.indices)
-                    newPlaces[index]
-                } else newPlaces.last()
+                val placeMatchingId = newPlaces.firstOrNull { it.id == initialSelectedId }
+                placeMatchingId ?: newPlaces.first()
             }
-            is State.Loaded -> when {
-                newPlaces.size > state.places.size -> {
-                    (newPlaces - state.places).first()
-                }
-                state.selected in newPlaces -> {
+            is State.Loaded -> {
+                if (state.selected.id in newPlaces.ids()) {
                     state.selected
-                }
-                else -> {
-                    val newIndex = state.places.indexOf(state.selected).coerceIn(newPlaces.indices)
-                    newPlaces[newIndex]
-                }
+                } else newPlaces.first()
             }
         }
         return State.Loaded(selected = selected, places = newPlaces)
@@ -87,7 +80,7 @@ private class StreamPlacesAction(
 
 private class SelectionChangedAction(
     private val selectedPlace: Place,
-    private val saveIndex: (Int) -> Unit,
+    private val saveId: (Long?) -> Unit,
 ) : Action<State> {
     override suspend fun execute(state: UpdatableStateFlow<State>) {
         val newState = state.update {
@@ -97,7 +90,7 @@ private class SelectionChangedAction(
                     this
                 }
                 is State.Loaded -> {
-                    if (selectedPlace in places) {
+                    if (selectedPlace.id in places.ids()) {
                         copy(selected = selectedPlace)
                     } else {
                         logError { "Cannot select a place that is not loaded. Place: $selectedPlace, Loaded: $places" }
@@ -107,8 +100,9 @@ private class SelectionChangedAction(
             }
         }
         if (newState is State.Loaded) {
-            val index = newState.places.indexOf(newState.selected)
-            saveIndex(index)
+            saveId(selectedPlace.id)
         }
     }
 }
+
+private fun List<Place>.ids(): List<Long?> = map { it.id }

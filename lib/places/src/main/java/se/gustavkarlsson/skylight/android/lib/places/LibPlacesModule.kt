@@ -17,6 +17,7 @@ import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
+import se.gustavkarlsson.skylight.android.lib.time.Time
 
 @Module
 object LibPlacesModule {
@@ -25,11 +26,12 @@ object LibPlacesModule {
     @AppScope
     internal fun placesRepository(
         context: Context,
-        @Io dispatcher: CoroutineDispatcher
+        @Io dispatcher: CoroutineDispatcher,
+        time: Time,
     ): PlacesRepository {
         val driver = AndroidSqliteDriver(Database.Schema, context, "places.db")
         val database = Database(driver)
-        return SqlDelightPlacesRepository(database.dbPlaceQueries, dispatcher)
+        return SqlDelightPlacesRepository(database.dbPlaceQueries, dispatcher, time)
     }
 
     @FlowPreview

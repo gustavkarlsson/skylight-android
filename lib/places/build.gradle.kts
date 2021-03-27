@@ -9,10 +9,18 @@ android {
     commonConfig()
 }
 
+sqldelight {
+    database("Database") {
+        schemaOutputDirectory = file("src/main/sqldelight")
+        verifyMigrations = true
+    }
+}
+
 dependencies {
     implementation(project(":core"))
     implementation(project(":lib:analytics"))
     implementation(project(":lib:location"))
+    implementation(project(":lib:time"))
 
     implementation("com.squareup.sqldelight:android-driver:${Versions.sqldelight}")
     implementation("com.squareup.sqldelight:coroutines-extensions:${Versions.sqldelight}")

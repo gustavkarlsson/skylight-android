@@ -2,15 +2,25 @@ CREATE TABLE DbPlace (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   latitude REAL NOT NULL,
-  longitude REAL NOT NULL
+  longitude REAL NOT NULL,
+  type TEXT NOT NULL DEFAULT "favorite",
+  lastChangedMillis INTEGER NOT NULL DEFAULT 0
 );
+
+selectLatest:
+SELECT * FROM DbPlace ORDER BY id DESC LIMIT 1;
 
 selectAll:
 SELECT * FROM DbPlace;
 
 insert:
-INSERT INTO DbPlace (name, latitude, longitude)
-  VALUES (?, ?, ?);
+INSERT INTO DbPlace (name, latitude, longitude, type, lastChangedMillis)
+  VALUES (?, ?, ?, ?, ?);
+
+updateLastChanged:
+UPDATE DbPlace
+  SET lastChangedMillis = ?
+  WHERE id = ?;
 
 delete:
 DELETE FROM DbPlace

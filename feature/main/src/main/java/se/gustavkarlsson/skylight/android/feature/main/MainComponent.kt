@@ -17,6 +17,7 @@ import se.gustavkarlsson.skylight.android.feature.main.gui.MainViewModel
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
+import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
 import se.gustavkarlsson.skylight.android.lib.darkness.DarknessComponent
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
@@ -25,9 +26,11 @@ import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexComponent
 import se.gustavkarlsson.skylight.android.lib.location.LocationComponent
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
+import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
+import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
@@ -81,6 +84,7 @@ internal object MainModule {
     fun mainStore(
         permissionChecker: PermissionChecker,
         selectedPlaceRepository: SelectedPlaceRepository,
+        placesRepository: PlacesRepository,
         locationProvider: LocationProvider,
         auroraReportProvider: AuroraReportProvider
     ): Store<State> {
@@ -91,9 +95,22 @@ internal object MainModule {
             throttleDuration = 500.millis
         )
         val placeSelectionAction = PlaceSelectionAction(selectedPlaceRepository.stream())
+        val streamPlacesAction = StreamPlacesAction(placesRepository.stream())
         return Store(
-            initialState = State(selectedPlace = selectedPlaceRepository.get()),
-            startActions = listOf(locationPermissionAction, placeSelectionAction, streamReportsAction),
+            initialState = State(
+                locationAccess = Access.Unknown,
+                selectedPlace = selectedPlaceRepository.get(),
+                selectedAuroraReport = LoadableAuroraReport.LOADING,
+                searchText = "",
+                searchFocused = false,
+                places = emptyList(),
+            ),
+            startActions = listOf(
+                locationPermissionAction,
+                placeSelectionAction,
+                streamPlacesAction,
+                streamReportsAction,
+            ),
         )
     }
 
@@ -102,6 +119,8 @@ internal object MainModule {
     fun viewModel(
         context: Context,
         mainStore: Store<State>,
+        placesRepository: PlacesRepository,
+        selectedPlaceRepository: SelectedPlaceRepository,
         time: Time,
         auroraChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
         chanceLevelFormatter: Formatter<ChanceLevel>,
@@ -119,6 +138,8 @@ internal object MainModule {
         val relativeTimeFormatter = DateUtilsRelativeTimeFormatter(rightNowText)
         return MainViewModel(
             mainStore,
+            placesRepository,
+            selectedPlaceRepository,
             auroraChanceEvaluator,
             relativeTimeFormatter,
             chanceLevelFormatter,

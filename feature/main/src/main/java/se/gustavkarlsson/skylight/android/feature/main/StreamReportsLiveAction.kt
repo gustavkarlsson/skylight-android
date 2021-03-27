@@ -57,7 +57,7 @@ internal class StreamReportsLiveAction(
             .distinctUntilChanged()
 
     private fun locationUpdates(selectedPlace: Place): Flow<Loadable<LocationResult>> =
-        if (selectedPlace is Place.Custom) {
+        if (selectedPlace is Place.Favorite) {
             flowOf(Loadable.loaded(LocationResult.success(selectedPlace.location)))
         } else {
             currentLocation

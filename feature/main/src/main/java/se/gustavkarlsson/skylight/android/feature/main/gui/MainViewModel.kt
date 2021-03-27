@@ -2,7 +2,11 @@ package se.gustavkarlsson.skylight.android.feature.main.gui
 
 import androidx.annotation.StringRes
 import androidx.compose.material.Colors
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.MyLocation
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -12,6 +16,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.issue
@@ -30,9 +35,12 @@ import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
+import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.places.Place
+import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
+import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingResult
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
@@ -42,6 +50,8 @@ import se.gustavkarlsson.skylight.android.lib.weather.Weather
 @ExperimentalCoroutinesApi
 internal class MainViewModel(
     private val store: Store<State>,
+    private val placesRepository: PlacesRepository,
+    private val selectedPlaceRepository: SelectedPlaceRepository,
     private val auroraChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
     private val relativeTimeFormatter: RelativeTimeFormatter,
     private val chanceLevelFormatter: Formatter<ChanceLevel>,
@@ -137,7 +147,7 @@ internal class MainViewModel(
                 format = weatherFormatter::format,
             )
         val searchResults = if (state.searchFocused) {
-            listOf(state.searchText, "Res2", "Res3", "Res4", "Res5", "Res6", "Res7", "Res8")
+            state.places.map { place -> SearchResult.Known(place) }
         } else null
         return ViewState(
             toolbarTitleName = state.selectedPlace.name,
@@ -192,6 +202,21 @@ internal class MainViewModel(
 
     fun onSearchFocusChanged(focused: Boolean) = store.issue { state ->
         state.update { copy(searchFocused = focused) }
+    }
+
+    fun onSearchResultClicked(result: SearchResult) {
+        scope.launch {
+            val place = when (result) {
+                is SearchResult.Known -> result.place
+                is SearchResult.New -> {
+                    placesRepository.addRecent(result.name, result.location)
+                }
+            }
+            if (place is Place.Recent) {
+                placesRepository.setLastChanged(place.id, time.now())
+            }
+            selectedPlaceRepository.set(place)
+        }
     }
 }
 
@@ -248,8 +273,33 @@ internal data class ViewState(
     val errorBannerData: BannerData?,
     val factorItems: List<FactorItem>,
     val searchText: String,
-    val searchResults: List<String>?,
+    val searchResults: List<SearchResult>?,
 )
+
+internal sealed class SearchResult {
+    abstract val title: TextRef
+    open val subtitle: TextRef? = null
+    abstract val icon: ImageVector
+
+    data class Known(val place: Place) : SearchResult() {
+        override val title: TextRef get() = place.name
+        override val icon: ImageVector = when (place) {
+            Place.Current -> Icons.MyLocation
+            is Place.Favorite -> Icons.Star
+            is Place.Recent -> Icons.History
+        }
+    }
+
+    data class New(
+        val name: String,
+        val caption: String,
+        val location: Location,
+    ) : SearchResult() {
+        override val title: TextRef = TextRef.string(name)
+        override val subtitle: TextRef = TextRef.string(caption)
+        override val icon: ImageVector = Icons.Map
+    }
+}
 
 internal data class ItemTexts(
     @StringRes val shortTitle: Int,

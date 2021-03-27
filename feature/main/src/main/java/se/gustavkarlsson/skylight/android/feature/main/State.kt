@@ -5,10 +5,11 @@ import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.places.Place
 
 internal data class State(
-    val locationAccess: Access = Access.Unknown,
+    val locationAccess: Access,
     val selectedPlace: Place,
-    val selectedAuroraReport: LoadableAuroraReport = LoadableAuroraReport.LOADING,
+    val selectedAuroraReport: LoadableAuroraReport,
     // FIXME combine search into one object
-    val searchText: String = "",
-    val searchFocused: Boolean = false,
+    val searchText: String,
+    val searchFocused: Boolean,
+    val places: List<Place>,
 )

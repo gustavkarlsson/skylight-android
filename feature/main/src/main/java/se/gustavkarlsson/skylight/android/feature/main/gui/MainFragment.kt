@@ -25,7 +25,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
@@ -40,11 +40,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Place
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -75,6 +71,7 @@ import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
+import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Banner
@@ -125,6 +122,9 @@ class MainFragment : ComposeScreenFragment() {
             onAboutClicked = { navigator.goTo(screens.about) },
             onSearchTextChanged = { viewModel.onSearchTextChanged(it) },
             onSearchFocusChanged = { viewModel.onSearchFocusChanged(it) },
+            onSearchResultClicked = { viewModel.onSearchResultClicked(it) },
+            onRecentFavorited = {},
+            onFavoriteRemoved = {},
         )
     }
 
@@ -162,6 +162,9 @@ private fun PreviewContent() {
         onAboutClicked = {},
         onSearchTextChanged = {},
         onSearchFocusChanged = {},
+        onSearchResultClicked = {},
+        onRecentFavorited = {},
+        onFavoriteRemoved = {},
     )
 }
 
@@ -176,6 +179,9 @@ private fun Content(
     onAboutClicked: () -> Unit,
     onSearchTextChanged: (String) -> Unit,
     onSearchFocusChanged: (Boolean) -> Unit,
+    onSearchResultClicked: (SearchResult) -> Unit,
+    onRecentFavorited: (Place.Recent) -> Unit,
+    onFavoriteRemoved: (Place.Favorite) -> Unit,
 ) {
     ScreenBackground {
         val topBarElevation = AppBarDefaults.TopAppBarElevation
@@ -202,6 +208,9 @@ private fun Content(
                 searchBackgroundColor = topBarBackgroundColor,
                 viewState = viewState,
                 onBannerActionClicked = onBannerActionClicked,
+                onSearchResultClicked = onSearchResultClicked,
+                onRecentFavorited = onRecentFavorited,
+                onFavoriteRemoved = onFavoriteRemoved,
             )
         }
     }
@@ -266,6 +275,9 @@ private fun MainContent(
     searchElevation: Dp,
     searchBackgroundColor: Color,
     onBannerActionClicked: (BannerData.Event) -> Unit,
+    onSearchResultClicked: (SearchResult) -> Unit,
+    onRecentFavorited: (Place.Recent) -> Unit,
+    onFavoriteRemoved: (Place.Favorite) -> Unit,
 ) {
     Box {
         Column(modifier = modifier) {
@@ -297,25 +309,17 @@ private fun MainContent(
                     modifier = Modifier.fillMaxHeight(),
                     contentPadding = LocalWindowInsets.current.navigationBarsWithIme.toPaddingValues(),
                 ) {
-                    itemsIndexed(viewState.searchResults.orEmpty()) { i, item ->
+                    items(viewState.searchResults.orEmpty()) { item ->
                         ListItem(
-                            modifier = Modifier.clickable { /* FIXME do stuff */ },
+                            modifier = Modifier.clickable { onSearchResultClicked(item) },
                             icon = {
-                                when (i) {
-                                    0 -> Icon(Icons.Place, contentDescription = null)
-                                    1 -> Icon(Icons.Favorite, contentDescription = null)
-                                    2 -> Icon(Icons.History, contentDescription = null)
-                                    else -> Icon(Icons.Map, contentDescription = null)
-                                }
+                                Icon(item.icon, contentDescription = null)
                             },
-                            secondaryText = {
-                                Text(item.reversed())
+                            secondaryText = item.subtitle?.let { subtitle ->
+                                { Text(textRef(subtitle)) }
                             },
                         ) {
-                            Text(
-                                text = item,
-                                color = Colors.onSurface,
-                            )
+                            Text(textRef(item.title))
                         }
                     }
                 }
@@ -417,7 +421,7 @@ private fun Card(
     expanded: Boolean,
     onClick: () -> Unit,
 ) {
-    // FIXME re-arrange when expanded
+    // TODO re-arrange when expanded
     Card(
         modifier = Modifier
             .fillMaxWidth()

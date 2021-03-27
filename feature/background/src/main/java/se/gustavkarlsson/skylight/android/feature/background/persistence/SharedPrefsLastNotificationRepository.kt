@@ -7,7 +7,6 @@ import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notification
 import se.gustavkarlsson.skylight.android.feature.background.notifications.PlaceWithChance
-import se.gustavkarlsson.skylight.android.lib.places.Place
 
 internal class SharedPrefsLastNotificationRepository(
     context: Context
@@ -77,11 +76,7 @@ internal class SharedPrefsLastNotificationRepository(
         }
     }
 
-    private fun getKey(value: PlaceWithChance) =
-        when (val place = value.place) {
-            Place.Current -> CURRENT_KEY
-            is Place.Custom -> place.id.toString()
-        }
+    private fun getKey(value: PlaceWithChance) = value.place.id?.toString() ?: CURRENT_KEY
 
     private fun getValue(value: PlaceWithChance) = value.chanceLevel.ordinal
 }

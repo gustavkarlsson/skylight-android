@@ -80,7 +80,8 @@ internal class BackgroundWorkImpl(
     private suspend fun getLocation(place: Place): LocationResult =
         when (place) {
             Place.Current -> locationProvider.get()
-            is Place.Custom -> LocationResult.Success(place.location)
+            is Place.Favorite -> LocationResult.Success(place.location)
+            is Place.Recent -> LocationResult.Success(place.location)
         }
 }
 
