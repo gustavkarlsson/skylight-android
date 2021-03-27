@@ -1,15 +1,8 @@
-package se.gustavkarlsson.skylight.android.feature.main.gui
+package se.gustavkarlsson.skylight.android.feature.main
 
 import androidx.annotation.StringRes
-import androidx.compose.material.Colors
-import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.LocationOn
-import androidx.compose.material.icons.filled.Map
-import androidx.compose.material.icons.filled.MyLocation
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.ioki.textref.TextRef
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
@@ -28,17 +21,11 @@ import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
-import se.gustavkarlsson.skylight.android.feature.main.R
-import se.gustavkarlsson.skylight.android.feature.main.RelativeTimeFormatter
-import se.gustavkarlsson.skylight.android.feature.main.Search
-import se.gustavkarlsson.skylight.android.feature.main.State
-import se.gustavkarlsson.skylight.android.feature.main.Suggestions
 import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
-import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.places.Place
@@ -152,12 +139,12 @@ internal class MainViewModel(
             )
         val searchText = (state.search as? Search.Open)?.query.orEmpty()
         val searchResults = if (state.search is Search.Open) {
+            val query = state.search.query
             val placesResults = state.places
                 .map { place ->
                     SearchResult.Known(place)
                 }
                 .filter { result ->
-                    val query = state.search.query
                     if (query.isBlank()) {
                         true
                     } else {
@@ -276,77 +263,6 @@ private fun format(cause: Cause): TextRef {
         Cause.Unknown -> R.string.cause_unknown
     }
     return TextRef.stringRes(id)
-}
-
-internal data class FactorItem(
-    val title: TextRef,
-    val valueText: TextRef,
-    val descriptionText: TextRef,
-    val valueTextColor: Colors.() -> Color,
-    val progress: Double?,
-    val errorText: TextRef?
-) {
-    companion object {
-        fun loading(
-            texts: ItemTexts,
-        ): FactorItem {
-            return FactorItem(
-                title = TextRef.stringRes(texts.shortTitle),
-                valueText = TextRef.string("…"),
-                descriptionText = TextRef.stringRes(texts.description),
-                valueTextColor = { onSurface.copy(alpha = 0.7F) },
-                progress = null,
-                errorText = null,
-            )
-        }
-    }
-}
-
-internal data class BannerData(
-    val message: TextRef,
-    val buttonText: TextRef,
-    val icon: ImageVector,
-    val buttonEvent: Event
-) {
-    enum class Event {
-        RequestLocationPermission, OpenAppDetails
-    }
-}
-
-internal data class ViewState(
-    val toolbarTitleName: TextRef,
-    val chanceLevelText: TextRef,
-    val chanceSubtitleText: TextRef,
-    val errorBannerData: BannerData?,
-    val factorItems: List<FactorItem>,
-    // FIXME combine into one search object?
-    val searchText: String,
-    val searchResults: List<SearchResult>?,
-)
-
-internal sealed class SearchResult {
-    abstract val title: TextRef
-    open val subtitle: TextRef? = null
-    abstract val icon: ImageVector
-
-    data class Known(val place: Place) : SearchResult() {
-        override val title: TextRef get() = place.name
-        override val icon: ImageVector get() = when (place) {
-            Place.Current -> Icons.MyLocation
-            is Place.Favorite -> Icons.Star
-            is Place.Recent -> Icons.History
-        }
-    }
-
-    data class New(
-        val name: String,
-        val details: String,
-        val location: Location,
-    ) : SearchResult() {
-        override val title: TextRef get() = TextRef.string(name)
-        override val subtitle: TextRef get() = TextRef.string(details)
-        override val icon: ImageVector = Icons.Map
-    }
 }
 
 internal data class ItemTexts(
