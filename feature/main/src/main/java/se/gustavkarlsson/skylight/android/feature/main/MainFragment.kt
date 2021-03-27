@@ -4,10 +4,12 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.expandIn
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -59,7 +61,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.ioki.textref.TextRef
 import dev.chrisbanes.accompanist.insets.LocalWindowInsets
@@ -350,11 +351,13 @@ private fun ErrorBanner(
             Banner(
                 backgroundColor = Colors.error,
                 icon = {
-                    Icon(
-                        modifier = Modifier.size(40.dp),
-                        imageVector = errorBannerData.icon,
-                        contentDescription = null,
-                    )
+                    Crossfade(targetState = errorBannerData.icon) { icon ->
+                        Icon(
+                            modifier = Modifier.size(40.dp),
+                            imageVector = icon,
+                            contentDescription = null,
+                        )
+                    }
                 },
                 actions = {
                     TextButton(
@@ -367,13 +370,18 @@ private fun ErrorBanner(
                             onBannerActionClicked(errorBannerData.buttonEvent)
                         },
                     ) {
-                        Text(
-                            text = textRef(errorBannerData.buttonText).toUpperCase(Locale.ROOT),
-                        )
+                        Crossfade(targetState = errorBannerData.buttonText) { text ->
+                            Text(
+                                text = textRef(text).toUpperCase(Locale.ROOT),
+                            )
+                        }
                     }
                 },
             ) {
-                Text(textRef(errorBannerData.message))
+                Text(
+                    modifier = Modifier.animateContentSize(spring(stiffness = Spring.StiffnessLow)),
+                    text = textRef(errorBannerData.message),
+                )
             }
         }
     }
