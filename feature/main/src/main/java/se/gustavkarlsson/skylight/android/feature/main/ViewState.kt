@@ -19,9 +19,7 @@ internal data class ViewState(
     val chanceSubtitleText: TextRef,
     val errorBannerData: BannerData?,
     val factorItems: List<FactorItem>,
-    // FIXME combine into one search object?
-    val searchText: String,
-    val searchResults: List<SearchResult>?,
+    val search: SearchViewState,
 )
 
 internal data class BannerData(
@@ -59,13 +57,20 @@ internal data class FactorItem(
     }
 }
 
+internal sealed class SearchViewState {
+    object Closed : SearchViewState()
+    data class Open(val query: String, val searchResults: List<SearchResult>) : SearchViewState()
+}
+
 internal sealed class SearchResult {
     abstract val title: TextRef
-    open val subtitle: TextRef? = null
+    abstract val subtitle: TextRef?
     abstract val icon: ImageVector
+    abstract val selected: Boolean
 
-    data class Known(val place: Place) : SearchResult() {
+    data class Known(val place: Place, override val selected: Boolean) : SearchResult() {
         override val title: TextRef get() = place.name
+        override val subtitle: Nothing? = null
         override val icon: ImageVector
             get() = when (place) {
                 Place.Current -> Icons.MyLocation
@@ -82,5 +87,6 @@ internal sealed class SearchResult {
         override val title: TextRef get() = TextRef.string(name)
         override val subtitle: TextRef get() = TextRef.string(details)
         override val icon: ImageVector = Icons.Map
+        override val selected: Boolean = false
     }
 }

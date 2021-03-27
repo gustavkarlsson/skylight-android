@@ -12,6 +12,7 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,6 +35,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -150,8 +152,7 @@ private fun PreviewContent() {
             chanceSubtitleText = TextRef.EMPTY,
             errorBannerData = null,
             factorItems = emptyList(),
-            searchText = "",
-            searchResults = null,
+            search = SearchViewState.Closed,
         ),
         onBannerActionClicked = {},
         onSettingsClicked = {},
@@ -182,7 +183,7 @@ private fun Content(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    searchText = viewState.searchText,
+                    searchText = (viewState.search as? SearchViewState.Open)?.query,
                     title = textRef(viewState.toolbarTitleName),
                     onSettingsClicked = onSettingsClicked,
                     onAboutClicked = onAboutClicked,
@@ -210,7 +211,7 @@ private fun Content(
 
 @Composable
 private fun TopAppBar(
-    searchText: String,
+    searchText: String?,
     title: String,
     onSettingsClicked: () -> Unit,
     onAboutClicked: () -> Unit,
@@ -226,7 +227,7 @@ private fun TopAppBar(
         title = {
             SearchField(
                 modifier = Modifier.fillMaxWidth(),
-                text = searchText,
+                text = searchText.orEmpty(),
                 unfocusedText = title,
                 placeholderText = "Search", // FIXME,
                 onStateChanged = onSearchFieldStateChanged,
@@ -284,7 +285,7 @@ private fun MainContent(
             )
         }
         AnimatedVisibility(
-            visible = viewState.searchResults != null,
+            visible = viewState.search is SearchViewState.Open,
             enter = expandIn(
                 expandFrom = Alignment.TopCenter,
                 initialSize = { initial -> IntSize(initial.width, 0) }
@@ -299,9 +300,12 @@ private fun MainContent(
                 LazyColumn(
                     contentPadding = LocalWindowInsets.current.navigationBarsWithIme.toPaddingValues(),
                 ) {
-                    items(viewState.searchResults.orEmpty()) { item ->
+                    items((viewState.search as? SearchViewState.Open)?.searchResults.orEmpty()) { item ->
+                        val itemModifier = if (item.selected) {
+                            Modifier.background(MaterialTheme.colors.onSurface.copy(alpha = 0.1f))
+                        } else Modifier
                         ListItem(
-                            modifier = Modifier.clickable {
+                            modifier = itemModifier.clickable {
                                 focusManager.clearFocus()
                                 onSearchResultClicked(item)
                             },

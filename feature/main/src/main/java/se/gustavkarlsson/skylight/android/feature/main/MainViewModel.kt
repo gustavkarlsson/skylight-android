@@ -137,12 +137,12 @@ internal class MainViewModel(
                 evaluate = weatherChanceEvaluator::evaluate,
                 format = weatherFormatter::format,
             )
-        val searchText = (state.search as? Search.Open)?.query.orEmpty()
-        val searchResults = if (state.search is Search.Open) {
+        val search = if (state.search is Search.Open) {
             val query = state.search.query
             val placesResults = state.places
                 .map { place ->
-                    SearchResult.Known(place)
+                    val selected = place.id == state.selectedPlace.id
+                    SearchResult.Known(place, selected = selected)
                 }
                 .filter { result ->
                     if (query.isBlank()) {
@@ -155,16 +155,16 @@ internal class MainViewModel(
                 .map { suggestion ->
                     suggestion.toSearchResult()
                 }
-            (placesResults + searchResults)
-        } else null
+            val results = placesResults + searchResults
+            SearchViewState.Open(query, results)
+        } else SearchViewState.Closed
         return ViewState(
             toolbarTitleName = state.selectedPlace.name,
             chanceLevelText = changeLevelText,
             chanceSubtitleText = chanceSubtitleText,
             errorBannerData = errorBannerData,
             factorItems = listOf(kpIndexItem, geomagLocationItem, darknessItem, weatherItem),
-            searchText = searchText,
-            searchResults = searchResults,
+            search = search,
         )
     }
 
