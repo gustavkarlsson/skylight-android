@@ -24,7 +24,9 @@ internal class SqlDelightPlacesRepository(
 
     override suspend fun addFavorite(name: String, location: Location): Place.Favorite {
         val now = time.now()
-        queries.insert(name, location.latitude, location.longitude, TYPE_FAVORITE, now.toEpochMilli())
+        withContext(dispatcher) {
+            queries.insert(name, location.latitude, location.longitude, TYPE_FAVORITE, now.toEpochMilli())
+        }
         return queries
             .selectLatest { id, theName, latitude, longitude, _, lastChangedMillis ->
                 Place.Favorite(
@@ -39,7 +41,9 @@ internal class SqlDelightPlacesRepository(
 
     override suspend fun addRecent(name: String, location: Location): Place.Recent {
         val now = time.now()
-        queries.insert(name, location.latitude, location.longitude, TYPE_RECENT, now.toEpochMilli())
+        withContext(dispatcher) {
+            queries.insert(name, location.latitude, location.longitude, TYPE_RECENT, now.toEpochMilli())
+        }
         return queries
             .selectLatest { id, theName, latitude, longitude, _, lastChangedMillis ->
                 Place.Recent(
@@ -52,7 +56,7 @@ internal class SqlDelightPlacesRepository(
             .exactlyOne()
     }
 
-    override suspend fun setLastChanged(placeId: Long, time: Instant) {
+    override suspend fun setLastChanged(placeId: Long, time: Instant) = withContext(dispatcher) {
         queries.updateLastChanged(time.toEpochMilli(), placeId)
     }
 

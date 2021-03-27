@@ -12,6 +12,8 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -286,10 +288,8 @@ private fun MainContent(
         }
         AnimatedVisibility(
             visible = viewState.search is SearchViewState.Open,
-            enter = expandIn(
-                expandFrom = Alignment.TopCenter,
-                initialSize = { initial -> IntSize(initial.width, 0) }
-            )
+            enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
+            exit = shrinkVertically(shrinkTowards = Alignment.Top) + fadeOut()
         ) {
             Surface(
                 modifier = Modifier.fillMaxSize(),
@@ -341,7 +341,11 @@ private fun ErrorBanner(
     errorBannerData: BannerData?,
     onBannerActionClicked: (BannerData.Event) -> Unit,
 ) {
-    AnimatedVisibility(visible = errorBannerData != null) {
+    AnimatedVisibility(
+        visible = errorBannerData != null,
+        enter = slideInVertically(initialOffsetY = { y -> -y }),
+        exit = slideOutVertically(targetOffsetY = { y -> -y })
+    ) {
         if (errorBannerData != null) {
             Banner(
                 backgroundColor = Colors.error,
@@ -463,7 +467,7 @@ private fun Card(
             AnimatedVisibility(
                 visible = expanded,
                 enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
-                exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top),
+                exit = shrinkVertically(shrinkTowards = Alignment.Top) + fadeOut(),
             ) {
                 Column {
                     // FIXME add formatting and make links clickable

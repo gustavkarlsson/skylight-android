@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.feature.intro
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -111,7 +111,7 @@ private fun Content(
                     enter = slideInVertically(
                         initialOffsetY = { y -> y },
                         animationSpec = spring(stiffness = 200f),
-                    ),
+                    ) + fadeIn(),
                 ) {
                     ExtendedFloatingActionButton(
                         backgroundColor = Colors.primary,

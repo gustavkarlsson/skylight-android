@@ -116,6 +116,7 @@ private fun Content(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 ErrorSnackbar(errorSnackbarVisible, onErrorSnackbarDismissed)
+                // FIXME animate in like intro
                 ExtendedFloatingActionButton(
                     backgroundColor = Colors.primary,
                     text = { Text(stringResource(id = R.string.google_play_services_install)) },
