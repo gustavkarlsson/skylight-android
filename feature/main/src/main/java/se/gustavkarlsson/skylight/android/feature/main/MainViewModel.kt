@@ -181,13 +181,15 @@ internal class MainViewModel(
             is Place.Recent -> Event.AddFavorite(selectedPlace)
             is Place.Favorite -> Event.RemoveFavorite(selectedPlace)
         }
-        val notificationLevelItems = TriggerLevel.values().map { level ->
-            NotificationLevelItem(
-                text = level.shortText,
-                selected = level == selectedPlaceTriggerLevel,
-                selectEvent = Event.SetNotificationLevel(selectedPlace, level),
-            )
-        }
+        val notificationLevelItems = TriggerLevel.values()
+            .map { level ->
+                NotificationLevelItem(
+                    text = level.shortText,
+                    selected = level == selectedPlaceTriggerLevel,
+                    selectEvent = Event.SetNotificationLevel(selectedPlace, level),
+                )
+            }
+            .asReversed()
         return ViewState(
             toolbarTitleName = state.selectedPlace.name,
             chanceLevelText = changeLevelText,
