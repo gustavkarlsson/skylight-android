@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.main
 
 import androidx.compose.material.Colors
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.MyLocation
@@ -81,7 +82,7 @@ internal sealed class SearchResult {
         override val icon: ImageVector
             get() = when (place) {
                 Place.Current -> Icons.MyLocation
-                is Place.Favorite -> Icons.Star
+                is Place.Favorite -> Icons.Favorite
                 is Place.Recent -> Icons.History
             }
         override val selectEvent: Event get() = Event.SelectSearchResult(this)
