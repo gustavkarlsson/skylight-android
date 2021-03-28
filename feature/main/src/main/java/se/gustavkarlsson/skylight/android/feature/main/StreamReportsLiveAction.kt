@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -54,7 +55,7 @@ internal class StreamReportsLiveAction(
     private fun selectedPlace(state: UpdatableStateFlow<State>): Flow<Place> =
         state
             .map { it.selectedPlace }
-            .distinctUntilChanged()
+            .distinctUntilChangedBy { selected -> selected.id }
 
     private fun locationUpdates(selectedPlace: Place): Flow<Loadable<LocationResult>> {
         return when (selectedPlace) {

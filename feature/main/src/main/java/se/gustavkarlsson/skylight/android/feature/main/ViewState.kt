@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
+import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
@@ -27,7 +28,8 @@ internal data class ViewState(
     val factorItems: List<FactorItem>,
     val search: SearchViewState,
     val onFavoritesClickedEvent: Event,
-) // FIXME add events for setting notification levels
+    val notificationLevelItems: List<NotificationLevelItem>,
+)
 
 internal data class BannerData(
     val message: TextRef,
@@ -101,10 +103,16 @@ internal sealed class SearchResult {
     }
 }
 
+internal data class NotificationLevelItem(
+    val text: TextRef,
+    val selected: Boolean,
+    val selectEvent: Event,
+)
+
 internal sealed class Event {
     data class AddFavorite(val place: Place.Recent) : Event()
     data class RemoveFavorite(val place: Place.Favorite) : Event()
-    data class SetNotificationLevel(val place: Place, val level: ChanceLevel) : Event()
+    data class SetNotificationLevel(val place: Place, val level: TriggerLevel) : Event()
     data class SearchChanged(val state: SearchFieldState) : Event()
     data class SelectSearchResult(val result: SearchResult) : Event()
     object RefreshLocationPermission : Event()

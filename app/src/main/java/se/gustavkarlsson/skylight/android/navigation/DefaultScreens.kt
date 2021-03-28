@@ -7,14 +7,12 @@ import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.feature.about.AboutFragment
 import se.gustavkarlsson.skylight.android.feature.intro.PrivacyPolicyFragment
 import se.gustavkarlsson.skylight.android.feature.main.MainFragment
-import se.gustavkarlsson.skylight.android.feature.settings.SettingsFragment
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.navigation.Screens
 
 internal object DefaultScreens : Screens {
     override val main: Screen = MainScreen()
-    override val settings: Screen = SettingsScreen()
     override val about: Screen = AboutScreen()
     override val privacyPolicy: Screen = PrivacyPolicyScreen()
 }
@@ -30,16 +28,6 @@ private data class MainScreen(private val dummy: Unit = Unit) : Screen {
     @ExperimentalCoroutinesApi
     @FlowPreview
     override fun createFragment() = MainFragment()
-}
-
-@Parcelize
-private data class SettingsScreen(private val dummy: Unit = Unit) : Screen {
-    @IgnoredOnParcel
-    override val name = ScreenName.Settings
-
-    @FlowPreview
-    @ExperimentalCoroutinesApi
-    override fun createFragment() = SettingsFragment()
 }
 
 @Parcelize

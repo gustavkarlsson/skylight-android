@@ -34,6 +34,8 @@ import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
+import se.gustavkarlsson.skylight.android.lib.settings.Settings
+import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
@@ -55,6 +57,7 @@ import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
         KpIndexComponent::class,
         GeomagLocationComponent::class,
         GeocoderComponent::class,
+        SettingsComponent::class,
     ]
 )
 internal interface MainComponent {
@@ -75,6 +78,7 @@ internal interface MainComponent {
                 .kpIndexComponent(KpIndexComponent.instance)
                 .geomagLocationComponent(GeomagLocationComponent.instance)
                 .geocoderComponent(GeocoderComponent.instance)
+                .settingsComponent(SettingsComponent.instance)
                 .build()
     }
 }
@@ -91,6 +95,7 @@ internal object MainModule {
         placesRepository: PlacesRepository,
         locationProvider: LocationProvider,
         auroraReportProvider: AuroraReportProvider,
+        settings: Settings,
         geocoder: Geocoder,
     ): Store<State> {
         val locationPermissionAction = LocationPermissionAction(permissionChecker.access)
@@ -99,7 +104,8 @@ internal object MainModule {
             streamAuroraReports = auroraReportProvider::stream,
             throttleDuration = 500.millis
         )
-        val placeSelectionAction = PlaceSelectionAction(selectedPlaceRepository.stream())
+        val streamTriggerLevelsAction = StreamTriggerLevelsAction(settings.streamNotificationTriggerLevels())
+        val streamSelectedPlaceAction = StreamSelectedPlaceAction(selectedPlaceRepository.stream())
         val streamPlacesAction = StreamPlacesAction(placesRepository.stream())
         val continuouslySearchAction = ContinuouslySearchAction(geocoder, 1.seconds)
         // TODO Load initial data, and then remove fallback for State.selectedPlace.
@@ -111,12 +117,14 @@ internal object MainModule {
                 selectedAuroraReport = LoadableAuroraReport.LOADING,
                 search = Search.Closed,
                 places = emptyList(),
+                notificationTriggerLevels = emptyMap(),
             ),
             startActions = listOf(
                 locationPermissionAction,
-                placeSelectionAction,
+                streamSelectedPlaceAction,
                 streamPlacesAction,
                 streamReportsAction,
+                streamTriggerLevelsAction,
                 continuouslySearchAction,
             ),
         )
@@ -140,7 +148,8 @@ internal object MainModule {
         weatherFormatter: Formatter<Weather>,
         darknessEvaluator: ChanceEvaluator<Darkness>,
         darknessFormatter: Formatter<Darkness>,
-        locationPermissionChecker: PermissionChecker
+        locationPermissionChecker: PermissionChecker,
+        settings: Settings,
     ): MainViewModel {
         val rightNowText = context.getString(R.string.right_now)
         val relativeTimeFormatter = DateUtilsRelativeTimeFormatter(rightNowText)
@@ -161,6 +170,7 @@ internal object MainModule {
             weatherFormatter,
             locationPermissionChecker,
             time,
+            settings,
             1.minutes
         )
     }

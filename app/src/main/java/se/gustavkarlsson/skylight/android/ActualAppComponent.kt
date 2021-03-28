@@ -8,7 +8,6 @@ import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
 import se.gustavkarlsson.skylight.android.feature.background.FeatureBackgroundModule
 import se.gustavkarlsson.skylight.android.feature.googleplayservices.FeatureGooglePlayServicesModule
 import se.gustavkarlsson.skylight.android.feature.intro.FeatureIntroModule
-import se.gustavkarlsson.skylight.android.feature.settings.FeatureSettingsModule
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
 import se.gustavkarlsson.skylight.android.lib.analytics.LibAnalyticsModule
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
@@ -66,7 +65,6 @@ import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
         LibAuroraModule::class,
         FeatureGooglePlayServicesModule::class,
         FeatureIntroModule::class,
-        FeatureSettingsModule::class,
         FeatureBackgroundModule::class
     ]
 )

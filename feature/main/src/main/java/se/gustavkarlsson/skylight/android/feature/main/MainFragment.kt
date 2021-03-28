@@ -21,10 +21,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AppBarDefaults
@@ -39,6 +42,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.IconToggleButton
 import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.RadioButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -127,7 +131,6 @@ class MainFragment : ComposeScreenFragment() {
         Content(
             viewState = state,
             onBannerActionClicked = onBannerActionClicked,
-            onSettingsClicked = { navigator.goTo(screens.settings) },
             onAboutClicked = { navigator.goTo(screens.about) },
             onEvent = { event -> viewModel.onEvent(event) },
         )
@@ -162,9 +165,9 @@ private fun PreviewContent() {
             factorItems = emptyList(),
             search = SearchViewState.Closed,
             onFavoritesClickedEvent = Event.Noop,
+            notificationLevelItems = emptyList(),
         ),
         onBannerActionClicked = {},
-        onSettingsClicked = {},
         onAboutClicked = {},
         onEvent = {},
     )
@@ -176,7 +179,6 @@ private fun PreviewContent() {
 private fun Content(
     viewState: ViewState,
     onBannerActionClicked: (BannerData.Event) -> Unit,
-    onSettingsClicked: () -> Unit,
     onAboutClicked: () -> Unit,
     onEvent: (Event) -> Unit,
 ) {
@@ -188,7 +190,6 @@ private fun Content(
                 TopAppBar(
                     searchText = (viewState.search as? SearchViewState.Open)?.query,
                     title = textRef(viewState.toolbarTitleName),
-                    onSettingsClicked = onSettingsClicked,
                     onAboutClicked = onAboutClicked,
                     onEvent = onEvent,
                     backgroundColor = topBarBackgroundColor,
@@ -214,7 +215,6 @@ private fun Content(
 private fun TopAppBar(
     searchText: String?,
     title: String,
-    onSettingsClicked: () -> Unit,
     onAboutClicked: () -> Unit,
     onEvent: (Event) -> Unit,
     backgroundColor: Color,
@@ -241,15 +241,13 @@ private fun TopAppBar(
             ) {
                 Icon(Icons.MoreVert, contentDescription = null)
             }
+            // FIXME change to icon?
             DropdownMenu(
                 expanded = menuExpanded,
                 onDismissRequest = {
                     menuExpanded = false
                 },
             ) {
-                DropdownMenuItem(onClick = onSettingsClicked) {
-                    Text(stringResource(R.string.settings))
-                }
                 DropdownMenuItem(onClick = onAboutClicked) {
                     Text(stringResource(R.string.about))
                 }
@@ -285,6 +283,12 @@ private fun MainContent(
                 onBannerActionClicked = onBannerActionClicked,
             )
 
+            var showDialog by remember { mutableStateOf(false) }
+            AlertDialog(
+                items = if (showDialog) viewState.notificationLevelItems else null,
+                onDismiss = { showDialog = false },
+                onEvent = onEvent,
+            )
             PlaceButtons(
                 modifier = Modifier
                     .padding(end = 16.dp, bottom = 8.dp)
@@ -294,7 +298,7 @@ private fun MainContent(
                     },
                 notificationsButtonState = viewState.notificationsButtonState,
                 favoriteButtonState = viewState.favoriteButtonState,
-                onNotificationsClicked = { /* FIXME implement */ },
+                onNotificationsClicked = { showDialog = true },
                 onFavoriteClicked = { onEvent(viewState.onFavoritesClickedEvent) },
             )
 
@@ -420,6 +424,45 @@ private fun ErrorBanner(
         }
     }
 }
+@Composable
+private fun AlertDialog(
+    items: List<NotificationLevelItem>?,
+    onEvent: (Event) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    if (items != null) {
+        // TODO This looks quite ugly. It has built-in padding and extra padding for buttons
+        androidx.compose.material.AlertDialog(
+            onDismissRequest = onDismiss,
+            text = {
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    for (item in items) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    onEvent(item.selectEvent)
+                                    onDismiss()
+                                }
+                                .padding(8.dp),
+                        ) {
+                            RadioButton(
+                                selected = item.selected,
+                                onClick = null,
+                            )
+                            Spacer(modifier = Modifier.width(16.dp))
+                            Text(textRef(textRef = item.text))
+                        }
+                    }
+                }
+            },
+            confirmButton = {},
+        )
+    }
+}
+
 
 @ExperimentalAnimationApi
 @Composable
@@ -536,12 +579,13 @@ private fun Card(
                 style = Typography.body1,
             )
 
-            val progress = item.progress?.toFloat()
-            val animatedProgress by animateFloatAsState(progress?.coerceAtLeast(0.02F) ?: 0F)
-            val progressToRender = if (progress == null) null else animatedProgress
+            val actualProgress = item.progress?.toFloat()
+            val targetProgress = actualProgress?.coerceAtLeast(0.02F) ?: 0F
+            val animatedProgress by animateFloatAsState(targetValue = targetProgress)
+            val renderProgress = if (actualProgress == null) null else animatedProgress
             MultiColorLinearProgressIndicator(
                 modifier = Modifier.layoutId("progressIndicator"),
-                progress = progressToRender,
+                progress = renderProgress,
             )
 
             if (expanded) {

@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.main
 
 import com.ioki.textref.TextRef
+import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.permissions.Access
@@ -12,11 +13,15 @@ internal data class State(
     val selectedAuroraReport: LoadableAuroraReport,
     val search: Search,
     val places: List<Place>,
+    val notificationTriggerLevels: Map<Long?, TriggerLevel>,
 ) {
     val selectedPlace: Place
         get() = places.firstOrNull { place ->
             place.id == selectedPlaceId
         } ?: Place.Current
+
+    val selectedPlaceTriggerLevel: TriggerLevel
+        get() = notificationTriggerLevels[selectedPlaceId] ?: TriggerLevel.NEVER
 }
 
 // FIXME handle errors

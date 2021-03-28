@@ -109,7 +109,6 @@ dependencies {
     implementation(project(":feature:googleplayservices"))
     implementation(project(":feature:about"))
     implementation(project(":feature:intro"))
-    implementation(project(":feature:settings"))
     implementation(project(":feature:background"))
     implementation(project(":feature:main"))
     implementation(project(":feature:privacypolicy"))

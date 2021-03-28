@@ -6,9 +6,7 @@
     <string name="dismiss">Avvisa</string>
     <string name="your_location">Din plats</string>
 
-    <string name="settings">Inställningar</string>
     <string name="about">Om</string>
-    <string name="add_place">Lägg till plats</string>
 
     <string name="error_no_location_permission">Saknar åtkomst till plats</string>
     <string name="error_no_location">Kunde inte hitta plats</string>

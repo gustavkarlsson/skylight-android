@@ -20,6 +20,7 @@ import se.gustavkarlsson.skylight.android.core.entities.Chance
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Report
+import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
@@ -33,6 +34,7 @@ import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingResult
+import se.gustavkarlsson.skylight.android.lib.settings.Settings
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
@@ -58,6 +60,7 @@ internal class MainViewModel(
     private val weatherFormatter: Formatter<Weather>,
     private val permissionChecker: PermissionChecker,
     private val time: Time,
+    private val settings: Settings,
     private val nowTextThreshold: Duration
 ) : CoroutineScopedService() {
 
@@ -120,10 +123,11 @@ internal class MainViewModel(
             is Place.Recent -> ToggleButtonState.Enabled(checked = false)
             is Place.Favorite -> ToggleButtonState.Enabled(checked = true)
         }
+        val notificationChecked = selectedPlaceTriggerLevel != TriggerLevel.NEVER
         val notificationsButtonState = when (state.selectedPlace) {
-            Place.Current -> ToggleButtonState.Enabled(checked = true) // FIXME set based on setting
+            Place.Current -> ToggleButtonState.Enabled(notificationChecked)
             is Place.Recent -> ToggleButtonState.Gone
-            is Place.Favorite -> ToggleButtonState.Enabled(checked = false) // FIXME set based on setting
+            is Place.Favorite -> ToggleButtonState.Enabled(notificationChecked)
         }
         val kpIndexItem = state.selectedAuroraReport.kpIndex
             .toFactorItem(
@@ -177,6 +181,13 @@ internal class MainViewModel(
             is Place.Recent -> Event.AddFavorite(selectedPlace)
             is Place.Favorite -> Event.RemoveFavorite(selectedPlace)
         }
+        val notificationLevelItems = TriggerLevel.values().map { level ->
+            NotificationLevelItem(
+                text = level.shortText,
+                selected = level == selectedPlaceTriggerLevel,
+                selectEvent = Event.SetNotificationLevel(selectedPlace, level),
+            )
+        }
         return ViewState(
             toolbarTitleName = state.selectedPlace.name,
             chanceLevelText = changeLevelText,
@@ -187,6 +198,7 @@ internal class MainViewModel(
             factorItems = listOf(kpIndexItem, geomagLocationItem, darknessItem, weatherItem),
             search = search,
             onFavoritesClickedEvent = onFavoritesClickedEvent,
+            notificationLevelItems = notificationLevelItems,
         )
     }
 
@@ -223,6 +235,7 @@ internal class MainViewModel(
                 }
             }
         }
+
     private val Place.priority: Int
         get() = when (this) {
             Place.Current -> 0
@@ -236,7 +249,7 @@ internal class MainViewModel(
             when (event) {
                 is Event.AddFavorite -> placesRepository.setFavorite(event.place.id)
                 is Event.RemoveFavorite -> placesRepository.setRecent(event.place.id)
-                is Event.SetNotificationLevel -> TODO()
+                is Event.SetNotificationLevel -> settings.setNotificationTriggerLevel(event.place, event.level)
                 is Event.SearchChanged -> onSearchChanged(event.state)
                 is Event.SelectSearchResult -> onSearchResultClicked(event.result)
                 Event.RefreshLocationPermission -> permissionChecker.refresh()
@@ -330,3 +343,11 @@ internal data class ItemTexts(
         )
     }
 }
+
+private val TriggerLevel.shortText: TextRef
+    get() = when (this) {
+        TriggerLevel.NEVER -> TextRef.stringRes(R.string.notify_never)
+        TriggerLevel.LOW -> TextRef.stringRes(R.string.notify_at_low)
+        TriggerLevel.MEDIUM -> TextRef.stringRes(R.string.notify_at_medium)
+        TriggerLevel.HIGH -> TextRef.stringRes(R.string.notify_at_high)
+    }

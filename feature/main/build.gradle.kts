@@ -37,6 +37,7 @@ dependencies {
     implementation(project(":lib:geomaglocation"))
     implementation(project(":lib:reversegeocoder"))
     implementation(project(":lib:geocoder"))
+    implementation(project(":lib:settings"))
 
     implementation("com.github.gustavkarlsson.conveyor:conveyor-core:${Versions.conveyor}")
 
