@@ -20,9 +20,19 @@ internal class SqlDelightPlacesRepository(
     private val queries: DbPlaceQueries,
     @Io private val dispatcher: CoroutineDispatcher,
     private val time: Time,
+    private val maxRecentCount: Int,
 ) : PlacesRepository {
 
-    override suspend fun addFavorite(name: String, location: Location): Place.Favorite {
+    override suspend fun setFavorite(placeId: Long): Place.Favorite {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun unsetFavorite(placeId: Long): Place.Favorite {
+        TODO("Not yet implemented")
+    }
+
+    // FIXME useless now?
+    private suspend fun addFavorite(name: String, location: Location): Place.Favorite {
         val now = time.now()
         withContext(dispatcher) {
             queries.insert(name, location.latitude, location.longitude, TYPE_FAVORITE, now.toEpochMilli())
@@ -39,6 +49,7 @@ internal class SqlDelightPlacesRepository(
             .exactlyOne()
     }
 
+    // FIXME clean up after adding?
     override suspend fun addRecent(name: String, location: Location): Place.Recent {
         val now = time.now()
         withContext(dispatcher) {
@@ -56,7 +67,8 @@ internal class SqlDelightPlacesRepository(
             .exactlyOne()
     }
 
-    override suspend fun setLastChanged(placeId: Long, time: Instant) = withContext(dispatcher) {
+    // FIXME call this on changing all the others
+    private suspend fun setLastChanged(placeId: Long, time: Instant) = withContext(dispatcher) {
         queries.updateLastChanged(time.toEpochMilli(), placeId)
     }
 
@@ -66,7 +78,8 @@ internal class SqlDelightPlacesRepository(
             .first()
     }
 
-    override suspend fun remove(placeId: Long) = withContext(dispatcher) {
+    // FIXME useless now?
+    private suspend fun remove(placeId: Long) = withContext(dispatcher) {
         queries.delete(placeId)
     }
 

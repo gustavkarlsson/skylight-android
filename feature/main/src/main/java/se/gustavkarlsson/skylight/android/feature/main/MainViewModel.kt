@@ -36,6 +36,7 @@ import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
+import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 
 @ExperimentalCoroutinesApi
@@ -113,6 +114,16 @@ internal class MainViewModel(
             }
             else -> null
         }
+        val favoriteButtonState = when (state.selectedPlace) {
+            Place.Current -> ToggleButtonState.Gone
+            is Place.Recent -> ToggleButtonState.Enabled(checked = false)
+            is Place.Favorite -> ToggleButtonState.Enabled(checked = true)
+        }
+        val notificationsButtonState = when (state.selectedPlace) {
+            Place.Current -> ToggleButtonState.Enabled(checked = true) // FIXME set based on setting
+            is Place.Recent -> ToggleButtonState.Gone
+            is Place.Favorite -> ToggleButtonState.Enabled(checked = false) // FIXME set based on setting
+        }
         val kpIndexItem = state.selectedAuroraReport.kpIndex
             .toFactorItem(
                 texts = ItemTexts.kpIndex,
@@ -158,13 +169,21 @@ internal class MainViewModel(
             val results = placesResults + searchResults
             SearchViewState.Open(query, results)
         } else SearchViewState.Closed
+        val onFavoritesClickedEvent = when (selectedPlace) {
+            Place.Current -> Event.Noop
+            is Place.Recent -> Event.AddFavorite(selectedPlace)
+            is Place.Favorite -> Event.RemoveFavorite(selectedPlace)
+        }
         return ViewState(
             toolbarTitleName = state.selectedPlace.name,
             chanceLevelText = changeLevelText,
             chanceSubtitleText = chanceSubtitleText,
             errorBannerData = errorBannerData,
+            notificationsButtonState = notificationsButtonState,
+            favoriteButtonState = favoriteButtonState,
             factorItems = listOf(kpIndexItem, geomagLocationItem, darknessItem, weatherItem),
             search = search,
+            onFavoritesClickedEvent = onFavoritesClickedEvent,
         )
     }
 
@@ -202,9 +221,22 @@ internal class MainViewModel(
             }
         }
 
-    fun refreshLocationPermission() = permissionChecker.refresh()
+    fun onEvent(event: Event) {
+        @Suppress("UNUSED_VARIABLE")
+        val dummy = scope.launch {
+            when (event) {
+                is Event.AddFavorite -> placesRepository.setFavorite(event.place.id)
+                is Event.RemoveFavorite -> placesRepository.unsetFavorite(event.place.id)
+                is Event.SetNotificationLevel -> TODO()
+                is Event.SearchChanged -> onSearchChanged(event.state)
+                is Event.SelectSearchResult -> onSearchResultClicked(event.result)
+                Event.RefreshLocationPermission -> permissionChecker.refresh()
+                Event.Noop -> Unit
+            }
+        }
+    }
 
-    fun onSearchChanged(searchFieldState: SearchFieldState) = store.issue { state ->
+    private fun onSearchChanged(searchFieldState: SearchFieldState) = store.issue { state ->
         state.update {
             val search = when (searchFieldState) {
                 SearchFieldState.Unfocused -> Search.Closed
@@ -224,17 +256,13 @@ internal class MainViewModel(
         }
     }
 
-    fun onSearchResultClicked(result: SearchResult) {
+    private fun onSearchResultClicked(result: SearchResult) {
         scope.launch {
             val place = when (result) {
                 is SearchResult.Known -> result.place
                 is SearchResult.New -> {
                     placesRepository.addRecent(result.name, result.location)
                 }
-            }
-            val placeId = place.id
-            if (placeId != null) {
-                placesRepository.setLastChanged(placeId, time.now())
             }
             selectedPlaceRepository.set(place)
             store.issue { state ->

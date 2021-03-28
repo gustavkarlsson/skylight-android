@@ -36,13 +36,18 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.IconToggleButton
 import androidx.compose.material.ListItem
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -76,7 +81,6 @@ import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
-import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Banner
@@ -86,7 +90,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.MultiColorLinearProgressIndicator
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchField
-import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
+import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.navigationBarsWithIme
@@ -105,7 +109,7 @@ class MainFragment : ComposeScreenFragment() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.refreshLocationPermission()
+        viewModel.onEvent(Event.RefreshLocationPermission)
     }
 
     @ExperimentalMaterialApi
@@ -125,10 +129,7 @@ class MainFragment : ComposeScreenFragment() {
             onBannerActionClicked = onBannerActionClicked,
             onSettingsClicked = { navigator.goTo(screens.settings) },
             onAboutClicked = { navigator.goTo(screens.about) },
-            onSearchFieldStateChanged = { viewModel.onSearchChanged(it) },
-            onSearchResultClicked = { viewModel.onSearchResultClicked(it) },
-            onRecentFavorited = {},
-            onFavoriteRemoved = {},
+            onEvent = { event -> viewModel.onEvent(event) },
         )
     }
 
@@ -156,16 +157,16 @@ private fun PreviewContent() {
             chanceLevelText = TextRef.EMPTY,
             chanceSubtitleText = TextRef.EMPTY,
             errorBannerData = null,
+            notificationsButtonState = ToggleButtonState.Enabled(checked = false),
+            favoriteButtonState = ToggleButtonState.Enabled(checked = true),
             factorItems = emptyList(),
             search = SearchViewState.Closed,
+            onFavoritesClickedEvent = Event.Noop,
         ),
         onBannerActionClicked = {},
         onSettingsClicked = {},
         onAboutClicked = {},
-        onSearchFieldStateChanged = {},
-        onSearchResultClicked = {},
-        onRecentFavorited = {},
-        onFavoriteRemoved = {},
+        onEvent = {},
     )
 }
 
@@ -177,10 +178,7 @@ private fun Content(
     onBannerActionClicked: (BannerData.Event) -> Unit,
     onSettingsClicked: () -> Unit,
     onAboutClicked: () -> Unit,
-    onSearchFieldStateChanged: (SearchFieldState) -> Unit,
-    onSearchResultClicked: (SearchResult) -> Unit,
-    onRecentFavorited: (Place.Recent) -> Unit,
-    onFavoriteRemoved: (Place.Favorite) -> Unit,
+    onEvent: (Event) -> Unit,
 ) {
     ScreenBackground {
         val topBarElevation = AppBarDefaults.TopAppBarElevation
@@ -192,7 +190,7 @@ private fun Content(
                     title = textRef(viewState.toolbarTitleName),
                     onSettingsClicked = onSettingsClicked,
                     onAboutClicked = onAboutClicked,
-                    onSearchFieldStateChanged = onSearchFieldStateChanged,
+                    onEvent = onEvent,
                     backgroundColor = topBarBackgroundColor,
                     elevation = topBarElevation,
                 )
@@ -206,9 +204,7 @@ private fun Content(
                 searchBackgroundColor = topBarBackgroundColor,
                 viewState = viewState,
                 onBannerActionClicked = onBannerActionClicked,
-                onSearchResultClicked = onSearchResultClicked,
-                onRecentFavorited = onRecentFavorited,
-                onFavoriteRemoved = onFavoriteRemoved,
+                onEvent = onEvent,
             )
         }
     }
@@ -220,7 +216,7 @@ private fun TopAppBar(
     title: String,
     onSettingsClicked: () -> Unit,
     onAboutClicked: () -> Unit,
-    onSearchFieldStateChanged: (SearchFieldState) -> Unit,
+    onEvent: (Event) -> Unit,
     backgroundColor: Color,
     elevation: Dp,
 ) {
@@ -235,7 +231,7 @@ private fun TopAppBar(
                 text = searchText.orEmpty(),
                 unfocusedText = title,
                 placeholderText = "Search", // FIXME,
-                onStateChanged = onSearchFieldStateChanged,
+                onStateChanged = { state -> onEvent(Event.SearchChanged(state)) },
             )
         },
         actions = {
@@ -271,22 +267,35 @@ private fun MainContent(
     searchElevation: Dp,
     searchBackgroundColor: Color,
     onBannerActionClicked: (BannerData.Event) -> Unit,
-    onSearchResultClicked: (SearchResult) -> Unit,
-    onRecentFavorited: (Place.Recent) -> Unit,
-    onFavoriteRemoved: (Place.Favorite) -> Unit,
+    onEvent: (Event) -> Unit,
 ) {
     Box {
         ConstraintLayout(modifier = modifier) {
-            val (errorBanner, centerText, cards) = createRefs()
+            val (errorBanner, placeButtons, centerText, cards) = createRefs()
 
             ErrorBanner(
-                modifier = Modifier.constrainAs(errorBanner) {
-                    linkTo(parent.start, parent.top, parent.end, centerText.top)
-                    width = Dimension.fillToConstraints
-                    height = Dimension.wrapContent
-                },
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .constrainAs(errorBanner) {
+                        linkTo(parent.start, parent.top, parent.end, centerText.top)
+                        width = Dimension.fillToConstraints
+                        height = Dimension.wrapContent
+                    },
                 errorBannerData = viewState.errorBannerData,
                 onBannerActionClicked = onBannerActionClicked,
+            )
+
+            PlaceButtons(
+                modifier = Modifier
+                    .padding(end = 16.dp, bottom = 8.dp)
+                    .constrainAs(placeButtons) {
+                        bottom.linkTo(cards.top)
+                        end.linkTo(parent.end)
+                    },
+                notificationsButtonState = viewState.notificationsButtonState,
+                favoriteButtonState = viewState.favoriteButtonState,
+                onNotificationsClicked = { /* FIXME implement */ },
+                onFavoriteClicked = { onEvent(viewState.onFavoritesClickedEvent) },
             )
 
             CenterText(
@@ -299,11 +308,13 @@ private fun MainContent(
             )
 
             Cards(
-                modifier = Modifier.constrainAs(cards) {
-                    linkTo(parent.start, centerText.bottom, parent.end, parent.bottom)
-                    width = Dimension.fillToConstraints
-                    height = Dimension.wrapContent
-                },
+                modifier = Modifier
+                    .padding(16.dp, 8.dp, 16.dp, 16.dp)
+                    .constrainAs(cards) {
+                        linkTo(parent.start, centerText.bottom, parent.end, parent.bottom)
+                        width = Dimension.fillToConstraints
+                        height = Dimension.wrapContent
+                    },
                 items = viewState.factorItems,
             )
         }
@@ -328,7 +339,7 @@ private fun MainContent(
                         ListItem(
                             modifier = itemModifier.clickable {
                                 focusManager.clearFocus()
-                                onSearchResultClicked(item)
+                                onEvent(item.selectEvent)
                             },
                             icon = {
                                 Icon(item.icon, contentDescription = null)
@@ -410,6 +421,41 @@ private fun ErrorBanner(
     }
 }
 
+@ExperimentalAnimationApi
+@Composable
+private fun PlaceButtons(
+    modifier: Modifier = Modifier,
+    notificationsButtonState: ToggleButtonState,
+    favoriteButtonState: ToggleButtonState,
+    onNotificationsClicked: () -> Unit,
+    onFavoriteClicked: () -> Unit,
+) {
+    Column(modifier = modifier) {
+        AnimatedVisibility(visible = notificationsButtonState.visible) {
+            IconToggleButton(
+                checked = notificationsButtonState.checked,
+                onCheckedChange = { onNotificationsClicked() },
+            ) {
+                val icon = if (notificationsButtonState.checked) {
+                    Icons.Notifications
+                } else Icons.NotificationsNone
+                Icon(icon, tint = Color.Yellow, contentDescription = null)
+            }
+        }
+        AnimatedVisibility(visible = favoriteButtonState.visible) {
+            IconToggleButton(
+                checked = favoriteButtonState.checked,
+                onCheckedChange = { onFavoriteClicked() },
+            ) {
+                val icon = if (favoriteButtonState.checked) {
+                    Icons.Favorite
+                } else Icons.FavoriteBorder
+                Icon(icon, tint = Color.Red, contentDescription = null)
+            }
+        }
+    }
+}
+
 @Composable
 private fun CenterText(
     modifier: Modifier = Modifier,
@@ -439,7 +485,7 @@ private fun Cards(
     items: List<FactorItem>,
 ) {
     Column(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         var expandedIndex by remember { mutableStateOf<Int?>(null) }
@@ -505,13 +551,14 @@ private fun Card(
                     style = Typography.body2,
                 )
 
-                if (item.errorText != null) {
-                    Text(
-                        modifier = Modifier.layoutId("error"),
-                        text = textRef(item.errorText),
-                        style = Typography.body2,
-                        color = Colors.error,
-                    )
+                Box(modifier = Modifier.layoutId("error")) {
+                    if (item.errorText != null) {
+                        Text(
+                            text = textRef(item.errorText),
+                            style = Typography.body2,
+                            color = Colors.error,
+                        )
+                    }
                 }
             }
         }

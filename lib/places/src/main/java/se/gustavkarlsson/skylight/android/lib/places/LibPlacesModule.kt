@@ -31,7 +31,7 @@ object LibPlacesModule {
     ): PlacesRepository {
         val driver = AndroidSqliteDriver(Database.Schema, context, "places.db")
         val database = Database(driver)
-        return SqlDelightPlacesRepository(database.dbPlaceQueries, dispatcher, time)
+        return SqlDelightPlacesRepository(database.dbPlaceQueries, dispatcher, time, maxRecentCount = 5)
     }
 
     @FlowPreview
