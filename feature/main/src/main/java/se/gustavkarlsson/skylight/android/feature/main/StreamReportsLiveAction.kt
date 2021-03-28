@@ -56,12 +56,13 @@ internal class StreamReportsLiveAction(
             .map { it.selectedPlace }
             .distinctUntilChanged()
 
-    private fun locationUpdates(selectedPlace: Place): Flow<Loadable<LocationResult>> =
-        if (selectedPlace is Place.Favorite) {
-            flowOf(Loadable.loaded(LocationResult.success(selectedPlace.location)))
-        } else {
-            currentLocation
+    private fun locationUpdates(selectedPlace: Place): Flow<Loadable<LocationResult>> {
+        return when (selectedPlace) {
+            Place.Current -> currentLocation
+            is Place.Favorite -> flowOf(Loadable.loaded(LocationResult.success(selectedPlace.location)))
+            is Place.Recent -> flowOf(Loadable.loaded(LocationResult.success(selectedPlace.location)))
         }
+    }
 
     private suspend fun UpdatableStateFlow<State>.update(
         reportPlace: Place,
