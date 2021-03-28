@@ -10,12 +10,14 @@ sealed class Place {
     abstract val name: TextRef
     abstract val nameString: String?
     abstract val location: Location?
+    abstract val lastChanged: Instant?
 
     object Current : Place() {
         override val id: Nothing? = null
         override val name = TextRef.stringRes(R.string.your_location)
         override val nameString: String? = null
         override val location: Location? = null
+        override val lastChanged: Instant? = null
     }
 
     // TODO let favorite and recent share parent class Elsewhere?
@@ -23,7 +25,7 @@ sealed class Place {
         override val id: Long,
         override val nameString: String, // TODO rename?
         override val location: Location,
-        val lastChanged: Instant,
+        override val lastChanged: Instant,
     ) : Place() {
         override val name get() = TextRef.string(nameString)
     }
@@ -32,7 +34,7 @@ sealed class Place {
         override val id: Long,
         override val nameString: String, // TODO rename?
         override val location: Location,
-        val lastChanged: Instant,
+        override val lastChanged: Instant,
     ) : Place() {
         override val name get() = TextRef.string(nameString)
     }

@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.threeten.bp.Duration
+import org.threeten.bp.Instant
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.issue
 import se.gustavkarlsson.koptional.optionalOf
@@ -162,6 +163,8 @@ internal class MainViewModel(
                         result.place.nameString.orEmpty().contains(query, ignoreCase = true)
                     }
                 }
+                .sortedByDescending { it.place.lastChanged ?: Instant.EPOCH }
+                .sortedBy { it.place.priority }
             val searchResults = state.search.suggestions.items
                 .map { suggestion ->
                     suggestion.toSearchResult()
@@ -219,6 +222,12 @@ internal class MainViewModel(
                     else -> error("Invalid report: $report")
                 }
             }
+        }
+    private val Place.priority: Int
+        get() = when (this) {
+            Place.Current -> 0
+            is Place.Favorite -> 1
+            is Place.Recent -> 2
         }
 
     fun onEvent(event: Event) {
