@@ -4,6 +4,8 @@ import kotlinx.coroutines.flow.Flow
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
 
+// FIXME use ID:s instead?
+// FIXME auto sync with places?
 interface Settings {
     suspend fun setNotificationTriggerLevel(place: Place, level: TriggerLevel)
 
