@@ -8,11 +8,16 @@ import se.gustavkarlsson.skylight.android.lib.places.Place
 
 internal data class State(
     val locationAccess: Access,
-    val selectedPlace: Place,
+    val selectedPlaceId: Long?,
     val selectedAuroraReport: LoadableAuroraReport,
     val search: Search,
     val places: List<Place>,
-)
+) {
+    val selectedPlace: Place
+        get() = places.firstOrNull { place ->
+            place.id == selectedPlaceId
+        } ?: Place.Current
+}
 
 // FIXME handle errors
 internal sealed class Search {

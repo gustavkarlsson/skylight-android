@@ -14,7 +14,7 @@ internal class PlaceSelectionAction(
         places.collect { place ->
             state.update {
                 copy(
-                    selectedPlace = place,
+                    selectedPlaceId = place.id,
                     selectedAuroraReport = LoadableAuroraReport.LOADING // TODO Get from cache?
                 )
             }

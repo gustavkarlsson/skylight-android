@@ -102,10 +102,12 @@ internal object MainModule {
         val placeSelectionAction = PlaceSelectionAction(selectedPlaceRepository.stream())
         val streamPlacesAction = StreamPlacesAction(placesRepository.stream())
         val continuouslySearchAction = ContinuouslySearchAction(geocoder, 1.seconds)
+        // TODO Load initial data, and then remove fallback for State.selectedPlace.
+        //  or have another initial state
         return Store(
             initialState = State(
                 locationAccess = Access.Unknown,
-                selectedPlace = selectedPlaceRepository.get(),
+                selectedPlaceId = selectedPlaceRepository.get().id,
                 selectedAuroraReport = LoadableAuroraReport.LOADING,
                 search = Search.Closed,
                 places = emptyList(),

@@ -7,21 +7,33 @@ CREATE TABLE DbPlace (
   lastChangedMillis INTEGER NOT NULL DEFAULT 0
 );
 
-selectLatest:
+selectLastInserted:
 SELECT * FROM DbPlace ORDER BY id DESC LIMIT 1;
+
+selectById:
+SELECT * FROM DbPlace WHERE id = ? LIMIT 1;
 
 selectAll:
 SELECT * FROM DbPlace;
 
-insert:
+insertRecent:
 INSERT INTO DbPlace (name, latitude, longitude, type, lastChangedMillis)
-  VALUES (?, ?, ?, ?, ?);
+  VALUES (?, ?, ?, "recent", ?);
 
-updateLastChanged:
+updateType:
 UPDATE DbPlace
-  SET lastChangedMillis = ?
+  SET type = ?, lastChangedMillis = ?
   WHERE id = ?;
 
-delete:
+keepMostRecent:
 DELETE FROM DbPlace
-  WHERE id = ?;
+  WHERE type = "recent" AND id NOT IN (
+    SELECT id
+    FROM (
+      SELECT id
+        FROM DbPlace
+        WHERE type = "recent"
+        ORDER BY lastChangedMillis DESC
+        LIMIT ?
+    ) dummy
+  );

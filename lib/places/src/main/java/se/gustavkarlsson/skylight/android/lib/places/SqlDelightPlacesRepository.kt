@@ -16,6 +16,7 @@ import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.db.DbPlaceQueries
 import se.gustavkarlsson.skylight.android.lib.time.Time
 
+// FIXME clean up repetition in mapping
 internal class SqlDelightPlacesRepository(
     private val queries: DbPlaceQueries,
     @Io private val dispatcher: CoroutineDispatcher,
@@ -23,40 +24,39 @@ internal class SqlDelightPlacesRepository(
     private val maxRecentCount: Int,
 ) : PlacesRepository {
 
-    override suspend fun setFavorite(placeId: Long): Place.Favorite {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun unsetFavorite(placeId: Long): Place.Favorite {
-        TODO("Not yet implemented")
-    }
-
-    // FIXME useless now?
-    private suspend fun addFavorite(name: String, location: Location): Place.Favorite {
+    override suspend fun setFavorite(placeId: Long): Place.Favorite = withContext(dispatcher) {
         val now = time.now()
-        withContext(dispatcher) {
-            queries.insert(name, location.latitude, location.longitude, TYPE_FAVORITE, now.toEpochMilli())
-        }
-        return queries
-            .selectLatest { id, theName, latitude, longitude, _, lastChangedMillis ->
-                Place.Favorite(
-                    id = id,
-                    nameString = theName,
-                    location = Location(latitude, longitude),
-                    lastChanged = Instant.ofEpochMilli(lastChangedMillis),
-                )
-            }
-            .exactlyOne()
+        queries.updateType(TYPE_FAVORITE, now.toEpochMilli(), placeId)
+        queries.selectById(placeId) { id, name, latitude, longitude, _, lastChangedMillis ->
+            Place.Favorite(
+                id = id,
+                nameString = name,
+                location = Location(latitude, longitude),
+                lastChanged = Instant.ofEpochMilli(lastChangedMillis),
+            )
+        }.exactlyOne()
     }
 
-    // FIXME clean up after adding?
-    override suspend fun addRecent(name: String, location: Location): Place.Recent {
+    override suspend fun setRecent(placeId: Long): Place.Recent = withContext(dispatcher) {
         val now = time.now()
-        withContext(dispatcher) {
-            queries.insert(name, location.latitude, location.longitude, TYPE_RECENT, now.toEpochMilli())
-        }
-        return queries
-            .selectLatest { id, theName, latitude, longitude, _, lastChangedMillis ->
+        queries.updateType(TYPE_RECENT, now.toEpochMilli(), placeId)
+        val updated = queries.selectById(placeId) { id, name, latitude, longitude, _, lastChangedMillis ->
+            Place.Recent(
+                id = id,
+                nameString = name,
+                location = Location(latitude, longitude),
+                lastChanged = Instant.ofEpochMilli(lastChangedMillis),
+            )
+        }.exactlyOne()
+        removeOldRecents()
+        updated
+    }
+
+    override suspend fun addRecent(name: String, location: Location): Place.Recent = withContext(dispatcher) {
+        val now = time.now()
+        queries.insertRecent(name, location.latitude, location.longitude, now.toEpochMilli())
+        val inserted = queries
+            .selectLastInserted { id, theName, latitude, longitude, _, lastChangedMillis ->
                 Place.Recent(
                     id = id,
                     nameString = theName,
@@ -65,11 +65,8 @@ internal class SqlDelightPlacesRepository(
                 )
             }
             .exactlyOne()
-    }
-
-    // FIXME call this on changing all the others
-    private suspend fun setLastChanged(placeId: Long, time: Instant) = withContext(dispatcher) {
-        queries.updateLastChanged(time.toEpochMilli(), placeId)
+        removeOldRecents()
+        inserted
     }
 
     private suspend fun <T : Place> Query<T>.exactlyOne(): T {
@@ -78,10 +75,7 @@ internal class SqlDelightPlacesRepository(
             .first()
     }
 
-    // FIXME useless now?
-    private suspend fun remove(placeId: Long) = withContext(dispatcher) {
-        queries.delete(placeId)
-    }
+    private fun removeOldRecents() = queries.keepMostRecent(maxRecentCount.toLong())
 
     override fun stream(): Flow<List<Place>> =
         queries

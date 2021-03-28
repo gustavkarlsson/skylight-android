@@ -169,7 +169,7 @@ internal class MainViewModel(
             val results = placesResults + searchResults
             SearchViewState.Open(query, results)
         } else SearchViewState.Closed
-        val onFavoritesClickedEvent = when (selectedPlace) {
+        val onFavoritesClickedEvent = when (val selectedPlace = selectedPlace) {
             Place.Current -> Event.Noop
             is Place.Recent -> Event.AddFavorite(selectedPlace)
             is Place.Favorite -> Event.RemoveFavorite(selectedPlace)
@@ -226,7 +226,7 @@ internal class MainViewModel(
         val dummy = scope.launch {
             when (event) {
                 is Event.AddFavorite -> placesRepository.setFavorite(event.place.id)
-                is Event.RemoveFavorite -> placesRepository.unsetFavorite(event.place.id)
+                is Event.RemoveFavorite -> placesRepository.setRecent(event.place.id)
                 is Event.SetNotificationLevel -> TODO()
                 is Event.SearchChanged -> onSearchChanged(event.state)
                 is Event.SelectSearchResult -> onSearchResultClicked(event.result)
