@@ -475,7 +475,7 @@ private fun PlaceButtons(
     onNotificationsClicked: () -> Unit,
     onFavoriteClicked: () -> Unit,
 ) {
-    Column(modifier = modifier) {
+    Row(modifier = modifier) {
         AnimatedVisibility(visible = notificationsButtonState.visible) {
             IconToggleButton(
                 checked = notificationsButtonState.checked,
@@ -565,7 +565,7 @@ private fun Card(
     ) {
         ConstraintLayout(
             modifier = Modifier.padding(16.dp),
-            constraintSet = cardConstraints(expanded),
+            constraintSet = cardConstraints(expanded, item.errorText != null),
         ) {
             Text(
                 modifier = Modifier.layoutId("title"),
@@ -614,7 +614,7 @@ private fun Card(
     }
 }
 
-private fun cardConstraints(expanded: Boolean): ConstraintSet {
+private fun cardConstraints(expanded: Boolean, showError: Boolean): ConstraintSet {
     return ConstraintSet {
         val title = createRefFor("title")
         val valueText = createRefFor("valueText")
@@ -624,24 +624,30 @@ private fun cardConstraints(expanded: Boolean): ConstraintSet {
 
         if (expanded) {
             constrain(title) {
-                linkTo(parent.start, parent.top, valueText.start, description.top)
+                linkTo(parent.start, valueText.start)
                 width = Dimension.percent(0.35f)
             }
             constrain(valueText) {
-                linkTo(title.end, parent.top, progressIndicator.start, description.top)
+                linkTo(title.end, progressIndicator.start)
+                centerVerticallyTo(title)
                 width = Dimension.percent(0.35f)
             }
             constrain(progressIndicator) {
-                linkTo(valueText.end, parent.top, parent.end, description.top)
+                linkTo(valueText.end, parent.end)
+                centerVerticallyTo(title)
                 width = Dimension.percent(0.30f)
             }
             constrain(description) {
-                linkTo(parent.start, title.bottom, parent.end, error.top)
+                top.linkTo(title.bottom, margin = 8.dp)
+                linkTo(parent.start, parent.end)
                 width = Dimension.fillToConstraints
             }
-            constrain(error) {
-                linkTo(parent.start, description.bottom, parent.end, parent.bottom)
-                width = Dimension.fillToConstraints
+            if (showError) {
+                constrain(error) {
+                    top.linkTo(description.bottom, margin = 8.dp)
+                    linkTo(parent.start, parent.end)
+                    width = Dimension.fillToConstraints
+                }
             }
         } else {
             constrain(title) {
