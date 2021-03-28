@@ -21,7 +21,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -277,16 +276,34 @@ private fun MainContent(
     onFavoriteRemoved: (Place.Favorite) -> Unit,
 ) {
     Box {
-        Column(modifier = modifier) {
+        ConstraintLayout(modifier = modifier) {
+            val (errorBanner, centerText, cards) = createRefs()
+
             ErrorBanner(
+                modifier = Modifier.constrainAs(errorBanner) {
+                    linkTo(parent.start, parent.top, parent.end, centerText.top)
+                    width = Dimension.fillToConstraints
+                    height = Dimension.wrapContent
+                },
                 errorBannerData = viewState.errorBannerData,
                 onBannerActionClicked = onBannerActionClicked,
             )
-            Spacer(Modifier.weight(1.0f))
-            CenterText(viewState = viewState)
-            Spacer(Modifier.weight(1.0f))
+
+            CenterText(
+                modifier = Modifier.constrainAs(centerText) {
+                    linkTo(parent.start, errorBanner.bottom, parent.end, cards.top)
+                    width = Dimension.fillToConstraints
+                    height = Dimension.fillToConstraints
+                },
+                viewState = viewState,
+            )
+
             Cards(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.constrainAs(cards) {
+                    linkTo(parent.start, centerText.bottom, parent.end, parent.bottom)
+                    width = Dimension.fillToConstraints
+                    height = Dimension.wrapContent
+                },
                 items = viewState.factorItems,
             )
         }
@@ -342,49 +359,52 @@ private fun MainContent(
 @ExperimentalAnimationApi
 @Composable
 private fun ErrorBanner(
+    modifier: Modifier = Modifier,
     errorBannerData: BannerData?,
     onBannerActionClicked: (BannerData.Event) -> Unit,
 ) {
-    AnimatedVisibility(
-        visible = errorBannerData != null,
-        enter = slideInVertically(initialOffsetY = { y -> -y }),
-        exit = slideOutVertically(targetOffsetY = { y -> -y })
-    ) {
-        if (errorBannerData != null) {
-            Banner(
-                backgroundColor = Colors.error,
-                icon = {
-                    Crossfade(targetState = errorBannerData.icon) { icon ->
-                        Icon(
-                            modifier = Modifier.size(40.dp),
-                            imageVector = icon,
-                            contentDescription = null,
-                        )
-                    }
-                },
-                actions = {
-                    TextButton(
-                        colors = ButtonDefaults.textButtonColors(
-                            contentColor = Colors.onError,
-                            disabledContentColor = Colors.onError
-                                .copy(alpha = ContentAlpha.disabled),
-                        ),
-                        onClick = {
-                            onBannerActionClicked(errorBannerData.buttonEvent)
-                        },
-                    ) {
-                        Crossfade(targetState = errorBannerData.buttonText) { text ->
-                            Text(
-                                text = textRef(text).toUpperCase(Locale.ROOT),
+    Box(modifier = modifier) {
+        AnimatedVisibility(
+            visible = errorBannerData != null,
+            enter = slideInVertically(initialOffsetY = { y -> -y }),
+            exit = slideOutVertically(targetOffsetY = { y -> -y })
+        ) {
+            if (errorBannerData != null) {
+                Banner(
+                    backgroundColor = Colors.error,
+                    icon = {
+                        Crossfade(targetState = errorBannerData.icon) { icon ->
+                            Icon(
+                                modifier = Modifier.size(40.dp),
+                                imageVector = icon,
+                                contentDescription = null,
                             )
                         }
-                    }
-                },
-            ) {
-                Text(
-                    modifier = Modifier.animateContentSize(spring(stiffness = Spring.StiffnessLow)),
-                    text = textRef(errorBannerData.message),
-                )
+                    },
+                    actions = {
+                        TextButton(
+                            colors = ButtonDefaults.textButtonColors(
+                                contentColor = Colors.onError,
+                                disabledContentColor = Colors.onError
+                                    .copy(alpha = ContentAlpha.disabled),
+                            ),
+                            onClick = {
+                                onBannerActionClicked(errorBannerData.buttonEvent)
+                            },
+                        ) {
+                            Crossfade(targetState = errorBannerData.buttonText) { text ->
+                                Text(
+                                    text = textRef(text).toUpperCase(Locale.ROOT),
+                                )
+                            }
+                        }
+                    },
+                ) {
+                    Text(
+                        modifier = Modifier.animateContentSize(spring(stiffness = Spring.StiffnessLow)),
+                        text = textRef(errorBannerData.message),
+                    )
+                }
             }
         }
     }
@@ -392,10 +412,12 @@ private fun ErrorBanner(
 
 @Composable
 private fun CenterText(
+    modifier: Modifier = Modifier,
     viewState: ViewState,
 ) {
     Column(
-        modifier = Modifier.padding(16.dp),
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
