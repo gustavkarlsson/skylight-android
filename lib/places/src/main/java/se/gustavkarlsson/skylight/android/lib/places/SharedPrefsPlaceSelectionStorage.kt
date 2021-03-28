@@ -15,23 +15,17 @@ internal class SharedPrefsPlaceSelectionStorage(
         context.getSharedPreferences(PREFS_FILE_NAME, MODE_PRIVATE)
     }
 
-    override fun saveId(id: Long?) {
+    override fun saveId(id: Long) {
         sharedPreferences.edit {
-            if (id == null) {
-                putString(PLACE_ID_KEY, null)
-            } else {
-                putLong(PLACE_ID_KEY, id)
-            }
+            putLong(PLACE_ID_KEY, id)
         }
     }
 
-    override suspend fun loadId(): Long? =
+    override suspend fun loadId(): Long =
         withContext(dispatcher) {
-            val id = sharedPreferences.getLong(PLACE_ID_KEY, NULL_VALUE)
-            if (id == NULL_VALUE) null else id
+            sharedPreferences.getLong(PLACE_ID_KEY, Place.Current.id)
         }
 }
 
 private const val PREFS_FILE_NAME = "selected_place"
 private const val PLACE_ID_KEY = "place_id"
-private const val NULL_VALUE = -1L

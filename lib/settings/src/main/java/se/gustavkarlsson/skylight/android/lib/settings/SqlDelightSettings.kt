@@ -67,7 +67,7 @@ private fun getTriggerLevel(
         ?: Settings.DEFAULT_TRIGGER_LEVEL
 }
 
-private fun Place.getId(): Long = id ?: CURRENT_ID
+private fun Place.getId(): Long = id
 
 private fun findTriggerLevelByIndex(levelIndex: Long): TriggerLevel? =
     if (levelIndex in TriggerLevel.values().indices)
@@ -76,5 +76,3 @@ private fun findTriggerLevelByIndex(levelIndex: Long): TriggerLevel? =
         null
 
 private data class TriggerLevelRecord(val placeId: Long, val triggerLevelIndex: Long)
-
-private const val CURRENT_ID = -1L

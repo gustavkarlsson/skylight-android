@@ -9,11 +9,11 @@ import se.gustavkarlsson.skylight.android.lib.places.Place
 
 internal data class State(
     val locationAccess: Access,
-    val selectedPlaceId: Long?,
+    val selectedPlaceId: Long,
     val selectedAuroraReport: LoadableAuroraReport,
     val search: Search,
     val places: List<Place>,
-    val notificationTriggerLevels: Map<Long?, TriggerLevel>,
+    val notificationTriggerLevels: Map<Long, TriggerLevel>,
 ) {
     val selectedPlace: Place
         get() = places.firstOrNull { place ->

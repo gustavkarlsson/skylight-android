@@ -6,14 +6,14 @@ import se.gustavkarlsson.skylight.android.core.R
 import se.gustavkarlsson.skylight.android.lib.location.Location
 
 sealed class Place {
-    abstract val id: Long?
+    abstract val id: Long
     abstract val name: TextRef
     abstract val nameString: String?
     abstract val location: Location?
     abstract val lastChanged: Instant?
 
     object Current : Place() {
-        override val id: Nothing? = null
+        override val id: Long = -1
         override val name = TextRef.stringRes(R.string.your_location)
         override val nameString: String? = null
         override val location: Location? = null
