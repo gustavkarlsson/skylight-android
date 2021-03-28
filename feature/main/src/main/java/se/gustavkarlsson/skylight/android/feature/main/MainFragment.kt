@@ -581,7 +581,10 @@ private fun Card(
 
             val actualProgress = item.progress?.toFloat()
             val targetProgress = actualProgress?.coerceAtLeast(0.02F) ?: 0F
-            val animatedProgress by animateFloatAsState(targetValue = targetProgress)
+            val animatedProgress by animateFloatAsState(
+                targetValue = targetProgress,
+                animationSpec = spring(stiffness = Spring.StiffnessLow),
+            )
             val renderProgress = if (actualProgress == null) null else animatedProgress
             MultiColorLinearProgressIndicator(
                 modifier = Modifier.layoutId("progressIndicator"),
