@@ -97,7 +97,9 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchField
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
+import se.gustavkarlsson.skylight.android.lib.ui.compose.heart
 import se.gustavkarlsson.skylight.android.lib.ui.compose.navigationBarsWithIme
+import se.gustavkarlsson.skylight.android.lib.ui.compose.bell
 import se.gustavkarlsson.skylight.android.lib.ui.compose.onSurfaceWeaker
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
@@ -482,7 +484,7 @@ private fun PlaceButtons(
                 val icon = if (notificationsButtonState.checked) {
                     Icons.Notifications
                 } else Icons.NotificationsNone
-                Icon(icon, tint = Color.Yellow, contentDescription = null) // FIXME color
+                Icon(icon, tint = Colors.bell, contentDescription = null)
             }
         }
         AnimatedVisibility(visible = favoriteButtonState.visible) {
@@ -493,7 +495,7 @@ private fun PlaceButtons(
                 val icon = if (favoriteButtonState.checked) {
                     Icons.Favorite
                 } else Icons.FavoriteBorder
-                Icon(icon, tint = Color.Red, contentDescription = null) // FIXME color
+                Icon(icon, tint = Colors.heart, contentDescription = null)
             }
         }
     }

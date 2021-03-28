@@ -49,3 +49,9 @@ val Colors.progressMedium: Color
 
 val Colors.progressHighest: Color
     get() = Color(0xFF34B4E2)
+
+val Colors.bell: Color
+    get() = Color(0xFFFFEE58)
+
+val Colors.heart: Color
+    get() = Color(0xFFFF7043)
