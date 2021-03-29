@@ -13,9 +13,9 @@ internal class Skylight : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        initDarkMode()
         initLogging()
         initStrictMode()
-        initDarkMode()
         initThreeThen()
         initDagger()
         runMigrations()

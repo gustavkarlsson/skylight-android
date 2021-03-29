@@ -24,5 +24,4 @@ dependencies {
     api("androidx.constraintlayout:constraintlayout-compose:${Versions.composeConstraintLayout}")
 
     api("dev.chrisbanes.accompanist:accompanist-insets:${Versions.accompanist}")
-    api("com.google.android.material:compose-theme-adapter:${Versions.composeThemeAdapter}")
 }
