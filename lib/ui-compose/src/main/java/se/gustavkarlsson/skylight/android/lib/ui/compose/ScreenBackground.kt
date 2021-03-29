@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
+import com.google.accompanist.insets.ProvideWindowInsets
 
 @Composable
 fun ScreenBackground(

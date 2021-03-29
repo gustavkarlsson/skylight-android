@@ -23,5 +23,5 @@ dependencies {
     api("androidx.compose.animation:animation:${Versions.compose}")
     api("androidx.constraintlayout:constraintlayout-compose:${Versions.composeConstraintLayout}")
 
-    api("dev.chrisbanes.accompanist:accompanist-insets:${Versions.accompanist}")
+    api("com.google.accompanist:accompanist-insets:${Versions.accompanist}")
 }

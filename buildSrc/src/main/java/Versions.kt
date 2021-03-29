@@ -54,7 +54,7 @@ object Versions {
     val store = "4.0.0-beta01"
     val compose = "1.0.0-beta03"
     val composeConstraintLayout = "1.0.0-alpha05"
-    val accompanist = "0.6.1"
+    val accompanist = "0.7.0"
 
     // Test
     val junit = "4.12"
