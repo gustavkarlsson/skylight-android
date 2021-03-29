@@ -28,12 +28,9 @@ object Versions {
     val androidAppcompat = "1.3.0-beta01"
     val androidFragment = "1.3.1"
     val androidAnnotation = "1.1.0"
-    val androidPreference = "1.1.1"
     val androidWorkManager = "2.3.4"
     val androidCoreKtx = "1.3.0"
     val androidLifecycle = "2.2.0"
-
-    val material = "1.1.0"
 
     val runtimePermissionKotlin = "1.1.2"
     val kotlinxCoroutines = "1.4.2"

@@ -13,8 +13,6 @@ dependencies {
     api(project(":lib:navigation"))
     api(project(":lib:scopedservice"))
 
-    api("com.google.android.material:material:${Versions.material}")
-
     // Lifecycle
     api("androidx.lifecycle:lifecycle-runtime-ktx:${Versions.androidLifecycle}")
     kapt("androidx.lifecycle:lifecycle-compiler:${Versions.androidLifecycle}")
