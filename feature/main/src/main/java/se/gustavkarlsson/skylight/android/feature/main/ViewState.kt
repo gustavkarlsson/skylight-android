@@ -15,6 +15,7 @@ import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
+import se.gustavkarlsson.skylight.android.lib.ui.compose.SkylightColors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 
 
@@ -46,7 +47,7 @@ internal data class FactorItem(
     val title: TextRef,
     val valueText: TextRef,
     val descriptionText: TextRef,
-    val valueTextColor: Colors.() -> Color,
+    val valueTextColor: SkylightColors.() -> Color,
     val progress: Double?,
     val errorText: TextRef?
 ) {

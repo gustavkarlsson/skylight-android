@@ -52,7 +52,6 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.NotificationsNone
-import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -97,10 +96,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchField
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
-import se.gustavkarlsson.skylight.android.lib.ui.compose.heart
 import se.gustavkarlsson.skylight.android.lib.ui.compose.navigationBarsWithIme
-import se.gustavkarlsson.skylight.android.lib.ui.compose.bell
-import se.gustavkarlsson.skylight.android.lib.ui.compose.onSurfaceWeaker
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
 @FlowPreview

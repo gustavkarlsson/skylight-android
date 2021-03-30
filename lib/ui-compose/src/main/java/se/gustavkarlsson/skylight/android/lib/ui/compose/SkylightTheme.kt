@@ -13,6 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 
 // TODO set bars colors from compose?
 
@@ -76,6 +79,13 @@ private val lightPalette = SkylightColors(
 )
 
 // FIXME add typo
+
+private val typo = Typography(
+    defaultFontFamily = FontFamily(
+        Font(R.font.open_sans_condensed_light, weight = FontWeight.Light)
+    ),
+)
+
 /*
 <style name="AppTheme.TextTitleLarge" parent="TextAppearance.MaterialComponents.Headline4">
     <item name="android:textColor">?android:attr/textColor</item>
