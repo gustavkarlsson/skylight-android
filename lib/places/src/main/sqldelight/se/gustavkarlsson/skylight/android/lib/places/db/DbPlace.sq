@@ -25,6 +25,11 @@ UPDATE DbPlace
   SET type = ?, lastChangedMillis = ?
   WHERE id = ?;
 
+updateLastChanged:
+UPDATE DbPlace
+  SET lastChangedMillis = ?
+  WHERE id = ?;
+
 keepMostRecent:
 DELETE FROM DbPlace
   WHERE type = "recent" AND id NOT IN (

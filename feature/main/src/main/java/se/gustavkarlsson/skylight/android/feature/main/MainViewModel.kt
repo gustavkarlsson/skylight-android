@@ -283,7 +283,12 @@ internal class MainViewModel(
     private fun onSearchResultClicked(result: SearchResult) {
         scope.launch {
             val place = when (result) {
-                is SearchResult.Known -> result.place
+                is SearchResult.Known -> {
+                    when (result.place) {
+                        Place.Current -> result.place
+                        is Place.Favorite, is Place.Recent -> placesRepository.updateLastChanged(result.place.id)
+                    }
+                }
                 is SearchResult.New -> {
                     placesRepository.addRecent(result.name, result.location)
                 }
@@ -291,6 +296,19 @@ internal class MainViewModel(
             selectedPlaceRepository.set(place)
             store.issue { state ->
                 state.update { copy(search = Search.Closed) }
+            }
+        }
+    }
+
+    fun onBackPressed(): Boolean {
+        return when (store.state.value.search) {
+            Search.Closed -> false
+            is Search.Open -> {
+                // FIXME Doesn't remove focus
+                store.issue { state ->
+                    state.update { copy(search = Search.Closed) }
+                }
+                true
             }
         }
     }

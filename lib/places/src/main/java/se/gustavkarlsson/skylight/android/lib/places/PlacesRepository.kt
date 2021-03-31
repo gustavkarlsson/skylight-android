@@ -7,5 +7,6 @@ interface PlacesRepository {
     suspend fun setFavorite(placeId: Long): Place.Favorite
     suspend fun setRecent(placeId: Long): Place.Recent
     suspend fun addRecent(name: String, location: Location): Place.Recent
+    suspend fun updateLastChanged(placeId: Long): Place
     fun stream(): Flow<List<Place>>
 }

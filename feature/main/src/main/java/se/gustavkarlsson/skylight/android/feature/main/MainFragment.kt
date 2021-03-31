@@ -72,15 +72,16 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
-import com.ioki.textref.TextRef
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.toPaddingValues
+import com.ioki.textref.TextRef
 import java.util.Locale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
+import se.gustavkarlsson.skylight.android.lib.navigation.BackButtonHandler
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
@@ -103,7 +104,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class MainFragment : ComposeScreenFragment() {
+class MainFragment : ComposeScreenFragment(), BackButtonHandler {
 
     private val viewModel by lazy {
         getOrRegisterService("mainViewModel") {
@@ -147,6 +148,8 @@ class MainFragment : ComposeScreenFragment() {
         intent.data = Uri.fromParts("package", requireContext().packageName, null)
         startActivity(intent)
     }
+
+    override fun onBackPressed(): Boolean = viewModel.onBackPressed()
 }
 
 @ExperimentalMaterialApi
@@ -424,6 +427,7 @@ private fun ErrorBanner(
         }
     }
 }
+
 @Composable
 private fun AlertDialog(
     items: List<NotificationLevelItem>?,

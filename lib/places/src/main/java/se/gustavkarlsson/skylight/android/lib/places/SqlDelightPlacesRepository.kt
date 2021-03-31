@@ -52,13 +52,21 @@ internal class SqlDelightPlacesRepository(
         inserted
     }
 
+    private fun removeOldRecents() = queries.keepMostRecent(maxRecentsCount.toLong())
+
+    override suspend fun updateLastChanged(placeId: Long): Place = withContext(dispatcher) {
+        val now = time.now()
+        queries.updateLastChanged(now.toEpochMilli(), placeId)
+        queries.selectById(placeId)
+            .exactlyOne()
+            .toPlace()
+    }
+
     private suspend fun <T : Any> Query<T>.exactlyOne(): T {
         return asFlow()
             .mapToOne(dispatcher)
             .first()
     }
-
-    private fun removeOldRecents() = queries.keepMostRecent(maxRecentsCount.toLong())
 
     override fun stream(): Flow<List<Place>> =
         queries.selectAll()
