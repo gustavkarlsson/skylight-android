@@ -11,6 +11,7 @@ import androidx.compose.material.lightColors
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -19,8 +20,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-
-// TODO set bars colors from compose?
+import com.google.accompanist.systemuicontroller.LocalSystemUiController
+import com.google.accompanist.systemuicontroller.rememberAndroidSystemUiController
 
 data class SkylightColors(
     val material: Colors,
@@ -95,7 +96,14 @@ fun SkylightTheme(
     content: @Composable () -> Unit,
 ) {
     val colors = if (darkMode) darkPalette else lightPalette
-    CompositionLocalProvider(LocalColors provides colors) {
+    val systemUiController = rememberAndroidSystemUiController()
+    CompositionLocalProvider(
+        LocalColors provides colors,
+        LocalSystemUiController provides systemUiController,
+    ) {
+        SideEffect {
+            systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = !darkMode)
+        }
         MaterialTheme(
             colors = colors.material,
             content = content,
