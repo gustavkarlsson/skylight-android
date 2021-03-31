@@ -46,9 +46,9 @@ fun SearchField(
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = FocusRequester()
-    var wasFocused by remember { mutableStateOf(false) }
+    val wasFocused = remember { mutableStateOf(false) }
     val focused = state is SearchFieldState.Focused
-    val focusChanged = wasFocused != focused
+    val focusChanged = wasFocused.value != focused
     if (focusChanged) {
         SideEffect {
             if (focused) {
@@ -57,14 +57,14 @@ fun SearchField(
                 focusManager.clearFocus()
             }
         }
-        wasFocused = focused
+        wasFocused.value = focused
     }
     val focusedText = (state as? SearchFieldState.Focused)?.text
     TextField(
         modifier = modifier
             .onFocusChanged { focus ->
                 val newState = if (focus.isFocused) {
-                    SearchFieldState.Focused("")
+                    SearchFieldState.Focused(focusedText ?: "")
                 } else SearchFieldState.Unfocused
                 onStateChanged(newState)
             }
