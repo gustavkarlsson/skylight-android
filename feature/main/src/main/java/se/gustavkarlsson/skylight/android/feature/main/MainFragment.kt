@@ -96,6 +96,8 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchField
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
+import se.gustavkarlsson.skylight.android.lib.ui.compose.chanceSubtitle
+import se.gustavkarlsson.skylight.android.lib.ui.compose.chanceTitle
 import se.gustavkarlsson.skylight.android.lib.ui.compose.navigationBarsWithIme
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
@@ -509,12 +511,12 @@ private fun CenterText(
     ) {
         Text(
             text = textRef(textRef = viewState.chanceLevelText),
-            style = Typography.h4,
+            style = Typography.chanceTitle,
         )
         Text(
             text = textRef(textRef = viewState.chanceSubtitleText),
             color = Colors.onSurfaceWeaker,
-            style = Typography.body1,
+            style = Typography.chanceSubtitle,
         )
     }
 }

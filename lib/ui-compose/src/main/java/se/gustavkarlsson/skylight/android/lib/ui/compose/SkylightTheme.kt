@@ -13,9 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 
 // TODO set bars colors from compose?
 
@@ -53,7 +56,7 @@ private val darkPalette = SkylightColors(
         onPrimary = Color.White,
         onSecondary = Color.White,
     ),
-    onSurfaceWeaker = Color(0xB3000000),
+    onSurfaceWeaker = Color(0xB3FFFFFF),
     progressLowest = Color(0xFFF44336),
     progressMedium = Color(0xFFF0F436),
     progressHighest = Color(0xFF34B4E2),
@@ -70,7 +73,7 @@ private val lightPalette = SkylightColors(
         onPrimary = Color.White,
         onSecondary = Color.White,
     ),
-    onSurfaceWeaker = Color(0xB3FFFFFF),
+    onSurfaceWeaker = Color(0xB3000000),
     progressLowest = Color(0xFFF44336),
     progressMedium = Color(0xFFF0F436),
     progressHighest = Color(0xFF34B4E2),
@@ -78,39 +81,13 @@ private val lightPalette = SkylightColors(
     heart = Color(0xFFFF7043),
 )
 
-// FIXME add typo
-
-private val typo = Typography(
-    defaultFontFamily = FontFamily(
-        Font(R.font.open_sans_condensed_light, weight = FontWeight.Light)
-    ),
-)
-
-/*
-<style name="AppTheme.TextTitleLarge" parent="TextAppearance.MaterialComponents.Headline4">
-    <item name="android:textColor">?android:attr/textColor</item>
-    <item name="autoSizeTextType">uniform</item>
-    <item name="autoSizeMaxTextSize">40sp</item>
-    <item name="android:lines">1</item>
-</style>
-
-<style name="AppTheme.TextTitleSmall" parent="TextAppearance.MaterialComponents.Headline5">
-    <item name="android:textColor">?android:attr/textColor</item>
-    <item name="autoSizeTextType">uniform</item>
-    <item name="autoSizeMaxTextSize">24sp</item>
-    <item name="android:lines">1</item>
-</style>
-
-<style name="AppTheme.TextBody1" parent="TextAppearance.MaterialComponents.Body1">
-    <item name="android:textColor">?android:attr/textColorPrimary</item>
-</style>
-
-<style name="AppTheme.TextBody2" parent="TextAppearance.MaterialComponents.Body2">
-    <item name="android:textColor">?android:attr/textColorSecondary</item>
-</style>
-*/
-
 private val LocalColors = staticCompositionLocalOf { lightPalette }
+
+private val openSansCondensed = FontFamily(
+    Font(R.font.open_sans_condensed_light, weight = FontWeight.Light),
+    Font(R.font.open_sans_condensed_bold, weight = FontWeight.Bold),
+    Font(R.font.open_sans_condensed_light_italic, weight = FontWeight.Light, style = FontStyle.Italic),
+)
 
 @Composable
 fun SkylightTheme(
@@ -137,5 +114,11 @@ val Shapes: Shapes
 val Typography: Typography
     @Composable
     get() = MaterialTheme.typography
+
+val Typography.chanceTitle: TextStyle
+    get() = h3.copy(fontFamily = openSansCondensed)
+
+val Typography.chanceSubtitle: TextStyle
+    get() = subtitle1.copy(fontFamily = openSansCondensed, fontSize = 20.sp)
 
 val Icons: Icons.Filled = Icons.Default
