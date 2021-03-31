@@ -4,18 +4,20 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.runtime.getValue
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.isFocused
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
@@ -27,7 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 private fun PreviewSearchField() {
     SearchField(
         modifier = Modifier,
-        text = "",
+        state = SearchFieldState.Unfocused,
         unfocusedText = "Current location",
         placeholderText = "Enter your search term",
         onStateChanged = {},
@@ -37,25 +39,38 @@ private fun PreviewSearchField() {
 @Composable
 fun SearchField(
     modifier: Modifier = Modifier,
-    text: String,
+    state: SearchFieldState,
     unfocusedText: String,
     placeholderText: String,
     onStateChanged: (SearchFieldState) -> Unit,
 ) {
-    var focused by remember { mutableStateOf(false) }
-    LaunchedEffect(key1 = focused, key2 = text) {
-        val state = if (focused) {
-            SearchFieldState.Focused(text)
-        } else SearchFieldState.Unfocused
-        onStateChanged(state)
+    val focusManager = LocalFocusManager.current
+    val focusRequester = FocusRequester()
+    var wasFocused by remember { mutableStateOf(false) }
+    val focused = state is SearchFieldState.Focused
+    val focusChanged = wasFocused != focused
+    if (focusChanged) {
+        SideEffect {
+            if (focused) {
+                focusRequester.requestFocus()
+            } else {
+                focusManager.clearFocus()
+            }
+        }
+        wasFocused = focused
     }
+    val focusedText = (state as? SearchFieldState.Focused)?.text
     TextField(
-        modifier = modifier.onFocusChanged { focus ->
-            focused = focus.isFocused
-        },
-        value = if (focused) text else unfocusedText,
+        modifier = modifier
+            .onFocusChanged { focus ->
+                val newState = if (focus.isFocused) {
+                    SearchFieldState.Focused("")
+                } else SearchFieldState.Unfocused
+                onStateChanged(newState)
+            }
+            .focusRequester(focusRequester),
+        value = focusedText ?: unfocusedText,
         leadingIcon = {
-            val focusManager = LocalFocusManager.current
             IconButton(
                 enabled = focused,
                 onClick = { focusManager.clearFocus() }
@@ -71,12 +86,12 @@ fun SearchField(
                 }
             }
         },
-        trailingIcon = if (focused && text.isNotEmpty()) {
+        trailingIcon = if (!focusedText.isNullOrEmpty()) {
             {
                 IconButton(
                     onClick = {
-                        val state = SearchFieldState.Focused("")
-                        onStateChanged(state)
+                        val newState = SearchFieldState.Focused("")
+                        onStateChanged(newState)
                     },
                 ) {
                     Icon(
@@ -90,10 +105,10 @@ fun SearchField(
             Text(placeholderText)
         },
         onValueChange = { newText ->
-            val state = if (focused) {
+            val newState = if (focused) {
                 SearchFieldState.Focused(newText)
             } else SearchFieldState.Unfocused
-            onStateChanged(state)
+            onStateChanged(newState)
         },
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = Color.Transparent,

@@ -265,7 +265,7 @@ internal class MainViewModel(
             val search = when (searchFieldState) {
                 SearchFieldState.Unfocused -> Search.Closed
                 is SearchFieldState.Focused -> {
-                    val query = searchFieldState.text.trim()
+                    val query = searchFieldState.text
                     when (search) {
                         Search.Closed -> Search.Open(
                             query = query,
@@ -304,7 +304,6 @@ internal class MainViewModel(
         return when (store.state.value.search) {
             Search.Closed -> false
             is Search.Open -> {
-                // FIXME Doesn't remove focus
                 store.issue { state ->
                     state.update { copy(search = Search.Closed) }
                 }

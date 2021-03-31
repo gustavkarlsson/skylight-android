@@ -19,9 +19,13 @@ internal class ContinuouslySearchAction(
         while (true) {
             val search = state.value.search
             val durationMillis = measureTimeMillis {
-                if (search is Search.Open && search.query != search.suggestions.query) {
-                    val result = geocoder.geocode(search.query)
-                    state.update { update(search.query, result) }
+                if (search is Search.Open) {
+                    val searchQuery = search.query.trim()
+                    val suggestionsQuery = search.suggestions.query.trim()
+                    if (searchQuery != suggestionsQuery) {
+                        val result = geocoder.geocode(searchQuery)
+                        state.update { update(searchQuery, result) }
+                    }
                 }
             }
             val delayMillis = querySampleDelay.toMillis() - durationMillis
@@ -29,11 +33,11 @@ internal class ContinuouslySearchAction(
         }
     }
 
-    private fun State.update(requestQuery: String, result: GeocodingResult): State {
+    private fun State.update(searchQuery: String, result: GeocodingResult): State {
         if (search !is Search.Open) return this
         return when (result) {
             is GeocodingResult.Success -> {
-                val suggestions = Suggestions(requestQuery, result.suggestions)
+                val suggestions = Suggestions(searchQuery, result.suggestions)
                 updateState(search, suggestionsToSet = suggestions)
             }
             GeocodingResult.Failure.Io -> {

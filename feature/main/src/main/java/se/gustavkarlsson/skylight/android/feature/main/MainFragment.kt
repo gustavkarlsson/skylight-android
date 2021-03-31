@@ -94,6 +94,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.MultiColorLinearProgressIndicator
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchField
+import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
@@ -191,7 +192,7 @@ private fun Content(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    searchText = (viewState.search as? SearchViewState.Open)?.query,
+                    searchFieldState = viewState.search.toSearchFieldState(),
                     title = textRef(viewState.toolbarTitleName),
                     onAboutClicked = onAboutClicked,
                     onEvent = onEvent,
@@ -214,9 +215,16 @@ private fun Content(
     }
 }
 
+private fun SearchViewState.toSearchFieldState(): SearchFieldState {
+    return when (this) {
+        SearchViewState.Closed -> SearchFieldState.Unfocused
+        is SearchViewState.Open -> SearchFieldState.Focused(query)
+    }
+}
+
 @Composable
 private fun TopAppBar(
-    searchText: String?,
+    searchFieldState: SearchFieldState,
     title: String,
     onAboutClicked: () -> Unit,
     onEvent: (Event) -> Unit,
@@ -231,7 +239,7 @@ private fun TopAppBar(
         title = {
             SearchField(
                 modifier = Modifier.fillMaxWidth(),
-                text = searchText.orEmpty(),
+                state = searchFieldState,
                 unfocusedText = title,
                 placeholderText = "Search", // FIXME,
                 onStateChanged = { state -> onEvent(Event.SearchChanged(state)) },
