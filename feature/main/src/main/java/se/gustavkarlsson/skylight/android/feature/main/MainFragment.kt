@@ -217,8 +217,8 @@ private fun Content(
 
 private fun SearchViewState.toSearchFieldState(): SearchFieldState {
     return when (this) {
-        SearchViewState.Closed -> SearchFieldState.Unfocused
-        is SearchViewState.Open -> SearchFieldState.Focused(query)
+        SearchViewState.Closed -> SearchFieldState.Inactive
+        is SearchViewState.Open -> SearchFieldState.Active(query)
     }
 }
 
@@ -240,7 +240,7 @@ private fun TopAppBar(
             SearchField(
                 modifier = Modifier.fillMaxWidth(),
                 state = searchFieldState,
-                unfocusedText = title,
+                inactiveText = title,
                 placeholderText = "Search", // FIXME,
                 onStateChanged = { state -> onEvent(Event.SearchChanged(state)) },
             )

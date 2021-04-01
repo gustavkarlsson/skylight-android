@@ -263,8 +263,8 @@ internal class MainViewModel(
     private fun onSearchChanged(searchFieldState: SearchFieldState) = store.issue { state ->
         state.update {
             val search = when (searchFieldState) {
-                SearchFieldState.Unfocused -> Search.Closed
-                is SearchFieldState.Focused -> {
+                SearchFieldState.Inactive -> Search.Closed
+                is SearchFieldState.Active -> {
                     val query = searchFieldState.text
                     when (search) {
                         Search.Closed -> Search.Open(

@@ -4,7 +4,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.runtime.getValue
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.filled.ArrowBack
@@ -12,6 +11,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -29,54 +29,52 @@ import androidx.compose.ui.tooling.preview.Preview
 private fun PreviewSearchField() {
     SearchField(
         modifier = Modifier,
-        state = SearchFieldState.Unfocused,
-        unfocusedText = "Current location",
+        state = SearchFieldState.Inactive,
+        inactiveText = "Current location",
         placeholderText = "Enter your search term",
         onStateChanged = {},
     )
 }
 
+// TODO Fix flickering when focus changes
 @Composable
 fun SearchField(
     modifier: Modifier = Modifier,
     state: SearchFieldState,
-    unfocusedText: String,
+    inactiveText: String,
     placeholderText: String,
     onStateChanged: (SearchFieldState) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = FocusRequester()
-    val wasFocused = remember { mutableStateOf(false) }
-    val focused = state is SearchFieldState.Focused
-    val focusChanged = wasFocused.value != focused
-    if (focusChanged) {
-        SideEffect {
-            if (focused) {
-                focusRequester.requestFocus()
-            } else {
-                focusManager.clearFocus()
-            }
+    var focused by remember { mutableStateOf(false) }
+    val active = state is SearchFieldState.Active
+    val activeText = (state as? SearchFieldState.Active)?.text
+    SideEffect {
+        if (active) {
+            focusRequester.requestFocus()
+        } else if (focused) {
+            focusManager.clearFocus()
         }
-        wasFocused.value = focused
     }
-    val focusedText = (state as? SearchFieldState.Focused)?.text
     TextField(
         modifier = modifier
             .onFocusChanged { focus ->
+                focused = focus.isFocused
                 val newState = if (focus.isFocused) {
-                    SearchFieldState.Focused(focusedText ?: "")
-                } else SearchFieldState.Unfocused
+                    SearchFieldState.Active(activeText ?: "")
+                } else SearchFieldState.Inactive
                 onStateChanged(newState)
             }
             .focusRequester(focusRequester),
-        value = focusedText ?: unfocusedText,
+        value = activeText ?: inactiveText,
         leadingIcon = {
             IconButton(
-                enabled = focused,
+                enabled = active,
                 onClick = { focusManager.clearFocus() }
             ) {
-                Crossfade(targetState = focused) { focused ->
-                    val imageVector = if (focused) {
+                Crossfade(targetState = active) { active ->
+                    val imageVector = if (active) {
                         Icons.ArrowBack
                     } else Icons.Search
                     Icon(
@@ -86,11 +84,11 @@ fun SearchField(
                 }
             }
         },
-        trailingIcon = if (!focusedText.isNullOrEmpty()) {
+        trailingIcon = if (!activeText.isNullOrEmpty()) {
             {
                 IconButton(
                     onClick = {
-                        val newState = SearchFieldState.Focused("")
+                        val newState = SearchFieldState.Active("")
                         onStateChanged(newState)
                     },
                 ) {
@@ -105,9 +103,9 @@ fun SearchField(
             Text(placeholderText)
         },
         onValueChange = { newText ->
-            val newState = if (focused) {
-                SearchFieldState.Focused(newText)
-            } else SearchFieldState.Unfocused
+            val newState = if (active) {
+                SearchFieldState.Active(newText)
+            } else SearchFieldState.Inactive
             onStateChanged(newState)
         },
         colors = TextFieldDefaults.textFieldColors(
@@ -120,6 +118,6 @@ fun SearchField(
 }
 
 sealed class SearchFieldState {
-    object Unfocused : SearchFieldState()
-    data class Focused(val text: String) : SearchFieldState()
+    object Inactive : SearchFieldState()
+    data class Active(val text: String) : SearchFieldState()
 }
