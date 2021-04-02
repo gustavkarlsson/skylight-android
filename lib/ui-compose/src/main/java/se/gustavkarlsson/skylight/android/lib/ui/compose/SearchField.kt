@@ -37,6 +37,7 @@ private fun PreviewSearchField() {
 }
 
 // TODO Fix flickering when focus changes
+// FIXME fix focus when tapping leading, then input field. It doesn't get set to capture
 @Composable
 fun SearchField(
     modifier: Modifier = Modifier,
