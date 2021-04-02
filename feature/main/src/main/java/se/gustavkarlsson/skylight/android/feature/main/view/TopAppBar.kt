@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.filled.Info
@@ -36,7 +36,7 @@ internal fun TopAppBar(
             .toPaddingValues(additionalHorizontal = AppBarHorizontalPadding),
         title = {
             SearchField(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxSize(),
                 state = state.toSearchFieldState(),
                 inactiveText = title,
                 placeholderText = stringResource(id = R.string.place_search),
