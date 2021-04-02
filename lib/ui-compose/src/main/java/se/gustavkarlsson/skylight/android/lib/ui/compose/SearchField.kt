@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.isFocused
 import androidx.compose.ui.focus.onFocusChanged
@@ -37,7 +38,6 @@ private fun PreviewSearchField() {
 }
 
 // TODO Fix flickering when focus changes
-// FIXME fix focus when tapping leading, then input field. It doesn't get set to capture
 @Composable
 fun SearchField(
     modifier: Modifier = Modifier,
@@ -48,7 +48,7 @@ fun SearchField(
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = FocusRequester()
-    var canClearFocus by remember { mutableStateOf(false) }
+    var canClearFocus by remember { mutableStateOf(false) } // Prevents clearing focus when started as Inactive
     val active = state is SearchFieldState.Active
     val activeText = (state as? SearchFieldState.Active)?.text
     SideEffect {
@@ -65,6 +65,9 @@ fun SearchField(
             .focusRequester(focusRequester)
             .onFocusChanged { focus ->
                 val newState = if (focus.isFocused) {
+                    if (focus != FocusState.Captured) {
+                        focusRequester.captureFocus() // In case focus is active by non-captured means
+                    }
                     SearchFieldState.Active(activeText ?: "")
                 } else SearchFieldState.Inactive
                 onStateChanged(newState)
