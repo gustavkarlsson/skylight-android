@@ -12,15 +12,15 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.insets.navigationBarsPadding
 import com.ioki.textref.TextRef
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.MainViewModelComponent
@@ -57,24 +57,24 @@ class MainFragment : ComposeScreenFragment(), BackButtonHandler {
     @Composable
     override fun ScreenContent() {
         val state by viewModel.state.collectAsState()
-        val scope = rememberCoroutineScope()
-        val onBannerActionClicked: (BannerData.Event) -> Unit = { event ->
-            when (event) {
-                BannerData.Event.RequestLocationPermission -> requestLocationPermission(scope)
-                BannerData.Event.OpenAppDetails -> openAppDetails()
-            }
-        }
         Content(
             state = state,
-            onBannerActionClicked = onBannerActionClicked,
+            onBannerActionClicked = { event ->
+                when (event) {
+                    BannerData.Event.RequestLocationPermission -> requestLocationPermission()
+                    BannerData.Event.OpenAppDetails -> openAppDetails()
+                }
+            },
             onAboutClicked = { navigator.goTo(screens.about) },
             onEvent = { event -> viewModel.onEvent(event) },
         )
     }
 
-    private fun requestLocationPermission(scope: CoroutineScope) {
-        scope.launch {
-            PermissionsComponent.instance.locationPermissionRequester().request(this@MainFragment)
+    private fun requestLocationPermission() {
+        startStopScope?.launch {
+            withContext(Dispatchers.Main) {
+                PermissionsComponent.instance.locationPermissionRequester().request(this@MainFragment)
+            }
         }
     }
 
