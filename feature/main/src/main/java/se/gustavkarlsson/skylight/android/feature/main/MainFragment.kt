@@ -34,8 +34,6 @@ import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.ContentAlpha
-import androidx.compose.material.DropdownMenu
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -49,7 +47,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.runtime.Composable
@@ -246,22 +244,8 @@ private fun TopAppBar(
             )
         },
         actions = {
-            var menuExpanded by remember { mutableStateOf(false) }
-            IconButton(
-                onClick = { menuExpanded = !menuExpanded },
-            ) {
-                Icon(Icons.MoreVert, contentDescription = null)
-            }
-            // FIXME change to icon?
-            DropdownMenu(
-                expanded = menuExpanded,
-                onDismissRequest = {
-                    menuExpanded = false
-                },
-            ) {
-                DropdownMenuItem(onClick = onAboutClicked) {
-                    Text(stringResource(R.string.about))
-                }
+            IconButton(onClick = onAboutClicked) {
+                Icon(Icons.Info, contentDescription = stringResource(R.string.about))
             }
         }
     )
