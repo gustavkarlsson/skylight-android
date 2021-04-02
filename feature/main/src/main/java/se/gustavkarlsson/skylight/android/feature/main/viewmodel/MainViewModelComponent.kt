@@ -39,7 +39,7 @@ import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
 
 @Component(
     modules = [
-        MainModule::class,
+        MainViewModelModule::class,
         RelativeTimeFormatterModule::class,
     ],
     dependencies = [
@@ -93,7 +93,7 @@ internal annotation class SearchDelay
 internal annotation class StreamThrottle
 
 @Module
-internal object MainModule {
+internal object MainViewModelModule {
 
     @Provides
     @NowThreshold
