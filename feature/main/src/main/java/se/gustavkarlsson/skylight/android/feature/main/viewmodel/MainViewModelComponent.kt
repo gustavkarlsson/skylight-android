@@ -10,6 +10,7 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.skylight.android.core.AppComponent
+import se.gustavkarlsson.skylight.android.core.ViewModelScope
 import se.gustavkarlsson.skylight.android.core.utils.millis
 import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.core.utils.seconds
@@ -37,6 +38,7 @@ import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
 
+@ViewModelScope
 @Component(
     modules = [
         MainViewModelModule::class,
@@ -144,6 +146,7 @@ internal object MainViewModelModule {
     @FlowPreview
     @ExperimentalCoroutinesApi
     @Provides
+    @ViewModelScope
     fun store(
         initialState: State,
         startActions: List<@JvmSuppressWildcards Action<State>>,
