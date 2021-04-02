@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main
+package se.gustavkarlsson.skylight.android.feature.main.state
 
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers

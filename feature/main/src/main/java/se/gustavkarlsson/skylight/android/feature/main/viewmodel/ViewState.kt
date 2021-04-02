@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main
+package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.History

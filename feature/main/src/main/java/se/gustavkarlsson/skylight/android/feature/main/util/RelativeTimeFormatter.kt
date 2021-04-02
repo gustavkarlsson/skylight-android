@@ -1,9 +1,13 @@
-package se.gustavkarlsson.skylight.android.feature.main
+package se.gustavkarlsson.skylight.android.feature.main.util
 
 import android.text.format.DateUtils
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.core.utils.until
+
+internal interface RelativeTimeFormatter {
+    fun format(time: Instant, now: Instant, minResolution: Duration): CharSequence
+}
 
 internal class DateUtilsRelativeTimeFormatter(
     private val rightNowText: CharSequence

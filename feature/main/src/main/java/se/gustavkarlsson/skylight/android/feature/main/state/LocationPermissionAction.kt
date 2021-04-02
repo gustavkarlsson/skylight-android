@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main
+package se.gustavkarlsson.skylight.android.feature.main.state
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect

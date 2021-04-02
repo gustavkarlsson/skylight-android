@@ -6,7 +6,7 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.feature.about.AboutFragment
 import se.gustavkarlsson.skylight.android.feature.intro.PrivacyPolicyFragment
-import se.gustavkarlsson.skylight.android.feature.main.MainFragment
+import se.gustavkarlsson.skylight.android.feature.main.view.MainFragment
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.navigation.Screens

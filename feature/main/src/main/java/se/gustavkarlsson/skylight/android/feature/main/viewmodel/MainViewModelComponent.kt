@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main
+package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
 import android.content.Context
 import dagger.Component
@@ -14,6 +14,16 @@ import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.core.utils.millis
 import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.core.utils.seconds
+import se.gustavkarlsson.skylight.android.feature.main.R
+import se.gustavkarlsson.skylight.android.feature.main.state.ContinuouslySearchAction
+import se.gustavkarlsson.skylight.android.feature.main.state.LocationPermissionAction
+import se.gustavkarlsson.skylight.android.feature.main.state.Search
+import se.gustavkarlsson.skylight.android.feature.main.state.State
+import se.gustavkarlsson.skylight.android.feature.main.state.StreamPlacesAction
+import se.gustavkarlsson.skylight.android.feature.main.state.StreamReportsLiveAction
+import se.gustavkarlsson.skylight.android.feature.main.state.StreamSelectedPlaceAction
+import se.gustavkarlsson.skylight.android.feature.main.state.StreamTriggerLevelsAction
+import se.gustavkarlsson.skylight.android.feature.main.util.DateUtilsRelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
@@ -60,13 +70,13 @@ import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
         SettingsComponent::class,
     ]
 )
-internal interface MainComponent {
+internal interface MainViewModelComponent {
     @ExperimentalCoroutinesApi
     fun viewModel(): MainViewModel
 
     companion object {
-        fun build(): MainComponent =
-            DaggerMainComponent.builder()
+        fun build(): MainViewModelComponent =
+            DaggerMainViewModelComponent.builder()
                 .appComponent(AppComponent.instance)
                 .timeComponent(TimeComponent.instance)
                 .weatherComponent(WeatherComponent.instance)

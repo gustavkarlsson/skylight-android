@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main
+package se.gustavkarlsson.skylight.android.feature.main.state
 
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel

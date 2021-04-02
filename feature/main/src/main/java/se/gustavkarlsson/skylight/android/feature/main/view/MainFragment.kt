@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main
+package se.gustavkarlsson.skylight.android.feature.main.view
 
 import android.content.Intent
 import android.net.Uri
@@ -79,6 +79,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
+import se.gustavkarlsson.skylight.android.feature.main.R
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.FactorItem
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.MainViewModelComponent
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.NotificationLevelItem
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchViewState
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
 import se.gustavkarlsson.skylight.android.lib.navigation.BackButtonHandler
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
@@ -107,7 +115,7 @@ class MainFragment : ComposeScreenFragment(), BackButtonHandler {
 
     private val viewModel by lazy {
         getOrRegisterService("mainViewModel") {
-            MainComponent.build().viewModel()
+            MainViewModelComponent.build().viewModel()
         }
     }
 
@@ -120,7 +128,7 @@ class MainFragment : ComposeScreenFragment(), BackButtonHandler {
     @ExperimentalAnimationApi
     @Composable
     override fun ScreenContent() {
-        val state by viewModel.viewState.collectAsState()
+        val state by viewModel.state.collectAsState()
         val scope = rememberCoroutineScope()
         val onBannerActionClicked: (BannerData.Event) -> Unit = { event ->
             when (event) {
@@ -129,7 +137,7 @@ class MainFragment : ComposeScreenFragment(), BackButtonHandler {
             }
         }
         Content(
-            viewState = state,
+            state = state,
             onBannerActionClicked = onBannerActionClicked,
             onAboutClicked = { navigator.goTo(screens.about) },
             onEvent = { event -> viewModel.onEvent(event) },
@@ -157,7 +165,7 @@ class MainFragment : ComposeScreenFragment(), BackButtonHandler {
 @Preview
 private fun PreviewContent() {
     Content(
-        viewState = ViewState(
+        state = ViewState(
             toolbarTitleName = TextRef.EMPTY,
             chanceLevelText = TextRef.EMPTY,
             chanceSubtitleText = TextRef.EMPTY,
@@ -179,7 +187,7 @@ private fun PreviewContent() {
 @ExperimentalAnimationApi
 @Composable
 private fun Content(
-    viewState: ViewState,
+    state: ViewState,
     onBannerActionClicked: (BannerData.Event) -> Unit,
     onAboutClicked: () -> Unit,
     onEvent: (Event) -> Unit,
@@ -190,8 +198,8 @@ private fun Content(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    searchFieldState = viewState.search.toSearchFieldState(),
-                    title = textRef(viewState.toolbarTitleName),
+                    searchFieldState = state.search.toSearchFieldState(),
+                    title = textRef(state.toolbarTitleName),
                     onAboutClicked = onAboutClicked,
                     onEvent = onEvent,
                     backgroundColor = topBarBackgroundColor,
@@ -205,7 +213,7 @@ private fun Content(
                     .navigationBarsPadding(),
                 searchElevation = topBarElevation / 2,
                 searchBackgroundColor = topBarBackgroundColor,
-                viewState = viewState,
+                state = state,
                 onBannerActionClicked = onBannerActionClicked,
                 onEvent = onEvent,
             )
@@ -256,7 +264,7 @@ private fun TopAppBar(
 @Composable
 private fun MainContent(
     modifier: Modifier = Modifier,
-    viewState: ViewState,
+    state: ViewState,
     searchElevation: Dp,
     searchBackgroundColor: Color,
     onBannerActionClicked: (BannerData.Event) -> Unit,
@@ -274,13 +282,13 @@ private fun MainContent(
                         width = Dimension.fillToConstraints
                         height = Dimension.wrapContent
                     },
-                errorBannerData = viewState.errorBannerData,
+                errorBannerData = state.errorBannerData,
                 onBannerActionClicked = onBannerActionClicked,
             )
 
             var showDialog by remember { mutableStateOf(false) }
             AlertDialog(
-                items = if (showDialog) viewState.notificationLevelItems else null,
+                items = if (showDialog) state.notificationLevelItems else null,
                 onDismiss = { showDialog = false },
                 onEvent = onEvent,
             )
@@ -291,10 +299,10 @@ private fun MainContent(
                         bottom.linkTo(cards.top)
                         end.linkTo(parent.end)
                     },
-                notificationsButtonState = viewState.notificationsButtonState,
-                favoriteButtonState = viewState.favoriteButtonState,
+                notificationsButtonState = state.notificationsButtonState,
+                favoriteButtonState = state.favoriteButtonState,
                 onNotificationsClicked = { showDialog = true },
-                onFavoriteClicked = { onEvent(viewState.onFavoritesClickedEvent) },
+                onFavoriteClicked = { onEvent(state.onFavoritesClickedEvent) },
             )
 
             CenterText(
@@ -303,7 +311,7 @@ private fun MainContent(
                     width = Dimension.fillToConstraints
                     height = Dimension.fillToConstraints
                 },
-                viewState = viewState,
+                state = state,
             )
 
             Cards(
@@ -314,11 +322,11 @@ private fun MainContent(
                         width = Dimension.fillToConstraints
                         height = Dimension.wrapContent
                     },
-                items = viewState.factorItems,
+                items = state.factorItems,
             )
         }
         AnimatedVisibility(
-            visible = viewState.search is SearchViewState.Open,
+            visible = state.search is SearchViewState.Open,
             enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
             exit = shrinkVertically(shrinkTowards = Alignment.Top) + fadeOut()
         ) {
@@ -331,7 +339,7 @@ private fun MainContent(
                 LazyColumn(
                     contentPadding = LocalWindowInsets.current.navigationBarsWithIme.toPaddingValues(),
                 ) {
-                    items((viewState.search as? SearchViewState.Open)?.searchResults.orEmpty()) { item ->
+                    items((state.search as? SearchViewState.Open)?.searchResults.orEmpty()) { item ->
                         val itemModifier = if (item.selected) {
                             Modifier.background(MaterialTheme.colors.onSurface.copy(alpha = 0.1f))
                         } else Modifier
@@ -498,7 +506,7 @@ private fun PlaceButtons(
 @Composable
 private fun CenterText(
     modifier: Modifier = Modifier,
-    viewState: ViewState,
+    state: ViewState,
 ) {
     Column(
         modifier = modifier,
@@ -506,11 +514,11 @@ private fun CenterText(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = textRef(textRef = viewState.chanceLevelText),
+            text = textRef(textRef = state.chanceLevelText),
             style = Typography.chanceTitle,
         )
         Text(
-            text = textRef(textRef = viewState.chanceSubtitleText),
+            text = textRef(textRef = state.chanceSubtitleText),
             color = Colors.onSurfaceWeaker,
             style = Typography.chanceSubtitle,
         )

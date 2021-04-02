@@ -1,4 +1,4 @@
-package se.gustavkarlsson.skylight.android.feature.main
+package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.filled.LocationOn
@@ -23,6 +23,11 @@ import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
+import se.gustavkarlsson.skylight.android.feature.main.R
+import se.gustavkarlsson.skylight.android.feature.main.state.Search
+import se.gustavkarlsson.skylight.android.feature.main.state.State
+import se.gustavkarlsson.skylight.android.feature.main.state.Suggestions
+import se.gustavkarlsson.skylight.android.feature.main.util.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
@@ -68,7 +73,7 @@ internal class MainViewModel(
         store.start(scope)
     }
 
-    val viewState: StateFlow<ViewState> = store.state
+    val state: StateFlow<ViewState> = store.state
         .map { state -> state.toViewState() }
         .stateIn(scope, SharingStarted.Eagerly, store.state.value.toViewState())
 
