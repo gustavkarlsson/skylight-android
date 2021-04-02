@@ -241,7 +241,7 @@ private fun TopAppBar(
                 modifier = Modifier.fillMaxWidth(),
                 state = searchFieldState,
                 inactiveText = title,
-                placeholderText = "Search", // FIXME,
+                placeholderText = stringResource(id = R.string.place_search),
                 onStateChanged = { state -> onEvent(Event.SearchChanged(state)) },
             )
         },
