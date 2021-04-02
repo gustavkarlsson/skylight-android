@@ -68,6 +68,7 @@ fun SearchField(
             }
             .focusRequester(focusRequester),
         value = activeText ?: inactiveText,
+        singleLine = true,
         leadingIcon = {
             IconButton(
                 onClick = {
