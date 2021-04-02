@@ -1,10 +1,11 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -83,11 +84,11 @@ private fun Content(
                 .fillMaxSize()
                 .padding(16.dp)
                 .systemBarsPadding(),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(64.dp))
             Text(
                 text = stringResource(id = R.string.intro_title),
-                modifier = Modifier.align(Alignment.CenterHorizontally),
                 style = Typography.h4,
             )
             Spacer(modifier = Modifier.height(32.dp))
@@ -98,27 +99,22 @@ private fun Content(
             Spacer(modifier = Modifier.height(16.dp))
             ClickableText(
                 text = stringResource(R.string.privacy_policy),
-                modifier = Modifier.align(Alignment.CenterHorizontally),
                 onClick = onPrivacyPolicyClicked,
             )
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.BottomCenter,
+            Spacer(modifier = Modifier.weight(1f))
+            AnimatedVisibility(
+                visible = true,
+                initiallyVisible = false,
+                enter = slideInVertically(
+                    initialOffsetY = { y -> y },
+                    animationSpec = spring(stiffness = Spring.StiffnessLow),
+                ) + fadeIn(),
             ) {
-                androidx.compose.animation.AnimatedVisibility(
-                    visible = true,
-                    initiallyVisible = false,
-                    enter = slideInVertically(
-                        initialOffsetY = { y -> y },
-                        animationSpec = spring(stiffness = 200f),
-                    ) + fadeIn(),
-                ) {
-                    ExtendedFloatingActionButton(
-                        backgroundColor = Colors.primary,
-                        text = { Text(stringResource(id = R.string.intro_continue)) },
-                        onClick = onContinueClicked,
-                    )
-                }
+                ExtendedFloatingActionButton(
+                    backgroundColor = Colors.primary,
+                    text = { Text(stringResource(id = R.string.intro_continue)) },
+                    onClick = onContinueClicked,
+                )
             }
         }
     }

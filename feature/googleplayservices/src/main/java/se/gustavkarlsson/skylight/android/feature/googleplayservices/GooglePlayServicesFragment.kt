@@ -1,8 +1,12 @@
 package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -90,15 +94,14 @@ private fun Content(
                 .fillMaxSize()
                 .padding(16.dp)
                 .systemBarsPadding(),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(64.dp))
             Image(
-                modifier = Modifier
-                    .fillMaxSize(0.3f)
-                    .align(Alignment.CenterHorizontally),
+                modifier = Modifier.fillMaxSize(0.3f),
                 painter = painterResource(R.drawable.ic_google_play_store),
                 contentDescription = null,
-                colorFilter = ColorFilter.tint(Colors.onBackground)
+                colorFilter = ColorFilter.tint(Colors.onBackground),
             )
             Spacer(modifier = Modifier.height(32.dp))
             Text(
@@ -110,13 +113,16 @@ private fun Content(
                 text = stringResource(R.string.google_play_services_desc),
                 style = Typography.body1,
             )
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Bottom,
-                horizontalAlignment = Alignment.CenterHorizontally,
+            Spacer(modifier = Modifier.weight(1f))
+            ErrorSnackbar(errorSnackbarVisible, onErrorSnackbarDismissed)
+            AnimatedVisibility(
+                visible = true,
+                initiallyVisible = false,
+                enter = slideInVertically(
+                    initialOffsetY = { y -> y },
+                    animationSpec = spring(stiffness = Spring.StiffnessLow),
+                ) + fadeIn(),
             ) {
-                ErrorSnackbar(errorSnackbarVisible, onErrorSnackbarDismissed)
-                // FIXME animate in like intro
                 ExtendedFloatingActionButton(
                     backgroundColor = Colors.primary,
                     text = { Text(stringResource(id = R.string.google_play_services_install)) },
