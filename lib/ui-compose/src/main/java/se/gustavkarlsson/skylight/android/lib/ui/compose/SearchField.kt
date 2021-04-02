@@ -47,35 +47,36 @@ fun SearchField(
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = FocusRequester()
-    var focused by remember { mutableStateOf(false) }
+    var canClearFocus by remember { mutableStateOf(false) }
     val active = state is SearchFieldState.Active
     val activeText = (state as? SearchFieldState.Active)?.text
     SideEffect {
-        if (active) {
-            focusRequester.requestFocus()
-        } else if (focused) {
-            focusManager.clearFocus()
+        when {
+            active -> {
+                focusRequester.captureFocus()
+                canClearFocus = true
+            }
+            canClearFocus -> focusManager.clearFocus(forcedClear = true)
         }
     }
     TextField(
         modifier = modifier
+            .focusRequester(focusRequester)
             .onFocusChanged { focus ->
-                focused = focus.isFocused
                 val newState = if (focus.isFocused) {
                     SearchFieldState.Active(activeText ?: "")
                 } else SearchFieldState.Inactive
                 onStateChanged(newState)
-            }
-            .focusRequester(focusRequester),
+            },
         value = activeText ?: inactiveText,
         singleLine = true,
         leadingIcon = {
             IconButton(
                 onClick = {
                     if (active) {
-                        focusManager.clearFocus()
+                        onStateChanged(SearchFieldState.Inactive)
                     } else {
-                        focusRequester.requestFocus()
+                        onStateChanged(SearchFieldState.Active(""))
                     }
                 }
             ) {
