@@ -70,8 +70,13 @@ fun SearchField(
         value = activeText ?: inactiveText,
         leadingIcon = {
             IconButton(
-                enabled = active,
-                onClick = { focusManager.clearFocus() }
+                onClick = {
+                    if (active) {
+                        focusManager.clearFocus()
+                    } else {
+                        focusRequester.requestFocus()
+                    }
+                }
             ) {
                 Crossfade(targetState = active) { active ->
                     val imageVector = if (active) {
