@@ -1,20 +1,18 @@
 package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
-import android.content.Context
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import javax.inject.Qualifier
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import org.threeten.bp.Duration
+import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.skylight.android.core.AppComponent
-import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
-import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
-import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.core.utils.millis
 import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.core.utils.seconds
-import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.state.ContinuouslySearchAction
 import se.gustavkarlsson.skylight.android.feature.main.state.LocationPermissionAction
 import se.gustavkarlsson.skylight.android.feature.main.state.Search
@@ -23,37 +21,26 @@ import se.gustavkarlsson.skylight.android.feature.main.state.StreamPlacesAction
 import se.gustavkarlsson.skylight.android.feature.main.state.StreamReportsLiveAction
 import se.gustavkarlsson.skylight.android.feature.main.state.StreamSelectedPlaceAction
 import se.gustavkarlsson.skylight.android.feature.main.state.StreamTriggerLevelsAction
-import se.gustavkarlsson.skylight.android.feature.main.util.DateUtilsRelativeTimeFormatter
+import se.gustavkarlsson.skylight.android.feature.main.util.RelativeTimeFormatterModule
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
-import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
-import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
-import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
 import se.gustavkarlsson.skylight.android.lib.darkness.DarknessComponent
-import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
-import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationComponent
-import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexComponent
 import se.gustavkarlsson.skylight.android.lib.location.LocationComponent
-import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
 import se.gustavkarlsson.skylight.android.lib.permissions.Access
-import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
-import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
-import se.gustavkarlsson.skylight.android.lib.settings.Settings
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
-import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
-import se.gustavkarlsson.skylight.android.lib.weather.Weather
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
 
 @Component(
     modules = [
-        MainModule::class
+        MainModule::class,
+        RelativeTimeFormatterModule::class,
     ],
     dependencies = [
         AppComponent::class,
@@ -93,95 +80,72 @@ internal interface MainViewModelComponent {
     }
 }
 
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+internal annotation class NowThreshold
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+internal annotation class SearchDelay
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+internal annotation class StreamThrottle
+
 @Module
 internal object MainModule {
+
+    @Provides
+    @NowThreshold
+    fun provideNowThreshold(): Duration = 1.minutes
+
+    @Provides
+    @SearchDelay
+    fun provideSearchDelay(): Duration = 1.seconds
+
+    @Provides
+    @StreamThrottle
+    fun provideStreamThrottle(): Duration = 500.millis
+
+    @ExperimentalCoroutinesApi
+    @Provides
+    fun startActions(
+        locationPermissionAction: LocationPermissionAction,
+        streamTriggerLevelsAction: StreamTriggerLevelsAction,
+        streamSelectedPlaceAction: StreamSelectedPlaceAction,
+        streamPlacesAction: StreamPlacesAction,
+        continuouslySearchAction: ContinuouslySearchAction,
+        streamReportsAction: StreamReportsLiveAction,
+    ): List<Action<State>> = listOf(
+        locationPermissionAction,
+        streamSelectedPlaceAction,
+        streamPlacesAction,
+        streamReportsAction,
+        streamTriggerLevelsAction,
+        continuouslySearchAction,
+    )
+
+    // TODO Load initial data, and then remove fallback for State.selectedPlace.
+    //  or have another initial state
+    @FlowPreview
+    @ExperimentalCoroutinesApi
+    @Provides
+    fun initialState(
+        selectedPlaceRepository: SelectedPlaceRepository,
+    ): State = State(
+        locationAccess = Access.Unknown,
+        selectedPlaceId = selectedPlaceRepository.get().id,
+        selectedAuroraReport = LoadableAuroraReport.LOADING,
+        search = Search.Closed,
+        places = emptyList(),
+        notificationTriggerLevels = emptyMap(),
+    )
 
     @FlowPreview
     @ExperimentalCoroutinesApi
     @Provides
-    fun mainStore(
-        permissionChecker: PermissionChecker,
-        selectedPlaceRepository: SelectedPlaceRepository,
-        placesRepository: PlacesRepository,
-        locationProvider: LocationProvider,
-        auroraReportProvider: AuroraReportProvider,
-        settings: Settings,
-        geocoder: Geocoder,
-    ): Store<State> {
-        val locationPermissionAction = LocationPermissionAction(permissionChecker.access)
-        val streamReportsAction = StreamReportsLiveAction(
-            currentLocation = locationProvider.stream(),
-            streamAuroraReports = auroraReportProvider::stream,
-            throttleDuration = 500.millis
-        )
-        val streamTriggerLevelsAction = StreamTriggerLevelsAction(settings.streamNotificationTriggerLevels())
-        val streamSelectedPlaceAction = StreamSelectedPlaceAction(selectedPlaceRepository.stream())
-        val streamPlacesAction = StreamPlacesAction(placesRepository.stream())
-        val continuouslySearchAction = ContinuouslySearchAction(geocoder, 1.seconds)
-        // TODO Load initial data, and then remove fallback for State.selectedPlace.
-        //  or have another initial state
-        return Store(
-            initialState = State(
-                locationAccess = Access.Unknown,
-                selectedPlaceId = selectedPlaceRepository.get().id,
-                selectedAuroraReport = LoadableAuroraReport.LOADING,
-                search = Search.Closed,
-                places = emptyList(),
-                notificationTriggerLevels = emptyMap(),
-            ),
-            startActions = listOf(
-                locationPermissionAction,
-                streamSelectedPlaceAction,
-                streamPlacesAction,
-                streamReportsAction,
-                streamTriggerLevelsAction,
-                continuouslySearchAction,
-            ),
-        )
-    }
-
-    @ExperimentalCoroutinesApi
-    @Provides
-    fun viewModel(
-        context: Context,
-        mainStore: Store<State>,
-        placesRepository: PlacesRepository,
-        selectedPlaceRepository: SelectedPlaceRepository,
-        time: Time,
-        auroraChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
-        chanceLevelFormatter: Formatter<ChanceLevel>,
-        kpIndexEvaluator: ChanceEvaluator<KpIndex>,
-        kpIndexFormatter: Formatter<KpIndex>,
-        geomagLocationEvaluator: ChanceEvaluator<GeomagLocation>,
-        geomagLocationFormatter: Formatter<GeomagLocation>,
-        weatherEvaluator: ChanceEvaluator<Weather>,
-        weatherFormatter: Formatter<Weather>,
-        darknessEvaluator: ChanceEvaluator<Darkness>,
-        darknessFormatter: Formatter<Darkness>,
-        locationPermissionChecker: PermissionChecker,
-        settings: Settings,
-    ): MainViewModel {
-        val rightNowText = context.getString(R.string.right_now)
-        val relativeTimeFormatter = DateUtilsRelativeTimeFormatter(rightNowText)
-        return MainViewModel(
-            mainStore,
-            placesRepository,
-            selectedPlaceRepository,
-            auroraChanceEvaluator,
-            relativeTimeFormatter,
-            chanceLevelFormatter,
-            darknessEvaluator,
-            darknessFormatter,
-            geomagLocationEvaluator,
-            geomagLocationFormatter,
-            kpIndexEvaluator,
-            kpIndexFormatter,
-            weatherEvaluator,
-            weatherFormatter,
-            locationPermissionChecker,
-            time,
-            settings,
-            1.minutes
-        )
-    }
+    fun store(
+        initialState: State,
+        startActions: List<@JvmSuppressWildcards Action<State>>,
+    ): Store<State> = Store(initialState, startActions)
 }

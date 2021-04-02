@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Warning
 import com.ioki.textref.TextRef
+import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -49,7 +50,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 
 @ExperimentalCoroutinesApi
-internal class MainViewModel(
+internal class MainViewModel @Inject constructor(
     private val store: Store<State>,
     private val placesRepository: PlacesRepository,
     private val selectedPlaceRepository: SelectedPlaceRepository,
@@ -67,7 +68,7 @@ internal class MainViewModel(
     private val permissionChecker: PermissionChecker,
     private val time: Time,
     private val settings: Settings,
-    private val nowTextThreshold: Duration
+    @NowThreshold private val nowTextThreshold: Duration
 ) : CoroutineScopedService() {
 
     init {
@@ -80,21 +81,20 @@ internal class MainViewModel(
 
     // FIXME clean up
     private fun State.toViewState(): ViewState {
-        val state = this
         val changeLevelText = let {
-            val chance = state.selectedAuroraReport.toCompleteAuroraReport()
+            val chance = this.selectedAuroraReport.toCompleteAuroraReport()
                 ?.let(auroraChanceEvaluator::evaluate)
                 ?: Chance.UNKNOWN
             val level = ChanceLevel.fromChance(chance)
             chanceLevelFormatter.format(level)
         }
         val chanceSubtitleText = let {
-            val name = optionalOf(state.selectedAuroraReport.locationName)
+            val name = optionalOf(this.selectedAuroraReport.locationName)
                 .map { it as? Loadable.Loaded<ReverseGeocodingResult> }
                 .map { it.value as? ReverseGeocodingResult.Success }
                 .map { it.name }
                 .value
-            val relativeTime = state.selectedAuroraReport.timestamp?.let { timestamp ->
+            val relativeTime = this.selectedAuroraReport.timestamp?.let { timestamp ->
                 // FIXME emit new time every sec
                 relativeTimeFormatter.format(timestamp, time.now(), nowTextThreshold).toString()
             }
@@ -105,8 +105,8 @@ internal class MainViewModel(
             }
         }
         val errorBannerData = when {
-            state.selectedPlace != Place.Current -> null
-            state.locationAccess == Access.Denied -> {
+            this.selectedPlace != Place.Current -> null
+            this.locationAccess == Access.Denied -> {
                 BannerData(
                     TextRef.stringRes(R.string.location_permission_denied_message),
                     TextRef.stringRes(R.string.fix),
@@ -114,7 +114,7 @@ internal class MainViewModel(
                     BannerData.Event.RequestLocationPermission
                 )
             }
-            state.locationAccess == Access.DeniedForever -> {
+            this.locationAccess == Access.DeniedForever -> {
                 BannerData(
                     TextRef.stringRes(R.string.location_permission_denied_forever_message),
                     TextRef.stringRes(R.string.fix),
@@ -124,46 +124,46 @@ internal class MainViewModel(
             }
             else -> null
         }
-        val favoriteButtonState = when (state.selectedPlace) {
+        val favoriteButtonState = when (this.selectedPlace) {
             Place.Current -> ToggleButtonState.Gone
             is Place.Recent -> ToggleButtonState.Enabled(checked = false)
             is Place.Favorite -> ToggleButtonState.Enabled(checked = true)
         }
         val notificationChecked = selectedPlaceTriggerLevel != TriggerLevel.NEVER
-        val notificationsButtonState = when (state.selectedPlace) {
+        val notificationsButtonState = when (this.selectedPlace) {
             Place.Current -> ToggleButtonState.Enabled(notificationChecked)
             is Place.Recent -> ToggleButtonState.Gone
             is Place.Favorite -> ToggleButtonState.Enabled(notificationChecked)
         }
-        val kpIndexItem = state.selectedAuroraReport.kpIndex
+        val kpIndexItem = this.selectedAuroraReport.kpIndex
             .toFactorItem(
                 texts = ItemTexts.kpIndex,
                 evaluate = kpIndexChanceEvaluator::evaluate,
                 format = kpIndexFormatter::format,
             )
-        val geomagLocationItem = state.selectedAuroraReport.geomagLocation
+        val geomagLocationItem = this.selectedAuroraReport.geomagLocation
             .toFactorItem(
                 texts = ItemTexts.geomagLocation,
                 evaluate = geomagLocationChanceEvaluator::evaluate,
                 format = geomagLocationFormatter::format,
             )
-        val darknessItem = state.selectedAuroraReport.darkness
+        val darknessItem = this.selectedAuroraReport.darkness
             .toFactorItem(
                 texts = ItemTexts.darkness,
                 evaluate = darknessChanceEvaluator::evaluate,
                 format = darknessFormatter::format,
             )
-        val weatherItem = state.selectedAuroraReport.weather
+        val weatherItem = this.selectedAuroraReport.weather
             .toFactorItem(
                 texts = ItemTexts.weather,
                 evaluate = weatherChanceEvaluator::evaluate,
                 format = weatherFormatter::format,
             )
-        val search = if (state.search is Search.Open) {
-            val query = state.search.query
-            val placesResults = state.places
+        val search = if (this.search is Search.Open) {
+            val query = this.search.query
+            val placesResults = this.places
                 .map { place ->
-                    val selected = place.id == state.selectedPlace.id
+                    val selected = place.id == this.selectedPlace.id
                     SearchResult.Known(place, selected = selected)
                 }
                 .filter { result ->
@@ -175,7 +175,7 @@ internal class MainViewModel(
                 }
                 .sortedByDescending { it.place.lastChanged ?: Instant.EPOCH }
                 .sortedBy { it.place.priority }
-            val searchResults = state.search.suggestions.items
+            val searchResults = this.search.suggestions.items
                 .map { suggestion ->
                     suggestion.toSearchResult()
                 }
@@ -197,7 +197,7 @@ internal class MainViewModel(
             }
             .asReversed()
         return ViewState(
-            toolbarTitleName = state.selectedPlace.name,
+            toolbarTitleName = this.selectedPlace.name,
             chanceLevelText = changeLevelText,
             chanceSubtitleText = chanceSubtitleText,
             errorBannerData = errorBannerData,

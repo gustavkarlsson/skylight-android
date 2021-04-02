@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.main.state
 
 import com.ioki.textref.TextRef
+import javax.inject.Inject
 import kotlin.system.measureTimeMillis
 import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.delay
@@ -8,12 +9,13 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.UpdatableStateFlow
 import se.gustavkarlsson.skylight.android.feature.main.R
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchDelay
 import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocodingResult
 
-internal class ContinuouslySearchAction(
+internal class ContinuouslySearchAction @Inject constructor(
     private val geocoder: Geocoder,
-    private val querySampleDelay: Duration,
+    @SearchDelay private val querySampleDelay: Duration,
 ) : Action<State> {
     @ExperimentalTime
     override suspend fun execute(state: UpdatableStateFlow<State>) {

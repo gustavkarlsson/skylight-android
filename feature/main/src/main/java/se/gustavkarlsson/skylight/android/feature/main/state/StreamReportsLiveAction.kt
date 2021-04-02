@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.state
 
+import javax.inject.Inject
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,15 +20,18 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.UpdatableStateFlow
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.StreamThrottle
+import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
+import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.places.Place
 
 @ExperimentalCoroutinesApi
-internal class StreamReportsLiveAction(
-    private val currentLocation: Flow<Loadable<LocationResult>>,
-    private val streamAuroraReports: (Flow<Loadable<LocationResult>>) -> Flow<LoadableAuroraReport>,
-    private val throttleDuration: Duration,
+internal class StreamReportsLiveAction @Inject constructor(
+    private val locationProvider: LocationProvider,
+    private val auroraReportProvider: AuroraReportProvider,
+    @StreamThrottle private val throttleDuration: Duration,
 ) : Action<State> {
     override suspend fun execute(state: UpdatableStateFlow<State>) {
         isStoreLive(state).collectLatest { live ->
@@ -44,7 +48,7 @@ internal class StreamReportsLiveAction(
 
     private suspend fun streamAndUpdateReports(state: UpdatableStateFlow<State>) {
         selectedPlace(state).collectLatest { selectedPlace ->
-            streamAuroraReports(locationUpdates(selectedPlace))
+            auroraReportProvider.stream(locationUpdates(selectedPlace))
                 .throttle(throttleDuration.toMillis())
                 .collectLatest { report ->
                     state.update(selectedPlace, report)
@@ -59,7 +63,7 @@ internal class StreamReportsLiveAction(
 
     private fun locationUpdates(selectedPlace: Place): Flow<Loadable<LocationResult>> {
         return when (selectedPlace) {
-            Place.Current -> currentLocation
+            Place.Current -> locationProvider.stream()
             is Place.Favorite -> flowOf(Loadable.loaded(LocationResult.success(selectedPlace.location)))
             is Place.Recent -> flowOf(Loadable.loaded(LocationResult.success(selectedPlace.location)))
         }

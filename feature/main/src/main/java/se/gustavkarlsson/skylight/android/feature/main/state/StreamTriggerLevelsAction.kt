@@ -1,17 +1,16 @@
 package se.gustavkarlsson.skylight.android.feature.main.state
 
-import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.UpdatableStateFlow
-import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
-import se.gustavkarlsson.skylight.android.lib.places.Place
+import se.gustavkarlsson.skylight.android.lib.settings.Settings
 
-internal class StreamTriggerLevelsAction(
-    private val notificationTriggerLevels: Flow<List<Pair<Place, TriggerLevel>>>,
+internal class StreamTriggerLevelsAction @Inject constructor(
+    private val settings: Settings,
 ) : Action<State> {
     override suspend fun execute(state: UpdatableStateFlow<State>) {
-        notificationTriggerLevels.collect { levels ->
+        settings.streamNotificationTriggerLevels().collect { levels ->
             state.update {
                 copy(notificationTriggerLevels = levels.toMap().mapKeys { entry -> entry.key.id })
             }

@@ -1,28 +1,37 @@
 package se.gustavkarlsson.skylight.android.feature.main.util
 
 import android.text.format.DateUtils
+import com.ioki.textref.TextRef
+import dagger.Module
+import dagger.Provides
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.core.utils.until
+import se.gustavkarlsson.skylight.android.feature.main.R
 
-internal interface RelativeTimeFormatter {
-    fun format(time: Instant, now: Instant, minResolution: Duration): CharSequence
+@Module
+internal object RelativeTimeFormatterModule {
+    @Provides
+    fun relativeTimeFormatter(): RelativeTimeFormatter = DateUtilsRelativeTimeFormatter
 }
 
-internal class DateUtilsRelativeTimeFormatter(
-    private val rightNowText: CharSequence
-) : RelativeTimeFormatter {
-    override fun format(time: Instant, now: Instant, minResolution: Duration): CharSequence {
+internal interface RelativeTimeFormatter {
+    fun format(time: Instant, now: Instant, minResolution: Duration): TextRef
+}
+
+internal object DateUtilsRelativeTimeFormatter : RelativeTimeFormatter {
+    override fun format(time: Instant, now: Instant, minResolution: Duration): TextRef {
         require(!minResolution.isNegative) { "minResolution is negative: $minResolution" }
         return when {
             time.isCloseTo(now, minResolution) -> {
-                rightNowText
+                TextRef.stringRes(R.string.right_now)
             }
             else -> {
                 val timeMillis = time.toEpochMilli()
                 val nowMillis = now.toEpochMilli()
                 val minResolutionMillis = minResolution.toMillis()
-                DateUtils.getRelativeTimeSpanString(timeMillis, nowMillis, minResolutionMillis)
+                val s = DateUtils.getRelativeTimeSpanString(timeMillis, nowMillis, minResolutionMillis)
+                TextRef.string(s.toString())
             }
         }
     }
