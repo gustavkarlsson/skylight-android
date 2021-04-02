@@ -35,6 +35,7 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
+import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
@@ -85,7 +86,15 @@ class MainFragment : ComposeScreenFragment(), BackButtonHandler {
         startActivity(intent)
     }
 
-    override fun onBackPressed(): BackPress = viewModel.onBackPressed()
+    override fun onBackPressed(): BackPress {
+        return when (viewModel.state.value.search) {
+            SearchViewState.Closed -> BackPress.NOT_HANDLED
+            is SearchViewState.Open -> {
+                viewModel.onEvent(Event.SearchChanged(SearchFieldState.Inactive))
+                BackPress.HANDLED
+            }
+        }
+    }
 }
 
 @ExperimentalMaterialApi
