@@ -60,7 +60,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
 @ExperimentalAnimationApi
 @Composable
-internal fun SelectedLocation(
+internal fun SelectedPlace(
     modifier: Modifier,
     state: ViewState,
     onBannerActionClicked: (BannerData.Event) -> Unit,
@@ -106,7 +106,8 @@ internal fun SelectedLocation(
                 width = Dimension.fillToConstraints
                 height = Dimension.fillToConstraints
             },
-            state = state,
+            title = textRef(textRef = state.chanceLevelText),
+            subtitle = textRef(textRef = state.chanceSubtitleText),
         )
 
         Cards(
@@ -125,7 +126,7 @@ internal fun SelectedLocation(
 @ExperimentalAnimationApi
 @Composable
 private fun ErrorBanner(
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     errorBannerData: BannerData?,
     onBannerActionClicked: (BannerData.Event) -> Unit,
 ) {
@@ -218,7 +219,7 @@ private fun AlertDialog(
 @ExperimentalAnimationApi
 @Composable
 private fun PlaceButtons(
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     notificationsButtonState: ToggleButtonState,
     favoriteButtonState: ToggleButtonState,
     onNotificationsClicked: () -> Unit,
@@ -252,8 +253,9 @@ private fun PlaceButtons(
 
 @Composable
 private fun CenterText(
-    modifier: Modifier = Modifier,
-    state: ViewState,
+    modifier: Modifier,
+    title: String,
+    subtitle: String,
 ) {
     Column(
         modifier = modifier,
@@ -261,11 +263,11 @@ private fun CenterText(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = textRef(textRef = state.chanceLevelText),
+            text = title,
             style = Typography.chanceTitle,
         )
         Text(
-            text = textRef(textRef = state.chanceSubtitleText),
+            text = subtitle,
             color = Colors.onSurfaceWeaker,
             style = Typography.chanceSubtitle,
         )

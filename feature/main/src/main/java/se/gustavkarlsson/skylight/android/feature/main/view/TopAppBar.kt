@@ -22,7 +22,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 
 @Composable
 internal fun TopAppBar(
-    searchState: SearchViewState,
+    state: SearchViewState,
     title: String,
     onAboutClicked: () -> Unit,
     onEvent: (Event) -> Unit,
@@ -37,7 +37,7 @@ internal fun TopAppBar(
         title = {
             SearchField(
                 modifier = Modifier.fillMaxWidth(),
-                state = searchState.toSearchFieldState(),
+                state = state.toSearchFieldState(),
                 inactiveText = title,
                 placeholderText = stringResource(id = R.string.place_search),
                 onStateChanged = { state -> onEvent(Event.SearchChanged(state)) },

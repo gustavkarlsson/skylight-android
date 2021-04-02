@@ -126,7 +126,7 @@ private fun Content(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    searchState = state.search,
+                    state = state.search,
                     title = textRef(state.toolbarTitleName),
                     onAboutClicked = onAboutClicked,
                     onEvent = onEvent,
@@ -136,7 +136,7 @@ private fun Content(
             },
         ) {
             Box {
-                SelectedLocation(
+                SelectedPlace(
                     modifier = Modifier
                         .fillMaxSize()
                         .navigationBarsPadding(),

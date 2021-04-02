@@ -32,7 +32,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 @ExperimentalAnimationApi
 @Composable
 internal fun SearchResults(
-    modifier: Modifier = Modifier,
+    modifier: Modifier,
     state: ViewState,
     searchElevation: Dp,
     searchBackgroundColor: Color,
