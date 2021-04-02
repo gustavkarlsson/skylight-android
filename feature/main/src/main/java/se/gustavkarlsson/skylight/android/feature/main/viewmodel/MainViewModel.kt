@@ -33,6 +33,7 @@ import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
+import se.gustavkarlsson.skylight.android.lib.navigation.BackPress
 import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.places.Place
@@ -305,14 +306,14 @@ internal class MainViewModel(
         }
     }
 
-    fun onBackPressed(): Boolean {
+    fun onBackPressed(): BackPress {
         return when (store.state.value.search) {
-            Search.Closed -> false
+            Search.Closed -> BackPress.NOT_HANDLED
             is Search.Open -> {
                 store.issue { state ->
                     state.update { copy(search = Search.Closed) }
                 }
-                true
+                BackPress.HANDLED
             }
         }
     }

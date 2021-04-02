@@ -27,6 +27,7 @@ import se.gustavkarlsson.skylight.android.feature.main.viewmodel.MainViewModelCo
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchViewState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
 import se.gustavkarlsson.skylight.android.lib.navigation.BackButtonHandler
+import se.gustavkarlsson.skylight.android.lib.navigation.BackPress
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
@@ -84,7 +85,7 @@ class MainFragment : ComposeScreenFragment(), BackButtonHandler {
         startActivity(intent)
     }
 
-    override fun onBackPressed(): Boolean = viewModel.onBackPressed()
+    override fun onBackPressed(): BackPress = viewModel.onBackPressed()
 }
 
 @ExperimentalMaterialApi
