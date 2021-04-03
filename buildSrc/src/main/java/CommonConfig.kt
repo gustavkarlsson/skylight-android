@@ -4,7 +4,6 @@ import com.android.build.gradle.LibraryExtension
 
 fun BaseExtension.commonConfig() {
     compileSdkVersion(Versions.compileSdk)
-    buildToolsVersion(Versions.buildTools)
 
     packagingOptions {
         resources.excludes += "META-INF/LICENSE"
