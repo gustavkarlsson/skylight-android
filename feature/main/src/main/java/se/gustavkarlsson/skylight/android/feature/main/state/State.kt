@@ -24,10 +24,35 @@ internal data class State(
         get() = notificationTriggerLevels[selectedPlaceId] ?: TriggerLevel.NEVER
 }
 
-// FIXME handle errors
 internal sealed class Search {
-    object Closed : Search()
-    data class Open(val query: String, val suggestions: Suggestions, val error: TextRef?) : Search()
+    object Inactive : Search()
+    sealed class Active : Search() {
+        abstract val query: String
+        abstract val inProgress: Boolean
+        abstract val suggestions: Suggestions
+
+        data class Blank(
+            override val query: String,
+        ) : Active() {
+            override val inProgress = false
+            override val suggestions = Suggestions(query = "", items = emptyList())
+        }
+
+        data class Success(
+            override val query: String,
+            override val inProgress: Boolean,
+            override val suggestions: Suggestions,
+        ) : Active()
+
+        data class Failure(
+            override val query: String,
+            override val inProgress: Boolean,
+            val errorQuery: String,
+            val error: TextRef,
+        ) : Active() {
+            override val suggestions: Suggestions get() = Suggestions(query = errorQuery, items = emptyList())
+        }
+    }
 }
 
 internal data class Suggestions(val query: String, val items: List<PlaceSuggestion>)

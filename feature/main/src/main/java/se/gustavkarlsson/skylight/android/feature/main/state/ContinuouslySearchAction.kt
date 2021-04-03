@@ -22,12 +22,20 @@ internal class ContinuouslySearchAction @Inject constructor(
         while (true) {
             val search = state.value.search
             val durationMillis = measureTimeMillis {
-                if (search is Search.Open) {
+                if (search is Search.Active) {
                     val searchQuery = search.query.trim()
                     val suggestionsQuery = search.suggestions.query.trim()
                     if (searchQuery != suggestionsQuery) {
+                        state.update {
+                            val newSearch = when (search) {
+                                is Search.Active.Blank -> search
+                                is Search.Active.Failure -> search.copy(inProgress = true)
+                                is Search.Active.Success -> search.copy(inProgress = true)
+                            }
+                            copy(search = newSearch)
+                        }
                         val result = geocoder.geocode(searchQuery)
-                        state.update { update(searchQuery, result) }
+                        state.update { update(result, searchQuery) }
                     }
                 }
             }
@@ -36,35 +44,35 @@ internal class ContinuouslySearchAction @Inject constructor(
         }
     }
 
-    private fun State.update(searchQuery: String, result: GeocodingResult): State {
-        if (search !is Search.Open) return this
-        return when (result) {
+    private fun State.update(result: GeocodingResult, searchQuery: String): State {
+        if (search !is Search.Active) return this
+        val newSearch = when (result) {
             is GeocodingResult.Success -> {
                 val suggestions = Suggestions(searchQuery, result.suggestions)
-                updateState(search, suggestionsToSet = suggestions)
+                search.update(searchQuery, suggestions)
             }
-            GeocodingResult.Failure.Io -> {
-                val error = TextRef.stringRes(R.string.place_search_failed_io)
-                updateState(search, errorToSet = error)
-            }
-            GeocodingResult.Failure.ServerError -> {
-                val error = TextRef.stringRes(R.string.place_search_failed_server_response)
-                updateState(search, errorToSet = error)
-            }
-            GeocodingResult.Failure.Unknown -> {
-                val error = TextRef.stringRes(R.string.place_search_failed_generic)
-                updateState(search, errorToSet = error)
+            is GeocodingResult.Failure -> {
+                val error = when (result) {
+                    GeocodingResult.Failure.Io -> TextRef.stringRes(R.string.place_search_failed_io)
+                    GeocodingResult.Failure.Server -> TextRef.stringRes(R.string.place_search_failed_server_response)
+                    GeocodingResult.Failure.Unknown -> TextRef.stringRes(R.string.place_search_failed_generic)
+                }
+                search.update(searchQuery, search.suggestions, error)
             }
         }
+        return copy(search = newSearch)
     }
 
-    private fun State.updateState(
-        search: Search.Open,
-        suggestionsToSet: Suggestions? = null,
-        errorToSet: TextRef? = null,
-    ): State {
-        val suggestions = suggestionsToSet ?: search.suggestions
-        val error = errorToSet ?: search.error
-        return copy(search = search.copy(suggestions = suggestions, error = error))
+    private fun Search.Active.update(
+        resultQuery: String,
+        suggestions: Suggestions,
+        error: TextRef? = null,
+    ): Search {
+        val inProgress = query.trim() != resultQuery.trim()
+        return when {
+            error != null -> Search.Active.Failure(query, inProgress, errorQuery = resultQuery, error)
+            query.isBlank() -> Search.Active.Blank(query)
+            else -> Search.Active.Success(query, inProgress, suggestions)
+        }
     }
 }

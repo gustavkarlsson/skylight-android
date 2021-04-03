@@ -128,7 +128,7 @@ internal class StateToViewStateMapper @Inject constructor(
                 evaluate = weatherChanceEvaluator::evaluate,
                 format = weatherFormatter::format,
             )
-        val search = if (state.search is Search.Open) {
+        val search = if (state.search is Search.Active) {
             val query = state.search.query
             val placesResults = state.places
                 .map { place ->
@@ -149,7 +149,17 @@ internal class StateToViewStateMapper @Inject constructor(
                     suggestion.toSearchResult()
                 }
             val results = placesResults + searchResults
-            SearchViewState.Open(query, results)
+            when (state.search) {
+                is Search.Active.Blank -> {
+                    SearchViewState.Open.Ok(query, state.search.inProgress, results)
+                }
+                is Search.Active.Failure -> {
+                    SearchViewState.Open.Error(query, state.search.inProgress, text = state.search.error)
+                }
+                is Search.Active.Success -> {
+                    SearchViewState.Open.Ok(query, state.search.inProgress, results)
+                }
+            }
         } else SearchViewState.Closed
         val onFavoritesClickedEvent = when (val selectedPlace = state.selectedPlace) {
             Place.Current -> Event.Noop

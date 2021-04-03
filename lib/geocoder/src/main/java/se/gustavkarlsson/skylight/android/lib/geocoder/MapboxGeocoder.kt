@@ -2,6 +2,9 @@ package se.gustavkarlsson.skylight.android.lib.geocoder
 
 import com.mapbox.api.geocoding.v5.MapboxGeocoding
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse
+import java.io.IOException
+import java.util.Locale
+import kotlin.coroutines.resume
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineName
@@ -13,9 +16,6 @@ import retrofit2.Response
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.lib.location.Location
-import java.io.IOException
-import java.util.Locale
-import kotlin.coroutines.resume
 
 internal class MapboxGeocoder(
     private val accessToken: String,
@@ -68,7 +68,7 @@ internal class MapboxGeocoder(
                             val code = response.code()
                             val error = response.errorBody()?.string() ?: "<empty>"
                             logError { "Geocoding failed with HTTP $code: $error" }
-                            continuation.resume(GeocodingResult.Failure.ServerError)
+                            continuation.resume(GeocodingResult.Failure.Server)
                         }
                     }
                 }

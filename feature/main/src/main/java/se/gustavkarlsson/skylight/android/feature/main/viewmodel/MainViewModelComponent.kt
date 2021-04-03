@@ -13,7 +13,6 @@ import se.gustavkarlsson.skylight.android.core.AppComponent
 import se.gustavkarlsson.skylight.android.core.ViewModelScope
 import se.gustavkarlsson.skylight.android.core.utils.millis
 import se.gustavkarlsson.skylight.android.core.utils.minutes
-import se.gustavkarlsson.skylight.android.core.utils.seconds
 import se.gustavkarlsson.skylight.android.feature.main.state.ContinuouslySearchAction
 import se.gustavkarlsson.skylight.android.feature.main.state.LocationPermissionAction
 import se.gustavkarlsson.skylight.android.feature.main.state.Search
@@ -103,7 +102,7 @@ internal object MainViewModelModule {
 
     @Provides
     @SearchDelay
-    fun provideSearchDelay(): Duration = 1.seconds
+    fun provideSearchDelay(): Duration = 500.millis
 
     @Provides
     @StreamThrottle
@@ -138,7 +137,7 @@ internal object MainViewModelModule {
         locationAccess = Access.Unknown,
         selectedPlaceId = selectedPlaceRepository.get().id,
         selectedAuroraReport = LoadableAuroraReport.LOADING,
-        search = Search.Closed,
+        search = Search.Inactive,
         places = emptyList(),
         notificationTriggerLevels = emptyMap(),
     )

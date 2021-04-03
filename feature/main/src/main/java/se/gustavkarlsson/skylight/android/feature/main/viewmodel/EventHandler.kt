@@ -39,16 +39,19 @@ internal class EventHandler @Inject constructor(
     private fun onSearchChanged(searchFieldState: SearchFieldState) = store.issue { state ->
         state.update {
             val search = when (searchFieldState) {
-                SearchFieldState.Inactive -> Search.Closed
+                SearchFieldState.Inactive -> Search.Inactive
                 is SearchFieldState.Active -> {
                     val query = searchFieldState.text
-                    when (search) {
-                        Search.Closed -> Search.Open(
-                            query = query,
-                            suggestions = Suggestions("", emptyList()),
-                            error = null,
-                        )
-                        is Search.Open -> search.copy(query = query)
+                    if (query.isBlank()) {
+                        Search.Active.Blank(query)
+                    } else {
+                        when (search) {
+                            Search.Inactive, is Search.Active.Blank -> {
+                                Search.Active.Success(query, inProgress = true, Suggestions("", emptyList()))
+                            }
+                            is Search.Active.Failure -> search.copy(query = query, inProgress = true)
+                            is Search.Active.Success -> search.copy(query = query, inProgress = true)
+                        }
                     }
                 }
             }
@@ -70,7 +73,7 @@ internal class EventHandler @Inject constructor(
         }
         selectedPlaceRepository.set(place)
         store.issue { state ->
-            state.update { copy(search = Search.Closed) }
+            state.update { copy(search = Search.Inactive) }
         }
     }
 }

@@ -66,7 +66,22 @@ internal data class FactorItem(
 
 internal sealed class SearchViewState {
     object Closed : SearchViewState()
-    data class Open(val query: String, val searchResults: List<SearchResult>) : SearchViewState()
+    sealed class Open : SearchViewState() {
+        abstract val query: String
+        abstract val inProgress: Boolean
+
+        data class Ok(
+            override val query: String,
+            override val inProgress: Boolean,
+            val searchResults: List<SearchResult>,
+        ) : Open()
+
+        data class Error(
+            override val query: String,
+            override val inProgress: Boolean,
+            val text: TextRef,
+        ) : Open()
+    }
 }
 
 internal sealed class SearchResult {
