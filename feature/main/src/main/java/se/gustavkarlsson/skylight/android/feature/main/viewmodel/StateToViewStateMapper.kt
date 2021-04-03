@@ -128,6 +128,7 @@ internal class StateToViewStateMapper @Inject constructor(
                 evaluate = weatherChanceEvaluator::evaluate,
                 format = weatherFormatter::format,
             )
+        // FIXME rework how this is created
         val search = if (state.search is Search.Active) {
             val query = state.search.query
             val placesResults = state.places
@@ -150,14 +151,11 @@ internal class StateToViewStateMapper @Inject constructor(
                 }
             val results = placesResults + searchResults
             when (state.search) {
-                is Search.Active.Blank -> {
-                    SearchViewState.Open.Ok(query, state.search.inProgress, results)
+                is Search.Active.Blank, is Search.Active.Ok -> {
+                    SearchViewState.Open.Ok(query, results)
                 }
-                is Search.Active.Failure -> {
-                    SearchViewState.Open.Error(query, state.search.inProgress, text = state.search.error)
-                }
-                is Search.Active.Success -> {
-                    SearchViewState.Open.Ok(query, state.search.inProgress, results)
+                is Search.Active.Error -> {
+                    SearchViewState.Open.Error(query, state.search.text)
                 }
             }
         } else SearchViewState.Closed

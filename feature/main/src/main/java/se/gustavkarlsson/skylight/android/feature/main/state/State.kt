@@ -28,27 +28,23 @@ internal sealed class Search {
     object Inactive : Search()
     sealed class Active : Search() {
         abstract val query: String
-        abstract val inProgress: Boolean
         abstract val suggestions: Suggestions
 
         data class Blank(
             override val query: String,
         ) : Active() {
-            override val inProgress = false
             override val suggestions = Suggestions(query = "", items = emptyList())
         }
 
-        data class Success(
+        data class Ok(
             override val query: String,
-            override val inProgress: Boolean,
             override val suggestions: Suggestions,
         ) : Active()
 
-        data class Failure(
+        data class Error(
             override val query: String,
-            override val inProgress: Boolean,
             val errorQuery: String,
-            val error: TextRef,
+            val text: TextRef,
         ) : Active() {
             override val suggestions: Suggestions get() = Suggestions(query = errorQuery, items = emptyList())
         }

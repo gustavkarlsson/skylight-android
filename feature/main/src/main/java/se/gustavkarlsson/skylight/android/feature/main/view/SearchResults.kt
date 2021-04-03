@@ -81,10 +81,6 @@ internal fun SearchResults(
                     }
                 }
             }
-            val progressVisible = (state.search as? SearchViewState.Open)?.inProgress == true
-            if (progressVisible) {
-                Text("---LOADING---") // FIXME replace with something better
-            }
         }
     }
 }
