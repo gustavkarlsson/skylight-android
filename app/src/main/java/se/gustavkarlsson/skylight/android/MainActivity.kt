@@ -15,6 +15,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.plus
+import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.BackstackListener
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
@@ -32,7 +33,6 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceRegistry
 import se.gustavkarlsson.skylight.android.lib.ui.ScopeHost
 import se.gustavkarlsson.skylight.android.navigation.DefaultScreens
 
-// FIXME AnalyticsComponent.instance.analytics().logScreen(requireActivity(), this::class.java.simpleName)
 internal class MainActivity :
     AppCompatActivity(),
     NavigatorHost,
@@ -135,6 +135,11 @@ internal class MainActivity :
     }
 
     override fun onBackstackChanged(old: Backstack, new: Backstack) {
+        val oldTop = old.lastOrNull()
+        val newTop = new.lastOrNull()
+        if (newTop != null && oldTop != newTop) {
+            AnalyticsComponent.instance.analytics().logScreen(newTop.name.name)
+        }
         val tags = new.map(Screen::tag)
         serviceRegistry.onTagsChanged(tags)
         if (new.isEmpty()) {

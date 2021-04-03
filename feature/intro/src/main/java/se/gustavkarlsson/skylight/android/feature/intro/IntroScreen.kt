@@ -38,7 +38,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.startStopScope
 
 @Parcelize
-class IntroScreen(private val target: Backstack) : Screen {
+internal data class IntroScreen(private val target: Backstack) : Screen {
 
     init {
         require(target.isNotEmpty()) { "Target backstack must not be empty" }
