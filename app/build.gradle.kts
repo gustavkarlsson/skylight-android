@@ -130,7 +130,6 @@ dependencies {
 
     // Compose
     implementation("androidx.activity:activity-compose:${Versions.androidActivity}")
-    implementation("androidx.compose.runtime:runtime-livedata:${Versions.compose}")
     implementation("androidx.compose.animation:animation:${Versions.compose}")
 
     // Testing

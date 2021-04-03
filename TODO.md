@@ -1,8 +1,6 @@
 ## ASAP Compose
-* Create base theme
-* Include extra colors
-* Include extra text styles
-* Include standard dimensions
+* Include standard dimensions?
+* Include standard animations?
 
 ## Soon
 * Single-use permission doesn't really work
@@ -16,7 +14,6 @@
 * Retire ThreeTenABP
 * Add Hyperion
 * Android 11: https://developer.android.com/preview/privacy/permissions#one-time
-* Android 11: https://developer.android.com/preview/privacy/location#background-location
 * Use cases instead of repositories?
 * Show banner when no connectivity (check for flight mode?)
 * Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource

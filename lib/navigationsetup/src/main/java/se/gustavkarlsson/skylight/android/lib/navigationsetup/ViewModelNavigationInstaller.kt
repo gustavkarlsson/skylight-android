@@ -14,13 +14,13 @@ internal object ViewModelNavigationInstaller : NavigationInstaller {
         navigationOverrides: Iterable<NavigationOverride>,
         backstackListeners: List<BackstackListener>,
     ): Pair<Navigator, BackButtonController> {
-        val viewModelFactory = NavigatorViewModel.Factory(
+        val viewModelFactory = ViewModelNavigator.Factory(
             activity,
             initialBackstack,
             navigationOverrides,
             backstackListeners,
         )
-        val navigator = ViewModelProvider(activity, viewModelFactory).get(NavigatorViewModel::class.java)
+        val navigator = ViewModelProvider(activity, viewModelFactory).get(ViewModelNavigator::class.java)
         val backButtonController = NavigatorBackButtonController(navigator, activity)
         return navigator to backButtonController
     }

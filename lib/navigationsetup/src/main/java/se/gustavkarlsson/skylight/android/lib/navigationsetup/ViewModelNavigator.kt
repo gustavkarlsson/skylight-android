@@ -1,10 +1,14 @@
 package se.gustavkarlsson.skylight.android.lib.navigationsetup
 
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.BackstackListener
@@ -14,19 +18,21 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 
 private const val STATE_BACKSTACK_KEY = "backstack"
 
-internal class NavigatorViewModel private constructor(
+internal class ViewModelNavigator private constructor(
     private val state: SavedStateHandle,
     initialBackstack: Backstack,
     private val overrides: Iterable<NavigationOverride>,
     private val backstackListeners: List<BackstackListener>,
 ) : ViewModel(), Navigator {
 
-    override val backstack: LiveData<Backstack>
+    override val backstack: StateFlow<Backstack>
 
     init {
         val actualInitialBackstack = overrideBackstack(emptyList(), initialBackstack)
         updateBackstackListeners(emptyList(), actualInitialBackstack)
         backstack = state.getLiveData(STATE_BACKSTACK_KEY, actualInitialBackstack)
+            .asFlow()
+            .stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = actualInitialBackstack)
     }
 
     override fun setBackstack(backstack: Backstack) = changeBackstack {
@@ -62,7 +68,7 @@ internal class NavigatorViewModel private constructor(
     }
 
     private fun changeBackstack(change: (stack: Backstack) -> Backstack) {
-        val oldBackstack = backstack.value ?: emptyList()
+        val oldBackstack = state.get<Backstack>(STATE_BACKSTACK_KEY) ?: emptyList()
         val targetBackstack = change(oldBackstack)
         val newBackstack = overrideBackstack(oldBackstack, targetBackstack)
         logInfo { "Backstack is now: $newBackstack" }
@@ -91,11 +97,11 @@ internal class NavigatorViewModel private constructor(
         owner: SavedStateRegistryOwner,
         private val initialBackstack: Backstack,
         private val navigationOverrides: Iterable<NavigationOverride>,
-        private val backstackListeners: List<BackstackListener>,
+        private val backstackListeners: List<BackstackListener>, // FIXME Leaking activity!?
     ) : AbstractSavedStateViewModelFactory(owner, null) {
         override fun <T : ViewModel> create(key: String, modelClass: Class<T>, handle: SavedStateHandle): T {
             @Suppress("UNCHECKED_CAST")
-            return NavigatorViewModel(handle, initialBackstack, navigationOverrides, backstackListeners) as T
+            return ViewModelNavigator(handle, initialBackstack, navigationOverrides, backstackListeners) as T
         }
     }
 }

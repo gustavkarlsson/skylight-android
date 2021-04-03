@@ -6,8 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.core.view.WindowCompat
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
@@ -93,8 +93,8 @@ internal class MainActivity :
     }
 
     private fun setContent() = setContent {
-        val backstack by navigator.backstack.observeAsState()
-        val topScreen = backstack?.lastOrNull()
+        val backstack by navigator.backstack.collectAsState()
+        val topScreen = backstack.lastOrNull()
         Crossfade(targetState = topScreen) { screen -> // TODO different animations for different directions?
             screen?.run { Content() }
         }
@@ -150,7 +150,7 @@ internal class MainActivity :
     override fun onBackPressed() = backButtonController.onBackPress()
 
     private fun onEachScreen(block: Screen.() -> Unit) {
-        navigator.backstack.value?.forEach { screen ->
+        navigator.backstack.value.forEach { screen ->
             screen.block()
         }
     }
