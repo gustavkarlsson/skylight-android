@@ -24,7 +24,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
@@ -50,12 +49,10 @@ import se.gustavkarlsson.skylight.android.lib.ui.startStopScope
 @ExperimentalMaterialApi
 @ExperimentalCoroutinesApi
 @Parcelize
-class MainScreen(private val dummy: Unit = Unit) : Screen { // FIXME do we need dummy, or can this be an object?
-    @IgnoredOnParcel
-    override val name = ScreenName.Main
+object MainScreen : Screen {
+    override val name get() = ScreenName.Main
 
-    @IgnoredOnParcel
-    override val scopeStart: String = "main"
+    override val scopeStart get() = "main"
 
     private val AppCompatActivity.viewModel: MainViewModel
         get() = getOrRegisterService(this@MainScreen, "mainViewModel") {

@@ -32,7 +32,6 @@ import kotlin.math.roundToInt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.withContext
-import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.feature.privacypolicy.R
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
@@ -47,10 +46,8 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 @ExperimentalMaterialApi
 @ExperimentalCoroutinesApi
 @Parcelize
-class PrivacyPolicyScreen(private val dummy: Unit = Unit) :
-    Screen { // FIXME do we need dummy, or can this be an object?
-    @IgnoredOnParcel
-    override val name = ScreenName.PrivacyPolicy
+object PrivacyPolicyScreen : Screen {
+    override val name get() = ScreenName.PrivacyPolicy
 
     @Composable
     override fun AppCompatActivity.Content() {

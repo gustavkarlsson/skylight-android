@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.toPaddingValues
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
@@ -44,9 +43,8 @@ import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
 @ExperimentalMaterialApi
 @ExperimentalCoroutinesApi
 @Parcelize
-class AboutScreen(private val dummy: Unit = Unit) : Screen { // FIXME do we need dummy, or can this be an object?
-    @IgnoredOnParcel
-    override val name = ScreenName.About
+object AboutScreen : Screen {
+    override val name get() = ScreenName.About
 
     private val AppCompatActivity.viewModel: AboutViewModel
         get() = getOrRegisterService(this@AboutScreen, "aboutViewModel") {

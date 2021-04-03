@@ -13,7 +13,7 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Screens
 @ExperimentalAnimationApi
 @ExperimentalCoroutinesApi
 internal object DefaultScreens : Screens {
-    override val main: Screen = MainScreen()
-    override val about: Screen = AboutScreen()
-    override val privacyPolicy: Screen = PrivacyPolicyScreen()
+    override val main: Screen = MainScreen
+    override val about: Screen = AboutScreen
+    override val privacyPolicy: Screen = PrivacyPolicyScreen
 }
