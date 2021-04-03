@@ -13,6 +13,7 @@ import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchDelay
 import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocodingResult
 
+// TODO Rework to use flow of search queries
 internal class ContinuouslySearchAction @Inject constructor(
     private val geocoder: Geocoder,
     @SearchDelay private val querySampleDelay: Duration,
