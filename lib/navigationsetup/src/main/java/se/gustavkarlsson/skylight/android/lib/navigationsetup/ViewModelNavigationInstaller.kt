@@ -2,26 +2,20 @@ package se.gustavkarlsson.skylight.android.lib.navigationsetup
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
-import se.gustavkarlsson.skylight.android.lib.navigation.BackstackListener
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 
 internal object ViewModelNavigationInstaller : NavigationInstaller {
+    @ExperimentalCoroutinesApi
     override fun install(
         activity: AppCompatActivity,
         initialBackstack: Backstack,
         navigationOverrides: Iterable<NavigationOverride>,
-        backstackListeners: List<BackstackListener>,
-    ): Pair<Navigator, BackButtonController> {
-        val viewModelFactory = ViewModelNavigator.Factory(
-            activity,
-            initialBackstack,
-            navigationOverrides,
-            backstackListeners,
-        )
-        val navigator = ViewModelProvider(activity, viewModelFactory).get(ViewModelNavigator::class.java)
-        val backButtonController = NavigatorBackButtonController(navigator, activity)
-        return navigator to backButtonController
+    ): Navigator {
+        val viewModelFactory = ViewModelNavigator.Factory(activity, initialBackstack, navigationOverrides)
+        return ViewModelProvider(activity, viewModelFactory).get<ViewModelNavigator>()
     }
 }

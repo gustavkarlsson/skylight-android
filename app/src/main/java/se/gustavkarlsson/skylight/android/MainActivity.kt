@@ -14,17 +14,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
+import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
-import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
-import se.gustavkarlsson.skylight.android.lib.navigation.BackstackListener
+import se.gustavkarlsson.skylight.android.lib.navigation.BackPress
+import se.gustavkarlsson.skylight.android.lib.navigation.BackstackChange
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigatorHost
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.Screens
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreensHost
-import se.gustavkarlsson.skylight.android.lib.navigationsetup.BackButtonController
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.NavigationSetupComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedServiceComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceCatalog
@@ -33,25 +35,33 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceRegistry
 import se.gustavkarlsson.skylight.android.lib.ui.ScopeHost
 import se.gustavkarlsson.skylight.android.navigation.DefaultScreens
 
+// TODO Can some of this be moved to navigationsetup?
 internal class MainActivity :
     AppCompatActivity(),
     NavigatorHost,
     ScreensHost,
     ScopeHost,
-    ServiceHost,
-    BackstackListener {
-
-    override lateinit var navigator: Navigator private set
-
-    private lateinit var backButtonController: BackButtonController
+    ServiceHost {
 
     private val serviceRegistry: ServiceRegistry = ScopedServiceComponent.instance.serviceRegistry()
 
     override val serviceCatalog: ServiceCatalog get() = serviceRegistry
 
     @ExperimentalCoroutinesApi
-    @ExperimentalMaterialApi
     @ExperimentalAnimationApi
+    @ExperimentalMaterialApi
+    override val navigator: Navigator by lazy {
+        val installer = NavigationSetupComponent.instance.navigationInstaller()
+        installer.install(
+            activity = this,
+            initialBackstack = listOf(screens.main),
+            navigationOverrides = NavigationComponent.instance.navigationOverrides(),
+        )
+    }
+
+    @ExperimentalCoroutinesApi
+    @ExperimentalAnimationApi
+    @ExperimentalMaterialApi
     override val screens: Screens = DefaultScreens
 
     // Create Destroy
@@ -59,16 +69,16 @@ internal class MainActivity :
         private set
 
     @ExperimentalCoroutinesApi
-    @ExperimentalMaterialApi
     @ExperimentalAnimationApi
+    @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         val scope = MainScope() + CoroutineName("createDestroyScope")
         createDestroyScope = scope
-        setupNavigation()
         setContent()
         onEachScreen { onNewCreateDestroyScope(scope) }
+        scope.handleBackstackChanges()
     }
 
     override fun onDestroy() {
@@ -78,25 +88,35 @@ internal class MainActivity :
     }
 
     @ExperimentalCoroutinesApi
-    @ExperimentalMaterialApi
     @ExperimentalAnimationApi
-    private fun setupNavigation() {
-        val installer = NavigationSetupComponent.instance.navigationInstaller()
-        val (navigator, backButtonController) = installer.install(
-            activity = this,
-            initialBackstack = listOf(screens.main),
-            navigationOverrides = NavigationComponent.instance.navigationOverrides(),
-            backstackListeners = listOf(this),
-        )
-        this.navigator = navigator
-        this.backButtonController = backButtonController
-    }
-
+    @ExperimentalMaterialApi
     private fun setContent() = setContent {
-        val backstack by navigator.backstack.collectAsState()
-        val topScreen = backstack.lastOrNull()
+        val change by navigator.backstackChanges.collectAsState()
+        val topScreen = change.new.lastOrNull()
         Crossfade(targetState = topScreen) { screen -> // TODO different animations for different directions?
             screen?.run { Content() }
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    @ExperimentalAnimationApi
+    @ExperimentalMaterialApi
+    private fun CoroutineScope.handleBackstackChanges() = launch {
+        navigator.backstackChanges.collect { change ->
+            onBackstackChange(change)
+        }
+    }
+
+    private fun onBackstackChange(change: BackstackChange) {
+        val oldTop = change.old.lastOrNull()
+        val newTop = change.new.lastOrNull()
+        if (newTop != null && oldTop != newTop) {
+            AnalyticsComponent.instance.analytics().logScreen(newTop.name.name)
+        }
+        val tags = change.new.map(Screen::tag)
+        serviceRegistry.onTagsChanged(tags)
+        if (change.new.isEmpty()) {
+            finish()
         }
     }
 
@@ -104,6 +124,9 @@ internal class MainActivity :
     override var startStopScope: CoroutineScope? = null
         private set
 
+    @ExperimentalCoroutinesApi
+    @ExperimentalAnimationApi
+    @ExperimentalMaterialApi
     override fun onStart() {
         super.onStart()
         val scope = MainScope() + CoroutineName("startStopScope")
@@ -121,6 +144,9 @@ internal class MainActivity :
     override var resumePauseScope: CoroutineScope? = null
         private set
 
+    @ExperimentalCoroutinesApi
+    @ExperimentalAnimationApi
+    @ExperimentalMaterialApi
     override fun onResume() {
         super.onResume()
         val scope = MainScope() + CoroutineName("resumePauseScope")
@@ -134,24 +160,29 @@ internal class MainActivity :
         super.onPause()
     }
 
-    override fun onBackstackChanged(old: Backstack, new: Backstack) {
-        val oldTop = old.lastOrNull()
-        val newTop = new.lastOrNull()
-        if (newTop != null && oldTop != newTop) {
-            AnalyticsComponent.instance.analytics().logScreen(newTop.name.name)
-        }
-        val tags = new.map(Screen::tag)
-        serviceRegistry.onTagsChanged(tags)
-        if (new.isEmpty()) {
-            finish()
+    @ExperimentalCoroutinesApi
+    @ExperimentalAnimationApi
+    @ExperimentalMaterialApi
+    private fun onEachScreen(block: Screen.() -> Unit) {
+        val change = navigator.backstackChanges.value
+        change.new.forEach { screen ->
+            screen.block()
         }
     }
 
-    override fun onBackPressed() = backButtonController.onBackPress()
-
-    private fun onEachScreen(block: Screen.() -> Unit) {
-        navigator.backstack.value.forEach { screen ->
-            screen.block()
+    @ExperimentalCoroutinesApi
+    @ExperimentalAnimationApi
+    @ExperimentalMaterialApi
+    override fun onBackPressed() {
+        val topScreen = navigator.backstackChanges.value.new.lastOrNull()
+        val backPress = topScreen?.run {
+            onBackPress()
         }
+        when (backPress) {
+            null -> logInfo { "Top screen could not handle back press" }
+            BackPress.HANDLED -> logInfo { "Top screen handled back press" }
+            BackPress.NOT_HANDLED -> logInfo { "Top screen did not handle back press" }
+        }
+        if (backPress != BackPress.HANDLED) navigator.closeScreen()
     }
 }

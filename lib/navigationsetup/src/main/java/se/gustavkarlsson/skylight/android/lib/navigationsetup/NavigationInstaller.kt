@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.lib.navigationsetup
 
 import androidx.appcompat.app.AppCompatActivity
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
-import se.gustavkarlsson.skylight.android.lib.navigation.BackstackListener
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 
@@ -11,6 +10,5 @@ interface NavigationInstaller {
         activity: AppCompatActivity,
         initialBackstack: Backstack,
         navigationOverrides: Iterable<NavigationOverride> = emptyList(),
-        backstackListeners: List<BackstackListener> = emptyList(),
-    ): Pair<Navigator, BackButtonController>
+    ): Navigator
 }

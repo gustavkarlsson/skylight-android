@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.lib.navigation
 import kotlinx.coroutines.flow.StateFlow
 
 interface Navigator {
-    val backstack: StateFlow<Backstack>
+    val backstackChanges: StateFlow<BackstackChange>
     fun setBackstack(backstack: Backstack)
     fun goTo(screen: Screen)
     fun closeScreenAndGoTo(screen: Screen)
