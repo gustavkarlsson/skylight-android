@@ -35,6 +35,7 @@ internal fun TopAppBar(
         contentPadding = LocalWindowInsets.current.statusBars
             .toPaddingValues(additionalHorizontal = AppBarHorizontalPadding),
         title = {
+            // FIXME doesn't fit. Lower case 'j' and 'g' get cut off
             SearchField(
                 modifier = Modifier.fillMaxSize(),
                 state = state.toSearchFieldState(),
