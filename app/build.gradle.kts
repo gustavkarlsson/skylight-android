@@ -27,6 +27,7 @@ play {
 
 android {
     commonConfig()
+    composeConfig()
 
     defaultConfig {
         applicationId = "se.gustavkarlsson.skylight.android"
@@ -126,6 +127,11 @@ dependencies {
 
     // Timber
     implementation("com.jakewharton.timber:timber:${Versions.timber}")
+
+    // Compose
+    implementation("androidx.activity:activity-compose:${Versions.androidActivity}")
+    implementation("androidx.compose.runtime:runtime-livedata:${Versions.compose}")
+    implementation("androidx.compose.animation:animation:${Versions.compose}")
 
     // Testing
     testImplementation("junit:junit:${Versions.junit}")

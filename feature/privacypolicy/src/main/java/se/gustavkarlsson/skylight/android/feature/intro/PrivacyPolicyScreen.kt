@@ -3,6 +3,9 @@ package se.gustavkarlsson.skylight.android.feature.intro
 import android.widget.FrameLayout
 import android.widget.ScrollView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
@@ -27,19 +30,30 @@ import com.google.accompanist.insets.toPaddingValues
 import io.noties.markwon.Markwon
 import kotlin.math.roundToInt
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.withContext
+import kotlinx.parcelize.IgnoredOnParcel
+import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.feature.privacypolicy.R
+import se.gustavkarlsson.skylight.android.lib.navigation.Screen
+import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
-import se.gustavkarlsson.skylight.android.lib.ui.compose.ComposeScreenFragment
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 
-class PrivacyPolicyFragment : ComposeScreenFragment() {
+@ExperimentalAnimationApi
+@ExperimentalMaterialApi
+@ExperimentalCoroutinesApi
+@Parcelize
+class PrivacyPolicyScreen(private val dummy: Unit = Unit) :
+    Screen { // FIXME do we need dummy, or can this be an object?
+    @IgnoredOnParcel
+    override val name = ScreenName.PrivacyPolicy
 
     @Composable
-    override fun ScreenContent() {
+    override fun AppCompatActivity.Content() {
         var text by remember { mutableStateOf("") }
         LaunchedEffect(key1 = null) {
             withContext(Dispatchers.IO) {

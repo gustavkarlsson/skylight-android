@@ -1,8 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.scopedservice
 
-interface ServiceRegistry {
-    fun register(id: String, tag: String, service: ScopedService)
-    operator fun get(id: String): ScopedService?
+interface ServiceRegistry : ServiceCatalog {
     fun onTagsChanged(tags: Collection<String>)
-    fun clear() = onTagsChanged(emptySet())
 }

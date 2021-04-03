@@ -9,8 +9,5 @@ object LibNavigationSetupModule {
 
     @Provides
     @Reusable
-    internal fun provideNavigationInstaller(): NavigationInstaller =
-        SimpleStackNavigationInstaller(
-            DefaultDirectionsCalculator
-        )
+    internal fun provideNavigationInstaller(): NavigationInstaller = ViewModelNavigationInstaller
 }

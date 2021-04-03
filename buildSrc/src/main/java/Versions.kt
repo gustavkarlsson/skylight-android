@@ -25,8 +25,8 @@ object Versions {
     val crashlyticsGradle = "2.2.0"
     val crashlytics = "17.1.0"
 
-    val androidAppcompat = "1.3.0-beta01"
-    val androidFragment = "1.3.1"
+    val androidAppcompat = "1.3.0-rc01" // FIXME can we move this out of core?
+    val androidActivity = "1.3.0-alpha05"
     val androidAnnotation = "1.1.0"
     val androidWorkManager = "2.3.4"
     val androidCoreKtx = "1.3.0"
@@ -48,7 +48,6 @@ object Versions {
     val mapboxServices = "5.3.0"
     val conveyor = "ae2111d8df" // TODO use release version
     val koptional = "0.4.0"
-    val simpleStack = "2.3.2"
     val textref = "1.3.1"
     val markwon = "4.4.0"
     val store = "4.0.0-beta01"

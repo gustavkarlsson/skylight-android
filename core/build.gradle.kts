@@ -17,8 +17,8 @@ dependencies {
     api("com.github.gustavkarlsson:koptional:${Versions.koptional}")
     api("com.google.dagger:dagger:${Versions.dagger}")
     api("com.github.ioki-mobility:TextRef:${Versions.textref}")
-    api("androidx.fragment:fragment-ktx:${Versions.androidFragment}")
-    api("androidx.appcompat:appcompat:${Versions.androidAppcompat}")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlinxCoroutines}")
+    api("androidx.appcompat:appcompat:${Versions.androidAppcompat}") // FIXME can we skip this in core?
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

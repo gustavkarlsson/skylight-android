@@ -1,23 +1,24 @@
 package se.gustavkarlsson.skylight.android.lib.navigationsetup
 
-import androidx.fragment.app.FragmentManager
+import androidx.appcompat.app.AppCompatActivity
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
-import se.gustavkarlsson.skylight.android.lib.navigation.BackButtonHandler
 import se.gustavkarlsson.skylight.android.lib.navigation.BackPress
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 
 internal class NavigatorBackButtonController(
     private val navigator: Navigator,
-    private val fragmentManager: FragmentManager
+    private val activity: AppCompatActivity,
 ) : BackButtonController {
 
-    override fun onBackPressed() {
-        val topFragment = fragmentManager.fragments.lastOrNull()
-        val backPress = (topFragment as? BackButtonHandler)?.onBackPressed()
+    override fun onBackPress() {
+        val topScreen = navigator.backstack.value?.lastOrNull()
+        val backPress = topScreen?.run {
+            activity.onBackPress()
+        }
         when (backPress) {
-            null -> logInfo { "Top fragment could not handle back press" }
-            BackPress.HANDLED -> logInfo { "Top fragment handled back press" }
-            BackPress.NOT_HANDLED -> logInfo { "Top fragment did not handle back press" }
+            null -> logInfo { "Top screen could not handle back press" }
+            BackPress.HANDLED -> logInfo { "Top screen handled back press" }
+            BackPress.NOT_HANDLED -> logInfo { "Top screen did not handle back press" }
         }
         if (backPress != BackPress.HANDLED) navigator.closeScreen()
     }

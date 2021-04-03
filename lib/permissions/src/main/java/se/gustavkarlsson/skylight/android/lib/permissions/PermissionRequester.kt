@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 
 interface PermissionRequester {
-    suspend fun request(fragment: Fragment)
+    suspend fun request(activity: FragmentActivity)
 }
