@@ -5,6 +5,7 @@ import com.dropbox.android.external.store4.StoreRequest
 import com.dropbox.android.external.store4.StoreResponse
 import com.dropbox.android.external.store4.fresh
 import com.dropbox.android.external.store4.get
+import java.io.IOException
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -16,28 +17,20 @@ import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.time.Time
-import java.io.IOException
 
 internal class StoreKpIndexProvider(
     private val store: Store<Unit, KpIndex>,
     private val time: Time
 ) : KpIndexProvider {
 
-    override suspend fun get(fresh: Boolean): Report<KpIndex> =
-        getSingleReport {
-            if (fresh) {
-                fresh(Unit)
-            } else {
-                get(Unit)
-            }
-        }
+    override suspend fun get(fresh: Boolean): Report<KpIndex> = getReport(fresh)
 
-    private suspend fun getSingleReport(
-        getWeather: suspend Store<Unit, KpIndex>.() -> KpIndex
-    ): Report<KpIndex> {
+    private suspend fun getReport(fresh: Boolean): Report<KpIndex> {
         val report = try {
-            val weather = store.getWeather()
-            Report.Success(weather, time.now())
+            val kpIndex = if (fresh) {
+                store.fresh(Unit)
+            } else store.get(Unit)
+            Report.Success(kpIndex, time.now())
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
