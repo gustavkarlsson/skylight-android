@@ -12,7 +12,6 @@ import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.skylight.android.core.AppComponent
 import se.gustavkarlsson.skylight.android.core.ViewModelScope
 import se.gustavkarlsson.skylight.android.core.utils.millis
-import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.feature.main.state.ContinuouslySearchAction
 import se.gustavkarlsson.skylight.android.feature.main.state.LocationPermissionAction
 import se.gustavkarlsson.skylight.android.feature.main.state.Search
@@ -83,26 +82,14 @@ internal interface MainViewModelComponent {
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-internal annotation class NowThreshold
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
 internal annotation class SearchDelay
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 internal annotation class StreamThrottle
 
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-internal annotation class MinUpdateInterval
-
 @Module
 internal object MainViewModelModule {
-
-    @Provides
-    @NowThreshold
-    fun provideNowThreshold(): Duration = 1.minutes
 
     @Provides
     @SearchDelay
@@ -111,10 +98,6 @@ internal object MainViewModelModule {
     @Provides
     @StreamThrottle
     fun provideStreamThrottle(): Duration = 500.millis
-
-    @Provides
-    @MinUpdateInterval
-    fun provideMinUpdateInterval(): Duration = 1.minutes
 
     @ExperimentalCoroutinesApi
     @Provides

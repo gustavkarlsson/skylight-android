@@ -5,7 +5,6 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Warning
 import com.ioki.textref.TextRef
 import javax.inject.Inject
-import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.core.entities.Cause
@@ -19,7 +18,6 @@ import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.state.Search
 import se.gustavkarlsson.skylight.android.feature.main.state.State
-import se.gustavkarlsson.skylight.android.feature.main.util.RelativeTimeFormatter
 import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
@@ -34,7 +32,6 @@ import se.gustavkarlsson.skylight.android.lib.weather.Weather
 
 internal class StateToViewStateMapper @Inject constructor(
     private val auroraChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
-    private val relativeTimeFormatter: RelativeTimeFormatter,
     private val chanceLevelFormatter: Formatter<ChanceLevel>,
     private val darknessChanceEvaluator: ChanceEvaluator<Darkness>,
     private val darknessFormatter: Formatter<Darkness>,
@@ -44,14 +41,13 @@ internal class StateToViewStateMapper @Inject constructor(
     private val kpIndexFormatter: Formatter<KpIndex>,
     private val weatherChanceEvaluator: ChanceEvaluator<Weather>,
     private val weatherFormatter: Formatter<Weather>,
-    @NowThreshold private val nowTextThreshold: Duration
 ) {
 
-    fun map(state: State, currentTime: Instant): ViewState {
+    fun map(state: State): ViewState {
         return ViewState(
             toolbarTitleName = state.selectedPlace.displayName,
             chanceLevelText = createChangeLevelText(state),
-            chanceSubtitleText = createChanceSubtitleText(state, currentTime),
+            chanceSubtitleText = createChanceSubtitleText(state),
             errorBannerData = createErrorBannerData(state),
             notificationsButtonState = createNotificationButtonState(state),
             favoriteButtonState = createFavoriteButtonState(state),
@@ -115,19 +111,15 @@ internal class StateToViewStateMapper @Inject constructor(
         return chanceLevelFormatter.format(level)
     }
 
-    private fun createChanceSubtitleText(state: State, currentTime: Instant): TextRef {
+    private fun createChanceSubtitleText(state: State): TextRef {
         val name = optionalOf(state.selectedAuroraReport.locationName)
             .map { it as? Loadable.Loaded<ReverseGeocodingResult> }
             .map { it.value as? ReverseGeocodingResult.Success }
             .map { it.name }
             .value
-        val relativeTime = state.selectedAuroraReport.timestamp?.let { timestamp ->
-            relativeTimeFormatter.format(timestamp, currentTime, nowTextThreshold)
-        }
-        return when {
-            relativeTime == null -> TextRef.EMPTY
-            name == null -> relativeTime
-            else -> TextRef.stringRes(R.string.time_in_location, relativeTime, name)
+        return when (name) {
+            null -> TextRef.EMPTY
+            else -> TextRef.stringRes(R.string.in_location, name)
         }
     }
 

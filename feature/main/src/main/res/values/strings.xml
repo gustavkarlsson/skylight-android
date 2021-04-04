@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="right_now">Right now</string>
-    <string name="time_in_location">%1$s in %2$s</string>
+    <string name="in_location">in %1$s</string>
     <string name="remove">Remove</string>
     <string name="remove_thing">Remove %s?</string>
     <string name="fix">Fix</string>

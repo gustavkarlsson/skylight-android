@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.aurora
 
-import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
@@ -16,15 +15,6 @@ data class LoadableAuroraReport(
     val darkness: Loadable<Report<Darkness>>,
     val weather: Loadable<Report<Weather>>
 ) {
-    val timestamp: Instant?
-        get() = listOf(kpIndex, geomagLocation, darkness, weather)
-            .flatMap {
-                if (it is Loadable.Loaded)
-                    listOf(it.value.timestamp)
-                else
-                    emptyList()
-            }
-            .maxOrNull()
 
     fun toCompleteAuroraReport(): CompleteAuroraReport? =
         if (locationName is Loadable.Loaded &&
