@@ -14,7 +14,7 @@ import se.gustavkarlsson.skylight.android.core.ViewModelScope
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.utils.millis
 import se.gustavkarlsson.skylight.android.feature.main.state.ContinuouslySearchAction
-import se.gustavkarlsson.skylight.android.feature.main.state.LocationPermissionAction
+import se.gustavkarlsson.skylight.android.feature.main.state.PermissionsAction
 import se.gustavkarlsson.skylight.android.feature.main.state.Search
 import se.gustavkarlsson.skylight.android.feature.main.state.State
 import se.gustavkarlsson.skylight.android.feature.main.state.StreamCurrentLocationAction
@@ -30,7 +30,7 @@ import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationComponent
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexComponent
 import se.gustavkarlsson.skylight.android.lib.location.LocationComponent
-import se.gustavkarlsson.skylight.android.lib.permissions.Access
+import se.gustavkarlsson.skylight.android.lib.permissions.Permissions
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
@@ -107,7 +107,7 @@ internal object MainViewModelModule {
     @ExperimentalCoroutinesApi
     @Provides
     fun startActions(
-        locationPermissionAction: LocationPermissionAction,
+        permissionsAction: PermissionsAction,
         streamTriggerLevelsAction: StreamTriggerLevelsAction,
         streamSelectedPlaceAction: StreamSelectedPlaceAction,
         streamPlacesAction: StreamPlacesAction,
@@ -115,7 +115,7 @@ internal object MainViewModelModule {
         streamReportsAction: StreamReportsLiveAction,
         streamCurrentLocationAction: StreamCurrentLocationAction,
     ): List<Action<State>> = listOf(
-        locationPermissionAction,
+        permissionsAction,
         streamSelectedPlaceAction,
         streamPlacesAction,
         streamReportsAction,
@@ -126,13 +126,14 @@ internal object MainViewModelModule {
 
     // TODO Load initial data, and then remove fallback for State.selectedPlace.
     //  or have another initial state
+    // TODO Also remove initial permissions and get from checker instead
     @FlowPreview
     @ExperimentalCoroutinesApi
     @Provides
     fun initialState(
         selectedPlaceRepository: SelectedPlaceRepository,
     ): State = State(
-        locationAccess = Access.Unknown,
+        permissions = Permissions.INITIAL,
         currentLocationName = Loadable.Loading,
         selectedPlaceId = selectedPlaceRepository.get().id,
         selectedAuroraReport = LoadableAuroraReport.LOADING,

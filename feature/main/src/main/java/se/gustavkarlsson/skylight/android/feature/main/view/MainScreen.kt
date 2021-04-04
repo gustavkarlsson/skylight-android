@@ -37,6 +37,7 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
+import se.gustavkarlsson.skylight.android.lib.permissions.Permission
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
@@ -84,7 +85,8 @@ object MainScreen : Screen {
     private fun FragmentActivity.requestLocationPermission() {
         startStopScope?.launch {
             withContext(Dispatchers.Main) {
-                PermissionsComponent.instance.locationPermissionRequester().request(this@requestLocationPermission)
+                PermissionsComponent.instance.locationPermissionRequester()
+                    .request(this@requestLocationPermission, Permission.LocationFine, Permission.BackgroundLocation)
             }
         }
     }

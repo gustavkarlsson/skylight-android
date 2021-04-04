@@ -29,6 +29,7 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
+import se.gustavkarlsson.skylight.android.lib.permissions.Permission
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ClickableText
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
@@ -67,8 +68,9 @@ internal data class IntroScreen(private val target: Backstack) : Screen {
 
     private fun AppCompatActivity.onContinueClicked() {
         startStopScope?.launch {
+            // TODO Don't request permissions on this screen
             PermissionsComponent.instance.locationPermissionRequester()
-                .request(this@onContinueClicked)
+                .request(this@onContinueClicked, Permission.LocationFine, Permission.BackgroundLocation)
             viewModel.registerScreenSeen()
             navigator.setBackstack(target)
         }

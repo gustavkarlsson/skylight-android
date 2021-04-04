@@ -82,10 +82,11 @@ internal class StateToViewStateMapper @Inject constructor(
         return TextRef.EMPTY // FIXME what to do with this?
     }
 
+    // FIXME we can now also check for backgroundLocation
     private fun createErrorBannerData(state: State): BannerData? {
         return when {
             state.selectedPlace != Place.Current -> null
-            state.locationAccess == Access.Denied -> {
+            state.permissions.location.access == Access.Denied -> {
                 BannerData(
                     TextRef.stringRes(R.string.location_permission_denied_message),
                     TextRef.stringRes(R.string.fix),
@@ -93,7 +94,7 @@ internal class StateToViewStateMapper @Inject constructor(
                     BannerData.Event.RequestLocationPermission
                 )
             }
-            state.locationAccess == Access.DeniedForever -> {
+            state.permissions.location.access == Access.DeniedForever -> {
                 BannerData(
                     TextRef.stringRes(R.string.location_permission_denied_forever_message),
                     TextRef.stringRes(R.string.fix),

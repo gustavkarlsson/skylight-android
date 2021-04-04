@@ -1,43 +1,34 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
-import android.Manifest
 import android.content.Context
-import android.os.Build
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
+import kotlinx.coroutines.flow.MutableStateFlow
 
 @Module
 object LibPermissionsModule {
 
     @ExperimentalCoroutinesApi
-    private val channel = ConflatedBroadcastChannel(Access.Unknown)
+    private val state: MutableStateFlow<Permissions> = MutableStateFlow(Permissions.INITIAL)
 
     @ExperimentalCoroutinesApi
     @Provides
     @Reusable
     internal fun locationPermissionChecker(
         context: Context
-    ): PermissionChecker =
-        AndroidPermissionChecker(locationPermissionKey, context, channel)
+    ): PermissionChecker = AndroidPermissionChecker(context, state)
 
     @ExperimentalCoroutinesApi
     @Provides
     @Reusable
     internal fun locationPermissionRequester(): PermissionRequester =
-        RuntimePermissionRequester(
-            requiredPermissionKeys = listOf(locationPermissionKey),
-            extraPermissionKeys = listOfNotNull(backgroundLocationPermissionKey)
-        ) { channel.offer(it) }
+        RuntimePermissionRequester { newPermissions ->
+            val old = state.value
+            val new = old.update(newPermissions)
+            state.value = new
+        }
 }
-
-private const val locationPermissionKey = Manifest.permission.ACCESS_FINE_LOCATION
-
-private val backgroundLocationPermissionKey =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        Manifest.permission.ACCESS_BACKGROUND_LOCATION
-    } else null
 
 // TODO Show dialog if background permission not given but notifications are on.

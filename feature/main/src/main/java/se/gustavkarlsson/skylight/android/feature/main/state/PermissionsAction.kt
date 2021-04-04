@@ -6,13 +6,13 @@ import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.UpdatableStateFlow
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 
-internal class LocationPermissionAction @Inject constructor(
+internal class PermissionsAction @Inject constructor(
     private val permissionChecker: PermissionChecker,
 ) : Action<State> {
     override suspend fun execute(state: UpdatableStateFlow<State>) {
-        permissionChecker.access.collect { access ->
+        permissionChecker.permissions.collect { permissions ->
             state.update {
-                copy(locationAccess = access)
+                copy(permissions = permissions)
             }
         }
     }

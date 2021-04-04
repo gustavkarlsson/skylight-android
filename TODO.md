@@ -1,9 +1,15 @@
+## ASAP
+* Refresh permissions when coming back from other app, and when starting main screen (or on every onStart?)
+* Permission: "Ask every time" shows up as "denied" for some reason.
+* Add "ask" permission?
+* Test permissions more
+
 ## Soon
 * Standard dimensions?
 * Standard animations?
 * Bug: Single-use permission doesn't really work: https://developer.android.com/preview/privacy/permissions#one-time
 * Make location refresh on phone location on/off, or permission granted
-* Show actionable banner for missing location, permission, internet, with better action text than "fix"
+* Show actionable banner for missing location, permission, internet, notifications denied, with better action text than "fix"
 * Migrate libraries using sqldelight to use store?
 * Rework location inputs to "ApproximateLocation" so store can cache results from nearby locations
 * Readme
