@@ -1,30 +1,21 @@
-## ASAP Compose
-* Include standard dimensions?
-* Include standard animations?
-
 ## Soon
-* Single-use permission doesn't really work
-* Make location take phone location on/off into account
-* Make location auto-refresh on permission granted
-* Migrate libraries using sqldelight to use store
-* Bug: If location is granted (while using app), then go to add place, and go back. Banner shows up again.
+* Standard dimensions?
+* Standard animations?
+* Bug: Single-use permission doesn't really work: https://developer.android.com/preview/privacy/permissions#one-time
+* Make location refresh on phone location on/off, or permission granted
+* Show actionable banner for missing location, permission, internet, with better action text than "fix"
+* Migrate libraries using sqldelight to use store?
 * Rework location inputs to "ApproximateLocation" so store can cache results from nearby locations
 * Readme
 * Simpler configuration of required keys (move to root? fail if not present?)
 * Retire ThreeTenABP
 * Add Hyperion
-* Android 11: https://developer.android.com/preview/privacy/permissions#one-time
-* Use cases instead of repositories?
-* Show banner when no connectivity (check for flight mode?)
-* Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
 * Add prettier detail screens
 * Improve feature graphics
+* Main screen: Tell a story, one or a few sentences?
+* Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
 
 ## Some day
-* Put more info in bottom sheet. Images, text, links, CTA for missing location
-* Use favorites instead of saving? If so: Change map icon (in menu) to favorite icon?
-* Change "FIX" to "ALLOW/GRANT" in banner?
-* Main screen: Tell a story, one or a few sentences.
 * Oversee text style usage (also use TextAppearance instead of style in XML)
 * Make testing use other settings
 * Add more tests

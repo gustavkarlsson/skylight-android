@@ -70,14 +70,6 @@ internal class StateToViewStateMapper @Inject constructor(
         }
     }
 
-    private fun createCurrentLocationDisplayName(state: State): String? {
-        return optionalOf(state.currentLocationName)
-            .map { it as? Loadable.Loaded<ReverseGeocodingResult> }
-            .map { it.value as? ReverseGeocodingResult.Success }
-            .map { it.name }
-            .value
-    }
-
     private fun createChangeLevelText(state: State): TextRef {
         val chance = state.selectedAuroraReport.toCompleteAuroraReport()
             ?.let(auroraChanceEvaluator::evaluate)
@@ -222,6 +214,14 @@ internal class StateToViewStateMapper @Inject constructor(
                 }
             }
         } else SearchViewState.Closed
+    }
+
+    private fun createCurrentLocationDisplayName(state: State): String? {
+        return optionalOf(state.currentLocationName)
+            .map { it as? Loadable.Loaded<ReverseGeocodingResult> }
+            .map { it.value as? ReverseGeocodingResult.Success }
+            .map { it.name }
+            .value
     }
 
     private fun createOnFavoritesClickedEvent(state: State): Event {
