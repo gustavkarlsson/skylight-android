@@ -50,30 +50,92 @@ internal class StateToViewStateMapper @Inject constructor(
 ) {
 
     fun map(state: State): ViewState {
-        val changeLevelText = let {
-            val chance = state.selectedAuroraReport.toCompleteAuroraReport()
-                ?.let(auroraChanceEvaluator::evaluate)
-                ?: Chance.UNKNOWN
-            val level = ChanceLevel.fromChance(chance)
-            chanceLevelFormatter.format(level)
+        return ViewState(
+            toolbarTitleName = state.selectedPlace.displayName,
+            chanceLevelText = createChangeLevelText(state),
+            chanceSubtitleText = createChanceSubtitleText(state),
+            errorBannerData = createErrorBannerData(state),
+            notificationsButtonState = createNotificationButtonState(state),
+            favoriteButtonState = createFavoriteButtonState(state),
+            factorItems = createFactorItems(state),
+            search = createSearchViewState(state),
+            onFavoritesClickedEvent = createOnFavoritesClickedEvent(state),
+            notificationLevelItems = createNotificationLevelItems(state),
+        )
+    }
+
+    private fun createFactorItems(state: State): List<FactorItem> {
+        return listOf(
+            createKpIndexItem(state),
+            createGeomagLocationItem(state),
+            createDarknessItem(state),
+            createWeatherItem(state),
+        )
+    }
+
+    private fun createKpIndexItem(state: State): FactorItem {
+        return state.selectedAuroraReport.kpIndex
+            .toFactorItem(
+                texts = ItemTexts.KP_INDEX,
+                evaluator = kpIndexChanceEvaluator,
+                formatter = kpIndexFormatter,
+            )
+    }
+
+    private fun createGeomagLocationItem(state: State): FactorItem {
+        return state.selectedAuroraReport.geomagLocation
+            .toFactorItem(
+                texts = ItemTexts.GEOMAG_LOCATION,
+                evaluator = geomagLocationChanceEvaluator,
+                formatter = geomagLocationFormatter,
+            )
+    }
+
+    private fun createDarknessItem(state: State): FactorItem {
+        return state.selectedAuroraReport.darkness
+            .toFactorItem(
+                texts = ItemTexts.DARKNESS,
+                evaluator = darknessChanceEvaluator,
+                formatter = darknessFormatter,
+            )
+    }
+
+    private fun createWeatherItem(state: State): FactorItem {
+        return state.selectedAuroraReport.weather
+            .toFactorItem(
+                texts = ItemTexts.WEATHER,
+                evaluator = weatherChanceEvaluator,
+                formatter = weatherFormatter,
+            )
+    }
+
+    private fun createChangeLevelText(state: State): TextRef {
+        val chance = state.selectedAuroraReport.toCompleteAuroraReport()
+            ?.let(auroraChanceEvaluator::evaluate)
+            ?: Chance.UNKNOWN
+        val level = ChanceLevel.fromChance(chance)
+        return chanceLevelFormatter.format(level)
+    }
+
+    private fun createChanceSubtitleText(state: State): TextRef {
+        val name = optionalOf(state.selectedAuroraReport.locationName)
+            .map { it as? Loadable.Loaded<ReverseGeocodingResult> }
+            .map { it.value as? ReverseGeocodingResult.Success }
+            .map { it.name }
+            .value
+        val relativeTime = state.selectedAuroraReport.timestamp?.let { timestamp ->
+            // FIXME emit new time every sec
+            relativeTimeFormatter.format(timestamp, time.now(), nowTextThreshold)
         }
-        val chanceSubtitleText = let {
-            val name = optionalOf(state.selectedAuroraReport.locationName)
-                .map { it as? Loadable.Loaded<ReverseGeocodingResult> }
-                .map { it.value as? ReverseGeocodingResult.Success }
-                .map { it.name }
-                .value
-            val relativeTime = state.selectedAuroraReport.timestamp?.let { timestamp ->
-                // FIXME emit new time every sec
-                relativeTimeFormatter.format(timestamp, time.now(), nowTextThreshold)
-            }
-            when {
-                relativeTime == null -> TextRef.EMPTY
-                name == null -> relativeTime
-                else -> TextRef.stringRes(R.string.time_in_location, relativeTime, name)
-            }
+        return when {
+            relativeTime == null -> TextRef.EMPTY
+            name == null -> relativeTime
+            else -> TextRef.stringRes(R.string.time_in_location, relativeTime, name)
         }
-        val errorBannerData = when {
+    }
+
+    private fun createErrorBannerData(state: State): BannerData? {
+        return when {
             state.selectedPlace != Place.Current -> null
             state.locationAccess == Access.Denied -> {
                 BannerData(
@@ -93,44 +155,30 @@ internal class StateToViewStateMapper @Inject constructor(
             }
             else -> null
         }
-        val favoriteButtonState = when (state.selectedPlace) {
-            Place.Current -> ToggleButtonState.Gone
-            is Place.Saved.Recent -> ToggleButtonState.Enabled(checked = false)
-            is Place.Saved.Favorite -> ToggleButtonState.Enabled(checked = true)
-        }
+    }
+
+    private fun createNotificationButtonState(state: State): ToggleButtonState {
         val notificationChecked = state.selectedPlaceTriggerLevel != TriggerLevel.NEVER
-        val notificationsButtonState = when (state.selectedPlace) {
+        return when (state.selectedPlace) {
             Place.Current -> ToggleButtonState.Enabled(notificationChecked)
             is Place.Saved.Recent -> ToggleButtonState.Gone
             is Place.Saved.Favorite -> ToggleButtonState.Enabled(notificationChecked)
         }
-        val kpIndexItem = state.selectedAuroraReport.kpIndex
-            .toFactorItem(
-                texts = ItemTexts.KP_INDEX,
-                evaluate = kpIndexChanceEvaluator::evaluate,
-                format = kpIndexFormatter::format,
-            )
-        val geomagLocationItem = state.selectedAuroraReport.geomagLocation
-            .toFactorItem(
-                texts = ItemTexts.GEOMAG_LOCATION,
-                evaluate = geomagLocationChanceEvaluator::evaluate,
-                format = geomagLocationFormatter::format,
-            )
-        val darknessItem = state.selectedAuroraReport.darkness
-            .toFactorItem(
-                texts = ItemTexts.DARKNESS,
-                evaluate = darknessChanceEvaluator::evaluate,
-                format = darknessFormatter::format,
-            )
-        val weatherItem = state.selectedAuroraReport.weather
-            .toFactorItem(
-                texts = ItemTexts.WEATHER,
-                evaluate = weatherChanceEvaluator::evaluate,
-                format = weatherFormatter::format,
-            )
-        // FIXME rework how this is created
-        val search = if (state.search is Search.Active) {
-            val query = state.search.query
+    }
+
+    private fun createFavoriteButtonState(state: State): ToggleButtonState {
+        return when (state.selectedPlace) {
+            Place.Current -> ToggleButtonState.Gone
+            is Place.Saved.Recent -> ToggleButtonState.Enabled(checked = false)
+            is Place.Saved.Favorite -> ToggleButtonState.Enabled(checked = true)
+        }
+    }
+
+    // FIXME rework how this is created
+    private fun createSearchViewState(state: State): SearchViewState {
+        return if (state.search is Search.Active) {
+            val search = state.search
+            val query = search.query
             val placesResults = state.places
                 .map { place ->
                     val selected = place.id == state.selectedPlace.id
@@ -140,39 +188,46 @@ internal class StateToViewStateMapper @Inject constructor(
                     if (query.isBlank()) {
                         true
                     } else {
-                        when (result.place) {
+                        when (val place = result.place) {
                             Place.Current -> false
-                            is Place.Saved -> result.place.name.contains(query, ignoreCase = true)
+                            is Place.Saved -> place.name.contains(query, ignoreCase = true)
                         }
                     }
                 }
-                .sortedByDescending {
-                    when (it.place) {
+                .sortedByDescending { result ->
+                    when (val place = result.place) {
                         Place.Current -> Instant.EPOCH
-                        is Place.Saved -> it.place.lastChanged
+                        is Place.Saved -> place.lastChanged
                     }
                 }
-                .sortedBy { it.place.priority }
-            val searchResults = state.search.suggestions.items
+                .sortedBy { result -> result.place.priority }
+            val searchResults = search.suggestions.items
                 .map { suggestion ->
                     suggestion.toSearchResult()
                 }
             val results = placesResults + searchResults
-            when (state.search) {
+            when (search) {
                 is Search.Active.Blank, is Search.Active.Filled -> {
                     SearchViewState.Open.Ok(query, results)
                 }
                 is Search.Active.Error -> {
-                    SearchViewState.Open.Error(query, state.search.text)
+                    SearchViewState.Open.Error(query, search.text)
                 }
             }
         } else SearchViewState.Closed
-        val onFavoritesClickedEvent = when (val selectedPlace = state.selectedPlace) {
+    }
+
+    private fun createOnFavoritesClickedEvent(state: State): Event {
+        return when (val selectedPlace = state.selectedPlace) {
             Place.Current -> Event.Noop
             is Place.Saved.Recent -> Event.AddFavorite(selectedPlace)
             is Place.Saved.Favorite -> Event.RemoveFavorite(selectedPlace)
         }
-        val notificationLevelItems = TriggerLevel.values()
+    }
+
+    private fun createNotificationLevelItems(state: State): List<NotificationLevelItem> {
+        return TriggerLevel.values()
+            .sortedBy { level -> level.displayIndex }
             .map { level ->
                 NotificationLevelItem(
                     text = level.shortText,
@@ -180,33 +235,20 @@ internal class StateToViewStateMapper @Inject constructor(
                     selectEvent = Event.SetNotificationLevel(state.selectedPlace, level),
                 )
             }
-            .asReversed()
-        return ViewState(
-            toolbarTitleName = state.selectedPlace.displayName,
-            chanceLevelText = changeLevelText,
-            chanceSubtitleText = chanceSubtitleText,
-            errorBannerData = errorBannerData,
-            notificationsButtonState = notificationsButtonState,
-            favoriteButtonState = favoriteButtonState,
-            factorItems = listOf(kpIndexItem, geomagLocationItem, darknessItem, weatherItem),
-            search = search,
-            onFavoritesClickedEvent = onFavoritesClickedEvent,
-            notificationLevelItems = notificationLevelItems,
-        )
     }
 
     private fun <T : Any> Loadable<Report<T>>.toFactorItem(
         texts: ItemTexts,
-        evaluate: (T) -> Chance,
-        format: (T) -> TextRef
+        evaluator: ChanceEvaluator<T>,
+        formatter: Formatter<T>,
     ): FactorItem =
         when (this) {
             Loadable.Loading -> FactorItem.loading(texts)
             is Loadable.Loaded -> {
                 when (val report = value) {
                     is Report.Success -> {
-                        val valueText = format(report.value)
-                        val chance = evaluate(report.value).value
+                        val valueText = formatter.format(report.value)
+                        val chance = evaluator.evaluate(report.value).value
                         FactorItem(
                             title = TextRef.stringRes(texts.shortTitle),
                             valueText = valueText,
@@ -257,6 +299,14 @@ private fun format(cause: Cause): TextRef {
     }
     return TextRef.stringRes(id)
 }
+
+private val TriggerLevel.displayIndex: Int
+    get() = when (this) {
+        TriggerLevel.NEVER -> 1
+        TriggerLevel.HIGH -> 2
+        TriggerLevel.MEDIUM -> 3
+        TriggerLevel.LOW -> 4
+    }
 
 private val TriggerLevel.shortText: TextRef
     get() = when (this) {
