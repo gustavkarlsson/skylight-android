@@ -21,18 +21,46 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.toPaddingValues
+import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchResult
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchViewState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
+import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.navigationBarsWithIme
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
+
+@ExperimentalMaterialApi
+@ExperimentalAnimationApi
+@Preview
+@Composable
+private fun PreviewSearchResults() {
+    SearchResults(
+        modifier = Modifier,
+        state = ViewState(
+            toolbarTitleName = TextRef.EMPTY,
+            chanceLevelText = TextRef.EMPTY,
+            chanceSubtitleText = TextRef.EMPTY,
+            errorBannerData = null,
+            notificationsButtonState = ToggleButtonState.Enabled(checked = false),
+            favoriteButtonState = ToggleButtonState.Enabled(checked = true),
+            factorItems = emptyList(),
+            search = SearchViewState.Closed,
+            onFavoritesClickedEvent = Event.Noop,
+            notificationLevelItems = emptyList(),
+        ),
+        searchElevation = 4.dp,
+        searchBackgroundColor = Color.Gray,
+        onEvent = {},
+    )
+}
 
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi

@@ -14,6 +14,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
@@ -45,6 +46,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.startStopScope
 
+@ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
 @ExperimentalCoroutinesApi
@@ -107,6 +109,7 @@ object MainScreen : Screen {
     }
 }
 
+@ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @Composable
@@ -131,6 +134,7 @@ private fun PreviewContent() {
     )
 }
 
+@ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @Composable

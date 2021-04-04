@@ -38,15 +38,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
+import com.ioki.textref.TextRef
 import java.util.Locale
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.FactorItem
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.NotificationLevelItem
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchViewState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Banner
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
@@ -57,6 +60,29 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.chanceSubtitle
 import se.gustavkarlsson.skylight.android.lib.ui.compose.chanceTitle
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
+
+@ExperimentalAnimationApi
+@Preview
+@Composable
+private fun PreviewSelectedPlace() {
+    SelectedPlace(
+        modifier = Modifier,
+        state = ViewState(
+            toolbarTitleName = TextRef.EMPTY,
+            chanceLevelText = TextRef.EMPTY,
+            chanceSubtitleText = TextRef.EMPTY,
+            errorBannerData = null,
+            notificationsButtonState = ToggleButtonState.Enabled(checked = false),
+            favoriteButtonState = ToggleButtonState.Enabled(checked = true),
+            factorItems = emptyList(),
+            search = SearchViewState.Closed,
+            onFavoritesClickedEvent = Event.Noop,
+            notificationLevelItems = emptyList(),
+        ),
+        onBannerActionClicked = {},
+        onEvent = {},
+    )
+}
 
 @ExperimentalAnimationApi
 @Composable

@@ -1,6 +1,8 @@
 package se.gustavkarlsson.skylight.android.lib.ui.compose
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -15,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.FocusState
@@ -23,8 +26,11 @@ import androidx.compose.ui.focus.isFocused
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 
+@ExperimentalComposeUiApi
 @Composable
 @Preview
 private fun PreviewSearchField() {
@@ -38,6 +44,7 @@ private fun PreviewSearchField() {
 }
 
 // TODO Fix flickering when focus changes
+@ExperimentalComposeUiApi
 @Composable
 fun SearchField(
     modifier: Modifier = Modifier,
@@ -47,6 +54,7 @@ fun SearchField(
     onStateChanged: (SearchFieldState) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
     val focusRequester = FocusRequester()
     var canClearFocus by remember { mutableStateOf(false) } // Prevents clearing focus when started as Inactive
     val active = state is SearchFieldState.Active
@@ -125,6 +133,8 @@ fun SearchField(
             unfocusedIndicatorColor = Color.Transparent,
             cursorColor = Colors.secondary,
         ),
+        keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
+        keyboardActions = KeyboardActions { keyboardController?.hideSoftwareKeyboard() },
     )
 }
 

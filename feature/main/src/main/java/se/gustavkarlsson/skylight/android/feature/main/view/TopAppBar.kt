@@ -5,10 +5,13 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.toPaddingValues
 import se.gustavkarlsson.skylight.android.feature.main.R
@@ -20,6 +23,21 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchField
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 
+@ExperimentalComposeUiApi
+@Preview
+@Composable
+private fun PreviewTopAppBar() {
+    TopAppBar(
+        state = SearchViewState.Open.Ok("query", emptyList()),
+        title = "Title",
+        onAboutClicked = {},
+        onEvent = {},
+        backgroundColor = Color.White,
+        elevation = 6.dp,
+    )
+}
+
+@ExperimentalComposeUiApi
 @Composable
 internal fun TopAppBar(
     state: SearchViewState,

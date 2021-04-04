@@ -8,6 +8,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.core.view.WindowCompat
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
@@ -47,6 +48,7 @@ internal class MainActivity :
 
     override val serviceCatalog: ServiceCatalog get() = serviceRegistry
 
+    @ExperimentalComposeUiApi
     @ExperimentalCoroutinesApi
     @ExperimentalAnimationApi
     @ExperimentalMaterialApi
@@ -59,6 +61,7 @@ internal class MainActivity :
         )
     }
 
+    @ExperimentalComposeUiApi
     @ExperimentalCoroutinesApi
     @ExperimentalAnimationApi
     @ExperimentalMaterialApi
@@ -68,6 +71,7 @@ internal class MainActivity :
     override var createDestroyScope: CoroutineScope? = null
         private set
 
+    @ExperimentalComposeUiApi
     @ExperimentalCoroutinesApi
     @ExperimentalAnimationApi
     @ExperimentalMaterialApi
@@ -87,6 +91,7 @@ internal class MainActivity :
         super.onDestroy()
     }
 
+    @ExperimentalComposeUiApi
     @ExperimentalCoroutinesApi
     @ExperimentalAnimationApi
     @ExperimentalMaterialApi
@@ -98,6 +103,7 @@ internal class MainActivity :
         }
     }
 
+    @ExperimentalComposeUiApi
     @ExperimentalCoroutinesApi
     @ExperimentalAnimationApi
     @ExperimentalMaterialApi
@@ -124,6 +130,7 @@ internal class MainActivity :
     override var startStopScope: CoroutineScope? = null
         private set
 
+    @ExperimentalComposeUiApi
     @ExperimentalCoroutinesApi
     @ExperimentalAnimationApi
     @ExperimentalMaterialApi
@@ -144,6 +151,7 @@ internal class MainActivity :
     override var resumePauseScope: CoroutineScope? = null
         private set
 
+    @ExperimentalComposeUiApi
     @ExperimentalCoroutinesApi
     @ExperimentalAnimationApi
     @ExperimentalMaterialApi
@@ -160,6 +168,7 @@ internal class MainActivity :
         super.onPause()
     }
 
+    @ExperimentalComposeUiApi
     @ExperimentalCoroutinesApi
     @ExperimentalAnimationApi
     @ExperimentalMaterialApi
@@ -170,6 +179,7 @@ internal class MainActivity :
         }
     }
 
+    @ExperimentalComposeUiApi
     @ExperimentalCoroutinesApi
     @ExperimentalAnimationApi
     @ExperimentalMaterialApi
