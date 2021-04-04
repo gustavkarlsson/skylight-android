@@ -1,15 +1,18 @@
 package se.gustavkarlsson.skylight.android.feature.main.state
 
 import com.ioki.textref.TextRef
+import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
+import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingResult
 
 internal data class State(
     val locationAccess: Access,
+    val currentLocationName: Loadable<ReverseGeocodingResult>,
     val selectedPlaceId: PlaceId,
     val selectedAuroraReport: LoadableAuroraReport,
     val search: Search,

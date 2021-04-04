@@ -112,7 +112,7 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createChanceSubtitleText(state: State): TextRef {
-        val name = optionalOf(state.selectedAuroraReport.locationName)
+        val name = optionalOf(state.currentLocationName)
             .map { it as? Loadable.Loaded<ReverseGeocodingResult> }
             .map { it.value as? ReverseGeocodingResult.Success }
             .map { it.name }

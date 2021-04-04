@@ -11,11 +11,13 @@ import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.skylight.android.core.AppComponent
 import se.gustavkarlsson.skylight.android.core.ViewModelScope
+import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.utils.millis
 import se.gustavkarlsson.skylight.android.feature.main.state.ContinuouslySearchAction
 import se.gustavkarlsson.skylight.android.feature.main.state.LocationPermissionAction
 import se.gustavkarlsson.skylight.android.feature.main.state.Search
 import se.gustavkarlsson.skylight.android.feature.main.state.State
+import se.gustavkarlsson.skylight.android.feature.main.state.StreamCurrentLocationAction
 import se.gustavkarlsson.skylight.android.feature.main.state.StreamPlacesAction
 import se.gustavkarlsson.skylight.android.feature.main.state.StreamReportsLiveAction
 import se.gustavkarlsson.skylight.android.feature.main.state.StreamSelectedPlaceAction
@@ -32,6 +34,7 @@ import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
+import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoderComponent
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
@@ -54,6 +57,7 @@ import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
         KpIndexComponent::class,
         GeomagLocationComponent::class,
         GeocoderComponent::class,
+        ReverseGeocoderComponent::class,
         SettingsComponent::class,
     ]
 )
@@ -75,6 +79,7 @@ internal interface MainViewModelComponent {
                 .kpIndexComponent(KpIndexComponent.instance)
                 .geomagLocationComponent(GeomagLocationComponent.instance)
                 .geocoderComponent(GeocoderComponent.instance)
+                .reverseGeocoderComponent(ReverseGeocoderComponent.instance)
                 .settingsComponent(SettingsComponent.instance)
                 .build()
     }
@@ -108,6 +113,7 @@ internal object MainViewModelModule {
         streamPlacesAction: StreamPlacesAction,
         continuouslySearchAction: ContinuouslySearchAction,
         streamReportsAction: StreamReportsLiveAction,
+        streamCurrentLocationAction: StreamCurrentLocationAction,
     ): List<Action<State>> = listOf(
         locationPermissionAction,
         streamSelectedPlaceAction,
@@ -115,6 +121,7 @@ internal object MainViewModelModule {
         streamReportsAction,
         streamTriggerLevelsAction,
         continuouslySearchAction,
+        streamCurrentLocationAction,
     )
 
     // TODO Load initial data, and then remove fallback for State.selectedPlace.
@@ -126,6 +133,7 @@ internal object MainViewModelModule {
         selectedPlaceRepository: SelectedPlaceRepository,
     ): State = State(
         locationAccess = Access.Unknown,
+        currentLocationName = Loadable.Loading,
         selectedPlaceId = selectedPlaceRepository.get().id,
         selectedAuroraReport = LoadableAuroraReport.LOADING,
         search = Search.Inactive,

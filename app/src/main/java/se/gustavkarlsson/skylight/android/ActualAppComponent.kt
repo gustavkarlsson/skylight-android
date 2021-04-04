@@ -31,6 +31,7 @@ import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.places.LibPlacesModule
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.LibReverseGeocoderModule
+import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoderComponent
 import se.gustavkarlsson.skylight.android.lib.runversion.LibRunVersionModule
 import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.LibScopedServiceModule
@@ -78,6 +79,7 @@ internal interface ActualAppComponent :
     RunVersionComponent,
     WeatherComponent,
     GeocoderComponent,
+    ReverseGeocoderComponent,
     PlacesComponent,
     LocationComponent,
     AuroraComponent,

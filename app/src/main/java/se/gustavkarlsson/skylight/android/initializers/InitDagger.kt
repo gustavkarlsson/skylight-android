@@ -18,6 +18,7 @@ import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.NavigationSetupComponent
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
+import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoderComponent
 import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedServiceComponent
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
@@ -33,6 +34,7 @@ private object Setter :
     RunVersionComponent.Setter,
     WeatherComponent.Setter,
     GeocoderComponent.Setter,
+    ReverseGeocoderComponent.Setter,
     PlacesComponent.Setter,
     LocationComponent.Setter,
     AuroraComponent.Setter,
@@ -58,6 +60,7 @@ internal fun Application.initDagger() {
         setRunVersionComponent(component)
         setWeatherComponent(component)
         setGeocoderComponent(component)
+        setReverseGeocoderComponent(component)
         setPlacesComponent(component)
         setLocationComponent(component)
         setAuroraComponent(component)
