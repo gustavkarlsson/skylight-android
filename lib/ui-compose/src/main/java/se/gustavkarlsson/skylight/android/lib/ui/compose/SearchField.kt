@@ -5,6 +5,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -27,6 +28,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 
@@ -51,6 +53,7 @@ fun SearchField(
     state: SearchFieldState,
     inactiveText: String,
     placeholderText: String,
+    textStyle: TextStyle = LocalTextStyle.current,
     onStateChanged: (SearchFieldState) -> Unit,
 ) {
     val focusManager = LocalFocusManager.current
@@ -80,6 +83,7 @@ fun SearchField(
                 } else SearchFieldState.Inactive
                 onStateChanged(newState)
             },
+        textStyle = textStyle,
         value = activeText ?: inactiveText,
         singleLine = true,
         leadingIcon = {

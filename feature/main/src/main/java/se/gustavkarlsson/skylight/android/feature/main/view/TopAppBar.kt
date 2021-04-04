@@ -22,6 +22,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchField
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 
 @ExperimentalComposeUiApi
 @Preview
@@ -59,6 +60,7 @@ internal fun TopAppBar(
                 state = state.toSearchFieldState(),
                 inactiveText = title,
                 placeholderText = stringResource(id = R.string.place_search),
+                textStyle = Typography.h6.copy(fontSize = Typography.h6.fontSize * 0.9),
                 onStateChanged = { state -> onEvent(Event.SearchChanged(state)) },
             )
         },
