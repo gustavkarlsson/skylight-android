@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<full-backup-content>
-    <!-- This rule exists to disable backup for all files -->
-    <!-- See: https://developer.android.com/guide/topics/data/autobackup#IncludingFiles -->
-    <include
-        domain="external"
-        path="does_not_exist.xml" />
-</full-backup-content>
