@@ -6,6 +6,6 @@ import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 
 interface GeomagLocationProvider {
-    fun get(location: LocationResult): Report<GeomagLocation>
+    fun get(locationResult: LocationResult): Report<GeomagLocation>
     fun stream(locations: Flow<Loadable<LocationResult>>): Flow<Loadable<Report<GeomagLocation>>>
 }

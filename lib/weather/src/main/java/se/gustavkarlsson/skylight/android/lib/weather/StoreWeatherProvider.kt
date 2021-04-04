@@ -5,6 +5,7 @@ import com.dropbox.android.external.store4.StoreRequest
 import com.dropbox.android.external.store4.StoreResponse
 import com.dropbox.android.external.store4.fresh
 import com.dropbox.android.external.store4.get
+import java.io.IOException
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -20,39 +21,34 @@ import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.time.Time
-import java.io.IOException
 
 internal class StoreWeatherProvider(
     private val store: Store<Location, Weather>,
     private val time: Time
 ) : WeatherProvider {
 
-    override suspend fun get(location: LocationResult, fresh: Boolean): Report<Weather> =
-        getSingleReport(location) {
-            if (fresh) {
-                fresh(it)
-            } else {
-                get(it)
-            }
-        }
+    override suspend fun get(locationResult: LocationResult, fresh: Boolean): Report<Weather> =
+        getReport(locationResult, fresh)
 
-    private suspend fun getSingleReport(
-        location: LocationResult,
-        getWeather: suspend Store<Location, Weather>.(Location) -> Weather
-    ): Report<Weather> {
-        val report = when (location) {
-            is LocationResult.Success ->
+    private suspend fun getReport(locationResult: LocationResult, fresh: Boolean): Report<Weather> {
+        val report = locationResult.map(
+            onSuccess = { location ->
                 try {
-                    val weather = store.getWeather(location.location)
+                    val weather = if (fresh) {
+                        store.fresh(location)
+                    } else {
+                        store.get(location)
+                    }
                     Report.Success(weather, time.now())
                 } catch (e: CancellationException) {
                     throw e
                 } catch (e: Exception) {
                     Report.Error(getCause(e), time.now())
                 }
-            LocationResult.Failure.MissingPermission -> Report.Error(Cause.LocationPermission, time.now())
-            LocationResult.Failure.Unknown -> Report.Error(Cause.Location, time.now())
-        }
+            },
+            onMissingPermissionError = { Report.Error(Cause.LocationPermission, time.now()) },
+            onUnknownError = { Report.Error(Cause.Location, time.now()) },
+        )
         logInfo { "Provided weather: $report" }
         return report
     }

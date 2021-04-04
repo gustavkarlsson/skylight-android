@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.darkness
 
+import java.util.GregorianCalendar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -18,15 +19,14 @@ import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.time.Time
-import java.util.GregorianCalendar
 
 internal class KlausBrunnerDarknessProvider(
     private val time: Time,
     private val pollingInterval: Duration
 ) : DarknessProvider {
 
-    override fun get(location: LocationResult): Report<Darkness> {
-        val report = getDarknessReport(location, time.now())
+    override fun get(locationResult: LocationResult): Report<Darkness> {
+        val report = getDarknessReport(locationResult, time.now())
         logInfo { "Provided darkness: $report" }
         return report
     }
