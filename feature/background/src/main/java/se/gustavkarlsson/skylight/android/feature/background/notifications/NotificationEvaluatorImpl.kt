@@ -2,8 +2,6 @@ package se.gustavkarlsson.skylight.android.feature.background.notifications
 
 import se.gustavkarlsson.skylight.android.feature.background.persistence.LastNotificationRepository
 import se.gustavkarlsson.skylight.android.feature.background.persistence.NotificationRecord
-import se.gustavkarlsson.skylight.android.feature.background.persistence.PlaceRef
-import se.gustavkarlsson.skylight.android.lib.places.Place
 
 internal class NotificationEvaluatorImpl(
     private val lastNotificationRepository: LastNotificationRepository,
@@ -28,7 +26,7 @@ internal class NotificationEvaluatorImpl(
 private infix fun Notification.hasHigherChanceThan(old: NotificationRecord): Boolean {
     val oldAndNewChances = data.map { new ->
         val correspondingOldChance = old.data
-            .firstOrNull { old -> new.place isSameAs old.placeRef }
+            .firstOrNull { old -> new.place.id == old.id }
             ?.chanceLevel
         correspondingOldChance to new.chanceLevel
     }
@@ -36,9 +34,3 @@ private infix fun Notification.hasHigherChanceThan(old: NotificationRecord): Boo
         old == null || new > old
     }
 }
-
-private infix fun Place.isSameAs(other: PlaceRef) =
-    when (this) {
-        Place.Current -> other is PlaceRef.Current
-        is Place.Saved -> other is PlaceRef.Saved && id == other.id
-    }

@@ -12,7 +12,7 @@ internal class StreamTriggerLevelsAction @Inject constructor(
     override suspend fun execute(state: UpdatableStateFlow<State>) {
         settings.streamNotificationTriggerLevels().collect { levels ->
             state.update {
-                copy(notificationTriggerLevels = levels.toMap().mapKeys { entry -> entry.key.id })
+                copy(notificationTriggerLevels = levels)
             }
         }
     }

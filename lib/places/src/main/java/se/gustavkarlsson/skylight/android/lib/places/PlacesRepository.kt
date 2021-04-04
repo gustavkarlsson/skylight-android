@@ -4,9 +4,9 @@ import kotlinx.coroutines.flow.Flow
 import se.gustavkarlsson.skylight.android.lib.location.Location
 
 interface PlacesRepository {
-    suspend fun setFavorite(place: Place.Saved): Place.Saved.Favorite
-    suspend fun setRecent(place: Place.Saved): Place.Saved.Recent
+    suspend fun setFavorite(placeId: PlaceId.Saved): Place.Saved.Favorite
+    suspend fun setRecent(placeId: PlaceId.Saved): Place.Saved.Recent
     suspend fun addRecent(name: String, location: Location): Place.Saved.Recent
-    suspend fun updateLastChanged(place: Place.Saved): Place
+    suspend fun updateLastChanged(placeId: PlaceId.Saved): Place
     fun stream(): Flow<List<Place>>
 }

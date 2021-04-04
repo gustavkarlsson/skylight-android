@@ -6,14 +6,15 @@ import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.places.Place
+import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 
 internal data class State(
     val locationAccess: Access,
-    val selectedPlaceId: Long,
+    val selectedPlaceId: PlaceId,
     val selectedAuroraReport: LoadableAuroraReport,
     val search: Search,
     val places: List<Place>,
-    val notificationTriggerLevels: Map<Long, TriggerLevel>,
+    val notificationTriggerLevels: Map<PlaceId, TriggerLevel>,
 ) {
     val selectedPlace: Place
         get() = places.firstOrNull { place ->

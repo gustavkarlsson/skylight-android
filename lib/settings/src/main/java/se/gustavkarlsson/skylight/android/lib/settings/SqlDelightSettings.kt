@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
+import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.settings.db.DbSettingsQueries
 
@@ -20,38 +21,38 @@ internal class SqlDelightSettings(
     private val dispatcher: CoroutineDispatcher
 ) : Settings {
 
-    override suspend fun setNotificationTriggerLevel(place: Place, level: TriggerLevel) {
-        val placeId = place.getId()
-        val exists = queries.getById(placeId)
+    override suspend fun setNotificationTriggerLevel(placeId: PlaceId, level: TriggerLevel) {
+        val placeIdLong = placeId.value
+        val exists = queries.getById(placeIdLong)
             .asFlow()
             .mapToOneOrNull(dispatcher)
             .first() != null
 
         val levelIndex = level.ordinal.toLong()
         if (exists)
-            queries.update(levelIndex, placeId)
+            queries.update(levelIndex, placeIdLong)
         else
-            queries.insert(placeId, levelIndex)
+            queries.insert(placeIdLong, levelIndex)
     }
 
-    override fun clearNotificationTriggerLevel(place: Place) = queries.delete(place.getId())
+    override fun clearNotificationTriggerLevel(placeId: PlaceId) = queries.delete(placeId.value)
 
-    // FIXME only take favorites
     @ExperimentalCoroutinesApi
-    override fun streamNotificationTriggerLevels(): Flow<List<Pair<Place, TriggerLevel>>> =
+    override fun streamNotificationTriggerLevels(): Flow<Map<PlaceId, TriggerLevel>> =
         placesRepository.stream()
             .flatMapLatest { places ->
                 getTriggerLevelRecords()
                     .map { records ->
-                        places.map { place ->
-                            place to getTriggerLevel(place, records)
-                        }
+                        places
+                            .filterIsInstance<Place.Saved.Favorite>()
+                            .map { favorite -> favorite.id to getTriggerLevel(favorite, records) }
+                            .toMap()
                     }
             }
 
     private fun getTriggerLevelRecords(): Flow<List<TriggerLevelRecord>> =
         queries
-            .selectAll { id, levelIndex -> TriggerLevelRecord(id, levelIndex) }
+            .selectAll { id, levelIndex -> TriggerLevelRecord(PlaceId.fromLong(id), levelIndex) }
             .asFlow()
             .mapToList()
 }
@@ -60,14 +61,11 @@ private fun getTriggerLevel(
     place: Place,
     records: List<TriggerLevelRecord>
 ): TriggerLevel {
-    val placeId = place.getId()
-    val matchingRecord = records.find { record -> record.placeId == placeId }
+    val matchingRecord = records.find { record -> record.placeId == place.id }
         ?: return Settings.DEFAULT_TRIGGER_LEVEL
     return findTriggerLevelByIndex(matchingRecord.triggerLevelIndex)
         ?: Settings.DEFAULT_TRIGGER_LEVEL
 }
-
-private fun Place.getId(): Long = id
 
 private fun findTriggerLevelByIndex(levelIndex: Long): TriggerLevel? =
     if (levelIndex in TriggerLevel.values().indices)
@@ -75,4 +73,4 @@ private fun findTriggerLevelByIndex(levelIndex: Long): TriggerLevel? =
     else
         null
 
-private data class TriggerLevelRecord(val placeId: Long, val triggerLevelIndex: Long)
+private data class TriggerLevelRecord(val placeId: PlaceId, val triggerLevelIndex: Long)

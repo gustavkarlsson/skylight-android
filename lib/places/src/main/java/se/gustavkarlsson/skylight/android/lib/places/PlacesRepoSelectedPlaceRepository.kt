@@ -50,7 +50,7 @@ private sealed class State {
 }
 
 private class StreamPlacesAction(
-    private val loadId: suspend () -> Long,
+    private val loadId: suspend () -> PlaceId,
     private val placesStream: Flow<List<Place>>,
 ) : Action<State> {
     override suspend fun execute(state: UpdatableStateFlow<State>) {
@@ -63,10 +63,10 @@ private class StreamPlacesAction(
             }
     }
 
-    private fun createState(state: State, newPlaces: List<Place>, initialSelectedId: Long): State {
+    private fun createState(state: State, newPlaces: List<Place>, initialSelectedId: PlaceId): State {
         val selected = when (state) {
             is State.Initial -> {
-                val placeMatchingId = newPlaces.firstOrNull { it.id == initialSelectedId }
+                val placeMatchingId = newPlaces.firstOrNull { place -> place.id == initialSelectedId }
                 placeMatchingId ?: newPlaces.first()
             }
             is State.Loaded -> {
@@ -81,7 +81,7 @@ private class StreamPlacesAction(
 
 private class SelectionChangedAction(
     private val selectedPlace: Place,
-    private val saveId: (Long) -> Unit,
+    private val saveId: (PlaceId) -> Unit,
 ) : Action<State> {
     override suspend fun execute(state: UpdatableStateFlow<State>) {
         val newState = state.update {
@@ -106,4 +106,4 @@ private class SelectionChangedAction(
     }
 }
 
-private fun List<Place>.ids(): List<Long> = map { it.id }
+private fun List<Place>.ids(): List<PlaceId> = map { it.id }

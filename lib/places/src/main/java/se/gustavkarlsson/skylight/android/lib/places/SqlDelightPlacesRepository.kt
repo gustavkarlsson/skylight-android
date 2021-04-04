@@ -24,18 +24,18 @@ internal class SqlDelightPlacesRepository(
     private val maxRecentsCount: Int,
 ) : PlacesRepository {
 
-    override suspend fun setFavorite(place: Place.Saved): Place.Saved.Favorite = withContext(dispatcher) {
+    override suspend fun setFavorite(placeId: PlaceId.Saved): Place.Saved.Favorite = withContext(dispatcher) {
         val now = time.now()
-        queries.updateType(TYPE_FAVORITE, now.toEpochMilli(), place.id)
-        queries.selectById(place.id)
+        queries.updateType(TYPE_FAVORITE, now.toEpochMilli(), placeId.value)
+        queries.selectById(placeId.value)
             .exactlyOne()
             .toPlace()
     }
 
-    override suspend fun setRecent(place: Place.Saved): Place.Saved.Recent = withContext(dispatcher) {
+    override suspend fun setRecent(placeId: PlaceId.Saved): Place.Saved.Recent = withContext(dispatcher) {
         val now = time.now()
-        queries.updateType(TYPE_RECENT, now.toEpochMilli(), place.id)
-        val updated = queries.selectById(place.id)
+        queries.updateType(TYPE_RECENT, now.toEpochMilli(), placeId.value)
+        val updated = queries.selectById(placeId.value)
             .exactlyOne()
             .toPlace<Place.Saved.Recent>()
         removeOldRecents()
@@ -54,10 +54,10 @@ internal class SqlDelightPlacesRepository(
 
     private fun removeOldRecents() = queries.keepMostRecent(maxRecentsCount.toLong())
 
-    override suspend fun updateLastChanged(place: Place.Saved): Place = withContext(dispatcher) {
+    override suspend fun updateLastChanged(placeId: PlaceId.Saved): Place = withContext(dispatcher) {
         val now = time.now()
-        queries.updateLastChanged(now.toEpochMilli(), place.id)
-        queries.selectById(place.id)
+        queries.updateLastChanged(now.toEpochMilli(), placeId.value)
+        queries.selectById(placeId.value)
             .exactlyOne()
             .toPlace()
     }
@@ -82,11 +82,12 @@ internal class SqlDelightPlacesRepository(
 }
 
 private inline fun <reified T : Place> DbPlace.toPlace(): T {
+    val placeId = PlaceId.Saved(id)
     val location = Location(latitude, longitude)
     val lastChanged = Instant.ofEpochMilli(lastChangedMillis)
     val place = when (type) {
-        TYPE_FAVORITE -> Place.Saved.Favorite(id, name, location, lastChanged)
-        TYPE_RECENT -> Place.Saved.Recent(id, name, location, lastChanged)
+        TYPE_FAVORITE -> Place.Saved.Favorite(placeId, name, location, lastChanged)
+        TYPE_RECENT -> Place.Saved.Recent(placeId, name, location, lastChanged)
         else -> error("Unexpected location type: $type")
     }
     return place as? T ?: error("Unexpected last inserted place type: ${place.javaClass.name}")
