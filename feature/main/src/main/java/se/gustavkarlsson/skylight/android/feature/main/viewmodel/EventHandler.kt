@@ -61,11 +61,11 @@ internal class EventHandler @Inject constructor(
 
     private suspend fun onSearchResultClicked(result: SearchResult) {
         val place = when (result) {
-            is SearchResult.Known -> {
-                when (result.place) {
-                    Place.Current -> result.place
-                    is Place.Saved -> placesRepository.updateLastChanged(result.place.id)
-                }
+            is SearchResult.Known.Current -> {
+                Place.Current
+            }
+            is SearchResult.Known.Saved -> {
+                placesRepository.updateLastChanged(result.place.id)
             }
             is SearchResult.New -> {
                 placesRepository.addRecent(result.name, result.location)

@@ -1,17 +1,13 @@
 package se.gustavkarlsson.skylight.android.lib.places
 
-import com.ioki.textref.TextRef
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.core.R
 import se.gustavkarlsson.skylight.android.lib.location.Location
 
 sealed class Place {
     abstract val id: PlaceId
-    abstract val displayName: TextRef
 
     object Current : Place() {
         override val id = PlaceId.Current
-        override val displayName = TextRef.stringRes(R.string.your_location)
     }
 
     sealed class Saved : Place() {
@@ -25,18 +21,14 @@ sealed class Place {
             override val name: String,
             override val location: Location,
             override val lastChanged: Instant,
-        ) : Saved() {
-            override val displayName get() = TextRef.string(name)
-        }
+        ) : Saved()
 
         data class Recent(
             override val id: PlaceId.Saved,
             override val name: String,
             override val location: Location,
             override val lastChanged: Instant,
-        ) : Saved() {
-            override val displayName get() = TextRef.string(name)
-        }
+        ) : Saved()
     }
 }
 

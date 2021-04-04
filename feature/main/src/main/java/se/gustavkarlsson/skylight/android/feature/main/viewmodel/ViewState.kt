@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.ioki.textref.TextRef
+import se.gustavkarlsson.skylight.android.core.R
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.Place
@@ -73,16 +74,34 @@ internal sealed class SearchResult {
     abstract val selected: Boolean
     abstract val selectEvent: Event
 
-    data class Known(val place: Place, override val selected: Boolean) : SearchResult() {
-        override val title: TextRef get() = place.displayName
-        override val subtitle: Nothing? = null
-        override val icon: ImageVector
-            get() = when (place) {
-                Place.Current -> Icons.MyLocation
-                is Place.Saved.Favorite -> Icons.Favorite
-                is Place.Saved.Recent -> Icons.History
-            }
-        override val selectEvent: Event get() = Event.SelectSearchResult(this)
+    sealed class Known : SearchResult() {
+        data class Current(val name: String?, override val selected: Boolean) : Known() {
+            override val title: TextRef
+                get() {
+                    return if (name != null) {
+                        TextRef.string(name)
+                    } else TextRef.stringRes(R.string.your_location)
+                }
+            override val subtitle: TextRef?
+                get() {
+                    return if (name != null) {
+                        TextRef.stringRes(R.string.your_location)
+                    } else null
+                }
+            override val icon = Icons.MyLocation
+            override val selectEvent: Event get() = Event.SelectSearchResult(this)
+        }
+
+        data class Saved(val place: Place.Saved, override val selected: Boolean) : Known() {
+            override val title: TextRef get() = TextRef.string(place.name)
+            override val subtitle: Nothing? = null
+            override val icon: ImageVector
+                get() = when (place) {
+                    is Place.Saved.Favorite -> Icons.Favorite
+                    is Place.Saved.Recent -> Icons.History
+                }
+            override val selectEvent: Event get() = Event.SelectSearchResult(this)
+        }
     }
 
     data class New(

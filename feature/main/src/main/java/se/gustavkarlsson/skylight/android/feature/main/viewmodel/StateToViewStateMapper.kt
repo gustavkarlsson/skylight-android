@@ -45,7 +45,7 @@ internal class StateToViewStateMapper @Inject constructor(
 
     fun map(state: State): ViewState {
         return ViewState(
-            toolbarTitleName = state.selectedPlace.displayName,
+            toolbarTitleName = createToolbarTitleName(state),
             chanceLevelText = createChangeLevelText(state),
             chanceSubtitleText = createChanceSubtitleText(state),
             errorBannerData = createErrorBannerData(state),
@@ -56,6 +56,78 @@ internal class StateToViewStateMapper @Inject constructor(
             onFavoritesClickedEvent = createOnFavoritesClickedEvent(state),
             notificationLevelItems = createNotificationLevelItems(state),
         )
+    }
+
+    private fun createToolbarTitleName(state: State): TextRef {
+        return when (val selectedPlace = state.selectedPlace) {
+            Place.Current -> {
+                val name = createCurrentLocationDisplayName(state)
+                if (name != null) {
+                    TextRef.string(name)
+                } else TextRef.stringRes(R.string.your_location)
+            }
+            is Place.Saved -> TextRef.string(selectedPlace.name)
+        }
+    }
+
+    private fun createCurrentLocationDisplayName(state: State): String? {
+        return optionalOf(state.currentLocationName)
+            .map { it as? Loadable.Loaded<ReverseGeocodingResult> }
+            .map { it.value as? ReverseGeocodingResult.Success }
+            .map { it.name }
+            .value
+    }
+
+    private fun createChangeLevelText(state: State): TextRef {
+        val chance = state.selectedAuroraReport.toCompleteAuroraReport()
+            ?.let(auroraChanceEvaluator::evaluate)
+            ?: Chance.UNKNOWN
+        val level = ChanceLevel.fromChance(chance)
+        return chanceLevelFormatter.format(level)
+    }
+
+    private fun createChanceSubtitleText(state: State): TextRef {
+        return TextRef.EMPTY // FIXME what to do with this?
+    }
+
+    private fun createErrorBannerData(state: State): BannerData? {
+        return when {
+            state.selectedPlace != Place.Current -> null
+            state.locationAccess == Access.Denied -> {
+                BannerData(
+                    TextRef.stringRes(R.string.location_permission_denied_message),
+                    TextRef.stringRes(R.string.fix),
+                    Icons.LocationOn,
+                    BannerData.Event.RequestLocationPermission
+                )
+            }
+            state.locationAccess == Access.DeniedForever -> {
+                BannerData(
+                    TextRef.stringRes(R.string.location_permission_denied_forever_message),
+                    TextRef.stringRes(R.string.fix),
+                    Icons.Warning,
+                    BannerData.Event.OpenAppDetails
+                )
+            }
+            else -> null
+        }
+    }
+
+    private fun createNotificationButtonState(state: State): ToggleButtonState {
+        val notificationChecked = state.selectedPlaceTriggerLevel != TriggerLevel.NEVER
+        return when (state.selectedPlace) {
+            Place.Current -> ToggleButtonState.Enabled(notificationChecked)
+            is Place.Saved.Recent -> ToggleButtonState.Gone
+            is Place.Saved.Favorite -> ToggleButtonState.Enabled(notificationChecked)
+        }
+    }
+
+    private fun createFavoriteButtonState(state: State): ToggleButtonState {
+        return when (state.selectedPlace) {
+            Place.Current -> ToggleButtonState.Gone
+            is Place.Saved.Recent -> ToggleButtonState.Enabled(checked = false)
+            is Place.Saved.Favorite -> ToggleButtonState.Enabled(checked = true)
+        }
     }
 
     private fun createFactorItems(state: State): List<FactorItem> {
@@ -103,66 +175,6 @@ internal class StateToViewStateMapper @Inject constructor(
             )
     }
 
-    private fun createChangeLevelText(state: State): TextRef {
-        val chance = state.selectedAuroraReport.toCompleteAuroraReport()
-            ?.let(auroraChanceEvaluator::evaluate)
-            ?: Chance.UNKNOWN
-        val level = ChanceLevel.fromChance(chance)
-        return chanceLevelFormatter.format(level)
-    }
-
-    private fun createChanceSubtitleText(state: State): TextRef {
-        val name = optionalOf(state.currentLocationName)
-            .map { it as? Loadable.Loaded<ReverseGeocodingResult> }
-            .map { it.value as? ReverseGeocodingResult.Success }
-            .map { it.name }
-            .value
-        return when (name) {
-            null -> TextRef.EMPTY
-            else -> TextRef.stringRes(R.string.in_location, name)
-        }
-    }
-
-    private fun createErrorBannerData(state: State): BannerData? {
-        return when {
-            state.selectedPlace != Place.Current -> null
-            state.locationAccess == Access.Denied -> {
-                BannerData(
-                    TextRef.stringRes(R.string.location_permission_denied_message),
-                    TextRef.stringRes(R.string.fix),
-                    Icons.LocationOn,
-                    BannerData.Event.RequestLocationPermission
-                )
-            }
-            state.locationAccess == Access.DeniedForever -> {
-                BannerData(
-                    TextRef.stringRes(R.string.location_permission_denied_forever_message),
-                    TextRef.stringRes(R.string.fix),
-                    Icons.Warning,
-                    BannerData.Event.OpenAppDetails
-                )
-            }
-            else -> null
-        }
-    }
-
-    private fun createNotificationButtonState(state: State): ToggleButtonState {
-        val notificationChecked = state.selectedPlaceTriggerLevel != TriggerLevel.NEVER
-        return when (state.selectedPlace) {
-            Place.Current -> ToggleButtonState.Enabled(notificationChecked)
-            is Place.Saved.Recent -> ToggleButtonState.Gone
-            is Place.Saved.Favorite -> ToggleButtonState.Enabled(notificationChecked)
-        }
-    }
-
-    private fun createFavoriteButtonState(state: State): ToggleButtonState {
-        return when (state.selectedPlace) {
-            Place.Current -> ToggleButtonState.Gone
-            is Place.Saved.Recent -> ToggleButtonState.Enabled(checked = false)
-            is Place.Saved.Favorite -> ToggleButtonState.Enabled(checked = true)
-        }
-    }
-
     // FIXME rework how this is created
     private fun createSearchViewState(state: State): SearchViewState {
         return if (state.search is Search.Active) {
@@ -171,25 +183,31 @@ internal class StateToViewStateMapper @Inject constructor(
             val placesResults = state.places
                 .map { place ->
                     val selected = place.id == state.selectedPlace.id
-                    SearchResult.Known(place, selected = selected)
+                    when (place) {
+                        Place.Current -> {
+                            val name = createCurrentLocationDisplayName(state)
+                            SearchResult.Known.Current(name, selected = selected)
+                        }
+                        is Place.Saved -> SearchResult.Known.Saved(place, selected = selected)
+                    }
                 }
                 .filter { result ->
                     if (query.isBlank()) {
                         true
                     } else {
-                        when (val place = result.place) {
-                            Place.Current -> false
-                            is Place.Saved -> place.name.contains(query, ignoreCase = true)
+                        when (result) {
+                            is SearchResult.Known.Current -> false
+                            is SearchResult.Known.Saved -> result.place.name.contains(query, ignoreCase = true)
                         }
                     }
                 }
                 .sortedByDescending { result ->
-                    when (val place = result.place) {
-                        Place.Current -> Instant.EPOCH
-                        is Place.Saved -> place.lastChanged
+                    when (result) {
+                        is SearchResult.Known.Current -> Instant.EPOCH
+                        is SearchResult.Known.Saved -> result.place.lastChanged
                     }
                 }
-                .sortedBy { result -> result.place.priority }
+                .sortedBy { result -> result.priority }
             val searchResults = search.suggestions.items
                 .map { suggestion ->
                     suggestion.toSearchResult()
@@ -267,11 +285,14 @@ internal class StateToViewStateMapper @Inject constructor(
             }
         }
 
-    private val Place.priority: Int
+    private val SearchResult.priority: Int
         get() = when (this) {
-            Place.Current -> 0
-            is Place.Saved.Favorite -> 1
-            is Place.Saved.Recent -> 2
+            is SearchResult.Known.Current -> 1
+            is SearchResult.Known.Saved -> when (place) {
+                is Place.Saved.Favorite -> 2
+                is Place.Saved.Recent -> 3
+            }
+            is SearchResult.New -> 4
         }
 }
 

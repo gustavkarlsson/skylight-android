@@ -22,7 +22,7 @@ internal class NotificationFormatter(
                 val chanceText = chanceLevelFormatter.format(it.chanceLevel)
                 when (it.place) {
                     Place.Current -> TextRef.stringRes(R.string.x_at_your_current_location, chanceText)
-                    is Place.Saved -> TextRef.stringRes(R.string.x_in_y, chanceText, it.place.displayName)
+                    is Place.Saved -> TextRef.stringRes(R.string.x_in_y, chanceText, it.place.name)
                 }
             }.toTypedArray()
 }
