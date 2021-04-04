@@ -7,6 +7,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import se.gustavkarlsson.skylight.android.core.logging.logInfo
 
 @ExperimentalCoroutinesApi
 internal class AndroidPermissionChecker(
@@ -23,7 +24,10 @@ internal class AndroidPermissionChecker(
             getAccessFromSystem(permission)
         }
         val new = old.update(fromSystem)
-        state.value = new
+        if (new != old) {
+            state.value = new
+            logInfo { "Permissions changed from $old to $new" }
+        }
     }
 
     private fun getAccessFromSystem(permission: Permission): PermissionAccess {

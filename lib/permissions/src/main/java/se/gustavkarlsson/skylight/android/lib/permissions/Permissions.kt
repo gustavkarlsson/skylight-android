@@ -1,7 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
-import se.gustavkarlsson.skylight.android.core.logging.logDebug
-
 // FIXME rework to Map<Permission, Access> and require function?
 data class Permissions(
     val location: PermissionAccess,
@@ -34,11 +32,9 @@ data class Permissions(
 }
 
 internal fun Permissions.update(newValues: List<PermissionAccess>): Permissions {
-    val newLocation = location.update(newValues)
-    val newBackgroundLocation = backgroundLocation.update(newValues)
     return Permissions(
-        location = newLocation,
-        backgroundLocation = newBackgroundLocation,
+        location = location.update(newValues),
+        backgroundLocation = backgroundLocation.update(newValues),
     )
 }
 
@@ -47,10 +43,5 @@ private fun PermissionAccess.update(newValues: List<PermissionAccess>): Permissi
         .find { newPermissionAccess ->
             newPermissionAccess.permission == permission
         }?.access ?: return this
-
-    val actualNewAccess = if (access == Access.DeniedForever && newAccess == Access.Denied) {
-        logDebug { "Won't change $permission from $access to $newAccess" }
-        access
-    } else newAccess
-    return copy(access = actualNewAccess)
+    return copy(access = newAccess)
 }

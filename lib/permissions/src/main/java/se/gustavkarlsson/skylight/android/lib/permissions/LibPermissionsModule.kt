@@ -6,6 +6,7 @@ import dagger.Provides
 import dagger.Reusable
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import se.gustavkarlsson.skylight.android.core.logging.logInfo
 
 @Module
 object LibPermissionsModule {
@@ -27,7 +28,10 @@ object LibPermissionsModule {
         RuntimePermissionRequester { newPermissions ->
             val old = state.value
             val new = old.update(newPermissions)
-            state.value = new
+            if (new != old) {
+                state.value = new
+                logInfo { "Permissions changed from $old to $new" }
+            }
         }
 }
 
