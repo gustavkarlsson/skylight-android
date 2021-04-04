@@ -25,10 +25,11 @@ internal class StoreReverseGeocoder(
 ) : ReverseGeocoder {
 
     override suspend fun get(locationResult: LocationResult): ReverseGeocodingResult {
-        val result = when (locationResult) {
-            is LocationResult.Success -> getName(locationResult.location)
-            is LocationResult.Failure -> ReverseGeocodingResult.Failure.Location
-        }
+        val result = locationResult.map(
+            onSuccess = { location -> getName(location) },
+            onMissingPermissionError = { ReverseGeocodingResult.Failure.LocationPermission },
+            onUnknownError = { ReverseGeocodingResult.Failure.Location },
+        )
         logInfo { "Provided location name: $result" }
         return result
     }
@@ -39,10 +40,17 @@ internal class StoreReverseGeocoder(
             .flatMapLatest { loadableLocationResult ->
                 when (loadableLocationResult) {
                     Loadable.Loading -> flowOf(Loadable.Loading)
-                    is Loadable.Loaded -> when (val result = loadableLocationResult.value) {
-                        is LocationResult.Success -> getNameWithRetry(result.location)
-                        is LocationResult.Failure -> flowOf(Loadable.Loaded(ReverseGeocodingResult.Failure.Location))
-                    }
+                    is Loadable.Loaded -> loadableLocationResult.value.map(
+                        onSuccess = { location ->
+                            getNameWithRetry(location)
+                        },
+                        onMissingPermissionError = {
+                            flowOf(Loadable.Loaded(ReverseGeocodingResult.Failure.LocationPermission))
+                        },
+                        onUnknownError = {
+                            flowOf(Loadable.Loaded(ReverseGeocodingResult.Failure.Location))
+                        },
+                    )
                 }
             }
             .distinctUntilChanged()

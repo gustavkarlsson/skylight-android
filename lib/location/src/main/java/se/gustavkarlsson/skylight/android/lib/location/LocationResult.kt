@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.lib.location
 
 sealed class LocationResult {
 
-    fun <T> map(
+    inline fun <T> map(
         onSuccess: (Location) -> T,
         onMissingPermissionError: () -> T,
         onUnknownError: () -> T
