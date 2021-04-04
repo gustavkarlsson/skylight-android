@@ -28,7 +28,6 @@ import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
 import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingResult
-import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
@@ -45,15 +44,14 @@ internal class StateToViewStateMapper @Inject constructor(
     private val kpIndexFormatter: Formatter<KpIndex>,
     private val weatherChanceEvaluator: ChanceEvaluator<Weather>,
     private val weatherFormatter: Formatter<Weather>,
-    private val time: Time,
     @NowThreshold private val nowTextThreshold: Duration
 ) {
 
-    fun map(state: State): ViewState {
+    fun map(state: State, currentTime: Instant): ViewState {
         return ViewState(
             toolbarTitleName = state.selectedPlace.displayName,
             chanceLevelText = createChangeLevelText(state),
-            chanceSubtitleText = createChanceSubtitleText(state),
+            chanceSubtitleText = createChanceSubtitleText(state, currentTime),
             errorBannerData = createErrorBannerData(state),
             notificationsButtonState = createNotificationButtonState(state),
             favoriteButtonState = createFavoriteButtonState(state),
@@ -117,15 +115,14 @@ internal class StateToViewStateMapper @Inject constructor(
         return chanceLevelFormatter.format(level)
     }
 
-    private fun createChanceSubtitleText(state: State): TextRef {
+    private fun createChanceSubtitleText(state: State, currentTime: Instant): TextRef {
         val name = optionalOf(state.selectedAuroraReport.locationName)
             .map { it as? Loadable.Loaded<ReverseGeocodingResult> }
             .map { it.value as? ReverseGeocodingResult.Success }
             .map { it.name }
             .value
         val relativeTime = state.selectedAuroraReport.timestamp?.let { timestamp ->
-            // FIXME emit new time every sec
-            relativeTimeFormatter.format(timestamp, time.now(), nowTextThreshold)
+            relativeTimeFormatter.format(timestamp, currentTime, nowTextThreshold)
         }
         return when {
             relativeTime == null -> TextRef.EMPTY
@@ -243,7 +240,14 @@ internal class StateToViewStateMapper @Inject constructor(
         formatter: Formatter<T>,
     ): FactorItem =
         when (this) {
-            Loadable.Loading -> FactorItem.loading(texts)
+            Loadable.Loading -> FactorItem(
+                title = TextRef.stringRes(texts.shortTitle),
+                valueText = TextRef.string("…"),
+                descriptionText = TextRef.stringRes(texts.description),
+                valueTextColor = { onSurface.copy(alpha = 0.7F) },
+                progress = null,
+                errorText = null,
+            )
             is Loadable.Loaded -> {
                 when (val report = value) {
                     is Report.Success -> {
@@ -316,7 +320,7 @@ private val TriggerLevel.shortText: TextRef
         TriggerLevel.HIGH -> TextRef.stringRes(R.string.notify_at_high)
     }
 
-internal enum class ItemTexts(
+private enum class ItemTexts(
     @StringRes val shortTitle: Int,
     @StringRes val longTitle: Int,
     @StringRes val description: Int,

@@ -47,22 +47,7 @@ internal data class FactorItem(
     val valueTextColor: SkylightColors.() -> Color,
     val progress: Double?,
     val errorText: TextRef?
-) {
-    companion object {
-        fun loading(
-            texts: ItemTexts,
-        ): FactorItem {
-            return FactorItem(
-                title = TextRef.stringRes(texts.shortTitle),
-                valueText = TextRef.string("…"),
-                descriptionText = TextRef.stringRes(texts.description),
-                valueTextColor = { onSurface.copy(alpha = 0.7F) },
-                progress = null,
-                errorText = null,
-            )
-        }
-    }
-}
+)
 
 internal sealed class SearchViewState {
     object Closed : SearchViewState()

@@ -93,6 +93,10 @@ internal annotation class SearchDelay
 @Retention(AnnotationRetention.RUNTIME)
 internal annotation class StreamThrottle
 
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+internal annotation class MinUpdateInterval
+
 @Module
 internal object MainViewModelModule {
 
@@ -107,6 +111,10 @@ internal object MainViewModelModule {
     @Provides
     @StreamThrottle
     fun provideStreamThrottle(): Duration = 500.millis
+
+    @Provides
+    @MinUpdateInterval
+    fun provideMinUpdateInterval(): Duration = 1.minutes
 
     @ExperimentalCoroutinesApi
     @Provides
