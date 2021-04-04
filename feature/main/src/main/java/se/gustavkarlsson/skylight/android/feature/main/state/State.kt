@@ -37,7 +37,7 @@ internal sealed class Search {
             override val suggestions = Suggestions(query = "", items = emptyList())
         }
 
-        data class Ok(
+        data class Filled(
             override val query: String,
             override val suggestions: Suggestions,
         ) : Active()

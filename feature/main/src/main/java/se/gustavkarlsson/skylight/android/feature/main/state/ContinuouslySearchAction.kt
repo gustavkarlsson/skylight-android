@@ -64,7 +64,7 @@ internal class ContinuouslySearchAction @Inject constructor(
         if (this is Search.Active.Blank) return this
         return when {
             errorText != null -> Search.Active.Error(query, errorQuery = resultQuery, errorText)
-            else -> Search.Active.Ok(query, suggestions)
+            else -> Search.Active.Filled(query, suggestions)
         }
     }
 }

@@ -82,7 +82,7 @@ internal fun SearchResults(
             elevation = searchElevation,
             color = searchBackgroundColor,
         ) {
-            when (state.search) {
+            val dummy = when (state.search) {
                 SearchViewState.Closed -> Unit
                 is SearchViewState.Open.Error -> {
                     Box(
@@ -91,7 +91,6 @@ internal fun SearchResults(
                             .padding(16.dp),
                         contentAlignment = Alignment.Center,
                     ) {
-                        // FIXME make this look better
                         Text(
                             textAlign = TextAlign.Center,
                             text = textRef(state.search.text),

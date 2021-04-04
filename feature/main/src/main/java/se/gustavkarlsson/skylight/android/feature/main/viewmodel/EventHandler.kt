@@ -47,10 +47,10 @@ internal class EventHandler @Inject constructor(
                     } else {
                         when (search) {
                             Search.Inactive, is Search.Active.Blank -> {
-                                Search.Active.Ok(query, Suggestions("", emptyList()))
+                                Search.Active.Filled(query, Suggestions("", emptyList()))
                             }
                             is Search.Active.Error -> search.copy(query)
-                            is Search.Active.Ok -> search.copy(query)
+                            is Search.Active.Filled -> search.copy(query)
                         }
                     }
                 }

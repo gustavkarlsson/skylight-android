@@ -159,7 +159,7 @@ internal class StateToViewStateMapper @Inject constructor(
                 }
             val results = placesResults + searchResults
             when (state.search) {
-                is Search.Active.Blank, is Search.Active.Ok -> {
+                is Search.Active.Blank, is Search.Active.Filled -> {
                     SearchViewState.Open.Ok(query, results)
                 }
                 is Search.Active.Error -> {
