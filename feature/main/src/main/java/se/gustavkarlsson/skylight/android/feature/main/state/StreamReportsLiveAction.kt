@@ -64,8 +64,7 @@ internal class StreamReportsLiveAction @Inject constructor(
     private fun locationUpdates(selectedPlace: Place): Flow<Loadable<LocationResult>> {
         return when (selectedPlace) {
             Place.Current -> locationProvider.stream()
-            is Place.Favorite -> flowOf(Loadable.loaded(LocationResult.success(selectedPlace.location)))
-            is Place.Recent -> flowOf(Loadable.loaded(LocationResult.success(selectedPlace.location)))
+            is Place.Saved -> flowOf(Loadable.loaded(LocationResult.success(selectedPlace.location)))
         }
     }
 

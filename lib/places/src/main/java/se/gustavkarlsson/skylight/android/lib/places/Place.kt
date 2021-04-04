@@ -7,35 +7,34 @@ import se.gustavkarlsson.skylight.android.lib.location.Location
 
 sealed class Place {
     abstract val id: Long
-    abstract val name: TextRef
-    abstract val nameString: String?
-    abstract val location: Location?
-    abstract val lastChanged: Instant?
+    abstract val displayName: TextRef
 
     object Current : Place() {
         override val id: Long = -1
-        override val name = TextRef.stringRes(R.string.your_location)
-        override val nameString: String? = null
-        override val location: Location? = null
-        override val lastChanged: Instant? = null
+        override val displayName = TextRef.stringRes(R.string.your_location)
     }
 
-    // TODO let favorite and recent share parent class Elsewhere?
-    data class Favorite(
-        override val id: Long,
-        override val nameString: String, // TODO rename?
-        override val location: Location,
-        override val lastChanged: Instant,
-    ) : Place() {
-        override val name get() = TextRef.string(nameString)
-    }
+    sealed class Saved : Place() {
+        abstract val location: Location
+        abstract val name: String
+        abstract val lastChanged: Instant
 
-    data class Recent(
-        override val id: Long,
-        override val nameString: String, // TODO rename?
-        override val location: Location,
-        override val lastChanged: Instant,
-    ) : Place() {
-        override val name get() = TextRef.string(nameString)
+        data class Favorite(
+            override val id: Long,
+            override val name: String,
+            override val location: Location,
+            override val lastChanged: Instant,
+        ) : Saved() {
+            override val displayName get() = TextRef.string(name)
+        }
+
+        data class Recent(
+            override val id: Long,
+            override val name: String,
+            override val location: Location,
+            override val lastChanged: Instant,
+        ) : Saved() {
+            override val displayName get() = TextRef.string(name)
+        }
     }
 }

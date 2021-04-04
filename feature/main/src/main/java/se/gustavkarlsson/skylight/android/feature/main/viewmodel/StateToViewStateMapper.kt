@@ -95,14 +95,14 @@ internal class StateToViewStateMapper @Inject constructor(
         }
         val favoriteButtonState = when (state.selectedPlace) {
             Place.Current -> ToggleButtonState.Gone
-            is Place.Recent -> ToggleButtonState.Enabled(checked = false)
-            is Place.Favorite -> ToggleButtonState.Enabled(checked = true)
+            is Place.Saved.Recent -> ToggleButtonState.Enabled(checked = false)
+            is Place.Saved.Favorite -> ToggleButtonState.Enabled(checked = true)
         }
         val notificationChecked = state.selectedPlaceTriggerLevel != TriggerLevel.NEVER
         val notificationsButtonState = when (state.selectedPlace) {
             Place.Current -> ToggleButtonState.Enabled(notificationChecked)
-            is Place.Recent -> ToggleButtonState.Gone
-            is Place.Favorite -> ToggleButtonState.Enabled(notificationChecked)
+            is Place.Saved.Recent -> ToggleButtonState.Gone
+            is Place.Saved.Favorite -> ToggleButtonState.Enabled(notificationChecked)
         }
         val kpIndexItem = state.selectedAuroraReport.kpIndex
             .toFactorItem(
@@ -140,10 +140,18 @@ internal class StateToViewStateMapper @Inject constructor(
                     if (query.isBlank()) {
                         true
                     } else {
-                        result.place.nameString.orEmpty().contains(query, ignoreCase = true)
+                        when (result.place) {
+                            Place.Current -> false
+                            is Place.Saved -> result.place.name.contains(query, ignoreCase = true)
+                        }
                     }
                 }
-                .sortedByDescending { it.place.lastChanged ?: Instant.EPOCH }
+                .sortedByDescending {
+                    when (it.place) {
+                        Place.Current -> Instant.EPOCH
+                        is Place.Saved -> it.place.lastChanged
+                    }
+                }
                 .sortedBy { it.place.priority }
             val searchResults = state.search.suggestions.items
                 .map { suggestion ->
@@ -161,8 +169,8 @@ internal class StateToViewStateMapper @Inject constructor(
         } else SearchViewState.Closed
         val onFavoritesClickedEvent = when (val selectedPlace = state.selectedPlace) {
             Place.Current -> Event.Noop
-            is Place.Recent -> Event.AddFavorite(selectedPlace)
-            is Place.Favorite -> Event.RemoveFavorite(selectedPlace)
+            is Place.Saved.Recent -> Event.AddFavorite(selectedPlace)
+            is Place.Saved.Favorite -> Event.RemoveFavorite(selectedPlace)
         }
         val notificationLevelItems = TriggerLevel.values()
             .map { level ->
@@ -174,7 +182,7 @@ internal class StateToViewStateMapper @Inject constructor(
             }
             .asReversed()
         return ViewState(
-            toolbarTitleName = state.selectedPlace.name,
+            toolbarTitleName = state.selectedPlace.displayName,
             chanceLevelText = changeLevelText,
             chanceSubtitleText = chanceSubtitleText,
             errorBannerData = errorBannerData,
@@ -224,8 +232,8 @@ internal class StateToViewStateMapper @Inject constructor(
     private val Place.priority: Int
         get() = when (this) {
             Place.Current -> 0
-            is Place.Favorite -> 1
-            is Place.Recent -> 2
+            is Place.Saved.Favorite -> 1
+            is Place.Saved.Recent -> 2
         }
 }
 

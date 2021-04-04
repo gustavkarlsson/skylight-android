@@ -89,13 +89,13 @@ internal sealed class SearchResult {
     abstract val selectEvent: Event
 
     data class Known(val place: Place, override val selected: Boolean) : SearchResult() {
-        override val title: TextRef get() = place.name
+        override val title: TextRef get() = place.displayName
         override val subtitle: Nothing? = null
         override val icon: ImageVector
             get() = when (place) {
                 Place.Current -> Icons.MyLocation
-                is Place.Favorite -> Icons.Favorite
-                is Place.Recent -> Icons.History
+                is Place.Saved.Favorite -> Icons.Favorite
+                is Place.Saved.Recent -> Icons.History
             }
         override val selectEvent: Event get() = Event.SelectSearchResult(this)
     }
@@ -120,8 +120,8 @@ internal data class NotificationLevelItem(
 )
 
 internal sealed class Event {
-    data class AddFavorite(val place: Place.Recent) : Event()
-    data class RemoveFavorite(val place: Place.Favorite) : Event()
+    data class AddFavorite(val place: Place.Saved.Recent) : Event()
+    data class RemoveFavorite(val place: Place.Saved.Favorite) : Event()
     data class SetNotificationLevel(val place: Place, val level: TriggerLevel) : Event()
     data class SearchChanged(val state: SearchFieldState) : Event()
     data class SelectSearchResult(val result: SearchResult) : Event()

@@ -12,5 +12,5 @@ internal data class PlaceRefWithChance(val placeRef: PlaceRef, val chanceLevel: 
 
 internal sealed class PlaceRef {
     object Current : PlaceRef()
-    data class Custom(val id: Long) : PlaceRef()
+    data class Saved(val id: Long) : PlaceRef()
 }

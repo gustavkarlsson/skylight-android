@@ -56,7 +56,7 @@ internal class SharedPrefsLastNotificationRepository(
     private fun readAsCustom(key: String, value: Any?) =
         (value as? Int)?.let { intValue ->
             val placeId = key.toLong()
-            val placeRef = PlaceRef.Custom(placeId)
+            val placeRef = PlaceRef.Saved(placeId)
             val chanceLevel = ChanceLevel.values()[intValue]
             PlaceRefWithChance(
                 placeRef,

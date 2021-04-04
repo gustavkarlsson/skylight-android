@@ -40,6 +40,5 @@ private infix fun Notification.hasHigherChanceThan(old: NotificationRecord): Boo
 private infix fun Place.isSameAs(other: PlaceRef) =
     when (this) {
         Place.Current -> other is PlaceRef.Current
-        is Place.Favorite -> other is PlaceRef.Custom && id == other.id
-        is Place.Recent -> other is PlaceRef.Custom && id == other.id
+        is Place.Saved -> other is PlaceRef.Saved && id == other.id
     }

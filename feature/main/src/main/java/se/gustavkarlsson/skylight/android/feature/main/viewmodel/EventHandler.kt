@@ -26,8 +26,8 @@ internal class EventHandler @Inject constructor(
     suspend fun onEvent(event: Event) {
         @Suppress("UNUSED_VARIABLE")
         val dummy: Any = when (event) {
-            is Event.AddFavorite -> placesRepository.setFavorite(event.place.id)
-            is Event.RemoveFavorite -> placesRepository.setRecent(event.place.id)
+            is Event.AddFavorite -> placesRepository.setFavorite(event.place)
+            is Event.RemoveFavorite -> placesRepository.setRecent(event.place)
             is Event.SetNotificationLevel -> settings.setNotificationTriggerLevel(event.place, event.level)
             is Event.SearchChanged -> onSearchChanged(event.state)
             is Event.SelectSearchResult -> onSearchResultClicked(event.result)
@@ -64,7 +64,7 @@ internal class EventHandler @Inject constructor(
             is SearchResult.Known -> {
                 when (result.place) {
                     Place.Current -> result.place
-                    is Place.Favorite, is Place.Recent -> placesRepository.updateLastChanged(result.place.id)
+                    is Place.Saved -> placesRepository.updateLastChanged(result.place)
                 }
             }
             is SearchResult.New -> {
