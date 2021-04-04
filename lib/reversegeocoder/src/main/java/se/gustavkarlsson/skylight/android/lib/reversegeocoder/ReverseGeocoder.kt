@@ -5,6 +5,6 @@ import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 
 interface ReverseGeocoder {
-    suspend fun get(locationResult: LocationResult, fresh: Boolean = false): ReverseGeocodingResult
+    suspend fun get(locationResult: LocationResult): ReverseGeocodingResult
     fun stream(locations: Flow<Loadable<LocationResult>>): Flow<Loadable<ReverseGeocodingResult>>
 }

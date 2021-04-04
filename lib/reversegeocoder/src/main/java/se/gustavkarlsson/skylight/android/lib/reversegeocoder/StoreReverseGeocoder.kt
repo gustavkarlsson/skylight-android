@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.reversegeocoder
 
 import com.dropbox.android.external.store4.Store
-import com.dropbox.android.external.store4.fresh
 import com.dropbox.android.external.store4.get
 import java.io.IOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -25,9 +24,9 @@ internal class StoreReverseGeocoder(
     private val retryDelay: Duration
 ) : ReverseGeocoder {
 
-    override suspend fun get(locationResult: LocationResult, fresh: Boolean): ReverseGeocodingResult {
+    override suspend fun get(locationResult: LocationResult): ReverseGeocodingResult {
         val result = when (locationResult) {
-            is LocationResult.Success -> getName(locationResult.location, fresh)
+            is LocationResult.Success -> getName(locationResult.location)
             is LocationResult.Failure -> ReverseGeocodingResult.Failure.Location
         }
         logInfo { "Provided location name: $result" }
@@ -53,7 +52,7 @@ internal class StoreReverseGeocoder(
     private suspend fun getNameWithRetry(location: Location): Flow<Loadable<ReverseGeocodingResult>> = flow {
         emit(Loadable.Loading)
         do {
-            val result = getName(location, fresh = false)
+            val result = getName(location)
             emit(Loadable.loaded(result))
             val shouldRetry = result is ReverseGeocodingResult.Failure.Io
             if (shouldRetry) {
@@ -62,11 +61,8 @@ internal class StoreReverseGeocoder(
         } while (shouldRetry)
     }
 
-    private suspend fun getName(location: Location, fresh: Boolean): ReverseGeocodingResult = try {
-        val locationName = if (fresh) {
-            store.fresh(location)
-        } else store.get(location)
-        locationName
+    private suspend fun getName(location: Location): ReverseGeocodingResult = try {
+        store.get(location)
             .map { ReverseGeocodingResult.Success(it) }
             .valueOr { ReverseGeocodingResult.Failure.NotFound }
     } catch (e: IOException) {
