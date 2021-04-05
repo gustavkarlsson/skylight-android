@@ -4,6 +4,7 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
@@ -34,14 +35,23 @@ internal class SqlDelightSettings(
             queries.insert(placeIdLong, levelIndex)
     }
 
+    // FIXME clean up. Remove TriggerLevelRecord?
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun streamNotificationTriggerLevels(): Flow<Map<PlaceId, TriggerLevel>> =
         placesRepository.stream()
             .flatMapLatest { places ->
                 getTriggerLevelRecords()
                     .map { records ->
                         val alive = records.removeZombies(places)
-                        places
-                            .map { place -> place.id to alive.getTriggerLevel(place) }
+                        alive
+                            .map { record ->
+                                val placeId = places
+                                    .map { place -> place.id }
+                                    .first { id -> id == record.placeId }
+                                val triggerLevel =
+                                    findTriggerLevelByIndex(record.triggerLevelIndex) ?: TriggerLevel.NEVER
+                                placeId to triggerLevel
+                            }
                             .toMap()
                     }
             }
@@ -62,12 +72,6 @@ internal class SqlDelightSettings(
         }
         return alive
     }
-}
-
-private fun List<TriggerLevelRecord>.getTriggerLevel(place: Place): TriggerLevel {
-    val matchingRecord = first { record -> record.placeId == place.id }
-    return findTriggerLevelByIndex(matchingRecord.triggerLevelIndex)
-        ?: TriggerLevel.NEVER
 }
 
 private fun findTriggerLevelByIndex(levelIndex: Long): TriggerLevel? =
