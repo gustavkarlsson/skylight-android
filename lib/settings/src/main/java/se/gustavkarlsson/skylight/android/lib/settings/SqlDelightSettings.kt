@@ -34,16 +34,14 @@ internal class SqlDelightSettings(
             queries.insert(placeIdLong, levelIndex)
     }
 
-    override fun clearNotificationTriggerLevel(placeId: PlaceId) = queries.delete(placeId.value)
-
     override fun streamNotificationTriggerLevels(): Flow<Map<PlaceId, TriggerLevel>> =
         placesRepository.stream()
             .flatMapLatest { places ->
                 getTriggerLevelRecords()
                     .map { records ->
+                        val alive = records.removeZombies(places)
                         places
-                            .filterIsInstance<Place.Saved.Favorite>()
-                            .map { favorite -> favorite.id to getTriggerLevel(favorite, records) }
+                            .map { place -> place.id to alive.getTriggerLevel(place) }
                             .toMap()
                     }
             }
@@ -53,16 +51,23 @@ internal class SqlDelightSettings(
             .selectAll { id, levelIndex -> TriggerLevelRecord(PlaceId.fromLong(id), levelIndex) }
             .asFlow()
             .mapToList()
+
+    private fun List<TriggerLevelRecord>.removeZombies(places: List<Place>): List<TriggerLevelRecord> {
+        val placeIds = places.map { place -> place.id }
+        val (alive, dead) = partition { record ->
+            record.placeId in placeIds
+        }
+        for (toRemove in dead) {
+            queries.delete(toRemove.placeId.value)
+        }
+        return alive
+    }
 }
 
-private fun getTriggerLevel(
-    place: Place,
-    records: List<TriggerLevelRecord>
-): TriggerLevel {
-    val matchingRecord = records.find { record -> record.placeId == place.id }
-        ?: return Settings.DEFAULT_TRIGGER_LEVEL
+private fun List<TriggerLevelRecord>.getTriggerLevel(place: Place): TriggerLevel {
+    val matchingRecord = first { record -> record.placeId == place.id }
     return findTriggerLevelByIndex(matchingRecord.triggerLevelIndex)
-        ?: Settings.DEFAULT_TRIGGER_LEVEL
+        ?: TriggerLevel.NEVER
 }
 
 private fun findTriggerLevelByIndex(levelIndex: Long): TriggerLevel? =

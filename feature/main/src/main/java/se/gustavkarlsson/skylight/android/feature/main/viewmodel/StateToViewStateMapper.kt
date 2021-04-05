@@ -109,11 +109,7 @@ internal class StateToViewStateMapper @Inject constructor(
 
     private fun createNotificationButtonState(state: State): ToggleButtonState {
         val notificationChecked = state.selectedPlaceTriggerLevel != TriggerLevel.NEVER
-        return when (state.selectedPlace) {
-            Place.Current -> ToggleButtonState.Enabled(notificationChecked)
-            is Place.Saved.Recent -> ToggleButtonState.Gone
-            is Place.Saved.Favorite -> ToggleButtonState.Enabled(notificationChecked)
-        }
+        return ToggleButtonState.Enabled(notificationChecked)
     }
 
     private fun createFavoriteButtonState(state: State): ToggleButtonState {
