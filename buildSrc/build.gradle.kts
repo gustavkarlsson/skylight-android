@@ -3,7 +3,7 @@ plugins {
 }
 
 repositories {
-    jcenter() // FIXME remove jcenter
+    mavenCentral()
     google()
 }
 
