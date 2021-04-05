@@ -6,8 +6,8 @@ import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
@@ -35,49 +35,31 @@ internal class SqlDelightSettings(
             queries.insert(placeIdLong, levelIndex)
     }
 
-    // FIXME clean up. Remove TriggerLevelRecord?
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun streamNotificationTriggerLevels(): Flow<Map<PlaceId, TriggerLevel>> =
-        placesRepository.stream()
-            .flatMapLatest { places ->
-                getTriggerLevelRecords()
-                    .map { records ->
-                        val alive = records.removeZombies(places)
-                        alive
-                            .map { record ->
-                                val placeId = places
-                                    .map { place -> place.id }
-                                    .first { id -> id == record.placeId }
-                                val triggerLevel =
-                                    findTriggerLevelByIndex(record.triggerLevelIndex) ?: TriggerLevel.NEVER
-                                placeId to triggerLevel
-                            }
-                            .toMap()
-                    }
-            }
+        combine(placesRepository.stream(), streamAll()) { places, entries ->
+            entries.removeZombies(places)
+        }
 
-    private fun getTriggerLevelRecords(): Flow<List<TriggerLevelRecord>> =
-        queries
-            .selectAll { id, levelIndex -> TriggerLevelRecord(PlaceId.fromLong(id), levelIndex) }
+    private fun streamAll(): Flow<Map<PlaceId, TriggerLevel>> {
+        return queries
+            .selectAll { id, levelIndex ->
+                val placeId = PlaceId.fromLong(id)
+                // FIXME don't use indices
+                val triggerLevel = TriggerLevel.values().getOrNull(levelIndex.toInt()) ?: TriggerLevel.NEVER
+                placeId to triggerLevel
+            }
             .asFlow()
             .mapToList()
+            .map { entries -> entries.toMap() }
+    }
 
-    private fun List<TriggerLevelRecord>.removeZombies(places: List<Place>): List<TriggerLevelRecord> {
-        val placeIds = places.map { place -> place.id }
-        val (alive, dead) = partition { record ->
-            record.placeId in placeIds
+    private fun Map<PlaceId, TriggerLevel>.removeZombies(places: List<Place>): Map<PlaceId, TriggerLevel> {
+        val livePlaceIds = places.map { place -> place.id }
+        val deadPlaceIds = keys - livePlaceIds
+        for (dead in deadPlaceIds) {
+            queries.delete(dead.value)
         }
-        for (toRemove in dead) {
-            queries.delete(toRemove.placeId.value)
-        }
-        return alive
+        return filterKeys { placeId -> placeId in livePlaceIds }
     }
 }
-
-private fun findTriggerLevelByIndex(levelIndex: Long): TriggerLevel? =
-    if (levelIndex in TriggerLevel.values().indices)
-        TriggerLevel.values()[levelIndex.toInt()]
-    else
-        null
-
-private data class TriggerLevelRecord(val placeId: PlaceId, val triggerLevelIndex: Long)
