@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Warning
 import com.ioki.textref.TextRef
+import java.util.Comparator
 import javax.inject.Inject
 import org.threeten.bp.Instant
 import se.gustavkarlsson.koptional.optionalOf
@@ -168,53 +169,53 @@ internal class StateToViewStateMapper @Inject constructor(
             )
     }
 
-    // FIXME rework how this is created
     private fun createSearchViewState(state: State): SearchViewState {
-        return if (state.search is Search.Active) {
-            val search = state.search
-            val query = search.query
-            val placesResults = state.places
-                .map { place ->
-                    val selected = place.id == state.selectedPlace.id
+        return when (val search = state.search) {
+            is Search.Active.Blank -> {
+                val searchResults = createPlacesSearchResults(state, filter = null)
+                    .sortedWith(searchResultOrderComparator)
+                SearchViewState.Open.Ok(search.query, searchResults)
+            }
+            is Search.Active.Filled -> {
+                val searchResults = createPlacesSearchResults(state, filter = search.query)
+                    .plus(createGeocodedSearchResults(search))
+                    .sortedWith(searchResultOrderComparator)
+                SearchViewState.Open.Ok(search.query, searchResults)
+            }
+            is Search.Active.Error -> {
+                SearchViewState.Open.Error(search.query, search.text)
+            }
+            Search.Inactive -> SearchViewState.Closed
+        }
+    }
+
+    private fun createPlacesSearchResults(state: State, filter: String?): List<SearchResult.Known> {
+        return state.places
+            .filter { place ->
+                if (filter != null) {
                     when (place) {
-                        Place.Current -> {
-                            val name = createCurrentLocationDisplayName(state)
-                            SearchResult.Known.Current(name, selected = selected)
-                        }
-                        is Place.Saved -> SearchResult.Known.Saved(place, selected = selected)
+                        Place.Current -> false
+                        is Place.Saved -> place.name.contains(filter, ignoreCase = true)
                     }
-                }
-                .filter { result ->
-                    if (query.isBlank()) {
-                        true
-                    } else {
-                        when (result) {
-                            is SearchResult.Known.Current -> false
-                            is SearchResult.Known.Saved -> result.place.name.contains(query, ignoreCase = true)
-                        }
+                } else true
+            }
+            .map { place ->
+                val selected = place.id == state.selectedPlace.id
+                when (place) {
+                    Place.Current -> {
+                        val name = createCurrentLocationDisplayName(state)
+                        SearchResult.Known.Current(name, selected = selected)
                     }
-                }
-                .sortedByDescending { result ->
-                    when (result) {
-                        is SearchResult.Known.Current -> Instant.EPOCH
-                        is SearchResult.Known.Saved -> result.place.lastChanged
-                    }
-                }
-                .sortedBy { result -> result.priority }
-            val searchResults = search.suggestions.items
-                .map { suggestion ->
-                    suggestion.toSearchResult()
-                }
-            val results = placesResults + searchResults
-            when (search) {
-                is Search.Active.Blank, is Search.Active.Filled -> {
-                    SearchViewState.Open.Ok(query, results)
-                }
-                is Search.Active.Error -> {
-                    SearchViewState.Open.Error(query, search.text)
+                    is Place.Saved -> SearchResult.Known.Saved(place, selected = selected)
                 }
             }
-        } else SearchViewState.Closed
+    }
+
+    private fun createGeocodedSearchResults(search: Search.Active.Filled): List<SearchResult.New> {
+        return search.suggestions.items
+            .map { suggestion ->
+                SearchResult.New(suggestion.simpleName, suggestion.toDetailsString(), suggestion.location)
+            }
     }
 
     private fun createCurrentLocationDisplayName(state: State): String? {
@@ -285,21 +286,32 @@ internal class StateToViewStateMapper @Inject constructor(
                 }
             }
         }
+}
 
-    private val SearchResult.priority: Int
-        get() = when (this) {
-            is SearchResult.Known.Current -> 1
-            is SearchResult.Known.Saved -> when (place) {
-                is Place.Saved.Favorite -> 2
-                is Place.Saved.Recent -> 3
-            }
-            is SearchResult.New -> 4
+private val searchResultOrderComparator: Comparator<SearchResult>
+    get() {
+        return compareBy<SearchResult> { result ->
+            result.typePriority
+        }.thenByDescending { result ->
+            result.lastChanged
         }
-}
+    }
 
-private fun PlaceSuggestion.toSearchResult(): SearchResult.New {
-    return SearchResult.New(simpleName, this.toDetailsString(), location)
-}
+private val SearchResult.typePriority: Int
+    get() = when (this) {
+        is SearchResult.Known.Current -> 1
+        is SearchResult.Known.Saved -> when (place) {
+            is Place.Saved.Favorite -> 2
+            is Place.Saved.Recent -> 3
+        }
+        is SearchResult.New -> 4
+    }
+
+private val SearchResult.lastChanged: Instant
+    get() = when (this) {
+        is SearchResult.Known.Saved -> place.lastChanged
+        is SearchResult.Known.Current, is SearchResult.New -> Instant.EPOCH
+    }
 
 private fun PlaceSuggestion.toDetailsString(): String {
     return fullName
