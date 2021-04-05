@@ -18,7 +18,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.FocusState
@@ -32,7 +31,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.Preview
 
-@ExperimentalComposeUiApi
 @Composable
 @Preview
 private fun PreviewSearchField() {
@@ -46,7 +44,6 @@ private fun PreviewSearchField() {
 }
 
 // TODO Fix flickering when focus changes
-@ExperimentalComposeUiApi
 @Composable
 fun SearchField(
     modifier: Modifier = Modifier,

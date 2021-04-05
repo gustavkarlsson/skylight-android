@@ -7,16 +7,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.utils.seconds
 
 @Module
 object LibReverseGeocoderModule {
 
-    @ExperimentalCoroutinesApi
-    @FlowPreview
     @Provides
     @Reusable
     internal fun reverseGeocoder(context: Context, @Io dispatcher: CoroutineDispatcher): ReverseGeocoder {

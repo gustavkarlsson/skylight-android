@@ -7,8 +7,6 @@ import dagger.Provides
 import dagger.multibindings.IntoSet
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -34,8 +32,6 @@ object LibPlacesModule {
         return SqlDelightPlacesRepository(database.dbPlaceQueries, dispatcher, time, maxRecentsCount = 5)
     }
 
-    @FlowPreview
-    @ExperimentalCoroutinesApi
     @Provides
     @AppScope
     internal fun selectedPlaceRepository(

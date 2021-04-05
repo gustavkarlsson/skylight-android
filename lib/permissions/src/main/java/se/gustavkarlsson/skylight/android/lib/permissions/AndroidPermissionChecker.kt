@@ -3,19 +3,15 @@ package se.gustavkarlsson.skylight.android.lib.permissions
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 
-@ExperimentalCoroutinesApi
 internal class AndroidPermissionChecker(
     private val context: Context,
     private val state: MutableStateFlow<Permissions>,
 ) : PermissionChecker {
 
-    @FlowPreview
     override val permissions: StateFlow<Permissions> = state
 
     override fun refresh() {

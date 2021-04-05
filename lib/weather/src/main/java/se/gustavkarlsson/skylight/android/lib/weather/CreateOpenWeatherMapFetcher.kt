@@ -2,19 +2,16 @@ package se.gustavkarlsson.skylight.android.lib.weather
 
 import com.dropbox.android.external.store4.Fetcher
 import com.dropbox.android.external.store4.FetcherResult
+import java.io.IOException
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.lib.location.Location
-import java.io.IOException
 
-@ExperimentalCoroutinesApi
 internal fun createOpenWeatherMapFetcher(
     api: OpenWeatherMapApi,
     appId: String,

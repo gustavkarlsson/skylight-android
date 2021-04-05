@@ -4,8 +4,6 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import javax.inject.Qualifier
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.Store
@@ -62,7 +60,6 @@ import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
     ]
 )
 internal interface MainViewModelComponent {
-    @ExperimentalCoroutinesApi
     fun viewModel(): MainViewModel
 
     companion object {
@@ -104,7 +101,6 @@ internal object MainViewModelModule {
     @StreamThrottle
     fun provideStreamThrottle(): Duration = 500.millis
 
-    @ExperimentalCoroutinesApi
     @Provides
     fun startActions(
         permissionsAction: PermissionsAction,
@@ -127,8 +123,6 @@ internal object MainViewModelModule {
     // TODO Load initial data, and then remove fallback for State.selectedPlace.
     //  or have another initial state
     // TODO Also remove initial permissions and get from checker instead
-    @FlowPreview
-    @ExperimentalCoroutinesApi
     @Provides
     fun initialState(
         selectedPlaceRepository: SelectedPlaceRepository,
@@ -142,8 +136,6 @@ internal object MainViewModelModule {
         notificationTriggerLevels = emptyMap(),
     )
 
-    @FlowPreview
-    @ExperimentalCoroutinesApi
     @Provides
     @ViewModelScope
     fun store(

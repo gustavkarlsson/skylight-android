@@ -5,7 +5,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -24,7 +23,6 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 
-@ExperimentalComposeUiApi
 @Preview
 @Composable
 private fun PreviewTopAppBar() {
@@ -38,7 +36,6 @@ private fun PreviewTopAppBar() {
     )
 }
 
-@ExperimentalComposeUiApi
 @Composable
 internal fun TopAppBar(
     state: SearchViewState,

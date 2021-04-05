@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import androidx.savedstate.SavedStateRegistryOwner
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
@@ -21,7 +20,6 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 
 private const val STATE_BACKSTACK_KEY = "backstack"
 
-@ExperimentalCoroutinesApi
 internal class ViewModelNavigator private constructor(
     private val state: SavedStateHandle,
     initialBackstack: Backstack,

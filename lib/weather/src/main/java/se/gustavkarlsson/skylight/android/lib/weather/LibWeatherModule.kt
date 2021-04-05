@@ -6,9 +6,9 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import kotlin.time.ExperimentalTime
+import kotlin.time.milliseconds as kotlinMilliseconds
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
@@ -20,8 +20,6 @@ import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.core.utils.seconds
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.time.Time
-import kotlin.time.ExperimentalTime
-import kotlin.time.milliseconds as kotlinMilliseconds
 
 @Module
 object LibWeatherModule {
@@ -35,8 +33,6 @@ object LibWeatherModule {
     internal fun weatherEvaluator(): ChanceEvaluator<Weather> = WeatherEvaluator
 
     @ExperimentalTime
-    @FlowPreview
-    @ExperimentalCoroutinesApi
     @Provides
     @Reusable
     internal fun weatherProvider(

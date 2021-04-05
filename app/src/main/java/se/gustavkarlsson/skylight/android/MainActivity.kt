@@ -4,15 +4,11 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.core.view.WindowCompat
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
@@ -48,10 +44,6 @@ internal class MainActivity :
 
     override val serviceCatalog: ServiceCatalog get() = serviceRegistry
 
-    @ExperimentalComposeUiApi
-    @ExperimentalCoroutinesApi
-    @ExperimentalAnimationApi
-    @ExperimentalMaterialApi
     override val navigator: Navigator by lazy {
         val installer = NavigationSetupComponent.instance.navigationInstaller()
         installer.install(
@@ -61,20 +53,12 @@ internal class MainActivity :
         )
     }
 
-    @ExperimentalComposeUiApi
-    @ExperimentalCoroutinesApi
-    @ExperimentalAnimationApi
-    @ExperimentalMaterialApi
     override val screens: Screens = DefaultScreens
 
     // Create Destroy
     override var createDestroyScope: CoroutineScope? = null
         private set
 
-    @ExperimentalComposeUiApi
-    @ExperimentalCoroutinesApi
-    @ExperimentalAnimationApi
-    @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -91,10 +75,6 @@ internal class MainActivity :
         super.onDestroy()
     }
 
-    @ExperimentalComposeUiApi
-    @ExperimentalCoroutinesApi
-    @ExperimentalAnimationApi
-    @ExperimentalMaterialApi
     private fun setContent() = setContent {
         val change by navigator.backstackChanges.collectAsState()
         val topScreen = change.new.lastOrNull()
@@ -103,10 +83,6 @@ internal class MainActivity :
         }
     }
 
-    @ExperimentalComposeUiApi
-    @ExperimentalCoroutinesApi
-    @ExperimentalAnimationApi
-    @ExperimentalMaterialApi
     private fun CoroutineScope.handleBackstackChanges() = launch {
         navigator.backstackChanges.collect { change ->
             onBackstackChange(change)
@@ -130,10 +106,6 @@ internal class MainActivity :
     override var startStopScope: CoroutineScope? = null
         private set
 
-    @ExperimentalComposeUiApi
-    @ExperimentalCoroutinesApi
-    @ExperimentalAnimationApi
-    @ExperimentalMaterialApi
     override fun onStart() {
         super.onStart()
         val scope = MainScope() + CoroutineName("startStopScope")
@@ -151,10 +123,6 @@ internal class MainActivity :
     override var resumePauseScope: CoroutineScope? = null
         private set
 
-    @ExperimentalComposeUiApi
-    @ExperimentalCoroutinesApi
-    @ExperimentalAnimationApi
-    @ExperimentalMaterialApi
     override fun onResume() {
         super.onResume()
         val scope = MainScope() + CoroutineName("resumePauseScope")
@@ -168,10 +136,6 @@ internal class MainActivity :
         super.onPause()
     }
 
-    @ExperimentalComposeUiApi
-    @ExperimentalCoroutinesApi
-    @ExperimentalAnimationApi
-    @ExperimentalMaterialApi
     private fun onEachScreen(block: Screen.() -> Unit) {
         val change = navigator.backstackChanges.value
         change.new.forEach { screen ->
@@ -179,10 +143,6 @@ internal class MainActivity :
         }
     }
 
-    @ExperimentalComposeUiApi
-    @ExperimentalCoroutinesApi
-    @ExperimentalAnimationApi
-    @ExperimentalMaterialApi
     override fun onBackPressed() {
         val topScreen = navigator.backstackChanges.value.new.lastOrNull()
         val backPress = topScreen?.run {

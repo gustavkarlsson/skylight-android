@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.feature.main.state
 import javax.inject.Inject
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
@@ -27,7 +26,6 @@ import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.places.Place
 
-@ExperimentalCoroutinesApi
 internal class StreamReportsLiveAction @Inject constructor(
     private val locationProvider: LocationProvider,
     private val auroraReportProvider: AuroraReportProvider,

@@ -7,7 +7,6 @@ import com.dropbox.android.external.store4.fresh
 import com.dropbox.android.external.store4.get
 import java.io.IOException
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -40,7 +39,6 @@ internal class StoreKpIndexProvider(
         return report
     }
 
-    @ExperimentalCoroutinesApi
     override fun stream(): Flow<Loadable<Report<KpIndex>>> =
         streamReports()
             .distinctUntilChanged()

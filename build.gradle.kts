@@ -34,8 +34,17 @@ allprojects {
     }
 
     tasks.withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = Versions.java.toString()
-        kotlinOptions.useIR = true
+        kotlinOptions {
+            jvmTarget = Versions.java.toString()
+            useIR = true
+            freeCompilerArgs = freeCompilerArgs + listOf(
+                "-Xuse-experimental=androidx.compose.animation.ExperimentalAnimationApi",
+                "-Xuse-experimental=androidx.compose.material.ExperimentalMaterialApi",
+                "-Xuse-experimental=androidx.compose.ui.ExperimentalComposeUiApi",
+                "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
+            )
+        }
     }
 }
 

@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ListItem
 import androidx.compose.material.Surface
@@ -37,8 +35,6 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.navigationBarsWithIme
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
-@ExperimentalMaterialApi
-@ExperimentalAnimationApi
 @Preview
 @Composable
 private fun PreviewSearchResults() {
@@ -62,8 +58,6 @@ private fun PreviewSearchResults() {
     )
 }
 
-@ExperimentalMaterialApi
-@ExperimentalAnimationApi
 @Composable
 internal fun SearchResults(
     modifier: Modifier,
@@ -112,7 +106,6 @@ internal fun SearchResults(
     }
 }
 
-@ExperimentalMaterialApi
 @Composable
 private fun ListItem(
     item: SearchResult,

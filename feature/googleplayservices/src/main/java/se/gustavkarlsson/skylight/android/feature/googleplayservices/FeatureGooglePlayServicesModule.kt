@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
 import android.content.Context
-import androidx.compose.animation.ExperimentalAnimationApi
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -13,7 +12,6 @@ import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 @Module
 object FeatureGooglePlayServicesModule {
 
-    @ExperimentalAnimationApi
     @Provides
     @Reusable
     @IntoSet

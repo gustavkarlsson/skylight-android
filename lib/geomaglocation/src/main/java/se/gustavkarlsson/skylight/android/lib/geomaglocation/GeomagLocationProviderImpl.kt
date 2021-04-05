@@ -8,7 +8,6 @@ import kotlin.math.cos
 import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -30,7 +29,6 @@ internal class GeomagLocationProviderImpl(
         return report
     }
 
-    @ExperimentalCoroutinesApi
     override fun stream(
         locations: Flow<Loadable<LocationResult>>
     ): Flow<Loadable<Report<GeomagLocation>>> =

@@ -5,16 +5,13 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.AppBarDefaults
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
@@ -22,7 +19,6 @@ import com.google.accompanist.insets.navigationBarsPadding
 import com.ioki.textref.TextRef
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
@@ -47,10 +43,6 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.startStopScope
 
-@ExperimentalComposeUiApi
-@ExperimentalAnimationApi
-@ExperimentalMaterialApi
-@ExperimentalCoroutinesApi
 @Parcelize
 object MainScreen : Screen {
     override val name get() = ScreenName.Main
@@ -111,9 +103,6 @@ object MainScreen : Screen {
     }
 }
 
-@ExperimentalComposeUiApi
-@ExperimentalMaterialApi
-@ExperimentalAnimationApi
 @Composable
 @Preview
 private fun PreviewContent() {
@@ -136,9 +125,6 @@ private fun PreviewContent() {
     )
 }
 
-@ExperimentalComposeUiApi
-@ExperimentalMaterialApi
-@ExperimentalAnimationApi
 @Composable
 private fun Content(
     state: ViewState,

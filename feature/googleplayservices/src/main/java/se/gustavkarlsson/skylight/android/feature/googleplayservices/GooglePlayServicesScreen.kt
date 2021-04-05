@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
@@ -45,7 +44,6 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
 
-@ExperimentalAnimationApi
 @Parcelize
 internal data class GooglePlayServicesScreen(private val target: Backstack) : Screen {
 
@@ -80,7 +78,6 @@ internal data class GooglePlayServicesScreen(private val target: Backstack) : Sc
     }
 }
 
-@ExperimentalAnimationApi
 @Composable
 @Preview
 private fun PreviewContent() {
@@ -91,7 +88,6 @@ private fun PreviewContent() {
     )
 }
 
-@ExperimentalAnimationApi
 @Composable
 private fun Content(
     errorSnackbarVisible: Boolean,

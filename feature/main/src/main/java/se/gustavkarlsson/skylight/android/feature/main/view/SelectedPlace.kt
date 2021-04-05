@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.feature.main.view
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -61,7 +60,6 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.chanceSubtitle
 import se.gustavkarlsson.skylight.android.lib.ui.compose.chanceTitle
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
-@ExperimentalAnimationApi
 @Preview
 @Composable
 private fun PreviewSelectedPlace() {
@@ -84,7 +82,6 @@ private fun PreviewSelectedPlace() {
     )
 }
 
-@ExperimentalAnimationApi
 @Composable
 internal fun SelectedPlace(
     modifier: Modifier,
@@ -149,7 +146,6 @@ internal fun SelectedPlace(
     }
 }
 
-@ExperimentalAnimationApi
 @Composable
 private fun ErrorBanner(
     modifier: Modifier,
@@ -242,7 +238,6 @@ private fun AlertDialog(
     }
 }
 
-@ExperimentalAnimationApi
 @Composable
 private fun PlaceButtons(
     modifier: Modifier,
@@ -300,7 +295,6 @@ private fun CenterText(
     }
 }
 
-@ExperimentalAnimationApi
 @Composable
 private fun Cards(
     modifier: Modifier,
@@ -326,7 +320,6 @@ private fun Cards(
     }
 }
 
-@ExperimentalAnimationApi
 @Composable
 private fun Card(
     item: FactorItem,

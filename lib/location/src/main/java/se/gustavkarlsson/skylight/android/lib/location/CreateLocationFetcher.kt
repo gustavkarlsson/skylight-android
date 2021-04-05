@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.location
 
+import android.location.Location as AndroidLocation
 import android.os.Looper
 import androidx.annotation.RequiresPermission
 import com.dropbox.android.external.store4.Fetcher
@@ -7,9 +8,9 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationAvailability
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult as GmsLocationResult
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
@@ -25,10 +26,7 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
-import android.location.Location as AndroidLocation
-import com.google.android.gms.location.LocationResult as GmsLocationResult
 
-@ExperimentalCoroutinesApi
 internal fun createLocationFetcher(
     client: FusedLocationProviderClient,
     looper: Looper,
@@ -44,7 +42,6 @@ internal fun createLocationFetcher(
             .flowOn(dispatcher)
     }
 
-@ExperimentalCoroutinesApi
 private fun lastLocation(client: FusedLocationProviderClient): Flow<LocationResult> =
     flow {
         try {
@@ -76,7 +73,6 @@ private suspend fun FusedLocationProviderClient.awaitIsLocationAvailable(): Bool
 @RequiresPermission(anyOf = ["android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"])
 private suspend fun FusedLocationProviderClient.awaitLastLocation(): Location = lastLocation.await().toLocation()
 
-@ExperimentalCoroutinesApi
 private fun stream(
     client: FusedLocationProviderClient,
     looper: Looper,
@@ -91,7 +87,6 @@ private fun stream(
         } while (true)
     }
 
-@ExperimentalCoroutinesApi
 private fun streamUntilError(
     client: FusedLocationProviderClient,
     looper: Looper,

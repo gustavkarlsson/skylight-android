@@ -4,7 +4,6 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
@@ -37,7 +36,6 @@ internal class SqlDelightSettings(
 
     override fun clearNotificationTriggerLevel(placeId: PlaceId) = queries.delete(placeId.value)
 
-    @ExperimentalCoroutinesApi
     override fun streamNotificationTriggerLevels(): Flow<Map<PlaceId, TriggerLevel>> =
         placesRepository.stream()
             .flatMapLatest { places ->

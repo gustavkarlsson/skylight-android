@@ -7,7 +7,6 @@ import com.dropbox.android.external.store4.fresh
 import com.dropbox.android.external.store4.get
 import java.io.IOException
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
@@ -53,7 +52,6 @@ internal class StoreWeatherProvider(
         return report
     }
 
-    @ExperimentalCoroutinesApi
     override fun stream(
         locations: Flow<Loadable<LocationResult>>
     ): Flow<Loadable<Report<Weather>>> =

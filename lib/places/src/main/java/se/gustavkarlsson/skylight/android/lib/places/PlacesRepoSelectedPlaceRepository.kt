@@ -1,8 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.places
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -12,14 +10,11 @@ import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.UpdatableStateFlow
 import se.gustavkarlsson.skylight.android.core.logging.logError
 
-@FlowPreview
-@ExperimentalCoroutinesApi
 internal class PlacesRepoSelectedPlaceRepository(
     placesRepo: PlacesRepository,
     private val placeSelectionStorage: PlaceSelectionStorage,
     scope: CoroutineScope
 ) : SelectedPlaceRepository {
-    @FlowPreview
     private val store = Store(
         initialState = State.Initial,
         startActions = listOf(StreamPlacesAction(placeSelectionStorage::loadId, placesRepo.stream()))

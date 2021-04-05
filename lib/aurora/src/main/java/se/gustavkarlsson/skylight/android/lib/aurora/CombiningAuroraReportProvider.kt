@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.aurora
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -38,7 +37,6 @@ internal class CombiningAuroraReportProvider(
             report
         }
 
-    @ExperimentalCoroutinesApi
     override fun stream(
         locations: Flow<Loadable<LocationResult>>
     ): Flow<LoadableAuroraReport> =
