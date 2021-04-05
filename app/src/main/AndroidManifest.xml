@@ -8,7 +8,6 @@
 
     <application
         android:name=".Skylight"
-        android:allowBackup="@bool/allow_backup"
         android:fullBackupContent="@xml/backup_config"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name_manifest"
@@ -20,7 +19,6 @@
             android:name=".MainActivity"
             android:label="@string/app_name_manifest"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
             <intent-filter android:label="@string/app_name_manifest">
                 <action android:name="android.intent.action.MAIN" />
