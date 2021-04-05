@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ListItem
 import androidx.compose.material.Surface
@@ -58,6 +60,7 @@ private fun PreviewSearchResults() {
     )
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 internal fun SearchResults(
     modifier: Modifier,
@@ -76,6 +79,7 @@ internal fun SearchResults(
             elevation = searchElevation,
             color = searchBackgroundColor,
         ) {
+            @Suppress("UNUSED_VARIABLE")
             val dummy = when (state.search) {
                 SearchViewState.Closed -> Unit
                 is SearchViewState.Open.Error -> {
@@ -106,6 +110,7 @@ internal fun SearchResults(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun ListItem(
     item: SearchResult,

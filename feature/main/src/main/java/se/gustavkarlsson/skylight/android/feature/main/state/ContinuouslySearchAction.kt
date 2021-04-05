@@ -4,6 +4,8 @@ import com.ioki.textref.TextRef
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
 import kotlin.time.ExperimentalTime
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
@@ -18,7 +20,7 @@ internal class ContinuouslySearchAction @Inject constructor(
     private val geocoder: Geocoder,
     @SearchDelay private val querySampleDelay: Duration,
 ) : Action<State> {
-    @ExperimentalTime
+    @OptIn(ExperimentalTime::class)
     override suspend fun execute(state: UpdatableStateFlow<State>) {
         while (true) {
             val search = state.value.search

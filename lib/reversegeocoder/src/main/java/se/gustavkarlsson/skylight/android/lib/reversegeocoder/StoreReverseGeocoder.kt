@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.lib.reversegeocoder
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.get
 import java.io.IOException
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -33,6 +34,7 @@ internal class StoreReverseGeocoder(
         return result
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun stream(locations: Flow<Loadable<LocationResult>>): Flow<Loadable<ReverseGeocodingResult>> {
         return locations
             .flatMapLatest { loadableLocationResult ->

@@ -11,6 +11,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult as GmsLocationResult
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.sendBlocking
@@ -87,6 +88,7 @@ private fun stream(
         } while (true)
     }
 
+@OptIn(ExperimentalCoroutinesApi::class)
 private fun streamUntilError(
     client: FusedLocationProviderClient,
     looper: Looper,

@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.feature.main.view
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -146,6 +147,7 @@ internal fun SelectedPlace(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun ErrorBanner(
     modifier: Modifier,
@@ -238,6 +240,7 @@ private fun AlertDialog(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun PlaceButtons(
     modifier: Modifier,

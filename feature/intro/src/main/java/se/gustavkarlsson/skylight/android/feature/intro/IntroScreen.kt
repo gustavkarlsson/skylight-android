@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.feature.intro
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
@@ -84,6 +85,7 @@ private fun PreviewContent() {
     )
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun Content(
     onPrivacyPolicyClicked: () -> Unit,

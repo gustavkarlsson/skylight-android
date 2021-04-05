@@ -6,13 +6,20 @@ import com.dropbox.android.external.store4.StoreBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.utils.seconds
 
 @Module
 object LibReverseGeocoderModule {
 
+    @OptIn(
+        FlowPreview::class,
+        ExperimentalCoroutinesApi::class,
+    )
     @Provides
     @Reusable
     internal fun reverseGeocoder(context: Context, @Io dispatcher: CoroutineDispatcher): ReverseGeocoder {

@@ -48,7 +48,7 @@ internal class StateToViewStateMapper @Inject constructor(
         return ViewState(
             toolbarTitleName = createToolbarTitleName(state),
             chanceLevelText = createChangeLevelText(state),
-            chanceSubtitleText = createChanceSubtitleText(state),
+            chanceSubtitleText = createChanceSubtitleText(),
             errorBannerData = createErrorBannerData(state),
             notificationsButtonState = createNotificationButtonState(state),
             favoriteButtonState = createFavoriteButtonState(state),
@@ -79,7 +79,7 @@ internal class StateToViewStateMapper @Inject constructor(
         return chanceLevelFormatter.format(level)
     }
 
-    private fun createChanceSubtitleText(state: State): TextRef {
+    private fun createChanceSubtitleText(): TextRef {
         return TextRef.EMPTY // FIXME what to do with this?
     }
 

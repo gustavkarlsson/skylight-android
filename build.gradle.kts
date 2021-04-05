@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     repositories {
-        jcenter()
+        jcenter() // FIXME remove jcenter
         mavenCentral()
         google()
         maven("https://plugins.gradle.org/m2/")
@@ -24,7 +24,7 @@ allprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
     repositories {
-        jcenter()
+        jcenter() // FIXME remove jcenter
         mavenCentral()
         google()
         maven { setUrl("https://s3.amazonaws.com/repo.commonsware.com") }
@@ -37,13 +37,7 @@ allprojects {
         kotlinOptions {
             jvmTarget = Versions.java.toString()
             useIR = true
-            freeCompilerArgs = freeCompilerArgs + listOf(
-                "-Xuse-experimental=androidx.compose.animation.ExperimentalAnimationApi",
-                "-Xuse-experimental=androidx.compose.material.ExperimentalMaterialApi",
-                "-Xuse-experimental=androidx.compose.ui.ExperimentalComposeUiApi",
-                "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
-            )
+            freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
         }
     }
 }

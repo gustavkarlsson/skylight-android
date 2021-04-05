@@ -3,7 +3,7 @@ plugins {
 }
 
 repositories {
-    jcenter()
+    jcenter() // FIXME remove jcenter
     google()
 }
 

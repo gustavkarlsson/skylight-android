@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.darkness
 
 import java.util.GregorianCalendar
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -30,6 +31,7 @@ internal class KlausBrunnerDarknessProvider(
         return report
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun stream(
         locations: Flow<Loadable<LocationResult>>
     ): Flow<Loadable<Report<Darkness>>> =
