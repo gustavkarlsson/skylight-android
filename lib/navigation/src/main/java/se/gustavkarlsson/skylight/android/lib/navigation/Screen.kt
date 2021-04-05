@@ -10,9 +10,9 @@ interface Screen : Parcelable {
     val tag: String get() = "$name[${hashCode()}]"
     val scopeStart: String? get() = null
 
-    fun AppCompatActivity.onNewCreateDestroyScope(scope: CoroutineScope) = Unit
-    fun AppCompatActivity.onNewStartStopScope(scope: CoroutineScope) = Unit
-    fun AppCompatActivity.onNewResumePauseScope(scope: CoroutineScope) = Unit
+    fun AppCompatActivity.onCreateDestroyScope(scope: CoroutineScope) = Unit
+    fun AppCompatActivity.onStartStopScope(scope: CoroutineScope) = Unit
+    fun AppCompatActivity.onResumePauseScope(scope: CoroutineScope) = Unit
 
     fun AppCompatActivity.onBackPress(): BackPress = BackPress.NOT_HANDLED
 

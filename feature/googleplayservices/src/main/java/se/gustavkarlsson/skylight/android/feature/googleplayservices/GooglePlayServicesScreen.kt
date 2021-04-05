@@ -59,7 +59,7 @@ internal data class GooglePlayServicesScreen(private val target: Backstack) : Sc
             GooglePlayServicesComponent.build().viewModel()
         }
 
-    override fun AppCompatActivity.onNewCreateDestroyScope(scope: CoroutineScope) {
+    override fun AppCompatActivity.onCreateDestroyScope(scope: CoroutineScope) {
         scope.launch {
             viewModel.success.collect {
                 navigator.setBackstack(target)

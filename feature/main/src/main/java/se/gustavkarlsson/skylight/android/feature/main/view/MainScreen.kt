@@ -54,7 +54,7 @@ object MainScreen : Screen {
             MainViewModelComponent.build().viewModel()
         }
 
-    override fun AppCompatActivity.onNewStartStopScope(scope: CoroutineScope) {
+    override fun AppCompatActivity.onStartStopScope(scope: CoroutineScope) {
         viewModel.onEvent(Event.RefreshLocationPermission)
     }
 

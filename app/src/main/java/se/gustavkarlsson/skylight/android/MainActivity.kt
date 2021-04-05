@@ -65,7 +65,7 @@ internal class MainActivity :
         val scope = MainScope() + CoroutineName("createDestroyScope")
         createDestroyScope = scope
         setContent()
-        onEachScreen { onNewCreateDestroyScope(scope) }
+        onEachScreen { onCreateDestroyScope(scope) }
         scope.handleBackstackChanges()
     }
 
@@ -97,8 +97,25 @@ internal class MainActivity :
         }
         val tags = change.new.map(Screen::tag)
         serviceRegistry.onTagsChanged(tags)
+        val addedScreens = change.new - change.old
+        addedScreens.tryPassScope(createDestroyScope) { scope ->
+            onCreateDestroyScope(scope)
+        }
+        addedScreens.tryPassScope(startStopScope) { scope ->
+            onStartStopScope(scope)
+        }
+        addedScreens.tryPassScope(resumePauseScope) { scope ->
+            onResumePauseScope(scope)
+        }
         if (change.new.isEmpty()) {
             finish()
+        }
+    }
+
+    private fun List<Screen>.tryPassScope(scope: CoroutineScope?, action: Screen.(CoroutineScope) -> Unit) {
+        if (scope == null) return
+        for (element in this) {
+            element.action(scope)
         }
     }
 
@@ -110,7 +127,7 @@ internal class MainActivity :
         super.onStart()
         val scope = MainScope() + CoroutineName("startStopScope")
         startStopScope = scope
-        onEachScreen { onNewStartStopScope(scope) }
+        onEachScreen { onStartStopScope(scope) }
     }
 
     override fun onStop() {
@@ -127,7 +144,7 @@ internal class MainActivity :
         super.onResume()
         val scope = MainScope() + CoroutineName("resumePauseScope")
         resumePauseScope = scope
-        onEachScreen { onNewResumePauseScope(scope) }
+        onEachScreen { onResumePauseScope(scope) }
     }
 
     override fun onPause() {
