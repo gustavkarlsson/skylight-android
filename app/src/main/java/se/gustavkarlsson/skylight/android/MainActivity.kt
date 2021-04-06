@@ -1,24 +1,16 @@
 package se.gustavkarlsson.skylight.android
 
 import android.os.Bundle
-import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.view.WindowCompat
-import com.zachklipp.compose.backstack.Backstack
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
-import se.gustavkarlsson.skylight.android.lib.navigation.BackstackChange
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigatorHost
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
@@ -32,7 +24,6 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceHost
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceRegistry
 import se.gustavkarlsson.skylight.android.lib.ui.ScopeHost
 import se.gustavkarlsson.skylight.android.navigation.DefaultScreens
-import se.gustavkarlsson.skylight.android.transitions.CrossFadeZoom
 
 // TODO Can some of this be moved to navigationsetup?
 internal class MainActivity :
@@ -46,6 +37,8 @@ internal class MainActivity :
 
     override val serviceCatalog: ServiceCatalog get() = serviceRegistry
 
+    override val screens: Screens = DefaultScreens
+
     override val navigator: MasterNavigator by lazy {
         val installer = NavigationSetupComponent.create().navigationInstaller()
         installer.install(
@@ -55,7 +48,9 @@ internal class MainActivity :
         )
     }
 
-    override val screens: Screens = DefaultScreens
+    private val renderer: Renderer by lazy {
+        Renderer(this, navigator)
+    }
 
     // Create Destroy
     override var createDestroyScope: CoroutineScope? = null
@@ -64,58 +59,35 @@ internal class MainActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        val scope = MainScope() + CoroutineName("createDestroyScope")
+        val scope = createLifecycleScope("createDestroyScope")
         createDestroyScope = scope
-        setContent()
         onEachScreen { onCreateDestroyScope(scope) }
-        scope.handleBackstackChanges()
+        scope.launch { handleBackstackChanges() }
+        renderer.render()
     }
 
-    override fun onDestroy() {
-        createDestroyScope?.cancel("onDestroy called")
-        createDestroyScope = null
-        super.onDestroy()
-    }
-
-    private fun setContent() = setContent {
-        val scope = rememberCoroutineScope {
-            SupervisorJob() + Dispatchers.Main + CoroutineName("viewScope")
-        }
-        val change by navigator.backstackChanges.collectAsState()
-        Backstack(
-            backstack = change.new,
-            transition = CrossFadeZoom,
-        ) { screen ->
-            screen.run { Content(scope) }
-        }
-    }
-
-    private fun CoroutineScope.handleBackstackChanges() = launch {
+    private suspend fun handleBackstackChanges() {
         navigator.backstackChanges.collect { change ->
-            onBackstackChange(change)
-        }
-    }
-
-    private fun onBackstackChange(change: BackstackChange) {
-        val oldTop = change.old.lastOrNull()
-        val newTop = change.new.lastOrNull()
-        if (newTop != null && oldTop != newTop) {
-            AnalyticsComponent.instance.analytics().logScreen(newTop.name.name)
-        }
-        val tags = change.new.map(Screen::tag)
-        serviceRegistry.onTagsChanged(tags)
-        val addedScreens = change.new - change.old
-        addedScreens.tryPassScope(createDestroyScope) { scope ->
-            onCreateDestroyScope(scope)
-        }
-        addedScreens.tryPassScope(startStopScope) { scope ->
-            onStartStopScope(scope)
-        }
-        addedScreens.tryPassScope(resumePauseScope) { scope ->
-            onResumePauseScope(scope)
-        }
-        if (change.new.isEmpty()) {
-            finish()
+            val oldTop = change.old.lastOrNull()
+            val newTop = change.new.lastOrNull()
+            if (newTop != null && oldTop != newTop) {
+                AnalyticsComponent.instance.analytics().logScreen(newTop.name.name)
+            }
+            val tags = change.new.map(Screen::tag)
+            serviceRegistry.onTagsChanged(tags)
+            val addedScreens = change.new - change.old
+            addedScreens.tryPassScope(createDestroyScope) { scope ->
+                onCreateDestroyScope(scope)
+            }
+            addedScreens.tryPassScope(startStopScope) { scope ->
+                onStartStopScope(scope)
+            }
+            addedScreens.tryPassScope(resumePauseScope) { scope ->
+                onResumePauseScope(scope)
+            }
+            if (change.new.isEmpty()) {
+                finish()
+            }
         }
     }
 
@@ -126,13 +98,19 @@ internal class MainActivity :
         }
     }
 
+    override fun onDestroy() {
+        createDestroyScope?.cancel("onDestroy called")
+        createDestroyScope = null
+        super.onDestroy()
+    }
+
     // Start Stop
     override var startStopScope: CoroutineScope? = null
         private set
 
     override fun onStart() {
         super.onStart()
-        val scope = MainScope() + CoroutineName("startStopScope")
+        val scope = createLifecycleScope("startStopScope")
         startStopScope = scope
         onEachScreen { onStartStopScope(scope) }
     }
@@ -149,10 +127,12 @@ internal class MainActivity :
 
     override fun onResume() {
         super.onResume()
-        val scope = MainScope() + CoroutineName("resumePauseScope")
+        val scope = createLifecycleScope("resumePauseScope")
         resumePauseScope = scope
         onEachScreen { onResumePauseScope(scope) }
     }
+
+    private fun createLifecycleScope(name: String) = MainScope() + CoroutineName(name)
 
     override fun onPause() {
         resumePauseScope?.cancel("onPause called")
