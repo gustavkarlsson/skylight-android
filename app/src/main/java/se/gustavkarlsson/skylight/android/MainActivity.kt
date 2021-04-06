@@ -3,10 +3,10 @@ package se.gustavkarlsson.skylight.android
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.core.view.WindowCompat
+import com.zachklipp.compose.backstack.Backstack
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -31,6 +31,7 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceHost
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceRegistry
 import se.gustavkarlsson.skylight.android.lib.ui.ScopeHost
 import se.gustavkarlsson.skylight.android.navigation.DefaultScreens
+import se.gustavkarlsson.skylight.android.transitions.FancyTransition
 
 // TODO Can some of this be moved to navigationsetup?
 internal class MainActivity :
@@ -78,8 +79,11 @@ internal class MainActivity :
     private fun setContent() = setContent {
         val change by navigator.backstackChanges.collectAsState()
         val topScreen = change.new.lastOrNull()
-        Crossfade(targetState = topScreen) { screen -> // TODO different animations for different directions?
-            screen?.run { Content() }
+        Backstack(
+            backstack = change.new,
+            transition = FancyTransition,
+        ) { screen ->
+            screen.run { Content() }
         }
     }
 
