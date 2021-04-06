@@ -47,7 +47,7 @@ internal class MainActivity :
     override val serviceCatalog: ServiceCatalog get() = serviceRegistry
 
     override val navigator: MasterNavigator by lazy {
-        val installer = NavigationSetupComponent.instance.navigationInstaller()
+        val installer = NavigationSetupComponent.create().navigationInstaller()
         installer.install(
             activity = this,
             initialBackstack = listOf(screens.main),
