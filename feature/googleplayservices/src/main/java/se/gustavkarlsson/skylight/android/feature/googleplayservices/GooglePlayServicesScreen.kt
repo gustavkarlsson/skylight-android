@@ -69,7 +69,7 @@ internal data class GooglePlayServicesScreen(private val target: Backstack) : Sc
     }
 
     @Composable
-    override fun AppCompatActivity.Content() {
+    override fun AppCompatActivity.Content(scope: CoroutineScope) {
         val errorSnackbarVisible = viewModel.error.collectAsState()
         Content(
             errorSnackbarVisible = errorSnackbarVisible.value,

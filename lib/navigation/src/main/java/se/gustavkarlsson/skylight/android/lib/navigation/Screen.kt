@@ -17,9 +17,10 @@ interface Screen : Parcelable {
     fun AppCompatActivity.onBackPress(): BackPress = BackPress.NOT_HANDLED
 
     @Composable
-    fun AppCompatActivity.Content()
+    fun AppCompatActivity.Content(scope: CoroutineScope)
 }
 
+// FIXME move?
 enum class BackPress {
     HANDLED, NOT_HANDLED
 }

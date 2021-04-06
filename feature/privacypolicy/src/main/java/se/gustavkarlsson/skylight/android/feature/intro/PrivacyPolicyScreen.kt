@@ -26,6 +26,7 @@ import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.toPaddingValues
 import io.noties.markwon.Markwon
+import kotlinx.coroutines.CoroutineScope
 import kotlin.math.roundToInt
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -44,7 +45,7 @@ object PrivacyPolicyScreen : Screen {
     override val name get() = ScreenName.PrivacyPolicy
 
     @Composable
-    override fun AppCompatActivity.Content() {
+    override fun AppCompatActivity.Content(scope: CoroutineScope) {
         var text by remember { mutableStateOf("") }
         LaunchedEffect(key1 = null) {
             withContext(Dispatchers.IO) {

@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.toPaddingValues
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
@@ -46,7 +47,7 @@ object AboutScreen : Screen {
         }
 
     @Composable
-    override fun AppCompatActivity.Content() {
+    override fun AppCompatActivity.Content(scope: CoroutineScope) {
         val text = viewModel.detailsText.resolve(this)
         Content(
             text = text,

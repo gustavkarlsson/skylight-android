@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.systemBarsPadding
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
@@ -54,7 +55,7 @@ internal data class IntroScreen(private val target: Backstack) : Screen {
         }
 
     @Composable
-    override fun AppCompatActivity.Content() {
+    override fun AppCompatActivity.Content(scope: CoroutineScope) {
         Content(
             onPrivacyPolicyClicked = { onPrivacyPolicyClicked() },
             onContinueClicked = { onContinueClicked() },

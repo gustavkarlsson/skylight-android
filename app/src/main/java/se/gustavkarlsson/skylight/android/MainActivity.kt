@@ -5,11 +5,14 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.view.WindowCompat
 import com.zachklipp.compose.backstack.Backstack
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -77,12 +80,15 @@ internal class MainActivity :
     }
 
     private fun setContent() = setContent {
+        val scope = rememberCoroutineScope {
+            SupervisorJob() + Dispatchers.Main + CoroutineName("viewScope")
+        }
         val change by navigator.backstackChanges.collectAsState()
         Backstack(
             backstack = change.new,
             transition = CrossFadeZoom,
         ) { screen ->
-            screen.run { Content() }
+            screen.run { Content(scope) }
         }
     }
 
