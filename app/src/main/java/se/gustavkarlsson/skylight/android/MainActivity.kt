@@ -17,16 +17,14 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
-import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
-import se.gustavkarlsson.skylight.android.lib.navigation.BackPress
 import se.gustavkarlsson.skylight.android.lib.navigation.BackstackChange
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
-import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigatorHost
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.Screens
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreensHost
+import se.gustavkarlsson.skylight.android.lib.navigationsetup.MasterNavigator
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.NavigationSetupComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedServiceComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceCatalog
@@ -48,7 +46,7 @@ internal class MainActivity :
 
     override val serviceCatalog: ServiceCatalog get() = serviceRegistry
 
-    override val navigator: Navigator by lazy {
+    override val navigator: MasterNavigator by lazy {
         val installer = NavigationSetupComponent.instance.navigationInstaller()
         installer.install(
             activity = this,
@@ -169,16 +167,5 @@ internal class MainActivity :
         }
     }
 
-    override fun onBackPressed() {
-        val topScreen = navigator.backstackChanges.value.new.lastOrNull()
-        val backPress = topScreen?.run {
-            onBackPress()
-        }
-        when (backPress) {
-            null -> logInfo { "Top screen could not handle back press" }
-            BackPress.HANDLED -> logInfo { "Top screen handled back press" }
-            BackPress.NOT_HANDLED -> logInfo { "Top screen did not handle back press" }
-        }
-        if (backPress != BackPress.HANDLED) navigator.closeScreen()
-    }
+    override fun onBackPressed() = navigator.onBackPress(this)
 }

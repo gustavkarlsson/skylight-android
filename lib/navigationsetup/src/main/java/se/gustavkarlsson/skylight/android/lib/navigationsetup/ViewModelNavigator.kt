@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.navigationsetup
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -13,10 +14,10 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.stateIn
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
+import se.gustavkarlsson.skylight.android.lib.navigation.BackPress
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.BackstackChange
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
-import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 
 private const val STATE_BACKSTACK_KEY = "backstack"
@@ -26,7 +27,7 @@ internal class ViewModelNavigator private constructor(
     private val state: SavedStateHandle,
     initialBackstack: Backstack,
     private val overrides: Iterable<NavigationOverride>,
-) : ViewModel(), Navigator {
+) : ViewModel(), MasterNavigator {
 
     override val backstackChanges: StateFlow<BackstackChange>
 
@@ -72,6 +73,19 @@ internal class ViewModelNavigator private constructor(
     override fun closeScope(scope: String) = changeBackstack { stack ->
         logInfo { "Closing scope '$scope'" }
         stack.takeWhile { it.scopeStart != scope }
+    }
+
+    override fun onBackPress(activity: AppCompatActivity) {
+        val topScreen = backstackChanges.value.new.lastOrNull()
+        val result = topScreen?.run {
+            activity.onBackPress()
+        }
+        when (result) {
+            null -> logInfo { "No top screen to handle back press" }
+            BackPress.HANDLED -> logInfo { "Top screen handled back press" }
+            BackPress.NOT_HANDLED -> logInfo { "Top screen did not handle back press" }
+        }
+        if (result != BackPress.HANDLED) closeScreen()
     }
 
     private fun changeBackstack(change: (stack: Backstack) -> Backstack) {
