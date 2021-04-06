@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
+import se.gustavkarlsson.skylight.android.lib.navigation.BackstackChange
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigatorHost
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
@@ -25,7 +26,6 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceRegistry
 import se.gustavkarlsson.skylight.android.lib.ui.ScopeHost
 import se.gustavkarlsson.skylight.android.navigation.DefaultScreens
 
-// TODO Can some of this be moved to navigationsetup?
 internal class MainActivity :
     AppCompatActivity(),
     NavigatorHost,
@@ -62,32 +62,33 @@ internal class MainActivity :
         val scope = createLifecycleScope("createDestroyScope")
         createDestroyScope = scope
         onEachScreen { onCreateDestroyScope(scope) }
-        scope.launch { handleBackstackChanges() }
+        scope.launch { navigator.backstackChanges.collect(::onBackstackChange) }
         renderer.render()
     }
 
-    private suspend fun handleBackstackChanges() {
-        navigator.backstackChanges.collect { change ->
-            val oldTop = change.old.lastOrNull()
-            val newTop = change.new.lastOrNull()
-            if (newTop != null && oldTop != newTop) {
-                AnalyticsComponent.instance.analytics().logScreen(newTop.name.name)
-            }
-            val tags = change.new.map(Screen::tag)
-            serviceRegistry.onTagsChanged(tags)
-            val addedScreens = change.new - change.old
-            addedScreens.tryPassScope(createDestroyScope) { scope ->
-                onCreateDestroyScope(scope)
-            }
-            addedScreens.tryPassScope(startStopScope) { scope ->
-                onStartStopScope(scope)
-            }
-            addedScreens.tryPassScope(resumePauseScope) { scope ->
-                onResumePauseScope(scope)
-            }
-            if (change.new.isEmpty()) {
-                finish()
-            }
+    // TODO Implement listeners instead?
+    private fun onBackstackChange(change: BackstackChange) {
+        notifyServiceRegistry(change)
+        passScopesToNewScreens(change)
+        trackScreenChange(change)
+        finishIfEmpty(change)
+    }
+
+    private fun notifyServiceRegistry(change: BackstackChange) {
+        val tags = change.new.map(Screen::tag)
+        serviceRegistry.onTagsChanged(tags)
+    }
+
+    private fun passScopesToNewScreens(change: BackstackChange) {
+        val addedScreens = change.new - change.old
+        addedScreens.tryPassScope(createDestroyScope) { scope ->
+            onCreateDestroyScope(scope)
+        }
+        addedScreens.tryPassScope(startStopScope) { scope ->
+            onStartStopScope(scope)
+        }
+        addedScreens.tryPassScope(resumePauseScope) { scope ->
+            onResumePauseScope(scope)
         }
     }
 
@@ -95,6 +96,20 @@ internal class MainActivity :
         if (scope == null) return
         for (element in this) {
             element.action(scope)
+        }
+    }
+
+    private fun trackScreenChange(change: BackstackChange) {
+        val oldTop = change.old.lastOrNull()
+        val newTop = change.new.lastOrNull()
+        if (newTop != null && oldTop != newTop) {
+            AnalyticsComponent.instance.analytics().logScreen(newTop.name.name)
+        }
+    }
+
+    private fun finishIfEmpty(change: BackstackChange) {
+        if (change.new.isEmpty()) {
+            finish()
         }
     }
 
@@ -132,13 +147,15 @@ internal class MainActivity :
         onEachScreen { onResumePauseScope(scope) }
     }
 
-    private fun createLifecycleScope(name: String) = MainScope() + CoroutineName(name)
-
     override fun onPause() {
         resumePauseScope?.cancel("onPause called")
         resumePauseScope = null
         super.onPause()
     }
+
+    override fun onBackPressed() = navigator.onBackPress(this)
+
+    private fun createLifecycleScope(name: String) = MainScope() + CoroutineName(name)
 
     private fun onEachScreen(block: Screen.() -> Unit) {
         val change = navigator.backstackChanges.value
@@ -146,6 +163,4 @@ internal class MainActivity :
             screen.block()
         }
     }
-
-    override fun onBackPressed() = navigator.onBackPress(this)
 }
