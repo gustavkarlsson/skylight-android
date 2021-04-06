@@ -31,7 +31,7 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceHost
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceRegistry
 import se.gustavkarlsson.skylight.android.lib.ui.ScopeHost
 import se.gustavkarlsson.skylight.android.navigation.DefaultScreens
-import se.gustavkarlsson.skylight.android.transitions.FancyTransition
+import se.gustavkarlsson.skylight.android.transitions.CrossFadeZoom
 
 // TODO Can some of this be moved to navigationsetup?
 internal class MainActivity :
@@ -78,10 +78,9 @@ internal class MainActivity :
 
     private fun setContent() = setContent {
         val change by navigator.backstackChanges.collectAsState()
-        val topScreen = change.new.lastOrNull()
         Backstack(
             backstack = change.new,
-            transition = FancyTransition,
+            transition = CrossFadeZoom,
         ) { screen ->
             screen.run { Content() }
         }
