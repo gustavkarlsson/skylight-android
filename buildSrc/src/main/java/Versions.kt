@@ -45,7 +45,7 @@ object Versions {
     val solarPositioning = "0.0.9"
     val sqldelight = "1.4.4"
     val leakcanary = "2.7"
-    val mapboxServices = "5.3.0"
+    val mapboxServices = "5.8.0"
     val conveyor = "ae2111d8df" // TODO use release version
     val koptional = "0.4.0"
     val textref = "1.3.1"
