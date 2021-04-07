@@ -208,10 +208,9 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createGeocodedSearchResults(search: Search.Active.Filled): List<SearchResult.New> {
-        return search.suggestions.items
-            .map { suggestion ->
-                SearchResult.New(suggestion.simpleName, suggestion.toDetailsString(), suggestion.location)
-            }
+        return search.suggestions.map { suggestion ->
+            SearchResult.New(suggestion.simpleName, suggestion.toDetailsString(), suggestion.location)
+        }
     }
 
     private fun createCurrentLocationDisplayName(state: State): String? {

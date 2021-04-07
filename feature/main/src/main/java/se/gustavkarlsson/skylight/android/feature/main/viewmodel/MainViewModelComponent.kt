@@ -4,6 +4,9 @@ import dagger.Component
 import dagger.Module
 import dagger.Provides
 import javax.inject.Qualifier
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.channels.SendChannel
 import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.Store
@@ -35,6 +38,7 @@ import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoderComponent
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
+import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
 
 @ViewModelScope
@@ -84,7 +88,7 @@ internal interface MainViewModelComponent {
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-internal annotation class SearchDelay
+internal annotation class SearchThrottle
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
@@ -94,8 +98,18 @@ internal annotation class StreamThrottle
 internal object MainViewModelModule {
 
     @Provides
-    @SearchDelay
-    fun provideSearchDelay(): Duration = 500.millis
+    @ViewModelScope
+    fun provideSearchChannel(): Channel<SearchFieldState> = Channel(Channel.CONFLATED)
+
+    @Provides
+    fun provideSearchSendChannel(channel: Channel<SearchFieldState>): SendChannel<SearchFieldState> = channel
+
+    @Provides
+    fun provideSearchReceiveChannel(channel: Channel<SearchFieldState>): ReceiveChannel<SearchFieldState> = channel
+
+    @Provides
+    @SearchThrottle
+    fun provideSearchThrottle(): Duration = 500.millis
 
     @Provides
     @StreamThrottle

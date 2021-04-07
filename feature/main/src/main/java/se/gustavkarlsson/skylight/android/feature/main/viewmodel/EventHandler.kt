@@ -1,11 +1,11 @@
 package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
 import javax.inject.Inject
+import kotlinx.coroutines.channels.SendChannel
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.issue
 import se.gustavkarlsson.skylight.android.feature.main.state.Search
 import se.gustavkarlsson.skylight.android.feature.main.state.State
-import se.gustavkarlsson.skylight.android.feature.main.state.Suggestions
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
@@ -19,6 +19,7 @@ internal class EventHandler @Inject constructor(
     private val settings: Settings,
     private val permissionChecker: PermissionChecker,
     private val selectedPlaceRepository: SelectedPlaceRepository,
+    private val searchChannel: SendChannel<@JvmSuppressWildcards SearchFieldState>,
 ) {
 
     suspend fun onEvent(event: Event) {
@@ -27,33 +28,10 @@ internal class EventHandler @Inject constructor(
             is Event.AddFavorite -> placesRepository.setFavorite(event.place.id)
             is Event.RemoveFavorite -> placesRepository.setRecent(event.place.id)
             is Event.SetNotificationLevel -> settings.setNotificationTriggerLevel(event.place.id, event.level)
-            is Event.SearchChanged -> onSearchChanged(event.state)
+            is Event.SearchChanged -> searchChannel.send(event.state)
             is Event.SelectSearchResult -> onSearchResultClicked(event.result)
             Event.RefreshLocationPermission -> permissionChecker.refresh()
             Event.Noop -> Unit
-        }
-    }
-
-    private fun onSearchChanged(searchFieldState: SearchFieldState) = store.issue { state ->
-        state.update {
-            val search = when (searchFieldState) {
-                SearchFieldState.Inactive -> Search.Inactive
-                is SearchFieldState.Active -> {
-                    val query = searchFieldState.text
-                    if (query.isBlank()) {
-                        Search.Active.Blank(query)
-                    } else {
-                        when (search) {
-                            Search.Inactive, is Search.Active.Blank -> {
-                                Search.Active.Filled(query, Suggestions("", emptyList()))
-                            }
-                            is Search.Active.Error -> search.copy(query)
-                            is Search.Active.Filled -> search.copy(query)
-                        }
-                    }
-                }
-            }
-            copy(search = search)
         }
     }
 

@@ -1,24 +1,17 @@
 package se.gustavkarlsson.skylight.android.feature.main.state
 
 import javax.inject.Inject
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.UpdatableStateFlow
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.utils.throttle
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.StreamThrottle
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
@@ -75,35 +68,6 @@ internal class StreamReportsLiveAction @Inject constructor(
                 copy(selectedAuroraReport = report)
             } else {
                 this
-            }
-        }
-    }
-}
-
-// TODO replace with built-in
-private fun <T> Flow<T>.throttle(waitMillis: Long): Flow<T> = flow {
-    coroutineScope {
-        val context = coroutineContext
-        var nextMillis = 0L
-        var delayPost: Deferred<Unit>? = null
-        collect {
-            val current = System.currentTimeMillis()
-            if (nextMillis < current) {
-                nextMillis = current + waitMillis
-                emit(it)
-                delayPost?.cancel()
-            } else {
-                val delayNext = nextMillis
-                delayPost?.cancel()
-                delayPost = async(Dispatchers.Default) {
-                    delay(nextMillis - current)
-                    if (delayNext == nextMillis) {
-                        nextMillis = System.currentTimeMillis() + waitMillis
-                        withContext(context) {
-                            emit(it)
-                        }
-                    }
-                }
             }
         }
     }

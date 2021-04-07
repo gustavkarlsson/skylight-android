@@ -32,27 +32,24 @@ internal sealed class Search {
     object Inactive : Search()
     sealed class Active : Search() {
         abstract val query: String
-        abstract val suggestions: Suggestions
+        abstract val suggestions: List<PlaceSuggestion>
 
         data class Blank(
             override val query: String,
         ) : Active() {
-            override val suggestions = Suggestions(query = "", items = emptyList())
+            override val suggestions = emptyList<PlaceSuggestion>()
         }
 
         data class Filled(
             override val query: String,
-            override val suggestions: Suggestions,
+            override val suggestions: List<PlaceSuggestion>,
         ) : Active()
 
         data class Error(
             override val query: String,
-            val errorQuery: String,
             val text: TextRef,
         ) : Active() {
-            override val suggestions: Suggestions get() = Suggestions(query = errorQuery, items = emptyList())
+            override val suggestions get() = emptyList<PlaceSuggestion>()
         }
     }
 }
-
-internal data class Suggestions(val query: String, val items: List<PlaceSuggestion>)
