@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.core.graphics.ColorUtils
+import kotlin.math.abs
 import kotlin.random.Random
 
 private const val minLineWidth = 10f
@@ -87,7 +88,7 @@ private data class Line(
 
     fun draw(scope: DrawScope) {
         val colorEdge = color.copy(alpha = 0f)
-        val colorCenter = color.copy(alpha = 0.5f)
+        val colorCenter = color.copy(alpha = fade(age, ttl))
         val steps = arrayOf(
             0f to colorEdge,
             0.5f to colorCenter,
@@ -108,4 +109,9 @@ private data class Line(
         }
         scope.drawPath(path, brush, style = Stroke(width))
     }
+}
+
+private fun fade(age: Int, ttl: Int): Float {
+    val hm = 0.5f * ttl
+    return abs((age + hm) % ttl - hm) / hm
 }
