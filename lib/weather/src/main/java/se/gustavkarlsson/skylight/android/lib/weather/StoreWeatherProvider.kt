@@ -18,13 +18,16 @@ import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
+import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
+import se.gustavkarlsson.skylight.android.lib.location.approximate
 import se.gustavkarlsson.skylight.android.lib.time.Time
 
 internal class StoreWeatherProvider(
-    private val store: Store<Location, Weather>,
-    private val time: Time
+    private val store: Store<ApproximatedLocation, Weather>,
+    private val time: Time,
+    private val approximationMeters: Double,
 ) : WeatherProvider {
 
     override suspend fun get(locationResult: LocationResult, fresh: Boolean): Report<Weather> =
@@ -35,9 +38,9 @@ internal class StoreWeatherProvider(
             onSuccess = { location ->
                 try {
                     val weather = if (fresh) {
-                        store.fresh(location)
+                        store.fresh(location.approximate(approximationMeters))
                     } else {
-                        store.get(location)
+                        store.get(location.approximate(approximationMeters))
                     }
                     Report.Success(weather, time.now())
                 } catch (e: CancellationException) {
@@ -78,7 +81,7 @@ internal class StoreWeatherProvider(
             .onEach { logInfo { "Streamed weather: $it" } }
 
     private fun streamReports(location: Location): Flow<Loadable<Report<Weather>>> =
-        store.stream(StoreRequest.cached(location, refresh = false))
+        store.stream(StoreRequest.cached(location.approximate(approximationMeters), refresh = false))
             .map { response ->
                 when (response) {
                     is StoreResponse.Loading -> Loadable.loading()

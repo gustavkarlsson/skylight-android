@@ -11,7 +11,6 @@
 * Make location refresh on phone location on/off, or permission granted
 * Show actionable banner for missing location, permission, internet, notifications denied, with better action text than "fix"
 * Migrate libraries using sqldelight to use store?
-* Rework location inputs to "ApproximateLocation" so store can cache results from nearby locations
 * Readme
 * Simpler configuration of required keys (move to root? fail if not present?)
 * Retire ThreeTenABP

@@ -6,7 +6,6 @@ import com.dropbox.android.external.store4.StoreBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -26,6 +25,6 @@ object LibReverseGeocoderModule {
         val fetcher = createAndroidReverseGeocoderFetcher(Geocoder(context), dispatcher)
         val store = StoreBuilder.from(fetcher)
             .build()
-        return StoreReverseGeocoder(store, retryDelay = 10.seconds)
+        return StoreReverseGeocoder(store, retryDelay = 10.seconds, approximationMeters = 1000.0)
     }
 }

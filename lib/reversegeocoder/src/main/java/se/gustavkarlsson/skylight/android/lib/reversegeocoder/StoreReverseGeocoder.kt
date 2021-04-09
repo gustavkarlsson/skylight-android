@@ -16,12 +16,15 @@ import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.koptional.valueOr
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
+import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
+import se.gustavkarlsson.skylight.android.lib.location.approximate
 
 internal class StoreReverseGeocoder(
-    private val store: Store<Location, Optional<String>>,
-    private val retryDelay: Duration
+    private val store: Store<ApproximatedLocation, Optional<String>>,
+    private val retryDelay: Duration,
+    private val approximationMeters: Double,
 ) : ReverseGeocoder {
 
     override suspend fun get(locationResult: LocationResult): ReverseGeocodingResult {
@@ -70,7 +73,7 @@ internal class StoreReverseGeocoder(
     }
 
     private suspend fun getName(location: Location): ReverseGeocodingResult = try {
-        store.get(location)
+        store.get(location.approximate(approximationMeters))
             .map { ReverseGeocodingResult.Success(it) }
             .valueOr { ReverseGeocodingResult.Failure.NotFound }
     } catch (e: IOException) {
