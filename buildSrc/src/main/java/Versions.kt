@@ -51,7 +51,7 @@ object Versions {
     val textref = "1.3.1"
     val markwon = "4.4.0"
     val store = "4.0.0"
-    val compose = "1.0.0-beta03"
+    val compose = "1.0.0-beta04"
     val composeConstraintLayout = "1.0.0-alpha05"
     val accompanist = "0.7.0"
     val backstack = "0.8.0+beta02"
