@@ -4,8 +4,8 @@ import android.Manifest
 import android.os.Build
 
 enum class Permission(val key: String, val supported: Boolean) {
-    LocationFine(
-        key = Manifest.permission.ACCESS_FINE_LOCATION,
+    Location(
+        key = Manifest.permission.ACCESS_COARSE_LOCATION,
         supported = true,
     ),
     BackgroundLocation(

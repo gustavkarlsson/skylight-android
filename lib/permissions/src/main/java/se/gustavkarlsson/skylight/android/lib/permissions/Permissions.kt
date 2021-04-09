@@ -17,7 +17,7 @@ data class Permissions(
         val INITIAL: Permissions
             get() {
                 return Permissions(
-                    location = Permission.LocationFine.withDefaultAccess(),
+                    location = Permission.Location.withDefaultAccess(),
                     backgroundLocation = Permission.BackgroundLocation.withDefaultAccess(),
                 )
             }

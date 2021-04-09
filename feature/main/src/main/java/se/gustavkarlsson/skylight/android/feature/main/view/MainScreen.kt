@@ -78,7 +78,7 @@ object MainScreen : Screen {
         startStopScope?.launch {
             withContext(Dispatchers.Main) {
                 PermissionsComponent.instance.locationPermissionRequester()
-                    .request(this@requestLocationPermission, Permission.LocationFine, Permission.BackgroundLocation)
+                    .request(this@requestLocationPermission, Permission.Location, Permission.BackgroundLocation)
             }
         }
     }
