@@ -14,11 +14,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
@@ -41,7 +40,7 @@ fun Aurora() {
         var lines by remember { mutableStateOf(createLines()) }
         Canvas(Modifier.fillMaxSize()) {
             for (line in lines) {
-                line.draw(this)
+                draw(line)
             }
             val newLines = lines.map { line ->
                 if (line.ageSeconds > line.ttlSeconds) {
@@ -105,6 +104,28 @@ private fun ClosedFloatingPointRange<Float>.random(): Float {
     return start + (Random.nextFloat() * delta)
 }
 
+private fun DrawScope.draw(line: Line) = with(line) {
+    val colorCenter = color.copy(alpha = fade(ageSeconds, ttlSeconds))
+    val steps = arrayOf(
+        0f to Color.Transparent,
+        0.5f to colorCenter,
+        1f to Color.Transparent,
+    )
+    val startY = y - (height / 2)
+    val endY = y + (height / 2)
+    val brush = Brush.verticalGradient(
+        *steps,
+        startY = startY,
+        endY = endY,
+    )
+    drawLine(brush, start = Offset(x, startY), end = Offset(x, endY), width)
+}
+
+private fun fade(ageSeconds: Float, ttlSeconds: Float): Float {
+    val hm = 0.5f * ttlSeconds
+    return abs((ageSeconds + hm) % ttlSeconds - hm) / hm
+}
+
 private data class Line(
     val x: Float,
     val y: Float,
@@ -112,35 +133,5 @@ private data class Line(
     val height: Float,
     val color: Color,
     val ttlSeconds: Float,
-    val ageSeconds: Float = 0f,
-) {
-
-    fun draw(scope: DrawScope) {
-        val colorEdge = color.copy(alpha = 0f)
-        val colorCenter = color.copy(alpha = fade(ageSeconds, ttlSeconds))
-        val steps = arrayOf(
-            0f to colorEdge,
-            0.5f to colorCenter,
-            1f to colorEdge,
-        )
-        val startY = y - (height / 2)
-        val endY = y + (height / 2)
-        val brush = Brush.verticalGradient(
-            *steps,
-            startY = startY,
-            endY = endY,
-        )
-
-        val path = Path().apply {
-            moveTo(x, startY)
-            lineTo(x, endY)
-            close()
-        }
-        scope.drawPath(path, brush, style = Stroke(width))
-    }
-}
-
-private fun fade(ageSeconds: Float, ttlSeconds: Float): Float {
-    val hm = 0.5f * ttlSeconds
-    return abs((ageSeconds + hm) % ttlSeconds - hm) / hm
-}
+    val ageSeconds: Float,
+)
