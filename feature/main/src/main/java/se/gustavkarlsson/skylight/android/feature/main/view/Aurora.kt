@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import kotlin.math.abs
 import kotlin.random.Random
+import se.gustavkarlsson.skylight.android.lib.ui.compose.ColorRange
+import se.gustavkarlsson.skylight.android.lib.ui.compose.rangeTo
 
 @Composable
 fun Aurora(
@@ -32,8 +34,7 @@ fun Aurora(
     lineWidthRange: ClosedRange<Dp> = 8.dp..12.dp,
     @FloatRange(from = 0.0, to = 1.0) lineYRandomness: Float = 0.4f,
     @FloatRange(from = 0.0, to = 1.0) minLineHeightRatio: Float = 0.4f,
-    color1: Color = Color(0xFF4CFFA6),
-    color2: Color = Color(0xFF4CBFA6),
+    colorRange: ColorRange = Color(0xFF4CFFA6)..Color(0xFF4CBFA6),
     lineTtlSecondsRange: ClosedRange<Float> = 2f..8f,
 ) {
     BoxWithConstraints(Modifier.fillMaxSize()) {
@@ -45,8 +46,7 @@ fun Aurora(
             widthDpRange = lineWidthRange,
             yRandomness = lineYRandomness,
             minHeightRatio = minLineHeightRatio,
-            color1 = color1,
-            color2 = color2,
+            colorRange = colorRange,
             ttlSecondsRange = lineTtlSecondsRange,
         )
         var lines by remember {
@@ -89,8 +89,7 @@ private class LineFactory(
     widthDpRange: ClosedRange<Dp>,
     yRandomness: Float,
     minHeightRatio: Float,
-    color1: Color,
-    color2: Color,
+    private val colorRange: ColorRange,
     private val ttlSecondsRange: ClosedRange<Float>,
 ) {
     init {
@@ -121,7 +120,6 @@ private class LineFactory(
         val maxHeight = (canvasHeight - ((canvasHeight * yRandomness) / 2))
         minHeight..maxHeight
     }
-    private val colorRange = color1..color2
 
     fun createInitial(): List<Line> = List(count) { createLine(randomizeAge = true) }
 
@@ -167,12 +165,6 @@ private fun Float.requireRatio(name: String) {
         "$name ($this) must be within 0..1"
     }
 }
-
-private operator fun Color.rangeTo(that: Color): ColorRange {
-    return ColorRange(this, that)
-}
-
-private data class ColorRange(val start: Color, val endInclusive: Color)
 
 private fun ColorRange.random(): Color {
     val startHsl = start.toHsl()
