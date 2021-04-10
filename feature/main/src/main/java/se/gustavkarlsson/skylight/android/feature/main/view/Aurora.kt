@@ -76,18 +76,16 @@ private fun BoxWithConstraintsScope.createLines(): List<Line> {
 }
 
 private fun BoxWithConstraintsScope.createLine(randomizeAge: Boolean): Line {
-    val random = Random.Default
     val yVariance = (canvasHeight * 0.4f)
     val minLineHeight = (canvasHeight * 0.4f)
     val maxLineHeight = (canvasHeight - (yVariance / 2))
-    val colorHsl = floatArrayOf(validHue.random(), 1f, 0.65f)
     val ttlSeconds = validTtlSeconds.random()
     return Line(
         x = (0..canvasWidth).random().toFloat(),
-        y = (canvasHeight / 2) - (yVariance / 2) + (random.nextFloat() * yVariance),
+        y = (canvasHeight / 2) - (yVariance / 2) + (Random.nextFloat() * yVariance),
         width = validLineWidth.random(),
         height = (minLineHeight..maxLineHeight).random(),
-        color = Color(ColorUtils.HSLToColor(colorHsl)),
+        color = Color(ColorUtils.HSLToColor(floatArrayOf(validHue.random(), 1f, 0.65f))),
         ttlSeconds = ttlSeconds,
         ageSeconds = if (randomizeAge) (0f..ttlSeconds).random() else 0f,
     )
@@ -105,10 +103,9 @@ private fun ClosedFloatingPointRange<Float>.random(): Float {
 }
 
 private fun DrawScope.draw(line: Line) = with(line) {
-    val colorCenter = color.copy(alpha = fade(ageSeconds, ttlSeconds))
     val steps = arrayOf(
         0f to Color.Transparent,
-        0.5f to colorCenter,
+        0.5f to color.copy(alpha = getAlpha(ageSeconds, ttlSeconds)),
         1f to Color.Transparent,
     )
     val startY = y - (height / 2)
@@ -121,9 +118,9 @@ private fun DrawScope.draw(line: Line) = with(line) {
     drawLine(brush, start = Offset(x, startY), end = Offset(x, endY), width)
 }
 
-private fun fade(ageSeconds: Float, ttlSeconds: Float): Float {
-    val hm = 0.5f * ttlSeconds
-    return abs((ageSeconds + hm) % ttlSeconds - hm) / hm
+private fun getAlpha(age: Float, ttl: Float): Float {
+    val hm = 0.5f * ttl
+    return abs((age + hm) % ttl - hm) / hm
 }
 
 private data class Line(
