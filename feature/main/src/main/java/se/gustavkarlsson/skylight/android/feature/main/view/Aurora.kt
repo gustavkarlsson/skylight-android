@@ -107,12 +107,11 @@ private class LineFactory(
     private val xRange = 0f..canvasWidth
     private val yRange = let {
         val center = canvasHeight / 2
-        val delta = yRandomness / 2
+        val delta = (canvasHeight * yRandomness) / 2
         val min = center - delta
         val max = center + delta
         min..max
     }
-    private val yRandomness = (canvasHeight * yRandomness)
     private val widthRange = with(density) {
         val minPx = minLineWidthDp.toPx()
         val maxPx = maxLineWidthDp.toPx()
@@ -120,7 +119,7 @@ private class LineFactory(
     }
     private val heightRange = let {
         val minLineHeight = (canvasHeight * minHeightRatio)
-        val maxLineHeight = (canvasHeight - (this.yRandomness / 2))
+        val maxLineHeight = (canvasHeight - ((canvasHeight * yRandomness) / 2))
         minLineHeight..maxLineHeight
     }
     private val colorRange = color1..color2
