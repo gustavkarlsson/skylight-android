@@ -188,6 +188,7 @@ private fun ClosedRange<Float>.random(random: Random): Float {
     return start + (random.nextFloat() * delta)
 }
 
+// FIXME use scale or other transform in combination with radial gradient and draw a rect instead
 private fun DrawScope.draw(line: Line) = with(line) {
     val steps = arrayOf(
         0f to Color.Transparent,
