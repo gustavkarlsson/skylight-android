@@ -25,11 +25,13 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import kotlin.math.abs
 import kotlin.random.Random
+import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ColorRange
 import se.gustavkarlsson.skylight.android.lib.ui.compose.rangeTo
 
 @Composable
 fun Aurora(
+    modifier: Modifier = Modifier,
     @FloatRange(from = 0.0) linesPerDp: Float = 0.1f,
     lineWidthRange: ClosedRange<Dp> = 8.dp..12.dp,
     @FloatRange(from = 0.0, to = 1.0) lineYRandomness: Float = 0.4f,
@@ -37,7 +39,8 @@ fun Aurora(
     colorRange: ColorRange = Color(0xFF4CFFA6)..Color(0xFF4CBFA6),
     lineTtlSecondsRange: ClosedRange<Float> = 2f..8f,
 ) {
-    BoxWithConstraints(Modifier.fillMaxSize()) {
+    BoxWithConstraints(modifier.fillMaxSize()) {
+        logInfo { "XXX Creating line factory" }
         val lineFactory = LineFactory(
             canvasWidth = canvasWidth.toFloat(),
             canvasHeight = canvasHeight.toFloat(),
@@ -53,28 +56,37 @@ fun Aurora(
             val initialLines = lineFactory.createInitial()
             mutableStateOf(initialLines, policy = neverEqualPolicy())
         }
-        var elapsedTimeSeconds by remember { mutableStateOf(0f) }
-        Canvas(Modifier.fillMaxSize()) {
-            val newLines = lines.map { line ->
-                if (line.ageSeconds > line.ttlSeconds) {
-                    lineFactory.createNew()
-                } else {
-                    line.incrementAgeSeconds(elapsedTimeSeconds)
+        EveryFrame { frameMillis ->
+            Canvas(Modifier.fillMaxSize()) {
+                val newLines = lines.map { line ->
+                    if (line.ageSeconds > line.ttlSeconds) {
+                        lineFactory.createNew()
+                    } else {
+                        val incrementSeconds = frameMillis / 1000f
+                        line.incrementAgeSeconds(incrementSeconds)
+                    }
                 }
+                for (line in newLines) {
+                    draw(line)
+                }
+                lines = newLines
             }
-            for (line in newLines) {
-                draw(line)
-            }
-            lines = newLines
         }
-        LaunchedEffect(key1 = null) {
-            var lastTime = withFrameMillis { it }
-            while (true) {
-                val currentTime = withFrameMillis { it }
-                val elapsedTimeMillis = currentTime - lastTime
-                elapsedTimeSeconds = elapsedTimeMillis / 1000f
-                lastTime = currentTime
-            }
+    }
+}
+
+@Composable
+private fun EveryFrame(
+    content: @Composable (frameMillis: Long) -> Unit,
+) {
+    var frameTime by remember { mutableStateOf(0L) }
+    content(frameTime)
+    LaunchedEffect(key1 = null) {
+        var lastTime = withFrameMillis { it }
+        while (true) {
+            val currentTime = withFrameMillis { it }
+            frameTime = currentTime - lastTime
+            lastTime = currentTime
         }
     }
 }
