@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import kotlin.math.abs
 import kotlin.random.Random
-import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ColorRange
 import se.gustavkarlsson.skylight.android.lib.ui.compose.rangeTo
 
@@ -40,7 +39,6 @@ fun Aurora(
     lineTtlSecondsRange: ClosedRange<Float> = 2f..8f,
 ) {
     BoxWithConstraints(modifier.fillMaxSize()) {
-        logInfo { "XXX Creating line factory" }
         val lineFactory = LineFactory(
             canvasWidth = canvasWidth.toFloat(),
             canvasHeight = canvasHeight.toFloat(),
