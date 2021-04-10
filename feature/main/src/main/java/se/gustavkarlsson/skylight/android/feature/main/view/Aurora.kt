@@ -168,7 +168,8 @@ private fun ColorRange.random(random: Random): Color {
     val outHsl = FloatArray(3)
     ColorUtils.blendHSL(startHsl, endHsl, random.nextFloat(), outHsl)
     val colorInt = ColorUtils.HSLToColor(outHsl)
-    return Color(colorInt)
+    val newAlpha = (start.alpha + endInclusive.alpha) / 2
+    return Color(colorInt).copy(alpha = newAlpha)
 }
 
 private fun Color.toHsl(): FloatArray {
@@ -190,7 +191,7 @@ private fun ClosedRange<Float>.random(random: Random): Float {
 private fun DrawScope.draw(line: Line) = with(line) {
     val steps = arrayOf(
         0f to Color.Transparent,
-        0.5f to color.copy(alpha = getAlpha(age)),
+        0.5f to color.copy(alpha = color.alpha * fadeInOut(age)),
         1f to Color.Transparent,
     )
     val startY = y - (height / 2)
@@ -203,7 +204,7 @@ private fun DrawScope.draw(line: Line) = with(line) {
     drawLine(brush, start = Offset(x, startY), end = Offset(x, endY), width)
 }
 
-private fun getAlpha(age: Float): Float {
+private fun fadeInOut(age: Float): Float {
     return abs((age + 0.5f) % 1f - 0.5f) / 0.5f
 }
 
