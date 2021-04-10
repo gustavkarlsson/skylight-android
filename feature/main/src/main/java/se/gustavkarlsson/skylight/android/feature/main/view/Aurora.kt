@@ -117,15 +117,13 @@ private class Renderer(
         val generation = timeMillis / ttlMillis
         val instanceSeed = 31 * index + generation
         val instanceRandom = Random(instanceSeed)
-
         return Line(
             x = xRange.random(instanceRandom),
             y = yRange.random(instanceRandom),
             width = widthRange.random(instanceRandom),
             height = heightRange.random(instanceRandom),
             color = colorRange.random(instanceRandom),
-            ttlMillis = ttlMillis,
-            ageMillis = timeMillis % ttlMillis,
+            age = (timeMillis % ttlMillis).toFloat() / ttlMillis,
         )
     }
 
@@ -192,7 +190,7 @@ private fun ClosedRange<Float>.random(random: Random): Float {
 private fun DrawScope.draw(line: Line) = with(line) {
     val steps = arrayOf(
         0f to Color.Transparent,
-        0.5f to color.copy(alpha = getAlpha(ageMillis, ttlMillis)),
+        0.5f to color.copy(alpha = getAlpha(age)),
         1f to Color.Transparent,
     )
     val startY = y - (height / 2)
@@ -205,9 +203,8 @@ private fun DrawScope.draw(line: Line) = with(line) {
     drawLine(brush, start = Offset(x, startY), end = Offset(x, endY), width)
 }
 
-private fun getAlpha(age: Long, ttl: Long): Float {
-    val hm = 0.5f * ttl
-    return abs((age + hm) % ttl - hm) / hm
+private fun getAlpha(age: Float): Float {
+    return abs((age + 0.5f) % 1f - 0.5f) / 0.5f
 }
 
 private data class Line(
@@ -216,6 +213,5 @@ private data class Line(
     val width: Float,
     val height: Float,
     val color: Color,
-    val ttlMillis: Long,
-    val ageMillis: Long,
+    val age: Float,
 )
