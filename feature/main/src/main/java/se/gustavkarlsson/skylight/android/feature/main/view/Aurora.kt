@@ -1,62 +1,66 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
-import android.content.Context
-import android.os.Build
-import android.view.Display
-import android.view.WindowManager
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.neverEqualPolicy
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
 import kotlin.math.abs
 import kotlin.random.Random
 
-private const val DEFAULT_REFRESH_RATE = 60
-
 @Composable
 fun Aurora() {
     BoxWithConstraints(Modifier.fillMaxSize()) {
-        val frameTime = FrameTime
         val factory = LineFactory(canvasWidth.toFloat(), canvasHeight.toFloat(), LocalDensity.current)
         var lines by remember {
-            val lines = factory.createInitialLines()
-            mutableStateOf(lines)
+            val initialLines = factory.createInitialLines()
+            mutableStateOf(initialLines, policy = neverEqualPolicy())
         }
+        var elapsedTimeSeconds by remember { mutableStateOf(0f) }
         Canvas(Modifier.fillMaxSize()) {
-            for (line in lines) {
-                draw(line)
-            }
             val newLines = lines.map { line ->
                 if (line.ageSeconds > line.ttlSeconds) {
                     factory.createNewLine()
                 } else {
-                    line.addTime(frameTime)
+                    line.incrementAgeSeconds(elapsedTimeSeconds)
                 }
             }
+            for (line in newLines) {
+                draw(line)
+            }
             lines = newLines
+        }
+        LaunchedEffect(key1 = null) {
+            var lastTime = withFrameMillis { it }
+            while (true) {
+                val currentTime = withFrameMillis { it }
+                val elapsedTimeMillis = currentTime - lastTime
+                elapsedTimeSeconds = elapsedTimeMillis / 1000f
+                lastTime = currentTime
+            }
         }
     }
 }
 
-private fun Line.addTime(frameTime: Float): Line = copy(ageSeconds = ageSeconds + frameTime)
+private fun Line.incrementAgeSeconds(increment: Float): Line = copy(ageSeconds = ageSeconds + increment)
 
 private class LineFactory(
     canvasWidth: Float,
@@ -169,22 +173,6 @@ private fun Color.toHsl(): FloatArray {
     )
     return hsl
 }
-
-private val FrameTime: Float
-    @Composable
-    get() {
-        val context = LocalContext.current
-        val refreshRate = context.displayCompat?.refreshRate?.toInt() ?: DEFAULT_REFRESH_RATE
-        return 1f / refreshRate
-    }
-
-private val Context.displayCompat: Display?
-    get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        display
-    } else {
-        @Suppress("DEPRECATION")
-        getSystemService<WindowManager>()?.defaultDisplay
-    }
 
 private val BoxWithConstraintsScope.canvasWidth: Int
     get() = constraints.maxWidth
