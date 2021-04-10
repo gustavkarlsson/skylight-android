@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.feature.main.view
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,8 +38,8 @@ fun Aurora(
 ) {
     BoxWithConstraints(modifier.fillMaxSize()) {
         val renderer = Renderer(
-            canvasWidth = canvasWidth.toFloat(),
-            canvasHeight = canvasHeight.toFloat(),
+            canvasWidth = constraints.maxWidth.toFloat(),
+            canvasHeight = constraints.maxHeight.toFloat(),
             density = LocalDensity.current,
             countPerDp = linesPerDp,
             widthDpRange = lineWidthRange,
@@ -85,10 +84,10 @@ private class Renderer(
 ) {
     init {
         countPerDp.requirePositive("countPerDp")
-        widthDpRange.map { it.value }.requirePositiveIncreasing("widthDpRange")
+        widthDpRange.map { it.value }.requirePositiveAndAscending("widthDpRange")
         yRandomness.requireRatio("yRandomness")
         minHeightRatio.requireRatio("minHeightRatio")
-        ttlMillisRange.requirePositiveIncreasing("ttlMillisRange")
+        ttlMillisRange.requirePositiveAndAscending("ttlMillisRange")
     }
 
     private val count = with(density) {
@@ -119,7 +118,6 @@ private class Renderer(
         val instanceSeed = 31 * index + generation
         val instanceRandom = Random(instanceSeed)
 
-        val ageMillis = timeMillis % ttlMillis
         return Line(
             x = xRange.random(instanceRandom),
             y = yRange.random(instanceRandom),
@@ -127,7 +125,7 @@ private class Renderer(
             height = heightRange.random(instanceRandom),
             color = colorRange.random(instanceRandom),
             ttlMillis = ttlMillis,
-            ageMillis = ageMillis,
+            ageMillis = timeMillis % ttlMillis,
         )
     }
 
@@ -145,12 +143,12 @@ private fun <T : Comparable<T>, R : Comparable<R>> ClosedRange<T>.map(block: (T)
     return start..endInclusive
 }
 
-private fun <T> ClosedRange<T>.requirePositiveIncreasing(name: String) where T : Comparable<T>, T : Number {
+private fun <T> ClosedRange<T>.requirePositiveAndAscending(name: String) where T : Comparable<T>, T : Number {
     require(start.toDouble() > 0.0) {
-        "$name ($this) must be increasing"
+        "$name ($this) must be positive"
     }
     require(start <= endInclusive) {
-        "$name ($this) must be increasing"
+        "$name ($this) must be ascending"
     }
 }
 
@@ -160,8 +158,8 @@ private fun <T : Number> T.requirePositive(name: String) {
     }
 }
 
-private fun Float.requireRatio(name: String) {
-    require(this in 0f..1f) {
+private fun <T : Number> T.requireRatio(name: String) {
+    require(this.toDouble() in 0.0..1.0) {
         "$name ($this) must be within 0..1"
     }
 }
@@ -169,9 +167,9 @@ private fun Float.requireRatio(name: String) {
 private fun ColorRange.random(random: Random): Color {
     val startHsl = start.toHsl()
     val endHsl = endInclusive.toHsl()
-    val hsl = FloatArray(3)
-    ColorUtils.blendHSL(startHsl, endHsl, random.nextFloat(), hsl)
-    val colorInt = ColorUtils.HSLToColor(hsl)
+    val outHsl = FloatArray(3)
+    ColorUtils.blendHSL(startHsl, endHsl, random.nextFloat(), outHsl)
+    val colorInt = ColorUtils.HSLToColor(outHsl)
     return Color(colorInt)
 }
 
@@ -185,12 +183,6 @@ private fun Color.toHsl(): FloatArray {
     )
     return hsl
 }
-
-private val BoxWithConstraintsScope.canvasWidth: Int
-    get() = constraints.maxWidth
-
-private val BoxWithConstraintsScope.canvasHeight: Int
-    get() = constraints.maxHeight
 
 private fun ClosedRange<Float>.random(random: Random): Float {
     val delta = endInclusive - start
