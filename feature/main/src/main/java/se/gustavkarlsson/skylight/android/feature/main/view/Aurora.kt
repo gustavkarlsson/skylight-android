@@ -29,16 +29,16 @@ import kotlin.random.Random
 @Composable
 fun Aurora() {
     BoxWithConstraints(Modifier.fillMaxSize()) {
-        val factory = LineFactory(canvasWidth.toFloat(), canvasHeight.toFloat(), LocalDensity.current)
+        val lineFactory = LineFactory(canvasWidth.toFloat(), canvasHeight.toFloat(), LocalDensity.current)
         var lines by remember {
-            val initialLines = factory.createInitialLines()
+            val initialLines = lineFactory.createInitial()
             mutableStateOf(initialLines, policy = neverEqualPolicy())
         }
         var elapsedTimeSeconds by remember { mutableStateOf(0f) }
         Canvas(Modifier.fillMaxSize()) {
             val newLines = lines.map { line ->
                 if (line.ageSeconds > line.ttlSeconds) {
-                    factory.createNewLine()
+                    lineFactory.createNew()
                 } else {
                     line.incrementAgeSeconds(elapsedTimeSeconds)
                 }
@@ -66,43 +66,25 @@ private class LineFactory(
     canvasWidth: Float,
     canvasHeight: Float,
     density: Density,
-    @FloatRange(from = 0.0) linesPerDp: Float = 0.1f,
-    minLineWidthDp: Dp = 8.dp,
-    maxLineWidthDp: Dp = 12.dp,
+    @FloatRange(from = 0.0) countPerDp: Float = 0.1f,
+    widthDpRange: ClosedRange<Dp> = 8.dp..12.dp,
     @FloatRange(from = 0.0, to = 1.0) yRandomness: Float = 0.4f,
     @FloatRange(from = 0.0, to = 1.0) minHeightRatio: Float = 0.4f,
     color1: Color = Color(0xFF4CFFA6),
     color2: Color = Color(0xFF4CBFA6),
-    @FloatRange(from = 0.0) minTtlSeconds: Float = 2f,
-    @FloatRange(from = 0.0) maxTtlSeconds: Float = 8f,
+    private val ttlSecondsRange: ClosedRange<Float> = 2f..8f,
 ) {
     init {
-        require(linesPerDp > 0f) {
-            "linesPerDp ($linesPerDp) must be positive"
-        }
-        require(minLineWidthDp >= 0.dp) {
-            "minLineWidthDp ($minLineWidthDp) must be non-negative"
-        }
-        require(minLineWidthDp <= maxLineWidthDp) {
-            "minLineWidthDp ($minLineWidthDp) must be <= maxLineWidthDp ($maxLineWidthDp)"
-        }
-        require(yRandomness in VALID_RATIO) {
-            "yRandomness ($yRandomness) must be in $VALID_RATIO"
-        }
-        require(minHeightRatio in VALID_RATIO) {
-            "minHeightRatio ($minHeightRatio) must be in $VALID_RATIO"
-        }
-        require(minTtlSeconds > 0f) {
-            "minTtlSeconds ($minTtlSeconds) must be positive"
-        }
-        require(minTtlSeconds <= maxTtlSeconds) {
-            "minTtlSeconds ($minTtlSeconds) must be <= maxTtlSeconds ($maxTtlSeconds)"
-        }
+        countPerDp.requirePositive("countPerDp")
+        widthDpRange.map { it.value }.requirePositiveIncreasing("widthDpRange")
+        yRandomness.requireRatio("yRandomness")
+        minHeightRatio.requireRatio("minHeightRatio")
+        ttlSecondsRange.requirePositiveIncreasing("ttlSecondsRange")
     }
 
-    private val lineCount = with(density) {
+    private val count = with(density) {
         val widthDp = canvasWidth.toDp()
-        (linesPerDp * widthDp.value).toInt()
+        (countPerDp * widthDp.value).toInt()
     }
     private val xRange = 0f..canvasWidth
     private val yRange = let {
@@ -113,21 +95,18 @@ private class LineFactory(
         min..max
     }
     private val widthRange = with(density) {
-        val minPx = minLineWidthDp.toPx()
-        val maxPx = maxLineWidthDp.toPx()
-        minPx..maxPx
+        widthDpRange.map { it.toPx() }
     }
     private val heightRange = let {
-        val minLineHeight = (canvasHeight * minHeightRatio)
-        val maxLineHeight = (canvasHeight - ((canvasHeight * yRandomness) / 2))
-        minLineHeight..maxLineHeight
+        val minHeight = (canvasHeight * minHeightRatio)
+        val maxHeight = (canvasHeight - ((canvasHeight * yRandomness) / 2))
+        minHeight..maxHeight
     }
     private val colorRange = color1..color2
-    private val ttlSecondsRange = minTtlSeconds..maxTtlSeconds
 
-    fun createInitialLines(): List<Line> = List(lineCount) { createLine(randomizeAge = true) }
+    fun createInitial(): List<Line> = List(count) { createLine(randomizeAge = true) }
 
-    fun createNewLine(): Line = createLine(randomizeAge = false)
+    fun createNew(): Line = createLine(randomizeAge = false)
 
     private fun createLine(randomizeAge: Boolean): Line {
         val ttlSeconds = ttlSecondsRange.random()
@@ -141,9 +120,32 @@ private class LineFactory(
             ageSeconds = if (randomizeAge) (0f..ttlSeconds).random() else 0f,
         )
     }
+}
 
-    private companion object {
-        private val VALID_RATIO = 0f..1f
+private fun <T : Comparable<T>, R : Comparable<R>> ClosedRange<T>.map(block: (T) -> R): ClosedRange<R> {
+    val start = block(start)
+    val endInclusive = block(endInclusive)
+    return start..endInclusive
+}
+
+private fun ClosedRange<Float>.requirePositiveIncreasing(name: String) {
+    require(start > 0f) {
+        "$name ($this) must be increasing"
+    }
+    require(start <= endInclusive) {
+        "$name ($this) must be increasing"
+    }
+}
+
+private fun Float.requirePositive(name: String) {
+    require(this > 0f) {
+        "$name ($this) must be positive"
+    }
+}
+
+private fun Float.requireRatio(name: String) {
+    require(this in 0f..1f) {
+        "$name ($this) must be within 0..1"
     }
 }
 
@@ -179,7 +181,7 @@ private val BoxWithConstraintsScope.canvasWidth: Int
 private val BoxWithConstraintsScope.canvasHeight: Int
     get() = constraints.maxHeight
 
-private fun ClosedFloatingPointRange<Float>.random(): Float {
+private fun ClosedRange<Float>.random(): Float {
     val delta = endInclusive - start
     return start + (Random.nextFloat() * delta)
 }
