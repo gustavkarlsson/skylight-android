@@ -284,9 +284,12 @@ private fun CenterText(
     subtitle: String,
 ) {
     Box(modifier) {
-        Box(Modifier.fillMaxWidth().fillMaxHeight(0.6f).align(Alignment.Center)) {
-            Aurora()
-        }
+        Aurora(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.6f)
+                .align(Alignment.Center)
+        )
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
