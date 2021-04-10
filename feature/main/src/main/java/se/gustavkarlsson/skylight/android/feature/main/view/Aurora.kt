@@ -62,7 +62,7 @@ fun Aurora() {
 private data class LineFactory(
     private val canvasWidth: Int,
     private val canvasHeight: Int,
-    @FloatRange(from = 0.0, to = MAX_HUE.toDouble()) private val hue: Float = 150f,
+    private val color: Color = Color(0xFF4CFFA6),
     @FloatRange(from = 0.0, to = 1.0) private val hueRandomness: Float = 0.15f,
     @FloatRange(from = 0.0, to = 1.0) private val yRandomness: Float = 0.4f,
     @FloatRange(from = 0.0, to = 1.0) private val minHeightRatio: Float = 0.4f,
@@ -76,16 +76,13 @@ private data class LineFactory(
         val yRandomnessPx = (canvasHeight * yRandomness)
         val minLineHeight = (canvasHeight * minHeightRatio)
         val maxLineHeight = (canvasHeight - (yRandomnessPx / 2))
-        val hueDelta = (hueRandomness * MAX_HUE) / 2
-        val validHue = (hue - hueDelta)..(hue + hueDelta)
-        val hue = validHue.random() % MAX_HUE
         val ttlSeconds = (minTtlSeconds..maxTtlSeconds).random()
         return Line(
             x = (0..canvasWidth).random().toFloat(),
             y = (canvasHeight / 2) - (yRandomnessPx / 2) + (Random.nextFloat() * yRandomnessPx),
             width = validLineWidth.random(),
             height = (minLineHeight..maxLineHeight).random(),
-            color = Color(ColorUtils.HSLToColor(floatArrayOf(hue, 1f, 0.65f))),
+            color = color.randomizeHue(hueRandomness),
             ttlSeconds = ttlSeconds,
             ageSeconds = if (randomizeAge) (0f..ttlSeconds).random() else 0f,
         )
@@ -117,6 +114,22 @@ private val BoxWithConstraintsScope.canvasHeight: Int
 private fun ClosedFloatingPointRange<Float>.random(): Float {
     val delta = endInclusive - start
     return start + (Random.nextFloat() * delta)
+}
+
+private fun Color.randomizeHue(randomness: Float): Color {
+    val inHsl = FloatArray(3)
+    ColorUtils.RGBToHSL(
+        (red * 255).roundToInt(),
+        (green * 255).roundToInt(),
+        (blue * 255).roundToInt(),
+        inHsl,
+    )
+    val hueDelta = (randomness * MAX_HUE) / 2
+    val validHue = (inHsl[0] - hueDelta)..(inHsl[0] + hueDelta)
+    val outHsl = inHsl.copyOf()
+    inHsl[0] = validHue.random() % MAX_HUE
+    val colorInt = ColorUtils.HSLToColor(outHsl)
+    return Color(colorInt)
 }
 
 private fun DrawScope.draw(line: Line) = with(line) {
