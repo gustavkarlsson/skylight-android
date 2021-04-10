@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.view.Display
 import android.view.WindowManager
+import androidx.annotation.FloatRange
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
@@ -27,30 +28,67 @@ import kotlin.random.Random
 
 
 private const val FALLBACK_REFRESH_RATE = 60
+private const val MAX_HUE = 360f
 private const val minLineWidth = 10f
 private const val maxLineWidth = 50f
 private val validLineWidth = minLineWidth..maxLineWidth // FIXME base on dps
-private val validTtlSeconds = 2f..10f
-private val validHue = 120f..180f
 
 @Composable
 fun Aurora() {
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val frameTime = FrameTime
-        var lines by remember { mutableStateOf(createLines()) }
+        val factory = LineFactory(canvasWidth, canvasHeight)
+        var lines by remember {
+            val lineCount = canvasWidth / minLineWidth.toInt()
+            val lines = List(lineCount) { factory.createLine(randomizeAge = true) }
+            mutableStateOf(lines)
+        }
         Canvas(Modifier.fillMaxSize()) {
             for (line in lines) {
                 draw(line)
             }
             val newLines = lines.map { line ->
                 if (line.ageSeconds > line.ttlSeconds) {
-                    createLine(randomizeAge = false)
+                    factory.createLine(randomizeAge = false)
                 } else {
                     line.copy(ageSeconds = line.ageSeconds + frameTime)
                 }
             }
             lines = newLines
         }
+    }
+}
+
+private data class LineFactory(
+    private val canvasWidth: Int,
+    private val canvasHeight: Int,
+    @FloatRange(from = 0.0, to = MAX_HUE.toDouble()) private val hue: Float = 150f,
+    @FloatRange(from = 0.0, to = 1.0) private val hueRandomness: Float = 0.15f,
+    @FloatRange(from = 0.0, to = 1.0) private val yRandomness: Float = 0.4f,
+    @FloatRange(from = 0.0, to = 1.0) private val minHeightRatio: Float = 0.4f,
+    @FloatRange(from = 0.0) private val minTtlSeconds: Float = 2f,
+    @FloatRange(from = 0.0) private val maxTtlSeconds: Float = 8f,
+) {
+    fun createLine(randomizeAge: Boolean): Line {
+        require(minTtlSeconds <= maxTtlSeconds) {
+            "minTtlSeconds ($minTtlSeconds) must be <= maxTtlSeconds ($maxTtlSeconds)"
+        }
+        val yRandomnessPx = (canvasHeight * yRandomness)
+        val minLineHeight = (canvasHeight * minHeightRatio)
+        val maxLineHeight = (canvasHeight - (yRandomnessPx / 2))
+        val hueDelta = (hueRandomness * MAX_HUE) / 2
+        val validHue = (hue - hueDelta)..(hue + hueDelta)
+        val hue = validHue.random() % MAX_HUE
+        val ttlSeconds = (minTtlSeconds..maxTtlSeconds).random()
+        return Line(
+            x = (0..canvasWidth).random().toFloat(),
+            y = (canvasHeight / 2) - (yRandomnessPx / 2) + (Random.nextFloat() * yRandomnessPx),
+            width = validLineWidth.random(),
+            height = (minLineHeight..maxLineHeight).random(),
+            color = Color(ColorUtils.HSLToColor(floatArrayOf(hue, 1f, 0.65f))),
+            ttlSeconds = ttlSeconds,
+            ageSeconds = if (randomizeAge) (0f..ttlSeconds).random() else 0f,
+        )
     }
 }
 
@@ -69,27 +107,6 @@ private val Context.displayCompat: Display?
         @Suppress("DEPRECATION")
         getSystemService<WindowManager>()?.defaultDisplay
     }
-
-private fun BoxWithConstraintsScope.createLines(): List<Line> {
-    val lineCount = canvasWidth / minLineWidth.toInt()
-    return List(lineCount) { createLine(randomizeAge = true) }
-}
-
-private fun BoxWithConstraintsScope.createLine(randomizeAge: Boolean): Line {
-    val yVariance = (canvasHeight * 0.4f)
-    val minLineHeight = (canvasHeight * 0.4f)
-    val maxLineHeight = (canvasHeight - (yVariance / 2))
-    val ttlSeconds = validTtlSeconds.random()
-    return Line(
-        x = (0..canvasWidth).random().toFloat(),
-        y = (canvasHeight / 2) - (yVariance / 2) + (Random.nextFloat() * yVariance),
-        width = validLineWidth.random(),
-        height = (minLineHeight..maxLineHeight).random(),
-        color = Color(ColorUtils.HSLToColor(floatArrayOf(validHue.random(), 1f, 0.65f))),
-        ttlSeconds = ttlSeconds,
-        ageSeconds = if (randomizeAge) (0f..ttlSeconds).random() else 0f,
-    )
-}
 
 private val BoxWithConstraintsScope.canvasWidth: Int
     get() = constraints.maxWidth
