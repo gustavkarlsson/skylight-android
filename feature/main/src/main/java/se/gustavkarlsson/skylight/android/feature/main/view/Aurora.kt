@@ -31,7 +31,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.rangeTo
 fun Aurora(
     modifier: Modifier = Modifier,
     @FloatRange(from = 0.0) linesPerDp: Float = 0.2f,
-    lineWidthRange: ClosedRange<Dp> = 30.dp..120.dp,
+    lineWidthRange: ClosedRange<Dp> = 30.dp..80.dp,
     @FloatRange(from = 0.0, to = 1.0) lineYRandomness: Float = 0.4f,
     @FloatRange(from = 0.0, to = 1.0) minLineHeightRatio: Float = 0.4f,
     colorRange: ColorRange = Color(0xFF4CFFA6)..Color(0xFF4CBFA6),
@@ -189,30 +189,26 @@ private fun ClosedRange<Float>.random(random: Random): Float {
     return start + (random.nextFloat() * delta)
 }
 
-// FIXME use scale or other transform in combination with radial gradient and draw a rect instead
 private fun DrawScope.draw(line: Line) = with(line) {
     val steps = arrayOf(
         0f to color.copy(alpha = color.alpha * fadeInOut(age)),
         1f to Color.Transparent,
     )
     val higherThanWide = height > width
-    val (smallestDimension, largestDimension) = if (higherThanWide) {
-        width to height
-    } else height to width
+    val smallestDimension = if (higherThanWide) width else height
     val (scaleY, scaleX) = if (higherThanWide) {
-        height / width to 1.0f
-    } else 1.0f to width / height
-    val scale = if (scaleX > scaleY) scaleX else scaleY
-
-    val startY = y - ((height / 2) / scale)
-    val endY = y + ((height / 2) / scale)
+        (height / width) to 1.0f
+    } else 1.0f to (width / height)
+    val downScaledStartY = y - ((height / 2) / scaleY) // FIXME check if dividing is right
+    val downScaledEndY = y + ((height / 2) / scaleY) // FIXME check if dividing is right
+    val downScaledWidth = width / scaleX // FIXME check if dividing is right
     val brush = Brush.radialGradient(
         *steps,
         center = Offset(x, y),
         radius = smallestDimension / 2,
     )
     scale(scaleX, scaleY, Offset(x, y)) {
-        drawLine(brush, start = Offset(x, startY), end = Offset(x, endY), width / scaleX)
+        drawLine(brush, start = Offset(x, downScaledStartY), end = Offset(x, downScaledEndY), downScaledWidth)
     }
 }
 
