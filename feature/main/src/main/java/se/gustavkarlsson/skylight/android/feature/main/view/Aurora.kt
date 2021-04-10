@@ -27,9 +27,28 @@ import kotlin.math.abs
 import kotlin.random.Random
 
 @Composable
-fun Aurora() {
+fun Aurora(
+    @FloatRange(from = 0.0) linesPerDp: Float = 0.1f,
+    lineWidthRange: ClosedRange<Dp> = 8.dp..12.dp,
+    @FloatRange(from = 0.0, to = 1.0) lineYRandomness: Float = 0.4f,
+    @FloatRange(from = 0.0, to = 1.0) minLineHeightRatio: Float = 0.4f,
+    color1: Color = Color(0xFF4CFFA6),
+    color2: Color = Color(0xFF4CBFA6),
+    lineTtlSecondsRange: ClosedRange<Float> = 2f..8f,
+) {
     BoxWithConstraints(Modifier.fillMaxSize()) {
-        val lineFactory = LineFactory(canvasWidth.toFloat(), canvasHeight.toFloat(), LocalDensity.current)
+        val lineFactory = LineFactory(
+            canvasWidth = canvasWidth.toFloat(),
+            canvasHeight = canvasHeight.toFloat(),
+            density = LocalDensity.current,
+            countPerDp = linesPerDp,
+            widthDpRange = lineWidthRange,
+            yRandomness = lineYRandomness,
+            minHeightRatio = minLineHeightRatio,
+            color1 = color1,
+            color2 = color2,
+            ttlSecondsRange = lineTtlSecondsRange,
+        )
         var lines by remember {
             val initialLines = lineFactory.createInitial()
             mutableStateOf(initialLines, policy = neverEqualPolicy())
@@ -66,13 +85,13 @@ private class LineFactory(
     canvasWidth: Float,
     canvasHeight: Float,
     density: Density,
-    @FloatRange(from = 0.0) countPerDp: Float = 0.1f,
-    widthDpRange: ClosedRange<Dp> = 8.dp..12.dp,
-    @FloatRange(from = 0.0, to = 1.0) yRandomness: Float = 0.4f,
-    @FloatRange(from = 0.0, to = 1.0) minHeightRatio: Float = 0.4f,
-    color1: Color = Color(0xFF4CFFA6),
-    color2: Color = Color(0xFF4CBFA6),
-    private val ttlSecondsRange: ClosedRange<Float> = 2f..8f,
+    countPerDp: Float,
+    widthDpRange: ClosedRange<Dp>,
+    yRandomness: Float,
+    minHeightRatio: Float,
+    color1: Color,
+    color2: Color,
+    private val ttlSecondsRange: ClosedRange<Float>,
 ) {
     init {
         countPerDp.requirePositive("countPerDp")
