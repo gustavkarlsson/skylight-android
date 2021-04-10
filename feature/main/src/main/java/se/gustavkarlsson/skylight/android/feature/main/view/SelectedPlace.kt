@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -281,20 +283,25 @@ private fun CenterText(
     title: String,
     subtitle: String,
 ) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Text(
-            text = title,
-            style = Typography.chanceTitle,
-        )
-        Text(
-            text = subtitle,
-            color = Colors.onSurfaceWeaker,
-            style = Typography.chanceSubtitle,
-        )
+    Box(modifier) {
+        Box(Modifier.fillMaxWidth().fillMaxHeight(0.6f).align(Alignment.Center)) {
+            Aurora()
+        }
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Text(
+                text = title,
+                style = Typography.chanceTitle,
+            )
+            Text(
+                text = subtitle,
+                color = Colors.onSurfaceWeaker,
+                style = Typography.chanceSubtitle,
+            )
+        }
     }
 }
 
