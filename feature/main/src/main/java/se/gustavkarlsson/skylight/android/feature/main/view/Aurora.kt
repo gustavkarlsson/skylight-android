@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.neverEqualPolicy
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameMillis
@@ -36,10 +35,10 @@ fun Aurora(
     @FloatRange(from = 0.0, to = 1.0) lineYRandomness: Float = 0.4f,
     @FloatRange(from = 0.0, to = 1.0) minLineHeightRatio: Float = 0.4f,
     colorRange: ColorRange = Color(0xFF4CFFA6)..Color(0xFF4CBFA6),
-    lineTtlSecondsRange: ClosedRange<Float> = 2f..8f,
+    lineTtlMillisRange: LongRange = 2000L..8000L,
 ) {
     BoxWithConstraints(modifier.fillMaxSize()) {
-        val lineFactory = LineFactory(
+        val renderer = Renderer(
             canvasWidth = canvasWidth.toFloat(),
             canvasHeight = canvasHeight.toFloat(),
             density = LocalDensity.current,
@@ -48,26 +47,11 @@ fun Aurora(
             yRandomness = lineYRandomness,
             minHeightRatio = minLineHeightRatio,
             colorRange = colorRange,
-            ttlSecondsRange = lineTtlSecondsRange,
+            ttlMillisRange = lineTtlMillisRange,
         )
-        var lines by remember {
-            val initialLines = lineFactory.createInitial()
-            mutableStateOf(initialLines, policy = neverEqualPolicy())
-        }
         EveryFrame { frameMillis ->
             Canvas(Modifier.fillMaxSize()) {
-                val newLines = lines.map { line ->
-                    if (line.ageSeconds > line.ttlSeconds) {
-                        lineFactory.createNew()
-                    } else {
-                        val incrementSeconds = frameMillis / 1000f
-                        line.incrementAgeSeconds(incrementSeconds)
-                    }
-                }
-                for (line in newLines) {
-                    draw(line)
-                }
-                lines = newLines
+                renderer.render(this, frameMillis)
             }
         }
     }
@@ -78,20 +62,17 @@ private fun EveryFrame(
     content: @Composable (frameMillis: Long) -> Unit,
 ) {
     var frameTime by remember { mutableStateOf(0L) }
-    content(frameTime)
+    if (frameTime > 0) {
+        content(frameTime)
+    }
     LaunchedEffect(key1 = null) {
-        var lastTime = withFrameMillis { it }
         while (true) {
-            val currentTime = withFrameMillis { it }
-            frameTime = currentTime - lastTime
-            lastTime = currentTime
+            frameTime = withFrameMillis { it }
         }
     }
 }
 
-private fun Line.incrementAgeSeconds(increment: Float): Line = copy(ageSeconds = ageSeconds + increment)
-
-private class LineFactory(
+private class Renderer(
     canvasWidth: Float,
     canvasHeight: Float,
     density: Density,
@@ -100,14 +81,14 @@ private class LineFactory(
     yRandomness: Float,
     minHeightRatio: Float,
     private val colorRange: ColorRange,
-    private val ttlSecondsRange: ClosedRange<Float>,
+    private val ttlMillisRange: LongRange,
 ) {
     init {
         countPerDp.requirePositive("countPerDp")
         widthDpRange.map { it.value }.requirePositiveIncreasing("widthDpRange")
         yRandomness.requireRatio("yRandomness")
         minHeightRatio.requireRatio("minHeightRatio")
-        ttlSecondsRange.requirePositiveIncreasing("ttlSecondsRange")
+        ttlMillisRange.requirePositiveIncreasing("ttlMillisRange")
     }
 
     private val count = with(density) {
@@ -131,21 +112,30 @@ private class LineFactory(
         minHeight..maxHeight
     }
 
-    fun createInitial(): List<Line> = List(count) { createLine(randomizeAge = true) }
+    private fun createLine(index: Int, timeMillis: Long): Line {
+        val indexRandom = Random(index)
+        val ttlMillis = ttlMillisRange.random(indexRandom)
+        val generation = timeMillis / ttlMillis
+        val instanceSeed = 31 * index + generation
+        val instanceRandom = Random(instanceSeed)
 
-    fun createNew(): Line = createLine(randomizeAge = false)
-
-    private fun createLine(randomizeAge: Boolean): Line {
-        val ttlSeconds = ttlSecondsRange.random()
+        val ageMillis = timeMillis % ttlMillis
         return Line(
-            x = xRange.random(),
-            y = yRange.random(),
-            width = widthRange.random(),
-            height = heightRange.random(),
-            color = colorRange.random(),
-            ttlSeconds = ttlSeconds,
-            ageSeconds = if (randomizeAge) (0f..ttlSeconds).random() else 0f,
+            x = xRange.random(instanceRandom),
+            y = yRange.random(instanceRandom),
+            width = widthRange.random(instanceRandom),
+            height = heightRange.random(instanceRandom),
+            color = colorRange.random(instanceRandom),
+            ttlMillis = ttlMillis,
+            ageMillis = ageMillis,
         )
+    }
+
+    fun render(scope: DrawScope, timeMillis: Long) {
+        repeat(count) { index ->
+            val line = createLine(index, timeMillis)
+            scope.draw(line)
+        }
     }
 }
 
@@ -155,8 +145,8 @@ private fun <T : Comparable<T>, R : Comparable<R>> ClosedRange<T>.map(block: (T)
     return start..endInclusive
 }
 
-private fun ClosedRange<Float>.requirePositiveIncreasing(name: String) {
-    require(start > 0f) {
+private fun <T> ClosedRange<T>.requirePositiveIncreasing(name: String) where T : Comparable<T>, T : Number {
+    require(start.toDouble() > 0.0) {
         "$name ($this) must be increasing"
     }
     require(start <= endInclusive) {
@@ -164,8 +154,8 @@ private fun ClosedRange<Float>.requirePositiveIncreasing(name: String) {
     }
 }
 
-private fun Float.requirePositive(name: String) {
-    require(this > 0f) {
+private fun <T : Number> T.requirePositive(name: String) {
+    require(this.toDouble() > 0.0) {
         "$name ($this) must be positive"
     }
 }
@@ -176,11 +166,11 @@ private fun Float.requireRatio(name: String) {
     }
 }
 
-private fun ColorRange.random(): Color {
+private fun ColorRange.random(random: Random): Color {
     val startHsl = start.toHsl()
     val endHsl = endInclusive.toHsl()
     val hsl = FloatArray(3)
-    ColorUtils.blendHSL(startHsl, endHsl, Random.nextFloat(), hsl)
+    ColorUtils.blendHSL(startHsl, endHsl, random.nextFloat(), hsl)
     val colorInt = ColorUtils.HSLToColor(hsl)
     return Color(colorInt)
 }
@@ -202,15 +192,15 @@ private val BoxWithConstraintsScope.canvasWidth: Int
 private val BoxWithConstraintsScope.canvasHeight: Int
     get() = constraints.maxHeight
 
-private fun ClosedRange<Float>.random(): Float {
+private fun ClosedRange<Float>.random(random: Random): Float {
     val delta = endInclusive - start
-    return start + (Random.nextFloat() * delta)
+    return start + (random.nextFloat() * delta)
 }
 
 private fun DrawScope.draw(line: Line) = with(line) {
     val steps = arrayOf(
         0f to Color.Transparent,
-        0.5f to color.copy(alpha = getAlpha(ageSeconds, ttlSeconds)),
+        0.5f to color.copy(alpha = getAlpha(ageMillis, ttlMillis)),
         1f to Color.Transparent,
     )
     val startY = y - (height / 2)
@@ -223,7 +213,7 @@ private fun DrawScope.draw(line: Line) = with(line) {
     drawLine(brush, start = Offset(x, startY), end = Offset(x, endY), width)
 }
 
-private fun getAlpha(age: Float, ttl: Float): Float {
+private fun getAlpha(age: Long, ttl: Long): Float {
     val hm = 0.5f * ttl
     return abs((age + hm) % ttl - hm) / hm
 }
@@ -234,6 +224,6 @@ private data class Line(
     val width: Float,
     val height: Float,
     val color: Color,
-    val ttlSeconds: Float,
-    val ageSeconds: Float,
+    val ttlMillis: Long,
+    val ageMillis: Long,
 )
