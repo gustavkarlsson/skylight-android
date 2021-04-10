@@ -16,6 +16,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -29,8 +30,8 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.rangeTo
 @Composable
 fun Aurora(
     modifier: Modifier = Modifier,
-    @FloatRange(from = 0.0) linesPerDp: Float = 0.1f,
-    lineWidthRange: ClosedRange<Dp> = 8.dp..12.dp,
+    @FloatRange(from = 0.0) linesPerDp: Float = 0.2f,
+    lineWidthRange: ClosedRange<Dp> = 30.dp..120.dp,
     @FloatRange(from = 0.0, to = 1.0) lineYRandomness: Float = 0.4f,
     @FloatRange(from = 0.0, to = 1.0) minLineHeightRatio: Float = 0.4f,
     colorRange: ColorRange = Color(0xFF4CFFA6)..Color(0xFF4CBFA6),
@@ -191,18 +192,28 @@ private fun ClosedRange<Float>.random(random: Random): Float {
 // FIXME use scale or other transform in combination with radial gradient and draw a rect instead
 private fun DrawScope.draw(line: Line) = with(line) {
     val steps = arrayOf(
-        0f to Color.Transparent,
-        0.5f to color.copy(alpha = color.alpha * fadeInOut(age)),
+        0f to color.copy(alpha = color.alpha * fadeInOut(age)),
         1f to Color.Transparent,
     )
-    val startY = y - (height / 2)
-    val endY = y + (height / 2)
-    val brush = Brush.verticalGradient(
+    val higherThanWide = height > width
+    val (smallestDimension, largestDimension) = if (higherThanWide) {
+        width to height
+    } else height to width
+    val (scaleY, scaleX) = if (higherThanWide) {
+        height / width to 1.0f
+    } else 1.0f to width / height
+    val scale = if (scaleX > scaleY) scaleX else scaleY
+
+    val startY = y - ((height / 2) / scale)
+    val endY = y + ((height / 2) / scale)
+    val brush = Brush.radialGradient(
         *steps,
-        startY = startY,
-        endY = endY,
+        center = Offset(x, y),
+        radius = smallestDimension / 2,
     )
-    drawLine(brush, start = Offset(x, startY), end = Offset(x, endY), width)
+    scale(scaleX, scaleY, Offset(x, y)) {
+        drawLine(brush, start = Offset(x, startY), end = Offset(x, endY), width / scaleX)
+    }
 }
 
 private fun fadeInOut(age: Float): Float {
