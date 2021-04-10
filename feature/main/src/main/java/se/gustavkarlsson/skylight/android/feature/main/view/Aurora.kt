@@ -30,7 +30,7 @@ fun Aurora() {
     BoxWithConstraints(Modifier.fillMaxSize()) {
         var lines by remember {
             val lineCount = canvasWidth / minLineWidth.toInt()
-            val list = List(lineCount) { createLine() }
+            val list = List(lineCount) { createLine(startAtAgeZero = false) }
             mutableStateOf(list)
         }
         Canvas(Modifier.fillMaxSize()) {
@@ -39,7 +39,7 @@ fun Aurora() {
             }
             val updatedLines = lines.map { line ->
                 if (line.age > line.ttl) {
-                    createLine()
+                    createLine(startAtAgeZero = true)
                 } else {
                     line.copy(age = line.age + 1)
                 }
@@ -49,19 +49,21 @@ fun Aurora() {
     }
 }
 
-private fun BoxWithConstraintsScope.createLine(): Line {
+private fun BoxWithConstraintsScope.createLine(startAtAgeZero: Boolean): Line {
     val random = Random.Default
     val yVariance = (canvasHeight * 0.4f)
     val minLineHeight = (canvasHeight * 0.4f)
     val maxLineHeight = (canvasHeight - (yVariance / 2))
     val colorHsl = floatArrayOf(validHue.random(), 1f, 0.65f)
+    val ttl = validTtl.random()
     return Line(
         x = (0..canvasWidth).random().toFloat(),
         y = (canvasHeight / 2) - (yVariance / 2) + (random.nextFloat() * yVariance),
         width = validLineWidth.random(),
         height = (minLineHeight..maxLineHeight).random(),
         color = Color(ColorUtils.HSLToColor(colorHsl)),
-        ttl = validTtl.random()
+        ttl = ttl,
+        age = if (startAtAgeZero) 0 else (0..ttl).random(),
     )
 }
 
