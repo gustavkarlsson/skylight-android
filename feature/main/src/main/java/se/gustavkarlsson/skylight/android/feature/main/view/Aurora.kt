@@ -27,12 +27,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import androidx.core.graphics.ColorUtils
 import kotlin.math.abs
-import kotlin.math.roundToInt
 import kotlin.random.Random
 
-
-private const val FALLBACK_REFRESH_RATE = 60
-private const val MAX_HUE = 360f
+private const val DEFAULT_REFRESH_RATE = 60
 
 @Composable
 fun Aurora() {
@@ -40,8 +37,7 @@ fun Aurora() {
         val frameTime = FrameTime
         val factory = LineFactory(canvasWidth.toFloat(), canvasHeight.toFloat(), LocalDensity.current)
         var lines by remember {
-            val lineCount = canvasWidth / 10
-            val lines = List(lineCount) { factory.createLine(randomizeAge = true) }
+            val lines = factory.createInitialLines()
             mutableStateOf(lines)
         }
         Canvas(Modifier.fillMaxSize()) {
@@ -50,9 +46,9 @@ fun Aurora() {
             }
             val newLines = lines.map { line ->
                 if (line.ageSeconds > line.ttlSeconds) {
-                    factory.createLine(randomizeAge = false)
+                    factory.createNewLine()
                 } else {
-                    line.copy(ageSeconds = line.ageSeconds + frameTime)
+                    line.addTime(frameTime)
                 }
             }
             lines = newLines
@@ -60,20 +56,26 @@ fun Aurora() {
     }
 }
 
+private fun Line.addTime(frameTime: Float): Line = copy(ageSeconds = ageSeconds + frameTime)
+
 private class LineFactory(
     canvasWidth: Float,
     canvasHeight: Float,
     density: Density,
+    @FloatRange(from = 0.0) linesPerDp: Float = 0.1f,
     minLineWidthDp: Dp = 8.dp,
     maxLineWidthDp: Dp = 12.dp,
     @FloatRange(from = 0.0, to = 1.0) yRandomness: Float = 0.4f,
     @FloatRange(from = 0.0, to = 1.0) minHeightRatio: Float = 0.4f,
-    private val color: Color = Color(0xFF4CFFA6),
-    @FloatRange(from = 0.0, to = 1.0) private val hueRandomness: Float = 0.15f,
+    color1: Color = Color(0xFF4CFFA6),
+    color2: Color = Color(0xFF4CBFA6),
     @FloatRange(from = 0.0) minTtlSeconds: Float = 2f,
     @FloatRange(from = 0.0) maxTtlSeconds: Float = 8f,
 ) {
     init {
+        require(linesPerDp > 0f) {
+            "linesPerDp ($linesPerDp) must be positive"
+        }
         require(minLineWidthDp >= 0.dp) {
             "minLineWidthDp ($minLineWidthDp) must be non-negative"
         }
@@ -86,9 +88,6 @@ private class LineFactory(
         require(minHeightRatio in VALID_RATIO) {
             "minHeightRatio ($minHeightRatio) must be in $VALID_RATIO"
         }
-        require(hueRandomness in VALID_RATIO) {
-            "hueRandomness ($hueRandomness) must be in $VALID_RATIO"
-        }
         require(minTtlSeconds > 0f) {
             "minTtlSeconds ($minTtlSeconds) must be positive"
         }
@@ -97,6 +96,10 @@ private class LineFactory(
         }
     }
 
+    private val lineCount = with(density) {
+        val widthDp = canvasWidth.toDp()
+        (linesPerDp * widthDp.value).toInt()
+    }
     private val xRange = 0f..canvasWidth
     private val yRange = let {
         val center = canvasHeight / 2
@@ -116,16 +119,21 @@ private class LineFactory(
         val maxLineHeight = (canvasHeight - (this.yRandomness / 2))
         minLineHeight..maxLineHeight
     }
+    private val colorRange = color1..color2
     private val ttlSecondsRange = minTtlSeconds..maxTtlSeconds
 
-    fun createLine(randomizeAge: Boolean): Line {
+    fun createInitialLines(): List<Line> = List(lineCount) { createLine(randomizeAge = true) }
+
+    fun createNewLine(): Line = createLine(randomizeAge = false)
+
+    private fun createLine(randomizeAge: Boolean): Line {
         val ttlSeconds = ttlSecondsRange.random()
         return Line(
             x = xRange.random(),
             y = yRange.random(),
             width = widthRange.random(),
             height = heightRange.random(),
-            color = color.randomizeHue(hueRandomness),
+            color = colorRange.random(),
             ttlSeconds = ttlSeconds,
             ageSeconds = if (randomizeAge) (0f..ttlSeconds).random() else 0f,
         )
@@ -136,11 +144,37 @@ private class LineFactory(
     }
 }
 
+private operator fun Color.rangeTo(that: Color): ColorRange {
+    return ColorRange(this, that)
+}
+
+private data class ColorRange(val start: Color, val endInclusive: Color)
+
+private fun ColorRange.random(): Color {
+    val startHsl = start.toHsl()
+    val endHsl = endInclusive.toHsl()
+    val hsl = FloatArray(3)
+    ColorUtils.blendHSL(startHsl, endHsl, Random.nextFloat(), hsl)
+    val colorInt = ColorUtils.HSLToColor(hsl)
+    return Color(colorInt)
+}
+
+private fun Color.toHsl(): FloatArray {
+    val hsl = FloatArray(3)
+    ColorUtils.RGBToHSL(
+        (red * 255).toInt(),
+        (green * 255).toInt(),
+        (blue * 255).toInt(),
+        hsl,
+    )
+    return hsl
+}
+
 private val FrameTime: Float
     @Composable
     get() {
         val context = LocalContext.current
-        val refreshRate = context.displayCompat?.refreshRate?.roundToInt() ?: FALLBACK_REFRESH_RATE
+        val refreshRate = context.displayCompat?.refreshRate?.toInt() ?: DEFAULT_REFRESH_RATE
         return 1f / refreshRate
     }
 
@@ -161,22 +195,6 @@ private val BoxWithConstraintsScope.canvasHeight: Int
 private fun ClosedFloatingPointRange<Float>.random(): Float {
     val delta = endInclusive - start
     return start + (Random.nextFloat() * delta)
-}
-
-private fun Color.randomizeHue(randomness: Float): Color {
-    val inHsl = FloatArray(3)
-    ColorUtils.RGBToHSL(
-        (red * 255).roundToInt(),
-        (green * 255).roundToInt(),
-        (blue * 255).roundToInt(),
-        inHsl,
-    )
-    val hueDelta = (randomness * MAX_HUE) / 2
-    val validHue = (inHsl[0] - hueDelta)..(inHsl[0] + hueDelta)
-    val outHsl = inHsl.copyOf()
-    inHsl[0] = validHue.random() % MAX_HUE
-    val colorInt = ColorUtils.HSLToColor(outHsl)
-    return Color(colorInt)
 }
 
 private fun DrawScope.draw(line: Line) = with(line) {
