@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import kotlin.math.abs
+import kotlin.math.min
 import kotlin.random.Random
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ColorRange
 import se.gustavkarlsson.skylight.android.lib.ui.compose.rangeTo
@@ -33,7 +34,7 @@ fun Aurora(
     modifier: Modifier = Modifier,
     lineDistance: Dp = 5.dp,
     lineWidthDps: ClosedRange<Dp> = 40.dp..80.dp,
-    @FloatRange(from = 0.0, to = 1.0) altitudeVariation: Float = 0.3f, // FIXME non-zero values can cause lines to render outside of canvas
+    @FloatRange(from = 0.0, to = 1.0) altitudeVariation: Float = 0.3f,
     @FloatRange(from = 0.0, to = 1.0) angleVariation: Float = 0.1f,
     @FloatRange(from = 0.0, to = 1.0) heightVariation: Float = 0.6f,
     colors: ColorRange = Color(0xFF4CFF86)..Color(0xFF4CBFA6),
@@ -77,13 +78,13 @@ private fun EveryFrame(
 
 private class Renderer(
     canvasWidth: Float,
-    canvasHeight: Float,
+    private val canvasHeight: Float,
     density: Density,
     distance: Dp,
     widthDps: ClosedRange<Dp>,
     altitudeVariation: Float,
     angleVariation: Float,
-    heightVariation: Float,
+    private val heightVariation: Float,
     private val colors: ColorRange,
     private val ttlMillis: LongRange,
 ) {
@@ -111,11 +112,6 @@ private class Renderer(
     private val widths: ClosedRange<Float> = with(density) {
         widthDps.map { it.toPx() }
     }
-    private val heights: ClosedRange<Float> = let {
-        val minHeight = (canvasHeight * (1 - heightVariation))
-        val maxHeight = yRange.start * 2
-        minHeight..maxHeight
-    }
     private val angles: ClosedRange<Float> = let {
         val offset = angleVariation * 90f
         -offset..offset
@@ -127,15 +123,26 @@ private class Renderer(
         val generation = timeMillis / ttlMillis
         val instanceSeed = 31 * index + generation
         val instanceRandom = Random(instanceSeed)
+        val y = yRange.random(instanceRandom)
+        val heights: ClosedRange<Float> = createHeights(y)
         return Line(
             x = xRange.random(instanceRandom),
-            y = yRange.random(instanceRandom),
+            y = y,
             width = widths.random(instanceRandom),
             height = heights.random(instanceRandom),
             angle = angles.random(instanceRandom),
             color = colors.random(instanceRandom),
             age = (timeMillis % ttlMillis).toFloat() / ttlMillis,
         )
+    }
+
+    private fun createHeights(y: Float): ClosedRange<Float> {
+        val maxHeightBottom = y * 2
+        val maxHeightTop = (canvasHeight - y) * 2
+        val maxHeight = min(maxHeightBottom, maxHeightTop)
+        val minHeightWhenCentered = (canvasHeight * (1 - heightVariation))
+        val minHeight = minHeightWhenCentered.coerceAtMost(maxHeight)
+        return (minHeight..maxHeight)
     }
 
     fun render(scope: DrawScope, timeMillis: Long) {
