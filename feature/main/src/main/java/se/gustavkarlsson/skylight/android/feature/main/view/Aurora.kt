@@ -16,6 +16,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
@@ -30,24 +31,26 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.rangeTo
 @Composable
 fun Aurora(
     modifier: Modifier = Modifier,
-    @FloatRange(from = 0.0) linesPerDp: Float = 0.2f,
-    lineWidthRange: ClosedRange<Dp> = 30.dp..80.dp,
-    @FloatRange(from = 0.0, to = 1.0) lineYRandomness: Float = 0.4f,
-    @FloatRange(from = 0.0, to = 1.0) minLineHeightRatio: Float = 0.4f,
-    colorRange: ColorRange = Color(0xFF4CFFA6)..Color(0xFF4CBFA6),
-    lineTtlMillisRange: LongRange = 2000L..8000L,
+    lineDistance: Dp = 5.dp,
+    lineWidthDps: ClosedRange<Dp> = 40.dp..80.dp,
+    @FloatRange(from = 0.0, to = 1.0) altitudeVariation: Float = 0.4f, // FIXME non-zero values can cause lines to render outside of canvas
+    @FloatRange(from = 0.0, to = 1.0) angleVariation: Float = 0.1f,
+    @FloatRange(from = 0.0, to = 1.0) minHeightRatio: Float = 0.4f,
+    colors: ColorRange = Color(0xFF4CFF86)..Color(0xFF4CBFA6),
+    ttlMillis: LongRange = 2000L..8000L,
 ) {
     BoxWithConstraints(modifier.fillMaxSize()) {
         val renderer = Renderer(
             canvasWidth = constraints.maxWidth.toFloat(),
             canvasHeight = constraints.maxHeight.toFloat(),
             density = LocalDensity.current,
-            countPerDp = linesPerDp,
-            widthDpRange = lineWidthRange,
-            yRandomness = lineYRandomness,
-            minHeightRatio = minLineHeightRatio,
-            colorRange = colorRange,
-            ttlMillisRange = lineTtlMillisRange,
+            distance = lineDistance,
+            widthDps = lineWidthDps,
+            altitudeVariation = altitudeVariation,
+            angleVariation = angleVariation,
+            minHeightRatio = minHeightRatio,
+            colors = colors,
+            ttlMillis = ttlMillis,
         )
         EveryFrame { frameMillis ->
             Canvas(Modifier.fillMaxSize()) {
@@ -76,54 +79,61 @@ private class Renderer(
     canvasWidth: Float,
     canvasHeight: Float,
     density: Density,
-    countPerDp: Float,
-    widthDpRange: ClosedRange<Dp>,
-    yRandomness: Float,
+    distance: Dp,
+    widthDps: ClosedRange<Dp>,
+    altitudeVariation: Float,
+    angleVariation: Float,
     minHeightRatio: Float,
-    private val colorRange: ColorRange,
-    private val ttlMillisRange: LongRange,
+    private val colors: ColorRange,
+    private val ttlMillis: LongRange,
 ) {
     init {
-        countPerDp.requirePositive("countPerDp")
-        widthDpRange.map { it.value }.requirePositiveAndAscending("widthDpRange")
-        yRandomness.requireRatio("yRandomness")
+        distance.value.requirePositive("distance")
+        widthDps.map { it.value }.requirePositiveAndAscending("widthDps")
+        altitudeVariation.requireRatio("altitudeVariation")
+        angleVariation.requireRatio("angleVariation")
         minHeightRatio.requireRatio("minHeightRatio")
-        ttlMillisRange.requirePositiveAndAscending("ttlMillisRange")
+        ttlMillis.requirePositiveAndAscending("ttlMillis")
     }
 
-    private val count = with(density) {
+    private val count: Int = with(density) {
         val widthDp = canvasWidth.toDp()
-        (countPerDp * widthDp.value).toInt()
+        (widthDp / distance).toInt()
     }
-    private val xRange = 0f..canvasWidth
-    private val yRange = let {
+    private val xRange: ClosedRange<Float> = 0f..canvasWidth
+    private val yRange: ClosedRange<Float> = let {
         val center = canvasHeight / 2
-        val delta = (canvasHeight * yRandomness) / 2
+        val delta = (canvasHeight * altitudeVariation) / 2
         val min = center - delta
         val max = center + delta
         min..max
     }
-    private val widthRange = with(density) {
-        widthDpRange.map { it.toPx() }
+    private val widths: ClosedRange<Float> = with(density) {
+        widthDps.map { it.toPx() }
     }
-    private val heightRange = let {
+    private val heights: ClosedRange<Float> = let {
         val minHeight = (canvasHeight * minHeightRatio)
-        val maxHeight = (canvasHeight - ((canvasHeight * yRandomness) / 2))
+        val maxHeight = (canvasHeight - ((canvasHeight * altitudeVariation) / 2))
         minHeight..maxHeight
+    }
+    private val angles: ClosedRange<Float> = let {
+        val offset = angleVariation * 90f
+        -offset..offset
     }
 
     private fun createLine(index: Int, timeMillis: Long): Line {
         val indexRandom = Random(index)
-        val ttlMillis = ttlMillisRange.random(indexRandom)
+        val ttlMillis = ttlMillis.random(indexRandom)
         val generation = timeMillis / ttlMillis
         val instanceSeed = 31 * index + generation
         val instanceRandom = Random(instanceSeed)
         return Line(
             x = xRange.random(instanceRandom),
             y = yRange.random(instanceRandom),
-            width = widthRange.random(instanceRandom),
-            height = heightRange.random(instanceRandom),
-            color = colorRange.random(instanceRandom),
+            width = widths.random(instanceRandom),
+            height = heights.random(instanceRandom),
+            angle = angles.random(instanceRandom),
+            color = colors.random(instanceRandom),
             age = (timeMillis % ttlMillis).toFloat() / ttlMillis,
         )
     }
@@ -199,16 +209,18 @@ private fun DrawScope.draw(line: Line) = with(line) {
     val (scaleY, scaleX) = if (higherThanWide) {
         (height / width) to 1.0f
     } else 1.0f to (width / height)
-    val downScaledStartY = y - ((height / 2) / scaleY) // FIXME check if dividing is right
-    val downScaledEndY = y + ((height / 2) / scaleY) // FIXME check if dividing is right
-    val downScaledWidth = width / scaleX // FIXME check if dividing is right
+    val downScaledStartY = y - ((height / 2) / scaleY)
+    val downScaledEndY = y + ((height / 2) / scaleY)
+    val downScaledWidth = width / scaleX
     val brush = Brush.radialGradient(
         *steps,
         center = Offset(x, y),
         radius = smallestDimension / 2,
     )
-    scale(scaleX, scaleY, Offset(x, y)) {
-        drawLine(brush, start = Offset(x, downScaledStartY), end = Offset(x, downScaledEndY), downScaledWidth)
+    rotate(angle) {
+        scale(scaleX, scaleY, Offset(x, y)) {
+            drawLine(brush, start = Offset(x, downScaledStartY), end = Offset(x, downScaledEndY), downScaledWidth)
+        }
     }
 }
 
@@ -221,6 +233,7 @@ private data class Line(
     val y: Float,
     val width: Float,
     val height: Float,
+    val angle: Float,
     val color: Color,
     val age: Float,
 )
