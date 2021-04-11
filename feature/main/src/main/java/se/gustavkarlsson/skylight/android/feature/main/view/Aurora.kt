@@ -113,7 +113,7 @@ private class Renderer(
     }
     private val heights: ClosedRange<Float> = let {
         val minHeight = (canvasHeight * (1 - heightVariation))
-        val maxHeight = (canvasHeight - ((canvasHeight * altitudeVariation) / 2))
+        val maxHeight = yRange.start * 2
         minHeight..maxHeight
     }
     private val angles: ClosedRange<Float> = let {
