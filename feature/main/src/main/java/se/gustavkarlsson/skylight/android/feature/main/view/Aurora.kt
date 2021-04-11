@@ -33,9 +33,9 @@ fun Aurora(
     modifier: Modifier = Modifier,
     lineDistance: Dp = 5.dp,
     lineWidthDps: ClosedRange<Dp> = 40.dp..80.dp,
-    @FloatRange(from = 0.0, to = 1.0) altitudeVariation: Float = 0.4f, // FIXME non-zero values can cause lines to render outside of canvas
+    @FloatRange(from = 0.0, to = 1.0) altitudeVariation: Float = 0.3f, // FIXME non-zero values can cause lines to render outside of canvas
     @FloatRange(from = 0.0, to = 1.0) angleVariation: Float = 0.1f,
-    @FloatRange(from = 0.0, to = 1.0) minHeightRatio: Float = 0.4f,
+    @FloatRange(from = 0.0, to = 1.0) heightVariation: Float = 0.6f,
     colors: ColorRange = Color(0xFF4CFF86)..Color(0xFF4CBFA6),
     ttlMillis: LongRange = 2000L..8000L,
 ) {
@@ -48,7 +48,7 @@ fun Aurora(
             widthDps = lineWidthDps,
             altitudeVariation = altitudeVariation,
             angleVariation = angleVariation,
-            minHeightRatio = minHeightRatio,
+            heightVariation = heightVariation,
             colors = colors,
             ttlMillis = ttlMillis,
         )
@@ -83,7 +83,7 @@ private class Renderer(
     widthDps: ClosedRange<Dp>,
     altitudeVariation: Float,
     angleVariation: Float,
-    minHeightRatio: Float,
+    heightVariation: Float,
     private val colors: ColorRange,
     private val ttlMillis: LongRange,
 ) {
@@ -92,7 +92,7 @@ private class Renderer(
         widthDps.map { it.value }.requirePositiveAndAscending("widthDps")
         altitudeVariation.requireRatio("altitudeVariation")
         angleVariation.requireRatio("angleVariation")
-        minHeightRatio.requireRatio("minHeightRatio")
+        heightVariation.requireRatio("heightVariation")
         ttlMillis.requirePositiveAndAscending("ttlMillis")
     }
 
@@ -112,7 +112,7 @@ private class Renderer(
         widthDps.map { it.toPx() }
     }
     private val heights: ClosedRange<Float> = let {
-        val minHeight = (canvasHeight * minHeightRatio)
+        val minHeight = (canvasHeight * (1 - heightVariation))
         val maxHeight = (canvasHeight - ((canvasHeight * altitudeVariation) / 2))
         minHeight..maxHeight
     }
