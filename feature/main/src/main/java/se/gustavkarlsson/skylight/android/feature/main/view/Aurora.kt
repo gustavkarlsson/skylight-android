@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
@@ -181,24 +182,10 @@ private fun <T : Number> T.requireRatio(name: String) {
 }
 
 private fun ColorRange.random(random: Random): Color {
-    val startHsl = start.toHsl()
-    val endHsl = endInclusive.toHsl()
-    val outHsl = FloatArray(3)
-    ColorUtils.blendHSL(startHsl, endHsl, random.nextFloat(), outHsl)
-    val colorInt = ColorUtils.HSLToColor(outHsl)
-    val newAlpha = (start.alpha + endInclusive.alpha) / 2
-    return Color(colorInt).copy(alpha = newAlpha)
-}
-
-private fun Color.toHsl(): FloatArray {
-    val hsl = FloatArray(3)
-    ColorUtils.RGBToHSL(
-        (red * 255).toInt(),
-        (green * 255).toInt(),
-        (blue * 255).toInt(),
-        hsl,
-    )
-    return hsl
+    val startArgb = start.toArgb()
+    val endArgb = endInclusive.toArgb()
+    val colorInt = ColorUtils.blendARGB(startArgb, endArgb, random.nextFloat())
+    return Color(colorInt)
 }
 
 private fun ClosedRange<Float>.random(random: Random): Float {
