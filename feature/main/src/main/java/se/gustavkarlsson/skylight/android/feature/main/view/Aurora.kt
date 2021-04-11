@@ -211,7 +211,7 @@ private fun DrawScope.draw(line: Line) = with(line) {
         center = Offset(x, y),
         radius = smallestDimension / 2,
     )
-    rotate(angle) {
+    rotate(angle, Offset(x, y)) {
         scale(scaleX, scaleY, Offset(x, y)) {
             drawLine(brush, start = Offset(x, downScaledStartY), end = Offset(x, downScaledEndY), downScaledWidth)
         }
