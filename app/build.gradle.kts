@@ -1,3 +1,4 @@
+import com.android.build.gradle.AppExtension
 import pl.allegro.tech.build.axion.release.domain.TagNameSerializationConfig
 
 plugins {
@@ -31,6 +32,7 @@ android {
 
     defaultConfig {
         applicationId = "se.gustavkarlsson.skylight.android"
+        targetSdk = Versions.targetSdk
         versionCode = generateVersionCode(scmVersion.version)
         versionName = scmVersion.version
     }
@@ -49,12 +51,13 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
             signingConfig = signingConfigs["release"]
+            proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))
         }
 
         getByName("debug")
     }
 
-    flavorDimensions("environment")
+    flavorDimensions += "environment"
 
     productFlavors {
         create("production") {
@@ -70,19 +73,21 @@ android {
         }
     }
 
-    applicationVariants.all {
-        val isProductionRelease = buildType.name == "release" && flavorName == "production"
-        val manifestAName = buildString {
-            if (isProductionRelease) {
-                append(APP_NAME)
-            } else {
-                append(APP_INITIALS)
-                append(' ')
-                append(flavorName.take(3).capitalize())
-                append(buildType.name.take(3).capitalize())
+    if (this is AppExtension) { // TODO Remove the need for this. It's dumb
+        applicationVariants.all {
+            val isProductionRelease = buildType.name == "release" && flavorName == "production"
+            val manifestAName = buildString {
+                if (isProductionRelease) {
+                    append(APP_NAME)
+                } else {
+                    append(APP_INITIALS)
+                    append(' ')
+                    append(flavorName.take(3).capitalize())
+                    append(buildType.name.take(3).capitalize())
+                }
             }
+            resValue("string", "app_name_manifest", manifestAName)
         }
-        resValue("string", "app_name_manifest", manifestAName)
     }
 }
 

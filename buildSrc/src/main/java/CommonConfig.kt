@@ -1,9 +1,7 @@
-import com.android.build.gradle.AppExtension
-import com.android.build.gradle.BaseExtension
-import com.android.build.gradle.LibraryExtension
+import com.android.build.api.dsl.CommonExtension
 
-fun BaseExtension.commonConfig() {
-    compileSdkVersion(Versions.compileSdk)
+fun CommonExtension<*, *, *, *>.commonConfig() {
+    compileSdk = Versions.compileSdk
 
     packagingOptions {
         resources.excludes += "META-INF/LICENSE"
@@ -22,22 +20,14 @@ fun BaseExtension.commonConfig() {
     }
 
     defaultConfig {
-        minSdkVersion(Versions.minSdk)
-        targetSdkVersion(Versions.targetSdk)
+        minSdk = Versions.minSdk
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArgument("clearPackageData", "true")
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
     }
 
     buildTypes {
         getByName("release") {
-            when (this@commonConfig) {
-                is AppExtension -> {
-                    proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-                }
-                is LibraryExtension -> {
-                    consumerProguardFiles("proguard-rules.pro")
-                }
-            }
+            proguardFile("proguard-rules.pro")
         }
     }
 }

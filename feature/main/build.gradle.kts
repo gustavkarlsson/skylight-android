@@ -9,16 +9,16 @@ android {
     commonConfig()
     composeConfig()
 
-    flavorDimensions("environment")
+    flavorDimensions += "environment"
 
     productFlavors {
         create("production") {
-            dimension("environment")
+            dimension = "environment"
             buildConfigField("boolean", "DEVELOP", "false")
         }
 
         create("develop") {
-            dimension("environment")
+            dimension = "environment"
             buildConfigField("boolean", "DEVELOP", "true")
         }
     }
