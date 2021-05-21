@@ -39,11 +39,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import com.ioki.textref.TextRef
 import java.util.Locale
@@ -346,54 +344,26 @@ private fun Card(
             .animateContentSize()
             .clickable(onClick = onClick),
     ) {
-        val titleId = "title"
-        val valueTextId = "valueText"
-        val progressIndicatorId = "progressIndicator"
-        val descriptionId = "description"
-        val errorId = "error"
-        val constraintSet = ConstraintSet {
-            val title = createRefFor(titleId)
-            val valueText = createRefFor(valueTextId)
-            val progressIndicator = createRefFor(progressIndicatorId)
-            val description = createRefFor(descriptionId)
-            val error = createRefFor(errorId)
-
-            constrain(title) {
-                linkTo(start = parent.start, top = parent.top, end = valueText.start, bottom = description.top)
-                width = Dimension.percent(0.35f)
-            }
-            constrain(valueText) {
-                linkTo(start = title.end, end = progressIndicator.start)
-                centerVerticallyTo(title)
-                width = Dimension.percent(0.35f)
-            }
-            constrain(progressIndicator) {
-                linkTo(start = valueText.end, end = parent.end)
-                centerVerticallyTo(title)
-                width = Dimension.percent(0.30f)
-            }
-            constrain(description) {
-                linkTo(start = parent.start, top = title.bottom, end = parent.end, bottom = error.top)
-                width = Dimension.fillToConstraints
-            }
-            constrain(error) {
-                linkTo(start = parent.start, top = description.bottom, end = parent.end, bottom = parent.bottom)
-                width = Dimension.fillToConstraints
-            }
-        }
         ConstraintLayout(
             modifier = Modifier.padding(16.dp),
-            constraintSet = constraintSet,
         ) {
+            val (title, valueText, progressIndicator, description, error) = createRefs()
             Text(
-                modifier = Modifier.layoutId(titleId),
+                modifier = Modifier.constrainAs(title) {
+                    linkTo(start = parent.start, top = parent.top, end = valueText.start, bottom = description.top)
+                    width = Dimension.percent(0.35f)
+                },
                 text = textRef(item.title),
                 style = Typography.body1,
             )
 
             val getValueTextColor = item.valueTextColor
             Text(
-                modifier = Modifier.layoutId(valueTextId),
+                modifier = Modifier.constrainAs(valueText) {
+                    linkTo(start = title.end, end = progressIndicator.start)
+                    centerVerticallyTo(title)
+                    width = Dimension.percent(0.35f)
+                },
                 text = textRef(item.valueText),
                 color = Colors.getValueTextColor(),
                 style = Typography.body1,
@@ -407,11 +377,20 @@ private fun Card(
             )
             val renderProgress = if (actualProgress == null) null else animatedProgress
             MultiColorLinearProgressIndicator(
-                modifier = Modifier.layoutId(progressIndicatorId),
+                modifier = Modifier.constrainAs(progressIndicator) {
+                    linkTo(start = valueText.end, end = parent.end)
+                    centerVerticallyTo(title)
+                    width = Dimension.percent(0.30f)
+                },
                 progress = renderProgress,
             )
 
-            Box(modifier = Modifier.layoutId(descriptionId)) {
+            Box(
+                modifier = Modifier.constrainAs(description) {
+                    linkTo(start = parent.start, top = title.bottom, end = parent.end, bottom = error.top)
+                    width = Dimension.fillToConstraints
+                },
+            ) {
                 if (expanded) {
                     Text(
                         modifier = Modifier.padding(top = 8.dp),
@@ -421,7 +400,12 @@ private fun Card(
                 }
             }
 
-            Box(modifier = Modifier.layoutId(errorId)) {
+            Box(
+                modifier = Modifier.constrainAs(error) {
+                    linkTo(start = parent.start, top = description.bottom, end = parent.end, bottom = parent.bottom)
+                    width = Dimension.fillToConstraints
+                },
+            ) {
                 if (expanded && item.errorText != null) {
                     Text(
                         modifier = Modifier.padding(top = 8.dp),
