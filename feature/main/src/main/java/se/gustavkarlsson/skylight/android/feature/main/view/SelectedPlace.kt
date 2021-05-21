@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -65,15 +64,24 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 @Composable
 private fun PreviewSelectedPlace() {
     SelectedPlace(
-        modifier = Modifier,
+        modifier = Modifier.fillMaxSize(),
         state = ViewState(
-            toolbarTitleName = TextRef.EMPTY,
-            chanceLevelText = TextRef.EMPTY,
-            chanceSubtitleText = TextRef.EMPTY,
+            toolbarTitleName = TextRef.string("Title"),
+            chanceLevelText = TextRef.string("What chance?"),
+            chanceSubtitleText = TextRef.string("subtitle"),
             errorBannerData = null,
             notificationsButtonState = ToggleButtonState.Enabled(checked = false),
             favoriteButtonState = ToggleButtonState.Enabled(checked = true),
-            factorItems = emptyList(),
+            factorItems = listOf(
+                FactorItem(
+                    title = TextRef.string("Factor 1"),
+                    valueText = TextRef.string("High"),
+                    descriptionText = TextRef.string("Description..."),
+                    valueTextColor = { primary },
+                    progress = 0.7,
+                    errorText = null,
+                )
+            ),
             search = SearchViewState.Closed,
             onFavoritesClickedEvent = Event.Noop,
             notificationLevelItems = emptyList(),
