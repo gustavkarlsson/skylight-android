@@ -1,12 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -116,20 +111,11 @@ private fun Content(
                 onClick = onPrivacyPolicyClicked,
             )
             Spacer(modifier = Modifier.weight(1f))
-            AnimatedVisibility(
-                visible = true,
-                initiallyVisible = false,
-                enter = slideInVertically(
-                    initialOffsetY = { y -> y },
-                    animationSpec = spring(stiffness = Spring.StiffnessLow),
-                ) + fadeIn(),
-            ) {
-                ExtendedFloatingActionButton(
-                    backgroundColor = Colors.primary,
-                    text = { Text(stringResource(id = R.string.intro_continue)) },
-                    onClick = onContinueClicked,
-                )
-            }
+            ExtendedFloatingActionButton(
+                backgroundColor = Colors.primary,
+                text = { Text(stringResource(id = R.string.intro_continue)) },
+                onClick = onContinueClicked,
+            )
         }
     }
 }

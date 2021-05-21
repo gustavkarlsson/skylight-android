@@ -20,8 +20,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.systemuicontroller.LocalSystemUiController
-import com.google.accompanist.systemuicontroller.rememberAndroidSystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 data class SkylightColors(
     val material: Colors,
@@ -96,10 +95,9 @@ fun SkylightTheme(
     content: @Composable () -> Unit,
 ) {
     val colors = if (darkMode) darkPalette else lightPalette
-    val systemUiController = rememberAndroidSystemUiController()
+    val systemUiController = rememberSystemUiController()
     CompositionLocalProvider(
         LocalColors provides colors,
-        LocalSystemUiController provides systemUiController,
     ) {
         SideEffect {
             systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = !darkMode)

@@ -1,12 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -123,20 +118,11 @@ private fun Content(
             )
             Spacer(modifier = Modifier.weight(1f))
             ErrorSnackbar(errorSnackbarVisible, onErrorSnackbarDismissed)
-            AnimatedVisibility(
-                visible = true,
-                initiallyVisible = false,
-                enter = slideInVertically(
-                    initialOffsetY = { y -> y },
-                    animationSpec = spring(stiffness = Spring.StiffnessLow),
-                ) + fadeIn(),
-            ) {
-                ExtendedFloatingActionButton(
-                    backgroundColor = Colors.primary,
-                    text = { Text(stringResource(id = R.string.google_play_services_install)) },
-                    onClick = onInstallClicked,
-                )
-            }
+            ExtendedFloatingActionButton(
+                backgroundColor = Colors.primary,
+                text = { Text(stringResource(id = R.string.google_play_services_install)) },
+                onClick = onInstallClicked,
+            )
         }
     }
 }

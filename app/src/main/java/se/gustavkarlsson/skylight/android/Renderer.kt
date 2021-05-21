@@ -22,18 +22,12 @@ internal class Renderer(
                 SupervisorJob() + Dispatchers.Main + CoroutineName("viewScope")
             }
             val change by navigator.backstackChanges.collectAsState()
-            /*
-            // FIXME re-enable once bug is fixed: https://github.com/zach-klippenstein/compose-backstack/issues/54
             Backstack(
                 backstack = change.new,
                 transition = CrossFadeZoom,
             ) { screen ->
                 screen.run { activity.Content(scope) }
             }
-             */
-
-            // Temporary fix
-            change.new.lastOrNull()?.run { activity.Content(scope) }
         }
     }
 }
