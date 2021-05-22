@@ -1,0 +1,7 @@
+ALTER TABLE DbTriggerLevel RENAME TO OldDbTriggerLevel;
+CREATE TABLE DbTriggerLevel (
+  placeId INTEGER NOT NULL PRIMARY KEY,
+  levelId INTEGER NOT NULL
+);
+INSERT INTO DbTriggerLevel(placeId, levelId) SELECT placeId, levelIndex FROM OldDbTriggerLevel;
+DROP TABLE OldDbTriggerLevel;

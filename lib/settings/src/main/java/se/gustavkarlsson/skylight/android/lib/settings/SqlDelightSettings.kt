@@ -4,7 +4,6 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
@@ -29,14 +28,13 @@ internal class SqlDelightSettings(
             .mapToOneOrNull(dispatcher)
             .first() != null
 
-        val levelIndex = level.ordinal.toLong()
+        val levelId = level.id
         if (exists)
-            queries.update(levelIndex, placeIdLong)
+            queries.update(levelId, placeIdLong)
         else
-            queries.insert(placeIdLong, levelIndex)
+            queries.insert(placeIdLong, levelId)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override fun streamNotificationTriggerLevels(): Flow<Map<PlaceId, TriggerLevel>> =
         combine(placesRepository.stream(), streamAll()) { places, entries ->
             entries.removeZombies(places)
@@ -44,9 +42,9 @@ internal class SqlDelightSettings(
 
     private fun streamAll(): Flow<Map<PlaceId, TriggerLevel>> {
         return queries
-            .selectAll { id, levelIndex -> // TODO Rename table column to levelId ?
+            .selectAll { id, levelId ->
                 val placeId = PlaceId.fromLong(id)
-                val triggerLevel = triggerLevelFromId(levelIndex)
+                val triggerLevel = triggerLevelFromId(levelId)
                 placeId to triggerLevel
             }
             .asFlow()
@@ -74,3 +72,11 @@ private fun triggerLevelFromId(id: Long): TriggerLevel = when (id) {
         TriggerLevel.NEVER
     }
 }
+
+private val TriggerLevel.id: Long
+    get() = when (this) {
+        TriggerLevel.LOW -> 0
+        TriggerLevel.MEDIUM -> 1
+        TriggerLevel.HIGH -> 2
+        TriggerLevel.NEVER -> 3
+    }
