@@ -8,7 +8,6 @@ import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
 import se.gustavkarlsson.skylight.android.feature.background.FeatureBackgroundModule
 import se.gustavkarlsson.skylight.android.feature.googleplayservices.FeatureGooglePlayServicesModule
 import se.gustavkarlsson.skylight.android.feature.intro.FeatureIntroModule
-import se.gustavkarlsson.skylight.android.feature.settings.FeatureSettingsModule
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
 import se.gustavkarlsson.skylight.android.lib.analytics.LibAnalyticsModule
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
@@ -24,14 +23,13 @@ import se.gustavkarlsson.skylight.android.lib.kpindex.LibKpIndexModule
 import se.gustavkarlsson.skylight.android.lib.location.LibLocationModule
 import se.gustavkarlsson.skylight.android.lib.location.LocationComponent
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
-import se.gustavkarlsson.skylight.android.lib.navigationsetup.LibNavigationSetupModule
-import se.gustavkarlsson.skylight.android.lib.navigationsetup.NavigationSetupComponent
 import se.gustavkarlsson.skylight.android.lib.okhttp.LibOkHttpModule
 import se.gustavkarlsson.skylight.android.lib.permissions.LibPermissionsModule
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.places.LibPlacesModule
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.LibReverseGeocoderModule
+import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoderComponent
 import se.gustavkarlsson.skylight.android.lib.runversion.LibRunVersionModule
 import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.LibScopedServiceModule
@@ -43,6 +41,7 @@ import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.lib.weather.LibWeatherModule
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
 
+// TODO Do all of these actually need to be app scoped!?
 @AppScope
 @Component(
     modules = [
@@ -59,14 +58,12 @@ import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
         LibPlacesModule::class,
         LibReverseGeocoderModule::class,
         LibSettingsModule::class,
-        LibNavigationSetupModule::class,
         LibPermissionsModule::class,
         LibRunVersionModule::class,
         LibScopedServiceModule::class,
         LibAuroraModule::class,
         FeatureGooglePlayServicesModule::class,
         FeatureIntroModule::class,
-        FeatureSettingsModule::class,
         FeatureBackgroundModule::class
     ]
 )
@@ -79,11 +76,11 @@ internal interface ActualAppComponent :
     RunVersionComponent,
     WeatherComponent,
     GeocoderComponent,
+    ReverseGeocoderComponent,
     PlacesComponent,
     LocationComponent,
     AuroraComponent,
     PermissionsComponent,
-    NavigationSetupComponent,
     ScopedServiceComponent,
     NavigationComponent,
     DarknessComponent,

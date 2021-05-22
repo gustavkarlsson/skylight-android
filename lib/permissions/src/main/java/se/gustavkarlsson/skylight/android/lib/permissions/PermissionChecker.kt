@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 interface PermissionChecker {
-    val access: Flow<Access>
+    val permissions: StateFlow<Permissions>
     fun refresh()
 }

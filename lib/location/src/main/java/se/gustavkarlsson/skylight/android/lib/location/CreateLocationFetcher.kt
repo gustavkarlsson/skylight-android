@@ -28,7 +28,6 @@ import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import android.location.Location as AndroidLocation
 import com.google.android.gms.location.LocationResult as GmsLocationResult
 
-@ExperimentalCoroutinesApi
 internal fun createLocationFetcher(
     client: FusedLocationProviderClient,
     looper: Looper,
@@ -44,7 +43,6 @@ internal fun createLocationFetcher(
             .flowOn(dispatcher)
     }
 
-@ExperimentalCoroutinesApi
 private fun lastLocation(client: FusedLocationProviderClient): Flow<LocationResult> =
     flow {
         try {
@@ -76,7 +74,6 @@ private suspend fun FusedLocationProviderClient.awaitIsLocationAvailable(): Bool
 @RequiresPermission(anyOf = ["android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"])
 private suspend fun FusedLocationProviderClient.awaitLastLocation(): Location = lastLocation.await().toLocation()
 
-@ExperimentalCoroutinesApi
 private fun stream(
     client: FusedLocationProviderClient,
     looper: Looper,
@@ -91,7 +88,7 @@ private fun stream(
         } while (true)
     }
 
-@ExperimentalCoroutinesApi
+@OptIn(ExperimentalCoroutinesApi::class)
 private fun streamUntilError(
     client: FusedLocationProviderClient,
     looper: Looper,

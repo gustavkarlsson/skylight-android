@@ -15,14 +15,16 @@ import se.gustavkarlsson.skylight.android.core.utils.seconds
 @Module
 object LibReverseGeocoderModule {
 
-    @ExperimentalCoroutinesApi
-    @FlowPreview
+    @OptIn(
+        FlowPreview::class,
+        ExperimentalCoroutinesApi::class,
+    )
     @Provides
     @Reusable
     internal fun reverseGeocoder(context: Context, @Io dispatcher: CoroutineDispatcher): ReverseGeocoder {
         val fetcher = createAndroidReverseGeocoderFetcher(Geocoder(context), dispatcher)
         val store = StoreBuilder.from(fetcher)
             .build()
-        return StoreReverseGeocoder(store, retryDelay = 10.seconds)
+        return StoreReverseGeocoder(store, retryDelay = 10.seconds, approximationMeters = 1000.0)
     }
 }

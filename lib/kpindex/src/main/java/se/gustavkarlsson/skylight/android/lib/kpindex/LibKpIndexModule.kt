@@ -33,9 +33,11 @@ object LibKpIndexModule {
     @Reusable
     internal fun kpIndexEvaluator(): ChanceEvaluator<KpIndex> = KpIndexEvaluator
 
-    @FlowPreview
-    @ExperimentalTime
-    @ExperimentalCoroutinesApi
+    @OptIn(
+        FlowPreview::class,
+        ExperimentalCoroutinesApi::class,
+        ExperimentalTime::class,
+    )
     @Provides
     @Reusable
     internal fun kpIndexProvider(

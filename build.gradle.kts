@@ -2,7 +2,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     repositories {
-        jcenter()
         mavenCentral()
         google()
         maven("https://plugins.gradle.org/m2/")
@@ -24,7 +23,6 @@ allprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
 
     repositories {
-        jcenter()
         mavenCentral()
         google()
         maven { setUrl("https://s3.amazonaws.com/repo.commonsware.com") }
@@ -34,7 +32,11 @@ allprojects {
     }
 
     tasks.withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = Versions.java.toString()
+        kotlinOptions {
+            jvmTarget = Versions.java.toString()
+            useIR = true
+            freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
+        }
     }
 }
 

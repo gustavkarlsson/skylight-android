@@ -5,8 +5,11 @@ plugins {
 
 android {
     commonConfig()
+    composeConfig()
 }
 
 dependencies {
     implementation(project(":core"))
+
+    implementation("androidx.compose.runtime:runtime:${Versions.compose}")
 }

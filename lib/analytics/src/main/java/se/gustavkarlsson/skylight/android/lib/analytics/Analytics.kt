@@ -1,9 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.analytics
 
-import android.app.Activity
-
 interface Analytics {
-    fun logScreen(activity: Activity, name: String)
+    fun logScreen(name: String)
     fun setProperty(name: String, value: Any?)
     fun logEvent(name: String, data: Map<String, Any?>? = null)
     fun logEvent(name: String, key: String, value: Any?) =

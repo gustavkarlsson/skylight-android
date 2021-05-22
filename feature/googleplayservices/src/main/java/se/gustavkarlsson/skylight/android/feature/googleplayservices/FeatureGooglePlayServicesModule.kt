@@ -17,17 +17,20 @@ object FeatureGooglePlayServicesModule {
     @IntoSet
     internal fun navigationOverride(context: Context): NavigationOverride =
         object : NavigationOverride {
-            val googlePlayServicesChecker = GmsGooglePlayServicesChecker(context)
-
             override val priority = 8
 
-            override fun override(oldBackstack: Backstack, targetBackstack: Backstack) =
-                when {
+            override fun override(
+                oldBackstack: Backstack,
+                targetBackstack: Backstack,
+            ): List<GooglePlayServicesScreen>? {
+                val googlePlayServicesChecker = GmsGooglePlayServicesChecker(context)
+                return when {
                     targetBackstack.isNotEmpty() &&
                         targetBackstack.none { it.name == ScreenName.GooglePlayServices } &&
                         !googlePlayServicesChecker.isAvailable ->
                         listOf(GooglePlayServicesScreen(targetBackstack))
                     else -> null
                 }
+            }
         }
 }

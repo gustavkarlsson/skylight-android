@@ -35,6 +35,7 @@ import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
+import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
 import se.gustavkarlsson.skylight.android.lib.time.Time
 
@@ -135,6 +136,7 @@ object FeatureBackgroundModule {
     @Provides
     @Reusable
     internal fun backgroundWork(
+        placesRepository: PlacesRepository,
         settings: Settings,
         appVisibilityEvaluator: AppVisibilityEvaluator,
         locationProvider: LocationProvider,
@@ -145,6 +147,7 @@ object FeatureBackgroundModule {
         time: Time
     ): BackgroundWork =
         BackgroundWorkImpl(
+            placesRepository = placesRepository,
             settings = settings,
             appVisibilityEvaluator = appVisibilityEvaluator,
             locationProvider = locationProvider,

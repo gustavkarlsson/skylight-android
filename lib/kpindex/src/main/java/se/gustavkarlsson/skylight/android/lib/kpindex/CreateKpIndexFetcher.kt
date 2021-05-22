@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.lib.kpindex
 import com.dropbox.android.external.store4.Fetcher
 import com.dropbox.android.external.store4.FetcherResult
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
@@ -13,7 +12,6 @@ import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import java.io.IOException
 
-@ExperimentalCoroutinesApi
 internal fun createKpIndexFetcher(
     api: KpIndexApi,
     retryDelay: Duration,

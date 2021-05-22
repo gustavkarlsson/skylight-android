@@ -25,13 +25,13 @@ internal class KlausBrunnerDarknessProvider(
     private val pollingInterval: Duration
 ) : DarknessProvider {
 
-    override fun get(location: LocationResult): Report<Darkness> {
-        val report = getDarknessReport(location, time.now())
+    override fun get(locationResult: LocationResult): Report<Darkness> {
+        val report = getDarknessReport(locationResult, time.now())
         logInfo { "Provided darkness: $report" }
         return report
     }
 
-    @ExperimentalCoroutinesApi
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun stream(
         locations: Flow<Loadable<LocationResult>>
     ): Flow<Loadable<Report<Darkness>>> =

@@ -6,7 +6,6 @@ import com.dropbox.android.external.store4.StoreResponse
 import com.dropbox.android.external.store4.fresh
 import com.dropbox.android.external.store4.get
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -23,21 +22,14 @@ internal class StoreKpIndexProvider(
     private val time: Time
 ) : KpIndexProvider {
 
-    override suspend fun get(fresh: Boolean): Report<KpIndex> =
-        getSingleReport {
-            if (fresh) {
-                fresh(Unit)
-            } else {
-                get(Unit)
-            }
-        }
+    override suspend fun get(fresh: Boolean): Report<KpIndex> = getReport(fresh)
 
-    private suspend fun getSingleReport(
-        getWeather: suspend Store<Unit, KpIndex>.() -> KpIndex
-    ): Report<KpIndex> {
+    private suspend fun getReport(fresh: Boolean): Report<KpIndex> {
         val report = try {
-            val weather = store.getWeather()
-            Report.Success(weather, time.now())
+            val kpIndex = if (fresh) {
+                store.fresh(Unit)
+            } else store.get(Unit)
+            Report.Success(kpIndex, time.now())
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
@@ -47,7 +39,6 @@ internal class StoreKpIndexProvider(
         return report
     }
 
-    @ExperimentalCoroutinesApi
     override fun stream(): Flow<Loadable<Report<KpIndex>>> =
         streamReports()
             .distinctUntilChanged()

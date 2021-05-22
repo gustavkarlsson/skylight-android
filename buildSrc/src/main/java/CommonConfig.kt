@@ -1,15 +1,12 @@
-import com.android.build.gradle.AppExtension
-import com.android.build.gradle.BaseExtension
-import com.android.build.gradle.LibraryExtension
+import com.android.build.api.dsl.CommonExtension
 
-fun BaseExtension.commonConfig() {
-    compileSdkVersion(Versions.compileSdk)
-    buildToolsVersion(Versions.buildTools)
+fun CommonExtension<*, *, *, *>.commonConfig() {
+    compileSdk = Versions.compileSdk
 
     packagingOptions {
-        exclude("META-INF/LICENSE")
-        exclude("META-INF/NOTICE")
-        exclude("META-INF/*.kotlin_module")
+        resources.excludes += "META-INF/LICENSE"
+        resources.excludes += "META-INF/NOTICE"
+        resources.excludes += "META-INF/*.kotlin_module"
     }
 
     testOptions {
@@ -23,22 +20,28 @@ fun BaseExtension.commonConfig() {
     }
 
     defaultConfig {
-        minSdkVersion(Versions.minSdk)
-        targetSdkVersion(Versions.targetSdk)
+        minSdk = Versions.minSdk
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArgument("clearPackageData", "true")
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
     }
 
     buildTypes {
         getByName("release") {
-            when (this@commonConfig) {
-                is AppExtension -> {
-                    proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-                }
-                is LibraryExtension -> {
-                    consumerProguardFiles("proguard-rules.pro")
-                }
-            }
+            proguardFile("proguard-rules.pro")
         }
+    }
+
+    lint {
+        // TODO Re-enable once this bug has been fixed: https://github.com/JakeWharton/timber/issues/408
+        disable(
+            "LogNotTimber",
+            "StringFormatInTimber",
+            "ThrowableNotAtBeginning",
+            "BinaryOperationInTimber",
+            "TimberArgCount",
+            "TimberArgTypes",
+            "TimberTagLength",
+            "TimberExceptionLogging",
+        )
     }
 }

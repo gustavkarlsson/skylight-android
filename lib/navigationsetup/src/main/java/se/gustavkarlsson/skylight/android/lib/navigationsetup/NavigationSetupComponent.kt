@@ -1,17 +1,15 @@
 package se.gustavkarlsson.skylight.android.lib.navigationsetup
 
+import dagger.Component
+
+@Component(modules = [NavigationSetupModule::class])
 interface NavigationSetupComponent {
 
     fun navigationInstaller(): NavigationInstaller
 
-    interface Setter {
-        fun setNavigationSetupComponent(component: NavigationSetupComponent) {
-            instance = component
-        }
-    }
-
     companion object {
-        lateinit var instance: NavigationSetupComponent
-            private set
+        fun create(): NavigationSetupComponent {
+            return DaggerNavigationSetupComponent.builder().build()
+        }
     }
 }

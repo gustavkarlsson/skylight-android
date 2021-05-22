@@ -22,7 +22,7 @@ internal class NotificationFormatter(
                 val chanceText = chanceLevelFormatter.format(it.chanceLevel)
                 when (it.place) {
                     Place.Current -> TextRef.stringRes(R.string.x_at_your_current_location, chanceText)
-                    is Place.Custom -> TextRef.stringRes(R.string.x_in_y, chanceText, it.place.name)
+                    is Place.Saved -> TextRef.stringRes(R.string.x_in_y, chanceText, it.place.name)
                 }
             }.toTypedArray()
 }
@@ -34,5 +34,6 @@ private val comparator =
 private fun placeTypeComparable(placeWithChance: PlaceWithChance) =
     when (placeWithChance.place) {
         Place.Current -> -1
-        is Place.Custom -> 1
+        is Place.Saved.Favorite -> 1
+        is Place.Saved.Recent -> 2
     }

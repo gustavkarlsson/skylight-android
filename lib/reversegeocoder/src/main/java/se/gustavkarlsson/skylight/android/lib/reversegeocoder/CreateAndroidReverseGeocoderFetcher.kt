@@ -11,13 +11,13 @@ import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.koptional.toOptional
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
-import se.gustavkarlsson.skylight.android.lib.location.Location
+import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
 import java.io.IOException
 
 internal fun createAndroidReverseGeocoderFetcher(
     geocoder: Geocoder,
     dispatcher: CoroutineDispatcher
-): Fetcher<Location, Optional<String>> = Fetcher.ofResult { location ->
+): Fetcher<ApproximatedLocation, Optional<String>> = Fetcher.ofResult { location ->
     withContext(dispatcher + CoroutineName("reverseGeocoderFetcher")) {
         try {
             @Suppress("BlockingMethodInNonBlockingContext")

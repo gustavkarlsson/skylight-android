@@ -9,6 +9,13 @@ android {
     commonConfig()
 }
 
+sqldelight {
+    database("Database") {
+        schemaOutputDirectory = file("src/main/sqldelight")
+        verifyMigrations = true
+    }
+}
+
 dependencies {
     implementation(project(":core"))
     implementation(project(":lib:places"))

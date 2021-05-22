@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notification
 import se.gustavkarlsson.skylight.android.feature.background.notifications.PlaceWithChance
-import se.gustavkarlsson.skylight.android.lib.places.Place
+import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 
 internal class SharedPrefsLastNotificationRepository(
     context: Context
@@ -35,8 +35,7 @@ internal class SharedPrefsLastNotificationRepository(
             try {
                 when (key) {
                     TIMESTAMP_KEY -> null
-                    CURRENT_KEY -> readAsCurrent(value)
-                    else -> readAsCustom(key, value)
+                    else -> read(key, value)
                 }
             } catch (e: Exception) {
                 logWarn(e) { "Failed to load notification record key $key from shared prefs" }
@@ -44,26 +43,21 @@ internal class SharedPrefsLastNotificationRepository(
             }
         }.toSet()
 
-    private fun readAsCurrent(value: Any?) =
-        (value as? Int)?.let { intValue ->
-            val placeRef = PlaceRef.Current
-            val chanceLevel = ChanceLevel.values()[intValue]
-            PlaceRefWithChance(
-                placeRef,
-                chanceLevel
-            )
-        }
+    private fun read(key: String, value: Any?): PlaceIdWithChance {
+        val placeId = getPlaceId(key)
+        val chanceLevel = getChanceLevel(value)
+        return PlaceIdWithChance(placeId, chanceLevel)
+    }
 
-    private fun readAsCustom(key: String, value: Any?) =
-        (value as? Int)?.let { intValue ->
-            val placeId = key.toLong()
-            val placeRef = PlaceRef.Custom(placeId)
-            val chanceLevel = ChanceLevel.values()[intValue]
-            PlaceRefWithChance(
-                placeRef,
-                chanceLevel
-            )
-        }
+    private fun getPlaceId(key: String): PlaceId {
+        val keyId = key.removePrefix(PLACE_ID_KEY_PREFIX)
+        return PlaceId.fromLong(keyId.toLong())
+    }
+
+    private fun getChanceLevel(value: Any?): ChanceLevel {
+        val ordinal = value as Int
+        return ChanceLevel.values()[ordinal]
+    }
 
     override fun insert(data: Notification) {
         sharedPreferences.edit {
@@ -77,16 +71,12 @@ internal class SharedPrefsLastNotificationRepository(
         }
     }
 
-    private fun getKey(value: PlaceWithChance) =
-        when (val place = value.place) {
-            Place.Current -> CURRENT_KEY
-            is Place.Custom -> place.id.toString()
-        }
+    private fun getKey(placeWithChance: PlaceWithChance): String = PLACE_ID_KEY_PREFIX + placeWithChance.place.id.value
 
-    private fun getValue(value: PlaceWithChance) = value.chanceLevel.ordinal
+    private fun getValue(placeWithChance: PlaceWithChance): Int = placeWithChance.chanceLevel.ordinal
 }
 
 private const val PREFS_FILE_NAME = "last_notification"
 private const val TIMESTAMP_KEY = "timestamp"
-private const val CURRENT_KEY = "current"
+private const val PLACE_ID_KEY_PREFIX = "place_"
 private const val MISSING_LONG = Long.MIN_VALUE

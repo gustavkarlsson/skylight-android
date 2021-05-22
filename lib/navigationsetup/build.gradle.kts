@@ -2,7 +2,6 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
-    id("kotlin-android-extensions")
 }
 
 android {
@@ -11,9 +10,10 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:ui"))
+    implementation(project(":lib:navigation"))
 
-    implementation("com.github.Zhuinden:simple-stack:${Versions.simpleStack}")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:${Versions.androidLifecycle}")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.androidLifecycle}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

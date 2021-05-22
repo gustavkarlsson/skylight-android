@@ -1,17 +1,18 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    id("kotlin-android-extensions")
+    id("kotlin-parcelize")
 }
 
 android {
     commonConfig()
+    composeConfig()
     sourceSets["main"].res.srcDir("$buildDir/generated/privacypolicy")
 }
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:ui"))
+    implementation(project(":lib:ui-compose"))
 
     implementation("io.noties.markwon:core:${Versions.markwon}")
 }

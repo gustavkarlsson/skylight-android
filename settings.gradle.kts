@@ -20,14 +20,13 @@ include(
     ":lib:settings",
     ":lib:time",
     ":lib:ui",
+    ":lib:ui-compose",
     ":lib:weather",
 
     ":feature:about",
-    ":feature:addplace",
     ":feature:background",
     ":feature:googleplayservices",
     ":feature:intro",
     ":feature:main",
-    ":feature:privacypolicy",
-    ":feature:settings"
+    ":feature:privacypolicy"
 )

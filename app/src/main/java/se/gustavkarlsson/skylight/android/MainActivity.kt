@@ -2,62 +2,165 @@ package se.gustavkarlsson.skylight.android
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
-import se.gustavkarlsson.skylight.android.lib.navigation.BackstackListener
+import androidx.core.view.WindowCompat
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
+import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
+import se.gustavkarlsson.skylight.android.lib.navigation.BackstackChange
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
-import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigatorHost
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
+import se.gustavkarlsson.skylight.android.lib.navigation.Screens
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreensHost
-import se.gustavkarlsson.skylight.android.lib.navigationsetup.BackButtonController
+import se.gustavkarlsson.skylight.android.lib.navigationsetup.MasterNavigator
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.NavigationSetupComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedServiceComponent
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceCatalog
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceHost
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceRegistry
+import se.gustavkarlsson.skylight.android.lib.ui.ScopeHost
 import se.gustavkarlsson.skylight.android.navigation.DefaultScreens
-import se.gustavkarlsson.skylight.android.navigation.animationConfig
 
-internal class MainActivity : AppCompatActivity(), NavigatorHost, ScreensHost, ServiceHost, BackstackListener {
+internal class MainActivity :
+    AppCompatActivity(),
+    NavigatorHost,
+    ScreensHost,
+    ScopeHost,
+    ServiceHost {
 
-    override lateinit var navigator: Navigator private set
+    private val serviceRegistry: ServiceRegistry = ScopedServiceComponent.instance.serviceRegistry()
 
-    private lateinit var backButtonController: BackButtonController
+    override val serviceCatalog: ServiceCatalog get() = serviceRegistry
 
-    override val serviceRegistry: ServiceRegistry =
-        ScopedServiceComponent.instance.serviceRegistry()
+    override val screens: Screens = DefaultScreens
 
-    override val screens =
-        DefaultScreens
+    override val navigator: MasterNavigator by lazy {
+        val installer = NavigationSetupComponent.create().navigationInstaller()
+        installer.install(
+            activity = this,
+            initialBackstack = listOf(screens.main),
+            navigationOverrides = NavigationComponent.instance.navigationOverrides(),
+        )
+    }
+
+    private val renderer: Renderer by lazy {
+        Renderer(this, navigator)
+    }
+
+    // Create Destroy
+    override var createDestroyScope: CoroutineScope? = null
+        private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setupNavigation()
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val scope = createLifecycleScope("createDestroyScope")
+        createDestroyScope = scope
+        onEachScreen { onCreateDestroyScope(scope) }
+        scope.launch { navigator.backstackChanges.collect(::onBackstackChange) }
+        renderer.render()
     }
 
-    private fun setupNavigation() {
-        val installer = NavigationSetupComponent.instance.navigationInstaller()
-        val (navigator, backButtonController) = installer.install(
-            this,
-            R.id.fragmentContainer,
-            listOf(screens.main),
-            NavigationComponent.instance.navigationOverrides(),
-            listOf(this),
-            animationConfig
-        )
-        this.navigator = navigator
-        this.backButtonController = backButtonController
+    // TODO Implement listeners instead?
+    private fun onBackstackChange(change: BackstackChange) {
+        notifyServiceRegistry(change)
+        passScopesToNewScreens(change)
+        trackScreenChange(change)
+        finishIfEmpty(change)
     }
 
-    override fun finish() {
-        serviceRegistry.clear()
-        super.finish()
-    }
-
-    override fun onBackstackChanged(old: Backstack, new: Backstack) {
-        val tags = new.map(Screen::tag)
+    private fun notifyServiceRegistry(change: BackstackChange) {
+        val tags = change.new.map(Screen::tag)
         serviceRegistry.onTagsChanged(tags)
     }
 
-    override fun onBackPressed() = backButtonController.onBackPressed()
+    private fun passScopesToNewScreens(change: BackstackChange) {
+        val addedScreens = change.new - change.old
+        addedScreens.tryPassScope(createDestroyScope) { scope ->
+            onCreateDestroyScope(scope)
+        }
+        addedScreens.tryPassScope(startStopScope) { scope ->
+            onStartStopScope(scope)
+        }
+        addedScreens.tryPassScope(resumePauseScope) { scope ->
+            onResumePauseScope(scope)
+        }
+    }
+
+    private fun List<Screen>.tryPassScope(scope: CoroutineScope?, action: Screen.(CoroutineScope) -> Unit) {
+        if (scope == null) return
+        for (element in this) {
+            element.action(scope)
+        }
+    }
+
+    private fun trackScreenChange(change: BackstackChange) {
+        val oldTop = change.old.lastOrNull()
+        val newTop = change.new.lastOrNull()
+        if (newTop != null && oldTop != newTop) {
+            AnalyticsComponent.instance.analytics().logScreen(newTop.name.name)
+        }
+    }
+
+    private fun finishIfEmpty(change: BackstackChange) {
+        if (change.new.isEmpty()) {
+            finish()
+        }
+    }
+
+    override fun onDestroy() {
+        createDestroyScope?.cancel("onDestroy called")
+        createDestroyScope = null
+        super.onDestroy()
+    }
+
+    // Start Stop
+    override var startStopScope: CoroutineScope? = null
+        private set
+
+    override fun onStart() {
+        super.onStart()
+        val scope = createLifecycleScope("startStopScope")
+        startStopScope = scope
+        onEachScreen { onStartStopScope(scope) }
+    }
+
+    override fun onStop() {
+        startStopScope?.cancel("onStop called")
+        startStopScope = null
+        super.onStop()
+    }
+
+    // Resume Pause
+    override var resumePauseScope: CoroutineScope? = null
+        private set
+
+    override fun onResume() {
+        super.onResume()
+        val scope = createLifecycleScope("resumePauseScope")
+        resumePauseScope = scope
+        onEachScreen { onResumePauseScope(scope) }
+    }
+
+    override fun onPause() {
+        resumePauseScope?.cancel("onPause called")
+        resumePauseScope = null
+        super.onPause()
+    }
+
+    override fun onBackPressed() = navigator.onBackPress(this)
+
+    private fun createLifecycleScope(name: String) = MainScope() + CoroutineName(name)
+
+    private fun onEachScreen(block: Screen.() -> Unit) {
+        val change = navigator.backstackChanges.value
+        change.new.forEach { screen ->
+            screen.block()
+        }
+    }
 }

@@ -17,47 +17,46 @@ import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
+import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
+import se.gustavkarlsson.skylight.android.lib.location.approximate
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.io.IOException
 
 internal class StoreWeatherProvider(
-    private val store: Store<Location, Weather>,
-    private val time: Time
+    private val store: Store<ApproximatedLocation, Weather>,
+    private val time: Time,
+    private val approximationMeters: Double,
 ) : WeatherProvider {
 
-    override suspend fun get(location: LocationResult, fresh: Boolean): Report<Weather> =
-        getSingleReport(location) {
-            if (fresh) {
-                fresh(it)
-            } else {
-                get(it)
-            }
-        }
+    override suspend fun get(locationResult: LocationResult, fresh: Boolean): Report<Weather> =
+        getReport(locationResult, fresh)
 
-    private suspend fun getSingleReport(
-        location: LocationResult,
-        getWeather: suspend Store<Location, Weather>.(Location) -> Weather
-    ): Report<Weather> {
-        val report = when (location) {
-            is LocationResult.Success ->
+    private suspend fun getReport(locationResult: LocationResult, fresh: Boolean): Report<Weather> {
+        val report = locationResult.map(
+            onSuccess = { location ->
                 try {
-                    val weather = store.getWeather(location.location)
+                    val weather = if (fresh) {
+                        store.fresh(location.approximate(approximationMeters))
+                    } else {
+                        store.get(location.approximate(approximationMeters))
+                    }
                     Report.Success(weather, time.now())
                 } catch (e: CancellationException) {
                     throw e
                 } catch (e: Exception) {
                     Report.Error(getCause(e), time.now())
                 }
-            LocationResult.Failure.MissingPermission -> Report.Error(Cause.LocationPermission, time.now())
-            LocationResult.Failure.Unknown -> Report.Error(Cause.Location, time.now())
-        }
+            },
+            onMissingPermissionError = { Report.Error(Cause.LocationPermission, time.now()) },
+            onUnknownError = { Report.Error(Cause.Location, time.now()) },
+        )
         logInfo { "Provided weather: $report" }
         return report
     }
 
-    @ExperimentalCoroutinesApi
+    @OptIn(ExperimentalCoroutinesApi::class)
     override fun stream(
         locations: Flow<Loadable<LocationResult>>
     ): Flow<Loadable<Report<Weather>>> =
@@ -82,7 +81,7 @@ internal class StoreWeatherProvider(
             .onEach { logInfo { "Streamed weather: $it" } }
 
     private fun streamReports(location: Location): Flow<Loadable<Report<Weather>>> =
-        store.stream(StoreRequest.cached(location, refresh = false))
+        store.stream(StoreRequest.cached(location.approximate(approximationMeters), refresh = false))
             .map { response ->
                 when (response) {
                     is StoreResponse.Loading -> Loadable.loading()

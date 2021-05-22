@@ -4,13 +4,14 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
+import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.lib.places.Place
+import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.settings.db.DbSettingsQueries
 
@@ -20,63 +21,62 @@ internal class SqlDelightSettings(
     private val dispatcher: CoroutineDispatcher
 ) : Settings {
 
-    override suspend fun setNotificationTriggerLevel(place: Place, level: TriggerLevel) {
-        val placeId = place.getId()
-        val exists = queries.getById(placeId)
+    override suspend fun setNotificationTriggerLevel(placeId: PlaceId, level: TriggerLevel) {
+        val placeIdLong = placeId.value
+        val exists = queries.getById(placeIdLong)
             .asFlow()
             .mapToOneOrNull(dispatcher)
             .first() != null
 
-        val levelIndex = level.ordinal.toLong()
+        val levelId = level.id
         if (exists)
-            queries.update(levelIndex, placeId)
+            queries.update(levelId, placeIdLong)
         else
-            queries.insert(placeId, levelIndex)
+            queries.insert(placeIdLong, levelId)
     }
 
-    override fun clearNotificationTriggerLevel(place: Place) = queries.delete(place.getId())
+    override fun streamNotificationTriggerLevels(): Flow<Map<PlaceId, TriggerLevel>> =
+        combine(placesRepository.stream(), streamAll()) { places, entries ->
+            entries.removeZombies(places)
+        }
 
-    @ExperimentalCoroutinesApi
-    override fun streamNotificationTriggerLevels(): Flow<List<Pair<Place, TriggerLevel>>> =
-        placesRepository.stream()
-            .flatMapLatest { places ->
-                getTriggerLevelRecords()
-                    .map { records ->
-                        places.map { place ->
-                            place to getTriggerLevel(place, records)
-                        }
-                    }
+    private fun streamAll(): Flow<Map<PlaceId, TriggerLevel>> {
+        return queries
+            .selectAll { id, levelId ->
+                val placeId = PlaceId.fromLong(id)
+                val triggerLevel = triggerLevelFromId(levelId)
+                placeId to triggerLevel
             }
-
-    private fun getTriggerLevelRecords(): Flow<List<TriggerLevelRecord>> =
-        queries
-            .selectAll { id, levelIndex -> TriggerLevelRecord(id, levelIndex) }
             .asFlow()
             .mapToList()
+            .map { entries -> entries.toMap() }
+    }
+
+    private fun Map<PlaceId, TriggerLevel>.removeZombies(places: List<Place>): Map<PlaceId, TriggerLevel> {
+        val livePlaceIds = places.map { place -> place.id }
+        val deadPlaceIds = keys - livePlaceIds
+        for (dead in deadPlaceIds) {
+            queries.delete(dead.value)
+        }
+        return filterKeys { placeId -> placeId in livePlaceIds }
+    }
 }
 
-private fun getTriggerLevel(
-    place: Place,
-    records: List<TriggerLevelRecord>
-): TriggerLevel {
-    val placeId = place.getId()
-    val matchingRecord = records.find { record -> record.placeId == placeId }
-        ?: return Settings.DEFAULT_TRIGGER_LEVEL
-    return findTriggerLevelByIndex(matchingRecord.triggerLevelIndex)
-        ?: Settings.DEFAULT_TRIGGER_LEVEL
+private fun triggerLevelFromId(id: Long): TriggerLevel = when (id) {
+    0L -> TriggerLevel.LOW
+    1L -> TriggerLevel.MEDIUM
+    2L -> TriggerLevel.HIGH
+    3L -> TriggerLevel.NEVER
+    else -> {
+        logError { "Unsupported trigger level id: $id" }
+        TriggerLevel.NEVER
+    }
 }
 
-private fun Place.getId(): Long = when (this) {
-    Place.Current -> CURRENT_ID
-    is Place.Custom -> id
-}
-
-private fun findTriggerLevelByIndex(levelIndex: Long): TriggerLevel? =
-    if (levelIndex in TriggerLevel.values().indices)
-        TriggerLevel.values()[levelIndex.toInt()]
-    else
-        null
-
-private data class TriggerLevelRecord(val placeId: Long, val triggerLevelIndex: Long)
-
-private const val CURRENT_ID = -1L
+private val TriggerLevel.id: Long
+    get() = when (this) {
+        TriggerLevel.LOW -> 0
+        TriggerLevel.MEDIUM -> 1
+        TriggerLevel.HIGH -> 2
+        TriggerLevel.NEVER -> 3
+    }

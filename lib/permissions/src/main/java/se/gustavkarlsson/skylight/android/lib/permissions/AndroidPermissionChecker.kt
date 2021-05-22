@@ -3,47 +3,34 @@ package se.gustavkarlsson.skylight.android.lib.permissions
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import se.gustavkarlsson.skylight.android.core.logging.logDebug
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import se.gustavkarlsson.skylight.android.core.logging.logInfo
 
-@ExperimentalCoroutinesApi
 internal class AndroidPermissionChecker(
-    private val permissionKey: String,
     private val context: Context,
-    private val channel: ConflatedBroadcastChannel<Access>
+    private val state: MutableStateFlow<Permissions>,
 ) : PermissionChecker {
 
-    @FlowPreview
-    override val access: Flow<Access>
-        get() {
-            refresh()
-            return channel
-                .asFlow()
-                .distinctUntilChanged()
-        }
+    override val permissions: StateFlow<Permissions> = state
 
     override fun refresh() {
-        val currentValue = channel.valueOrNull ?: Access.Unknown
-        val systemPermission = checkSystemPermission()
-        if (currentValue == Access.DeniedForever && systemPermission == Access.Denied) {
-            logDebug { "Won't change from $currentValue to $systemPermission" }
-            return
+        val old = state.value
+        val fromSystem = old.toMap().keys.map { permission ->
+            getAccessFromSystem(permission)
         }
-        channel.offer(systemPermission)
+        val new = old.update(fromSystem)
+        if (new != old) {
+            state.value = new
+            logInfo { "Permissions changed from $old to $new" }
+        }
     }
 
-    private fun checkSystemPermission(): Access {
-        val result = ContextCompat.checkSelfPermission(context, permissionKey)
-        val access = if (result == PackageManager.PERMISSION_GRANTED)
+    private fun getAccessFromSystem(permission: Permission): PermissionAccess {
+        val result = ContextCompat.checkSelfPermission(context, permission.key)
+        val access = if (result == PackageManager.PERMISSION_GRANTED) {
             Access.Granted
-        else
-            Access.Denied
-        logDebug { "$permissionKey = $access" }
-        return access
+        } else Access.Denied
+        return PermissionAccess(permission, access)
     }
 }

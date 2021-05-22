@@ -7,8 +7,6 @@ import dagger.Provides
 import dagger.multibindings.IntoSet
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -17,6 +15,7 @@ import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
+import se.gustavkarlsson.skylight.android.lib.time.Time
 
 @Module
 object LibPlacesModule {
@@ -25,15 +24,14 @@ object LibPlacesModule {
     @AppScope
     internal fun placesRepository(
         context: Context,
-        @Io dispatcher: CoroutineDispatcher
+        @Io dispatcher: CoroutineDispatcher,
+        time: Time,
     ): PlacesRepository {
         val driver = AndroidSqliteDriver(Database.Schema, context, "places.db")
         val database = Database(driver)
-        return SqlDelightPlacesRepository(database.dbPlaceQueries, dispatcher)
+        return SqlDelightPlacesRepository(database.dbPlaceQueries, dispatcher, time, maxRecentCount = 5)
     }
 
-    @FlowPreview
-    @ExperimentalCoroutinesApi
     @Provides
     @AppScope
     internal fun selectedPlaceRepository(

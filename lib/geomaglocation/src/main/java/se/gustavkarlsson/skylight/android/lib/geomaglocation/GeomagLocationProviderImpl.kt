@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.geomaglocation
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -24,13 +23,12 @@ internal class GeomagLocationProviderImpl(
     private val time: Time
 ) : GeomagLocationProvider {
 
-    override fun get(location: LocationResult): Report<GeomagLocation> {
-        val report = getSingleGeomagLocation(location)
+    override fun get(locationResult: LocationResult): Report<GeomagLocation> {
+        val report = getSingleGeomagLocation(locationResult)
         logInfo { "Provided geomag location: $report" }
         return report
     }
 
-    @ExperimentalCoroutinesApi
     override fun stream(
         locations: Flow<Loadable<LocationResult>>
     ): Flow<Loadable<Report<GeomagLocation>>> =

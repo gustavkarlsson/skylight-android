@@ -21,9 +21,11 @@ import kotlin.time.milliseconds
 @Module
 object LibLocationModule {
 
-    @FlowPreview
-    @ExperimentalTime
-    @ExperimentalCoroutinesApi
+    @OptIn(
+        FlowPreview::class,
+        ExperimentalCoroutinesApi::class,
+        ExperimentalTime::class,
+    )
     @Provides
     @AppScope
     internal fun locationProvider(

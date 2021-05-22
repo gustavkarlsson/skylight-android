@@ -12,7 +12,6 @@ import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexProvider
-import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoder
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherProvider
 
@@ -26,18 +25,16 @@ object LibAuroraModule {
     @Provides
     @Reusable
     internal fun auroraReportProvider(
-        reverseGeocoder: ReverseGeocoder,
         darknessProvider: DarknessProvider,
         geomagLocationProvider: GeomagLocationProvider,
         kpIndexProvider: KpIndexProvider,
         weatherProvider: WeatherProvider
     ): AuroraReportProvider =
         CombiningAuroraReportProvider(
-            reverseGeocoder,
             darknessProvider,
             geomagLocationProvider,
             kpIndexProvider,
-            weatherProvider
+            weatherProvider,
         )
 
     @Provides

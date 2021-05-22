@@ -1,16 +1,16 @@
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.RepositoryBuilder
-import java.io.File
 
 plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
-    id("kotlin-android-extensions")
+    id("kotlin-parcelize")
 }
 
 android {
     commonConfig()
+    composeConfig()
 
     defaultConfig {
         val repo = RepositoryBuilder().run {
@@ -31,16 +31,16 @@ android {
         buildConfigField("long", "BUILD_TIME_MILLIS", "${buildTime}L")
     }
 
-    flavorDimensions("environment")
+    flavorDimensions += "environment"
 
     productFlavors {
         create("production") {
-            setDimension("environment")
+            dimension = "environment"
             buildConfigField("boolean", "DEVELOP", "false")
         }
 
         create("develop") {
-            setDimension("environment")
+            dimension = "environment"
             buildConfigField("boolean", "DEVELOP", "true")
         }
     }
@@ -48,7 +48,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:ui"))
+    implementation(project(":lib:ui-compose"))
     implementation(project(":lib:time"))
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")

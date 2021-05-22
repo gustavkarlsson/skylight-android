@@ -1,10 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.background.scheduling
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.firstOrNull
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
@@ -18,10 +15,13 @@ import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.places.Place
+import se.gustavkarlsson.skylight.android.lib.places.PlaceId
+import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
 import se.gustavkarlsson.skylight.android.lib.time.Time
 
 internal class BackgroundWorkImpl(
+    private val placesRepository: PlacesRepository,
     private val settings: Settings,
     private val appVisibilityEvaluator: AppVisibilityEvaluator,
     private val locationProvider: LocationProvider,
@@ -41,36 +41,32 @@ internal class BackgroundWorkImpl(
     }
 
     private suspend fun getNotificationData(): Notification {
-        val placesWithChance = getPlacesToCheck()
-            .mapNotNull { (place, triggerLevel) ->
-                getPlaceWithChance(place).takeIf {
+        val placeIdsWithLevel = getPlaceIdsToCheck()
+            .mapNotNull { (placeId, triggerLevel) ->
+                getPlaceWithChance(placeId)?.takeIf {
                     it.chanceLevel isGreaterOrEqual triggerLevel
                 }
             }
-            .toList()
 
-        return Notification(
-            placesWithChance,
-            time.now()
-        )
+        return Notification(placeIdsWithLevel, time.now())
     }
 
-    private suspend fun getPlacesToCheck(): Flow<PlaceWithTriggerLevel> {
+    private suspend fun getPlaceIdsToCheck(): List<PlaceIdWithTriggerLevel> {
         val triggerLevels = settings.streamNotificationTriggerLevels()
             .first()
-        return triggerLevels.asFlow()
-            .mapNotNull { onlyEnabled(it) }
+        return triggerLevels
+            .map { (placeId, triggerLevel) ->
+                PlaceIdWithTriggerLevel(placeId, triggerLevel)
+            }
+            .filter { it.enabled }
     }
 
-    private fun onlyEnabled(
-        levels: Pair<Place, TriggerLevel>
-    ): PlaceWithTriggerLevel? {
-        val (place, triggerLevel) = levels
-        return if (triggerLevel == TriggerLevel.NEVER) null
-        else PlaceWithTriggerLevel(place, triggerLevel)
-    }
+    private val PlaceIdWithTriggerLevel.enabled: Boolean
+        get() = triggerLevel != TriggerLevel.NEVER
 
-    private suspend fun getPlaceWithChance(place: Place): PlaceWithChance {
+    private suspend fun getPlaceWithChance(placeId: PlaceId): PlaceWithChance? {
+        val places = placesRepository.stream().firstOrNull() ?: return null
+        val place = places.find { place -> place.id == placeId } ?: return null
         val report = reportProvider.get { getLocation(place) }
         val chance = chanceEvaluator.evaluate(report)
         val chanceLevel = ChanceLevel.fromChance(chance)
@@ -80,8 +76,8 @@ internal class BackgroundWorkImpl(
     private suspend fun getLocation(place: Place): LocationResult =
         when (place) {
             Place.Current -> locationProvider.get()
-            is Place.Custom -> LocationResult.Success(place.location)
+            is Place.Saved -> LocationResult.Success(place.location)
         }
 }
 
-private data class PlaceWithTriggerLevel(val place: Place, val triggerLevel: TriggerLevel)
+private data class PlaceIdWithTriggerLevel(val id: PlaceId, val triggerLevel: TriggerLevel)

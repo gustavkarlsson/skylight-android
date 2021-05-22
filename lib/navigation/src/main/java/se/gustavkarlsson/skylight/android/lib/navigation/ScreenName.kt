@@ -4,8 +4,6 @@ enum class ScreenName {
     Intro,
     GooglePlayServices,
     Main,
-    AddPlace,
-    Settings,
     About,
     PrivacyPolicy
 }
