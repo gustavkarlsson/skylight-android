@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
+import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
@@ -43,10 +44,9 @@ internal class SqlDelightSettings(
 
     private fun streamAll(): Flow<Map<PlaceId, TriggerLevel>> {
         return queries
-            .selectAll { id, levelIndex ->
+            .selectAll { id, levelIndex -> // TODO Rename table column to levelId ?
                 val placeId = PlaceId.fromLong(id)
-                // FIXME don't use indices
-                val triggerLevel = TriggerLevel.values().getOrNull(levelIndex.toInt()) ?: TriggerLevel.NEVER
+                val triggerLevel = triggerLevelFromId(levelIndex)
                 placeId to triggerLevel
             }
             .asFlow()
@@ -61,5 +61,16 @@ internal class SqlDelightSettings(
             queries.delete(dead.value)
         }
         return filterKeys { placeId -> placeId in livePlaceIds }
+    }
+}
+
+private fun triggerLevelFromId(id: Long): TriggerLevel = when (id) {
+    0L -> TriggerLevel.LOW
+    1L -> TriggerLevel.MEDIUM
+    2L -> TriggerLevel.HIGH
+    3L -> TriggerLevel.NEVER
+    else -> {
+        logError { "Unsupported trigger level id: $id" }
+        TriggerLevel.NEVER
     }
 }

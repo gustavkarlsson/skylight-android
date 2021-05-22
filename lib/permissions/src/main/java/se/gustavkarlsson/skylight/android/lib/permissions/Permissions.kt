@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
-// FIXME rework to Map<Permission, Access> and require function?
+// TODO rework to Map<Permission, Access> and require function?
 data class Permissions(
     val location: PermissionAccess,
     val backgroundLocation: PermissionAccess,

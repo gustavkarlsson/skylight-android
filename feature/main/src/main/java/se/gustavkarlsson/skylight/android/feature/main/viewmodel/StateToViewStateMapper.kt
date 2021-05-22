@@ -80,7 +80,7 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createChanceSubtitleText(): TextRef {
-        return TextRef.EMPTY // FIXME what to do with this?
+        return TextRef.EMPTY // TODO what to do with this?
     }
 
     // FIXME we can now also check for backgroundLocation
