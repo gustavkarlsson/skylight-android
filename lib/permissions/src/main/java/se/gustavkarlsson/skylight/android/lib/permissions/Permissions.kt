@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
 // TODO rework to Map<Permission, Access> and require function?
+//  Location and backgroud location need to be combined, as they have mutually exclusive states
 data class Permissions(
     val location: PermissionAccess,
     val backgroundLocation: PermissionAccess,

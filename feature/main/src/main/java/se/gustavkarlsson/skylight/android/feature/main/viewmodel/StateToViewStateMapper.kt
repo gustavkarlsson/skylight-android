@@ -83,22 +83,40 @@ internal class StateToViewStateMapper @Inject constructor(
         return TextRef.EMPTY // TODO what to do with this?
     }
 
-    // FIXME we can now also check for backgroundLocation
     private fun createErrorBannerData(state: State): BannerData? {
+        val locationAccess = state.permissions.location.access
+        val backgroundLocationAccess = state.permissions.backgroundLocation.access
+        val triggerLevelsEnabled = state.notificationTriggerLevels.values.any { it != TriggerLevel.NEVER }
         return when {
+            triggerLevelsEnabled && backgroundLocationAccess == Access.Denied -> {
+                BannerData(
+                    TextRef.stringRes(R.string.background_location_permission_denied_message),
+                    TextRef.stringRes(R.string.grant),
+                    Icons.Warning,
+                    BannerData.Event.OpenAppDetails
+                )
+            }
+            triggerLevelsEnabled && backgroundLocationAccess == Access.DeniedForever -> {
+                BannerData(
+                    TextRef.stringRes(R.string.location_permission_denied_forever_message),
+                    TextRef.stringRes(R.string.grant),
+                    Icons.Warning,
+                    BannerData.Event.OpenAppDetails
+                )
+            }
             state.selectedPlace != Place.Current -> null
-            state.permissions.location.access == Access.Denied -> {
+            locationAccess == Access.Denied -> {
                 BannerData(
                     TextRef.stringRes(R.string.location_permission_denied_message),
-                    TextRef.stringRes(R.string.fix),
+                    TextRef.stringRes(R.string.grant),
                     Icons.LocationOn,
                     BannerData.Event.RequestLocationPermission
                 )
             }
-            state.permissions.location.access == Access.DeniedForever -> {
+            locationAccess == Access.DeniedForever -> {
                 BannerData(
                     TextRef.stringRes(R.string.location_permission_denied_forever_message),
-                    TextRef.stringRes(R.string.fix),
+                    TextRef.stringRes(R.string.grant),
                     Icons.Warning,
                     BannerData.Event.OpenAppDetails
                 )

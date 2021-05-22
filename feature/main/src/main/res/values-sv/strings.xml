@@ -4,7 +4,7 @@
     <string name="in_location">i %1$s</string>
     <string name="remove">Ta bort</string>
     <string name="remove_thing">Ta bort %s?</string>
-    <string name="fix">Fixa</string>
+    <string name="grant">Tillåt</string>
     <string name="places">Platser</string>
 
     <string name="factor_geomag_location_title_full">Geomagnetisk plats</string>
@@ -38,10 +38,11 @@
     <string name="cause_server_response">Serverfel. Försök igen senare.</string>
     <string name="cause_unknown">Något gick fel ☹</string>
 
-    <string name="location_permission_denied_message">För att beräkna chansen att se norrsken för
-        din nuvarande plats, var vänlig ge Skylight åtkomst till den.</string>
-    <string name="location_permission_denied_forever_message">Åtkomst till din plats är nekad
-        permanent.</string>
+    <string name="location_permission_denied_message">För att beräkna chansen att se norrsken där du är,
+        tillåt att Skylight kan läsa din plats.</string>
+    <string name="background_location_permission_denied_message">För att notifiera dig om möjliga norrsken,
+        tillåt att Skylight alltid kan läsa din plats.</string>
+    <string name="location_permission_denied_forever_message">Åtkomst till din plats är nekad permanent.</string>
     <string name="place_search">Sök</string>
     <string name="place_search_failed_generic">Platssökningen misslyckades</string>
     <string name="place_search_failed_server_response">Platssökningen misslyckades. Serverfel.</string>
