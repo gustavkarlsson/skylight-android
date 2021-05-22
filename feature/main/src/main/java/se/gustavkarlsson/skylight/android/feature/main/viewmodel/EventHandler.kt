@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 import kotlinx.coroutines.channels.SendChannel
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.issue
+import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.feature.main.state.Search
 import se.gustavkarlsson.skylight.android.feature.main.state.State
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
@@ -26,8 +27,21 @@ internal class EventHandler @Inject constructor(
         @Suppress("UNUSED_VARIABLE")
         val dummy: Any = when (event) {
             is Event.AddFavorite -> placesRepository.setFavorite(event.place.id)
-            is Event.RemoveFavorite -> placesRepository.setRecent(event.place.id)
-            is Event.SetNotificationLevel -> settings.setNotificationTriggerLevel(event.place.id, event.level)
+            is Event.RemoveFavorite -> {
+                settings.setNotificationTriggerLevel(event.place.id, TriggerLevel.NEVER)
+                placesRepository.setRecent(event.place.id)
+            }
+            is Event.SetNotificationLevel -> {
+                when (event.place) {
+                    Place.Current, is Place.Saved.Favorite -> Unit
+                    is Place.Saved.Recent -> {
+                        if (event.level != TriggerLevel.NEVER) {
+                            placesRepository.setFavorite(event.place.id)
+                        }
+                    }
+                }
+                settings.setNotificationTriggerLevel(event.place.id, event.level)
+            }
             is Event.SearchChanged -> searchChannel.send(event.state)
             is Event.SelectSearchResult -> onSearchResultClicked(event.result)
             Event.RefreshLocationPermission -> permissionChecker.refresh()

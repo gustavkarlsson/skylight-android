@@ -21,7 +21,7 @@ internal class SqlDelightPlacesRepository(
     private val queries: DbPlaceQueries,
     @Io private val dispatcher: CoroutineDispatcher,
     private val time: Time,
-    private val maxRecentCount: Int, // FIXME Keep also if trigger level set
+    private val maxRecentCount: Int,
 ) : PlacesRepository {
 
     override suspend fun setFavorite(placeId: PlaceId.Saved): Place.Saved.Favorite = withContext(dispatcher) {
