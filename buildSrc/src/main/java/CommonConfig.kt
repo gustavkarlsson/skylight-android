@@ -30,4 +30,18 @@ fun CommonExtension<*, *, *, *>.commonConfig() {
             proguardFile("proguard-rules.pro")
         }
     }
+
+    lint {
+        // TODO Re-enable once this bug has been fixed: https://github.com/JakeWharton/timber/issues/408
+        disable(
+            "LogNotTimber",
+            "StringFormatInTimber",
+            "ThrowableNotAtBeginning",
+            "BinaryOperationInTimber",
+            "TimberArgCount",
+            "TimberArgTypes",
+            "TimberTagLength",
+            "TimberExceptionLogging",
+        )
+    }
 }
