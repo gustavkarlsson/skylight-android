@@ -8,7 +8,7 @@ plugins {
     id("kotlin-parcelize")
     id("com.google.firebase.crashlytics")
     id("pl.allegro.tech.build.axion-release")
-    // id("com.github.triplet.play") version Versions.playPublisher // FIXME Re-enable when play plugin works
+    id("com.github.triplet.play") version Versions.playPublisher
 }
 
 scmVersion {
@@ -17,14 +17,11 @@ scmVersion {
     }
 }
 
-/*
-FIXME Re-enable when play plugin works
 play {
-    serviceAccountCredentials = file("play-service-account.json")
-    track = "alpha"
-    defaultToAppBundles = true
+    serviceAccountCredentials.set(file("play-service-account.json"))
+    track.set("alpha")
+    defaultToAppBundles.set(true)
 }
-*/
 
 android {
     commonConfig()

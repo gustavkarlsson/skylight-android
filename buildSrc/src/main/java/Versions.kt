@@ -13,7 +13,7 @@ object Versions {
     // Skip 1.11.0 as it has breaking bug: https://github.com/allegro/axion-release-plugin/issues/332
     // Skip 1.12.0 as it has breaking bug: https://github.com/allegro/axion-release-plugin/issues/339
     val axionRelease = "1.10.3"
-    val playPublisher = "2.8.0"
+    val playPublisher = "3.4.0-agp7.0"
     val ktlint = "10.0.0"
 
     // Dependencies
