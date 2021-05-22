@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.darkness
 
-import java.util.GregorianCalendar
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +18,7 @@ import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.time.Time
+import java.util.GregorianCalendar
 
 internal class KlausBrunnerDarknessProvider(
     private val time: Time,

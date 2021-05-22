@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.lib.reversegeocoder
 
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.get
-import java.io.IOException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -20,6 +19,7 @@ import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.location.approximate
+import java.io.IOException
 
 internal class StoreReverseGeocoder(
     private val store: Store<ApproximatedLocation, Optional<String>>,

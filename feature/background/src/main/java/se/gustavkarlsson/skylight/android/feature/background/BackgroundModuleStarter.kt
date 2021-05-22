@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.background
 
 import android.content.Context
-import java.io.File
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
@@ -13,6 +12,7 @@ import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.feature.background.notifications.NotificationChannelCreator
 import se.gustavkarlsson.skylight.android.feature.background.scheduling.Scheduler
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
+import java.io.File
 
 internal class BackgroundModuleStarter(
     private val context: Context,

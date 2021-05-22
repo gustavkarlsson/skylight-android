@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.feature.main.state
 
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -18,6 +17,7 @@ import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.places.Place
+import javax.inject.Inject
 
 internal class StreamReportsLiveAction @Inject constructor(
     private val locationProvider: LocationProvider,

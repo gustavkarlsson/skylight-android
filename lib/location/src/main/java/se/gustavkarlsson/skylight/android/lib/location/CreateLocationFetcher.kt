@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.location
 
-import android.location.Location as AndroidLocation
 import android.os.Looper
 import androidx.annotation.RequiresPermission
 import com.dropbox.android.external.store4.Fetcher
@@ -8,7 +7,6 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationAvailability
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult as GmsLocationResult
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -27,6 +25,8 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
+import android.location.Location as AndroidLocation
+import com.google.android.gms.location.LocationResult as GmsLocationResult
 
 internal fun createLocationFetcher(
     client: FusedLocationProviderClient,

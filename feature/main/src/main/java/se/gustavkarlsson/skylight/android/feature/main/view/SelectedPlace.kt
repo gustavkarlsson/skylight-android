@@ -43,7 +43,6 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.ioki.textref.TextRef
-import java.util.Locale
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.FactorItem
@@ -59,6 +58,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.chanceSubtitle
 import se.gustavkarlsson.skylight.android.lib.ui.compose.chanceTitle
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
+import java.util.Locale
 
 @Preview
 @Composable
@@ -421,4 +421,3 @@ private fun Card(
         }
     }
 }
-

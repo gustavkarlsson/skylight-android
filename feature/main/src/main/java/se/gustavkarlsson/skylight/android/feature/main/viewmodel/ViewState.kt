@@ -16,7 +16,6 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SkylightColors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 
-
 internal data class ViewState(
     val toolbarTitleName: TextRef,
     val chanceLevelText: TextRef,

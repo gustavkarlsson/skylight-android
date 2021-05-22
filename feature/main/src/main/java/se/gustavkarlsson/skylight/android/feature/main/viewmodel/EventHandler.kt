@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
-import javax.inject.Inject
 import kotlinx.coroutines.channels.SendChannel
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.issue
@@ -12,6 +11,7 @@ import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
+import javax.inject.Inject
 
 internal class EventHandler @Inject constructor(
     private val store: Store<State>,

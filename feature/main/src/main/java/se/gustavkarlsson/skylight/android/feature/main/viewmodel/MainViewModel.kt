@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
-import javax.inject.Inject
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -9,6 +8,7 @@ import kotlinx.coroutines.launch
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.skylight.android.feature.main.state.State
 import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
+import javax.inject.Inject
 
 internal class MainViewModel @Inject constructor(
     store: Store<State>,

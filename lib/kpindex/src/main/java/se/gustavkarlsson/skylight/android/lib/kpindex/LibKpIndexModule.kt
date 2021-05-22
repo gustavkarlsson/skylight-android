@@ -6,8 +6,6 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import kotlin.time.ExperimentalTime
-import kotlin.time.milliseconds as kotlinMilliseconds
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -21,6 +19,8 @@ import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.core.utils.seconds
 import se.gustavkarlsson.skylight.android.lib.time.Time
+import kotlin.time.ExperimentalTime
+import kotlin.time.milliseconds as kotlinMilliseconds
 
 @Module
 object LibKpIndexModule {

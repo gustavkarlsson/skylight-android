@@ -4,8 +4,6 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Warning
 import com.ioki.textref.TextRef
-import java.util.Comparator
-import javax.inject.Inject
 import org.threeten.bp.Instant
 import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.core.entities.Cause
@@ -30,6 +28,8 @@ import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingRe
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
+import java.util.Comparator
+import javax.inject.Inject
 
 internal class StateToViewStateMapper @Inject constructor(
     private val auroraChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,

@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 import dagger.Component
 import dagger.Module
 import dagger.Provides
-import javax.inject.Qualifier
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
@@ -40,6 +39,7 @@ import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
+import javax.inject.Qualifier
 
 @ViewModelScope
 @Component(

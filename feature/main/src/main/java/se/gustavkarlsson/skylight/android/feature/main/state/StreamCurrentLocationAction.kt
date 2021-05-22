@@ -1,11 +1,11 @@
 package se.gustavkarlsson.skylight.android.feature.main.state
 
-import javax.inject.Inject
 import kotlinx.coroutines.flow.collect
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.UpdatableStateFlow
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoder
+import javax.inject.Inject
 
 internal class StreamCurrentLocationAction @Inject constructor(
     private val locationProvider: LocationProvider,

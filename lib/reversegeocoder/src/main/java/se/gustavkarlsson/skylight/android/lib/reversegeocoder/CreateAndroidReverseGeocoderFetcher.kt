@@ -11,8 +11,8 @@ import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.koptional.toOptional
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
-import java.io.IOException
 import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
+import java.io.IOException
 
 internal fun createAndroidReverseGeocoderFetcher(
     geocoder: Geocoder,

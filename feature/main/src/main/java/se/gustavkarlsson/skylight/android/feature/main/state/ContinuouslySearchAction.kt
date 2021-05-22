@@ -1,8 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.state
 
 import com.ioki.textref.TextRef
-import javax.inject.Inject
-import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.consumeEach
@@ -23,6 +21,8 @@ import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocodingResult
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
+import javax.inject.Inject
+import kotlin.time.ExperimentalTime
 
 internal class ContinuouslySearchAction @Inject constructor(
     private val searchChannel: ReceiveChannel<@JvmSuppressWildcards SearchFieldState>,
