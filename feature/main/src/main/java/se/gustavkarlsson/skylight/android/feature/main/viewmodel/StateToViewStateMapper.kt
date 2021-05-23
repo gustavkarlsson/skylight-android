@@ -100,8 +100,8 @@ internal class StateToViewStateMapper @Inject constructor(
         return when {
             needsBackgroundLocation && locationDeniedForever -> {
                 BannerData(
-                    TextRef.stringRes(R.string.location_permission_denied_forever_message), // FIXME Add string for telling them to also enable forever
-                    TextRef.stringRes(R.string.grant), // FIXME Add "open settings" string
+                    TextRef.stringRes(R.string.background_location_permission_denied_forever_message),
+                    TextRef.stringRes(R.string.open_settings),
                     Icons.Warning,
                     BannerData.Event.OpenAppDetails
                 )
@@ -126,7 +126,7 @@ internal class StateToViewStateMapper @Inject constructor(
             locationPermission == Permission.Location.DeniedForever -> {
                 BannerData(
                     TextRef.stringRes(R.string.location_permission_denied_forever_message),
-                    TextRef.stringRes(R.string.grant), // FIXME Add "open settings" string
+                    TextRef.stringRes(R.string.open_settings),
                     Icons.Warning,
                     BannerData.Event.OpenAppDetails
                 )
