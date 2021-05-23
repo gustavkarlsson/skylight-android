@@ -1,8 +1,9 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
 import co.selim.goldfinch.annotation.GenerateProperties
+import co.selim.goldfinch.annotation.Visibility
 
-@GenerateProperties
+@GenerateProperties(Visibility.INTERNAL)
 data class Permissions(
     val location: Permission.Location,
 ) {

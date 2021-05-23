@@ -12,12 +12,11 @@ internal class RuntimePermissionRequester(
 
     override suspend fun request(activity: FragmentActivity, vararg requested: Permission.Type) {
         if (requested.isEmpty()) return
-        val requestedSet = requested.toSet()
-        logInfo { "Requesting permission for $requestedSet" }
-        val keys = requestedSet.flatMap { type ->
+        val requestedDistinct = requested.distinctBy { it.key }
+        logInfo { "Requesting permission for $requestedDistinct" }
+        val keys = requestedDistinct.flatMap { type ->
             when (type) {
-                is Permission.Type.Location.WithBackground -> listOfNotNull(type.key, type.backgroundKey)
-                is Permission.Type.Location.WithoutBackground -> listOf(type.key)
+                is Permission.Type.Location -> listOfNotNull(type.key, type.backgroundKey)
             }
         }
 
@@ -25,27 +24,17 @@ internal class RuntimePermissionRequester(
         // but throws whenever the result is not granted. Hence the catch
         val newPermissions = try {
             activity.askPermission(*keys.toTypedArray())
-            requestedSet.allGranted()
+            requestedDistinct.allGranted()
         } catch (e: PermissionException) {
-            requestedSet.mapNotNull { type ->
+            requestedDistinct.mapNotNull { type ->
                 when (type) {
-                    is Permission.Type.Location.WithBackground -> {
+                    is Permission.Type.Location -> {
                         when {
                             type.backgroundKey in e.accepted -> Permission.Location.Granted.WithBackground
+                            type.key in e.accepted && type.backgroundKey == null -> Permission.Location.Granted.WithBackground
                             type.key in e.accepted -> Permission.Location.Granted.WithoutBackground
                             type.key in e.foreverDenied -> Permission.Location.DeniedForever
                             type.key in e.denied -> Permission.Location.Denied
-                            else -> {
-                                logError { "Unexpected state for key: ${type.key}: $e" }
-                                return@mapNotNull null
-                            }
-                        }
-                    }
-                    is Permission.Type.Location.WithoutBackground -> {
-                        when (type.key) {
-                            in e.accepted -> Permission.Location.Granted.WithoutBackground
-                            in e.foreverDenied -> Permission.Location.DeniedForever
-                            in e.denied -> Permission.Location.Denied
                             else -> {
                                 logError { "Unexpected state for key: ${type.key}: $e" }
                                 return@mapNotNull null
@@ -62,8 +51,7 @@ internal class RuntimePermissionRequester(
     private fun Collection<Permission.Type>.allGranted(): List<Permission.Location.Granted> {
         return map { type ->
             when (type) {
-                Permission.Type.Location.WithBackground -> Permission.Location.Granted.WithBackground
-                Permission.Type.Location.WithoutBackground -> Permission.Location.Granted.WithoutBackground
+                Permission.Type.Location -> Permission.Location.Granted.WithBackground
             }
         }
     }
