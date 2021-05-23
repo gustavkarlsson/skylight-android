@@ -1,9 +1,9 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
 import co.selim.goldfinch.annotation.GenerateProperties
-import co.selim.goldfinch.annotation.Visibility
 
-@GenerateProperties(Visibility.INTERNAL)
+// TODO Upgrade to later version and add visibility argument when running Kotlin 1.5
+@GenerateProperties
 data class Permissions(
     val location: Permission.Location,
 ) {

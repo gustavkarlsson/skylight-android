@@ -43,7 +43,7 @@ object Versions {
     val threetenabp = "1.3.0"
     val timber = "4.7.1"
     val solarPositioning = "0.0.9"
-    val goldFinch = "1.1.0"
+    val goldFinch = "1.0.0"
     val sqldelight = "1.4.4"
     val leakcanary = "2.7"
     val mapboxServices = "5.8.0"
