@@ -7,45 +7,54 @@ import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 
 internal class RuntimePermissionRequester(
-    private val onNewAccesses: (List<PermissionAccess>) -> Unit,
+    private val onNewPermissions: (List<Permission>) -> Unit,
 ) : PermissionRequester {
 
-    override suspend fun request(activity: FragmentActivity, vararg permissions: Permission) {
-        if (permissions.isEmpty()) return
-        val requested = permissions.toSet()
-        logInfo { "Requesting permission for $requested" }
-        logUnsupported(requested)
-        val keys = requested.intersect(Permission.supported)
-            .map { permission -> permission.key }
+    override suspend fun request(activity: FragmentActivity, vararg requested: Permission.Type) {
+        if (requested.isEmpty()) return
+        val requestedDistinct = requested.distinctBy { it.key }
+        logInfo { "Requesting permission for $requestedDistinct" }
+        val keys = requestedDistinct.flatMap { type ->
+            when (type) {
+                is Permission.Type.Location -> listOfNotNull(type.key, type.backgroundKey)
+            }
+        }
 
         // The implementation of this lib is a bit wonky. askPermission returns a result,
         // but throws whenever the result is not granted. Hence the catch
-        val permissionAccesses = try {
+        val newPermissions = try {
             activity.askPermission(*keys.toTypedArray())
-            keys.map { key -> PermissionAccess(Permission.fromKey(key), Access.Granted) }
+            requestedDistinct.allGranted()
         } catch (e: PermissionException) {
-            keys
-                .mapNotNull { key ->
-                    val access = when (key) {
-                        in e.accepted -> Access.Granted
-                        in e.foreverDenied -> Access.DeniedForever
-                        in e.denied -> Access.Denied
-                        else -> {
-                            logError { "Unexpected state for key: $key: $e" }
-                            return@mapNotNull null
+            requestedDistinct.mapNotNull { type ->
+                when (type) {
+                    is Permission.Type.Location -> {
+                        when {
+                            type.backgroundKey in e.accepted -> Permission.Location.Granted.WithBackground
+                            type.key in e.accepted && type.backgroundKey == null -> {
+                                Permission.Location.Granted.WithBackground
+                            }
+                            type.key in e.accepted -> Permission.Location.Granted.WithoutBackground
+                            type.key in e.foreverDenied -> Permission.Location.DeniedForever
+                            type.key in e.denied -> Permission.Location.Denied
+                            else -> {
+                                logError { "Unexpected state for key: ${type.key}: $e" }
+                                return@mapNotNull null
+                            }
                         }
                     }
-                    PermissionAccess(Permission.fromKey(key), access)
                 }
+            }
         }
-        logInfo { "Permissions are $permissionAccesses" }
-        onNewAccesses(permissionAccesses)
+        logInfo { "Permissions are $newPermissions" }
+        onNewPermissions(newPermissions)
     }
 
-    private fun logUnsupported(requested: Set<Permission>) {
-        val unsupported = requested subtract Permission.supported
-        if (unsupported.isNotEmpty()) {
-            logInfo { "Skipped unsupported permissions: $unsupported" }
+    private fun Collection<Permission.Type>.allGranted(): List<Permission.Location.Granted> {
+        return map { type ->
+            when (type) {
+                Permission.Type.Location -> Permission.Location.Granted.WithBackground
+            }
         }
     }
 }

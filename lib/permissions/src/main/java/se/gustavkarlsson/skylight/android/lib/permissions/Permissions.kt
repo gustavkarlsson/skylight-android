@@ -1,48 +1,21 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
-// TODO rework to Map<Permission, Access> and require function?
-//  Location and backgroud location need to be combined, as they have mutually exclusive states
+import co.selim.goldfinch.annotation.GenerateProperties
+
+// TODO Upgrade to later version and add visibility argument when running Kotlin 1.5
+@GenerateProperties
 data class Permissions(
-    val location: PermissionAccess,
-    val backgroundLocation: PermissionAccess,
+    val location: Permission.Location,
 ) {
-    fun toMap(): Map<Permission, Access> = listOf(location, backgroundLocation)
-        .map { it.permission to it.access }
-        .toMap()
-
-    operator fun get(permission: Permission): Access {
-        return toMap()[permission] ?: error("Failed to get access for permission: $permission")
-    }
-
     companion object {
-        val INITIAL: Permissions
-            get() {
-                return Permissions(
-                    location = Permission.Location.withDefaultAccess(),
-                    backgroundLocation = Permission.BackgroundLocation.withDefaultAccess(),
-                )
-            }
-
-        private fun Permission.withDefaultAccess(): PermissionAccess {
-            val access = if (supported) {
-                Access.Unknown
-            } else Access.Granted
-            return PermissionAccess(this, access)
-        }
+        val INITIAL: Permissions = Permissions(
+            location = Permission.Location.Unknown,
+        )
     }
 }
 
-internal fun Permissions.update(newValues: List<PermissionAccess>): Permissions {
-    return Permissions(
-        location = location.update(newValues),
-        backgroundLocation = backgroundLocation.update(newValues),
-    )
-}
-
-private fun PermissionAccess.update(newValues: List<PermissionAccess>): PermissionAccess {
-    val newAccess = newValues
-        .find { newPermissionAccess ->
-            newPermissionAccess.permission == permission
-        }?.access ?: return this
-    return copy(access = newAccess)
+internal fun Permissions.update(permission: Permission): Permissions {
+    return when (permission) {
+        is Permission.Location -> copy(location = permission)
+    }
 }

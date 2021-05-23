@@ -22,8 +22,9 @@ import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
-import se.gustavkarlsson.skylight.android.lib.permissions.Access
+import se.gustavkarlsson.skylight.android.lib.permissions.Permission
 import se.gustavkarlsson.skylight.android.lib.places.Place
+import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingResult
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
@@ -84,28 +85,37 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createErrorBannerData(state: State): BannerData? {
-        val locationAccess = state.permissions.location.access
-        val backgroundLocationAccess = state.permissions.backgroundLocation.access
-        val triggerLevelsEnabled = state.notificationTriggerLevels.values.any { it != TriggerLevel.NEVER }
+        val needsBackgroundLocation = state.notificationTriggerLevels.any { (placeId, triggerLevel) ->
+            placeId == PlaceId.Current && triggerLevel != TriggerLevel.NEVER
+        }
+        val locationPermission = state.permissions.location
+        val locationDeniedForever = locationPermission == Permission.Location.DeniedForever
+        val backgroundLocationDenied = when (locationPermission) {
+            Permission.Location.Denied -> true
+            Permission.Location.DeniedForever -> true
+            Permission.Location.Granted.WithoutBackground -> true
+            Permission.Location.Granted.WithBackground -> false
+            Permission.Location.Unknown -> false
+        }
         return when {
-            triggerLevelsEnabled && backgroundLocationAccess == Access.Denied -> {
+            needsBackgroundLocation && locationDeniedForever -> {
+                BannerData(
+                    TextRef.stringRes(R.string.background_location_permission_denied_forever_message),
+                    TextRef.stringRes(R.string.open_settings),
+                    Icons.Warning,
+                    BannerData.Event.OpenAppDetails
+                )
+            }
+            needsBackgroundLocation && backgroundLocationDenied -> {
                 BannerData(
                     TextRef.stringRes(R.string.background_location_permission_denied_message),
                     TextRef.stringRes(R.string.grant),
                     Icons.Warning,
-                    BannerData.Event.OpenAppDetails
-                )
-            }
-            triggerLevelsEnabled && backgroundLocationAccess == Access.DeniedForever -> {
-                BannerData(
-                    TextRef.stringRes(R.string.location_permission_denied_forever_message),
-                    TextRef.stringRes(R.string.grant),
-                    Icons.Warning,
-                    BannerData.Event.OpenAppDetails
+                    BannerData.Event.RequestLocationPermission
                 )
             }
             state.selectedPlace != Place.Current -> null
-            locationAccess == Access.Denied -> {
+            locationPermission == Permission.Location.Denied -> {
                 BannerData(
                     TextRef.stringRes(R.string.location_permission_denied_message),
                     TextRef.stringRes(R.string.grant),
@@ -113,10 +123,10 @@ internal class StateToViewStateMapper @Inject constructor(
                     BannerData.Event.RequestLocationPermission
                 )
             }
-            locationAccess == Access.DeniedForever -> {
+            locationPermission == Permission.Location.DeniedForever -> {
                 BannerData(
                     TextRef.stringRes(R.string.location_permission_denied_forever_message),
-                    TextRef.stringRes(R.string.grant),
+                    TextRef.stringRes(R.string.open_settings),
                     Icons.Warning,
                     BannerData.Event.OpenAppDetails
                 )

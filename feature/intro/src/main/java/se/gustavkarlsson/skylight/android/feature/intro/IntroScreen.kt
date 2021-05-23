@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.systemBarsPadding
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
@@ -25,14 +24,11 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
-import se.gustavkarlsson.skylight.android.lib.permissions.Permission
-import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ClickableText
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
-import se.gustavkarlsson.skylight.android.lib.ui.startStopScope
 
 @Parcelize
 internal data class IntroScreen(private val target: Backstack) : Screen {
@@ -62,13 +58,8 @@ internal data class IntroScreen(private val target: Backstack) : Screen {
     }
 
     private fun AppCompatActivity.onContinueClicked() {
-        startStopScope?.launch {
-            // TODO Don't request permissions on this screen
-            PermissionsComponent.instance.locationPermissionRequester()
-                .request(this@onContinueClicked, Permission.Location, Permission.BackgroundLocation)
-            viewModel.registerScreenSeen()
-            navigator.setBackstack(target)
-        }
+        viewModel.registerScreenSeen()
+        navigator.setBackstack(target)
     }
 }
 
