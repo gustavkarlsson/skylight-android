@@ -43,16 +43,17 @@ jobs:
       - name: Run release
         env:
           VERSION_NUMBER: ${{ github.event.inputs.versionNumber }}
+        run: ./gradlew release -Prelease.forceVersion="$VERSION_NUMBER"
+
+      - name: Run publish
+        env:
           ORG_GRADLE_PROJECT_android_store_file: android.jks
           ORG_GRADLE_PROJECT_android_store_password: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
           ORG_GRADLE_PROJECT_android_key_alias: ${{ secrets.RELEASE_KEY_ALIAS }}
           ORG_GRADLE_PROJECT_android_key_password: ${{ secrets.RELEASE_KEY_PASSWORD }}
           ORG_GRADLE_PROJECT_mapbox_api_key: ${{ secrets.MAPBOX_API_KEY }}
           ORG_GRADLE_PROJECT_openweathermap_api_key: ${{ secrets.OPENWEATHERMAP_API_KEY }}
-        run: ./gradlew release -Prelease.forceVersion="$VERSION_NUMBER" --dry-run
-
-      - name: Run publish
-        run: ./gradlew publishProductionRelease --dry-run
+        run: ./gradlew publishProductionRelease
 
       - name: Upload apk
         uses: actions/upload-artifact@v2
