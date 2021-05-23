@@ -93,7 +93,7 @@ object MainScreen : Screen {
             state = state,
             onBannerActionClicked = { event ->
                 when (event) {
-                    BannerData.Event.RequestLocationPermission -> requestLocationPermission() // FIXME Add separate call for background permission
+                    BannerData.Event.RequestLocationPermission -> requestLocationPermission()
                     BannerData.Event.OpenAppDetails -> openAppDetails()
                 }
             },
