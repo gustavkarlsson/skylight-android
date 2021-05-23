@@ -23,7 +23,9 @@ object LibPermissionsModule {
     internal fun locationPermissionRequester(): PermissionRequester =
         RuntimePermissionRequester { newPermissions ->
             val old = state.value
-            val new = old.update(newPermissions)
+            val new = newPermissions.fold(old) { acc, permission ->
+                acc.update(permission)
+            }
             if (new != old) {
                 state.value = new
                 logInfo { "Permissions changed from $old to $new" }

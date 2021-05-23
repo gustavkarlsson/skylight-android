@@ -78,7 +78,7 @@ object MainScreen : Screen {
         startStopScope?.launch {
             withContext(Dispatchers.Main) {
                 PermissionsComponent.instance.locationPermissionRequester()
-                    .request(this@requestLocationPermission, Permission.Location, Permission.BackgroundLocation)
+                    .request(this@requestLocationPermission, Permission.Type.Location.WithBackground)
             }
         }
     }
@@ -93,7 +93,7 @@ object MainScreen : Screen {
             state = state,
             onBannerActionClicked = { event ->
                 when (event) {
-                    BannerData.Event.RequestLocationPermission -> requestLocationPermission()
+                    BannerData.Event.RequestLocationPermission -> requestLocationPermission() // FIXME Add separate call for background permission
                     BannerData.Event.OpenAppDetails -> openAppDetails()
                 }
             },

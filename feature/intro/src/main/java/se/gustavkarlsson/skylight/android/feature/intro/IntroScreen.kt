@@ -63,9 +63,9 @@ internal data class IntroScreen(private val target: Backstack) : Screen {
 
     private fun AppCompatActivity.onContinueClicked() {
         startStopScope?.launch {
-            // TODO Don't request permissions on this screen
+            // FIXME Don't request permissions on this screen
             PermissionsComponent.instance.locationPermissionRequester()
-                .request(this@onContinueClicked, Permission.Location, Permission.BackgroundLocation)
+                .request(this@onContinueClicked, Permission.Type.Location.WithBackground)
             viewModel.registerScreenSeen()
             navigator.setBackstack(target)
         }
