@@ -31,7 +31,9 @@ internal class RuntimePermissionRequester(
                     is Permission.Type.Location -> {
                         when {
                             type.backgroundKey in e.accepted -> Permission.Location.Granted.WithBackground
-                            type.key in e.accepted && type.backgroundKey == null -> Permission.Location.Granted.WithBackground
+                            type.key in e.accepted && type.backgroundKey == null -> {
+                                Permission.Location.Granted.WithBackground
+                            }
                             type.key in e.accepted -> Permission.Location.Granted.WithoutBackground
                             type.key in e.foreverDenied -> Permission.Location.DeniedForever
                             type.key in e.denied -> Permission.Location.Denied
