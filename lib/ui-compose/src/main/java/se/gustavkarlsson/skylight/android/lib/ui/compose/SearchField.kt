@@ -137,7 +137,7 @@ fun SearchField(
             cursorColor = Colors.secondary,
         ),
         keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
-        keyboardActions = KeyboardActions { keyboardController?.hideSoftwareKeyboard() },
+        keyboardActions = KeyboardActions { keyboardController?.hide() },
     )
 }
 

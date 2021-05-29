@@ -24,10 +24,10 @@ internal class StreamReportsLiveAction @Inject constructor(
     private val auroraReportProvider: AuroraReportProvider,
     @StreamThrottle private val throttleDuration: Duration,
 ) : Action<State> {
-    override suspend fun execute(state: AtomicStateFlow<State>) {
-        isStoreLive(state).collectLatest { live ->
+    override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
+        isStoreLive(stateFlow).collectLatest { live ->
             if (live) {
-                streamAndUpdateReports(state)
+                streamAndUpdateReports(stateFlow)
             }
         }
     }

@@ -28,7 +28,7 @@ internal class NotifierImpl(
         val androidNotification = NotificationCompat.Builder(context, channelId).run {
             setSmallIcon(R.drawable.app_logo_small)
             setContentTitle(context.getString(R.string.possible_aurora))
-            createColor()?.let { color = it }
+            color = createColor()
             setText(notification)
             setCategory(NotificationCompat.CATEGORY_RECOMMENDATION)
             setAutoCancel(true)
@@ -72,7 +72,7 @@ internal class NotifierImpl(
             context,
             -1,
             mainActivityIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
     }
 }

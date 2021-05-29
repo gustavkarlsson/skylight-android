@@ -9,9 +9,9 @@ import javax.inject.Inject
 internal class PermissionsAction @Inject constructor(
     private val permissionChecker: PermissionChecker,
 ) : Action<State> {
-    override suspend fun execute(state: AtomicStateFlow<State>) {
+    override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         permissionChecker.permissions.collect { permissions ->
-            state.update {
+            stateFlow.update {
                 copy(permissions = permissions)
             }
         }

@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
 import android.app.Activity
 import com.google.android.gms.common.GoogleApiAvailability
+import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineName
@@ -14,13 +15,12 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import se.gustavkarlsson.conveyor.Action
-import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.AtomicStateFlow
+import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.issue
 import se.gustavkarlsson.skylight.android.core.Main
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
-import javax.inject.Inject
 
 internal class GooglePlayServicesViewModel @Inject constructor(
     @Main private val dispatcher: CoroutineDispatcher,
@@ -62,7 +62,7 @@ private class MakeGooglePlayServicesAvailableAction(
     private val activity: Activity,
     private val mainDispatcher: CoroutineDispatcher,
 ) : Action<Install> {
-    override suspend fun execute(state: AtomicStateFlow<Install>) {
+    override suspend fun execute(stateFlow: AtomicStateFlow<Install>) {
         val newState = withContext(mainDispatcher + CoroutineName("makeGooglePlayServicesAvailable")) {
             try {
                 // TODO Extract to library module (together with GooglePlayServicesChecker)
@@ -77,6 +77,6 @@ private class MakeGooglePlayServicesAvailableAction(
                 Install.Error
             }
         }
-        state.update { newState }
+        stateFlow.update { newState }
     }
 }

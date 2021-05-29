@@ -33,16 +33,16 @@ internal class ContinuouslySearchAction @Inject constructor(
         ExperimentalTime::class,
         FlowPreview::class
     )
-    override suspend fun execute(state: AtomicStateFlow<State>): Unit = coroutineScope {
+    override suspend fun execute(stateFlow: AtomicStateFlow<State>): Unit = coroutineScope {
         launch {
             searchChannel.consumeEach { searchFieldState ->
-                state.update {
+                stateFlow.update {
                     updateSearch(searchFieldState)
                 }
             }
         }
 
-        state
+        stateFlow
             .map { it.search }
             .distinctUntilChangedBy { search ->
                 if (search is Search.Active) {
@@ -57,7 +57,7 @@ internal class ContinuouslySearchAction @Inject constructor(
                 // TODO Ensure no race condition
                 launch {
                     val result = geocoder.geocode(query)
-                    state.update { update(result) }
+                    stateFlow.update { update(result) }
                 }
             }
     }

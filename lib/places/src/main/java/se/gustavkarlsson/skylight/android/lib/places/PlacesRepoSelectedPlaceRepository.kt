@@ -48,11 +48,11 @@ private class StreamPlacesAction(
     private val loadId: suspend () -> PlaceId,
     private val placesStream: Flow<List<Place>>,
 ) : Action<State> {
-    override suspend fun execute(state: AtomicStateFlow<State>) {
+    override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         val initialSelectedId = loadId()
         placesStream
             .collect { newPlaces ->
-                state.update {
+                stateFlow.update {
                     createState(this, newPlaces, initialSelectedId)
                 }
             }
@@ -78,8 +78,8 @@ private class SelectionChangedAction(
     private val selectedPlace: Place,
     private val saveId: (PlaceId) -> Unit,
 ) : Action<State> {
-    override suspend fun execute(state: AtomicStateFlow<State>) {
-        val newState = state.update {
+    override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
+        val newState = stateFlow.update {
             when (this) {
                 is State.Initial -> {
                     logError { "Cannot select a place before loading places. Place: $selectedPlace" }

@@ -12,12 +12,12 @@ import javax.inject.Inject
 internal class StreamSelectedPlaceAction @Inject constructor(
     private val selectedPlaceRepository: SelectedPlaceRepository,
 ) : Action<State> {
-    override suspend fun execute(state: AtomicStateFlow<State>) {
+    override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         selectedPlaceRepository.stream()
             .map { place -> place.id }
             .distinctUntilChanged()
             .collect { id ->
-                state.update {
+                stateFlow.update {
                     copy(
                         selectedPlaceId = id,
                         selectedAuroraReport = LoadableAuroraReport.LOADING // TODO Get from cache?

@@ -9,9 +9,9 @@ import javax.inject.Inject
 internal class StreamTriggerLevelsAction @Inject constructor(
     private val settings: Settings,
 ) : Action<State> {
-    override suspend fun execute(state: AtomicStateFlow<State>) {
+    override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         settings.streamNotificationTriggerLevels().collect { levels ->
-            state.update {
+            stateFlow.update {
                 copy(notificationTriggerLevels = levels)
             }
         }

@@ -11,10 +11,10 @@ internal class StreamCurrentLocationAction @Inject constructor(
     private val locationProvider: LocationProvider,
     private val reverseGeocoder: ReverseGeocoder,
 ) : Action<State> {
-    override suspend fun execute(state: AtomicStateFlow<State>) {
+    override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         reverseGeocoder.stream(locationProvider.stream())
             .collect { loadableGeocodingResult ->
-                state.update {
+                stateFlow.update {
                     copy(currentLocationName = loadableGeocodingResult)
                 }
             }
