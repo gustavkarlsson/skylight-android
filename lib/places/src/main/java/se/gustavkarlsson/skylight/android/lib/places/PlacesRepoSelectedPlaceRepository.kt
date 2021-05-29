@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import se.gustavkarlsson.conveyor.Action
-import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.AtomicStateFlow
+import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.skylight.android.core.logging.logError
 
 internal class PlacesRepoSelectedPlaceRepository(

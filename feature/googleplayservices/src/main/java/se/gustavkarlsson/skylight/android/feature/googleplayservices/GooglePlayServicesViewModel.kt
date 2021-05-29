@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
 import android.app.Activity
 import com.google.android.gms.common.GoogleApiAvailability
-import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineName
@@ -21,6 +20,7 @@ import se.gustavkarlsson.conveyor.issue
 import se.gustavkarlsson.skylight.android.core.Main
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
+import javax.inject.Inject
 
 internal class GooglePlayServicesViewModel @Inject constructor(
     @Main private val dispatcher: CoroutineDispatcher,
