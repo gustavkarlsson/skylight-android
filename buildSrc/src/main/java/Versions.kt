@@ -7,7 +7,7 @@ object Versions {
     val targetSdk = 30
     val java = JavaVersion.VERSION_1_8
     val kotlin = "1.4.32" // Must also update in buildSrc/build.gradle.kts
-    val androidGradle = "7.0.0-beta02" // Must also update in buildSrc/build.gradle.kts
+    val androidGradle = "7.0.0-beta03" // Must also update in buildSrc/build.gradle.kts
     val jgit = "5.6.1.202002131546-r"
 
     // Skip 1.11.0 as it has breaking bug: https://github.com/allegro/axion-release-plugin/issues/332
@@ -47,7 +47,7 @@ object Versions {
     val sqldelight = "1.4.4"
     val leakcanary = "2.7"
     val mapboxServices = "5.8.0"
-    val conveyor = "ae2111d8df" // TODO use release version
+    val conveyor = "cc93e41adc" // TODO use release version
     val koptional = "0.4.0"
     val textref = "1.3.1"
     val markwon = "4.4.0"

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.Store
-import se.gustavkarlsson.conveyor.UpdatableStateFlow
+import se.gustavkarlsson.conveyor.AtomicStateFlow
 import se.gustavkarlsson.skylight.android.core.logging.logError
 
 internal class PlacesRepoSelectedPlaceRepository(
@@ -48,7 +48,7 @@ private class StreamPlacesAction(
     private val loadId: suspend () -> PlaceId,
     private val placesStream: Flow<List<Place>>,
 ) : Action<State> {
-    override suspend fun execute(state: UpdatableStateFlow<State>) {
+    override suspend fun execute(state: AtomicStateFlow<State>) {
         val initialSelectedId = loadId()
         placesStream
             .collect { newPlaces ->
@@ -78,7 +78,7 @@ private class SelectionChangedAction(
     private val selectedPlace: Place,
     private val saveId: (PlaceId) -> Unit,
 ) : Action<State> {
-    override suspend fun execute(state: UpdatableStateFlow<State>) {
+    override suspend fun execute(state: AtomicStateFlow<State>) {
         val newState = state.update {
             when (this) {
                 is State.Initial -> {

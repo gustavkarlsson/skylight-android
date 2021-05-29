@@ -15,7 +15,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.Store
-import se.gustavkarlsson.conveyor.UpdatableStateFlow
+import se.gustavkarlsson.conveyor.AtomicStateFlow
 import se.gustavkarlsson.conveyor.issue
 import se.gustavkarlsson.skylight.android.core.Main
 import se.gustavkarlsson.skylight.android.core.logging.logError
@@ -62,7 +62,7 @@ private class MakeGooglePlayServicesAvailableAction(
     private val activity: Activity,
     private val mainDispatcher: CoroutineDispatcher,
 ) : Action<Install> {
-    override suspend fun execute(state: UpdatableStateFlow<Install>) {
+    override suspend fun execute(state: AtomicStateFlow<Install>) {
         val newState = withContext(mainDispatcher + CoroutineName("makeGooglePlayServicesAvailable")) {
             try {
                 // TODO Extract to library module (together with GooglePlayServicesChecker)

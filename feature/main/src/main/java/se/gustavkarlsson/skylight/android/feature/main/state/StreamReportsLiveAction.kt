@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
-import se.gustavkarlsson.conveyor.UpdatableStateFlow
+import se.gustavkarlsson.conveyor.AtomicStateFlow
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.utils.throttle
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.StreamThrottle
@@ -24,7 +24,7 @@ internal class StreamReportsLiveAction @Inject constructor(
     private val auroraReportProvider: AuroraReportProvider,
     @StreamThrottle private val throttleDuration: Duration,
 ) : Action<State> {
-    override suspend fun execute(state: UpdatableStateFlow<State>) {
+    override suspend fun execute(state: AtomicStateFlow<State>) {
         isStoreLive(state).collectLatest { live ->
             if (live) {
                 streamAndUpdateReports(state)
@@ -32,12 +32,12 @@ internal class StreamReportsLiveAction @Inject constructor(
         }
     }
 
-    private fun isStoreLive(state: UpdatableStateFlow<State>): Flow<Boolean> =
+    private fun isStoreLive(state: AtomicStateFlow<State>): Flow<Boolean> =
         state.storeSubscriberCount
             .map { it > 0 }
             .distinctUntilChanged()
 
-    private suspend fun streamAndUpdateReports(state: UpdatableStateFlow<State>) {
+    private suspend fun streamAndUpdateReports(state: AtomicStateFlow<State>) {
         selectedPlace(state).collectLatest { selectedPlace ->
             auroraReportProvider.stream(locationUpdates(selectedPlace))
                 .throttle(throttleDuration.toMillis())
@@ -47,7 +47,7 @@ internal class StreamReportsLiveAction @Inject constructor(
         }
     }
 
-    private fun selectedPlace(state: UpdatableStateFlow<State>): Flow<Place> =
+    private fun selectedPlace(state: AtomicStateFlow<State>): Flow<Place> =
         state
             .map { it.selectedPlace }
             .distinctUntilChangedBy { selected -> selected.id }
@@ -59,7 +59,7 @@ internal class StreamReportsLiveAction @Inject constructor(
         }
     }
 
-    private suspend fun UpdatableStateFlow<State>.update(
+    private suspend fun AtomicStateFlow<State>.update(
         reportPlace: Place,
         report: LoadableAuroraReport
     ) {

@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
-import se.gustavkarlsson.conveyor.UpdatableStateFlow
+import se.gustavkarlsson.conveyor.AtomicStateFlow
 import se.gustavkarlsson.skylight.android.core.utils.throttle
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchThrottle
@@ -33,7 +33,7 @@ internal class ContinuouslySearchAction @Inject constructor(
         ExperimentalTime::class,
         FlowPreview::class
     )
-    override suspend fun execute(state: UpdatableStateFlow<State>): Unit = coroutineScope {
+    override suspend fun execute(state: AtomicStateFlow<State>): Unit = coroutineScope {
         launch {
             searchChannel.consumeEach { searchFieldState ->
                 state.update {
