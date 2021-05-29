@@ -4,8 +4,8 @@ import android.content.Context
 import android.os.Looper
 import com.dropbox.android.external.store4.MemoryPolicy
 import com.dropbox.android.external.store4.StoreBuilder
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
@@ -32,9 +32,9 @@ object LibLocationModule {
         context: Context,
         @Io dispatcher: CoroutineDispatcher
     ): LocationProvider {
-        val client = FusedLocationProviderClient(context)
+        val client = LocationServices.getFusedLocationProviderClient(context)
         val requestInterval = 10.minutes
-        val locationRequest = LocationRequest().apply {
+        val locationRequest = LocationRequest.create().apply {
             priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
             fastestInterval = 1.minutes.toMillis()
             interval = requestInterval.toMillis()
