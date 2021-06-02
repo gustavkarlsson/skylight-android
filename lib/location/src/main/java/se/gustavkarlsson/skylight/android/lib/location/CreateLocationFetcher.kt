@@ -12,7 +12,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.sendBlocking
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -27,6 +26,7 @@ import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import android.location.Location as AndroidLocation
 import com.google.android.gms.location.LocationResult as GmsLocationResult
+import kotlinx.coroutines.channels.trySendBlocking
 
 internal fun createLocationFetcher(
     client: FusedLocationProviderClient,
@@ -147,10 +147,6 @@ private class LatestLocationCallback(
     }
 }
 
-private fun <T> SendChannel<T>.sendCatching(element: T) =
-    try {
-        sendBlocking(element)
-    } catch (e: Exception) {
-    }
+private fun <T> SendChannel<T>.sendCatching(element: T) = trySendBlocking(element)
 
 private fun AndroidLocation.toLocation(): Location = Location(latitude, longitude)

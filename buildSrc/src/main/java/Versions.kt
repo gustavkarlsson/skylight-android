@@ -6,7 +6,7 @@ object Versions {
     val compileSdk = 30
     val targetSdk = 30
     val java = JavaVersion.VERSION_1_8
-    val kotlin = "1.4.32" // Must also update in buildSrc/build.gradle.kts
+    val kotlin = "1.5.10" // Must also update in buildSrc/build.gradle.kts
     val androidGradle = "7.0.0-beta03" // Must also update in buildSrc/build.gradle.kts
     val jgit = "5.6.1.202002131546-r"
 
@@ -33,13 +33,13 @@ object Versions {
     val androidLifecycle = "2.3.1"
 
     val runtimePermissionKotlin = "1.1.2"
-    val kotlinxCoroutines = "1.4.3"
+    val kotlinxCoroutines = "1.5.0"
 
     val okHttp = "4.9.1"
     val retrofit = "2.9.0"
     val retrofitKotlinSerialization = "0.7.0"
 
-    val dagger = "2.33"
+    val dagger = "2.36"
     val threetenabp = "1.3.0"
     val timber = "4.7.1"
     val solarPositioning = "0.0.9"
@@ -51,8 +51,8 @@ object Versions {
     val koptional = "0.4.0"
     val textref = "1.3.1"
     val markwon = "4.4.0"
-    val store = "4.0.0"
-    val compose = "1.0.0-beta07"
+    val store = "4.0.2-KT15"
+    val compose = "1.0.0-beta08"
     val composeConstraintLayout = "1.0.0-alpha07"
     val accompanist = "0.10.0"
     val backstack = "0.9.0+1.0.0-beta07"

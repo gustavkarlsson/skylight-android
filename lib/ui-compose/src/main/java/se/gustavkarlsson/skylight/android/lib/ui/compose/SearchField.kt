@@ -21,9 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.isFocused
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
@@ -67,7 +65,7 @@ fun SearchField(
                 focusRequester.captureFocus()
                 canClearFocus = true
             }
-            canClearFocus -> focusManager.clearFocus(forcedClear = true)
+            canClearFocus -> focusManager.clearFocus(force = true)
         }
     }
     TextField(
@@ -75,7 +73,7 @@ fun SearchField(
             .focusRequester(focusRequester)
             .onFocusChanged { focus ->
                 val newState = if (focus.isFocused) {
-                    if (focus != FocusState.Captured) {
+                    if (!focus.isCaptured) {
                         focusRequester.captureFocus() // In case focus is active by non-captured means
                     }
                     SearchFieldState.Active(activeText ?: "")

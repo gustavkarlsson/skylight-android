@@ -34,7 +34,6 @@ allprojects {
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = Versions.java.toString()
-            useIR = true
             freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
         }
     }

@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ContentAlpha
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconToggleButton
 import androidx.compose.material.RadioButton
@@ -193,7 +194,7 @@ private fun ErrorBanner(
                         ) {
                             Crossfade(targetState = errorBannerData.buttonText) { text ->
                                 Text(
-                                    text = textRef(text).toUpperCase(Locale.ROOT),
+                                    text = textRef(text).uppercase(Locale.ROOT),
                                 )
                             }
                         }
@@ -334,6 +335,7 @@ private fun Cards(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun Card(
     item: FactorItem,
@@ -342,10 +344,10 @@ private fun Card(
 ) {
     // TODO re-arrange when expanded
     androidx.compose.material.Card(
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .animateContentSize()
-            .clickable(onClick = onClick),
+            .animateContentSize(),
     ) {
         ConstraintLayout(
             modifier = Modifier.padding(16.dp),

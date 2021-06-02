@@ -6,6 +6,8 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -20,8 +22,6 @@ import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.core.utils.seconds
 import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
 import se.gustavkarlsson.skylight.android.lib.time.Time
-import kotlin.time.ExperimentalTime
-import kotlin.time.milliseconds as kotlinMilliseconds
 
 @Module
 object LibWeatherModule {
@@ -66,7 +66,7 @@ object LibWeatherModule {
             dispatcher = dispatcher
         )
 
-        val expiry = (pollingInterval.toMillis() / 2).kotlinMilliseconds
+        val expiry = Duration.milliseconds(pollingInterval.toMillis() / 2)
         val cachePolicy = MemoryPolicy.builder<ApproximatedLocation, Weather>()
             .setExpireAfterWrite(expiry)
             .setMaxSize(16)
