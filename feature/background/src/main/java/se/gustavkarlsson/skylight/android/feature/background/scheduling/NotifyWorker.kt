@@ -5,6 +5,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import kotlinx.coroutines.CancellationException
 import se.gustavkarlsson.skylight.android.core.logging.logError
+import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
 
 internal class NotifyWorker(
@@ -13,17 +14,16 @@ internal class NotifyWorker(
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
-        // TODO Look into creating factory
         val work = BackgroundComponent.instance.backgroundWork()
         return try {
             work()
             Result.success()
         } catch (e: CancellationException) {
-            // FIXME is this the right approach for this?
+            logInfo(e) { "Worker cancelled" }
             throw e
         } catch (e: Exception) {
             logError(e) { "Failed to complete work" }
-            Result.retry()
+            Result.failure()
         }
     }
 }
