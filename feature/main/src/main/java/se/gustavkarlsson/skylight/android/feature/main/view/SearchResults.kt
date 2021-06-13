@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
-import com.google.accompanist.insets.toPaddingValues
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchResult
@@ -98,7 +98,9 @@ internal fun SearchResults(
                 }
                 is SearchViewState.Open.Ok -> {
                     LazyColumn(
-                        contentPadding = LocalWindowInsets.current.navigationBarsWithIme.toPaddingValues(),
+                        contentPadding = rememberInsetsPaddingValues(
+                            insets = LocalWindowInsets.current.navigationBarsWithIme
+                        ),
                     ) {
                         items(state.search.searchResults) { item ->
                             ListItem(item = item, onEvent = onEvent)

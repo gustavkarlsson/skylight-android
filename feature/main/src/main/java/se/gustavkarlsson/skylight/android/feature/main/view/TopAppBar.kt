@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.toPaddingValues
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchViewState
@@ -48,8 +48,11 @@ internal fun TopAppBar(
     TopAppBar(
         backgroundColor = backgroundColor,
         elevation = elevation,
-        contentPadding = LocalWindowInsets.current.statusBars
-            .toPaddingValues(additionalHorizontal = AppBarHorizontalPadding),
+        contentPadding = rememberInsetsPaddingValues(
+            insets = LocalWindowInsets.current.statusBars,
+            additionalStart = AppBarHorizontalPadding,
+            additionalEnd = AppBarHorizontalPadding
+        ),
         title = {
             // TODO doesn't fit unless text shrunk. Toolbar has fixed height. Lower case 'j' and 'g' get cut off.
             SearchField(
