@@ -40,6 +40,7 @@ internal class BackgroundWorkImpl(
         }
     }
 
+    // FIXME this doesn't complete sometimes
     private suspend fun getNotificationData(): Notification {
         val placeIdsWithLevel = getPlaceIdsToCheck()
             .mapNotNull { (placeId, triggerLevel) ->
