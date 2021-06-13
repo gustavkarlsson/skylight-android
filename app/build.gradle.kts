@@ -6,6 +6,7 @@ plugins {
     kotlin("android")
     kotlin("kapt")
     id("kotlin-parcelize")
+    id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("pl.allegro.tech.build.axion-release")
     id("com.github.triplet.play") version Versions.playPublisher
@@ -175,6 +176,3 @@ fun generateVersionCode(version: String): Int {
     require(versionCode in 1..2100000000)
     return versionCode
 }
-
-// Recommended to be applied at bottom (still?)
-apply(mapOf("plugin" to "com.google.gms.google-services"))
