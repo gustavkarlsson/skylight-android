@@ -29,7 +29,7 @@ object Versions {
     val androidAppcompat = "1.3.0"
     val androidActivity = "1.3.0-beta01"
     val androidAnnotation = "1.2.0"
-    val androidWorkManager = "2.5.0" // FIXME update to 2.6.0-beta01
+    val androidWorkManager = "2.6.0-beta01"
     val androidCore = "1.5.0"
     val androidLifecycle = "2.3.1"
 
