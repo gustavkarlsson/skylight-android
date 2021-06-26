@@ -22,8 +22,9 @@ internal class Renderer(
                 SupervisorJob() + Dispatchers.Main + CoroutineName("viewScope")
             }
             val change by navigator.backstackChanges.collectAsState()
+            val backstack = change.new.takeIf { it.isNotEmpty() } ?: change.old
             Backstack(
-                backstack = change.new,
+                backstack = backstack,
                 transition = CrossFadeZoom,
             ) { screen ->
                 screen.run { activity.Content(scope) }
