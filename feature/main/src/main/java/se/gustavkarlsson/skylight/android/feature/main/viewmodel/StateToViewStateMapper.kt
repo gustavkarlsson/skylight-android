@@ -89,8 +89,9 @@ internal class StateToViewStateMapper @Inject constructor(
             placeId == PlaceId.Current && triggerLevel != TriggerLevel.NEVER
         }
         val locationPermission = state.permissions.location
+        val locationDenied = locationPermission == Permission.Location.Denied
         val locationDeniedForever = locationPermission == Permission.Location.DeniedForever
-        val backgroundLocationDenied = when (locationPermission) {
+        val backgroundLocationDeniedSomehow = when (locationPermission) {
             Permission.Location.Denied -> true
             Permission.Location.DeniedForever -> true
             Permission.Location.Granted.WithoutBackground -> true
@@ -106,7 +107,7 @@ internal class StateToViewStateMapper @Inject constructor(
                     BannerData.Event.OpenAppDetails
                 )
             }
-            needsBackgroundLocation && backgroundLocationDenied -> {
+            needsBackgroundLocation && backgroundLocationDeniedSomehow -> {
                 BannerData(
                     TextRef.stringRes(R.string.background_location_permission_denied_message),
                     TextRef.stringRes(R.string.grant),
@@ -115,20 +116,20 @@ internal class StateToViewStateMapper @Inject constructor(
                 )
             }
             state.selectedPlace != Place.Current -> null
-            locationPermission == Permission.Location.Denied -> {
-                BannerData(
-                    TextRef.stringRes(R.string.location_permission_denied_message),
-                    TextRef.stringRes(R.string.grant),
-                    Icons.LocationOn,
-                    BannerData.Event.RequestLocationPermission
-                )
-            }
-            locationPermission == Permission.Location.DeniedForever -> {
+            locationDeniedForever -> {
                 BannerData(
                     TextRef.stringRes(R.string.location_permission_denied_forever_message),
                     TextRef.stringRes(R.string.open_settings),
                     Icons.Warning,
                     BannerData.Event.OpenAppDetails
+                )
+            }
+            locationDenied -> {
+                BannerData(
+                    TextRef.stringRes(R.string.location_permission_denied_message),
+                    TextRef.stringRes(R.string.grant),
+                    Icons.LocationOn,
+                    BannerData.Event.RequestLocationPermission
                 )
             }
             else -> null
