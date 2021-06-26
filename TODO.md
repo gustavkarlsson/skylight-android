@@ -3,6 +3,7 @@
 * Permission: "Ask every time" shows up as "denied" for some reason.
 * Add "ask" permission?
 * Test permissions more
+* Consider using accompanist permissions
 
 ## Soon
 * Standard dimensions?
