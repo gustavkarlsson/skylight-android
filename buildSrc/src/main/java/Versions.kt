@@ -6,7 +6,7 @@ object Versions {
     val compileSdk = 30
     val targetSdk = 30
     val java = JavaVersion.VERSION_1_8
-    val kotlin = "1.5.10" // Must also update in buildSrc/build.gradle.kts
+    val kotlin = "1.5.20" // Must also update in buildSrc/build.gradle.kts
     val androidGradle = "7.0.0-beta03" // Must also update in buildSrc/build.gradle.kts
     val jgit = "5.12.0.202106070339-r"
 

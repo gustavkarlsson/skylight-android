@@ -5,6 +5,6 @@ import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 
 interface AuroraReportProvider {
-    suspend fun get(getLocation: suspend () -> LocationResult): CompleteAuroraReport // TODO Why suspending lambda?
+    suspend fun get(getLocation: suspend () -> LocationResult): CompleteAuroraReport
     fun stream(locations: Flow<Loadable<LocationResult>>): Flow<LoadableAuroraReport>
 }
