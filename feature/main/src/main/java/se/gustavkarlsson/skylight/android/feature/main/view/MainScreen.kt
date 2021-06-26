@@ -7,7 +7,6 @@ import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -35,7 +34,6 @@ import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.permissions.Permission
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
@@ -133,8 +131,6 @@ private fun Content(
     onEvent: (Event) -> Unit,
 ) {
     ScreenBackground {
-        val topBarElevation = AppBarDefaults.TopAppBarElevation
-        val topBarBackgroundColor = Colors.primarySurface
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -142,8 +138,6 @@ private fun Content(
                     title = textRef(state.toolbarTitleName),
                     onAboutClicked = onAboutClicked,
                     onEvent = onEvent,
-                    backgroundColor = topBarBackgroundColor,
-                    elevation = topBarElevation,
                 )
             },
         ) {
@@ -159,8 +153,6 @@ private fun Content(
                 SearchResults(
                     modifier = Modifier.fillMaxSize(),
                     state = state,
-                    searchElevation = topBarElevation / 2,
-                    searchBackgroundColor = topBarBackgroundColor,
                     onEvent = onEvent,
                 )
             }

@@ -6,11 +6,8 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import se.gustavkarlsson.skylight.android.feature.main.R
@@ -31,8 +28,6 @@ private fun PreviewTopAppBar() {
         title = "Title",
         onAboutClicked = {},
         onEvent = {},
-        backgroundColor = Color.White,
-        elevation = 6.dp,
     )
 }
 
@@ -42,12 +37,8 @@ internal fun TopAppBar(
     title: String,
     onAboutClicked: () -> Unit,
     onEvent: (Event) -> Unit,
-    backgroundColor: Color,
-    elevation: Dp,
 ) {
     TopAppBar(
-        backgroundColor = backgroundColor,
-        elevation = elevation,
         contentPadding = rememberInsetsPaddingValues(
             insets = LocalWindowInsets.current.statusBars,
             additionalStart = AppBarHorizontalPadding,
