@@ -1,11 +1,14 @@
 ## ASAP
-* Refresh permissions when coming back from other app, and when starting main screen (or on every onStart?)
-* Permission: "Ask every time" shows up as "denied" for some reason.
-* Add "ask" permission?
-* Test permissions more
-* Consider using accompanist permissions
+* Fix location permission:
+  * On Android 11+: Denying a permission more than once automatically sets "don't ask again" (https://developer.android.com/about/versions/11/privacy/permissions#dialog-visibility)
+  * On Android 11+ Cannot request foreground AND background permission at the same time (https://developer.android.com/about/versions/11/privacy/location#request-background-location-separately)
+  * On Android 11+: Cannot request background permission via dialog at all? Must use app settings? (https://developer.android.com/about/versions/11/privacy/location#background-location-permission-dialog-changes)
+  * "Ask every time" shows up as "denied" for some reason (due to above reasons?)
+  * Test on different SDK:s Especially 10 and 11 which have slightly different solutions for requesting background permission
+* Ensure fetching aurora report in background always happens (se.gustavkarlsson.skylight.android.feature.background.scheduling.BackgroundWorkImpl.getNotificationData)
 
 ## Soon
+* Consider using accompanist permissions
 * Standard dimensions?
 * Standard animations?
 * Bug: Single-use permission doesn't really work: https://developer.android.com/preview/privacy/permissions#one-time
