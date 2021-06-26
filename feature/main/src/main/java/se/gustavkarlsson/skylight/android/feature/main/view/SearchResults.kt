@@ -1,9 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -60,46 +57,40 @@ private fun PreviewSearchResults() {
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 internal fun SearchResults(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     state: ViewState,
     onEvent: (Event) -> Unit
 ) {
-    AnimatedVisibility(
-        visible = state.search is SearchViewState.Open,
-        enter = fadeIn(),
-        exit = fadeOut(),
+    Surface(
+        modifier = modifier,
+        elevation = AppBarDefaults.TopAppBarElevation / 2,
+        color = Colors.primarySurface,
     ) {
-        Surface(
-            modifier = modifier,
-            elevation = AppBarDefaults.TopAppBarElevation / 2,
-            color = Colors.primarySurface,
-        ) {
-            @Suppress("UNUSED_VARIABLE")
-            val dummy = when (state.search) {
-                SearchViewState.Closed -> Unit
-                is SearchViewState.Open.Error -> {
-                    Box(
-                        modifier = Modifier
-                            .navigationBarsWithImePadding()
-                            .padding(16.dp),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        Text(
-                            textAlign = TextAlign.Center,
-                            text = textRef(state.search.text),
-                            color = Colors.error,
-                        )
-                    }
+        @Suppress("UNUSED_VARIABLE")
+        val dummy = when (state.search) {
+            SearchViewState.Closed -> Unit
+            is SearchViewState.Open.Error -> {
+                Box(
+                    modifier = Modifier
+                        .navigationBarsWithImePadding()
+                        .padding(16.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        textAlign = TextAlign.Center,
+                        text = textRef(state.search.text),
+                        color = Colors.error,
+                    )
                 }
-                is SearchViewState.Open.Ok -> {
-                    LazyColumn(
-                        contentPadding = rememberInsetsPaddingValues(
-                            insets = LocalWindowInsets.current.navigationBarsWithIme
-                        ),
-                    ) {
-                        items(state.search.searchResults) { item ->
-                            ListItem(item = item, onEvent = onEvent)
-                        }
+            }
+            is SearchViewState.Open.Ok -> {
+                LazyColumn(
+                    contentPadding = rememberInsetsPaddingValues(
+                        insets = LocalWindowInsets.current.navigationBarsWithIme
+                    ),
+                ) {
+                    items(state.search.searchResults) { item ->
+                        ListItem(item = item, onEvent = onEvent)
                     }
                 }
             }

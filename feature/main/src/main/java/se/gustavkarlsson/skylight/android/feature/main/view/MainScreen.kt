@@ -5,8 +5,9 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.Box
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -140,21 +141,27 @@ private fun Content(
                     onEvent = onEvent,
                 )
             },
-        ) {
-            Box {
-                SelectedPlace(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .navigationBarsPadding(),
-                    state = state,
-                    onBannerActionClicked = onBannerActionClicked,
-                    onEvent = onEvent,
-                )
-                SearchResults(
-                    modifier = Modifier.fillMaxSize(),
-                    state = state,
-                    onEvent = onEvent,
-                )
+        ) { paddingValues ->
+            Crossfade(
+                modifier = Modifier.padding(paddingValues),
+                targetState = state.search is SearchViewState.Open,
+            ) { showSearch ->
+                if (showSearch) {
+                    SearchResults(
+                        modifier = Modifier.fillMaxSize(),
+                        state = state,
+                        onEvent = onEvent,
+                    )
+                } else {
+                    SelectedPlace(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .navigationBarsPadding(),
+                        state = state,
+                        onBannerActionClicked = onBannerActionClicked,
+                        onEvent = onEvent,
+                    )
+                }
             }
         }
     }
