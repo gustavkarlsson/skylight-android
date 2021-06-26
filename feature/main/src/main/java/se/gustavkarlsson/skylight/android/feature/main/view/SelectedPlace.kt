@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.ExperimentalMaterialApi
@@ -115,7 +116,7 @@ internal fun SelectedPlace(
         )
 
         var showDialog by remember { mutableStateOf(false) }
-        AlertDialog(
+        SetNotificationLevelAlertDialog(
             items = if (showDialog) state.notificationLevelItems else null,
             onDismiss = { showDialog = false },
             onEvent = onEvent,
@@ -211,14 +212,14 @@ private fun ErrorBanner(
 }
 
 @Composable
-private fun AlertDialog(
+private fun SetNotificationLevelAlertDialog(
     items: List<NotificationLevelItem>?,
     onEvent: (Event) -> Unit,
     onDismiss: () -> Unit,
 ) {
     if (items != null) {
         // TODO This looks quite ugly. It has built-in padding and extra padding for buttons
-        androidx.compose.material.AlertDialog(
+        AlertDialog(
             onDismissRequest = onDismiss,
             text = {
                 Column(
