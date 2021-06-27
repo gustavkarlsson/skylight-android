@@ -4,7 +4,7 @@
     <string name="in_location">i %1$s</string>
     <string name="remove">Ta bort</string>
     <string name="remove_thing">Ta bort %s?</string>
-    <string name="grant">Tillåt</string>
+    <string name="allow">Tillåt</string>
     <string name="open_settings">Öppna inställningar</string>
     <string name="places">Platser</string>
 

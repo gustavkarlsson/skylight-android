@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
 import androidx.annotation.StringRes
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Warning
 import com.ioki.textref.TextRef
 import org.threeten.bp.Instant
@@ -72,6 +71,12 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createContent(state: State): ContentState {
+        if (state.permissions[Permission.Location] == Access.Denied) {
+            return ContentState.RequiresLocationPermission.UseDialog
+        }
+        if (state.permissions[Permission.Location] == Access.DeniedForever) {
+            return ContentState.RequiresLocationPermission.UseAppSettings
+        }
         return when (val search = state.search) {
             is Search.Active.Blank -> {
                 val searchResults = createPlacesSearchResults(state, filter = null)
@@ -118,11 +123,7 @@ internal class StateToViewStateMapper @Inject constructor(
         val needsBackgroundLocation = state.notificationTriggerLevels.any { (placeId, triggerLevel) ->
             placeId == PlaceId.Current && triggerLevel != TriggerLevel.NEVER
         }
-        val locationAccess = state.permissions[Permission.Location]
-        val backgroundLocationAccess = state.permissions[Permission.BackgroundLocation]
-        val locationDenied = locationAccess == Access.Denied
-        val locationDeniedForever = locationAccess == Access.DeniedForever
-        val backgroundLocationDeniedSomehow = when (backgroundLocationAccess) {
+        val backgroundLocationDeniedSomehow = when (state.permissions[Permission.BackgroundLocation]) {
             Access.Denied, Access.DeniedForever -> true
             Access.Granted, Access.Unknown -> false
         }
@@ -136,22 +137,6 @@ internal class StateToViewStateMapper @Inject constructor(
                 )
             }
             state.selectedPlace != Place.Current -> null
-            locationDeniedForever -> {
-                BannerData(
-                    TextRef.stringRes(R.string.location_permission_denied_forever_message),
-                    TextRef.stringRes(R.string.open_settings),
-                    Icons.Warning,
-                    BannerData.Event.OpenAppDetails
-                )
-            }
-            locationDenied -> {
-                BannerData(
-                    TextRef.stringRes(R.string.location_permission_denied_message),
-                    TextRef.stringRes(R.string.grant),
-                    Icons.LocationOn,
-                    BannerData.Event.RequestLocationPermission
-                )
-            }
             else -> null
         }
     }

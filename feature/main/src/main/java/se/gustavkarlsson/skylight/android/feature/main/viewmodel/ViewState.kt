@@ -42,6 +42,11 @@ internal sealed interface ContentState {
         data class Ok(val searchResults: List<SearchResult>) : Searching
         data class Error(val text: TextRef) : Searching
     }
+
+    sealed interface RequiresLocationPermission : ContentState {
+        object UseDialog : RequiresLocationPermission
+        object UseAppSettings : RequiresLocationPermission
+    }
 }
 
 internal data class BannerData(
@@ -51,7 +56,7 @@ internal data class BannerData(
     val buttonEvent: Event
 ) {
     enum class Event {
-        RequestLocationPermission, RequestBackgroundLocationPermission, OpenAppDetails
+        RequestBackgroundLocationPermission, OpenAppDetails
     }
 }
 
