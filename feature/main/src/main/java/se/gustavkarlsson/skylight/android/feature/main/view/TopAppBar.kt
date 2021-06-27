@@ -10,22 +10,23 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
+import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.feature.main.R
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.AppBarState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
-import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchViewState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchField
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
+import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
 @Preview
 @Composable
 private fun PreviewTopAppBar() {
     TopAppBar(
-        state = SearchViewState.Open.Ok("query", emptyList()),
-        title = "Title",
+        state = AppBarState.Searching("I'm searchi"),
         onAboutClicked = {},
         onEvent = {},
     )
@@ -33,8 +34,7 @@ private fun PreviewTopAppBar() {
 
 @Composable
 internal fun TopAppBar(
-    state: SearchViewState,
-    title: String,
+    state: AppBarState,
     onAboutClicked: () -> Unit,
     onEvent: (Event) -> Unit,
 ) {
@@ -49,7 +49,7 @@ internal fun TopAppBar(
             SearchField(
                 modifier = Modifier.fillMaxSize(),
                 state = state.toSearchFieldState(),
-                inactiveText = title,
+                inactiveText = textRef(textRef = (state as? AppBarState.PlaceSelected)?.title ?: TextRef.EMPTY),
                 placeholderText = stringResource(id = R.string.place_search),
                 textStyle = Typography.h6.copy(fontSize = Typography.h6.fontSize * 0.9),
                 onStateChanged = { state -> onEvent(Event.SearchChanged(state)) },
@@ -63,9 +63,9 @@ internal fun TopAppBar(
     )
 }
 
-private fun SearchViewState.toSearchFieldState(): SearchFieldState {
+private fun AppBarState.toSearchFieldState(): SearchFieldState {
     return when (this) {
-        SearchViewState.Closed -> SearchFieldState.Inactive
-        is SearchViewState.Open -> SearchFieldState.Active(query)
+        is AppBarState.PlaceSelected -> SearchFieldState.Inactive
+        is AppBarState.Searching -> SearchFieldState.Active(query)
     }
 }

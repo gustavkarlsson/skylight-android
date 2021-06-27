@@ -17,7 +17,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.SkylightColors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 
 internal data class ViewState(
-    val toolbarTitleName: TextRef,
+    val appBar: AppBarState,
     val chanceLevelText: TextRef,
     val chanceSubtitleText: TextRef,
     val errorBannerData: BannerData?,
@@ -25,9 +25,14 @@ internal data class ViewState(
     val favoriteButtonState: ToggleButtonState,
     val factorItems: List<FactorItem>,
     val search: SearchViewState,
-    val onFavoritesClickedEvent: Event,
+    val onFavoriteClickedEvent: Event,
     val notificationLevelItems: List<NotificationLevelItem>,
 )
+
+internal sealed interface AppBarState {
+    data class PlaceSelected(val title: TextRef) : AppBarState
+    data class Searching(val query: String) : AppBarState
+}
 
 internal data class BannerData(
     val message: TextRef,
@@ -49,20 +54,11 @@ internal data class FactorItem(
     val errorText: TextRef?
 )
 
-internal sealed class SearchViewState {
-    object Closed : SearchViewState()
-    sealed class Open : SearchViewState() {
-        abstract val query: String
-
-        data class Ok(
-            override val query: String,
-            val searchResults: List<SearchResult>,
-        ) : Open()
-
-        data class Error(
-            override val query: String,
-            val text: TextRef,
-        ) : Open()
+internal sealed interface SearchViewState {
+    object Closed : SearchViewState
+    sealed interface Open : SearchViewState {
+        data class Ok(val searchResults: List<SearchResult>) : Open
+        data class Error(val text: TextRef) : Open
     }
 }
 

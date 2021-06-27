@@ -48,7 +48,7 @@ internal class StateToViewStateMapper @Inject constructor(
 
     fun map(state: State): ViewState {
         return ViewState(
-            toolbarTitleName = createToolbarTitleName(state),
+            appBar = createToolbarState(state),
             chanceLevelText = createChangeLevelText(state),
             chanceSubtitleText = createChanceSubtitleText(),
             errorBannerData = createErrorBannerData(state),
@@ -56,20 +56,26 @@ internal class StateToViewStateMapper @Inject constructor(
             favoriteButtonState = createFavoriteButtonState(state),
             factorItems = createFactorItems(state),
             search = createSearchViewState(state),
-            onFavoritesClickedEvent = createOnFavoritesClickedEvent(state),
+            onFavoriteClickedEvent = createOnFavoritesClickedEvent(state),
             notificationLevelItems = createNotificationLevelItems(state),
         )
     }
 
-    private fun createToolbarTitleName(state: State): TextRef {
-        return when (val selectedPlace = state.selectedPlace) {
-            Place.Current -> {
-                val name = createCurrentLocationDisplayName(state)
-                if (name != null) {
-                    TextRef.string(name)
-                } else TextRef.stringRes(R.string.your_location)
+    private fun createToolbarState(state: State): AppBarState {
+        return when (state.search) {
+            is Search.Inactive -> {
+                val title = when (val selectedPlace = state.selectedPlace) {
+                    Place.Current -> {
+                        val name = createCurrentLocationDisplayName(state)
+                        if (name != null) {
+                            TextRef.string(name)
+                        } else TextRef.stringRes(R.string.your_location)
+                    }
+                    is Place.Saved -> TextRef.string(selectedPlace.name)
+                }
+                AppBarState.PlaceSelected(title)
             }
-            is Place.Saved -> TextRef.string(selectedPlace.name)
+            is Search.Active -> AppBarState.Searching(state.search.query)
         }
     }
 
@@ -190,16 +196,16 @@ internal class StateToViewStateMapper @Inject constructor(
             is Search.Active.Blank -> {
                 val searchResults = createPlacesSearchResults(state, filter = null)
                     .sortedWith(searchResultOrderComparator)
-                SearchViewState.Open.Ok(search.query, searchResults)
+                SearchViewState.Open.Ok(searchResults)
             }
             is Search.Active.Filled -> {
                 val searchResults = createPlacesSearchResults(state, filter = search.query)
                     .plus(createGeocodedSearchResults(search))
                     .sortedWith(searchResultOrderComparator)
-                SearchViewState.Open.Ok(search.query, searchResults)
+                SearchViewState.Open.Ok(searchResults)
             }
             is Search.Active.Error -> {
-                SearchViewState.Open.Error(search.query, search.text)
+                SearchViewState.Open.Error(search.text)
             }
             Search.Inactive -> SearchViewState.Closed
         }

@@ -50,6 +50,7 @@ import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.FactorItem
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.NotificationLevelItem
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchViewState
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.AppBarState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Banner
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
@@ -68,7 +69,7 @@ private fun PreviewSelectedPlace() {
     SelectedPlace(
         modifier = Modifier.fillMaxSize(),
         state = ViewState(
-            toolbarTitleName = TextRef.string("Title"),
+            appBar = AppBarState.PlaceSelected(TextRef.string("Some Place")),
             chanceLevelText = TextRef.string("What chance?"),
             chanceSubtitleText = TextRef.string("subtitle"),
             errorBannerData = null,
@@ -85,7 +86,7 @@ private fun PreviewSelectedPlace() {
                 )
             ),
             search = SearchViewState.Closed,
-            onFavoritesClickedEvent = Event.Noop,
+            onFavoriteClickedEvent = Event.Noop,
             notificationLevelItems = emptyList(),
         ),
         onBannerActionClicked = {},
@@ -131,7 +132,7 @@ internal fun SelectedPlace(
             notificationsButtonState = state.notificationsButtonState,
             favoriteButtonState = state.favoriteButtonState,
             onNotificationsClicked = { showDialog = true },
-            onFavoriteClicked = { onEvent(state.onFavoritesClickedEvent) },
+            onFavoriteClicked = { onEvent(state.onFavoriteClickedEvent) },
         )
 
         CenterText(

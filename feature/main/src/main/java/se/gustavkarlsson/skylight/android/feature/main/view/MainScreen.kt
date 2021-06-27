@@ -27,6 +27,7 @@ import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.MainViewModel
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.MainViewModelComponent
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchViewState
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.AppBarState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
 import se.gustavkarlsson.skylight.android.lib.navigation.BackPress
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
@@ -38,7 +39,6 @@ import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
-import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.startStopScope
 
@@ -111,7 +111,7 @@ object MainScreen : Screen {
 private fun PreviewContent() {
     Content(
         state = ViewState(
-            toolbarTitleName = TextRef.EMPTY,
+            appBar = AppBarState.PlaceSelected(TextRef.string("Some Place")),
             chanceLevelText = TextRef.EMPTY,
             chanceSubtitleText = TextRef.EMPTY,
             errorBannerData = null,
@@ -119,7 +119,7 @@ private fun PreviewContent() {
             favoriteButtonState = ToggleButtonState.Enabled(checked = true),
             factorItems = emptyList(),
             search = SearchViewState.Closed,
-            onFavoritesClickedEvent = Event.Noop,
+            onFavoriteClickedEvent = Event.Noop,
             notificationLevelItems = emptyList(),
         ),
         onBannerActionClicked = {},
@@ -139,8 +139,7 @@ private fun Content(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    state = state.search,
-                    title = textRef(state.toolbarTitleName),
+                    state = state.appBar,
                     onAboutClicked = onAboutClicked,
                     onEvent = onEvent,
                 )

@@ -1,4 +1,5 @@
 ## ASAP
+* Migrate some sealed classes to sealed interfaces
 * Fix location permission (some info here: https://developer.android.com/training/location/permissions):
   * On Android 11+: Denying a permission more than once automatically sets "don't ask again" (https://developer.android.com/about/versions/11/privacy/permissions#dialog-visibility)
   * On Android 11+: Cannot request background permission via dialog at all. Must use app settings (https://developer.android.com/about/versions/11/privacy/location#background-location-permission-dialog-changes)

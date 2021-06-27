@@ -27,6 +27,7 @@ import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchResult
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchViewState
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.AppBarState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
@@ -39,7 +40,7 @@ private fun PreviewSearchResults() {
     SearchResults(
         modifier = Modifier,
         state = ViewState(
-            toolbarTitleName = TextRef.EMPTY,
+            appBar = AppBarState.Searching("Somewh"),
             chanceLevelText = TextRef.EMPTY,
             chanceSubtitleText = TextRef.EMPTY,
             errorBannerData = null,
@@ -47,7 +48,7 @@ private fun PreviewSearchResults() {
             favoriteButtonState = ToggleButtonState.Enabled(checked = true),
             factorItems = emptyList(),
             search = SearchViewState.Closed,
-            onFavoritesClickedEvent = Event.Noop,
+            onFavoriteClickedEvent = Event.Noop,
             notificationLevelItems = emptyList(),
         ),
         onEvent = {},
