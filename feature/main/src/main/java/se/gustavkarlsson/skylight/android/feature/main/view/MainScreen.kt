@@ -22,12 +22,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.AppBarState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.MainViewModel
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.MainViewModelComponent
-import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchViewState
-import se.gustavkarlsson.skylight.android.feature.main.viewmodel.AppBarState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
 import se.gustavkarlsson.skylight.android.lib.navigation.BackPress
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
@@ -57,10 +57,10 @@ object MainScreen : Screen {
         viewModel.onEvent(Event.RefreshLocationPermission)
     }
 
-    override fun AppCompatActivity.onBackPress(): BackPress {
-        return when (viewModel.state.value.search) {
-            SearchViewState.Closed -> BackPress.NOT_HANDLED
-            is SearchViewState.Open -> {
+    override fun AppCompatActivity.onBackPress(): BackPress { // TODO doesn't always intercept?
+        return when (viewModel.state.value.appBar) {
+            is AppBarState.PlaceSelected -> BackPress.NOT_HANDLED
+            is AppBarState.Searching -> {
                 viewModel.onEvent(Event.SearchChanged(SearchFieldState.Inactive))
                 BackPress.HANDLED
             }
@@ -112,15 +112,16 @@ private fun PreviewContent() {
     Content(
         state = ViewState(
             appBar = AppBarState.PlaceSelected(TextRef.string("Some Place")),
-            chanceLevelText = TextRef.EMPTY,
-            chanceSubtitleText = TextRef.EMPTY,
-            errorBannerData = null,
-            notificationsButtonState = ToggleButtonState.Enabled(checked = false),
-            favoriteButtonState = ToggleButtonState.Enabled(checked = true),
-            factorItems = emptyList(),
-            search = SearchViewState.Closed,
-            onFavoriteClickedEvent = Event.Noop,
-            notificationLevelItems = emptyList(),
+            content = ContentState.PlaceSelected(
+                chanceLevelText = TextRef.EMPTY,
+                chanceSubtitleText = TextRef.EMPTY,
+                errorBannerData = null,
+                notificationsButtonState = ToggleButtonState.Enabled(checked = false),
+                favoriteButtonState = ToggleButtonState.Enabled(checked = true),
+                factorItems = emptyList(),
+                onFavoriteClickedEvent = Event.Noop,
+                notificationLevelItems = emptyList(),
+            )
         ),
         onBannerActionClicked = {},
         onAboutClicked = {},
@@ -147,23 +148,26 @@ private fun Content(
         ) { paddingValues ->
             Crossfade(
                 modifier = Modifier.padding(paddingValues),
-                targetState = state.search is SearchViewState.Open,
-            ) { showSearch ->
-                if (showSearch) {
-                    SearchResults(
-                        modifier = Modifier.fillMaxSize(),
-                        state = state,
-                        onEvent = onEvent,
-                    )
-                } else {
-                    SelectedPlace(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .navigationBarsPadding(),
-                        state = state,
-                        onBannerActionClicked = onBannerActionClicked,
-                        onEvent = onEvent,
-                    )
+                targetState = state.content,
+            ) { content ->
+                when (content) {
+                    is ContentState.PlaceSelected -> {
+                        SelectedPlace(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .navigationBarsPadding(),
+                            state = content,
+                            onBannerActionClicked = onBannerActionClicked,
+                            onEvent = onEvent,
+                        )
+                    }
+                    is ContentState.Searching -> {
+                        SearchResults(
+                            modifier = Modifier.fillMaxSize(),
+                            state = content,
+                            onEvent = onEvent,
+                        )
+                    }
                 }
             }
         }

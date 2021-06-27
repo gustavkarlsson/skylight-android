@@ -49,15 +49,7 @@ internal class StateToViewStateMapper @Inject constructor(
     fun map(state: State): ViewState {
         return ViewState(
             appBar = createToolbarState(state),
-            chanceLevelText = createChangeLevelText(state),
-            chanceSubtitleText = createChanceSubtitleText(),
-            errorBannerData = createErrorBannerData(state),
-            notificationsButtonState = createNotificationButtonState(state),
-            favoriteButtonState = createFavoriteButtonState(state),
-            factorItems = createFactorItems(state),
-            search = createSearchViewState(state),
-            onFavoriteClickedEvent = createOnFavoritesClickedEvent(state),
-            notificationLevelItems = createNotificationLevelItems(state),
+            content = createContent(state),
         )
     }
 
@@ -77,6 +69,37 @@ internal class StateToViewStateMapper @Inject constructor(
             }
             is Search.Active -> AppBarState.Searching(state.search.query)
         }
+    }
+
+    private fun createContent(state: State): ContentState {
+        return when (val search = state.search) {
+            is Search.Active.Blank -> {
+                val searchResults = createPlacesSearchResults(state, filter = null)
+                    .sortedWith(searchResultOrderComparator)
+                ContentState.Searching.Ok(searchResults)
+            }
+            is Search.Active.Filled -> {
+                val searchResults = createPlacesSearchResults(state, filter = search.query)
+                    .plus(createGeocodedSearchResults(search))
+                    .sortedWith(searchResultOrderComparator)
+                ContentState.Searching.Ok(searchResults)
+            }
+            is Search.Active.Error -> ContentState.Searching.Error(search.text)
+            Search.Inactive -> createSelectedPlaceContent(state)
+        }
+    }
+
+    private fun createSelectedPlaceContent(state: State): ContentState.PlaceSelected {
+        return ContentState.PlaceSelected(
+            chanceLevelText = createChangeLevelText(state),
+            chanceSubtitleText = createChanceSubtitleText(),
+            errorBannerData = createErrorBannerData(state),
+            notificationsButtonState = createNotificationButtonState(state),
+            favoriteButtonState = createFavoriteButtonState(state),
+            factorItems = createFactorItems(state),
+            onFavoriteClickedEvent = createOnFavoritesClickedEvent(state),
+            notificationLevelItems = createNotificationLevelItems(state),
+        )
     }
 
     private fun createChangeLevelText(state: State): TextRef {
@@ -189,26 +212,6 @@ internal class StateToViewStateMapper @Inject constructor(
                 evaluator = weatherChanceEvaluator,
                 formatter = weatherFormatter,
             )
-    }
-
-    private fun createSearchViewState(state: State): SearchViewState {
-        return when (val search = state.search) {
-            is Search.Active.Blank -> {
-                val searchResults = createPlacesSearchResults(state, filter = null)
-                    .sortedWith(searchResultOrderComparator)
-                SearchViewState.Open.Ok(searchResults)
-            }
-            is Search.Active.Filled -> {
-                val searchResults = createPlacesSearchResults(state, filter = search.query)
-                    .plus(createGeocodedSearchResults(search))
-                    .sortedWith(searchResultOrderComparator)
-                SearchViewState.Open.Ok(searchResults)
-            }
-            is Search.Active.Error -> {
-                SearchViewState.Open.Error(search.text)
-            }
-            Search.Inactive -> SearchViewState.Closed
-        }
     }
 
     private fun createPlacesSearchResults(state: State, filter: String?): List<SearchResult.Known> {

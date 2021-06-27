@@ -18,20 +18,30 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 
 internal data class ViewState(
     val appBar: AppBarState,
-    val chanceLevelText: TextRef,
-    val chanceSubtitleText: TextRef,
-    val errorBannerData: BannerData?,
-    val notificationsButtonState: ToggleButtonState,
-    val favoriteButtonState: ToggleButtonState,
-    val factorItems: List<FactorItem>,
-    val search: SearchViewState,
-    val onFavoriteClickedEvent: Event,
-    val notificationLevelItems: List<NotificationLevelItem>,
+    val content: ContentState,
 )
 
 internal sealed interface AppBarState {
     data class PlaceSelected(val title: TextRef) : AppBarState
     data class Searching(val query: String) : AppBarState
+}
+
+internal sealed interface ContentState {
+    data class PlaceSelected(
+        val chanceLevelText: TextRef,
+        val chanceSubtitleText: TextRef,
+        val errorBannerData: BannerData?,
+        val notificationsButtonState: ToggleButtonState,
+        val favoriteButtonState: ToggleButtonState,
+        val factorItems: List<FactorItem>,
+        val onFavoriteClickedEvent: Event,
+        val notificationLevelItems: List<NotificationLevelItem>,
+    ) : ContentState
+
+    sealed interface Searching : ContentState {
+        data class Ok(val searchResults: List<SearchResult>) : Searching
+        data class Error(val text: TextRef) : Searching
+    }
 }
 
 internal data class BannerData(
@@ -53,14 +63,6 @@ internal data class FactorItem(
     val progress: Double?,
     val errorText: TextRef?
 )
-
-internal sealed interface SearchViewState {
-    object Closed : SearchViewState
-    sealed interface Open : SearchViewState {
-        data class Ok(val searchResults: List<SearchResult>) : Open
-        data class Error(val text: TextRef) : Open
-    }
-}
 
 internal sealed class SearchResult {
     abstract val title: TextRef

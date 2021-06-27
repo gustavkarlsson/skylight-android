@@ -23,14 +23,14 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.rememberInsetsPaddingValues
-import com.ioki.textref.TextRef
+import org.threeten.bp.Instant
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchResult
-import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchViewState
-import se.gustavkarlsson.skylight.android.feature.main.viewmodel.AppBarState
-import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
+import se.gustavkarlsson.skylight.android.lib.location.Location
+import se.gustavkarlsson.skylight.android.lib.places.Place
+import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
-import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.navigationBarsWithIme
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
@@ -39,17 +39,36 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 private fun PreviewSearchResults() {
     SearchResults(
         modifier = Modifier,
-        state = ViewState(
-            appBar = AppBarState.Searching("Somewh"),
-            chanceLevelText = TextRef.EMPTY,
-            chanceSubtitleText = TextRef.EMPTY,
-            errorBannerData = null,
-            notificationsButtonState = ToggleButtonState.Enabled(checked = false),
-            favoriteButtonState = ToggleButtonState.Enabled(checked = true),
-            factorItems = emptyList(),
-            search = SearchViewState.Closed,
-            onFavoriteClickedEvent = Event.Noop,
-            notificationLevelItems = emptyList(),
+        state = ContentState.Searching.Ok(
+            listOf(
+                SearchResult.Known.Current(
+                    name = "Umeå",
+                    selected = true
+                ),
+                SearchResult.Known.Saved(
+                    place = Place.Saved.Favorite(
+                        id = PlaceId.Saved(1),
+                        name = "Fav",
+                        location = Location(1.0, 2.0),
+                        lastChanged = Instant.EPOCH,
+                    ),
+                    selected = false,
+                ),
+                SearchResult.Known.Saved(
+                    place = Place.Saved.Recent(
+                        id = PlaceId.Saved(2),
+                        name = "Recent",
+                        location = Location(3.0, 4.0),
+                        lastChanged = Instant.EPOCH,
+                    ),
+                    selected = false,
+                ),
+                SearchResult.New(
+                    name = "A place I searched",
+                    details = "Somewhere street",
+                    location = Location(5.0, 6.0),
+                ),
+            )
         ),
         onEvent = {},
     )
@@ -59,7 +78,7 @@ private fun PreviewSearchResults() {
 @Composable
 internal fun SearchResults(
     modifier: Modifier = Modifier,
-    state: ViewState,
+    state: ContentState.Searching,
     onEvent: (Event) -> Unit
 ) {
     Surface(
@@ -68,9 +87,8 @@ internal fun SearchResults(
         color = Colors.primarySurface,
     ) {
         @Suppress("UNUSED_VARIABLE")
-        val dummy = when (state.search) {
-            SearchViewState.Closed -> Unit
-            is SearchViewState.Open.Error -> {
+        val dummy = when (state) {
+            is ContentState.Searching.Error -> {
                 Box(
                     modifier = Modifier
                         .navigationBarsWithImePadding()
@@ -79,18 +97,18 @@ internal fun SearchResults(
                 ) {
                     Text(
                         textAlign = TextAlign.Center,
-                        text = textRef(state.search.text),
+                        text = textRef(state.text),
                         color = Colors.error,
                     )
                 }
             }
-            is SearchViewState.Open.Ok -> {
+            is ContentState.Searching.Ok -> {
                 LazyColumn(
                     contentPadding = rememberInsetsPaddingValues(
                         insets = LocalWindowInsets.current.navigationBarsWithIme
                     ),
                 ) {
-                    items(state.search.searchResults) { item ->
+                    items(state.searchResults) { item ->
                         ListItem(item = item, onEvent = onEvent)
                     }
                 }
