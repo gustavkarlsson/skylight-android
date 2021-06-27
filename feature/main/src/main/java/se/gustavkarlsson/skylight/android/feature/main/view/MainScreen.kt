@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
@@ -129,6 +130,7 @@ private fun PreviewContent() {
     )
 }
 
+@SuppressLint("UnusedCrossfadeTargetStateParameter")
 @Composable
 private fun Content(
     state: ViewState,
@@ -148,15 +150,15 @@ private fun Content(
         ) { paddingValues ->
             Crossfade(
                 modifier = Modifier.padding(paddingValues),
-                targetState = state.content,
-            ) { content ->
-                when (content) {
+                targetState = state.content.javaClass,
+            ) {
+                when (state.content) {
                     is ContentState.PlaceSelected -> {
                         SelectedPlace(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .navigationBarsPadding(),
-                            state = content,
+                            state = state.content,
                             onBannerActionClicked = onBannerActionClicked,
                             onEvent = onEvent,
                         )
@@ -164,7 +166,7 @@ private fun Content(
                     is ContentState.Searching -> {
                         SearchResults(
                             modifier = Modifier.fillMaxSize(),
-                            state = content,
+                            state = state.content,
                             onEvent = onEvent,
                         )
                     }
