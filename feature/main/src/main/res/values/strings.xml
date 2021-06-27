@@ -45,8 +45,6 @@
         Open the app settings to grant it.</string>
     <string name="background_location_permission_denied_message">To notify you of possible auroras,
         you must grant Skylight access to your location all the time.</string>
-    <string name="background_location_permission_denied_forever_message">Location access is permanently denied.
-        Open the app settings and grant Skylight access to your location all the time.</string>
     <string name="place_search">Search</string>
     <string name="place_search_failed_generic">Place search failed</string>
     <string name="place_search_failed_server_response">Place search failed. Server error.</string>

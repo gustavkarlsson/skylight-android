@@ -12,40 +12,26 @@ internal class AndroidPermissionChecker(
     private val state: MutableStateFlow<Permissions>,
 ) : PermissionChecker {
 
-    override val permissions: StateFlow<Permissions> = state
+    override val permissions: StateFlow<Permissions> get() = state
 
     override fun refresh() {
+        val new = Permissions(getPermissions())
         val old = state.value
-        val newPermissionsList = getNewPermissions(old)
-        val new = newPermissionsList.fold(old) { acc, permission ->
-            acc.update(permission)
-        }
-        if (new != old) {
-            state.value = new
-            logInfo { "Permissions changed from $old to $new" }
-        }
+        state.value = new
+        logInfo { "Permissions changed from $old to $new" }
     }
 
-    private fun getNewPermissions(old: Permissions): List<Permission> {
-        return old.properties.map { property ->
-            when (property) {
-                is LocationProperty -> getLocationPermission()
-            }
-        }
+    private fun getPermissions(): Map<Permission, Access> {
+        return Permission.values().map { permission ->
+            val access = getAccess(permission)
+            permission to access
+        }.toMap()
     }
 
-    private fun getLocationPermission(): Permission.Location {
-        val locationResult = ContextCompat.checkSelfPermission(context, Permission.Type.Location.key)
-        return if (locationResult == PackageManager.PERMISSION_GRANTED) {
-            getBackgroundLocationPermission()
-        } else Permission.Location.Denied
-    }
-
-    private fun getBackgroundLocationPermission(): Permission.Location.Granted {
-        val key = Permission.Type.Location.backgroundKey ?: return Permission.Location.Granted.WithBackground
-        val backgroundResult = ContextCompat.checkSelfPermission(context, key)
-        return if (backgroundResult == PackageManager.PERMISSION_GRANTED) {
-            Permission.Location.Granted.WithBackground
-        } else Permission.Location.Granted.WithoutBackground
+    private fun getAccess(permission: Permission): Access {
+        val result = ContextCompat.checkSelfPermission(context, permission.key)
+        return if (result == PackageManager.PERMISSION_GRANTED) {
+            Access.Granted
+        } else Access.Denied
     }
 }

@@ -36,7 +36,7 @@ internal data class BannerData(
     val buttonEvent: Event
 ) {
     enum class Event {
-        RequestLocationPermission, OpenAppDetails
+        RequestLocationPermission, RequestBackgroundLocationPermission, OpenAppDetails
     }
 }
 

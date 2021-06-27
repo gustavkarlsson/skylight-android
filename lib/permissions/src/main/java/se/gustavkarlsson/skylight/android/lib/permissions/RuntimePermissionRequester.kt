@@ -3,58 +3,30 @@ package se.gustavkarlsson.skylight.android.lib.permissions
 import androidx.fragment.app.FragmentActivity
 import com.github.florent37.runtimepermission.kotlin.PermissionException
 import com.github.florent37.runtimepermission.kotlin.coroutines.experimental.askPermission
-import se.gustavkarlsson.skylight.android.core.logging.logError
+import kotlinx.coroutines.flow.MutableStateFlow
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 
 internal class RuntimePermissionRequester(
-    private val onNewPermissions: (List<Permission>) -> Unit,
+    private val state: MutableStateFlow<Permissions>,
 ) : PermissionRequester {
 
-    override suspend fun request(activity: FragmentActivity, vararg requested: Permission.Type) {
-        if (requested.isEmpty()) return
-        val requestedDistinct = requested.distinctBy { it.key }
-        logInfo { "Requesting permission for $requestedDistinct" }
-        val keys = requestedDistinct.flatMap { type ->
-            when (type) {
-                is Permission.Type.Location -> listOfNotNull(type.key, type.backgroundKey)
-            }
-        }
+    override suspend fun request(activity: FragmentActivity, permission: Permission) {
+        logInfo { "Requesting permission for $permission using key '${permission.key}'" }
 
         // The implementation of this lib is a bit wonky. askPermission returns a result,
         // but throws whenever the result is not granted. Hence the catch
-        val newPermissions = try {
-            activity.askPermission(*keys.toTypedArray())
-            requestedDistinct.allGranted()
+        val newAccess = try {
+            activity.askPermission(permission.key)
+            Access.Granted
         } catch (e: PermissionException) {
-            requestedDistinct.mapNotNull { type ->
-                when (type) {
-                    is Permission.Type.Location -> {
-                        when {
-                            type.backgroundKey in e.accepted -> Permission.Location.Granted.WithBackground
-                            type.key in e.accepted && type.backgroundKey == null -> {
-                                Permission.Location.Granted.WithBackground
-                            }
-                            type.key in e.accepted -> Permission.Location.Granted.WithoutBackground
-                            type.key in e.foreverDenied -> Permission.Location.DeniedForever
-                            type.key in e.denied -> Permission.Location.Denied
-                            else -> {
-                                logError { "Unexpected state for key: ${type.key}: $e" }
-                                return@mapNotNull null
-                            }
-                        }
-                    }
-                }
+            when (permission.key) {
+                in e.foreverDenied -> Access.DeniedForever
+                in e.denied -> Access.Denied
+                else -> throw IllegalStateException("Unexpected state for key: ${permission.key}", e)
             }
         }
-        logInfo { "Permissions are $newPermissions" }
-        onNewPermissions(newPermissions)
-    }
-
-    private fun Collection<Permission.Type>.allGranted(): List<Permission.Location.Granted> {
-        return map { type ->
-            when (type) {
-                Permission.Type.Location -> Permission.Location.Granted.WithBackground
-            }
-        }
+        val old = state.value
+        val new = old.update(permission, newAccess)
+        state.value = new
     }
 }

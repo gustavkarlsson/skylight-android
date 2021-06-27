@@ -4,7 +4,7 @@ interface PermissionsComponent {
 
     fun permissionChecker(): PermissionChecker
 
-    fun locationPermissionRequester(): PermissionRequester
+    fun permissionRequester(): PermissionRequester
 
     interface Setter {
         fun setPermissionsComponent(component: PermissionsComponent) {

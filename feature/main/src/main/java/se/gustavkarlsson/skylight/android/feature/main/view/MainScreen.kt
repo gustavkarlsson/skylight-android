@@ -73,11 +73,11 @@ object MainScreen : Screen {
         startActivity(intent)
     }
 
-    private fun FragmentActivity.requestLocationPermission() {
+    private fun FragmentActivity.requestPermission(permission: Permission) {
         startStopScope?.launch {
             withContext(Dispatchers.Main) {
-                PermissionsComponent.instance.locationPermissionRequester()
-                    .request(this@requestLocationPermission, Permission.Type.Location)
+                PermissionsComponent.instance.permissionRequester()
+                    .request(this@requestPermission, permission)
             }
         }
     }
@@ -92,8 +92,12 @@ object MainScreen : Screen {
             state = state,
             onBannerActionClicked = { event ->
                 when (event) {
-                    BannerData.Event.RequestLocationPermission -> requestLocationPermission()
-                    BannerData.Event.OpenAppDetails -> openAppDetails()
+                    BannerData.Event.RequestLocationPermission ->
+                        requestPermission(Permission.Location)
+                    BannerData.Event.RequestBackgroundLocationPermission ->
+                        requestPermission(Permission.BackgroundLocation)
+                    BannerData.Event.OpenAppDetails ->
+                        openAppDetails()
                 }
             },
             onAboutClicked = { navigator.goTo(screens.about) },

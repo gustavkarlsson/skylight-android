@@ -22,6 +22,7 @@ import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
+import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.Permission
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
@@ -88,31 +89,21 @@ internal class StateToViewStateMapper @Inject constructor(
         val needsBackgroundLocation = state.notificationTriggerLevels.any { (placeId, triggerLevel) ->
             placeId == PlaceId.Current && triggerLevel != TriggerLevel.NEVER
         }
-        val locationPermission = state.permissions.location
-        val locationDenied = locationPermission == Permission.Location.Denied
-        val locationDeniedForever = locationPermission == Permission.Location.DeniedForever
-        val backgroundLocationDeniedSomehow = when (locationPermission) {
-            Permission.Location.Denied -> true
-            Permission.Location.DeniedForever -> true
-            Permission.Location.Granted.WithoutBackground -> true
-            Permission.Location.Granted.WithBackground -> false
-            Permission.Location.Unknown -> false
+        val locationAccess = state.permissions[Permission.Location]
+        val backgroundLocationAccess = state.permissions[Permission.BackgroundLocation]
+        val locationDenied = locationAccess == Access.Denied
+        val locationDeniedForever = locationAccess == Access.DeniedForever
+        val backgroundLocationDeniedSomehow = when (backgroundLocationAccess) {
+            Access.Denied, Access.DeniedForever -> true
+            Access.Granted, Access.Unknown -> false
         }
         return when {
-            needsBackgroundLocation && locationDeniedForever -> {
-                BannerData(
-                    TextRef.stringRes(R.string.background_location_permission_denied_forever_message),
-                    TextRef.stringRes(R.string.open_settings),
-                    Icons.Warning,
-                    BannerData.Event.OpenAppDetails
-                )
-            }
             needsBackgroundLocation && backgroundLocationDeniedSomehow -> {
                 BannerData(
                     TextRef.stringRes(R.string.background_location_permission_denied_message),
-                    TextRef.stringRes(R.string.grant),
+                    TextRef.stringRes(R.string.open_settings),
                     Icons.Warning,
-                    BannerData.Event.RequestLocationPermission
+                    BannerData.Event.OpenAppDetails
                 )
             }
             state.selectedPlace != Place.Current -> null
