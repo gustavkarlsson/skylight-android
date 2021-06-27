@@ -12,6 +12,7 @@
   * Check why "Ask every time" shows up as "denied" for some reason (due to above reasons?)
   * Test on different SDK:s Especially 9, 10 and 11 which have slightly different solutions for requesting background permission
 * Ensure fetching aurora report in background always happens (se.gustavkarlsson.skylight.android.feature.background.scheduling.BackgroundWorkImpl.getNotificationData)
+* Only subscribe to current location reports when permission exists?
 
 ## Soon
 * Consider using accompanist permissions

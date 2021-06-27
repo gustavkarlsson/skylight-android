@@ -16,10 +16,14 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SkylightColors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 
-internal data class ViewState(
-    val appBar: AppBarState,
-    val content: ContentState,
-)
+internal sealed interface ViewState {
+    data class Ready(
+        val appBar: AppBarState,
+        val content: ContentState,
+    ) : ViewState
+
+    object RequiresBackgroundLocationPermission : ViewState
+}
 
 internal sealed interface AppBarState {
     data class PlaceSelected(val title: TextRef) : AppBarState

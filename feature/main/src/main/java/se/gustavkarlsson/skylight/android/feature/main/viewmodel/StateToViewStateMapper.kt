@@ -45,11 +45,20 @@ internal class StateToViewStateMapper @Inject constructor(
     private val weatherFormatter: Formatter<Weather>,
 ) {
 
-    fun map(state: State): ViewState {
-        return ViewState(
-            appBar = createToolbarState(state),
-            content = createContent(state),
-        )
+    fun map(state: State): ViewState = createViewState(state)
+
+    private fun createViewState(state: State): ViewState {
+        val triggerLevel = state.notificationTriggerLevels[PlaceId.Current] // FIXME why is this sometimes null?
+        val requiresBackgroundLocationPermission = triggerLevel != null && triggerLevel != TriggerLevel.NEVER
+        val hasBackgroundPermission = state.permissions[Permission.BackgroundLocation] == Access.Granted
+        return if (requiresBackgroundLocationPermission && !hasBackgroundPermission) {
+            ViewState.RequiresBackgroundLocationPermission
+        } else {
+            ViewState.Ready(
+                appBar = createToolbarState(state),
+                content = createContent(state),
+            )
+        }
     }
 
     private fun createToolbarState(state: State): AppBarState {

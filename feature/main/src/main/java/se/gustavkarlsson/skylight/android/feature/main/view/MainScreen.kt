@@ -7,27 +7,17 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
-import com.google.accompanist.insets.navigationBarsPadding
 import com.ioki.textref.TextRef
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
-import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.AppBarState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
@@ -64,8 +54,8 @@ object MainScreen : Screen {
     }
 
     override fun AppCompatActivity.onBackPress(): BackPress { // TODO doesn't always intercept?
-        return when (viewModel.state.value.appBar) {
-            is AppBarState.PlaceSelected -> BackPress.NOT_HANDLED
+        return when ((viewModel.state.value as? ViewState.Ready)?.appBar) {
+            null, is AppBarState.PlaceSelected -> BackPress.NOT_HANDLED
             is AppBarState.Searching -> {
                 viewModel.onEvent(Event.SearchChanged(SearchFieldState.Inactive))
                 BackPress.HANDLED
@@ -116,7 +106,7 @@ object MainScreen : Screen {
 @Preview
 private fun PreviewContent() {
     Content(
-        state = ViewState(
+        state = ViewState.Ready(
             appBar = AppBarState.PlaceSelected(TextRef.string("Some Place")),
             content = ContentState.PlaceSelected(
                 chanceLevelText = TextRef.EMPTY,
@@ -148,65 +138,20 @@ private fun Content(
     onEvent: (Event) -> Unit,
 ) {
     ScreenBackground {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    state = state.appBar,
-                    onAboutClicked = onAboutClicked,
-                    onEvent = onEvent,
-                )
-            },
-        ) { paddingValues ->
-            Crossfade(
-                modifier = Modifier.padding(paddingValues),
-                targetState = state.content.javaClass,
-            ) {
-                val dummy = when (state.content) {
-                    is ContentState.PlaceSelected -> {
-                        SelectedPlace(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .navigationBarsPadding(),
-                            state = state.content,
-                            onBannerActionClicked = onBannerActionClicked,
-                            onEvent = onEvent,
-                        )
-                    }
-                    is ContentState.Searching -> {
-                        SearchResults(
-                            modifier = Modifier.fillMaxSize(),
-                            state = state.content,
-                            onEvent = onEvent,
-                        )
-                    }
-                    is ContentState.RequiresLocationPermission.UseDialog -> {
-                        Column {
-                            // FIXME build layout and fix string resources
-                            Text(stringResource(R.string.location_permission_denied_message))
-                            Text("Open the permission dialog to allow the permission")
-                            Button(onClick = onClickGrantLocationPermission) {
-                                Text(stringResource(R.string.allow))
-                            }
-                            Text("You can also search for a location by name")
-                            Button(onClick = { /* FIXME focus on search */ }) {
-                                Text(stringResource(R.string.place_search))
-                            }
-                        }
-                    }
-                    is ContentState.RequiresLocationPermission.UseAppSettings -> {
-                        Column {
-                            // FIXME build layout and fix string resources
-                            Text(stringResource(R.string.location_permission_denied_forever_message))
-                            Text("It seems like you have previously denied the permission. To resolve this, open the settings screen and allow the background permission")
-                            Button(onClick = onClickOpenSettings) {
-                                Text(stringResource(R.string.open_settings))
-                            }
-                            Text("You can also search for a location by name")
-                            Button(onClick = { /* FIXME focus on search */ }) {
-                                Text(stringResource(R.string.place_search))
-                            }
-                        }
-                    }
+        Crossfade(targetState = state.javaClass) {
+            when (state) {
+                is ViewState.Ready -> {
+                    Ready(
+                        state = state,
+                        onBannerActionClicked = onBannerActionClicked,
+                        onAboutClicked = onAboutClicked,
+                        onEvent = onEvent,
+                        onClickGrantLocationPermission = onClickGrantLocationPermission,
+                        onClickOpenSettings = onClickOpenSettings,
+                    )
+                }
+                ViewState.RequiresBackgroundLocationPermission -> {
+                    RequiresBackgroundLocationPermission(onClickOpenSettings)
                 }
             }
         }
