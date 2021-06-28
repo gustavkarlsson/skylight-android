@@ -80,12 +80,6 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createContent(state: State): ContentState {
-        if (state.permissions[Permission.Location] == Access.Denied) {
-            return ContentState.RequiresLocationPermission.UseDialog
-        }
-        if (state.permissions[Permission.Location] == Access.DeniedForever) {
-            return ContentState.RequiresLocationPermission.UseAppSettings
-        }
         return when (val search = state.search) {
             is Search.Active.Blank -> {
                 val searchResults = createPlacesSearchResults(state, filter = null)
@@ -99,7 +93,17 @@ internal class StateToViewStateMapper @Inject constructor(
                 ContentState.Searching.Ok(searchResults)
             }
             is Search.Active.Error -> ContentState.Searching.Error(search.text)
-            Search.Inactive -> createSelectedPlaceContent(state)
+            Search.Inactive -> {
+                val currentSelected = state.selectedPlace == Place.Current
+                val locationAccess = state.permissions[Permission.Location]
+                if (currentSelected && locationAccess == Access.Denied) {
+                    ContentState.RequiresLocationPermission.UseDialog
+                } else if (currentSelected && locationAccess == Access.DeniedForever) {
+                    ContentState.RequiresLocationPermission.UseAppSettings
+                } else {
+                    createSelectedPlaceContent(state)
+                }
+            }
         }
     }
 
