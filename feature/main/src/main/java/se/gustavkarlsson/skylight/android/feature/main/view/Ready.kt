@@ -17,6 +17,7 @@ import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
+import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 
 @SuppressLint("UnusedCrossfadeTargetStateParameter")
 @Composable
@@ -69,7 +70,13 @@ internal fun Ready(
                             Text(stringResource(R.string.allow))
                         }
                         Text("You can also search for a location by name")
-                        Button(onClick = { /* FIXME focus on search */ }) {
+                        Button(
+                            onClick = {
+                                // FIXME duplicated
+                                // FIXME doesn't focus search
+                                onEvent(Event.SearchChanged(SearchFieldState.Active("")))
+                            },
+                        ) {
                             Text(stringResource(R.string.place_search))
                         }
                     }
@@ -83,7 +90,13 @@ internal fun Ready(
                             Text(stringResource(R.string.open_settings))
                         }
                         Text("You can also search for a location by name")
-                        Button(onClick = { /* FIXME focus on search */ }) {
+                        Button(
+                            onClick = {
+                                // FIXME duplicated
+                                // FIXME doesn't focus search
+                                onEvent(Event.SearchChanged(SearchFieldState.Active("")))
+                            },
+                        ) {
                             Text(stringResource(R.string.place_search))
                         }
                     }
