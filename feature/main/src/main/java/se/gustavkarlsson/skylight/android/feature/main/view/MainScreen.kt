@@ -96,6 +96,7 @@ object MainScreen : Screen {
             },
             onClickGrantLocationPermission = { requestPermission(Permission.Location) },
             onClickOpenSettings = { openAppDetails() },
+            onClickTurnOffNotifications = { viewModel.onEvent(Event.TurnOffCurrentLocationNotifications) },
             onAboutClicked = { navigator.goTo(screens.about) },
             onEvent = { event -> viewModel.onEvent(event) },
         )
@@ -122,6 +123,7 @@ private fun PreviewContent() {
         onBannerActionClicked = {},
         onClickGrantLocationPermission = {},
         onClickOpenSettings = {},
+        onClickTurnOffNotifications = {},
         onAboutClicked = {},
         onEvent = {},
     )
@@ -134,6 +136,7 @@ private fun Content(
     onBannerActionClicked: (BannerData.Event) -> Unit,
     onClickGrantLocationPermission: () -> Unit,
     onClickOpenSettings: () -> Unit,
+    onClickTurnOffNotifications: () -> Unit,
     onAboutClicked: () -> Unit,
     onEvent: (Event) -> Unit,
 ) {
@@ -151,7 +154,10 @@ private fun Content(
                     )
                 }
                 ViewState.RequiresBackgroundLocationPermission -> {
-                    RequiresBackgroundLocationPermission(onClickOpenSettings)
+                    RequiresBackgroundLocationPermission(
+                        onClickOpenSettings = onClickOpenSettings,
+                        onClickTurnOffNotifications = onClickTurnOffNotifications,
+                    )
                 }
             }
         }

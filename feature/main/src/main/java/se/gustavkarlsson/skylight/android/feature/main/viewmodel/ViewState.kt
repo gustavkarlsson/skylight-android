@@ -136,5 +136,6 @@ internal sealed class Event {
     data class SearchChanged(val state: SearchFieldState) : Event()
     data class SelectSearchResult(val result: SearchResult) : Event()
     object RefreshLocationPermission : Event()
+    object TurnOffCurrentLocationNotifications : Event()
     object Noop : Event()
 }

@@ -5,7 +5,7 @@
     <string name="remove">Remove</string>
     <string name="remove_thing">Remove %s?</string>
     <string name="allow">Allow</string>
-    <string name="open_settings">Open settings</string>
+    <string name="open_settings">Open App info</string>
     <string name="places">Places</string>
 
     <string name="factor_geomag_location_title_full">Geomagnetic location</string>
@@ -40,11 +40,16 @@
     <string name="cause_unknown">Something has gone wrong ☹</string>
 
     <string name="location_permission_denied_message">To determine aurora chances where you are,
-        you must grant Skylight access to your location.</string>
+        you must allow Skylight access to your location.</string>
     <string name="location_permission_denied_forever_message">Location access is permanently denied.
-        Open the app settings to grant it.</string>
-    <string name="background_location_permission_denied_message">To notify you of possible auroras,
-        you must grant Skylight access to your location all the time.</string>
+        Open App info to grant it.</string>
+    <string name="background_location_permission_denied_message">You have enabled notifications for your current
+        location. This only works if Skylight has access to your location all the time.\n\n
+        1. Open App info\n
+        2. Select Permissions\n
+        3. Select Location\n
+        4. Select %s\n
+        5. Return to the app</string>
     <string name="place_search">Search</string>
     <string name="place_search_failed_generic">Place search failed</string>
     <string name="place_search_failed_server_response">Place search failed. Server error.</string>
