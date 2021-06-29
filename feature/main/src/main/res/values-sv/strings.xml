@@ -7,6 +7,7 @@
     <string name="allow">Tillåt</string>
     <string name="open_settings">Öppna Appinformation</string>
     <string name="places">Platser</string>
+    <string name="location_permission">Platsbehörighet</string>
 
     <string name="factor_geomag_location_title_full">Geomagnetisk plats</string>
     <string name="factor_geomag_location_title_compact">Plats</string>
@@ -39,12 +40,19 @@
     <string name="cause_server_response">Serverfel. Försök igen senare.</string>
     <string name="cause_unknown">Något gick fel ☹</string>
 
+    <string name="location_permission_required">Platsbehörighet krävs</string>
+    <string name="location_permission_denied_forever_title">Behörighet tidigare nekad</string>
     <string name="location_permission_denied_message">För att beräkna chansen att se norrsken där du är,
         tillåt att Skylight kan läsa din plats.</string>
-    <string name="location_permission_denied_forever_message">Åtkomst till din plats är nekad permanent.
-        Öppna inställningar för appen och tillåt den.</string>
+    <string name="location_permission_denied_forever_message">Du har tidigare nekat platsbehörighet för Skylight.\n\n
+        1. Öppna Appinformation\n
+        2. Välj Behörigheter\n
+        3. Välj Plats\n
+        4. Tillåt\n
+        5. Återvänd till appen</string>
+    <string name="location_permission_select_other">Välj en annan plats istället</string>
     <string name="background_location_permission_denied_message">Du har aktiverat aviseringar för din nuvarande plats.
-        Detta fungerar endast om Skylight alltid kan läsa din plats\n\n
+        Detta fungerar endast om Skylight alltid kan läsa din plats.\n\n
         1. Öppna Appinformation\n
         2. Välj Behörigheter\n
         3. Välj Plats\n

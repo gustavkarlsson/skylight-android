@@ -3,14 +3,17 @@ package se.gustavkarlsson.skylight.android.feature.main.view
 import android.annotation.SuppressLint
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.navigationBarsPadding
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
@@ -18,6 +21,7 @@ import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 
 @SuppressLint("UnusedCrossfadeTargetStateParameter")
 @Composable
@@ -62,42 +66,50 @@ internal fun Ready(
                     )
                 }
                 is ContentState.RequiresLocationPermission.UseDialog -> {
-                    Column {
-                        // FIXME build layout and fix string resources
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        // FIXME lots of duplication here
+                        Text(
+                            text = stringResource(R.string.location_permission_required),
+                            style = Typography.h5,
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
                         Text(stringResource(R.string.location_permission_denied_message))
-                        Text("Open the permission dialog to allow the permission")
-                        Button(onClick = onClickGrantLocationPermission) {
-                            Text(stringResource(R.string.allow))
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextButton(onClickGrantLocationPermission) {
+                            Text(stringResource(R.string.location_permission))
                         }
-                        Text("You can also search for a location by name")
-                        Button(
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextButton(
                             onClick = {
-                                // FIXME duplicated
                                 // FIXME doesn't focus search
                                 onEvent(Event.SearchChanged(SearchFieldState.Active("")))
                             },
                         ) {
-                            Text(stringResource(R.string.place_search))
+                            Text(stringResource(R.string.location_permission_select_other))
                         }
                     }
                 }
                 is ContentState.RequiresLocationPermission.UseAppSettings -> {
-                    Column {
-                        // FIXME build layout and fix string resources
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        // FIXME lots of duplication here
+                        Text(
+                            text = stringResource(R.string.location_permission_denied_forever_title),
+                            style = Typography.h5,
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
                         Text(stringResource(R.string.location_permission_denied_forever_message))
-                        Text("It seems like you have previously denied the permission. To resolve this, open the settings screen and allow the background permission")
-                        Button(onClick = onClickOpenSettings) {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextButton(onClick = onClickOpenSettings) {
                             Text(stringResource(R.string.open_settings))
                         }
-                        Text("You can also search for a location by name")
-                        Button(
+                        Spacer(modifier = Modifier.height(8.dp))
+                        TextButton(
                             onClick = {
-                                // FIXME duplicated
                                 // FIXME doesn't focus search
                                 onEvent(Event.SearchChanged(SearchFieldState.Active("")))
                             },
                         ) {
-                            Text(stringResource(R.string.place_search))
+                            Text(stringResource(R.string.location_permission_select_other))
                         }
                     }
                 }
