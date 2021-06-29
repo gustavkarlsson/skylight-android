@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -20,6 +21,7 @@ import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 
@@ -33,7 +35,6 @@ internal fun Ready(
     onClickGrantLocationPermission: () -> Unit,
     onClickOpenSettings: () -> Unit
 ) {
-    // FIXME crossfade?
     Scaffold(
         topBar = {
             TopAppBar(
@@ -74,11 +75,13 @@ internal fun Ready(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(stringResource(R.string.location_permission_denied_message))
-                        Spacer(modifier = Modifier.height(8.dp))
-                        TextButton(onClickGrantLocationPermission) {
-                            Text(stringResource(R.string.location_permission))
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
+                        ExtendedFloatingActionButton(
+                            backgroundColor = Colors.primary,
+                            text = { Text(stringResource(R.string.location_permission)) },
+                            onClick = onClickGrantLocationPermission,
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
                         TextButton(
                             onClick = {
                                 // FIXME doesn't focus search
@@ -98,11 +101,13 @@ internal fun Ready(
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(stringResource(R.string.location_permission_denied_forever_message))
-                        Spacer(modifier = Modifier.height(8.dp))
-                        TextButton(onClick = onClickOpenSettings) {
-                            Text(stringResource(R.string.open_settings))
-                        }
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
+                        ExtendedFloatingActionButton(
+                            backgroundColor = Colors.primary,
+                            text = { Text(stringResource(R.string.open_settings)) },
+                            onClick = onClickOpenSettings,
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
                         TextButton(
                             onClick = {
                                 // FIXME doesn't focus search

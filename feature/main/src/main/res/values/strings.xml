@@ -41,7 +41,9 @@
     <string name="cause_unknown">Something has gone wrong ☹</string>
 
     <string name="location_permission_required">Location permission required</string>
+    <string name="background_location_permission_required">Background location permission required</string>
     <string name="location_permission_denied_forever_title">Permission previously denied</string>
+    <string name="allow_all_the_time">Allow all the time</string>
     <string name="location_permission_denied_message">To determine aurora chances where you are,
         you must allow Skylight access to your location.</string>
     <string name="location_permission_denied_forever_message">You have previously denied location permission
@@ -59,6 +61,7 @@
         3. Select Location\n
         4. Select %s\n
         5. Return to the app</string>
+    <string name="turn_off_notifications instead">Turn of notifications instead</string>
     <string name="place_search">Search</string>
     <string name="place_search_failed_generic">Place search failed</string>
     <string name="place_search_failed_server_response">Place search failed. Server error.</string>

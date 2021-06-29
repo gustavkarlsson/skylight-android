@@ -34,41 +34,37 @@ internal fun RequiresBackgroundLocationPermission(
             .fillMaxSize()
             .padding(16.dp)
             .systemBarsPadding(),
-        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(64.dp))
         Image(
-            modifier = Modifier.fillMaxSize(0.3f),
+            modifier = Modifier
+                .fillMaxSize(0.3f)
+                .align(Alignment.CenterHorizontally),
             imageVector = Icons.Default.MyLocation,
             contentDescription = null,
             colorFilter = ColorFilter.tint(Colors.onBackground),
         )
         Spacer(modifier = Modifier.height(32.dp))
         Text(
-            text = "Background location required", // FIXME String resource
+            text = stringResource(R.string.background_location_permission_required),
             style = Typography.h5,
         )
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         val backgroundLocationName = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             LocalContext.current.packageManager.backgroundPermissionOptionLabel.toString()
         } else {
-            "Allow all the time" // FIXME String resource. SV: Tillåt alltid
+            stringResource(R.string.allow_all_the_time)
         }
-        Text(
-            text = stringResource(R.string.background_location_permission_denied_message, backgroundLocationName),
-            style = Typography.body1,
-        )
+        Text(stringResource(R.string.background_location_permission_denied_message, backgroundLocationName))
+        Spacer(modifier = Modifier.height(16.dp))
         ExtendedFloatingActionButton(
             backgroundColor = Colors.primary,
-            text = { Text(stringResource(R.string.open_settings)) }, // FIXME String resource
+            text = { Text(stringResource(R.string.open_settings)) },
             onClick = onClickOpenSettings,
         )
-        Text(
-            text = "Don't want to allow background permission? You can turn off notifications for your current location.", // FIXME String resource
-            style = Typography.body1,
-        )
+        Spacer(modifier = Modifier.height(16.dp))
         TextButton(onClick = onClickTurnOffNotifications) {
-            Text("Turn off notifications") // FIXME String resource
+            Text(stringResource(R.string.turn_off_notifications))
         }
     }
 }
