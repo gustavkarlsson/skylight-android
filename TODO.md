@@ -1,20 +1,11 @@
 ## ASAP
-* Migrate some sealed classes to sealed interfaces
-* Fix location permission (some info here: https://developer.android.com/training/location/permissions):
-  * On Android 11+: Denying a permission more than once automatically sets "don't ask again" (https://developer.android.com/about/versions/11/privacy/permissions#dialog-visibility)
-  * On Android 11+: Cannot request background permission via dialog at all. Must use app settings (https://developer.android.com/about/versions/11/privacy/location#background-location-permission-dialog-changes)
-  * On Android 11+ Cannot request foreground AND background permission at the same time (https://developer.android.com/about/versions/11/privacy/location#request-background-location-separately)
-    * If current location place is selected and location is missing:
-       * Show placeholder content or rationale under appbar, and use the normal permission dialog
-    * If normal permission is granted, but background is not (only possible on Android 10+), request it:
-      * Android 10: Show full-screen placeholder content or rationale, and use normal permission dialog
-      * Android 11: Show instruction for how to enable through app settings. Use label from: https://developer.android.com/reference/android/content/pm/PackageManager#getBackgroundPermissionOptionLabel())
-  * Check why "Ask every time" shows up as "denied" for some reason (due to above reasons?)
-  * Test on different SDK:s Especially 9, 10 and 11 which have slightly different solutions for requesting background permission
+* Test permissions on different SDK:s Especially 9, 10 and 11 which have slightly different solutions for requesting background permission
 * Ensure fetching aurora report in background always happens (se.gustavkarlsson.skylight.android.feature.background.scheduling.BackgroundWorkImpl.getNotificationData)
-* Only subscribe to current location reports when permission exists?
 
 ## Soon
+* Migrate some sealed classes to sealed interfaces
+* Only subscribe to current location reports when location is turned on?
+* Show helper about location turned off?
 * Consider using accompanist permissions
 * Standard dimensions?
 * Standard animations?
