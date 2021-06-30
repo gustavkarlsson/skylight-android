@@ -60,7 +60,7 @@
         3. Välj Plats\n
         4. Välj %s\n
         5. Återvänd till appen</string>
-    <string name="turn_off_notifications instead">Stäng av aviseringar istället</string>
+    <string name="turn_off_notifications_instead">Stäng av aviseringar istället</string>
     <string name="place_search">Sök</string>
     <string name="place_search_failed_generic">Platssökningen misslyckades</string>
     <string name="place_search_failed_server_response">Platssökningen misslyckades. Serverfel.</string>

@@ -61,7 +61,7 @@
         3. Select Location\n
         4. Select %s\n
         5. Return to the app</string>
-    <string name="turn_off_notifications instead">Turn of notifications instead</string>
+    <string name="turn_off_notifications_instead">Turn of notifications instead</string>
     <string name="place_search">Search</string>
     <string name="place_search_failed_generic">Place search failed</string>
     <string name="place_search_failed_server_response">Place search failed. Server error.</string>

@@ -64,7 +64,7 @@ internal fun RequiresBackgroundLocationPermission(
         )
         Spacer(modifier = Modifier.height(16.dp))
         TextButton(onClick = onClickTurnOffNotifications) {
-            Text(stringResource(R.string.turn_off_notifications))
+            Text(stringResource(R.string.turn_off_notifications_instead))
         }
     }
 }
