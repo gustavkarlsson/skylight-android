@@ -41,7 +41,7 @@ internal class StoreLocationProvider(
             .flatMapLatest { permissionGranted ->
                 if (permissionGranted) {
                     doStream()
-                } else flowOf(Loadable.loading())
+                } else flowOf(Loadable.loaded(LocationResult.errorMissingPermission()))
             }
 
     private fun doStream() = store.stream(StoreRequest.cached(Unit, refresh = false))
