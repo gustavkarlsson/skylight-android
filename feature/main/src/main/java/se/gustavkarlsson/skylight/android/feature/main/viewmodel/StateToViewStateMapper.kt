@@ -138,7 +138,7 @@ internal class StateToViewStateMapper @Inject constructor(
         }
         val backgroundLocationDeniedSomehow = when (state.permissions[Permission.BackgroundLocation]) {
             Access.Denied, Access.DeniedForever -> true
-            Access.Granted, Access.Unknown -> false
+            Access.Granted -> false
         }
         return when {
             needsBackgroundLocation && backgroundLocationDeniedSomehow -> {

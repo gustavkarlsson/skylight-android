@@ -1,25 +1,17 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
-import android.content.Context
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.Reusable
-import kotlinx.coroutines.flow.MutableStateFlow
 
 @Module
-object LibPermissionsModule {
+abstract class LibPermissionsModule {
 
-    private val state: MutableStateFlow<Permissions> = MutableStateFlow(Permissions.INITIAL)
-
-    @Provides
+    @Binds
     @Reusable
-    internal fun locationPermissionChecker(
-        context: Context,
-    ): PermissionChecker = AndroidPermissionChecker(context, state)
+    internal abstract fun bindPermissionChecker(permissionManager: PermissionManager): PermissionChecker
 
-    @Provides
+    @Binds
     @Reusable
-    internal fun locationPermissionRequester(): PermissionRequester = RuntimePermissionRequester(state)
+    internal abstract fun bindPermissionRequester(permissionManager: PermissionManager): PermissionRequester
 }
-
-// TODO Show dialog if background permission not given but notifications are on.
