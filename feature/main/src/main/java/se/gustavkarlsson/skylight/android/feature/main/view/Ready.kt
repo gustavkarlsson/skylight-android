@@ -83,10 +83,7 @@ internal fun Ready(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         TextButton(
-                            onClick = {
-                                // FIXME doesn't focus search
-                                onEvent(Event.SearchChanged(SearchFieldState.Active("")))
-                            },
+                            onClick = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
                         ) {
                             Text(stringResource(R.string.location_permission_select_other))
                         }
@@ -109,10 +106,7 @@ internal fun Ready(
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         TextButton(
-                            onClick = {
-                                // FIXME doesn't focus search
-                                onEvent(Event.SearchChanged(SearchFieldState.Active("")))
-                            },
+                            onClick = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
                         ) {
                             Text(stringResource(R.string.location_permission_select_other))
                         }
