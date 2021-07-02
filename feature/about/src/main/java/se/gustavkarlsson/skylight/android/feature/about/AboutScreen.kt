@@ -101,7 +101,7 @@ private fun Content(
                     modifier = Modifier
                         .width(200.dp)
                         .height(100.dp),
-                    painter = painterResource(R.drawable.about_logo),
+                    painter = painterResource(R.drawable.app_logo),
                     contentDescription = null,
                 )
                 Spacer(modifier = Modifier.height(32.dp))
