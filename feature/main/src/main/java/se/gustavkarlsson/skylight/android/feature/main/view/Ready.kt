@@ -2,28 +2,19 @@ package se.gustavkarlsson.skylight.android.feature.main.view
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExtendedFloatingActionButton
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.navigationBarsPadding
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 
 @SuppressLint("UnusedCrossfadeTargetStateParameter")
 @Composable
@@ -67,50 +58,30 @@ internal fun Ready(
                     )
                 }
                 is ContentState.RequiresLocationPermission.UseDialog -> {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        // FIXME lots of duplication here
-                        Text(
-                            text = stringResource(R.string.location_permission_required),
-                            style = Typography.h5,
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(stringResource(R.string.location_permission_denied_message))
-                        Spacer(modifier = Modifier.height(16.dp))
-                        ExtendedFloatingActionButton(
-                            backgroundColor = Colors.primary,
-                            text = { Text(stringResource(R.string.location_permission)) },
-                            onClick = onClickGrantLocationPermission,
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        TextButton(
-                            onClick = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
-                        ) {
-                            Text(stringResource(R.string.location_permission_select_other))
-                        }
-                    }
+                    RequiresLocationPermission(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .navigationBarsPadding(),
+                        title = stringResource(R.string.location_permission_required),
+                        description = stringResource(R.string.location_permission_denied_message),
+                        primaryActionText = stringResource(R.string.location_permission),
+                        onClickPrimaryAction = onClickGrantLocationPermission,
+                        secondaryActionText = stringResource(R.string.location_permission_select_other),
+                        onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
+                    )
                 }
                 is ContentState.RequiresLocationPermission.UseAppSettings -> {
-                    Column(modifier = Modifier.padding(16.dp)) {
-                        // FIXME lots of duplication here
-                        Text(
-                            text = stringResource(R.string.location_permission_denied_forever_title),
-                            style = Typography.h5,
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(stringResource(R.string.location_permission_denied_forever_message))
-                        Spacer(modifier = Modifier.height(16.dp))
-                        ExtendedFloatingActionButton(
-                            backgroundColor = Colors.primary,
-                            text = { Text(stringResource(R.string.open_settings)) },
-                            onClick = onClickOpenSettings,
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        TextButton(
-                            onClick = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
-                        ) {
-                            Text(stringResource(R.string.location_permission_select_other))
-                        }
-                    }
+                    RequiresLocationPermission(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .navigationBarsPadding(),
+                        title = stringResource(R.string.location_permission_denied_forever_title),
+                        description = stringResource(R.string.location_permission_denied_forever_message),
+                        primaryActionText = stringResource(R.string.open_settings),
+                        onClickPrimaryAction = onClickOpenSettings,
+                        secondaryActionText = stringResource(R.string.location_permission_select_other),
+                        onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
+                    )
                 }
             }
         }

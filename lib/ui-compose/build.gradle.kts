@@ -14,7 +14,7 @@ dependencies {
     api(project(":lib:ui"))
 
     api("androidx.compose.ui:ui:${Versions.compose}")
-    api("androidx.compose.ui:ui-tooling:${Versions.compose}")
+    api("androidx.compose.ui:ui-tooling-preview:${Versions.compose}")
     api("androidx.compose.compiler:compiler:${Versions.compose}")
     api("androidx.compose.foundation:foundation:${Versions.compose}")
     api("androidx.compose.material:material:${Versions.compose}")
