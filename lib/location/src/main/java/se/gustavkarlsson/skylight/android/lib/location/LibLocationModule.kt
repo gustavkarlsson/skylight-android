@@ -2,26 +2,20 @@ package se.gustavkarlsson.skylight.android.lib.location
 
 import android.content.Context
 import android.os.Looper
-import com.dropbox.android.external.store4.MemoryPolicy
-import com.dropbox.android.external.store4.StoreBuilder
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import se.gustavkarlsson.skylight.android.core.AppScope
-import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.core.utils.seconds
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
-import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
 @Module
 object LibLocationModule {
-
     @OptIn(
         FlowPreview::class,
         ExperimentalCoroutinesApi::class,
@@ -31,32 +25,24 @@ object LibLocationModule {
     @AppScope
     internal fun locationProvider(
         context: Context,
-        @Io dispatcher: CoroutineDispatcher,
         permissionChecker: PermissionChecker,
     ): LocationProvider {
         val client = LocationServices.getFusedLocationProviderClient(context)
-        val requestInterval = 10.minutes
+        val requestPriority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
         val locationRequest = LocationRequest.create().apply {
-            priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+            priority = requestPriority
             fastestInterval = 1.minutes.toMillis()
-            interval = requestInterval.toMillis()
-            maxWaitTime = 10.minutes.toMillis()
-            smallestDisplacement = 1000.toFloat()
+            interval = 2.minutes.toMillis()// FIXME update
+            maxWaitTime = 15.minutes.toMillis()
+            smallestDisplacement = 200.toFloat()
         }
-        val fetcher = createLocationFetcher(
+        return GmsLocationProvider(
             client = client,
             locationRequest = locationRequest,
+            freshLocationRequestPriority = requestPriority,
+            permissionChecker = permissionChecker,
             looper = Looper.getMainLooper(),
-            retryDelay = 15.seconds,
-            dispatcher = dispatcher,
+            streamRetryDuration = 15.seconds,
         )
-        val expiry = Duration.milliseconds(requestInterval.toMillis() / 2)
-        val cachePolicy = MemoryPolicy.builder<Unit, LocationResult>()
-            .setExpireAfterWrite(expiry)
-            .build()
-        val store = StoreBuilder.from(fetcher)
-            .cachePolicy(cachePolicy)
-            .build()
-        return StoreLocationProvider(store, permissionChecker)
     }
 }
