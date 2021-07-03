@@ -17,6 +17,7 @@ import se.gustavkarlsson.skylight.android.lib.places.db.DbPlace
 import se.gustavkarlsson.skylight.android.lib.places.db.DbPlaceQueries
 import se.gustavkarlsson.skylight.android.lib.time.Time
 
+// TODO Make sure all access to queries is done on IO dispatcher
 internal class SqlDelightPlacesRepository(
     private val queries: DbPlaceQueries,
     @Io private val dispatcher: CoroutineDispatcher,

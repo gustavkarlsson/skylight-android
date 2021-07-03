@@ -15,6 +15,7 @@ import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.settings.db.DbSettingsQueries
 
+// TODO Make sure all access to queries is done on IO dispatcher
 internal class SqlDelightSettings(
     private val queries: DbSettingsQueries,
     private val placesRepository: PlacesRepository,

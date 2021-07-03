@@ -13,9 +13,7 @@ internal fun initStrictMode() {
                 detectDiskReads()
                 detectDiskWrites()
                 detectNetwork()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    detectResourceMismatches()
-                }
+                detectResourceMismatches()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     detectUnbufferedIo()
                 }
@@ -35,9 +33,7 @@ internal fun initStrictMode() {
                 detectLeakedSqlLiteObjects()
                 // Ignored for now since AppCompatDelegateImpl.computeFitSystemWindows calls this
                 // detectNonSdkApiUsage()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    detectCleartextNetwork()
-                }
+                detectCleartextNetwork()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     detectContentUriWithoutPermission()
                     // Ignored because OkHttp doesn't deal with this
