@@ -1,13 +1,14 @@
 package se.gustavkarlsson.skylight.android.lib.location
 
 import android.content.Context
-import android.os.Looper
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.GlobalScope
 import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.core.utils.seconds
@@ -16,11 +17,6 @@ import kotlin.time.ExperimentalTime
 
 @Module
 object LibLocationModule {
-    @OptIn(
-        FlowPreview::class,
-        ExperimentalCoroutinesApi::class,
-        ExperimentalTime::class,
-    )
     @Provides
     @AppScope
     internal fun locationProvider(
@@ -41,8 +37,9 @@ object LibLocationModule {
             locationRequest = locationRequest,
             freshLocationRequestPriority = requestPriority,
             permissionChecker = permissionChecker,
-            looper = Looper.getMainLooper(),
             streamRetryDuration = 15.seconds,
+            shareScope = GlobalScope,
+            dispatcher = Dispatchers.IO,
         )
     }
 }

@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.location
 
 import android.annotation.SuppressLint
-import android.os.Looper
 import androidx.annotation.RequiresPermission
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationAvailability
@@ -9,22 +8,29 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.tasks.CancellationTokenSource
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
@@ -34,19 +40,19 @@ import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.Permission
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
-import kotlin.time.ExperimentalTime
 import android.location.Location as AndroidLocation
+import com.google.android.gms.location.LocationResult as GmsLocationResult
 
-// FIXME add logging
 internal class GmsLocationProvider(
     private val client: FusedLocationProviderClient,
     private val locationRequest: LocationRequest,
     private val freshLocationRequestPriority: Int,
     private val permissionChecker: PermissionChecker,
-    private val looper: Looper,
     private val streamRetryDuration: Duration,
+    shareScope: CoroutineScope,
+    private val dispatcher: CoroutineDispatcher,
 ) : LocationProvider {
-    override suspend fun get(fresh: Boolean): LocationResult {
+    override suspend fun get(fresh: Boolean): LocationResult = withContext(dispatcher) {
         val result = try {
             if (fresh) {
                 logInfo { "Getting fresh location" }
@@ -65,7 +71,7 @@ internal class GmsLocationProvider(
             LocationResult.errorUnknown()
         }
         logInfo { "Provided location: $result" }
-        return result
+        result
     }
 
     private suspend fun getFreshLocation(): LocationResult {
@@ -117,19 +123,21 @@ internal class GmsLocationProvider(
         return locationPermission == Access.Granted
     }
 
-    @OptIn(ExperimentalTime::class)
-    override fun stream(): Flow<Loadable<LocationResult>> {
-        return client.streamWithPermissionCheck(permissionChecker)
-            .distinctUntilChanged()
-            .map { result -> Loadable.loaded(result) }
-            .onEach { logInfo { "Streamed location: $it" } }
-            .onStart {
-                logInfo { "Streaming location" }
-                emit(Loadable.loading())
-                emit(Loadable.loaded(getCachedLocation()))
-            }
-    }
+    private val sharedStream: SharedFlow<Loadable<LocationResult>> = client.streamWithPermissionCheck(permissionChecker)
+        .distinctUntilChanged()
+        .map { result -> Loadable.loaded(result) }
+        .onEach { logInfo { "Streamed location: $it" } }
+        .onStart {
+            logInfo { "Streaming location" }
+            emit(Loadable.loading())
+            emit(Loadable.loaded(getCachedLocation()))
+        }
+        .flowOn(dispatcher)
+        .shareIn(shareScope, SharingStarted.WhileSubscribed(), replay = 1)
 
+    override fun stream(): Flow<Loadable<LocationResult>> = sharedStream
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun FusedLocationProviderClient.streamWithPermissionCheck(
         permissionChecker: PermissionChecker,
     ): Flow<LocationResult> {
@@ -140,7 +148,7 @@ internal class GmsLocationProvider(
             .distinctUntilChanged()
             .flatMapLatest { permissionGranted ->
                 if (permissionGranted) {
-                    stream(locationRequest, streamRetryDuration, looper)
+                    streamWithRetry(locationRequest, streamRetryDuration)
                 } else flowOf(LocationResult.errorMissingPermission())
             }
     }
@@ -169,13 +177,12 @@ private suspend fun FusedLocationProviderClient.awaitLastLocation(): Location? {
     return location?.toLocation()
 }
 
-private fun FusedLocationProviderClient.stream(
+private fun FusedLocationProviderClient.streamWithRetry(
     locationRequest: LocationRequest,
     retryDelay: Duration,
-    looper: Looper,
 ): Flow<LocationResult> = flow {
     do {
-        emitAll(streamUntilError(locationRequest, looper))
+        emitAll(streamUntilError(locationRequest))
         logDebug { "Stream ended. Retrying in $retryDelay" }
         delay(retryDelay.toMillis())
     } while (true)
@@ -184,7 +191,6 @@ private fun FusedLocationProviderClient.stream(
 @OptIn(ExperimentalCoroutinesApi::class)
 private fun FusedLocationProviderClient.streamUntilError(
     locationRequest: LocationRequest,
-    looper: Looper,
 ): Flow<LocationResult> = callbackFlow {
     val callback = LatestLocationCallback { location ->
         val result = LocationResult.success(location)
@@ -227,9 +233,9 @@ private fun FusedLocationProviderClient.streamUntilError(
 }
 
 private class LatestLocationCallback(
-    private val onLocation: (Location) -> Unit
+    private val onLocation: (Location) -> Unit,
 ) : LocationCallback() {
-    override fun onLocationResult(locationResult: com.google.android.gms.location.LocationResult) {
+    override fun onLocationResult(locationResult: GmsLocationResult) {
         val latestAndroidLocation: AndroidLocation? = locationResult.lastLocation
         if (latestAndroidLocation != null) {
             val location = latestAndroidLocation.toLocation()
