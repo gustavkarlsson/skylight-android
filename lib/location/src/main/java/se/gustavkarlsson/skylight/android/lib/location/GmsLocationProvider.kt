@@ -200,6 +200,7 @@ private fun FusedLocationProviderClient.streamUntilError(
 
     try {
         logDebug { "Requesting location updates" }
+        // TODO Can we use a looper from a different thread?
         val task = requestLocationUpdates(locationRequest, callback, looper)
         task.addOnFailureListener { e ->
             val result = if (e is SecurityException) {
