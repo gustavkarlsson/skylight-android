@@ -62,7 +62,7 @@ fun SearchField(
     SideEffect {
         when {
             active -> {
-                focusRequester.captureFocus()
+                focusRequester.requestFocus()
                 canClearFocus = true
             }
             canClearFocus -> focusManager.clearFocus(force = true)

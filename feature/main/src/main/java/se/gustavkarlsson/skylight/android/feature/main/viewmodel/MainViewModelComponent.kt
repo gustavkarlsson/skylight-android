@@ -30,7 +30,7 @@ import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationComponent
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexComponent
 import se.gustavkarlsson.skylight.android.lib.location.LocationComponent
-import se.gustavkarlsson.skylight.android.lib.permissions.Permissions
+import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
@@ -140,8 +140,9 @@ internal object MainViewModelModule {
     @Provides
     fun initialState(
         selectedPlaceRepository: SelectedPlaceRepository,
+        permissionChecker: PermissionChecker,
     ): State = State(
-        permissions = Permissions.INITIAL,
+        permissions = permissionChecker.permissions.value,
         currentLocationName = Loadable.Loading,
         selectedPlaceId = selectedPlaceRepository.get().id,
         selectedAuroraReport = LoadableAuroraReport.LOADING,

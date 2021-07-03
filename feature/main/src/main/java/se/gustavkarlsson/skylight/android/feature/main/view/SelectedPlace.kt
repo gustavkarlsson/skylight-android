@@ -46,11 +46,10 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.FactorItem
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.NotificationLevelItem
-import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchViewState
-import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Banner
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
@@ -67,8 +66,7 @@ import java.util.Locale
 private fun PreviewSelectedPlace() {
     SelectedPlace(
         modifier = Modifier.fillMaxSize(),
-        state = ViewState(
-            toolbarTitleName = TextRef.string("Title"),
+        state = ContentState.PlaceSelected(
             chanceLevelText = TextRef.string("What chance?"),
             chanceSubtitleText = TextRef.string("subtitle"),
             errorBannerData = null,
@@ -84,8 +82,7 @@ private fun PreviewSelectedPlace() {
                     errorText = null,
                 )
             ),
-            search = SearchViewState.Closed,
-            onFavoritesClickedEvent = Event.Noop,
+            onFavoriteClickedEvent = Event.Noop,
             notificationLevelItems = emptyList(),
         ),
         onBannerActionClicked = {},
@@ -96,7 +93,7 @@ private fun PreviewSelectedPlace() {
 @Composable
 internal fun SelectedPlace(
     modifier: Modifier,
-    state: ViewState,
+    state: ContentState.PlaceSelected,
     onBannerActionClicked: (BannerData.Event) -> Unit,
     onEvent: (Event) -> Unit
 ) {
@@ -131,7 +128,7 @@ internal fun SelectedPlace(
             notificationsButtonState = state.notificationsButtonState,
             favoriteButtonState = state.favoriteButtonState,
             onNotificationsClicked = { showDialog = true },
-            onFavoriteClicked = { onEvent(state.onFavoritesClickedEvent) },
+            onFavoriteClicked = { onEvent(state.onFavoriteClickedEvent) },
         )
 
         CenterText(

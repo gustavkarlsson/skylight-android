@@ -8,6 +8,7 @@ import se.gustavkarlsson.skylight.android.feature.main.state.Search
 import se.gustavkarlsson.skylight.android.feature.main.state.State
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.places.Place
+import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
@@ -45,6 +46,9 @@ internal class EventHandler @Inject constructor(
             is Event.SearchChanged -> searchChannel.send(event.state)
             is Event.SelectSearchResult -> onSearchResultClicked(event.result)
             Event.RefreshLocationPermission -> permissionChecker.refresh()
+            Event.TurnOffCurrentLocationNotifications -> {
+                settings.setNotificationTriggerLevel(PlaceId.Current, TriggerLevel.NEVER)
+            }
             Event.Noop -> Unit
         }
     }

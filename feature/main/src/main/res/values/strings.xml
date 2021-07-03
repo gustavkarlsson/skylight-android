@@ -4,9 +4,10 @@
     <string name="in_location">in %1$s</string>
     <string name="remove">Remove</string>
     <string name="remove_thing">Remove %s?</string>
-    <string name="grant">Grant</string>
-    <string name="open_settings">Open settings</string>
+    <string name="allow">Allow</string>
+    <string name="open_settings">Open App info</string>
     <string name="places">Places</string>
+    <string name="location_permission">Location permission</string>
 
     <string name="factor_geomag_location_title_full">Geomagnetic location</string>
     <string name="factor_geomag_location_title_compact">Location</string>
@@ -39,12 +40,28 @@
     <string name="cause_server_response">Server error. Try again later.</string>
     <string name="cause_unknown">Something has gone wrong ☹</string>
 
+    <string name="location_permission_required">Location permission required</string>
+    <string name="background_location_permission_required">Background location permission required</string>
+    <string name="location_permission_denied_forever_title">Permission previously denied</string>
+    <string name="allow_all_the_time">Allow all the time</string>
     <string name="location_permission_denied_message">To determine aurora chances where you are,
-        you must grant Skylight access to your location.</string>
-    <string name="location_permission_denied_forever_message">Location access is permanently denied.
-        Open the app settings to grant it.</string>
-    <string name="background_location_permission_denied_message">To notify you of possible auroras,
-        you must grant Skylight access to your location all the time.</string>
+        you must allow Skylight access to your location.</string>
+    <string name="location_permission_denied_forever_message">You have previously denied location permission
+        for Skylight.\n\n
+        1. Open App info\n
+        2. Select Permissions\n
+        3. Select Location\n
+        4. Allow\n
+        5. Return to the app</string>
+    <string name="location_permission_select_other">Select another location instead</string>
+    <string name="background_location_permission_denied_message">You have enabled notifications for your current
+        location. This only works if Skylight has access to your location all the time.\n\n
+        1. Open App info\n
+        2. Select Permissions\n
+        3. Select Location\n
+        4. Select %s\n
+        5. Return to the app</string>
+    <string name="turn_off_notifications_instead">Turn off notifications instead</string>
     <string name="place_search">Search</string>
     <string name="place_search_failed_generic">Place search failed</string>
     <string name="place_search_failed_server_response">Place search failed. Server error.</string>

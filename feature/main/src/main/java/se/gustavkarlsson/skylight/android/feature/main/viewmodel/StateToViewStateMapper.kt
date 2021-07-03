@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
 import androidx.annotation.StringRes
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Warning
 import com.ioki.textref.TextRef
 import org.threeten.bp.Instant
@@ -46,31 +45,79 @@ internal class StateToViewStateMapper @Inject constructor(
     private val weatherFormatter: Formatter<Weather>,
 ) {
 
-    fun map(state: State): ViewState {
-        return ViewState(
-            toolbarTitleName = createToolbarTitleName(state),
+    fun map(state: State): ViewState = createViewState(state)
+
+    private fun createViewState(state: State): ViewState {
+        val triggerLevel = state.notificationTriggerLevels[PlaceId.Current] // FIXME why is this sometimes null?
+        val requiresBackgroundLocationPermission = triggerLevel != null && triggerLevel != TriggerLevel.NEVER
+        val hasBackgroundPermission = state.permissions[Permission.BackgroundLocation] == Access.Granted
+        return if (requiresBackgroundLocationPermission && !hasBackgroundPermission) {
+            ViewState.RequiresBackgroundLocationPermission
+        } else {
+            ViewState.Ready(
+                appBar = createToolbarState(state),
+                content = createContent(state),
+            )
+        }
+    }
+
+    private fun createToolbarState(state: State): AppBarState {
+        return when (state.search) {
+            is Search.Inactive -> {
+                val title = when (val selectedPlace = state.selectedPlace) {
+                    Place.Current -> {
+                        val name = createCurrentLocationDisplayName(state)
+                        if (name != null) {
+                            TextRef.string(name)
+                        } else TextRef.stringRes(R.string.your_location)
+                    }
+                    is Place.Saved -> TextRef.string(selectedPlace.name)
+                }
+                AppBarState.PlaceSelected(title)
+            }
+            is Search.Active -> AppBarState.Searching(state.search.query)
+        }
+    }
+
+    private fun createContent(state: State): ContentState {
+        return when (val search = state.search) {
+            is Search.Active.Blank -> {
+                val searchResults = createPlacesSearchResults(state, filter = null)
+                    .sortedWith(searchResultOrderComparator)
+                ContentState.Searching.Ok(searchResults)
+            }
+            is Search.Active.Filled -> {
+                val searchResults = createPlacesSearchResults(state, filter = search.query)
+                    .plus(createGeocodedSearchResults(search))
+                    .sortedWith(searchResultOrderComparator)
+                ContentState.Searching.Ok(searchResults)
+            }
+            is Search.Active.Error -> ContentState.Searching.Error(search.text)
+            Search.Inactive -> {
+                val currentSelected = state.selectedPlace == Place.Current
+                val locationAccess = state.permissions[Permission.Location]
+                if (currentSelected && locationAccess == Access.Denied) {
+                    ContentState.RequiresLocationPermission.UseDialog
+                } else if (currentSelected && locationAccess == Access.DeniedForever) {
+                    ContentState.RequiresLocationPermission.UseAppSettings
+                } else {
+                    createSelectedPlaceContent(state)
+                }
+            }
+        }
+    }
+
+    private fun createSelectedPlaceContent(state: State): ContentState.PlaceSelected {
+        return ContentState.PlaceSelected(
             chanceLevelText = createChangeLevelText(state),
             chanceSubtitleText = createChanceSubtitleText(),
             errorBannerData = createErrorBannerData(state),
             notificationsButtonState = createNotificationButtonState(state),
             favoriteButtonState = createFavoriteButtonState(state),
             factorItems = createFactorItems(state),
-            search = createSearchViewState(state),
-            onFavoritesClickedEvent = createOnFavoritesClickedEvent(state),
+            onFavoriteClickedEvent = createOnFavoritesClickedEvent(state),
             notificationLevelItems = createNotificationLevelItems(state),
         )
-    }
-
-    private fun createToolbarTitleName(state: State): TextRef {
-        return when (val selectedPlace = state.selectedPlace) {
-            Place.Current -> {
-                val name = createCurrentLocationDisplayName(state)
-                if (name != null) {
-                    TextRef.string(name)
-                } else TextRef.stringRes(R.string.your_location)
-            }
-            is Place.Saved -> TextRef.string(selectedPlace.name)
-        }
     }
 
     private fun createChangeLevelText(state: State): TextRef {
@@ -89,13 +136,9 @@ internal class StateToViewStateMapper @Inject constructor(
         val needsBackgroundLocation = state.notificationTriggerLevels.any { (placeId, triggerLevel) ->
             placeId == PlaceId.Current && triggerLevel != TriggerLevel.NEVER
         }
-        val locationAccess = state.permissions[Permission.Location]
-        val backgroundLocationAccess = state.permissions[Permission.BackgroundLocation]
-        val locationDenied = locationAccess == Access.Denied
-        val locationDeniedForever = locationAccess == Access.DeniedForever
-        val backgroundLocationDeniedSomehow = when (backgroundLocationAccess) {
+        val backgroundLocationDeniedSomehow = when (state.permissions[Permission.BackgroundLocation]) {
             Access.Denied, Access.DeniedForever -> true
-            Access.Granted, Access.Unknown -> false
+            Access.Granted -> false
         }
         return when {
             needsBackgroundLocation && backgroundLocationDeniedSomehow -> {
@@ -107,22 +150,6 @@ internal class StateToViewStateMapper @Inject constructor(
                 )
             }
             state.selectedPlace != Place.Current -> null
-            locationDeniedForever -> {
-                BannerData(
-                    TextRef.stringRes(R.string.location_permission_denied_forever_message),
-                    TextRef.stringRes(R.string.open_settings),
-                    Icons.Warning,
-                    BannerData.Event.OpenAppDetails
-                )
-            }
-            locationDenied -> {
-                BannerData(
-                    TextRef.stringRes(R.string.location_permission_denied_message),
-                    TextRef.stringRes(R.string.grant),
-                    Icons.LocationOn,
-                    BannerData.Event.RequestLocationPermission
-                )
-            }
             else -> null
         }
     }
@@ -183,26 +210,6 @@ internal class StateToViewStateMapper @Inject constructor(
                 evaluator = weatherChanceEvaluator,
                 formatter = weatherFormatter,
             )
-    }
-
-    private fun createSearchViewState(state: State): SearchViewState {
-        return when (val search = state.search) {
-            is Search.Active.Blank -> {
-                val searchResults = createPlacesSearchResults(state, filter = null)
-                    .sortedWith(searchResultOrderComparator)
-                SearchViewState.Open.Ok(search.query, searchResults)
-            }
-            is Search.Active.Filled -> {
-                val searchResults = createPlacesSearchResults(state, filter = search.query)
-                    .plus(createGeocodedSearchResults(search))
-                    .sortedWith(searchResultOrderComparator)
-                SearchViewState.Open.Ok(search.query, searchResults)
-            }
-            is Search.Active.Error -> {
-                SearchViewState.Open.Error(search.query, search.text)
-            }
-            Search.Inactive -> SearchViewState.Closed
-        }
     }
 
     private fun createPlacesSearchResults(state: State, filter: String?): List<SearchResult.Known> {

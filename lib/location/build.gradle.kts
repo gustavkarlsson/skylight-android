@@ -10,6 +10,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":lib:permissions"))
 
     implementation("com.google.android.gms:play-services-location:${Versions.playServicesLocation}")
     implementation(

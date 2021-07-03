@@ -6,8 +6,8 @@ object Versions {
     val compileSdk = 30
     val targetSdk = 30
     val java = JavaVersion.VERSION_1_8
-    val kotlin = "1.5.20" // Must also update in buildSrc/build.gradle.kts
-    val androidGradle = "7.0.0-beta03" // Must also update in buildSrc/build.gradle.kts
+    val kotlin = "1.5.10" // Must also update in buildSrc/build.gradle.kts
+    val androidGradle = "7.0.0-beta05" // Must also update in buildSrc/build.gradle.kts
     val jgit = "5.12.0.202106070339-r"
 
     // Skip 1.11.0 as it has breaking bug: https://github.com/allegro/axion-release-plugin/issues/332
@@ -53,9 +53,9 @@ object Versions {
     val textref = "1.3.1"
     val markwon = "4.6.2"
     val store = "4.0.2-KT15"
-    val compose = "1.0.0-beta09"
-    val composeConstraintLayout = "1.0.0-alpha07"
-    val accompanist = "0.12.0"
+    val compose = "1.0.0-rc01"
+    val composeConstraintLayout = "1.0.0-alpha08"
+    val accompanist = "0.13.0"
     val backstack = "0.9.0+1.0.0-beta07"
 
     // Test

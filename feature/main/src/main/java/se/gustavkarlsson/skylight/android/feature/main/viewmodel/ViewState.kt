@@ -16,18 +16,42 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SkylightColors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 
-internal data class ViewState(
-    val toolbarTitleName: TextRef,
-    val chanceLevelText: TextRef,
-    val chanceSubtitleText: TextRef,
-    val errorBannerData: BannerData?,
-    val notificationsButtonState: ToggleButtonState,
-    val favoriteButtonState: ToggleButtonState,
-    val factorItems: List<FactorItem>,
-    val search: SearchViewState,
-    val onFavoritesClickedEvent: Event,
-    val notificationLevelItems: List<NotificationLevelItem>,
-)
+internal sealed interface ViewState {
+    data class Ready(
+        val appBar: AppBarState,
+        val content: ContentState,
+    ) : ViewState
+
+    object RequiresBackgroundLocationPermission : ViewState
+}
+
+internal sealed interface AppBarState {
+    data class PlaceSelected(val title: TextRef) : AppBarState
+    data class Searching(val query: String) : AppBarState
+}
+
+internal sealed interface ContentState {
+    data class PlaceSelected(
+        val chanceLevelText: TextRef,
+        val chanceSubtitleText: TextRef,
+        val errorBannerData: BannerData?,
+        val notificationsButtonState: ToggleButtonState,
+        val favoriteButtonState: ToggleButtonState,
+        val factorItems: List<FactorItem>,
+        val onFavoriteClickedEvent: Event,
+        val notificationLevelItems: List<NotificationLevelItem>,
+    ) : ContentState
+
+    sealed interface Searching : ContentState {
+        data class Ok(val searchResults: List<SearchResult>) : Searching
+        data class Error(val text: TextRef) : Searching
+    }
+
+    sealed interface RequiresLocationPermission : ContentState {
+        object UseDialog : RequiresLocationPermission
+        object UseAppSettings : RequiresLocationPermission
+    }
+}
 
 internal data class BannerData(
     val message: TextRef,
@@ -36,7 +60,7 @@ internal data class BannerData(
     val buttonEvent: Event
 ) {
     enum class Event {
-        RequestLocationPermission, RequestBackgroundLocationPermission, OpenAppDetails
+        RequestBackgroundLocationPermission, OpenAppDetails
     }
 }
 
@@ -48,23 +72,6 @@ internal data class FactorItem(
     val progress: Double?,
     val errorText: TextRef?
 )
-
-internal sealed class SearchViewState {
-    object Closed : SearchViewState()
-    sealed class Open : SearchViewState() {
-        abstract val query: String
-
-        data class Ok(
-            override val query: String,
-            val searchResults: List<SearchResult>,
-        ) : Open()
-
-        data class Error(
-            override val query: String,
-            val text: TextRef,
-        ) : Open()
-    }
-}
 
 internal sealed class SearchResult {
     abstract val title: TextRef
@@ -129,5 +136,6 @@ internal sealed class Event {
     data class SearchChanged(val state: SearchFieldState) : Event()
     data class SelectSearchResult(val result: SearchResult) : Event()
     object RefreshLocationPermission : Event()
+    object TurnOffCurrentLocationNotifications : Event()
     object Noop : Event()
 }

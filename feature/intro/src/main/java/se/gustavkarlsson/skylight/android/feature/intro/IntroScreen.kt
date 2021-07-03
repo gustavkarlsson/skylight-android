@@ -2,16 +2,14 @@ package se.gustavkarlsson.skylight.android.feature.intro
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExtendedFloatingActionButton
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,10 +22,8 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
-import se.gustavkarlsson.skylight.android.lib.ui.compose.ClickableText
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
+import se.gustavkarlsson.skylight.android.lib.ui.compose.LargeDialog
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
 
 @Parcelize
@@ -79,34 +75,27 @@ private fun Content(
     onContinueClicked: () -> Unit,
 ) {
     ScreenBackground {
-        Column(
+        LargeDialog(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
+                .padding(vertical = 16.dp, horizontal = 32.dp)
                 .systemBarsPadding(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Spacer(modifier = Modifier.height(64.dp))
-            Text(
-                text = stringResource(id = R.string.intro_title),
-                style = Typography.h4,
-            )
-            Spacer(modifier = Modifier.height(32.dp))
-            Text(
-                text = stringResource(id = R.string.intro_desc),
-                style = Typography.body1,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            ClickableText(
-                text = stringResource(R.string.privacy_policy),
-                onClick = onPrivacyPolicyClicked,
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            ExtendedFloatingActionButton(
-                backgroundColor = Colors.primary,
-                text = { Text(stringResource(id = R.string.intro_continue)) },
-                onClick = onContinueClicked,
-            )
-        }
+            image = {
+                Image(
+                    modifier = Modifier
+                        .padding(vertical = 32.dp)
+                        .width(200.dp)
+                        .height(100.dp),
+                    painter = painterResource(R.drawable.app_logo),
+                    contentDescription = null,
+                )
+            },
+            title = stringResource(R.string.intro_title),
+            description = stringResource(R.string.intro_desc),
+            primaryActionText = stringResource(R.string.intro_continue),
+            onClickPrimaryAction = onContinueClicked,
+            secondaryActionText = stringResource(R.string.privacy_policy),
+            onClickSecondaryAction = onPrivacyPolicyClicked,
+        )
     }
 }

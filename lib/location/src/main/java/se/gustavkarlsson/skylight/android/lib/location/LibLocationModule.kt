@@ -15,6 +15,7 @@ import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.core.utils.seconds
+import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
@@ -30,7 +31,8 @@ object LibLocationModule {
     @AppScope
     internal fun locationProvider(
         context: Context,
-        @Io dispatcher: CoroutineDispatcher
+        @Io dispatcher: CoroutineDispatcher,
+        permissionChecker: PermissionChecker,
     ): LocationProvider {
         val client = LocationServices.getFusedLocationProviderClient(context)
         val requestInterval = 10.minutes
@@ -55,6 +57,6 @@ object LibLocationModule {
         val store = StoreBuilder.from(fetcher)
             .cachePolicy(cachePolicy)
             .build()
-        return StoreLocationProvider(store)
+        return StoreLocationProvider(store, permissionChecker)
     }
 }
