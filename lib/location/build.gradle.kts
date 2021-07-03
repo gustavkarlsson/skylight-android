@@ -16,7 +16,6 @@ dependencies {
     implementation(
         "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.kotlinxCoroutines}"
     )
-    implementation("com.dropbox.mobile.store:store4:${Versions.store}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

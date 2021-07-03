@@ -26,30 +26,30 @@ internal class StreamReportsLiveAction @Inject constructor(
 ) : Action<State> {
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         isStoreLive(stateFlow).collectLatest { live ->
-            if (live) {
+            if (live) { // FIXME does this not go offline when sending app to background?
                 streamAndUpdateReports(stateFlow)
             }
         }
     }
 
-    private fun isStoreLive(state: AtomicStateFlow<State>): Flow<Boolean> =
-        state.storeSubscriberCount
+    private fun isStoreLive(stateFlow: AtomicStateFlow<State>): Flow<Boolean> =
+        stateFlow.storeSubscriberCount
             .map { it > 0 }
             .distinctUntilChanged()
 
-    private suspend fun streamAndUpdateReports(state: AtomicStateFlow<State>) {
-        selectedPlace(state).collectLatest { selectedPlace ->
+    private suspend fun streamAndUpdateReports(stateFlow: AtomicStateFlow<State>) {
+        selectedPlace(stateFlow).collectLatest { selectedPlace ->
             auroraReportProvider.stream(locationUpdates(selectedPlace))
                 .throttle(throttleDuration.toMillis())
                 .collectLatest { report ->
-                    state.update(selectedPlace, report)
+                    stateFlow.update(selectedPlace, report)
                 }
         }
     }
 
-    private fun selectedPlace(state: AtomicStateFlow<State>): Flow<Place> =
-        state
-            .map { it.selectedPlace }
+    private fun selectedPlace(stateFlow: AtomicStateFlow<State>): Flow<Place> =
+        stateFlow
+            .map { state -> state.selectedPlace }
             .distinctUntilChangedBy { selected -> selected.id }
 
     private fun locationUpdates(selectedPlace: Place): Flow<Loadable<LocationResult>> {

@@ -1,8 +1,9 @@
 ## ASAP
 * Test permissions on different SDK:s Especially 9, 10 and 11 which have slightly different solutions for requesting background permission
-* Ensure fetching aurora report in background always happens (se.gustavkarlsson.skylight.android.feature.background.scheduling.BackgroundWorkImpl.getNotificationData)
 
 ## Soon
+* Should all stateIn operators actually be eager? Can they operate when subscribed instead?
+*
 * Migrate some sealed classes to sealed interfaces
 * Only subscribe to current location reports when location is turned on?
 * Show helper about location turned off?
