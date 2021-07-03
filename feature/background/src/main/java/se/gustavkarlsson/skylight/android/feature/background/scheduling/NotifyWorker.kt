@@ -16,6 +16,7 @@ internal class NotifyWorker(
 
     override suspend fun doWork(): Result {
         val work = BackgroundComponent.instance.backgroundWork()
+        logInfo { "Starting work" }
         val startTime = System.currentTimeMillis()
         return try {
             work()
