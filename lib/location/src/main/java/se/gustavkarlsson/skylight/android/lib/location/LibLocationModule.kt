@@ -28,7 +28,7 @@ object LibLocationModule {
         val locationRequest = LocationRequest.create().apply {
             priority = requestPriority
             fastestInterval = 1.minutes.toMillis()
-            interval = 2.minutes.toMillis()// FIXME update
+            interval = 10.minutes.toMillis()
             maxWaitTime = 15.minutes.toMillis()
             smallestDisplacement = 200.toFloat()
         }
