@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
@@ -22,10 +23,13 @@ internal class StoreLocationProvider(
     private val store: Store<Unit, LocationResult>,
     private val permissionChecker: PermissionChecker,
 ) : LocationProvider {
+    // FIXME Doesn't work?
     override suspend fun get(fresh: Boolean): LocationResult {
         val result = if (fresh) {
+            logInfo { "Getting fresh location" }
             store.fresh(Unit)
         } else {
+            logInfo { "Getting cached location" }
             store.get(Unit)
         }
         logInfo { "Provided location: $result" }
@@ -59,4 +63,5 @@ internal class StoreLocationProvider(
         }
         .distinctUntilChanged()
         .onEach { logInfo { "Streamed location: $it" } }
+        .onStart { logInfo { "Streaming location" } }
 }
