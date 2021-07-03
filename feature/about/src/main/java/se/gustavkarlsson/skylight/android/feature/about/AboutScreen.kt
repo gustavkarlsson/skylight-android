@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.toPaddingValues
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
@@ -77,8 +77,11 @@ private fun Content(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    contentPadding = LocalWindowInsets.current.statusBars
-                        .toPaddingValues(additionalHorizontal = AppBarHorizontalPadding),
+                    contentPadding = rememberInsetsPaddingValues(
+                        insets = LocalWindowInsets.current.statusBars,
+                        additionalStart = AppBarHorizontalPadding,
+                        additionalEnd = AppBarHorizontalPadding,
+                    ),
                     navigationIcon = {
                         IconButton(onClick = onBackClicked) {
                             Icon(Icons.ArrowBack, contentDescription = null)
