@@ -7,17 +7,17 @@ import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoder
 import javax.inject.Inject
 
-internal class StreamCurrentLocationAction @Inject constructor(
+internal class StreamCurrentLocationNameAction @Inject constructor(
     private val locationProvider: LocationProvider,
     private val reverseGeocoder: ReverseGeocoder,
 ) : Action<State> {
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         reverseGeocoder.stream(locationProvider.stream())
-            .collect { loadableGeocodingResult ->
+            .collect { result ->
                 stateFlow.update {
                     when (this) {
-                        is State.Loading -> copy(currentLocationName = loadableGeocodingResult)
-                        is State.Ready -> copy(currentLocationName = loadableGeocodingResult)
+                        is State.Loading -> copy(currentLocationName = result)
+                        is State.Ready -> copy(currentLocationName = result)
                     }
                 }
             }

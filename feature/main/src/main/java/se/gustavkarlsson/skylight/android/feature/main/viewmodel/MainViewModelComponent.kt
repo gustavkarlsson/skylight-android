@@ -18,7 +18,7 @@ import se.gustavkarlsson.skylight.android.feature.main.state.FinishLoadingAction
 import se.gustavkarlsson.skylight.android.feature.main.state.PermissionsAction
 import se.gustavkarlsson.skylight.android.feature.main.state.Search
 import se.gustavkarlsson.skylight.android.feature.main.state.State
-import se.gustavkarlsson.skylight.android.feature.main.state.StreamCurrentLocationAction
+import se.gustavkarlsson.skylight.android.feature.main.state.StreamCurrentLocationNameAction
 import se.gustavkarlsson.skylight.android.feature.main.state.StreamPlacesAction
 import se.gustavkarlsson.skylight.android.feature.main.state.StreamReportsLiveAction
 import se.gustavkarlsson.skylight.android.feature.main.state.StreamSelectedPlaceAction
@@ -123,7 +123,7 @@ internal object MainViewModelModule {
         streamPlacesAction: StreamPlacesAction,
         continuouslySearchAction: ContinuouslySearchAction,
         streamReportsAction: StreamReportsLiveAction,
-        streamCurrentLocationAction: StreamCurrentLocationAction,
+        streamCurrentLocationNameAction: StreamCurrentLocationNameAction,
         finishLoadingAction: FinishLoadingAction,
     ): List<Action<State>> = listOf(
         permissionsAction,
@@ -132,7 +132,7 @@ internal object MainViewModelModule {
         streamReportsAction,
         streamTriggerLevelsAction,
         continuouslySearchAction,
-        streamCurrentLocationAction,
+        streamCurrentLocationNameAction,
         finishLoadingAction,
     )
 
