@@ -3,7 +3,7 @@
 
 ## Soon
 * Should all stateIn operators actually be eager? Can they operate when subscribed instead?
-*
+* Use cashapp/exhaustive?
 * Migrate some sealed classes to sealed interfaces
 * Only subscribe to current location reports when location is turned on?
 * Show helper about location turned off?

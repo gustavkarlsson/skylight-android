@@ -24,7 +24,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.setPadding
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.insets.toPaddingValues
+import com.google.accompanist.insets.rememberInsetsPaddingValues
 import io.noties.markwon.Markwon
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -80,8 +80,11 @@ private fun Content(
         Scaffold(
             topBar = {
                 TopAppBar(
-                    contentPadding = LocalWindowInsets.current.statusBars
-                        .toPaddingValues(additionalHorizontal = AppBarHorizontalPadding),
+                    contentPadding = rememberInsetsPaddingValues(
+                        insets = LocalWindowInsets.current.statusBars,
+                        additionalStart = AppBarHorizontalPadding,
+                        additionalEnd = AppBarHorizontalPadding,
+                    ),
                     navigationIcon = {
                         IconButton(onClick = onBackClicked) {
                             Icon(Icons.ArrowBack, contentDescription = null)

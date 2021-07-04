@@ -8,7 +8,6 @@ import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
@@ -35,6 +34,7 @@ import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
+import se.gustavkarlsson.skylight.android.lib.ui.compose.collectAsLifecycleAwareState
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.startStopScope
 
@@ -83,7 +83,7 @@ object MainScreen : Screen {
         val viewModel = getOrRegisterService(this@MainScreen, "mainViewModel") {
             MainViewModelComponent.build().viewModel()
         }
-        val state by viewModel.state.collectAsState()
+        val state by viewModel.state.collectAsLifecycleAwareState()
         Content(
             state = state,
             onBannerActionClicked = { event ->

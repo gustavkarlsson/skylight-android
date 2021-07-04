@@ -31,7 +31,7 @@ object Versions {
     val androidAnnotation = "1.2.0"
     val androidWorkManager = "2.6.0-beta01"
     val androidCore = "1.5.0"
-    val androidLifecycle = "2.3.1"
+    val androidLifecycle = "2.4.0-alpha02"
 
     val runtimePermissionKotlin = "1.1.2"
     val kotlinxCoroutines = "1.5.0"

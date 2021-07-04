@@ -40,7 +40,7 @@ internal class ViewModelNavigator private constructor(
                 BackstackChange(previous.new, current)
             }
             .filter { it.old != it.new }
-            .stateIn(viewModelScope, SharingStarted.Eagerly, initialValue = initialChange)
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), initialValue = initialChange)
     }
 
     override fun setBackstack(backstack: Backstack) = changeBackstack {

@@ -22,7 +22,7 @@ internal class MainViewModel @Inject constructor(
 
     val state: StateFlow<ViewState> = store.state
         .map { state -> stateToViewStateMapper.map(state) }
-        .stateIn(scope, SharingStarted.Eagerly, stateToViewStateMapper.map(store.state.value))
+        .stateIn(scope, SharingStarted.WhileSubscribed(), stateToViewStateMapper.map(store.state.value))
 
     fun onEvent(event: Event) {
         scope.launch { eventHandler.onEvent(event) }

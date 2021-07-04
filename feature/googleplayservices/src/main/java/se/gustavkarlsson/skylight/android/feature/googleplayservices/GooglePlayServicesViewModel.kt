@@ -32,7 +32,7 @@ internal class GooglePlayServicesViewModel @Inject constructor(
 
     val error: StateFlow<Boolean> = store.state
         .map { state -> state is Install.Error }
-        .stateIn(scope, SharingStarted.Eagerly, store.state.value is Install.Error)
+        .stateIn(scope, SharingStarted.WhileSubscribed(), store.state.value is Install.Error)
 
     val success: Flow<Unit> = store.state.mapNotNull { state ->
         if (state is Install.Success) {

@@ -15,7 +15,6 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +37,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ErrorSnackbar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
+import se.gustavkarlsson.skylight.android.lib.ui.compose.collectAsLifecycleAwareState
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
 
 @Parcelize
@@ -65,7 +65,7 @@ internal data class GooglePlayServicesScreen(private val target: Backstack) : Sc
 
     @Composable
     override fun AppCompatActivity.Content(scope: CoroutineScope) {
-        val errorSnackbarVisible = viewModel.error.collectAsState()
+        val errorSnackbarVisible = viewModel.error.collectAsLifecycleAwareState()
         Content(
             errorSnackbarVisible = errorSnackbarVisible.value,
             onInstallClicked = { viewModel.installGooglePlayServices(this@Content) },
