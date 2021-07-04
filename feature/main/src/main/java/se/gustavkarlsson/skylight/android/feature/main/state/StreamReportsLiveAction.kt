@@ -26,7 +26,9 @@ internal class StreamReportsLiveAction @Inject constructor(
 ) : Action<State> {
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         isStoreLive(stateFlow).collectLatest { live ->
-            if (live) { // FIXME does this not go offline when sending app to background?
+            // FIXME does this not go offline when sending app to background?
+            //  https://medium.com/androiddevelopers/a-safer-way-to-collect-flows-from-android-uis-23080b1f8bda
+            if (live) {
                 streamAndUpdateReports(stateFlow)
             }
         }
