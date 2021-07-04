@@ -55,10 +55,8 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createNonLoadingState(state: State.Ready): ViewState {
-        val triggerLevel = requireNotNull(state.notificationTriggerLevels[PlaceId.Current]) {
-            "notificationTriggerLevels should always contain a value for ${PlaceId.Current}"
-        }
-        val requiresBackgroundLocationPermission = triggerLevel != TriggerLevel.NEVER
+        val triggerLevel = state.notificationTriggerLevels[PlaceId.Current] // FIXME Can this be made to never be null?
+        val requiresBackgroundLocationPermission = triggerLevel != null && triggerLevel != TriggerLevel.NEVER
         val hasBackgroundPermission = state.permissions[Permission.BackgroundLocation] == Access.Granted
         return if (requiresBackgroundLocationPermission && !hasBackgroundPermission) {
             ViewState.RequiresBackgroundLocationPermission
