@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
@@ -49,7 +50,7 @@ internal class StreamReportsLiveAction @Inject constructor(
 
     private fun selectedPlace(stateFlow: AtomicStateFlow<State>): Flow<Place> =
         stateFlow
-            .map { state -> state.selectedPlace }
+            .mapNotNull { state -> state.selectedPlace }
             .distinctUntilChangedBy { selected -> selected.id }
 
     private fun locationUpdates(selectedPlace: Place): Flow<Loadable<LocationResult>> {
@@ -65,7 +66,10 @@ internal class StreamReportsLiveAction @Inject constructor(
     ) {
         update {
             if (selectedPlace == reportPlace) {
-                copy(selectedAuroraReport = report)
+                when (this) {
+                    is State.Loading -> copy(selectedAuroraReport = report)
+                    is State.Ready -> copy(selectedAuroraReport = report)
+                }
             } else {
                 this
             }

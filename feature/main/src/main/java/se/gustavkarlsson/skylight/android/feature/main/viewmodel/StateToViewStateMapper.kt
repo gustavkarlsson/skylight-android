@@ -48,8 +48,17 @@ internal class StateToViewStateMapper @Inject constructor(
     fun map(state: State): ViewState = createViewState(state)
 
     private fun createViewState(state: State): ViewState {
-        val triggerLevel = state.notificationTriggerLevels[PlaceId.Current] // FIXME why is this sometimes null?
-        val requiresBackgroundLocationPermission = triggerLevel != null && triggerLevel != TriggerLevel.NEVER
+        return when (state) {
+            is State.Loading -> ViewState.Loading
+            is State.Ready -> createNonLoadingState(state)
+        }
+    }
+
+    private fun createNonLoadingState(state: State.Ready): ViewState {
+        val triggerLevel = requireNotNull(state.notificationTriggerLevels[PlaceId.Current]) {
+            "notificationTriggerLevels should always contain a value for ${PlaceId.Current}"
+        }
+        val requiresBackgroundLocationPermission = triggerLevel != TriggerLevel.NEVER
         val hasBackgroundPermission = state.permissions[Permission.BackgroundLocation] == Access.Granted
         return if (requiresBackgroundLocationPermission && !hasBackgroundPermission) {
             ViewState.RequiresBackgroundLocationPermission
@@ -61,7 +70,7 @@ internal class StateToViewStateMapper @Inject constructor(
         }
     }
 
-    private fun createToolbarState(state: State): AppBarState {
+    private fun createToolbarState(state: State.Ready): AppBarState {
         return when (state.search) {
             is Search.Inactive -> {
                 val title = when (val selectedPlace = state.selectedPlace) {
@@ -79,7 +88,7 @@ internal class StateToViewStateMapper @Inject constructor(
         }
     }
 
-    private fun createContent(state: State): ContentState {
+    private fun createContent(state: State.Ready): ContentState {
         return when (val search = state.search) {
             is Search.Active.Blank -> {
                 val searchResults = createPlacesSearchResults(state, filter = null)
@@ -107,7 +116,7 @@ internal class StateToViewStateMapper @Inject constructor(
         }
     }
 
-    private fun createSelectedPlaceContent(state: State): ContentState.PlaceSelected {
+    private fun createSelectedPlaceContent(state: State.Ready): ContentState.PlaceSelected {
         return ContentState.PlaceSelected(
             chanceLevelText = createChangeLevelText(state),
             chanceSubtitleText = createChanceSubtitleText(),
@@ -132,7 +141,7 @@ internal class StateToViewStateMapper @Inject constructor(
         return TextRef.EMPTY // TODO what to do with this?
     }
 
-    private fun createErrorBannerData(state: State): BannerData? {
+    private fun createErrorBannerData(state: State.Ready): BannerData? {
         val needsBackgroundLocation = state.notificationTriggerLevels.any { (placeId, triggerLevel) ->
             placeId == PlaceId.Current && triggerLevel != TriggerLevel.NEVER
         }
@@ -154,12 +163,12 @@ internal class StateToViewStateMapper @Inject constructor(
         }
     }
 
-    private fun createNotificationButtonState(state: State): ToggleButtonState {
+    private fun createNotificationButtonState(state: State.Ready): ToggleButtonState {
         val notificationChecked = state.selectedPlaceTriggerLevel != TriggerLevel.NEVER
         return ToggleButtonState.Enabled(notificationChecked)
     }
 
-    private fun createFavoriteButtonState(state: State): ToggleButtonState {
+    private fun createFavoriteButtonState(state: State.Ready): ToggleButtonState {
         return when (state.selectedPlace) {
             Place.Current -> ToggleButtonState.Gone
             is Place.Saved.Recent -> ToggleButtonState.Enabled(checked = false)
@@ -212,7 +221,7 @@ internal class StateToViewStateMapper @Inject constructor(
             )
     }
 
-    private fun createPlacesSearchResults(state: State, filter: String?): List<SearchResult.Known> {
+    private fun createPlacesSearchResults(state: State.Ready, filter: String?): List<SearchResult.Known> {
         return state.places
             .filter { place ->
                 if (filter != null) {
@@ -248,7 +257,7 @@ internal class StateToViewStateMapper @Inject constructor(
             .value
     }
 
-    private fun createOnFavoritesClickedEvent(state: State): Event {
+    private fun createOnFavoritesClickedEvent(state: State.Ready): Event {
         return when (val selectedPlace = state.selectedPlace) {
             Place.Current -> Event.Noop
             is Place.Saved.Recent -> Event.AddFavorite(selectedPlace)
@@ -256,7 +265,7 @@ internal class StateToViewStateMapper @Inject constructor(
         }
     }
 
-    private fun createNotificationLevelItems(state: State): List<NotificationLevelItem> {
+    private fun createNotificationLevelItems(state: State.Ready): List<NotificationLevelItem> {
         return TriggerLevel.values()
             .sortedBy { level -> level.displayIndex }
             .map { level ->

@@ -12,7 +12,10 @@ internal class StreamPlacesAction @Inject constructor(
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         placesRepository.stream().collect { places ->
             stateFlow.update {
-                copy(places = places)
+                when (this) {
+                    is State.Loading -> copy(places = places)
+                    is State.Ready -> copy(places = places)
+                }
             }
         }
     }

@@ -17,6 +17,8 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.SkylightColors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 
 internal sealed interface ViewState {
+    object Loading : ViewState
+
     data class Ready(
         val appBar: AppBarState,
         val content: ContentState,

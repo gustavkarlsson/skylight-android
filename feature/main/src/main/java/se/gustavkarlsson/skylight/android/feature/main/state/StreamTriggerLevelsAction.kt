@@ -12,7 +12,10 @@ internal class StreamTriggerLevelsAction @Inject constructor(
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         settings.streamNotificationTriggerLevels().collect { levels ->
             stateFlow.update {
-                copy(notificationTriggerLevels = levels)
+                when (this) {
+                    is State.Loading -> copy(notificationTriggerLevels = levels)
+                    is State.Ready -> copy(notificationTriggerLevels = levels)
+                }
             }
         }
     }

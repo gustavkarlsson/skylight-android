@@ -12,7 +12,10 @@ internal class PermissionsAction @Inject constructor(
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         permissionChecker.permissions.collect { permissions ->
             stateFlow.update {
-                copy(permissions = permissions)
+                when (this) {
+                    is State.Loading -> copy(permissions = permissions)
+                    is State.Ready -> copy(permissions = permissions)
+                }
             }
         }
     }

@@ -15,7 +15,10 @@ internal class StreamCurrentLocationAction @Inject constructor(
         reverseGeocoder.stream(locationProvider.stream())
             .collect { loadableGeocodingResult ->
                 stateFlow.update {
-                    copy(currentLocationName = loadableGeocodingResult)
+                    when (this) {
+                        is State.Loading -> copy(currentLocationName = loadableGeocodingResult)
+                        is State.Ready -> copy(currentLocationName = loadableGeocodingResult)
+                    }
                 }
             }
     }

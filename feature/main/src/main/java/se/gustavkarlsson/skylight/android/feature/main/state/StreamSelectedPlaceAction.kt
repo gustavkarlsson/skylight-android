@@ -18,10 +18,17 @@ internal class StreamSelectedPlaceAction @Inject constructor(
             .distinctUntilChanged()
             .collect { id ->
                 stateFlow.update {
-                    copy(
-                        selectedPlaceId = id,
-                        selectedAuroraReport = LoadableAuroraReport.LOADING // TODO Get from cache?
-                    )
+                    val loading = LoadableAuroraReport.LOADING // TODO Get from cache?
+                    when (this) {
+                        is State.Loading -> copy(
+                            selectedPlaceId = id,
+                            selectedAuroraReport = loading,
+                        )
+                        is State.Ready -> copy(
+                            selectedPlaceId = id,
+                            selectedAuroraReport = loading,
+                        )
+                    }
                 }
             }
     }

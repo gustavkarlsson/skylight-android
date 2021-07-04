@@ -10,22 +10,47 @@ import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingResult
 
-internal data class State(
-    val permissions: Permissions,
-    val currentLocationName: Loadable<ReverseGeocodingResult>,
-    val selectedPlaceId: PlaceId,
-    val selectedAuroraReport: LoadableAuroraReport,
-    val search: Search,
-    val places: List<Place>,
-    val notificationTriggerLevels: Map<PlaceId, TriggerLevel>,
-) {
-    val selectedPlace: Place
-        get() = places.firstOrNull { place ->
-            place.id == selectedPlaceId
-        } ?: Place.Current
+internal sealed interface State {
+    val permissions: Permissions
+    val currentLocationName: Loadable<ReverseGeocodingResult>
+    val selectedAuroraReport: LoadableAuroraReport
+    val search: Search
+    val selectedPlace: Place?
 
-    val selectedPlaceTriggerLevel: TriggerLevel
-        get() = notificationTriggerLevels[selectedPlaceId] ?: TriggerLevel.NEVER
+    // FIXME More abstract properties?
+
+    data class Loading(
+        override val permissions: Permissions,
+        override val currentLocationName: Loadable<ReverseGeocodingResult>,
+        val selectedPlaceId: PlaceId?,
+        override val selectedAuroraReport: LoadableAuroraReport,
+        override val search: Search,
+        val places: List<Place>?,
+        val notificationTriggerLevels: Map<PlaceId, TriggerLevel>?,
+    ) : State {
+        override val selectedPlace: Place?
+            get() = places.orEmpty().firstOrNull { place ->
+                place.id == selectedPlaceId
+            }
+    }
+
+    data class Ready(
+        override val permissions: Permissions,
+        override val currentLocationName: Loadable<ReverseGeocodingResult>,
+        val selectedPlaceId: PlaceId,
+        override val selectedAuroraReport: LoadableAuroraReport,
+        override val search: Search,
+        val places: List<Place>,
+        val notificationTriggerLevels: Map<PlaceId, TriggerLevel>,
+    ) : State {
+        override val selectedPlace: Place
+            get() = places.firstOrNull { place ->
+                place.id == selectedPlaceId
+            } ?: error("No place with place id $selectedPlaceId in $places")
+
+        val selectedPlaceTriggerLevel: TriggerLevel
+            get() = notificationTriggerLevels[selectedPlaceId] ?: TriggerLevel.NEVER
+    }
 }
 
 internal sealed class Search {

@@ -66,8 +66,13 @@ internal class EventHandler @Inject constructor(
             }
         }
         selectedPlaceRepository.set(place)
-        store.issue { state ->
-            state.update { copy(search = Search.Inactive) }
+        store.issue { stateFlow ->
+            stateFlow.update {
+                when (this) {
+                    is State.Loading -> copy(search = Search.Inactive)
+                    is State.Ready -> copy(search = Search.Inactive)
+                }
+            }
         }
     }
 }

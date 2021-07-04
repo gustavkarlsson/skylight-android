@@ -70,7 +70,7 @@ internal class ContinuouslySearchAction @Inject constructor(
                 if (query.isBlank()) {
                     Search.Active.Blank(query)
                 } else {
-                    when (search) {
+                    when (val search = search) {
                         Search.Inactive, is Search.Active.Blank -> {
                             Search.Active.Filled(query, emptyList())
                         }
@@ -80,10 +80,14 @@ internal class ContinuouslySearchAction @Inject constructor(
                 }
             }
         }
-        return copy(search = newSearch)
+        return when (this) {
+            is State.Loading -> copy(search = newSearch)
+            is State.Ready -> copy(search = newSearch)
+        }
     }
 
     private fun State.update(result: GeocodingResult): State {
+        val search = search
         if (search !is Search.Active) return this
         val newSearch = when (result) {
             is GeocodingResult.Success -> {
@@ -99,7 +103,10 @@ internal class ContinuouslySearchAction @Inject constructor(
                 search.update(search.suggestions, error)
             }
         }
-        return copy(search = newSearch)
+        return when (this) {
+            is State.Loading -> copy(search = newSearch)
+            is State.Ready -> copy(search = newSearch)
+        }
     }
 
     private fun Search.Active.update(

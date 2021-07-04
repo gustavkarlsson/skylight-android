@@ -14,6 +14,7 @@ import se.gustavkarlsson.skylight.android.core.ViewModelScope
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.utils.millis
 import se.gustavkarlsson.skylight.android.feature.main.state.ContinuouslySearchAction
+import se.gustavkarlsson.skylight.android.feature.main.state.FinishLoadingAction
 import se.gustavkarlsson.skylight.android.feature.main.state.PermissionsAction
 import se.gustavkarlsson.skylight.android.feature.main.state.Search
 import se.gustavkarlsson.skylight.android.feature.main.state.State
@@ -33,7 +34,6 @@ import se.gustavkarlsson.skylight.android.lib.location.LocationComponent
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
-import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoderComponent
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
@@ -124,6 +124,7 @@ internal object MainViewModelModule {
         continuouslySearchAction: ContinuouslySearchAction,
         streamReportsAction: StreamReportsLiveAction,
         streamCurrentLocationAction: StreamCurrentLocationAction,
+        finishLoadingAction: FinishLoadingAction,
     ): List<Action<State>> = listOf(
         permissionsAction,
         streamSelectedPlaceAction,
@@ -132,23 +133,20 @@ internal object MainViewModelModule {
         streamTriggerLevelsAction,
         continuouslySearchAction,
         streamCurrentLocationAction,
+        finishLoadingAction,
     )
 
-    // TODO Load initial data, and then remove fallback for State.selectedPlace.
-    //  or have another initial state
-    // TODO Also remove initial permissions and get from checker instead
     @Provides
     fun initialState(
-        selectedPlaceRepository: SelectedPlaceRepository,
         permissionChecker: PermissionChecker,
-    ): State = State(
+    ): State = State.Loading(
         permissions = permissionChecker.permissions.value,
         currentLocationName = Loadable.Loading,
-        selectedPlaceId = selectedPlaceRepository.get().id,
+        selectedPlaceId = null,
         selectedAuroraReport = LoadableAuroraReport.LOADING,
         search = Search.Inactive,
-        places = emptyList(),
-        notificationTriggerLevels = emptyMap(),
+        places = null,
+        notificationTriggerLevels = null,
     )
 
     @Provides

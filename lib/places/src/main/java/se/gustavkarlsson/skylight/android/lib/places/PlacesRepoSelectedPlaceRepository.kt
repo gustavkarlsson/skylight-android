@@ -36,7 +36,7 @@ internal class PlacesRepoSelectedPlaceRepository(
 private sealed class State {
     abstract val selected: Place
 
-    // TODO Make get() suspending and don't use this default
+    // FIXME Make get() suspending and don't use this default
     object Initial : State() {
         override val selected = Place.Current
     }
