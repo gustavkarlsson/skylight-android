@@ -4,6 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface SelectedPlaceRepository {
     fun set(place: Place)
-    fun get(): Place
     fun stream(): Flow<Place>
 }

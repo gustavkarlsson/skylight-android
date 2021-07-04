@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
@@ -16,7 +17,7 @@ internal class PlacesRepoSelectedPlaceRepository(
     scope: CoroutineScope
 ) : SelectedPlaceRepository {
     private val store = Store(
-        initialState = State.Initial,
+        initialState = State.Loading,
         startActions = listOf(StreamPlacesAction(placeSelectionStorage::loadId, placesRepo.stream()))
     )
 
@@ -26,22 +27,15 @@ internal class PlacesRepoSelectedPlaceRepository(
 
     override fun set(place: Place) = store.issue(SelectionChangedAction(place, placeSelectionStorage::saveId))
 
-    override fun get(): Place = store.state.value.selected
-
     override fun stream(): Flow<Place> = store.state
+        .filterIsInstance<State.Loaded>()
         .map { it.selected }
         .distinctUntilChanged()
 }
 
-private sealed class State {
-    abstract val selected: Place
-
-    // FIXME Make get() suspending and don't use this default
-    object Initial : State() {
-        override val selected = Place.Current
-    }
-
-    data class Loaded(override val selected: Place, val places: List<Place>) : State()
+private sealed interface State {
+    object Loading : State
+    data class Loaded(val selected: Place, val places: List<Place>) : State
 }
 
 private class StreamPlacesAction(
@@ -60,7 +54,7 @@ private class StreamPlacesAction(
 
     private fun createState(state: State, newPlaces: List<Place>, initialSelectedId: PlaceId): State {
         val selected = when (state) {
-            is State.Initial -> {
+            is State.Loading -> {
                 val placeMatchingId = newPlaces.firstOrNull { place -> place.id == initialSelectedId }
                 placeMatchingId ?: newPlaces.first()
             }
@@ -81,7 +75,7 @@ private class SelectionChangedAction(
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         val newState = stateFlow.update {
             when (this) {
-                is State.Initial -> {
+                is State.Loading -> {
                     logError { "Cannot select a place before loading places. Place: $selectedPlace" }
                     this
                 }
