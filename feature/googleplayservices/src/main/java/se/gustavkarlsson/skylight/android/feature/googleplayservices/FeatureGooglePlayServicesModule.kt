@@ -19,13 +19,15 @@ object FeatureGooglePlayServicesModule {
         object : NavigationOverride {
             override val priority = 8
 
+            private val REQUIRING_SCREEN_NAMES = setOf(ScreenName.Main)
+
             override fun override(
                 oldBackstack: Backstack,
                 targetBackstack: Backstack,
             ): List<GooglePlayServicesScreen>? {
                 val googlePlayServicesChecker = GmsGooglePlayServicesChecker(context)
                 return when {
-                    targetBackstack.isNotEmpty() &&
+                    targetBackstack.any { it.name in REQUIRING_SCREEN_NAMES } &&
                         targetBackstack.none { it.name == ScreenName.GooglePlayServices } &&
                         !googlePlayServicesChecker.isAvailable ->
                         listOf(GooglePlayServicesScreen(targetBackstack))
