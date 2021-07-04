@@ -17,8 +17,6 @@ internal sealed interface State {
     val search: Search
     val selectedPlace: Place?
 
-    // FIXME More abstract properties?
-
     data class Loading(
         override val permissions: Permissions,
         override val currentLocationName: Loadable<ReverseGeocodingResult>,
