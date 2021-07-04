@@ -1,12 +1,10 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -129,7 +127,6 @@ private fun PreviewContent() {
     )
 }
 
-@SuppressLint("UnusedCrossfadeTargetStateParameter")
 @Composable
 private fun Content(
     state: ViewState,
@@ -141,24 +138,23 @@ private fun Content(
     onEvent: (Event) -> Unit,
 ) {
     ScreenBackground {
-        Crossfade(targetState = state.javaClass) {
-            when (state) {
-                is ViewState.Ready -> {
-                    Ready(
-                        state = state,
-                        onBannerActionClicked = onBannerActionClicked,
-                        onAboutClicked = onAboutClicked,
-                        onEvent = onEvent,
-                        onClickGrantLocationPermission = onClickGrantLocationPermission,
-                        onClickOpenSettings = onClickOpenSettings,
-                    )
-                }
-                ViewState.RequiresBackgroundLocationPermission -> {
-                    RequiresBackgroundLocationPermission(
-                        onClickOpenSettings = onClickOpenSettings,
-                        onClickTurnOffNotifications = onClickTurnOffNotifications,
-                    )
-                }
+        val dummy = when (state) {
+            ViewState.Loading -> Unit
+            is ViewState.Ready -> {
+                Ready(
+                    state = state,
+                    onBannerActionClicked = onBannerActionClicked,
+                    onAboutClicked = onAboutClicked,
+                    onEvent = onEvent,
+                    onClickGrantLocationPermission = onClickGrantLocationPermission,
+                    onClickOpenSettings = onClickOpenSettings,
+                )
+            }
+            ViewState.RequiresBackgroundLocationPermission -> {
+                RequiresBackgroundLocationPermission(
+                    onClickOpenSettings = onClickOpenSettings,
+                    onClickTurnOffNotifications = onClickTurnOffNotifications,
+                )
             }
         }
     }

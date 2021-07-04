@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -68,7 +67,6 @@ private fun PreviewContent() {
     )
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun Content(
     onPrivacyPolicyClicked: () -> Unit,

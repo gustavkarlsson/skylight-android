@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -84,7 +83,6 @@ private fun PreviewContent() {
     )
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun Content(
     errorSnackbarVisible: Boolean,

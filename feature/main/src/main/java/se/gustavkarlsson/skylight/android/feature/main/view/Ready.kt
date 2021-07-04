@@ -1,7 +1,5 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
-import android.annotation.SuppressLint
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
@@ -22,7 +20,6 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.LargeDialog
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 
-@SuppressLint("UnusedCrossfadeTargetStateParameter")
 @Composable
 internal fun Ready(
     state: ViewState.Ready,
@@ -41,52 +38,54 @@ internal fun Ready(
             )
         },
     ) { paddingValues ->
-        Crossfade(
-            modifier = Modifier.padding(paddingValues),
-            targetState = state.content.javaClass,
-        ) {
-            val dummy = when (val content = state.content) {
-                is ContentState.PlaceSelected -> {
-                    SelectedPlace(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .navigationBarsPadding(),
-                        state = content,
-                        onBannerActionClicked = onBannerActionClicked,
-                        onEvent = onEvent,
-                    )
-                }
-                is ContentState.Searching -> {
-                    SearchResults(
-                        modifier = Modifier.fillMaxSize(),
-                        state = content,
-                        onEvent = onEvent,
-                    )
-                }
-                is ContentState.RequiresLocationPermission.UseDialog -> {
-                    LargeDialog(
-                        modifier = Modifier.dialogModifiers(),
-                        image = { MyLocationIcon() },
-                        title = stringResource(R.string.location_permission_required),
-                        description = stringResource(R.string.location_permission_denied_message),
-                        primaryActionText = stringResource(R.string.location_permission),
-                        onClickPrimaryAction = onClickGrantLocationPermission,
-                        secondaryActionText = stringResource(R.string.location_permission_select_other),
-                        onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
-                    )
-                }
-                is ContentState.RequiresLocationPermission.UseAppSettings -> {
-                    LargeDialog(
-                        modifier = Modifier.dialogModifiers(),
-                        image = { MyLocationIcon() },
-                        title = stringResource(R.string.location_permission_denied_forever_title),
-                        description = stringResource(R.string.location_permission_denied_forever_message),
-                        primaryActionText = stringResource(R.string.open_settings),
-                        onClickPrimaryAction = onClickOpenSettings,
-                        secondaryActionText = stringResource(R.string.location_permission_select_other),
-                        onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
-                    )
-                }
+        val dummy = when (val content = state.content) {
+            is ContentState.PlaceSelected -> {
+                SelectedPlace(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                        .navigationBarsPadding(),
+                    state = content,
+                    onBannerActionClicked = onBannerActionClicked,
+                    onEvent = onEvent,
+                )
+            }
+            is ContentState.Searching -> {
+                SearchResults(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    state = content,
+                    onEvent = onEvent,
+                )
+            }
+            is ContentState.RequiresLocationPermission.UseDialog -> {
+                LargeDialog(
+                    modifier = Modifier
+                        .dialogModifiers()
+                        .padding(paddingValues),
+                    image = { MyLocationIcon() },
+                    title = stringResource(R.string.location_permission_required),
+                    description = stringResource(R.string.location_permission_denied_message),
+                    primaryActionText = stringResource(R.string.location_permission),
+                    onClickPrimaryAction = onClickGrantLocationPermission,
+                    secondaryActionText = stringResource(R.string.location_permission_select_other),
+                    onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
+                )
+            }
+            is ContentState.RequiresLocationPermission.UseAppSettings -> {
+                LargeDialog(
+                    modifier = Modifier
+                        .dialogModifiers()
+                        .padding(paddingValues),
+                    image = { MyLocationIcon() },
+                    title = stringResource(R.string.location_permission_denied_forever_title),
+                    description = stringResource(R.string.location_permission_denied_forever_message),
+                    primaryActionText = stringResource(R.string.open_settings),
+                    onClickPrimaryAction = onClickOpenSettings,
+                    secondaryActionText = stringResource(R.string.location_permission_select_other),
+                    onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
+                )
             }
         }
     }

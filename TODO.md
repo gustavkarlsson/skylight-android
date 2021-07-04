@@ -1,6 +1,5 @@
 ## ASAP
 * Test permissions on different SDK:s Especially 9, 10 and 11 which have slightly different solutions for requesting background permission
-* Crossfades when starting app
 
 ## Soon
 * Should all stateIn operators actually be eager? Can they operate when subscribed instead?
