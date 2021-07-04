@@ -123,35 +123,37 @@ internal class GmsLocationProvider(
         return locationPermission == Access.Granted
     }
 
-    private val sharedStream: SharedFlow<Loadable<LocationResult>> = client.streamWithPermissionCheck(permissionChecker)
-        .distinctUntilChanged()
-        .map { result -> Loadable.loaded(result) }
+    override fun stream(): Flow<Loadable<LocationResult>> = sharedStream
+
+    private val sharedStream: SharedFlow<Loadable<LocationResult>> = client.stream()
+        .onStart { logInfo { "Streaming started" } }
         .onEach { logInfo { "Streamed location: $it" } }
-        .onStart {
-            logInfo { "Streaming location" }
-            emit(Loadable.loading())
-            emit(Loadable.loaded(getCachedLocation()))
-        }
         .flowOn(dispatcher)
         .shareIn(shareScope, SharingStarted.WhileSubscribed(), replay = 1)
 
-    override fun stream(): Flow<Loadable<LocationResult>> = sharedStream
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private fun FusedLocationProviderClient.streamWithPermissionCheck(
-        permissionChecker: PermissionChecker,
-    ): Flow<LocationResult> {
-        return permissionChecker.permissions
-            .map { permissions ->
-                permissions[Permission.Location] == Access.Granted
-            }
-            .distinctUntilChanged()
+    private fun FusedLocationProviderClient.stream(): Flow<Loadable<LocationResult>> =
+        streamLocationPermission()
             .flatMapLatest { permissionGranted ->
                 if (permissionGranted) {
-                    streamWithRetry(locationRequest, streamRetryDuration)
-                } else flowOf(LocationResult.errorMissingPermission())
+                    logInfo { "Permission granted. Starting stream" }
+                    streamWithPermission()
+                } else {
+                    logInfo { "Permission denied" }
+                    flowOf(Loadable.loaded(LocationResult.errorMissingPermission()))
+                }
             }
-    }
+
+    private fun streamLocationPermission(): Flow<Boolean> = permissionChecker.permissions
+        .map { permissions ->
+            permissions[Permission.Location] == Access.Granted
+        }
+        .distinctUntilChanged()
+
+    private fun FusedLocationProviderClient.streamWithPermission(): Flow<Loadable<LocationResult>> = flow {
+        emit(Loadable.loading())
+        emit(Loadable.loaded(getCachedLocation()))
+        emitAll(streamWithRetry(locationRequest, streamRetryDuration).map { Loadable.loaded(it) })
+    }.distinctUntilChanged()
 }
 
 @RequiresPermission(anyOf = ["android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"])
