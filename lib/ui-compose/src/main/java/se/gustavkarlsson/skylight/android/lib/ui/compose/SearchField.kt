@@ -73,9 +73,6 @@ fun SearchField(
             .focusRequester(focusRequester)
             .onFocusChanged { focus ->
                 val newState = if (focus.isFocused) {
-                    if (!focus.isCaptured) {
-                        focusRequester.captureFocus() // In case focus is active by non-captured means
-                    }
                     SearchFieldState.Active(activeText ?: "")
                 } else SearchFieldState.Inactive
                 onStateChanged(newState)

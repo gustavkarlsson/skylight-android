@@ -1,6 +1,5 @@
 ## ASAP
 * Test permissions on different SDK:s Especially 9, 10 and 11 which have slightly different solutions for requesting background permission
-* Back button when search is active should deactivate search
 * Crossfades when starting app
 
 ## Soon
@@ -9,6 +8,7 @@
 * Migrate some sealed classes to sealed interfaces
 * Only subscribe to current location reports when location is turned on?
 * Show helper about location turned off?
+* Consider using jetpack BackHandler
 * Consider using accompanist permissions
 * Standard dimensions?
 * Standard animations?

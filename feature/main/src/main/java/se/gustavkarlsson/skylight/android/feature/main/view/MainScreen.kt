@@ -53,7 +53,7 @@ object MainScreen : Screen {
         viewModel.onEvent(Event.RefreshLocationPermission)
     }
 
-    override fun AppCompatActivity.onBackPress(): BackPress { // TODO doesn't always intercept?
+    override fun AppCompatActivity.onBackPress(): BackPress {
         return when ((viewModel.state.value as? ViewState.Ready)?.appBar) {
             null, is AppBarState.PlaceSelected -> BackPress.NOT_HANDLED
             is AppBarState.Searching -> {
