@@ -36,9 +36,10 @@ internal class SqlDelightSettings(
             queries.insert(placeIdLong, levelId)
     }
 
-    override fun streamNotificationTriggerLevels(): Flow<Map<PlaceId, TriggerLevel>> =
+    override fun streamNotificationTriggerLevels(): Flow<NotificationTriggerLevels> =
         combine(placesRepository.stream(), streamAll()) { places, entries ->
-            entries.removeZombies(places)
+            val map = entries.removeZombies(places)
+            NotificationTriggerLevels(map)
         }
 
     private fun streamAll(): Flow<Map<PlaceId, TriggerLevel>> {

@@ -55,8 +55,8 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createNonLoadingState(state: State.Ready): ViewState {
-        val triggerLevel = state.notificationTriggerLevels[PlaceId.Current] // FIXME Can this be made to never be null?
-        val requiresBackgroundLocationPermission = triggerLevel != null && triggerLevel != TriggerLevel.NEVER
+        val triggerLevel = state.notificationTriggerLevels[PlaceId.Current]
+        val requiresBackgroundLocationPermission = triggerLevel != TriggerLevel.NEVER
         val hasBackgroundPermission = state.permissions[Permission.BackgroundLocation] == Access.Granted
         return if (requiresBackgroundLocationPermission && !hasBackgroundPermission) {
             ViewState.RequiresBackgroundLocationPermission
@@ -140,7 +140,7 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createErrorBannerData(state: State.Ready): BannerData? {
-        val needsBackgroundLocation = state.notificationTriggerLevels.any { (placeId, triggerLevel) ->
+        val needsBackgroundLocation = state.notificationTriggerLevels.asMap().any { (placeId, triggerLevel) ->
             placeId == PlaceId.Current && triggerLevel != TriggerLevel.NEVER
         }
         val backgroundLocationDeniedSomehow = when (state.permissions[Permission.BackgroundLocation]) {

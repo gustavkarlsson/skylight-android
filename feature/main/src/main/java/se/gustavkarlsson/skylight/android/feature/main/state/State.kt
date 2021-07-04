@@ -9,6 +9,7 @@ import se.gustavkarlsson.skylight.android.lib.permissions.Permissions
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingResult
+import se.gustavkarlsson.skylight.android.lib.settings.NotificationTriggerLevels
 
 internal sealed interface State {
     val permissions: Permissions
@@ -24,7 +25,7 @@ internal sealed interface State {
         override val selectedAuroraReport: LoadableAuroraReport,
         override val search: Search,
         val places: List<Place>?,
-        val notificationTriggerLevels: Map<PlaceId, TriggerLevel>?,
+        val notificationTriggerLevels: NotificationTriggerLevels?,
     ) : State {
         override val selectedPlace: Place?
             get() = places.orEmpty().firstOrNull { place ->
@@ -39,7 +40,7 @@ internal sealed interface State {
         override val selectedAuroraReport: LoadableAuroraReport,
         override val search: Search,
         val places: List<Place>,
-        val notificationTriggerLevels: Map<PlaceId, TriggerLevel>,
+        val notificationTriggerLevels: NotificationTriggerLevels,
     ) : State {
         override val selectedPlace: Place
             get() = places.firstOrNull { place ->
@@ -47,7 +48,7 @@ internal sealed interface State {
             } ?: error("No place with place id $selectedPlaceId in $places")
 
         val selectedPlaceTriggerLevel: TriggerLevel
-            get() = notificationTriggerLevels[selectedPlaceId] ?: TriggerLevel.NEVER
+            get() = notificationTriggerLevels[selectedPlaceId]
     }
 }
 

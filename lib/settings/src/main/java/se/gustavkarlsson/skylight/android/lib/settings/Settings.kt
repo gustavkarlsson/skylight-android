@@ -7,5 +7,5 @@ import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 interface Settings {
     suspend fun setNotificationTriggerLevel(placeId: PlaceId, level: TriggerLevel)
 
-    fun streamNotificationTriggerLevels(): Flow<Map<PlaceId, TriggerLevel>>
+    fun streamNotificationTriggerLevels(): Flow<NotificationTriggerLevels>
 }

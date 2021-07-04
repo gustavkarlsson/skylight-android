@@ -39,7 +39,7 @@ internal class BackgroundModuleStarter(
     private suspend fun scheduleBasedOnSettings() {
         settings.streamNotificationTriggerLevels()
             .map { levels ->
-                levels.any { (_, triggerLevel) ->
+                levels.asMap().values.any { triggerLevel ->
                     triggerLevel != TriggerLevel.NEVER
                 }
             }
