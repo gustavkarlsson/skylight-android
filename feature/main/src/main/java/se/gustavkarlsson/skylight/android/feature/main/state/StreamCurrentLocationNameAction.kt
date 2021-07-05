@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.state
 
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
@@ -13,7 +13,7 @@ internal class StreamCurrentLocationNameAction @Inject constructor(
 ) : Action<State> {
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         reverseGeocoder.stream(locationProvider.stream())
-            .collect { result ->
+            .collectLatest { result ->
                 stateFlow.update {
                     when (this) {
                         is State.Loading -> copy(currentLocationName = result)

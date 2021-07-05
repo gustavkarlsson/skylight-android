@@ -1,5 +1,4 @@
 ## ASAP
-* Fix getting stuck at "loading" state
 * Show whether notifications are turned on or off in search results
 * Read more at wikipedia is not clickable
 

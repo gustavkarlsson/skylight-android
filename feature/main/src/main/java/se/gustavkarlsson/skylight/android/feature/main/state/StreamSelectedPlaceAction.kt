@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.state
 
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import se.gustavkarlsson.conveyor.Action
@@ -16,7 +16,7 @@ internal class StreamSelectedPlaceAction @Inject constructor(
         selectedPlaceRepository.stream()
             .map { place -> place.id }
             .distinctUntilChanged()
-            .collect { id ->
+            .collectLatest { id ->
                 stateFlow.update {
                     val loading = LoadableAuroraReport.LOADING // TODO Get from cache?
                     when (this) {

@@ -5,7 +5,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
@@ -53,8 +53,8 @@ internal class ContinuouslySearchAction @Inject constructor(
             .map { search -> search.query.trim() }
             .filter { query -> query.isNotBlank() }
             .throttle(queryThrottleDuration.toMillis())
-            .collect { query ->
-                // TODO Ensure no race condition
+            .collectLatest { query ->
+                // TODO Ensure no race condition. Are these launches cancelled when a new query is collected?
                 launch {
                     val result = geocoder.geocode(query)
                     stateFlow.update { update(result) }
