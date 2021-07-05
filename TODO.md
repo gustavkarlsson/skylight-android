@@ -1,8 +1,10 @@
 ## ASAP
-* Test permissions on different SDK:s Especially 9, 10 and 11 which have slightly different solutions for requesting background permission
+* Fix getting stuck at "loading" state
+* Show whether notifications are turned on or off in search results
 
 ## Soon
-* Should all stateIn operators actually be eager? Can they operate when subscribed instead?
+* Global notification level?
+* Notifications on/off without dialog (or only dialog when enabling). Needs a way to select current setting
 * Use cashapp/exhaustive?
 * Migrate some sealed classes to sealed interfaces
 * Only subscribe to current location reports when location is turned on?
