@@ -13,8 +13,6 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":lib:ui-compose"))
-
-    implementation("io.noties.markwon:core:${Versions.markwon}")
 }
 
 val copyPrivacyPolicyFile = task<Copy>("copyPrivacyPolicyFile") {

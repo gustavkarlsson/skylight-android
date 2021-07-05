@@ -14,6 +14,7 @@ dependencies {
     api(project(":lib:ui"))
 
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${Versions.androidLifecycle}")
+    implementation("io.noties.markwon:core:${Versions.markwon}")
 
     api("androidx.compose.ui:ui:${Versions.compose}")
     api("androidx.compose.ui:ui-tooling-preview:${Versions.compose}")
