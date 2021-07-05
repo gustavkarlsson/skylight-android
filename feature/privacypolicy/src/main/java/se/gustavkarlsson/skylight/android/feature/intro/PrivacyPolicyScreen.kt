@@ -1,9 +1,12 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
-import android.widget.FrameLayout
-import android.widget.ScrollView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
@@ -16,14 +19,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.view.setPadding
 import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import io.noties.markwon.Markwon
 import kotlinx.coroutines.CoroutineScope
@@ -38,7 +38,6 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
-import kotlin.math.roundToInt
 
 @Parcelize
 object PrivacyPolicyScreen : Screen {
@@ -95,33 +94,25 @@ private fun Content(
                     },
                 )
             },
-        ) {
-            val padding = with(LocalDensity.current) { 16.dp.toPx() }
-            AndroidView(
-                modifier = Modifier.navigationBarsPadding(),
-                factory = { context ->
-                    val scrollView = ScrollView(context)
-                    scrollView.layoutParams = FrameLayout.LayoutParams(
-                        FrameLayout.LayoutParams.MATCH_PARENT,
-                        FrameLayout.LayoutParams.MATCH_PARENT,
-                    )
-
-                    val textView = TextView(context)
-                    textView.layoutParams = FrameLayout.LayoutParams(
-                        FrameLayout.LayoutParams.MATCH_PARENT,
-                        FrameLayout.LayoutParams.WRAP_CONTENT,
-                    )
-                    textView.setPadding(padding.roundToInt())
-                    textView.tag = "markdown"
-
-                    scrollView.addView(textView)
-                    scrollView
-                },
-                update = { scrollView ->
-                    val textView = scrollView.findViewWithTag<TextView>("markdown")
-                    Markwon.create(scrollView.context).setMarkdown(textView, text)
-                }
-            )
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState()),
+            ) {
+                AndroidView(
+                    modifier = Modifier.padding(16.dp),
+                    factory = { context ->
+                        TextView(context)
+                    },
+                    update = { view ->
+                        Markwon.create(view.context).setMarkdown(view, text)
+                    }
+                )
+                Spacer(
+                    modifier = Modifier.padding(rememberInsetsPaddingValues(LocalWindowInsets.current.navigationBars))
+                )
+            }
         }
     }
 }
