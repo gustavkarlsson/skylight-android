@@ -1,6 +1,5 @@
 ## ASAP
 * Show whether notifications are turned on or off in search results
-* Read more at wikipedia is not clickable
 
 ## Soon
 * Align search button and back button placement and color

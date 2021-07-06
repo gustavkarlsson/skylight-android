@@ -12,27 +12,26 @@
     <string name="factor_geomag_location_title_full">Geomagnetisk plats</string>
     <string name="factor_geomag_location_title_compact">Plats</string>
     <string name="factor_geomag_location_desc">Norrsken är bara synligt nära
-		de <i>geomagnetiska</i> polerna belägna nära de <i>magnetiska</i> nord och syd-polerna.
+		de geomagnetiska polerna belägna nära de magnetiska nord och syd-polerna.
 		Det här värdet visar din geomagnetiska latitud.
-		Bäst förhållanden hittas kring <b>67°&#160;och&#160;-67°</b>.</string>
+		Bäst förhållanden hittas kring 67° och -67°.</string>
     <string name="factor_kp_index_title_full">Kp index</string>
     <string name="factor_kp_index_title_compact">Kp index</string>
     <string name="factor_kp_index_desc">Grundorsaken till norrsken
 		kommer från interaktionen mellan solarvindar och jordens magnetosfär.
 		Detta kan representeras som ett värde på Kp index-skalan som går
-		från <b>0&#160;till&#160;9</b>. Högre värde betyder högre chans att se norrsken.
-		\n\nLäs mer på <a href="https://en.wikipedia.org/wiki/K-index">Wikipedia</a> (eng)</string>
+		från 0 till 9. Högre värde betyder högre chans att se norrsken.</string>
     <string name="factor_weather_title_full">Väderförhållanden</string>
     <string name="factor_weather_title_compact">Väder</string>
     <string name="factor_weather_desc">Dåligt väder kan blockera sikten och göra det svårt att se
 		norrsken. Det här värdet indikerar nuvarande väderförhållanden.
-		<b>Klar himmel</b> innebär god sikt.</string>
+		Klar himmel innebär god sikt.</string>
     <string name="factor_darkness_title_full">Utomhusmörker</string>
     <string name="factor_darkness_title_compact">Mörker</string>
     <string name="factor_darkness_desc">Eftersom norrsken bara syns i mörker är solens position
 		på himlen viktig.
 		Det här värdet visar hur mörkt det är ute på nuvarande plats baserat på solens position.
-		<b>100\% mörker är perfekt</b> för att se norrsken.</string>
+		100\% mörker är perfekt för att se norrsken.</string>
 
     <string name="cause_location_permission">Åtkomst till plats saknas</string>
     <string name="cause_location">Kunde inte hitta din nuvarande plats</string>
