@@ -11,7 +11,7 @@ object Versions {
     val jgit = "5.12.0.202106070339-r"
 
     val axionRelease = "1.13.3"
-    val playPublisher = "3.4.0-agp7.0"
+    val playPublisher = "3.5.0-agp7.0"
     val ktlint = "10.1.0"
 
     // App
