@@ -3,6 +3,7 @@
 * Read more at wikipedia is not clickable
 
 ## Soon
+* Align search button and back button placement and color
 * Global notification level?
 * Notifications on/off without dialog (or only dialog when enabling). Needs a way to select current setting
 * Use cashapp/exhaustive?
