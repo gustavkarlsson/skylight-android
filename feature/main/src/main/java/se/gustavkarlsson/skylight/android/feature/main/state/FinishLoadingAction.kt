@@ -15,7 +15,6 @@ internal class FinishLoadingAction @Inject constructor() : Action<State> {
                 val places = loadingState.places
                 val notificationTriggerLevels = loadingState.notificationTriggerLevels
                 if (selectedPlaceId != null && places != null && notificationTriggerLevels != null) {
-                    // FIXME Can this still lock sometimes?
                     stateFlow.update {
                         State.Ready(
                             permissions = permissions,

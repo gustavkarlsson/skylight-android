@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
@@ -341,7 +342,7 @@ private fun Card(
     onClick: () -> Unit,
 ) {
     // TODO re-arrange when expanded
-    androidx.compose.material.Card(
+    Card(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
