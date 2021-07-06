@@ -5,7 +5,7 @@ import android.os.Build
 
 enum class Permission(val key: String) {
     Location(
-        Manifest.permission.ACCESS_COARSE_LOCATION
+        Manifest.permission.ACCESS_FINE_LOCATION
     ),
     BackgroundLocation(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
