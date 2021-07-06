@@ -3,6 +3,6 @@
     <string name="intro_title">Welcome to Skylight</string>
     <string name="intro_desc">Skylight helps you find out if you can see the aurora by
 		looking at different factors such as location, weather and time of day.
-		\n\nThe app will notify you when the chance gets high enough.</string>
+		\n\nThe app can notify you when the chance gets high enough.</string>
     <string name="intro_continue">Continue</string>
 </resources>

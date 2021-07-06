@@ -123,10 +123,12 @@ internal sealed class SearchResult {
                     is Place.Saved.Favorite -> Icons.Favorite
                     is Place.Saved.Recent -> Icons.History
                 }
-            override val trailingIcon: ImageVector
-                get() = if (notifications) {
-                    Icons.Notifications
-                } else Icons.NotificationsNone
+            override val trailingIcon: ImageVector?
+                get() = when {
+                    place is Place.Saved.Favorite && notifications -> Icons.Notifications
+                    place is Place.Saved.Favorite && !notifications -> Icons.NotificationsNone
+                    else -> null
+                }
             override val selectEvent: Event get() = Event.SelectSearchResult(this)
         }
     }

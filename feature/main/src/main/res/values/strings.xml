@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="right_now">Right now</string>
-    <string name="in_location">in %1$s</string>
     <string name="remove">Remove</string>
     <string name="remove_thing">Remove %s?</string>
     <string name="allow">Allow</string>
@@ -45,16 +44,17 @@
     <string name="allow_all_the_time">Allow all the time</string>
     <string name="location_permission_denied_message">To determine aurora chances where you are,
         you must allow Skylight access to your location.</string>
-    <string name="location_permission_denied_forever_message">You have previously denied location permission
-        for Skylight.\n\n
+    <string name="location_permission_denied_forever_message">
+        You have previously denied location permission for Skylight.\n\n
         1. Open App info\n
         2. Select Permissions\n
         3. Select Location\n
         4. Allow\n
         5. Return to the app</string>
     <string name="location_permission_select_other">Select another location instead</string>
-    <string name="background_location_permission_denied_message">You have enabled notifications for your current
-        location. This only works if Skylight has access to your location all the time.\n\n
+    <string name="background_location_permission_denied_message">
+        You have enabled notifications for your current location.
+        This only works if Skylight has access to your location all the time.\n\n
         1. Open App info\n
         2. Select Permissions\n
         3. Select Location\n
