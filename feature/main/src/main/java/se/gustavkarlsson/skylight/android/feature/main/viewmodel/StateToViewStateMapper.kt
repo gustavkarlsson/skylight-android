@@ -231,12 +231,13 @@ internal class StateToViewStateMapper @Inject constructor(
             }
             .map { place ->
                 val selected = place.id == state.selectedPlace.id
+                val notifications = state.notificationTriggerLevels[place.id] != TriggerLevel.NEVER
                 when (place) {
                     Place.Current -> {
                         val name = createCurrentLocationDisplayName(state)
-                        SearchResult.Known.Current(name, selected = selected)
+                        SearchResult.Known.Current(name, selected, notifications)
                     }
-                    is Place.Saved -> SearchResult.Known.Saved(place, selected = selected)
+                    is Place.Saved -> SearchResult.Known.Saved(place, selected, notifications)
                 }
             }
     }

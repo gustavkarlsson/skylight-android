@@ -1,5 +1,4 @@
 ## ASAP
-* Show whether notifications are turned on or off in search results
 
 ## Soon
 * Align search button and back button placement and color

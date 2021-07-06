@@ -42,7 +42,8 @@ private fun PreviewSearchResults() {
             listOf(
                 SearchResult.Known.Current(
                     name = "Umeå",
-                    selected = true
+                    selected = true,
+                    notifications = false,
                 ),
                 SearchResult.Known.Saved(
                     place = Place.Saved.Favorite(
@@ -52,6 +53,7 @@ private fun PreviewSearchResults() {
                         lastChanged = Instant.EPOCH,
                     ),
                     selected = false,
+                    notifications = true,
                 ),
                 SearchResult.Known.Saved(
                     place = Place.Saved.Recent(
@@ -61,6 +63,7 @@ private fun PreviewSearchResults() {
                         lastChanged = Instant.EPOCH,
                     ),
                     selected = false,
+                    notifications = false,
                 ),
                 SearchResult.New(
                     name = "A place I searched",
@@ -140,6 +143,11 @@ private fun ListItem(
                 )
             }
         },
+        trailing = item.trailingIcon?.let { icon ->
+            {
+                Icon(icon, contentDescription = null)
+            }
+        }
     ) {
         Text(
             text = textRef(item.title),

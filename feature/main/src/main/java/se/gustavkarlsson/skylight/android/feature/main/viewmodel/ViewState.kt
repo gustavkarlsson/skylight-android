@@ -4,6 +4,8 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.MyLocation
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.ioki.textref.TextRef
@@ -79,11 +81,16 @@ internal sealed class SearchResult {
     abstract val title: TextRef
     abstract val subtitle: TextRef?
     abstract val icon: ImageVector
+    abstract val trailingIcon: ImageVector?
     abstract val selected: Boolean
     abstract val selectEvent: Event
 
     sealed class Known : SearchResult() {
-        data class Current(val name: String?, override val selected: Boolean) : Known() {
+        data class Current(
+            val name: String?,
+            override val selected: Boolean,
+            private val notifications: Boolean,
+        ) : Known() {
             override val title: TextRef
                 get() {
                     return if (name != null) {
@@ -97,10 +104,18 @@ internal sealed class SearchResult {
                     } else null
                 }
             override val icon = Icons.MyLocation
+            override val trailingIcon: ImageVector
+                get() = if (notifications) {
+                    Icons.Notifications
+                } else Icons.NotificationsNone
             override val selectEvent: Event get() = Event.SelectSearchResult(this)
         }
 
-        data class Saved(val place: Place.Saved, override val selected: Boolean) : Known() {
+        data class Saved(
+            val place: Place.Saved,
+            override val selected: Boolean,
+            private val notifications: Boolean,
+        ) : Known() {
             override val title: TextRef get() = TextRef.string(place.name)
             override val subtitle: Nothing? = null
             override val icon: ImageVector
@@ -108,6 +123,10 @@ internal sealed class SearchResult {
                     is Place.Saved.Favorite -> Icons.Favorite
                     is Place.Saved.Recent -> Icons.History
                 }
+            override val trailingIcon: ImageVector
+                get() = if (notifications) {
+                    Icons.Notifications
+                } else Icons.NotificationsNone
             override val selectEvent: Event get() = Event.SelectSearchResult(this)
         }
     }
@@ -120,6 +139,7 @@ internal sealed class SearchResult {
         override val title: TextRef get() = TextRef.string(name)
         override val subtitle: TextRef get() = TextRef.string(details)
         override val icon: ImageVector = Icons.Map
+        override val trailingIcon: Nothing? = null
         override val selected: Boolean = false
         override val selectEvent: Event get() = Event.SelectSearchResult(this)
     }
