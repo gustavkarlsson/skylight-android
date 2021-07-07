@@ -50,6 +50,7 @@ android {
             isShrinkResources = true
             signingConfig = signingConfigs["release"]
             proguardFile(getDefaultProguardFile("proguard-android-optimize.txt"))
+            proguardFile("proguard-rules.pro")
         }
 
         getByName("debug")

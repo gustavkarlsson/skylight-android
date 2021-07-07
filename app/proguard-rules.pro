@@ -9,10 +9,10 @@
     kotlinx.serialization.KSerializer serializer(...);
 }
 
--keep,includedescriptorclasses class se.gustavkarlsson.skylight.android.lib.weather.**$$serializer { *; }
--keepclassmembers class se.gustavkarlsson.skylight.android.lib.weather.** {
+-keep,includedescriptorclasses class se.gustavkarlsson.skylight.android.**$$serializer { *; }
+-keepclassmembers class se.gustavkarlsson.skylight.android.** {
     *** Companion;
 }
--keepclasseswithmembers class se.gustavkarlsson.skylight.android.lib.weather.** {
+-keepclasseswithmembers class se.gustavkarlsson.skylight.android.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
