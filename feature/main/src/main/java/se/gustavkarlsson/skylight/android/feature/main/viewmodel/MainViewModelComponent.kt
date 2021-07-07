@@ -6,16 +6,12 @@ import dagger.Provides
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.onEach
 import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
-import se.gustavkarlsson.conveyor.Plugin
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.skylight.android.core.AppComponent
 import se.gustavkarlsson.skylight.android.core.ViewModelScope
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
-import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.core.utils.millis
 import se.gustavkarlsson.skylight.android.feature.main.state.ContinuouslySearchAction
 import se.gustavkarlsson.skylight.android.feature.main.state.FinishLoadingAction
@@ -158,13 +154,5 @@ internal object MainViewModelModule {
     fun store(
         initialState: State,
         startActions: List<@JvmSuppressWildcards Action<State>>,
-    ): Store<State> = Store(initialState, startActions, listOf(Logger))
-}
-
-private object Logger : Plugin<State> {
-    override fun transformStates(states: Flow<State>): Flow<State> {
-        return states.onEach {
-            logInfo { "XXX State: $it" }
-        }
-    }
+    ): Store<State> = Store(initialState, startActions)
 }
