@@ -87,6 +87,13 @@ android {
             resValue("string", "app_name_manifest", manifestAName)
         }
     }
+    packagingOptions {
+        with(resources.excludes) {
+            add("META-INF/licenses/**")
+            add("META-INF/AL2.0")
+            add("META-INF/LGPL2.1")
+        }
+    }
 }
 
 dependencies {
