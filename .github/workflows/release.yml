@@ -54,10 +54,3 @@ jobs:
           ORG_GRADLE_PROJECT_mapbox_api_key: ${{ secrets.MAPBOX_API_KEY }}
           ORG_GRADLE_PROJECT_openweathermap_api_key: ${{ secrets.OPENWEATHERMAP_API_KEY }}
         run: ./gradlew publishProductionReleaseApps
-
-      - name: Upload apk
-        uses: actions/upload-artifact@v2
-        with:
-          name: apk
-          path: |
-            **/*.apk
