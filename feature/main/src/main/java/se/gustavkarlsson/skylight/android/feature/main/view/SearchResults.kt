@@ -105,9 +105,7 @@ internal fun SearchResults(
             }
             is ContentState.Searching.Ok -> {
                 LazyColumn(
-                    contentPadding = rememberInsetsPaddingValues(
-                        insets = LocalWindowInsets.current.navigationBarsWithIme
-                    ),
+                    contentPadding = rememberInsetsPaddingValues(LocalWindowInsets.current.navigationBarsWithIme),
                 ) {
                     items(state.searchResults) { item ->
                         ListItem(item = item, onEvent = onEvent)
