@@ -66,6 +66,7 @@
     <string name="place_search_failed_server_response">Platssökningen misslyckades. Serverfel.</string>
     <string name="place_search_failed_io">Platssökningen misslyckades. Är du ansluten till internet?</string>
 
+    <string name="notify_title">Avisera om norrsken</string>
     <string name="notify_never">Aldrig</string>
     <string name="notify_at_high">Vid hög chans</string>
     <string name="notify_at_medium">Vid medium chans</string>

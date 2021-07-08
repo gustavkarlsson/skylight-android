@@ -41,11 +41,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.ioki.textref.TextRef
+import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
@@ -216,13 +218,13 @@ private fun SetNotificationLevelAlertDialog(
     onDismiss: () -> Unit,
 ) {
     if (items != null) {
-        // TODO This looks quite ugly. It has built-in padding and extra padding for buttons
         AlertDialog(
             onDismissRequest = onDismiss,
+            title = {
+                Text(text = stringResource(R.string.notify_title))
+            },
             text = {
-                Column(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
+                Column {
                     for (item in items) {
                         Row(
                             modifier = Modifier
