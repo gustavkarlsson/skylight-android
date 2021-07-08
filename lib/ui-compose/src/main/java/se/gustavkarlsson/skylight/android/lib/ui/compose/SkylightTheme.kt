@@ -29,7 +29,7 @@ data class SkylightColors(
     val progressMedium: Color,
     val progressHighest: Color,
     val bell: Color,
-    val heart: Color,
+    val bookmark: Color,
 ) {
     val primary: Color get() = material.primary
     val primaryVariant: Color get() = material.primaryVariant
@@ -61,7 +61,7 @@ private val darkPalette = SkylightColors(
     progressMedium = Color(0xFFF0F436),
     progressHighest = Color(0xFF34B4E2),
     bell = Color(0xFFFFEE58),
-    heart = Color(0xFFFF7043),
+    bookmark = Color(0xFF008000),
 )
 
 private val lightPalette = SkylightColors(
@@ -78,7 +78,7 @@ private val lightPalette = SkylightColors(
     progressMedium = Color(0xFFF0F436),
     progressHighest = Color(0xFF34B4E2),
     bell = Color(0xFFFFEE58),
-    heart = Color(0xFFFF7043),
+    bookmark = Color(0xFF008000),
 )
 
 private val LocalColors = staticCompositionLocalOf { lightPalette }

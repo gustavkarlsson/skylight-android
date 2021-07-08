@@ -30,8 +30,8 @@ import androidx.compose.material.IconToggleButton
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.runtime.Composable
@@ -275,9 +275,9 @@ private fun PlaceButtons(
                 onCheckedChange = { onFavoriteClicked() },
             ) {
                 val icon = if (favoriteButtonState.checked) {
-                    Icons.Favorite
-                } else Icons.FavoriteBorder
-                Icon(icon, tint = Colors.heart, contentDescription = null)
+                    Icons.Bookmark
+                } else Icons.BookmarkBorder
+                Icon(icon, tint = Colors.bookmark, contentDescription = null)
             }
         }
     }

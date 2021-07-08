@@ -1,11 +1,10 @@
 package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
-import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.ioki.textref.TextRef
@@ -104,10 +103,10 @@ internal sealed class SearchResult {
                     } else null
                 }
             override val icon = Icons.MyLocation
-            override val trailingIcon: ImageVector
+            override val trailingIcon: ImageVector?
                 get() = if (notifications) {
                     Icons.Notifications
-                } else Icons.NotificationsNone
+                } else null
             override val selectEvent: Event get() = Event.SelectSearchResult(this)
         }
 
@@ -120,15 +119,13 @@ internal sealed class SearchResult {
             override val subtitle: Nothing? = null
             override val icon: ImageVector
                 get() = when (place) {
-                    is Place.Saved.Favorite -> Icons.Favorite
+                    is Place.Saved.Favorite -> Icons.Bookmark
                     is Place.Saved.Recent -> Icons.History
                 }
             override val trailingIcon: ImageVector?
-                get() = when {
-                    place is Place.Saved.Favorite && notifications -> Icons.Notifications
-                    place is Place.Saved.Favorite && !notifications -> Icons.NotificationsNone
-                    else -> null
-                }
+                get() = if (notifications) {
+                    Icons.Notifications
+                } else null
             override val selectEvent: Event get() = Event.SelectSearchResult(this)
         }
     }

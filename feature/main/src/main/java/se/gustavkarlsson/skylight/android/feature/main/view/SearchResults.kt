@@ -145,7 +145,11 @@ private fun ListItem(
         },
         trailing = item.trailingIcon?.let { icon ->
             {
-                Icon(icon, contentDescription = null)
+                Icon(
+                    imageVector = icon,
+                    tint = Colors.onSurfaceWeaker,
+                    contentDescription = null,
+                )
             }
         }
     ) {
