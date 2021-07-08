@@ -130,7 +130,12 @@ private fun ListItem(
             onEvent(item.selectEvent)
         },
         icon = {
-            Icon(item.icon, contentDescription = null)
+            Icon(
+                modifier = Modifier.padding(start = 12.dp, top = 9.dp),
+                tint = Colors.onSurfaceWeaker,
+                imageVector = item.icon,
+                contentDescription = null,
+            )
         },
         secondaryText = item.subtitle?.let { subtitle ->
             {
