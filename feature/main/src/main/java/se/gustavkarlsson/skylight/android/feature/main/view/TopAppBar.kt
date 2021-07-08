@@ -10,15 +10,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
+import com.google.accompanist.insets.ui.TopAppBar
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.AppBarState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
-import se.gustavkarlsson.skylight.android.lib.ui.compose.AppBarHorizontalPadding
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchField
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
-import se.gustavkarlsson.skylight.android.lib.ui.compose.TopAppBar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
@@ -39,11 +38,7 @@ internal fun TopAppBar(
     onEvent: (Event) -> Unit,
 ) {
     TopAppBar(
-        contentPadding = rememberInsetsPaddingValues(
-            insets = LocalWindowInsets.current.statusBars,
-            additionalStart = AppBarHorizontalPadding,
-            additionalEnd = AppBarHorizontalPadding
-        ),
+        contentPadding = rememberInsetsPaddingValues(LocalWindowInsets.current.statusBars),
         title = {
             // TODO doesn't fit unless text shrunk. Toolbar has fixed height. Lower case 'j' and 'g' get cut off.
             SearchField(
