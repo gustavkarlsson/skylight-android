@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -19,7 +20,9 @@ import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Surface
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.contentColorFor
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -60,14 +63,35 @@ internal fun TopAppBar(
 ) {
     TopAppBar(
         contentPadding = rememberInsetsPaddingValues(LocalWindowInsets.current.statusBars),
+        navigationIcon = {
+            val active = state.toSearchFieldState() is SearchFieldState.Active
+            IconButton(
+                onClick = {
+                    if (active) {
+                        onEvent(Event.SearchChanged(SearchFieldState.Inactive))
+                    } else {
+                        onEvent(Event.SearchChanged(SearchFieldState.Active("")))
+                    }
+                }
+            ) {
+                Crossfade(targetState = active) { active ->
+                    val imageVector = if (active) {
+                        Icons.ArrowBack
+                    } else Icons.Search
+                    Icon(
+                        imageVector = imageVector,
+                        contentDescription = null,
+                    )
+                }
+            }
+        },
         title = {
-            // TODO doesn't fit unless text shrunk. Toolbar has fixed height. Lower case 'j' and 'g' get cut off.
             SearchField(
                 modifier = Modifier.fillMaxSize(),
                 state = state.toSearchFieldState(),
                 inactiveText = textRef(textRef = (state as? AppBarState.PlaceSelected)?.title ?: TextRef.EMPTY),
                 placeholderText = stringResource(id = R.string.place_search),
-                textStyle = Typography.h6.copy(fontSize = Typography.h6.fontSize * 0.9),
+                textStyle = Typography.h6,
                 onStateChanged = { state -> onEvent(Event.SearchChanged(state)) },
             )
         },
@@ -156,4 +180,4 @@ private val TitleInsetWithoutIcon = Modifier.width(16.dp - AppBarHorizontalPaddi
 // Start inset for the title when there is a navigation icon provided
 private val TitleIconModifier = Modifier
     .fillMaxHeight()
-    .width(72.dp - AppBarHorizontalPadding)
+    .width(56.dp - AppBarHorizontalPadding)
