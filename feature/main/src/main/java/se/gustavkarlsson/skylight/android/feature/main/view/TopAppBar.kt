@@ -64,7 +64,7 @@ internal fun TopAppBar(
     TopAppBar(
         contentPadding = rememberInsetsPaddingValues(LocalWindowInsets.current.statusBars),
         navigationIcon = {
-            val active = state.toSearchFieldState() is SearchFieldState.Active
+            val active = state is AppBarState.Searching
             IconButton(
                 onClick = {
                     if (active) {
