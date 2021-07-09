@@ -11,16 +11,14 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.db.DbPlace
 import se.gustavkarlsson.skylight.android.lib.places.db.DbPlaceQueries
 import se.gustavkarlsson.skylight.android.lib.time.Time
 
-// TODO Make sure all access to queries is done on IO dispatcher
 internal class SqlDelightPlacesRepository(
     private val queries: DbPlaceQueries,
-    @Io private val dispatcher: CoroutineDispatcher,
+    private val dispatcher: CoroutineDispatcher,
     private val time: Time,
     private val maxRecentCount: Int,
 ) : PlacesRepository {
@@ -53,7 +51,9 @@ internal class SqlDelightPlacesRepository(
         inserted
     }
 
-    private fun removeOldRecents() = queries.keepMostRecent(maxRecentCount.toLong())
+    private suspend fun removeOldRecents() = withContext(dispatcher) {
+        queries.keepMostRecent(maxRecentCount.toLong())
+    }
 
     override suspend fun updateLastChanged(placeId: PlaceId.Saved): Place = withContext(dispatcher) {
         val now = time.now()

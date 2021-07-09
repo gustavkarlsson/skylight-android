@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.lib.places.Place
@@ -15,14 +16,13 @@ import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.settings.db.DbSettingsQueries
 
-// TODO Make sure all access to queries is done on IO dispatcher
 internal class SqlDelightSettings(
     private val queries: DbSettingsQueries,
     private val placesRepository: PlacesRepository,
     private val dispatcher: CoroutineDispatcher
 ) : Settings {
 
-    override suspend fun setNotificationTriggerLevel(placeId: PlaceId, level: TriggerLevel) {
+    override suspend fun setNotificationTriggerLevel(placeId: PlaceId, level: TriggerLevel) = withContext(dispatcher) {
         val placeIdLong = placeId.value
         val exists = queries.getById(placeIdLong)
             .asFlow()
@@ -54,13 +54,15 @@ internal class SqlDelightSettings(
             .map { entries -> entries.toMap() }
     }
 
-    private fun Map<PlaceId, TriggerLevel>.removeZombies(places: List<Place>): Map<PlaceId, TriggerLevel> {
+    private suspend fun Map<PlaceId, TriggerLevel>.removeZombies(
+        places: List<Place>,
+    ): Map<PlaceId, TriggerLevel> = withContext(dispatcher) {
         val livePlaceIds = places.map { place -> place.id }
         val deadPlaceIds = keys - livePlaceIds
         for (dead in deadPlaceIds) {
             queries.delete(dead.value)
         }
-        return filterKeys { placeId -> placeId in livePlaceIds }
+        filterKeys { placeId -> placeId in livePlaceIds }
     }
 }
 
