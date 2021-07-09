@@ -89,6 +89,11 @@ private val openSansCondensed = FontFamily(
     Font(R.font.open_sans_condensed_light_italic, weight = FontWeight.Light, style = FontStyle.Italic),
 )
 
+private val skylightTypography = Typography().run {
+    val newH6 = h6.copy(fontSize = h6.fontSize * 0.9)
+    copy(h6 = newH6)
+}
+
 @Composable
 fun SkylightTheme(
     darkMode: Boolean = isSystemInDarkTheme(),
@@ -104,6 +109,7 @@ fun SkylightTheme(
         }
         MaterialTheme(
             colors = colors.material,
+            typography = skylightTypography,
             content = content,
         )
     }

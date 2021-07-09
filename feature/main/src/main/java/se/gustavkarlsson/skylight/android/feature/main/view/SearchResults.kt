@@ -131,8 +131,6 @@ private fun ListItem(
         },
         icon = {
             Icon(
-                modifier = Modifier.padding(start = 12.dp, top = 9.dp),
-                tint = Colors.onSurfaceWeaker,
                 imageVector = item.icon,
                 contentDescription = null,
             )

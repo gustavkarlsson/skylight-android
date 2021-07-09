@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.ui.compose
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
@@ -9,9 +8,7 @@ import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
@@ -80,27 +77,6 @@ fun SearchField(
         textStyle = textStyle,
         value = activeText ?: inactiveText,
         singleLine = true,
-        leadingIcon = {
-            IconButton(
-                onClick = {
-                    if (active) {
-                        onStateChanged(SearchFieldState.Inactive)
-                    } else {
-                        onStateChanged(SearchFieldState.Active(""))
-                    }
-                }
-            ) {
-                Crossfade(targetState = active) { active ->
-                    val imageVector = if (active) {
-                        Icons.ArrowBack
-                    } else Icons.Search
-                    Icon(
-                        imageVector = imageVector,
-                        contentDescription = null,
-                    )
-                }
-            }
-        },
         trailingIcon = if (!activeText.isNullOrEmpty()) {
             {
                 IconButton(
