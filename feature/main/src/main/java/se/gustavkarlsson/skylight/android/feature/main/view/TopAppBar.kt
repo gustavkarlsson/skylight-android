@@ -110,6 +110,7 @@ private fun AppBarState.toSearchFieldState(): SearchFieldState {
     }
 }
 
+// Everything is copied and modified from androidx.compose.material.TextFieldKt
 @Composable
 private fun TopAppBar(
     title: @Composable () -> Unit,
