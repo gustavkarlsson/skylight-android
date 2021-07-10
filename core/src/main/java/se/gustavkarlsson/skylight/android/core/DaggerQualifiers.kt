@@ -13,3 +13,7 @@ annotation class Io
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 annotation class Computation
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class Global
