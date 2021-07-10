@@ -6,11 +6,8 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import se.gustavkarlsson.conveyor.Action
@@ -19,6 +16,7 @@ import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.issue
 import se.gustavkarlsson.skylight.android.core.Main
 import se.gustavkarlsson.skylight.android.core.logging.logError
+import se.gustavkarlsson.skylight.android.core.utils.mapState
 import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
 import javax.inject.Inject
 
@@ -30,9 +28,7 @@ internal class GooglePlayServicesViewModel @Inject constructor(
         start(scope)
     }
 
-    val error: StateFlow<Boolean> = store.state
-        .map { state -> state is Install.Error }
-        .stateIn(scope, SharingStarted.WhileSubscribed(), store.state.value is Install.Error)
+    val error: StateFlow<Boolean> = store.state.mapState { state -> state is Install.Error }
 
     val success: Flow<Unit> = store.state.mapNotNull { state ->
         if (state is Install.Success) {
