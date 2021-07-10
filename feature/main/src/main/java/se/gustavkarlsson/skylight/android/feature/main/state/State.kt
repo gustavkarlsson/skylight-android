@@ -7,7 +7,6 @@ import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.permissions.Permissions
 import se.gustavkarlsson.skylight.android.lib.places.Place
-import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingResult
 import se.gustavkarlsson.skylight.android.lib.settings.NotificationTriggerLevels
 
@@ -21,34 +20,24 @@ internal sealed interface State {
     data class Loading(
         override val permissions: Permissions,
         override val currentLocationName: Loadable<ReverseGeocodingResult>,
-        val selectedPlaceId: PlaceId?,
+        override val selectedPlace: Place?,
         override val selectedAuroraReport: LoadableAuroraReport,
         override val search: Search,
         val places: List<Place>?,
         val notificationTriggerLevels: NotificationTriggerLevels?,
-    ) : State {
-        override val selectedPlace: Place?
-            get() = places.orEmpty().firstOrNull { place ->
-                place.id == selectedPlaceId
-            }
-    }
+    ) : State
 
     data class Ready(
         override val permissions: Permissions,
         override val currentLocationName: Loadable<ReverseGeocodingResult>,
-        val selectedPlaceId: PlaceId,
+        override val selectedPlace: Place,
         override val selectedAuroraReport: LoadableAuroraReport,
         override val search: Search,
         val places: List<Place>,
         val notificationTriggerLevels: NotificationTriggerLevels,
     ) : State {
-        override val selectedPlace: Place
-            get() = places.firstOrNull { place ->
-                place.id == selectedPlaceId
-            } ?: error("No place with place id $selectedPlaceId in $places")
-
         val selectedPlaceTriggerLevel: TriggerLevel
-            get() = notificationTriggerLevels[selectedPlaceId]
+            get() = notificationTriggerLevels[selectedPlace.id]
     }
 }
 

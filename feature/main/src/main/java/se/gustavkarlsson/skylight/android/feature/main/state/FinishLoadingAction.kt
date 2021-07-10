@@ -11,15 +11,15 @@ internal class FinishLoadingAction @Inject constructor() : Action<State> {
         stateFlow
             .filterIsInstance<State.Loading>()
             .collectLatest { loadingState ->
-                val selectedPlaceId = loadingState.selectedPlaceId
+                val selectedPlace = loadingState.selectedPlace
                 val places = loadingState.places
                 val notificationTriggerLevels = loadingState.notificationTriggerLevels
-                if (selectedPlaceId != null && places != null && notificationTriggerLevels != null) {
+                if (selectedPlace != null && places != null && notificationTriggerLevels != null) {
                     stateFlow.update {
                         State.Ready(
                             permissions = permissions,
                             currentLocationName = currentLocationName,
-                            selectedPlaceId = selectedPlaceId,
+                            selectedPlace = selectedPlace,
                             selectedAuroraReport = selectedAuroraReport,
                             search = search,
                             places = places,

@@ -142,7 +142,7 @@ internal object MainViewModelModule {
     ): State = State.Loading(
         permissions = permissionChecker.permissions.value,
         currentLocationName = Loadable.Loading,
-        selectedPlaceId = null,
+        selectedPlace = null,
         selectedAuroraReport = LoadableAuroraReport.LOADING,
         search = Search.Inactive,
         places = null,

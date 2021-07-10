@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.feature.main.state
 
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
@@ -14,18 +13,17 @@ internal class StreamSelectedPlaceAction @Inject constructor(
 ) : Action<State> {
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         selectedPlaceRepository.stream()
-            .map { place -> place.id }
             .distinctUntilChanged()
-            .collectLatest { id ->
+            .collectLatest { selectedPlace ->
                 stateFlow.update {
                     val loading = LoadableAuroraReport.LOADING // TODO Get from cache?
                     when (this) {
                         is State.Loading -> copy(
-                            selectedPlaceId = id,
+                            selectedPlace = selectedPlace,
                             selectedAuroraReport = loading,
                         )
                         is State.Ready -> copy(
-                            selectedPlaceId = id,
+                            selectedPlace = selectedPlace,
                             selectedAuroraReport = loading,
                         )
                     }
