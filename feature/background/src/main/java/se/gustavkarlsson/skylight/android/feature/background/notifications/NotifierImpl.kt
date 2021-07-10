@@ -14,7 +14,6 @@ import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.feature.background.R
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
-import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.places.setPlaceId
 
 internal class NotifierImpl(
@@ -36,8 +35,7 @@ internal class NotifierImpl(
             setAutoCancel(true)
             priority = createPriority(notification)
             setDefaults(NotificationCompat.DEFAULT_ALL)
-            val placeId = notification.data.map { it.place.id }.first()
-            setContentIntent(createActivityPendingIntent(placeId))
+            setContentIntent(createActivityPendingIntent(notification))
             build()
         }
 
@@ -68,7 +66,8 @@ internal class NotifierImpl(
     private fun createText(notification: Notification) =
         notificationFormatter.format(notification).resolve(context)
 
-    private fun createActivityPendingIntent(placeId: PlaceId): PendingIntent {
+    private fun createActivityPendingIntent(notification: Notification): PendingIntent {
+        val placeId = notification.data.map { it.place.id }.first()
         val intent = Intent(context, activityClass).apply {
             setPlaceId(placeId)
         }
