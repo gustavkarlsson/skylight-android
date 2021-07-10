@@ -5,9 +5,10 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import dagger.Module
 import dagger.Provides
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import se.gustavkarlsson.skylight.android.core.AppScope
+import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.core.utils.seconds
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
@@ -19,6 +20,8 @@ object LibLocationModule {
     internal fun locationProvider(
         context: Context,
         permissionChecker: PermissionChecker,
+        scope: CoroutineScope,
+        @Io dispatcher: CoroutineDispatcher,
     ): LocationProvider {
         val client = LocationServices.getFusedLocationProviderClient(context)
         val requestPriority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
@@ -35,8 +38,8 @@ object LibLocationModule {
             freshLocationRequestPriority = requestPriority,
             permissionChecker = permissionChecker,
             streamRetryDuration = 15.seconds,
-            shareScope = GlobalScope,
-            dispatcher = Dispatchers.IO,
+            shareScope = scope,
+            dispatcher = dispatcher,
         )
     }
 }
