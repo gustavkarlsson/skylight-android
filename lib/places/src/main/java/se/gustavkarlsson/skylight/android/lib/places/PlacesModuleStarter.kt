@@ -11,10 +11,10 @@ import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 internal class PlacesModuleStarter(
     private val placesRepository: PlacesRepository,
     private val analytics: Analytics,
-    private val scope: CoroutineScope,
+    private val globalScope: CoroutineScope,
 ) : ModuleStarter {
-    override fun start() {
-        scope.launch {
+    override suspend fun start() {
+        globalScope.launch {
             updateAnalyticsPlacesCount()
         }
     }

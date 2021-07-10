@@ -123,14 +123,14 @@ object FeatureBackgroundModule {
         scheduler: Scheduler,
         settings: Settings,
         notificationChannelCreator: NotificationChannelCreator,
-        @Global scope: CoroutineScope,
+        @Global globalScope: CoroutineScope,
     ): ModuleStarter =
         BackgroundModuleStarter(
             context = context,
             scheduler = scheduler,
             settings = settings,
             notificationChannelCreator = notificationChannelCreator,
-            scope = scope,
+            globalScope = globalScope,
         )
 
     @Provides

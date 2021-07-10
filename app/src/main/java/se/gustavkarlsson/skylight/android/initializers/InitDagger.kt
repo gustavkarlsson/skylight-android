@@ -1,6 +1,9 @@
 package se.gustavkarlsson.skylight.android.initializers
 
 import android.app.Application
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import se.gustavkarlsson.skylight.android.AppModule
 import se.gustavkarlsson.skylight.android.DaggerActualAppComponent
 import se.gustavkarlsson.skylight.android.core.AppComponent
@@ -68,7 +71,11 @@ internal fun Application.initDagger() {
         setGeomagLocationComponent(component)
     }
 
-    component.moduleStarters().forEach {
-        it.start()
+    runBlocking {
+        component.moduleStarters()
+            .map { starter ->
+                launch { starter.start() }
+            }
+            .joinAll()
     }
 }

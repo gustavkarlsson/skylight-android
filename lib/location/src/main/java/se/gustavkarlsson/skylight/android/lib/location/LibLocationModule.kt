@@ -21,7 +21,7 @@ object LibLocationModule {
     internal fun locationProvider(
         context: Context,
         permissionChecker: PermissionChecker,
-        @Global scope: CoroutineScope,
+        @Global globalScope: CoroutineScope,
         @Io dispatcher: CoroutineDispatcher,
     ): LocationProvider {
         val client = LocationServices.getFusedLocationProviderClient(context)
@@ -39,7 +39,7 @@ object LibLocationModule {
             freshLocationRequestPriority = requestPriority,
             permissionChecker = permissionChecker,
             streamRetryDuration = 15.seconds,
-            shareScope = scope,
+            shareScope = globalScope,
             dispatcher = dispatcher,
         )
     }

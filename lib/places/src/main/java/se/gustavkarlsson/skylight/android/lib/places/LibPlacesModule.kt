@@ -34,14 +34,14 @@ object LibPlacesModule {
     internal fun selectedPlaceRepository(
         context: Context,
         placesRepository: PlacesRepository,
-        @Global scope: CoroutineScope,
+        @Global globalScope: CoroutineScope,
         @Io dispatcher: CoroutineDispatcher,
     ): SelectedPlaceRepository {
         val storage = SharedPrefsPlaceSelectionStorage(context, dispatcher)
         return PlacesRepoSelectedPlaceRepository(
             placesRepo = placesRepository,
             placeSelectionStorage = storage,
-            scope = scope,
+            scope = globalScope,
         )
     }
 
@@ -51,7 +51,7 @@ object LibPlacesModule {
     fun moduleStarter(
         placesRepository: PlacesRepository,
         analytics: Analytics,
-        @Global scope: CoroutineScope,
+        @Global globalScope: CoroutineScope,
     ): ModuleStarter =
-        PlacesModuleStarter(placesRepository, analytics, scope)
+        PlacesModuleStarter(placesRepository, analytics, globalScope)
 }
