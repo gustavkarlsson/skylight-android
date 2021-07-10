@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.state
 
 import com.ioki.textref.TextRef
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.coroutineScope
@@ -22,17 +21,12 @@ import se.gustavkarlsson.skylight.android.lib.geocoder.GeocodingResult
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import javax.inject.Inject
-import kotlin.time.ExperimentalTime
 
 internal class ContinuouslySearchAction @Inject constructor(
     private val searchChannel: ReceiveChannel<@JvmSuppressWildcards SearchFieldState>,
     private val geocoder: Geocoder,
     @SearchThrottle private val queryThrottleDuration: Duration,
 ) : Action<State> {
-    @OptIn(
-        ExperimentalTime::class,
-        FlowPreview::class
-    )
     override suspend fun execute(stateFlow: AtomicStateFlow<State>): Unit = coroutineScope {
         launch {
             searchChannel.consumeEach { searchFieldState ->
