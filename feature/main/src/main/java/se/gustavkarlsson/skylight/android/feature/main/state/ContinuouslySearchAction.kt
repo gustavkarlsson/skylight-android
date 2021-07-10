@@ -48,9 +48,10 @@ internal class ContinuouslySearchAction @Inject constructor(
             .filter { query -> query.isNotBlank() }
             .throttle(queryThrottleDuration.toMillis())
             .collectLatest { query ->
-                // TODO Ensure no race condition. Are these launches cancelled when a new query is collected?
+                // TODO Ensure no race condition
                 launch {
-                    val result = geocoder.geocode(query)
+                    val currentLocation = stateFlow.value.currentLocation.value?.location
+                    val result = geocoder.geocode(query, biasAround = currentLocation)
                     stateFlow.update { update(result) }
                 }
             }

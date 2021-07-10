@@ -141,6 +141,7 @@ internal object MainViewModelModule {
         permissionChecker: PermissionChecker,
     ): State = State.Loading(
         permissions = permissionChecker.permissions.value,
+        currentLocation = Loadable.Loading,
         currentLocationName = Loadable.Loading,
         selectedPlace = null,
         selectedAuroraReport = LoadableAuroraReport.LOADING,
