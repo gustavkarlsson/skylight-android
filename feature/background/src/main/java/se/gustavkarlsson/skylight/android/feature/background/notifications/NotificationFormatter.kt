@@ -16,7 +16,7 @@ internal class NotificationFormatter(
     }
 
     private fun formatLines(value: Notification): Array<TextRef> =
-        value.data
+        value.placesWithChance
             .sortedWith(comparator)
             .map {
                 val chanceText = chanceLevelFormatter.format(it.chanceLevel)

@@ -9,7 +9,6 @@ internal class NotificationEvaluatorImpl(
 ) : NotificationEvaluator {
 
     override fun shouldNotify(notification: Notification): Boolean {
-        if (notification.data.isEmpty()) return false
         val lastData = lastNotificationRepository.get() ?: return true
         if (lastData.isOutdated) return true
         return notification hasHigherChanceThan lastData
@@ -24,7 +23,7 @@ internal class NotificationEvaluatorImpl(
 }
 
 private infix fun Notification.hasHigherChanceThan(old: NotificationRecord): Boolean {
-    val oldAndNewChances = data.map { new ->
+    val oldAndNewChances = placesWithChance.map { new ->
         val correspondingOldChance = old.data
             .firstOrNull { old -> new.place.id == old.id }
             ?.chanceLevel

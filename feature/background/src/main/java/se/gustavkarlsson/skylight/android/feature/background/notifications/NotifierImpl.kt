@@ -54,7 +54,7 @@ internal class NotifierImpl(
     }
 
     private fun createPriority(notification: Notification): Int =
-        when (notification.data.map { it.chanceLevel }.maxOrNull()) {
+        when (notification.placesWithChance.map { it.chanceLevel }.maxOrNull()) {
             ChanceLevel.HIGH -> NotificationCompat.PRIORITY_HIGH
             ChanceLevel.MEDIUM -> NotificationCompat.PRIORITY_DEFAULT
             ChanceLevel.LOW -> NotificationCompat.PRIORITY_LOW
@@ -67,9 +67,8 @@ internal class NotifierImpl(
         notificationFormatter.format(notification).resolve(context)
 
     private fun createActivityPendingIntent(notification: Notification): PendingIntent {
-        val placeId = notification.data.map { it.place.id }.first()
         val intent = Intent(context, activityClass).apply {
-            setPlaceId(placeId)
+            setPlaceId(notification.placeToOpen.id)
         }
         return PendingIntent.getActivity(
             context,

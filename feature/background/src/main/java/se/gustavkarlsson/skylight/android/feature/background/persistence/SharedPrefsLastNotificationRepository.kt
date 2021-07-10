@@ -63,7 +63,7 @@ internal class SharedPrefsLastNotificationRepository(
         sharedPreferences.edit {
             clear()
             putLong(TIMESTAMP_KEY, data.timestamp.toEpochMilli())
-            data.data.forEach { placeWithChance ->
+            data.placesWithChance.forEach { placeWithChance ->
                 val key = getKey(placeWithChance)
                 val value = getValue(placeWithChance)
                 putInt(key, value)
