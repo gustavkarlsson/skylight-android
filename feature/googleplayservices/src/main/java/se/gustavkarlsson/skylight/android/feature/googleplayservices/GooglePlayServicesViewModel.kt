@@ -24,14 +24,14 @@ internal class GooglePlayServicesViewModel @Inject constructor(
     @Main private val dispatcher: CoroutineDispatcher,
 ) : CoroutineScopedService() {
 
-    private val store = Store<Install>(Install.Idle).apply {
+    private val store = Store(Install.Idle).apply {
         start(scope)
     }
 
-    val error: StateFlow<Boolean> = store.state.mapState { state -> state is Install.Error }
+    val error: StateFlow<Boolean> = store.state.mapState { state -> state == Install.Error }
 
     val success: Flow<Unit> = store.state.mapNotNull { state ->
-        if (state is Install.Success) {
+        if (state == Install.Success) {
             Unit
         } else null
     }
@@ -48,10 +48,8 @@ internal class GooglePlayServicesViewModel @Inject constructor(
     }
 }
 
-private sealed class Install {
-    object Idle : Install()
-    object Success : Install()
-    object Error : Install()
+private enum class Install {
+    Idle, Success, Error
 }
 
 private class MakeGooglePlayServicesAvailableAction(

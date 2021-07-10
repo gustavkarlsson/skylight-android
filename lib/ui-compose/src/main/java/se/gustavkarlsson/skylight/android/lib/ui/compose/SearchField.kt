@@ -112,7 +112,7 @@ fun SearchField(
     )
 }
 
-sealed class SearchFieldState {
-    object Inactive : SearchFieldState()
-    data class Active(val text: String) : SearchFieldState()
+sealed interface SearchFieldState {
+    object Inactive : SearchFieldState
+    data class Active(val text: String) : SearchFieldState
 }

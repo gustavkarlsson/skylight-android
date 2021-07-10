@@ -45,27 +45,27 @@ internal sealed interface State {
     }
 }
 
-internal sealed class Search {
-    object Inactive : Search()
-    sealed class Active : Search() {
-        abstract val query: String
-        abstract val suggestions: List<PlaceSuggestion>
+internal sealed interface Search {
+    object Inactive : Search
+    sealed interface Active : Search {
+        val query: String
+        val suggestions: List<PlaceSuggestion>
 
         data class Blank(
             override val query: String,
-        ) : Active() {
+        ) : Active {
             override val suggestions = emptyList<PlaceSuggestion>()
         }
 
         data class Filled(
             override val query: String,
             override val suggestions: List<PlaceSuggestion>,
-        ) : Active()
+        ) : Active
 
         data class Error(
             override val query: String,
             val text: TextRef,
-        ) : Active() {
+        ) : Active {
             override val suggestions get() = emptyList<PlaceSuggestion>()
         }
     }

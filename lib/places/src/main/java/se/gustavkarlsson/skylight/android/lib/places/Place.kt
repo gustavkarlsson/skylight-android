@@ -3,43 +3,43 @@ package se.gustavkarlsson.skylight.android.lib.places
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.lib.location.Location
 
-sealed class Place {
-    abstract val id: PlaceId
+sealed interface Place {
+    val id: PlaceId
 
-    object Current : Place() {
+    object Current : Place {
         override val id = PlaceId.Current
     }
 
-    sealed class Saved : Place() {
+    sealed interface Saved : Place {
         abstract override val id: PlaceId.Saved
-        abstract val location: Location
-        abstract val name: String
-        abstract val lastChanged: Instant
+        val location: Location
+        val name: String
+        val lastChanged: Instant
 
         data class Favorite(
             override val id: PlaceId.Saved,
             override val name: String,
             override val location: Location,
             override val lastChanged: Instant,
-        ) : Saved()
+        ) : Saved
 
         data class Recent(
             override val id: PlaceId.Saved,
             override val name: String,
             override val location: Location,
             override val lastChanged: Instant,
-        ) : Saved()
+        ) : Saved
     }
 }
 
-sealed class PlaceId {
-    abstract val value: Long
+sealed interface PlaceId {
+    val value: Long
 
-    object Current : PlaceId() {
+    object Current : PlaceId {
         override val value: Long = -1
     }
 
-    data class Saved(override val value: Long) : PlaceId() {
+    data class Saved(override val value: Long) : PlaceId {
         init {
             require(value >= 0) { "Saved place ID:s must be non-negative: $value" }
         }

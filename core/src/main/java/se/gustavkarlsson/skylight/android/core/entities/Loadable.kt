@@ -1,16 +1,16 @@
 package se.gustavkarlsson.skylight.android.core.entities
 
 // TODO Move map to extension?
-sealed class Loadable<out T> {
-    abstract val value: T?
-    abstract fun <R> map(mapper: (T) -> R): Loadable<R>
+sealed interface Loadable<out T> {
+    val value: T?
+    fun <R> map(mapper: (T) -> R): Loadable<R>
 
-    object Loading : Loadable<Nothing>() {
+    object Loading : Loadable<Nothing> {
         override fun <R> map(mapper: (Nothing) -> R): Loadable<R> = Loading
         override val value: Nothing? = null
     }
 
-    data class Loaded<out T>(override val value: T) : Loadable<T>() {
+    data class Loaded<out T>(override val value: T) : Loadable<T> {
         override fun <R> map(mapper: (T) -> R): Loadable<R> = Loaded(mapper(value))
     }
 

@@ -75,20 +75,20 @@ internal data class FactorItem(
     val errorText: TextRef?
 )
 
-internal sealed class SearchResult {
-    abstract val title: TextRef
-    abstract val subtitle: TextRef?
-    abstract val icon: ImageVector
-    abstract val trailingIcon: ImageVector?
-    abstract val selected: Boolean
-    abstract val selectEvent: Event
+internal sealed interface SearchResult {
+    val title: TextRef
+    val subtitle: TextRef?
+    val icon: ImageVector
+    val trailingIcon: ImageVector?
+    val selected: Boolean
+    val selectEvent: Event
 
-    sealed class Known : SearchResult() {
+    sealed interface Known : SearchResult {
         data class Current(
             val name: String?,
             override val selected: Boolean,
             private val notifications: Boolean,
-        ) : Known() {
+        ) : Known {
             override val title: TextRef
                 get() {
                     return if (name != null) {
@@ -113,7 +113,7 @@ internal sealed class SearchResult {
             val place: Place.Saved,
             override val selected: Boolean,
             private val notifications: Boolean,
-        ) : Known() {
+        ) : Known {
             override val title: TextRef get() = TextRef.string(place.name)
             override val subtitle: Nothing? = null
             override val icon: ImageVector
@@ -133,7 +133,7 @@ internal sealed class SearchResult {
         val name: String,
         val details: String,
         val location: Location,
-    ) : SearchResult() {
+    ) : SearchResult {
         override val title: TextRef get() = TextRef.string(name)
         override val subtitle: TextRef get() = TextRef.string(details)
         override val icon: ImageVector = Icons.Map
@@ -149,13 +149,13 @@ internal data class NotificationLevelItem(
     val selectEvent: Event,
 )
 
-internal sealed class Event {
-    data class AddFavorite(val place: Place.Saved.Recent) : Event()
-    data class RemoveFavorite(val place: Place.Saved.Favorite) : Event()
-    data class SetNotificationLevel(val place: Place, val level: TriggerLevel) : Event()
-    data class SearchChanged(val state: SearchFieldState) : Event()
-    data class SelectSearchResult(val result: SearchResult) : Event()
-    object RefreshLocationPermission : Event()
-    object TurnOffCurrentLocationNotifications : Event()
-    object Noop : Event()
+internal sealed interface Event {
+    data class AddFavorite(val place: Place.Saved.Recent) : Event
+    data class RemoveFavorite(val place: Place.Saved.Favorite) : Event
+    data class SetNotificationLevel(val place: Place, val level: TriggerLevel) : Event
+    data class SearchChanged(val state: SearchFieldState) : Event
+    data class SelectSearchResult(val result: SearchResult) : Event
+    object RefreshLocationPermission : Event
+    object TurnOffCurrentLocationNotifications : Event
+    object Noop : Event
 }
