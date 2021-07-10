@@ -46,9 +46,10 @@ object LibWeatherModule {
         @Io dispatcher: CoroutineDispatcher,
         time: Time
     ): WeatherProvider {
+        val json = Json { ignoreUnknownKeys = true }
+
         @Suppress("EXPERIMENTAL_API_USAGE")
-        val converterFactory = Json { ignoreUnknownKeys = true }
-            .asConverterFactory(MediaType.get("application/json"))
+        val converterFactory = json.asConverterFactory(MediaType.get("application/json"))
 
         val api = Retrofit.Builder()
             .client(okHttpClient)
