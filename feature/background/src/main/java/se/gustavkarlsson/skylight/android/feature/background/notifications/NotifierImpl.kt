@@ -14,6 +14,7 @@ import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.feature.background.R
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
+import se.gustavkarlsson.skylight.android.lib.places.setPlaceId
 
 internal class NotifierImpl(
     private val context: Context,
@@ -34,7 +35,7 @@ internal class NotifierImpl(
             setAutoCancel(true)
             priority = createPriority(notification)
             setDefaults(NotificationCompat.DEFAULT_ALL)
-            setContentIntent(createActivityPendingIntent())
+            setContentIntent(createActivityPendingIntent(notification))
             build()
         }
 
@@ -53,7 +54,7 @@ internal class NotifierImpl(
     }
 
     private fun createPriority(notification: Notification): Int =
-        when (notification.data.map { it.chanceLevel }.maxOrNull()) {
+        when (notification.placesWithChance.map { it.chanceLevel }.maxOrNull()) {
             ChanceLevel.HIGH -> NotificationCompat.PRIORITY_HIGH
             ChanceLevel.MEDIUM -> NotificationCompat.PRIORITY_DEFAULT
             ChanceLevel.LOW -> NotificationCompat.PRIORITY_LOW
@@ -65,14 +66,15 @@ internal class NotifierImpl(
     private fun createText(notification: Notification) =
         notificationFormatter.format(notification).resolve(context)
 
-    // TODO Make it navigate to correct place.
-    private fun createActivityPendingIntent(): PendingIntent {
-        val mainActivityIntent = Intent(context, activityClass)
+    private fun createActivityPendingIntent(notification: Notification): PendingIntent {
+        val intent = Intent(context, activityClass).apply {
+            setPlaceId(notification.placeToOpen.id)
+        }
         return PendingIntent.getActivity(
             context,
             -1,
-            mainActivityIntent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
     }
 }

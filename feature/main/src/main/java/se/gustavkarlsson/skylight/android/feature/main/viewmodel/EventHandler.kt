@@ -65,7 +65,7 @@ internal class EventHandler @Inject constructor(
                 placesRepository.addRecent(result.name, result.location)
             }
         }
-        selectedPlaceRepository.set(place)
+        selectedPlaceRepository.set(place.id)
         store.issue { stateFlow ->
             stateFlow.update {
                 when (this) {

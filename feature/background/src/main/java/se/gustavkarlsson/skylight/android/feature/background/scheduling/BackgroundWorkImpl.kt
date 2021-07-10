@@ -33,22 +33,26 @@ internal class BackgroundWorkImpl(
 ) : BackgroundWork {
     override suspend operator fun invoke() {
         if (appVisibilityEvaluator.isVisible()) return
-        val notificationData = getNotificationData()
+        val notificationData = getNotificationData() ?: return
         if (notificationEvaluator.shouldNotify(notificationData)) {
             notifier.notify(notificationData)
             notificationEvaluator.onNotified(notificationData)
         }
     }
 
-    private suspend fun getNotificationData(): Notification {
-        val placeIdsWithLevel = getPlaceIdsToCheck()
+    private suspend fun getNotificationData(): Notification? {
+        val placesWithChance = getPlaceIdsToCheck()
             .mapNotNull { (placeId, triggerLevel) ->
                 getPlaceWithChance(placeId)?.takeIf {
                     it.chanceLevel isGreaterOrEqual triggerLevel
                 }
             }
+            .sortedByDescending { it.chanceLevel }
 
-        return Notification(placeIdsWithLevel, time.now())
+        return if (placesWithChance.isNotEmpty()) {
+            val targetPlace = placesWithChance.first().place
+            Notification(targetPlace, placesWithChance, time.now())
+        } else null
     }
 
     private suspend fun getPlaceIdsToCheck(): List<PlaceIdWithTriggerLevel> {

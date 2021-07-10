@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -19,6 +20,10 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Screens
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreensHost
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.MasterNavigator
 import se.gustavkarlsson.skylight.android.lib.navigationsetup.NavigationSetupComponent
+import se.gustavkarlsson.skylight.android.lib.places.PlaceId
+import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
+import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
+import se.gustavkarlsson.skylight.android.lib.places.getPlaceId
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedServiceComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceCatalog
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceHost
@@ -34,6 +39,8 @@ internal class MainActivity :
     ServiceHost {
 
     private val serviceRegistry: ServiceRegistry = ScopedServiceComponent.instance.serviceRegistry()
+
+    private val selectedPlaceRepository: SelectedPlaceRepository = PlacesComponent.instance.selectedPlaceRepository()
 
     override val serviceCatalog: ServiceCatalog get() = serviceRegistry
 
@@ -63,7 +70,22 @@ internal class MainActivity :
         createDestroyScope = scope
         onEachScreen { onCreateDestroyScope(scope) }
         scope.launch { navigator.backstackChanges.collect(::onBackstackChange) }
+        intent?.getPlaceId()?.let { placeId ->
+            onNewPlaceId(placeId)
+        }
         renderer.render()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intent?.getPlaceId()?.let { placeId ->
+            onNewPlaceId(placeId)
+        }
+    }
+
+    private fun onNewPlaceId(placeId: PlaceId) {
+        selectedPlaceRepository.set(placeId)
+        navigator.setBackstack(listOf(screens.main))
     }
 
     // TODO Implement listeners instead?
