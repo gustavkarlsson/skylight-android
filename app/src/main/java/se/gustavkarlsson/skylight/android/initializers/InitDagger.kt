@@ -5,7 +5,6 @@ import kotlinx.coroutines.GlobalScope
 import se.gustavkarlsson.skylight.android.AppModule
 import se.gustavkarlsson.skylight.android.DaggerActualAppComponent
 import se.gustavkarlsson.skylight.android.core.AppComponent
-import se.gustavkarlsson.skylight.android.core.utils.allowDiskReadsAndWritesInStrictMode
 import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
@@ -70,9 +69,7 @@ internal fun Application.initDagger() {
         setGeomagLocationComponent(component)
     }
 
-    allowDiskReadsAndWritesInStrictMode {
-        component.moduleStarters().forEach {
-            it.start(GlobalScope)
-        }
+    component.moduleStarters().forEach {
+        it.start(GlobalScope)
     }
 }

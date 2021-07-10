@@ -13,11 +13,11 @@ internal class Skylight : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        initDarkMode()
         initLogging()
-        initStrictMode()
         initThreeThen()
-        initDagger()
         runMigrations()
+        initDagger()
+        initDarkMode()
+        initStrictMode()
     }
 }

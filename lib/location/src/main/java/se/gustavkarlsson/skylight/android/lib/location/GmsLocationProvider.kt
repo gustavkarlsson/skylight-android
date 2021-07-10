@@ -131,6 +131,7 @@ internal class GmsLocationProvider(
         .flowOn(dispatcher)
         .shareIn(shareScope, SharingStarted.WhileSubscribed(), replay = 1)
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun FusedLocationProviderClient.stream(): Flow<Loadable<LocationResult>> =
         streamLocationPermission()
             .flatMapLatest { permissionGranted ->
