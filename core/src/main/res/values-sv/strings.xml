@@ -8,10 +8,6 @@
 
     <string name="about">Om</string>
 
-    <string name="error_no_location_permission">Saknar åtkomst till plats</string>
-    <string name="error_no_location">Kunde inte hitta plats</string>
-    <string name="error_no_internet_maybe">Ingen internetanslutning?</string>
-
     <string name="aurora_chance_none">Ingen chans</string>
     <string name="aurora_chance_low">Låg chans</string>
     <string name="aurora_chance_medium">Medium chans</string>

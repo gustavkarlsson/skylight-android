@@ -8,10 +8,6 @@
 
     <string name="about">About</string>
 
-    <string name="error_no_location_permission">Missing location permission</string>
-    <string name="error_no_location">Could not determine location</string>
-    <string name="error_no_internet_maybe">No internet connection?</string>
-
     <string name="aurora_chance_none">No chance</string>
     <string name="aurora_chance_low">Low chance</string>
     <string name="aurora_chance_medium">Medium chance</string>

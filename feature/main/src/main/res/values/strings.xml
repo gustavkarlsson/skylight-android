@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="right_now">Right now</string>
-    <string name="remove">Remove</string>
-    <string name="remove_thing">Remove %s?</string>
-    <string name="allow">Allow</string>
     <string name="open_settings">Open App info</string>
-    <string name="places">Places</string>
     <string name="location_permission">Location permission</string>
 
     <string name="factor_geomag_location_title_full">Geomagnetic location</string>
