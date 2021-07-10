@@ -10,7 +10,7 @@ fun Bundle.setPlaceId(placeId: PlaceId) {
 
 fun Bundle.getPlaceId(): PlaceId? {
     val value = getLong(KEY_PLACE_ID, Long.MIN_VALUE)
-    return if (value != Long.MIN_VALUE) {
+    return if (value == Long.MIN_VALUE) {
         null
     } else PlaceId.fromLong(value)
 }
