@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.map
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
 import se.gustavkarlsson.conveyor.Store
+import se.gustavkarlsson.skylight.android.core.logging.logInfo
+import se.gustavkarlsson.skylight.android.core.logging.logWarn
 
 internal class PlacesRepoSelectedPlaceRepository(
     placesRepo: PlacesRepository,
@@ -16,7 +18,7 @@ internal class PlacesRepoSelectedPlaceRepository(
     scope: CoroutineScope
 ) : SelectedPlaceRepository {
     private val store = Store(
-        initialState = State.Loading(selectedId = null),
+        initialState = State.Loading(suggestedId = null),
         startActions = listOf(StreamPlacesAction(placeSelectionStorage::loadId, placesRepo.stream()))
     )
 
@@ -29,19 +31,16 @@ internal class PlacesRepoSelectedPlaceRepository(
     override fun stream(): Flow<Place> = store.state
         .filterIsInstance<State.Loaded>()
         .map { state ->
-            state.places
-                .firstOrNull { place ->
-                    place.id == state.selectedId
-                } ?: state.places.first()
+            state.places.first { place ->
+                place.id == state.selectedId
+            }
         }
         .distinctUntilChanged()
 }
 
 private sealed interface State {
-    val selectedId: PlaceId?
-
-    data class Loading(override val selectedId: PlaceId?) : State
-    data class Loaded(override val selectedId: PlaceId, val places: List<Place>) : State
+    data class Loading(val suggestedId: PlaceId?) : State
+    data class Loaded(val selectedId: PlaceId, val places: List<Place>) : State
 }
 
 private class StreamPlacesAction(
@@ -50,15 +49,33 @@ private class StreamPlacesAction(
 ) : Action<State> {
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         val initialSelectedId = loadId()
-        placesStream
-            .collect { newPlaces ->
-                stateFlow.update {
-                    State.Loaded(
-                        selectedId = selectedId ?: initialSelectedId,
-                        places = newPlaces,
-                    )
-                }
+        placesStream.collect { newPlaces ->
+            stateFlow.update {
+                val newSelectedId = selectBestId(this, initialSelectedId, newPlaces)
+                logInfo { "Places updated to $newPlaces. New selected Place ID is: $newSelectedId" }
+                State.Loaded(
+                    selectedId = newSelectedId,
+                    places = newPlaces,
+                )
             }
+        }
+    }
+}
+
+private fun selectBestId(
+    state: State,
+    initialSelectedId: PlaceId,
+    newPlaces: List<Place>,
+): PlaceId {
+    val selectedIdCandidates = listOfNotNull(
+        when (state) {
+            is State.Loading -> state.suggestedId
+            is State.Loaded -> state.selectedId
+        },
+        initialSelectedId,
+    )
+    return selectedIdCandidates.first { placeId ->
+        placeId in newPlaces.ids()
     }
 }
 
@@ -67,13 +84,33 @@ private class SelectionChangedAction(
     private val saveId: (PlaceId) -> Unit,
 ) : Action<State> {
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
-        if (placeId == stateFlow.value.selectedId) return
+        var save = false
         stateFlow.update {
             when (this) {
-                is State.Loading -> copy(selectedId = placeId)
-                is State.Loaded -> copy(selectedId = placeId)
+                is State.Loading -> copy(suggestedId = placeId)
+                is State.Loaded -> {
+                    when (placeId) {
+                        selectedId -> {
+                            logInfo { "Place ID: $placeId already selected" }
+                            this
+                        }
+                        !in places.ids() -> {
+                            logWarn { "Place with ID: $placeId does not exist. Keep selected place ID:  $selectedId" }
+                            this
+                        }
+                        else -> {
+                            logInfo { "Selecting new Place ID: $placeId" }
+                            save = true
+                            copy(selectedId = placeId)
+                        }
+                    }
+                }
             }
         }
-        saveId(placeId)
+        if (save) {
+            saveId(placeId)
+        }
     }
 }
+
+private fun List<Place>.ids() = map { it.id }
