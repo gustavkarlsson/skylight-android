@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
+import app.cash.exhaustive.Exhaustive
 import com.ioki.textref.TextRef
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -138,7 +139,8 @@ private fun Content(
     onEvent: (Event) -> Unit,
 ) {
     ScreenBackground {
-        val dummy = when (state) {
+        @Exhaustive
+        when (state) {
             ViewState.Loading -> Unit
             is ViewState.Ready -> {
                 Ready(

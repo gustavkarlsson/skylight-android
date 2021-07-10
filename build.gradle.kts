@@ -16,6 +16,7 @@ buildscript {
         classpath("pl.allegro.tech.build:axion-release-plugin:${Versions.axionRelease}")
         classpath("com.squareup.sqldelight:gradle-plugin:${Versions.sqldelight}")
         classpath("org.jlleitschuh.gradle:ktlint-gradle:${Versions.ktlint}")
+        classpath("app.cash.exhaustive:exhaustive-gradle:${Versions.exhaustive}")
     }
 }
 
