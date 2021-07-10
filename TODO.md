@@ -1,6 +1,7 @@
 ## ASAP
 
 ## Soon
+* Merge selectedPlace and selectedAuroraReport to avoid sync issues
 * Dark mode splash screen for Android 12
 * Global notification level?
 * Notifications on/off without dialog (or only dialog when enabling). Needs a way to select current setting
