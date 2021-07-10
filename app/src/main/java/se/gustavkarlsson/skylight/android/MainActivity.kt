@@ -70,7 +70,7 @@ internal class MainActivity :
         createDestroyScope = scope
         onEachScreen { onCreateDestroyScope(scope) }
         scope.launch { navigator.backstackChanges.collect(::onBackstackChange) }
-        savedInstanceState?.getPlaceId()?.let { placeId ->
+        intent?.getPlaceId()?.let { placeId ->
             onNewPlaceId(placeId)
         }
         renderer.render()
@@ -78,12 +78,11 @@ internal class MainActivity :
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        intent?.extras?.getPlaceId()?.let { placeId ->
+        intent?.getPlaceId()?.let { placeId ->
             onNewPlaceId(placeId)
         }
     }
 
-    // FIXME make sure it both sets place and navigates (no double entries in backstack)
     private fun onNewPlaceId(placeId: PlaceId) {
         selectedPlaceRepository.set(placeId)
         navigator.setBackstack(listOf(screens.main))

@@ -6,7 +6,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
-import android.os.Bundle
 import android.util.TypedValue
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
@@ -69,11 +68,9 @@ internal class NotifierImpl(
     private fun createText(notification: Notification) =
         notificationFormatter.format(notification).resolve(context)
 
-    // FIXME test that it selects the correct place
     private fun createActivityPendingIntent(placeId: PlaceId): PendingIntent {
         val intent = Intent(context, activityClass).apply {
-            val bundle = Bundle().apply { setPlaceId(placeId) }
-            putExtras(bundle)
+            setPlaceId(placeId)
         }
         return PendingIntent.getActivity(
             context,
