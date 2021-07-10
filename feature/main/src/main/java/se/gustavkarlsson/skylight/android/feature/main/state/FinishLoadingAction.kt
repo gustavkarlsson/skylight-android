@@ -10,23 +10,28 @@ internal class FinishLoadingAction @Inject constructor() : Action<State> {
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         stateFlow
             .filterIsInstance<State.Loading>()
-            .collectLatest { loadingState ->
-                val selectedPlace = loadingState.selectedPlace
-                val places = loadingState.places
-                val notificationTriggerLevels = loadingState.notificationTriggerLevels
-                if (selectedPlace != null && places != null && notificationTriggerLevels != null) {
-                    stateFlow.update {
-                        State.Ready(
-                            permissions = permissions,
-                            currentLocationName = currentLocationName,
-                            selectedPlace = selectedPlace,
-                            selectedAuroraReport = selectedAuroraReport,
-                            search = search,
-                            places = places,
-                            notificationTriggerLevels = notificationTriggerLevels,
-                        )
+            .collectLatest {
+                stateFlow.update {
+                    when (this) {
+                        is State.Loading -> updateLoading()
+                        is State.Ready -> this
                     }
                 }
             }
     }
+}
+
+private fun State.Loading.updateLoading(): State {
+    return if (selectedPlace != null && places != null && notificationTriggerLevels != null) {
+        State.Ready(
+            permissions = permissions,
+            currentLocation = currentLocation,
+            currentLocationName = currentLocationName,
+            selectedPlace = selectedPlace,
+            selectedAuroraReport = selectedAuroraReport,
+            search = search,
+            places = places,
+            notificationTriggerLevels = notificationTriggerLevels,
+        )
+    } else this
 }
