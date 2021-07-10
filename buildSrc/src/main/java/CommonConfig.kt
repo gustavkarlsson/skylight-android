@@ -24,18 +24,4 @@ fun CommonExtension<*, *, *, *>.commonConfig() {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
     }
-
-    lint {
-        // TODO Re-enable once this bug has been fixed: https://github.com/JakeWharton/timber/issues/408
-        disable(
-            "LogNotTimber",
-            "StringFormatInTimber",
-            "ThrowableNotAtBeginning",
-            "BinaryOperationInTimber",
-            "TimberArgCount",
-            "TimberArgTypes",
-            "TimberTagLength",
-            "TimberExceptionLogging",
-        )
-    }
 }

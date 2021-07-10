@@ -42,7 +42,6 @@ object Versions {
     val dagger = "2.37"
     val exhaustive = "0.1.1" // Must work with kotlin version
     val threetenabp = "1.3.1"
-    val timber = "4.7.1"
     val solarPositioning = "0.0.9"
     val sqldelight = "1.5.0"
     val leakcanary = "2.7"
