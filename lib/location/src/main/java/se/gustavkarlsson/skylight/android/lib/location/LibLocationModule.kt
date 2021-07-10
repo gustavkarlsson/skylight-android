@@ -8,6 +8,7 @@ import dagger.Provides
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import se.gustavkarlsson.skylight.android.core.AppScope
+import se.gustavkarlsson.skylight.android.core.Global
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.core.utils.seconds
@@ -20,7 +21,7 @@ object LibLocationModule {
     internal fun locationProvider(
         context: Context,
         permissionChecker: PermissionChecker,
-        scope: CoroutineScope,
+        @Global scope: CoroutineScope,
         @Io dispatcher: CoroutineDispatcher,
     ): LocationProvider {
         val client = LocationServices.getFusedLocationProviderClient(context)

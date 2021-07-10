@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.initializers
 
 import android.app.Application
-import kotlinx.coroutines.GlobalScope
 import se.gustavkarlsson.skylight.android.AppModule
 import se.gustavkarlsson.skylight.android.DaggerActualAppComponent
 import se.gustavkarlsson.skylight.android.core.AppComponent
@@ -70,6 +69,6 @@ internal fun Application.initDagger() {
     }
 
     component.moduleStarters().forEach {
-        it.start(GlobalScope)
+        it.start()
     }
 }

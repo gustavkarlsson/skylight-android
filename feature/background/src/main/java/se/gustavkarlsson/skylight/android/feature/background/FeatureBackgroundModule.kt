@@ -8,9 +8,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.multibindings.IntoSet
-import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import se.gustavkarlsson.skylight.android.core.AppScope
-import se.gustavkarlsson.skylight.android.core.Io
+import se.gustavkarlsson.skylight.android.core.Global
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
@@ -123,14 +123,14 @@ object FeatureBackgroundModule {
         scheduler: Scheduler,
         settings: Settings,
         notificationChannelCreator: NotificationChannelCreator,
-        @Io dispatcher: CoroutineDispatcher
+        @Global scope: CoroutineScope,
     ): ModuleStarter =
         BackgroundModuleStarter(
             context = context,
             scheduler = scheduler,
             settings = settings,
             notificationChannelCreator = notificationChannelCreator,
-            ioDispatcher = dispatcher
+            scope = scope,
         )
 
     @Provides

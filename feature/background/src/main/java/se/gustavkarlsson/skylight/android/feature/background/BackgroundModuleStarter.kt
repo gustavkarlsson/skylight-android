@@ -1,12 +1,12 @@
 package se.gustavkarlsson.skylight.android.feature.background
 
 import android.content.Context
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.feature.background.notifications.NotificationChannelCreator
@@ -19,10 +19,10 @@ internal class BackgroundModuleStarter(
     private val scheduler: Scheduler,
     private val settings: Settings,
     private val notificationChannelCreator: NotificationChannelCreator,
-    private val ioDispatcher: CoroutineDispatcher
+    private val scope: CoroutineScope,
 ) : ModuleStarter {
-    override fun start(scope: CoroutineScope) {
-        scope.launch(ioDispatcher) {
+    override fun start() {
+        runBlocking {
             deleteOldNotifiedPrefsFile()
         }
         scope.launch {

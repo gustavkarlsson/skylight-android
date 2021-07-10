@@ -7,11 +7,8 @@ import dagger.Provides
 import dagger.multibindings.IntoSet
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.core.AppScope
+import se.gustavkarlsson.skylight.android.core.Global
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
@@ -37,7 +34,7 @@ object LibPlacesModule {
     internal fun selectedPlaceRepository(
         context: Context,
         placesRepository: PlacesRepository,
-        scope: CoroutineScope,
+        @Global scope: CoroutineScope,
         @Io dispatcher: CoroutineDispatcher,
     ): SelectedPlaceRepository {
         val storage = SharedPrefsPlaceSelectionStorage(context, dispatcher)
@@ -51,15 +48,10 @@ object LibPlacesModule {
     @Provides
     @AppScope
     @IntoSet
-    fun moduleStarter(placesRepository: PlacesRepository, analytics: Analytics): ModuleStarter =
-        ModuleStarter { scope ->
-            scope.launch {
-                placesRepository.stream()
-                    .map { it.count() }
-                    .distinctUntilChanged()
-                    .collect { placesCount ->
-                        analytics.setProperty("places_count", placesCount)
-                    }
-            }
-        }
+    fun moduleStarter(
+        placesRepository: PlacesRepository,
+        analytics: Analytics,
+        @Global scope: CoroutineScope,
+    ): ModuleStarter =
+        PlacesModuleStarter(placesRepository, analytics, scope)
 }
