@@ -1,4 +1,3 @@
-import com.android.build.gradle.AppExtension
 import pl.allegro.tech.build.axion.release.domain.TagNameSerializationConfig
 
 plugins {
@@ -72,21 +71,19 @@ android {
         }
     }
 
-    if (this is AppExtension) { // TODO Remove the need for this. It's dumb
-        applicationVariants.all {
-            val isProductionRelease = buildType.name == "release" && flavorName == "production"
-            val manifestAName = buildString {
-                if (isProductionRelease) {
-                    append(APP_NAME)
-                } else {
-                    append(APP_INITIALS)
-                    append(' ')
-                    append(flavorName.take(3).capitalize())
-                    append(buildType.name.take(3).capitalize())
-                }
+    applicationVariants.all {
+        val isProductionRelease = buildType.name == "release" && flavorName == "production"
+        val manifestAName = buildString {
+            if (isProductionRelease) {
+                append(APP_NAME)
+            } else {
+                append(APP_INITIALS)
+                append(' ')
+                append(flavorName.take(3).capitalize())
+                append(buildType.name.take(3).capitalize())
             }
-            resValue("string", "app_name_manifest", manifestAName)
         }
+        resValue("string", "app_name_manifest", manifestAName)
     }
     packagingOptions {
         with(resources.excludes) {

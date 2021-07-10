@@ -36,7 +36,6 @@ internal sealed interface AppBarState {
 internal sealed interface ContentState {
     data class PlaceSelected(
         val chanceLevelText: TextRef,
-        val chanceSubtitleText: TextRef,
         val errorBannerData: BannerData?,
         val notificationsButtonState: ToggleButtonState,
         val favoriteButtonState: ToggleButtonState,

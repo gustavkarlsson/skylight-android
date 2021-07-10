@@ -110,7 +110,6 @@ private fun PreviewContent() {
             appBar = AppBarState.PlaceSelected(TextRef.string("Some Place")),
             content = ContentState.PlaceSelected(
                 chanceLevelText = TextRef.EMPTY,
-                chanceSubtitleText = TextRef.EMPTY,
                 errorBannerData = null,
                 notificationsButtonState = ToggleButtonState.Enabled(checked = false),
                 favoriteButtonState = ToggleButtonState.Enabled(checked = true),

@@ -71,7 +71,6 @@ private fun PreviewSelectedPlace() {
         modifier = Modifier.fillMaxSize(),
         state = ContentState.PlaceSelected(
             chanceLevelText = TextRef.string("What chance?"),
-            chanceSubtitleText = TextRef.string("subtitle"),
             errorBannerData = null,
             notificationsButtonState = ToggleButtonState.Enabled(checked = false),
             favoriteButtonState = ToggleButtonState.Enabled(checked = true),
@@ -141,7 +140,6 @@ internal fun SelectedPlace(
                 height = Dimension.fillToConstraints
             },
             title = textRef(textRef = state.chanceLevelText),
-            subtitle = textRef(textRef = state.chanceSubtitleText),
         )
 
         Cards(
@@ -289,7 +287,6 @@ private fun PlaceButtons(
 private fun CenterText(
     modifier: Modifier,
     title: String,
-    subtitle: String,
 ) {
     Box(modifier) {
         // TODO Add aurora?
@@ -301,11 +298,6 @@ private fun CenterText(
             Text(
                 text = title,
                 style = Typography.chanceTitle,
-            )
-            Text(
-                text = subtitle,
-                color = Colors.onSurfaceWeaker,
-                style = Typography.chanceSubtitle,
             )
         }
     }

@@ -117,7 +117,6 @@ internal class StateToViewStateMapper @Inject constructor(
     private fun createSelectedPlaceContent(state: State.Ready): ContentState.PlaceSelected {
         return ContentState.PlaceSelected(
             chanceLevelText = createChangeLevelText(state),
-            chanceSubtitleText = createChanceSubtitleText(),
             errorBannerData = createErrorBannerData(state),
             notificationsButtonState = createNotificationButtonState(state),
             favoriteButtonState = createFavoriteButtonState(state),
@@ -133,10 +132,6 @@ internal class StateToViewStateMapper @Inject constructor(
             ?: Chance.UNKNOWN
         val level = ChanceLevel.fromChance(chance)
         return chanceLevelFormatter.format(level)
-    }
-
-    private fun createChanceSubtitleText(): TextRef {
-        return TextRef.EMPTY // TODO what to do with this?
     }
 
     private fun createErrorBannerData(state: State.Ready): BannerData? {

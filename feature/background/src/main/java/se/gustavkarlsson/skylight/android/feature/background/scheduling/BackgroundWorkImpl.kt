@@ -52,7 +52,6 @@ internal class BackgroundWorkImpl(
     }
 
     private suspend fun getPlaceIdsToCheck(): List<PlaceIdWithTriggerLevel> {
-        // TODO Can we make it a StateFlow?
         val triggerLevels = settings.streamNotificationTriggerLevels()
             .first()
         return triggerLevels.asMap()
