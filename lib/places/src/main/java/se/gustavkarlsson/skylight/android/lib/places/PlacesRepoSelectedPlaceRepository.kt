@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.map
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
 import se.gustavkarlsson.conveyor.Store
-import se.gustavkarlsson.skylight.android.core.logging.logError
 
 internal class PlacesRepoSelectedPlaceRepository(
     placesRepo: PlacesRepository,
@@ -17,7 +16,7 @@ internal class PlacesRepoSelectedPlaceRepository(
     scope: CoroutineScope
 ) : SelectedPlaceRepository {
     private val store = Store(
-        initialState = State.Loading,
+        initialState = State.Loading(selectedId = null),
         startActions = listOf(StreamPlacesAction(placeSelectionStorage::loadId, placesRepo.stream()))
     )
 
@@ -25,17 +24,24 @@ internal class PlacesRepoSelectedPlaceRepository(
         store.start(scope)
     }
 
-    override fun set(place: Place) = store.issue(SelectionChangedAction(place, placeSelectionStorage::saveId))
+    override fun set(placeId: PlaceId) = store.issue(SelectionChangedAction(placeId, placeSelectionStorage::saveId))
 
     override fun stream(): Flow<Place> = store.state
         .filterIsInstance<State.Loaded>()
-        .map { it.selected }
+        .map { state ->
+            state.places
+                .firstOrNull { place ->
+                    place.id == state.selectedId
+                } ?: state.places.first()
+        }
         .distinctUntilChanged()
 }
 
 private sealed interface State {
-    object Loading : State
-    data class Loaded(val selected: Place, val places: List<Place>) : State
+    val selectedId: PlaceId?
+
+    data class Loading(override val selectedId: PlaceId?) : State
+    data class Loaded(override val selectedId: PlaceId, val places: List<Place>) : State
 }
 
 private class StreamPlacesAction(
@@ -47,52 +53,27 @@ private class StreamPlacesAction(
         placesStream
             .collect { newPlaces ->
                 stateFlow.update {
-                    createState(this, newPlaces, initialSelectedId)
+                    State.Loaded(
+                        selectedId = selectedId ?: initialSelectedId,
+                        places = newPlaces,
+                    )
                 }
             }
-    }
-
-    private fun createState(state: State, newPlaces: List<Place>, initialSelectedId: PlaceId): State {
-        val selected = when (state) {
-            is State.Loading -> {
-                val placeMatchingId = newPlaces.firstOrNull { place -> place.id == initialSelectedId }
-                placeMatchingId ?: newPlaces.first()
-            }
-            is State.Loaded -> {
-                if (state.selected.id in newPlaces.ids()) {
-                    state.selected
-                } else newPlaces.first()
-            }
-        }
-        return State.Loaded(selected = selected, places = newPlaces)
     }
 }
 
 private class SelectionChangedAction(
-    private val selectedPlace: Place,
+    private val placeId: PlaceId,
     private val saveId: (PlaceId) -> Unit,
 ) : Action<State> {
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
-        val newState = stateFlow.update {
+        if (placeId == stateFlow.value.selectedId) return
+        stateFlow.update {
             when (this) {
-                is State.Loading -> {
-                    logError { "Cannot select a place before loading places. Place: $selectedPlace" }
-                    this
-                }
-                is State.Loaded -> {
-                    if (selectedPlace.id in places.ids()) {
-                        copy(selected = selectedPlace)
-                    } else {
-                        logError { "Cannot select a place that is not loaded. Place: $selectedPlace, Loaded: $places" }
-                        this
-                    }
-                }
+                is State.Loading -> copy(selectedId = placeId)
+                is State.Loaded -> copy(selectedId = placeId)
             }
         }
-        if (newState is State.Loaded) {
-            saveId(selectedPlace.id)
-        }
+        saveId(placeId)
     }
 }
-
-private fun List<Place>.ids(): List<PlaceId> = map { it.id }
