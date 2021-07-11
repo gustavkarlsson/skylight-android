@@ -17,6 +17,7 @@ import se.gustavkarlsson.skylight.android.core.utils.throttle
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchThrottle
 import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
+import se.gustavkarlsson.skylight.android.lib.geocoder.GeocodingError
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocodingResult
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
@@ -84,20 +85,20 @@ internal class ContinuouslySearchAction @Inject constructor(
     private fun State.update(result: GeocodingResult): State {
         val search = search
         if (search !is Search.Active) return this
-        val newSearch = when (result) {
-            is GeocodingResult.Success -> {
-                val suggestions = result.suggestions
+
+        val newSearch = result.fold(
+            ifLeft = { error ->
+                val text = when (error) {
+                    GeocodingError.Io -> TextRef.stringRes(R.string.place_search_failed_io)
+                    GeocodingError.Server -> TextRef.stringRes(R.string.place_search_failed_server_response)
+                    GeocodingError.Unknown -> TextRef.stringRes(R.string.place_search_failed_generic)
+                }
+                search.update(search.suggestions, text)
+            },
+            ifRight = { suggestions ->
                 search.update(suggestions)
             }
-            is GeocodingResult.Failure -> {
-                val error = when (result) {
-                    GeocodingResult.Failure.Io -> TextRef.stringRes(R.string.place_search_failed_io)
-                    GeocodingResult.Failure.Server -> TextRef.stringRes(R.string.place_search_failed_server_response)
-                    GeocodingResult.Failure.Unknown -> TextRef.stringRes(R.string.place_search_failed_generic)
-                }
-                search.update(search.suggestions, error)
-            }
-        }
+        )
         return when (this) {
             is State.Loading -> copy(search = newSearch)
             is State.Ready -> copy(search = newSearch)
