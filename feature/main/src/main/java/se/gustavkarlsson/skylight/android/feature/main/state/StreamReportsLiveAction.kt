@@ -13,6 +13,7 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Loaded
 import se.gustavkarlsson.skylight.android.core.utils.throttle
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.StreamThrottle
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
@@ -61,7 +62,7 @@ internal class StreamReportsLiveAction @Inject constructor(
     private fun Flow<State>.locations(selectedPlace: Place): Flow<Loadable<LocationResult>> =
         when (selectedPlace) {
             Place.Current -> this.map { state -> state.currentLocation }
-            is Place.Saved -> flowOf(Loadable.loaded(LocationResult.success(selectedPlace.location)))
+            is Place.Saved -> flowOf(Loaded(LocationResult.success(selectedPlace.location)))
         }
 
     private suspend fun AtomicStateFlow<State>.tryUpdate(updateData: UpdateData) {

@@ -33,6 +33,8 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Loaded
+import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
@@ -140,7 +142,7 @@ internal class GmsLocationProvider(
                     streamWithPermission()
                 } else {
                     logInfo { "Permission denied" }
-                    flowOf(Loadable.loaded(LocationResult.errorMissingPermission()))
+                    flowOf(Loaded(LocationResult.errorMissingPermission()))
                 }
             }
 
@@ -151,9 +153,9 @@ internal class GmsLocationProvider(
         .distinctUntilChanged()
 
     private fun FusedLocationProviderClient.streamWithPermission(): Flow<Loadable<LocationResult>> = flow {
-        emit(Loadable.loading())
-        emit(Loadable.loaded(getCachedLocation()))
-        emitAll(streamWithRetry(locationRequest, streamRetryDuration).map { Loadable.loaded(it) })
+        emit(Loading)
+        emit(Loaded(getCachedLocation()))
+        emitAll(streamWithRetry(locationRequest, streamRetryDuration).map { Loaded(it) })
     }.distinctUntilChanged()
 }
 

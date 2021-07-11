@@ -9,6 +9,8 @@ import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Chance
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Loaded
+import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
@@ -245,7 +247,7 @@ internal class StateToViewStateMapper @Inject constructor(
 
     private fun createCurrentLocationDisplayName(state: State): String? {
         return optionalOf(state.currentLocationName)
-            .map { it as? Loadable.Loaded<ReverseGeocodingResult> }
+            .map { it as? Loaded<ReverseGeocodingResult> }
             .map { it.value as? ReverseGeocodingResult.Success }
             .map { it.name }
             .value
@@ -277,7 +279,7 @@ internal class StateToViewStateMapper @Inject constructor(
         formatter: Formatter<T>,
     ): FactorItem =
         when (this) {
-            Loadable.Loading -> FactorItem(
+            is Loading -> FactorItem(
                 title = TextRef.stringRes(texts.shortTitle),
                 valueText = TextRef.string("…"),
                 descriptionText = TextRef.stringRes(texts.description),
@@ -285,7 +287,7 @@ internal class StateToViewStateMapper @Inject constructor(
                 progress = null,
                 errorText = null,
             )
-            is Loadable.Loaded -> {
+            is Loaded -> {
                 when (val report = value) {
                     is Report.Success -> {
                         val valueText = formatter.format(report.value)

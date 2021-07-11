@@ -39,6 +39,7 @@ object Versions {
     val retrofitKotlinSerialization = "0.8.0"
     val kotlinxSerialization = "1.2.1"
 
+    val arrow = "0.13.2"
     val dagger = "2.37"
     val exhaustive = "0.1.1" // Must work with kotlin version
     val threetenabp = "1.3.1"

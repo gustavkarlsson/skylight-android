@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Loaded
+import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
@@ -36,10 +38,10 @@ internal class GeomagLocationProviderImpl(
         locations
             .map { loadableLocation ->
                 when (loadableLocation) {
-                    Loadable.Loading -> Loadable.Loading
-                    is Loadable.Loaded -> {
+                    is Loading -> Loading
+                    is Loaded -> {
                         val report = getSingleGeomagLocation(loadableLocation.value)
-                        Loadable.Loaded(report)
+                        Loaded(report)
                     }
                 }
             }

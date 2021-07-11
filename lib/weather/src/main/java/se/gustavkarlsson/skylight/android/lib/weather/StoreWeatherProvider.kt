@@ -15,6 +15,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Loaded
+import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
@@ -64,15 +66,15 @@ internal class StoreWeatherProvider(
         locations
             .flatMapLatest { loadable ->
                 when (loadable) {
-                    Loadable.Loading -> flowOf(Loadable.Loading)
-                    is Loadable.Loaded -> {
+                    is Loading -> flowOf(Loading)
+                    is Loaded -> {
                         loadable.value.map(
                             onSuccess = ::streamReports,
                             onMissingPermissionError = {
-                                flowOf(Loadable.loaded(Report.Error(Cause.LocationPermission, time.now())))
+                                flowOf(Loaded(Report.Error(Cause.LocationPermission, time.now())))
                             },
                             onUnknownError = {
-                                flowOf(Loadable.loaded(Report.Error(Cause.Location, time.now())))
+                                flowOf(Loaded(Report.Error(Cause.Location, time.now())))
                             }
                         )
                     }
@@ -85,10 +87,10 @@ internal class StoreWeatherProvider(
         store.stream(StoreRequest.cached(location.approximate(approximationMeters), refresh = false))
             .map { response ->
                 when (response) {
-                    is StoreResponse.Loading -> Loadable.loading()
-                    is StoreResponse.Data -> Loadable.loaded(Report.success(response.value, time.now()))
+                    is StoreResponse.Loading -> Loading
+                    is StoreResponse.Data -> Loaded(Report.success(response.value, time.now()))
                     is StoreResponse.Error.Exception ->
-                        Loadable.loaded(Report.error(getCause(response.error), time.now()))
+                        Loaded(Report.error(getCause(response.error), time.now()))
                     is StoreResponse.Error.Message, is StoreResponse.NoNewData ->
                         error("Unsupported response type: $response")
                 }

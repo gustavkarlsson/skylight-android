@@ -13,6 +13,8 @@ import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Loaded
+import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.Location
@@ -39,8 +41,8 @@ internal class KlausBrunnerDarknessProvider(
         locations
             .flatMapLatest { loadableLocation ->
                 when (loadableLocation) {
-                    Loadable.Loading -> flowOf(Loadable.Loading)
-                    is Loadable.Loaded -> pollLocation(loadableLocation.value)
+                    is Loading -> flowOf(Loading)
+                    is Loaded -> pollLocation(loadableLocation.value)
                 }
             }
             .distinctUntilChanged()
@@ -50,7 +52,7 @@ internal class KlausBrunnerDarknessProvider(
         flow {
             while (true) {
                 val darknessReport = getDarknessReport(location, time.now())
-                emit(Loadable.loaded(darknessReport))
+                emit(Loaded(darknessReport))
                 delay(pollingInterval.toMillis())
             }
         }

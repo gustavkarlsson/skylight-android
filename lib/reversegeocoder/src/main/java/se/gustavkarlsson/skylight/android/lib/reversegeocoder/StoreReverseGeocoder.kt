@@ -14,6 +14,8 @@ import org.threeten.bp.Duration
 import se.gustavkarlsson.koptional.Optional
 import se.gustavkarlsson.koptional.valueOr
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Loaded
+import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
 import se.gustavkarlsson.skylight.android.lib.location.Location
@@ -43,16 +45,16 @@ internal class StoreReverseGeocoder(
         return locations
             .flatMapLatest { loadableLocationResult ->
                 when (loadableLocationResult) {
-                    Loadable.Loading -> flowOf(Loadable.Loading)
-                    is Loadable.Loaded -> loadableLocationResult.value.map(
+                    is Loading -> flowOf(Loading)
+                    is Loaded -> loadableLocationResult.value.map(
                         onSuccess = { location ->
                             getNameWithRetry(location)
                         },
                         onMissingPermissionError = {
-                            flowOf(Loadable.Loaded(ReverseGeocodingResult.Failure.LocationPermission))
+                            flowOf(Loaded(ReverseGeocodingResult.Failure.LocationPermission))
                         },
                         onUnknownError = {
-                            flowOf(Loadable.Loaded(ReverseGeocodingResult.Failure.Location))
+                            flowOf(Loaded(ReverseGeocodingResult.Failure.Location))
                         },
                     )
                 }
@@ -62,10 +64,10 @@ internal class StoreReverseGeocoder(
     }
 
     private suspend fun getNameWithRetry(location: Location): Flow<Loadable<ReverseGeocodingResult>> = flow {
-        emit(Loadable.Loading)
+        emit(Loading)
         do {
             val result = getName(location)
-            emit(Loadable.loaded(result))
+            emit(Loaded(result))
             val shouldRetry = result is ReverseGeocodingResult.Failure.Io
             if (shouldRetry) {
                 delay(retryDelay.toMillis())
