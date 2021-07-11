@@ -74,7 +74,7 @@ internal class StoreReverseGeocoder(
             val result = getName(location)
             emit(Loaded(result))
             val shouldRetry = result.fold(
-                ifLeft = { it is ReverseGeocodingError.Io },
+                ifLeft = { it == ReverseGeocodingError.Io },
                 ifRight = { false }
             )
             if (shouldRetry) {
@@ -89,8 +89,8 @@ internal class StoreReverseGeocoder(
         }
         .mapLeft { throwable ->
             when (throwable) {
-                is IOException -> ReverseGeocodingError.Io(throwable)
-                else -> ReverseGeocodingError.Unknown(throwable)
+                is IOException -> ReverseGeocodingError.Io
+                else -> ReverseGeocodingError.Unknown
             }
         }
         .flatMap { name ->
