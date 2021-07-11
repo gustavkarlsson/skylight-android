@@ -24,7 +24,7 @@ object FeatureIntroModule {
     ): NavigationOverride = object : NavigationOverride {
         override val priority = 10
 
-        override fun override(oldBackstack: Backstack, targetBackstack: Backstack): List<IntroScreen>? =
+        override fun override(oldBackstack: Backstack, targetBackstack: Backstack): Backstack? =
             runBlocking(dispatcher) {
                 when {
                     targetBackstack.isNotEmpty() &&

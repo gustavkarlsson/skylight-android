@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.core.utils
 
+import arrow.core.NonEmptyList
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,7 +22,7 @@ import kotlinx.coroutines.withContext
 // TODO Replace these with built-in once available
 
 @OptIn(ExperimentalCoroutinesApi::class)
-fun <T> Flow<T>.windowed(size: Int): Flow<List<T>> {
+fun <T> Flow<T>.windowed(size: Int): Flow<NonEmptyList<T>> {
     require(size > 0) { "Requested size $size is non-positive." }
     return scan(emptyList<T>()) { oldItems, newItem ->
         oldItems.takeLast(size - 1) + newItem

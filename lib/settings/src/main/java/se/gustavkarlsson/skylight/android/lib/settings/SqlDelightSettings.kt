@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.settings
 
+import arrow.core.NonEmptyList
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import com.squareup.sqldelight.runtime.coroutines.mapToOneOrNull
@@ -55,7 +56,7 @@ internal class SqlDelightSettings(
     }
 
     private suspend fun Map<PlaceId, TriggerLevel>.removeZombies(
-        places: List<Place>,
+        places: NonEmptyList<Place>,
     ): Map<PlaceId, TriggerLevel> = withContext(dispatcher) {
         val livePlaceIds = places.map { place -> place.id }
         val deadPlaceIds = keys - livePlaceIds
