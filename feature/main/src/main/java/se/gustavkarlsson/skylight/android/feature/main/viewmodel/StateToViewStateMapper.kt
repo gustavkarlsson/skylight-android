@@ -346,8 +346,8 @@ private fun PlaceSuggestion.toDetailsString(): String {
 
 private fun format(cause: Cause): TextRef {
     val id = when (cause) {
-        Cause.LocationPermission -> R.string.cause_location_permission
-        Cause.Location -> R.string.cause_location
+        Cause.NoLocationPermission -> R.string.cause_location_permission
+        Cause.NoLocation -> R.string.cause_location
         Cause.Connectivity -> R.string.cause_connectivity
         Cause.ServerResponse -> R.string.cause_server_response
         Cause.Unknown -> R.string.cause_unknown

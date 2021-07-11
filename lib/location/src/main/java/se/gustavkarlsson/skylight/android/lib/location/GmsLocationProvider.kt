@@ -2,6 +2,8 @@ package se.gustavkarlsson.skylight.android.lib.location
 
 import android.annotation.SuppressLint
 import androidx.annotation.RequiresPermission
+import arrow.core.left
+import arrow.core.right
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationAvailability
 import com.google.android.gms.location.LocationCallback
@@ -67,10 +69,10 @@ internal class GmsLocationProvider(
             throw e
         } catch (e: SecurityException) {
             logWarn(e) { "Failed to get location" }
-            LocationResult.errorMissingPermission()
+            LocationError.NoPermission.left()
         } catch (e: Exception) {
             logError(e) { "Failed to get location" }
-            LocationResult.errorUnknown()
+            LocationError.Unknown.left()
         }
         logInfo { "Provided location: $result" }
         result
@@ -80,17 +82,17 @@ internal class GmsLocationProvider(
         logDebug { "Checking location permission" }
         if (!hasLocationPermission()) {
             logDebug { "Location permission denied" }
-            return LocationResult.errorMissingPermission()
+            return LocationError.NoPermission.left()
         }
         logDebug { "Trying to get current location" }
         @SuppressLint("MissingPermission")
         val location = client.awaitCurrentLocation(freshLocationRequestPriority)
         return if (location != null) {
             logDebug { "Successfully got current location" }
-            LocationResult.success(location.toLocation())
+            location.toLocation().right()
         } else {
             logWarn { "Failed to get current location" }
-            LocationResult.errorUnknown()
+            LocationError.Unknown.left()
         }
     }
 
@@ -98,7 +100,7 @@ internal class GmsLocationProvider(
         logDebug { "Checking location permission" }
         if (!hasLocationPermission()) {
             logDebug { "Location permission denied" }
-            return LocationResult.errorMissingPermission()
+            return LocationError.NoPermission.left()
         }
         logDebug { "Checking if last location is up to date" }
         @SuppressLint("MissingPermission")
@@ -115,7 +117,7 @@ internal class GmsLocationProvider(
             return getFreshLocation()
         }
         logDebug { "Successfully got last location" }
-        return LocationResult.success(lastLocation)
+        return lastLocation.right()
     }
 
     private fun hasLocationPermission(): Boolean {
@@ -142,7 +144,7 @@ internal class GmsLocationProvider(
                     streamWithPermission()
                 } else {
                     logInfo { "Permission denied" }
-                    flowOf(Loaded(LocationResult.errorMissingPermission()))
+                    flowOf(Loaded(LocationError.NoPermission.left()))
                 }
             }
 
@@ -198,7 +200,7 @@ private fun FusedLocationProviderClient.streamUntilError(
     locationRequest: LocationRequest,
 ): Flow<LocationResult> = callbackFlow {
     val callback = LatestLocationCallback { location ->
-        val result = LocationResult.success(location)
+        val result = location.right()
         logDebug { "Got location update: $result" }
         sendCatching(result)
     }
@@ -210,10 +212,10 @@ private fun FusedLocationProviderClient.streamUntilError(
         task.addOnFailureListener { e ->
             val result = if (e is SecurityException) {
                 logWarn(e) { "Failed to get location update" }
-                LocationResult.errorMissingPermission()
+                LocationError.NoPermission.left()
             } else {
                 logError(e) { "Failed to get location update" }
-                LocationResult.errorUnknown()
+                LocationError.Unknown.left()
             }
             sendCatching(result)
             close(e)
@@ -222,12 +224,12 @@ private fun FusedLocationProviderClient.streamUntilError(
         throw e
     } catch (e: SecurityException) {
         logWarn(e) { "Failed to request location updates" }
-        val result = LocationResult.errorMissingPermission()
+        val result = LocationError.NoPermission.left()
         sendCatching(result)
         close(e)
     } catch (e: Exception) {
         logError(e) { "Failed to request location updates" }
-        val result = LocationResult.errorUnknown()
+        val result = LocationError.Unknown.left()
         sendCatching(result)
         close(e)
     } finally {

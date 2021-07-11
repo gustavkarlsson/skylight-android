@@ -21,9 +21,9 @@ import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
 import se.gustavkarlsson.skylight.android.lib.location.Location
+import se.gustavkarlsson.skylight.android.lib.location.LocationError
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.location.approximate
-import se.gustavkarlsson.skylight.android.lib.location.map
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.io.IOException
 
@@ -37,8 +37,15 @@ internal class StoreWeatherProvider(
         getReport(locationResult, fresh)
 
     private suspend fun getReport(locationResult: LocationResult, fresh: Boolean): Report<Weather> {
-        val report = locationResult.map(
-            onSuccess = { location ->
+        val report = locationResult.fold(
+            ifLeft = { error ->
+                val cause = when (error) {
+                    LocationError.NoPermission -> Cause.NoLocationPermission
+                    LocationError.Unknown -> Cause.NoLocation
+                }
+                Report.Error(cause, time.now())
+            },
+            ifRight = { location ->
                 try {
                     val weather = if (fresh) {
                         store.fresh(location.approximate(approximationMeters))
@@ -51,9 +58,7 @@ internal class StoreWeatherProvider(
                 } catch (e: Exception) {
                     Report.Error(getCause(e), time.now())
                 }
-            },
-            onMissingPermissionError = { Report.Error(Cause.LocationPermission, time.now()) },
-            onUnknownError = { Report.Error(Cause.Location, time.now()) },
+            }
         )
         logInfo { "Provided weather: $report" }
         return report
@@ -64,21 +69,24 @@ internal class StoreWeatherProvider(
         locations: Flow<Loadable<LocationResult>>
     ): Flow<Loadable<Report<Weather>>> =
         locations
-            .flatMapLatest { loadable ->
-                when (loadable) {
-                    is Loading -> flowOf(Loading)
-                    is Loaded -> {
-                        loadable.value.map(
-                            onSuccess = ::streamReports,
-                            onMissingPermissionError = {
-                                flowOf(Loaded(Report.Error(Cause.LocationPermission, time.now())))
+            .flatMapLatest { loadableLocationResult ->
+                loadableLocationResult.fold(
+                    ifEmpty = { flowOf(Loading) },
+                    ifSome = { locationResult ->
+                        locationResult.fold(
+                            ifLeft = { error ->
+                                val cause = when (error) {
+                                    LocationError.NoPermission -> Cause.NoLocationPermission
+                                    LocationError.Unknown -> Cause.NoLocation
+                                }
+                                flowOf(Loaded(Report.Error(cause, time.now())))
                             },
-                            onUnknownError = {
-                                flowOf(Loaded(Report.Error(Cause.Location, time.now())))
+                            ifRight = { location ->
+                                streamReports(location)
                             }
                         )
                     }
-                }
+                )
             }
             .distinctUntilChanged()
             .onEach { logInfo { "Streamed weather: $it" } }

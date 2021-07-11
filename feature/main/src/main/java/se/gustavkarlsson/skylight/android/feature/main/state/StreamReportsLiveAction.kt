@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.state
 
+import arrow.core.right
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
@@ -62,7 +63,7 @@ internal class StreamReportsLiveAction @Inject constructor(
     private fun Flow<State>.locations(selectedPlace: Place): Flow<Loadable<LocationResult>> =
         when (selectedPlace) {
             Place.Current -> this.map { state -> state.currentLocation }
-            is Place.Saved -> flowOf(Loaded(LocationResult.success(selectedPlace.location)))
+            is Place.Saved -> flowOf(Loaded(selectedPlace.location.right()))
         }
 
     private suspend fun AtomicStateFlow<State>.tryUpdate(updateData: UpdateData) {

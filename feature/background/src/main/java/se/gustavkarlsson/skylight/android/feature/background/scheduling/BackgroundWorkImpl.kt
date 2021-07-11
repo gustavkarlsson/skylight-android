@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.background.scheduling
 
+import arrow.core.right
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
@@ -80,7 +81,7 @@ internal class BackgroundWorkImpl(
     private suspend fun getLocation(place: Place): LocationResult =
         when (place) {
             Place.Current -> locationProvider.get()
-            is Place.Saved -> LocationResult.Success(place.location)
+            is Place.Saved -> place.location.right()
         }
 }
 

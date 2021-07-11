@@ -5,6 +5,7 @@ import arrow.core.Option
 import arrow.core.flatMap
 import arrow.core.left
 import arrow.core.rightIfNotNull
+import arrow.core.some
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.get
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,9 +23,9 @@ import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
 import se.gustavkarlsson.skylight.android.lib.location.Location
+import se.gustavkarlsson.skylight.android.lib.location.LocationError
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.location.approximate
-import se.gustavkarlsson.skylight.android.lib.location.map
 import java.io.IOException
 
 internal class StoreReverseGeocoder(
@@ -34,35 +35,45 @@ internal class StoreReverseGeocoder(
 ) : ReverseGeocoder {
 
     override suspend fun get(locationResult: LocationResult): ReverseGeocodingResult {
-        val result = locationResult.map(
-            onSuccess = { location -> getName(location) },
-            onMissingPermissionError = { ReverseGeocodingError.NoLocationPermission.left() },
-            onUnknownError = { ReverseGeocodingError.NoLocation.left() },
-        )
+        val result = locationResult
+            .mapLeft { error ->
+                when (error) {
+                    LocationError.NoPermission -> ReverseGeocodingError.NoLocationPermission
+                    LocationError.Unknown -> ReverseGeocodingError.NoLocation
+                }
+            }
+            .flatMap { location ->
+                getName(location)
+            }
         logInfo { "Provided location name: $result" }
         return result
     }
 
+    // TODO Is there an operation that does this better?
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun stream(locations: Flow<Loadable<LocationResult>>): Flow<Loadable<ReverseGeocodingResult>> {
         return locations
             .flatMapLatest { loadableLocationResult ->
-                when (loadableLocationResult) {
-                    is Loading -> flowOf(Loading)
-                    is Loaded -> loadableLocationResult.value.map(
-                        onSuccess = { location ->
-                            getNameWithRetry(location)
-                        },
-                        onMissingPermissionError = {
-                            val error = ReverseGeocodingError.NoLocationPermission.left()
-                            flowOf(Loaded(error))
-                        },
-                        onUnknownError = {
-                            val error = ReverseGeocodingError.NoLocation.left()
-                            flowOf(Loaded(error))
-                        },
-                    )
-                }
+                loadableLocationResult.fold(
+                    ifEmpty = { flowOf(Loading) },
+                    ifSome = { result ->
+                        result.fold(
+                            ifLeft = { error ->
+                                when (error) {
+                                    LocationError.NoPermission -> {
+                                        flowOf(ReverseGeocodingError.NoLocationPermission.left().some())
+                                    }
+                                    LocationError.Unknown -> {
+                                        flowOf(ReverseGeocodingError.NoLocation.left().some())
+                                    }
+                                }
+                            },
+                            ifRight = { location ->
+                                getNameWithRetry(location)
+                            }
+                        )
+                    }
+                )
             }
             .distinctUntilChanged()
             .onEach { logInfo { "Streamed location name: $it" } }

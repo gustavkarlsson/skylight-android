@@ -18,8 +18,8 @@ import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.Location
+import se.gustavkarlsson.skylight.android.lib.location.LocationError
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
-import se.gustavkarlsson.skylight.android.lib.location.map
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.util.GregorianCalendar
 
@@ -58,16 +58,16 @@ internal class KlausBrunnerDarknessProvider(
         }
 
     private fun getDarknessReport(locationResult: LocationResult, timestamp: Instant): Report<Darkness> =
-        locationResult.map(
-            onSuccess = {
-                val sunZenithAngle = calculateSunZenithAngle(it, timestamp)
+        locationResult.fold(
+            ifLeft = { error ->
+                when (error) {
+                    LocationError.NoPermission -> Report.Error(Cause.NoLocationPermission, timestamp)
+                    LocationError.Unknown -> Report.Error(Cause.NoLocation, timestamp)
+                }
+            },
+            ifRight = { location ->
+                val sunZenithAngle = calculateSunZenithAngle(location, timestamp)
                 Report.Success(Darkness(sunZenithAngle), timestamp)
-            },
-            onMissingPermissionError = {
-                Report.Error(Cause.LocationPermission, timestamp)
-            },
-            onUnknownError = {
-                Report.Error(Cause.Location, timestamp)
             }
         )
 }

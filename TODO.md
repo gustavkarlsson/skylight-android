@@ -1,4 +1,5 @@
 ## ASAP
+* Fix flicker when toggling bookmark. Does it go into loading?
 
 ## Soon
 * Readme

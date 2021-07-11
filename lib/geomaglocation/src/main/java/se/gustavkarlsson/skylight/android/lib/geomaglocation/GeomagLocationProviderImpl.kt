@@ -10,8 +10,8 @@ import se.gustavkarlsson.skylight.android.core.entities.Loaded
 import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
+import se.gustavkarlsson.skylight.android.lib.location.LocationError
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
-import se.gustavkarlsson.skylight.android.lib.location.map
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.lang.Math.toDegrees
 import java.lang.Math.toRadians
@@ -49,19 +49,19 @@ internal class GeomagLocationProviderImpl(
             .onEach { logInfo { "Streamed geomag location: $it" } }
 
     private fun getSingleGeomagLocation(locationResult: LocationResult): Report<GeomagLocation> =
-        locationResult.map(
-            onSuccess = {
+        locationResult.fold(
+            ifLeft = { error ->
+                when (error) {
+                    LocationError.NoPermission -> Report.Error(Cause.NoLocationPermission, time.now())
+                    LocationError.Unknown -> Report.Error(Cause.NoLocation, time.now())
+                }
+            },
+            ifRight = { location ->
                 val geomagneticLatitude = calculateGeomagneticLatitude(
-                    it.latitude,
-                    it.longitude
+                    location.latitude,
+                    location.longitude
                 )
                 Report.Success(GeomagLocation(geomagneticLatitude), time.now())
-            },
-            onMissingPermissionError = {
-                Report.Error(Cause.LocationPermission, time.now())
-            },
-            onUnknownError = {
-                Report.Error(Cause.Location, time.now())
             }
         )
 
