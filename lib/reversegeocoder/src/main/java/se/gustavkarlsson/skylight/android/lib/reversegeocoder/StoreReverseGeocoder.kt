@@ -1,5 +1,9 @@
 package se.gustavkarlsson.skylight.android.lib.reversegeocoder
 
+import arrow.core.Either
+import arrow.core.flatMap
+import arrow.core.left
+import arrow.core.rightIfNotNull
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.get
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -12,7 +16,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
 import org.threeten.bp.Duration
 import se.gustavkarlsson.koptional.Optional
-import se.gustavkarlsson.koptional.valueOr
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Loaded
 import se.gustavkarlsson.skylight.android.core.entities.Loading
@@ -33,8 +36,8 @@ internal class StoreReverseGeocoder(
     override suspend fun get(locationResult: LocationResult): ReverseGeocodingResult {
         val result = locationResult.map(
             onSuccess = { location -> getName(location) },
-            onMissingPermissionError = { ReverseGeocodingResult.Failure.LocationPermission },
-            onUnknownError = { ReverseGeocodingResult.Failure.Location },
+            onMissingPermissionError = { ReverseGeocodingError.NoLocationPermission.left() },
+            onUnknownError = { ReverseGeocodingError.NoLocation.left() },
         )
         logInfo { "Provided location name: $result" }
         return result
@@ -51,10 +54,12 @@ internal class StoreReverseGeocoder(
                             getNameWithRetry(location)
                         },
                         onMissingPermissionError = {
-                            flowOf(Loaded(ReverseGeocodingResult.Failure.LocationPermission))
+                            val error = ReverseGeocodingError.NoLocationPermission.left()
+                            flowOf(Loaded(error))
                         },
                         onUnknownError = {
-                            flowOf(Loaded(ReverseGeocodingResult.Failure.Location))
+                            val error = ReverseGeocodingError.NoLocation.left()
+                            flowOf(Loaded(error))
                         },
                     )
                 }
@@ -68,18 +73,27 @@ internal class StoreReverseGeocoder(
         do {
             val result = getName(location)
             emit(Loaded(result))
-            val shouldRetry = result is ReverseGeocodingResult.Failure.Io
+            val shouldRetry = result.fold(
+                ifLeft = { it is ReverseGeocodingError.Io },
+                ifRight = { false }
+            )
             if (shouldRetry) {
                 delay(retryDelay.toMillis())
             }
         } while (shouldRetry)
     }
 
-    private suspend fun getName(location: Location): ReverseGeocodingResult = try {
-        store.get(location.approximate(approximationMeters))
-            .map { ReverseGeocodingResult.Success(it) }
-            .valueOr { ReverseGeocodingResult.Failure.NotFound }
-    } catch (e: IOException) {
-        ReverseGeocodingResult.Failure.Io(e)
-    }
+    private suspend fun getName(location: Location): ReverseGeocodingResult = Either
+        .catch {
+            store.get(location.approximate(approximationMeters)).value
+        }
+        .mapLeft { throwable ->
+            when (throwable) {
+                is IOException -> ReverseGeocodingError.Io(throwable)
+                else -> ReverseGeocodingError.Unknown(throwable)
+            }
+        }
+        .flatMap { name ->
+            name.rightIfNotNull { ReverseGeocodingError.NotFound }
+        }
 }

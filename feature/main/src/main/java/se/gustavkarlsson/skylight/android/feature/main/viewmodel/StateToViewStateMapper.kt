@@ -4,7 +4,6 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.filled.Warning
 import com.ioki.textref.TextRef
 import org.threeten.bp.Instant
-import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Chance
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
@@ -27,7 +26,6 @@ import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.Permission
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
-import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingResult
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
@@ -246,11 +244,11 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createCurrentLocationDisplayName(state: State): String? {
-        return optionalOf(state.currentLocationName)
-            .map { it as? Loaded<ReverseGeocodingResult> }
-            .map { it.value as? ReverseGeocodingResult.Success }
-            .map { it.name }
-            .value
+        return state.currentLocationName
+            .mapNotNull { result ->
+                result.orNull()
+            }
+            .orNull()
     }
 
     private fun createOnFavoritesClickedEvent(state: State.Ready): Event {
