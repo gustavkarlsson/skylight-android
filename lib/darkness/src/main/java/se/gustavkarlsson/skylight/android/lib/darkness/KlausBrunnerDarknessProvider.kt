@@ -40,10 +40,10 @@ internal class KlausBrunnerDarknessProvider(
     ): Flow<Loadable<Report<Darkness>>> =
         locations
             .flatMapLatest { loadableLocation ->
-                when (loadableLocation) {
-                    is Loading -> flowOf(Loading)
-                    is Loaded -> pollLocation(loadableLocation.value)
-                }
+                loadableLocation.fold(
+                    ifEmpty = { flowOf(Loading) },
+                    ifSome = { location -> pollLocation(location) }
+                )
             }
             .distinctUntilChanged()
             .onEach { logInfo { "Streamed darkness: $it" } }
@@ -60,10 +60,11 @@ internal class KlausBrunnerDarknessProvider(
     private fun getDarknessReport(locationResult: LocationResult, timestamp: Instant): Report<Darkness> =
         locationResult.fold(
             ifLeft = { error ->
-                when (error) {
-                    LocationError.NoPermission -> Report.Error(Cause.NoLocationPermission, timestamp)
-                    LocationError.Unknown -> Report.Error(Cause.NoLocation, timestamp)
+                val cause = when (error) {
+                    LocationError.NoPermission -> Cause.NoLocationPermission
+                    LocationError.Unknown -> Cause.NoLocation
                 }
+                Report.Error(cause, timestamp)
             },
             ifRight = { location ->
                 val sunZenithAngle = calculateSunZenithAngle(location, timestamp)

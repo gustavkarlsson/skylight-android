@@ -8,8 +8,6 @@ import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Chance
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
-import se.gustavkarlsson.skylight.android.core.entities.Loaded
-import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
@@ -275,9 +273,9 @@ internal class StateToViewStateMapper @Inject constructor(
         texts: ItemTexts,
         evaluator: ChanceEvaluator<T>,
         formatter: Formatter<T>,
-    ): FactorItem =
-        when (this) {
-            is Loading -> FactorItem(
+    ): FactorItem = fold(
+        ifEmpty = {
+            FactorItem(
                 title = TextRef.stringRes(texts.shortTitle),
                 valueText = TextRef.string("…"),
                 descriptionText = TextRef.stringRes(texts.description),
@@ -285,32 +283,33 @@ internal class StateToViewStateMapper @Inject constructor(
                 progress = null,
                 errorText = null,
             )
-            is Loaded -> {
-                when (val report = value) {
-                    is Report.Success -> {
-                        val valueText = formatter.format(report.value)
-                        val chance = evaluator.evaluate(report.value).value
-                        FactorItem(
-                            title = TextRef.stringRes(texts.shortTitle),
-                            valueText = valueText,
-                            descriptionText = TextRef.stringRes(texts.description),
-                            valueTextColor = { onSurface },
-                            progress = chance,
-                            errorText = null,
-                        )
-                    }
-                    is Report.Error -> FactorItem(
+        },
+        ifSome = { report ->
+            when (report) {
+                is Report.Success -> {
+                    val valueText = formatter.format(report.value)
+                    val chance = evaluator.evaluate(report.value).value
+                    FactorItem(
                         title = TextRef.stringRes(texts.shortTitle),
-                        valueText = TextRef.string("?"),
+                        valueText = valueText,
                         descriptionText = TextRef.stringRes(texts.description),
-                        valueTextColor = { error },
-                        progress = null,
-                        errorText = format(report.cause),
+                        valueTextColor = { onSurface },
+                        progress = chance,
+                        errorText = null,
                     )
-                    else -> error("Invalid report: $report")
                 }
+                is Report.Error -> FactorItem(
+                    title = TextRef.stringRes(texts.shortTitle),
+                    valueText = TextRef.string("?"),
+                    descriptionText = TextRef.stringRes(texts.description),
+                    valueTextColor = { error },
+                    progress = null,
+                    errorText = format(report.cause),
+                )
+                else -> error("Invalid report: $report")
             }
         }
+    )
 }
 
 private val searchResultOrderComparator: Comparator<SearchResult>

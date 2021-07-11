@@ -5,7 +5,6 @@ import arrow.core.Option
 import arrow.core.flatMap
 import arrow.core.left
 import arrow.core.rightIfNotNull
-import arrow.core.some
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.get
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -56,17 +55,14 @@ internal class StoreReverseGeocoder(
             .flatMapLatest { loadableLocationResult ->
                 loadableLocationResult.fold(
                     ifEmpty = { flowOf(Loading) },
-                    ifSome = { result ->
-                        result.fold(
-                            ifLeft = { error ->
-                                when (error) {
-                                    LocationError.NoPermission -> {
-                                        flowOf(ReverseGeocodingError.NoLocationPermission.left().some())
-                                    }
-                                    LocationError.Unknown -> {
-                                        flowOf(ReverseGeocodingError.NoLocation.left().some())
-                                    }
+                    ifSome = { locationResult ->
+                        locationResult.fold(
+                            ifLeft = { locationError ->
+                                val error = when (locationError) {
+                                    LocationError.NoPermission -> ReverseGeocodingError.NoLocationPermission
+                                    LocationError.Unknown -> ReverseGeocodingError.NoLocation
                                 }
+                                flowOf(Loaded(error.left()))
                             },
                             ifRight = { location ->
                                 getNameWithRetry(location)
@@ -85,7 +81,7 @@ internal class StoreReverseGeocoder(
             val result = getName(location)
             emit(Loaded(result))
             val shouldRetry = result.fold(
-                ifLeft = { it == ReverseGeocodingError.Io },
+                ifLeft = { error -> error == ReverseGeocodingError.Io },
                 ifRight = { false }
             )
             if (shouldRetry) {

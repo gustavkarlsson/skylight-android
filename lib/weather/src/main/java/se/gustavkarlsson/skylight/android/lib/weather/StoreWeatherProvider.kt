@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Loaded
@@ -34,16 +35,16 @@ internal class StoreWeatherProvider(
 ) : WeatherProvider {
 
     override suspend fun get(locationResult: LocationResult, fresh: Boolean): Report<Weather> =
-        getReport(locationResult, fresh)
+        getReport(locationResult, fresh, time.now())
 
-    private suspend fun getReport(locationResult: LocationResult, fresh: Boolean): Report<Weather> {
+    private suspend fun getReport(locationResult: LocationResult, fresh: Boolean, timestamp: Instant): Report<Weather> {
         val report = locationResult.fold(
             ifLeft = { error ->
                 val cause = when (error) {
                     LocationError.NoPermission -> Cause.NoLocationPermission
                     LocationError.Unknown -> Cause.NoLocation
                 }
-                Report.Error(cause, time.now())
+                Report.Error(cause, timestamp)
             },
             ifRight = { location ->
                 try {
@@ -52,11 +53,11 @@ internal class StoreWeatherProvider(
                     } else {
                         store.get(location.approximate(approximationMeters))
                     }
-                    Report.Success(weather, time.now())
+                    Report.Success(weather, timestamp)
                 } catch (e: CancellationException) {
                     throw e
                 } catch (e: Exception) {
-                    Report.Error(getCause(e), time.now())
+                    Report.Error(getCause(e), timestamp)
                 }
             }
         )

@@ -113,5 +113,5 @@ private fun GeocodingResponse.toGeocodingResultSuccess(): Either.Right<List<Plac
                 simpleName
             )
     }
-    return Either.Right(suggestions)
+    return suggestions.right()
 }
