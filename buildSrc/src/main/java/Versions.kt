@@ -48,7 +48,6 @@ object Versions {
     val leakcanary = "2.7"
     val mapboxServices = "5.8.0"
     val conveyor = "cc93e41adc" // TODO use release version
-    val koptional = "0.4.0"
     val textref = "1.3.1"
     val markwon = "4.6.2"
     val store = "4.0.2-KT15"
