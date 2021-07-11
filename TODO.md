@@ -1,9 +1,11 @@
 ## ASAP
+* Look into migrating to Arrow NonEmptyList
 * Fix flicker when toggling bookmark. Does it go into loading?
 
 ## Soon
+
 * Readme
-* Look into introducing some functional types instead of Loadable, XyzResult, Report, etc.
+* Look into introducing some functional type instead of Report
 * Dark mode splash screen for Android 12
 * Global notification level?
 * Notifications on/off without dialog (or only dialog when enabling). Needs a way to select current setting
