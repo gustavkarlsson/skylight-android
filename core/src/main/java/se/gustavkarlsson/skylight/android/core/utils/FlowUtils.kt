@@ -26,7 +26,11 @@ fun <T> Flow<T>.windowed(size: Int): Flow<NonEmptyList<T>> {
     require(size > 0) { "Requested size $size is non-positive." }
     return scan(emptyList<T>()) { oldItems, newItem ->
         oldItems.takeLast(size - 1) + newItem
-    }.filter { it.size == size }
+    }.filter { items ->
+        items.size == size
+    }.map { items ->
+        items.nonEmptyUnsafe()
+    }
 }
 
 fun <T> Flow<T>.throttle(waitMillis: Long): Flow<T> = flow {

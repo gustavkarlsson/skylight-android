@@ -68,7 +68,7 @@ internal class NotifierImpl(
 
     private fun createActivityPendingIntent(notification: Notification): PendingIntent {
         val intent = Intent(context, activityClass).apply {
-            setPlaceId(notification.placeToOpen.id)
+            setPlaceId(notification.placesWithChance.head.place.id)
         }
         return PendingIntent.getActivity(
             context,
