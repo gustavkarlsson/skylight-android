@@ -11,7 +11,7 @@ import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.skylight.android.core.AppComponent
 import se.gustavkarlsson.skylight.android.core.ViewModelScope
-import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.utils.millis
 import se.gustavkarlsson.skylight.android.feature.main.state.ContinuouslySearchAction
 import se.gustavkarlsson.skylight.android.feature.main.state.FinishLoadingAction
@@ -144,8 +144,8 @@ internal object MainViewModelModule {
         permissionChecker: PermissionChecker,
     ): State = State.Loading(
         permissions = permissionChecker.permissions.value,
-        currentLocation = Loadable.Loading,
-        currentLocationName = Loadable.Loading,
+        currentLocation = Loading,
+        currentLocationName = Loading,
         selectedPlace = null,
         selectedAuroraReport = LoadableAuroraReport.LOADING,
         search = Search.Inactive,

@@ -4,12 +4,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
+import se.gustavkarlsson.skylight.android.lib.location.LocationError
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
-import se.gustavkarlsson.skylight.android.lib.location.map
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.lang.Math.toDegrees
 import java.lang.Math.toRadians
@@ -25,7 +26,7 @@ internal class GeomagLocationProviderImpl(
 ) : GeomagLocationProvider {
 
     override fun get(locationResult: LocationResult): Report<GeomagLocation> {
-        val report = getSingleGeomagLocation(locationResult)
+        val report = getSingleGeomagLocation(locationResult, time.now())
         logInfo { "Provided geomag location: $report" }
         return report
     }
@@ -35,31 +36,28 @@ internal class GeomagLocationProviderImpl(
     ): Flow<Loadable<Report<GeomagLocation>>> =
         locations
             .map { loadableLocation ->
-                when (loadableLocation) {
-                    Loadable.Loading -> Loadable.Loading
-                    is Loadable.Loaded -> {
-                        val report = getSingleGeomagLocation(loadableLocation.value)
-                        Loadable.Loaded(report)
-                    }
+                loadableLocation.map { location ->
+                    getSingleGeomagLocation(location, time.now())
                 }
             }
             .distinctUntilChanged()
             .onEach { logInfo { "Streamed geomag location: $it" } }
 
-    private fun getSingleGeomagLocation(locationResult: LocationResult): Report<GeomagLocation> =
-        locationResult.map(
-            onSuccess = {
+    private fun getSingleGeomagLocation(locationResult: LocationResult, timestamp: Instant): Report<GeomagLocation> =
+        locationResult.fold(
+            ifLeft = { error ->
+                val cause = when (error) {
+                    LocationError.NoPermission -> Cause.NoLocationPermission
+                    LocationError.Unknown -> Cause.NoLocation
+                }
+                Report.Error(cause, timestamp)
+            },
+            ifRight = { location ->
                 val geomagneticLatitude = calculateGeomagneticLatitude(
-                    it.latitude,
-                    it.longitude
+                    location.latitude,
+                    location.longitude,
                 )
-                Report.Success(GeomagLocation(geomagneticLatitude), time.now())
-            },
-            onMissingPermissionError = {
-                Report.Error(Cause.LocationPermission, time.now())
-            },
-            onUnknownError = {
-                Report.Error(Cause.Location, time.now())
+                Report.Success(GeomagLocation(geomagneticLatitude), timestamp)
             }
         )
 

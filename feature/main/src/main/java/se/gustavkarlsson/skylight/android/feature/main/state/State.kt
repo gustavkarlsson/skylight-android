@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.state
 
+import arrow.core.NonEmptyList
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
@@ -26,7 +27,7 @@ internal sealed interface State {
         override val selectedPlace: Place?,
         override val selectedAuroraReport: LoadableAuroraReport,
         override val search: Search,
-        val places: List<Place>?,
+        val places: NonEmptyList<Place>?,
         val notificationTriggerLevels: NotificationTriggerLevels?,
     ) : State
 
@@ -37,7 +38,7 @@ internal sealed interface State {
         override val selectedPlace: Place,
         override val selectedAuroraReport: LoadableAuroraReport,
         override val search: Search,
-        val places: List<Place>,
+        val places: NonEmptyList<Place>,
         val notificationTriggerLevels: NotificationTriggerLevels,
     ) : State {
         val selectedPlaceTriggerLevel: TriggerLevel

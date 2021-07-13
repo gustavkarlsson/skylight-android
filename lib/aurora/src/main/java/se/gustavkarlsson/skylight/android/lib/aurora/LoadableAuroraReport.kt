@@ -1,6 +1,8 @@
 package se.gustavkarlsson.skylight.android.lib.aurora
 
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Loaded
+import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
@@ -15,10 +17,10 @@ data class LoadableAuroraReport(
 ) {
 
     fun toCompleteAuroraReport(): CompleteAuroraReport? =
-        if (kpIndex is Loadable.Loaded &&
-            geomagLocation is Loadable.Loaded &&
-            darkness is Loadable.Loaded &&
-            weather is Loadable.Loaded
+        if (kpIndex is Loaded &&
+            geomagLocation is Loaded &&
+            darkness is Loaded &&
+            weather is Loaded
         ) {
             CompleteAuroraReport(
                 kpIndex = kpIndex.value,
@@ -30,10 +32,10 @@ data class LoadableAuroraReport(
 
     companion object {
         val LOADING = LoadableAuroraReport(
-            Loadable.Loading,
-            Loadable.Loading,
-            Loadable.Loading,
-            Loadable.Loading,
+            Loading,
+            Loading,
+            Loading,
+            Loading,
         )
     }
 }

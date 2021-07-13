@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.places
 
+import arrow.core.NonEmptyList
 import com.squareup.sqldelight.Query
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
@@ -69,7 +70,7 @@ internal class SqlDelightPlacesRepository(
             .first()
     }
 
-    override fun stream(): Flow<List<Place>> =
+    override fun stream(): Flow<NonEmptyList<Place>> =
         queries.selectAll()
             .asFlow()
             .mapToList(dispatcher)
@@ -77,7 +78,7 @@ internal class SqlDelightPlacesRepository(
                 val places = dbPlaces.map { dbPlace ->
                     dbPlace.toPlace<Place>()
                 }
-                listOf(Place.Current) + places
+                NonEmptyList(Place.Current, places)
             }
             .distinctUntilChanged()
 }

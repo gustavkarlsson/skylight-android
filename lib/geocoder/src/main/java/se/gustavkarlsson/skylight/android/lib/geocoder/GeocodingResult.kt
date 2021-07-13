@@ -1,11 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.geocoder
 
-sealed interface GeocodingResult {
-    data class Success(val suggestions: List<PlaceSuggestion>) : GeocodingResult
+import arrow.core.Either
 
-    sealed interface Failure : GeocodingResult {
-        object Io : Failure
-        object Server : Failure
-        object Unknown : Failure
-    }
-}
+typealias GeocodingResult = Either<GeocodingError, List<PlaceSuggestion>>

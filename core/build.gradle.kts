@@ -14,7 +14,7 @@ android {
 dependencies {
     api("androidx.core:core-ktx:${Versions.androidCore}")
     api("com.jakewharton.threetenabp:threetenabp:${Versions.threetenabp}")
-    api("com.github.gustavkarlsson:koptional:${Versions.koptional}")
+    api("io.arrow-kt:arrow-core:${Versions.arrow}")
     api("com.google.dagger:dagger:${Versions.dagger}")
     api("com.github.ioki-mobility:TextRef:${Versions.textref}")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlinxCoroutines}")

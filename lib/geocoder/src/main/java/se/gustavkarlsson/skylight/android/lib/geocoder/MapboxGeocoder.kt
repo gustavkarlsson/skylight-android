@@ -1,5 +1,8 @@
 package se.gustavkarlsson.skylight.android.lib.geocoder
 
+import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
 import com.mapbox.api.geocoding.v5.MapboxGeocoding
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse
 import com.mapbox.geojson.Point
@@ -27,7 +30,7 @@ internal class MapboxGeocoder(
 
     override suspend fun geocode(locationName: String, biasAround: Location?): GeocodingResult {
         if (locationName.isBlank()) {
-            return GeocodingResult.Success(emptyList())
+            return emptyList<PlaceSuggestion>().right()
         }
         return withContext(dispatcher + CoroutineName("geocode")) {
             try {
@@ -37,7 +40,7 @@ internal class MapboxGeocoder(
                 throw e
             } catch (e: Exception) {
                 logError(e) { "Failed to create Geocoding request" }
-                GeocodingResult.Failure.Unknown
+                GeocodingError.Unknown.left()
             }
         }
     }
@@ -61,19 +64,19 @@ private class ContinuationCallback(
             val code = response.code()
             val error = response.errorBody()?.string() ?: "<empty>"
             logError { "Geocoding failed with HTTP $code: $error" }
-            continuation.resume(GeocodingResult.Failure.Server)
+            continuation.resume(GeocodingError.Server.left())
         }
     }
 
     override fun onFailure(call: Call<GeocodingResponse>, t: Throwable) {
-        val result = if (t is IOException) {
+        val error = if (t is IOException) {
             logWarn(t) { "Geocoding failed" }
-            GeocodingResult.Failure.Io
+            GeocodingError.Io
         } else {
             logError(t) { "Geocoding failed" }
-            GeocodingResult.Failure.Unknown
+            GeocodingError.Unknown
         }
-        continuation.resume(result)
+        continuation.resume(error.left())
     }
 }
 
@@ -96,7 +99,7 @@ private fun createGeocoding(
     }
     .build()
 
-private fun GeocodingResponse.toGeocodingResultSuccess(): GeocodingResult.Success {
+private fun GeocodingResponse.toGeocodingResultSuccess(): Either.Right<List<PlaceSuggestion>> {
     val suggestions = features().mapNotNull { feature ->
         val center = feature.center()
         val fullName = feature.placeName() ?: feature.text()
@@ -110,5 +113,5 @@ private fun GeocodingResponse.toGeocodingResultSuccess(): GeocodingResult.Succes
                 simpleName
             )
     }
-    return GeocodingResult.Success(suggestions)
+    return Either.Right(suggestions)
 }

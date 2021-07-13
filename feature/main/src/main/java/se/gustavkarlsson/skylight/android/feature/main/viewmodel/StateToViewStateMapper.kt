@@ -4,7 +4,6 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.filled.Warning
 import com.ioki.textref.TextRef
 import org.threeten.bp.Instant
-import se.gustavkarlsson.koptional.optionalOf
 import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Chance
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
@@ -25,7 +24,6 @@ import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.Permission
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
-import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingResult
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
@@ -244,11 +242,11 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createCurrentLocationDisplayName(state: State): String? {
-        return optionalOf(state.currentLocationName)
-            .map { it as? Loadable.Loaded<ReverseGeocodingResult> }
-            .map { it.value as? ReverseGeocodingResult.Success }
-            .map { it.name }
-            .value
+        return state.currentLocationName
+            .mapNotNull { result ->
+                result.orNull()
+            }
+            .orNull()
     }
 
     private fun createOnFavoritesClickedEvent(state: State.Ready): Event {
@@ -275,9 +273,9 @@ internal class StateToViewStateMapper @Inject constructor(
         texts: ItemTexts,
         evaluator: ChanceEvaluator<T>,
         formatter: Formatter<T>,
-    ): FactorItem =
-        when (this) {
-            Loadable.Loading -> FactorItem(
+    ): FactorItem = fold(
+        ifEmpty = {
+            FactorItem(
                 title = TextRef.stringRes(texts.shortTitle),
                 valueText = TextRef.string("…"),
                 descriptionText = TextRef.stringRes(texts.description),
@@ -285,32 +283,33 @@ internal class StateToViewStateMapper @Inject constructor(
                 progress = null,
                 errorText = null,
             )
-            is Loadable.Loaded -> {
-                when (val report = value) {
-                    is Report.Success -> {
-                        val valueText = formatter.format(report.value)
-                        val chance = evaluator.evaluate(report.value).value
-                        FactorItem(
-                            title = TextRef.stringRes(texts.shortTitle),
-                            valueText = valueText,
-                            descriptionText = TextRef.stringRes(texts.description),
-                            valueTextColor = { onSurface },
-                            progress = chance,
-                            errorText = null,
-                        )
-                    }
-                    is Report.Error -> FactorItem(
+        },
+        ifSome = { report ->
+            when (report) {
+                is Report.Success -> {
+                    val valueText = formatter.format(report.value)
+                    val chance = evaluator.evaluate(report.value).value
+                    FactorItem(
                         title = TextRef.stringRes(texts.shortTitle),
-                        valueText = TextRef.string("?"),
+                        valueText = valueText,
                         descriptionText = TextRef.stringRes(texts.description),
-                        valueTextColor = { error },
-                        progress = null,
-                        errorText = format(report.cause),
+                        valueTextColor = { onSurface },
+                        progress = chance,
+                        errorText = null,
                     )
-                    else -> error("Invalid report: $report")
                 }
+                is Report.Error -> FactorItem(
+                    title = TextRef.stringRes(texts.shortTitle),
+                    valueText = TextRef.string("?"),
+                    descriptionText = TextRef.stringRes(texts.description),
+                    valueTextColor = { error },
+                    progress = null,
+                    errorText = format(report.cause),
+                )
+                else -> error("Invalid report: $report")
             }
         }
+    )
 }
 
 private val searchResultOrderComparator: Comparator<SearchResult>
@@ -346,8 +345,8 @@ private fun PlaceSuggestion.toDetailsString(): String {
 
 private fun format(cause: Cause): TextRef {
     val id = when (cause) {
-        Cause.LocationPermission -> R.string.cause_location_permission
-        Cause.Location -> R.string.cause_location
+        Cause.NoLocationPermission -> R.string.cause_location_permission
+        Cause.NoLocation -> R.string.cause_location
         Cause.Connectivity -> R.string.cause_connectivity
         Cause.ServerResponse -> R.string.cause_server_response
         Cause.Unknown -> R.string.cause_unknown

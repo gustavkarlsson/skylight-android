@@ -13,11 +13,13 @@ import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Loaded
+import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.Location
+import se.gustavkarlsson.skylight.android.lib.location.LocationError
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
-import se.gustavkarlsson.skylight.android.lib.location.map
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.util.GregorianCalendar
 
@@ -38,10 +40,10 @@ internal class KlausBrunnerDarknessProvider(
     ): Flow<Loadable<Report<Darkness>>> =
         locations
             .flatMapLatest { loadableLocation ->
-                when (loadableLocation) {
-                    Loadable.Loading -> flowOf(Loadable.Loading)
-                    is Loadable.Loaded -> pollLocation(loadableLocation.value)
-                }
+                loadableLocation.fold(
+                    ifEmpty = { flowOf(Loading) },
+                    ifSome = { location -> pollLocation(location) }
+                )
             }
             .distinctUntilChanged()
             .onEach { logInfo { "Streamed darkness: $it" } }
@@ -50,22 +52,23 @@ internal class KlausBrunnerDarknessProvider(
         flow {
             while (true) {
                 val darknessReport = getDarknessReport(location, time.now())
-                emit(Loadable.loaded(darknessReport))
+                emit(Loaded(darknessReport))
                 delay(pollingInterval.toMillis())
             }
         }
 
     private fun getDarknessReport(locationResult: LocationResult, timestamp: Instant): Report<Darkness> =
-        locationResult.map(
-            onSuccess = {
-                val sunZenithAngle = calculateSunZenithAngle(it, timestamp)
+        locationResult.fold(
+            ifLeft = { error ->
+                val cause = when (error) {
+                    LocationError.NoPermission -> Cause.NoLocationPermission
+                    LocationError.Unknown -> Cause.NoLocation
+                }
+                Report.Error(cause, timestamp)
+            },
+            ifRight = { location ->
+                val sunZenithAngle = calculateSunZenithAngle(location, timestamp)
                 Report.Success(Darkness(sunZenithAngle), timestamp)
-            },
-            onMissingPermissionError = {
-                Report.Error(Cause.LocationPermission, timestamp)
-            },
-            onUnknownError = {
-                Report.Error(Cause.Location, timestamp)
             }
         )
 }

@@ -1,13 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.reversegeocoder
 
-import java.io.IOException
+import arrow.core.Either
 
-sealed interface ReverseGeocodingResult {
-    data class Success(val name: String) : ReverseGeocodingResult
-    sealed interface Failure : ReverseGeocodingResult {
-        object NotFound : Failure
-        object Location : Failure
-        object LocationPermission : Failure
-        data class Io(val exception: IOException) : Failure
-    }
-}
+typealias ReverseGeocodingResult = Either<ReverseGeocodingError, String>

@@ -1,5 +1,10 @@
 package se.gustavkarlsson.skylight.android.lib.reversegeocoder
 
+import arrow.core.Either
+import arrow.core.Option
+import arrow.core.flatMap
+import arrow.core.left
+import arrow.core.rightIfNotNull
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.get
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -11,73 +16,91 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
 import org.threeten.bp.Duration
-import se.gustavkarlsson.koptional.Optional
-import se.gustavkarlsson.koptional.valueOr
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Loaded
+import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
 import se.gustavkarlsson.skylight.android.lib.location.Location
+import se.gustavkarlsson.skylight.android.lib.location.LocationError
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.location.approximate
-import se.gustavkarlsson.skylight.android.lib.location.map
 import java.io.IOException
 
 internal class StoreReverseGeocoder(
-    private val store: Store<ApproximatedLocation, Optional<String>>,
+    private val store: Store<ApproximatedLocation, Option<String>>,
     private val retryDelay: Duration,
     private val approximationMeters: Double,
 ) : ReverseGeocoder {
 
     override suspend fun get(locationResult: LocationResult): ReverseGeocodingResult {
-        val result = locationResult.map(
-            onSuccess = { location -> getName(location) },
-            onMissingPermissionError = { ReverseGeocodingResult.Failure.LocationPermission },
-            onUnknownError = { ReverseGeocodingResult.Failure.Location },
-        )
+        val result = locationResult
+            .mapLeft { error ->
+                when (error) {
+                    LocationError.NoPermission -> ReverseGeocodingError.NoLocationPermission
+                    LocationError.Unknown -> ReverseGeocodingError.NoLocation
+                }
+            }
+            .flatMap { location ->
+                getName(location)
+            }
         logInfo { "Provided location name: $result" }
         return result
     }
 
+    // TODO Is there an operation that does this better?
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun stream(locations: Flow<Loadable<LocationResult>>): Flow<Loadable<ReverseGeocodingResult>> {
         return locations
             .flatMapLatest { loadableLocationResult ->
-                when (loadableLocationResult) {
-                    Loadable.Loading -> flowOf(Loadable.Loading)
-                    is Loadable.Loaded -> loadableLocationResult.value.map(
-                        onSuccess = { location ->
-                            getNameWithRetry(location)
-                        },
-                        onMissingPermissionError = {
-                            flowOf(Loadable.Loaded(ReverseGeocodingResult.Failure.LocationPermission))
-                        },
-                        onUnknownError = {
-                            flowOf(Loadable.Loaded(ReverseGeocodingResult.Failure.Location))
-                        },
-                    )
-                }
+                loadableLocationResult.fold(
+                    ifEmpty = { flowOf(Loading) },
+                    ifSome = { locationResult ->
+                        locationResult.fold(
+                            ifLeft = { locationError ->
+                                val error = when (locationError) {
+                                    LocationError.NoPermission -> ReverseGeocodingError.NoLocationPermission
+                                    LocationError.Unknown -> ReverseGeocodingError.NoLocation
+                                }
+                                flowOf(Loaded(error.left()))
+                            },
+                            ifRight = { location ->
+                                getNameWithRetry(location)
+                            }
+                        )
+                    }
+                )
             }
             .distinctUntilChanged()
             .onEach { logInfo { "Streamed location name: $it" } }
     }
 
     private suspend fun getNameWithRetry(location: Location): Flow<Loadable<ReverseGeocodingResult>> = flow {
-        emit(Loadable.Loading)
+        emit(Loading)
         do {
             val result = getName(location)
-            emit(Loadable.loaded(result))
-            val shouldRetry = result is ReverseGeocodingResult.Failure.Io
+            emit(Loaded(result))
+            val shouldRetry = result.fold(
+                ifLeft = { error -> error == ReverseGeocodingError.Io },
+                ifRight = { false }
+            )
             if (shouldRetry) {
                 delay(retryDelay.toMillis())
             }
         } while (shouldRetry)
     }
 
-    private suspend fun getName(location: Location): ReverseGeocodingResult = try {
-        store.get(location.approximate(approximationMeters))
-            .map { ReverseGeocodingResult.Success(it) }
-            .valueOr { ReverseGeocodingResult.Failure.NotFound }
-    } catch (e: IOException) {
-        ReverseGeocodingResult.Failure.Io(e)
-    }
+    private suspend fun getName(location: Location): ReverseGeocodingResult = Either
+        .catch {
+            store.get(location.approximate(approximationMeters)).orNull()
+        }
+        .mapLeft { throwable ->
+            when (throwable) {
+                is IOException -> ReverseGeocodingError.Io
+                else -> ReverseGeocodingError.Unknown
+            }
+        }
+        .flatMap { name ->
+            name.rightIfNotNull { ReverseGeocodingError.NotFound }
+        }
 }

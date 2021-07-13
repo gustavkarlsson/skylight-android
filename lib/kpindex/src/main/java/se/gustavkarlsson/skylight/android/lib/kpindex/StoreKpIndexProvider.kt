@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Loaded
+import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.time.Time
@@ -48,10 +50,10 @@ internal class StoreKpIndexProvider(
         store.stream(StoreRequest.cached(Unit, refresh = false))
             .map { response ->
                 when (response) {
-                    is StoreResponse.Loading -> Loadable.loading()
-                    is StoreResponse.Data -> Loadable.loaded(Report.success(response.value, time.now()))
+                    is StoreResponse.Loading -> Loading
+                    is StoreResponse.Data -> Loaded(Report.success(response.value, time.now()))
                     is StoreResponse.Error.Exception ->
-                        Loadable.loaded(Report.error(getCause(response.error), time.now()))
+                        Loaded(Report.error(getCause(response.error), time.now()))
                     is StoreResponse.Error.Message, is StoreResponse.NoNewData ->
                         error("Unsupported response type: $response")
                 }

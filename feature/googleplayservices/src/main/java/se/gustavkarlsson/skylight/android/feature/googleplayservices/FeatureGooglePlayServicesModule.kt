@@ -24,7 +24,7 @@ object FeatureGooglePlayServicesModule {
             override fun override(
                 oldBackstack: Backstack,
                 targetBackstack: Backstack,
-            ): List<GooglePlayServicesScreen>? {
+            ): Backstack? {
                 val googlePlayServicesChecker = GmsGooglePlayServicesChecker(context)
                 return when {
                     targetBackstack.any { it.name in REQUIRING_SCREEN_NAMES } &&

@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.core.entities
 
 enum class Cause {
-    LocationPermission,
-    Location,
+    NoLocationPermission,
+    NoLocation,
     ServerResponse,
     Connectivity,
     Unknown

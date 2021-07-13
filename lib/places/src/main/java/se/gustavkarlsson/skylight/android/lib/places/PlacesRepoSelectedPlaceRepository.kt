@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.places
 
+import arrow.core.NonEmptyList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -40,12 +41,12 @@ internal class PlacesRepoSelectedPlaceRepository(
 
 private sealed interface State {
     data class Loading(val suggestedId: PlaceId?) : State
-    data class Loaded(val selectedId: PlaceId, val places: List<Place>) : State
+    data class Loaded(val selectedId: PlaceId, val places: NonEmptyList<Place>) : State
 }
 
 private class StreamPlacesAction(
     private val loadId: suspend () -> PlaceId,
-    private val placesStream: Flow<List<Place>>,
+    private val placesStream: Flow<NonEmptyList<Place>>,
 ) : Action<State> {
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         val initialSelectedId = loadId()
@@ -65,7 +66,7 @@ private class StreamPlacesAction(
 private fun selectBestId(
     state: State,
     initialSelectedId: PlaceId,
-    newPlaces: List<Place>,
+    newPlaces: NonEmptyList<Place>,
 ): PlaceId {
     val selectedIdCandidates = listOfNotNull(
         when (state) {
@@ -113,4 +114,4 @@ private class SelectionChangedAction(
     }
 }
 
-private fun List<Place>.ids() = map { it.id }
+private fun NonEmptyList<Place>.ids() = map { it.id }

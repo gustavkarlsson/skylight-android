@@ -1,10 +1,12 @@
 package se.gustavkarlsson.skylight.android.feature.background.scheduling
 
+import arrow.core.right
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
+import se.gustavkarlsson.skylight.android.core.utils.nonEmpty
 import se.gustavkarlsson.skylight.android.feature.background.notifications.AppVisibilityEvaluator
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notification
 import se.gustavkarlsson.skylight.android.feature.background.notifications.NotificationEvaluator
@@ -48,11 +50,11 @@ internal class BackgroundWorkImpl(
                 }
             }
             .sortedByDescending { it.chanceLevel }
+            .nonEmpty()
 
-        return if (placesWithChance.isNotEmpty()) {
-            val targetPlace = placesWithChance.first().place
-            Notification(targetPlace, placesWithChance, time.now())
-        } else null
+        return placesWithChance.map { list ->
+            Notification(list, time.now())
+        }.orNull()
     }
 
     private suspend fun getPlaceIdsToCheck(): List<PlaceIdWithTriggerLevel> {
@@ -80,7 +82,7 @@ internal class BackgroundWorkImpl(
     private suspend fun getLocation(place: Place): LocationResult =
         when (place) {
             Place.Current -> locationProvider.get()
-            is Place.Saved -> LocationResult.Success(place.location)
+            is Place.Saved -> place.location.right()
         }
 }
 
