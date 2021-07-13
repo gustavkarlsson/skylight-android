@@ -16,6 +16,7 @@ import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Loaded
+import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.core.utils.throttle
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.StreamThrottle
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
@@ -70,12 +71,15 @@ internal class StreamReportsLiveAction @Inject constructor(
 
     private suspend fun AtomicStateFlow<State>.tryUpdate(updateData: UpdateData) {
         update {
-            if (updateData.place == selectedPlace) { // FIXME this fails often
+            if (updateData.place.savedLocation == selectedPlace?.savedLocation) {
                 when (this) {
                     is State.Loading -> copy(selectedAuroraReport = updateData.report)
                     is State.Ready -> copy(selectedAuroraReport = updateData.report)
                 }
-            } else this
+            } else {
+                logWarn { "Update data does not match selected place" }
+                this
+            }
         }
     }
 }

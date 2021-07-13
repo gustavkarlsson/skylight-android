@@ -1,6 +1,8 @@
 ## ASAP
 
 ## Soon
+* Don't send location streams to stream other data
+* Consider migrating place types in database to a boolean "bookmarked"
 * Readme
 * Look into introducing some functional type instead of Report
 * Dark mode splash screen for Android 12
