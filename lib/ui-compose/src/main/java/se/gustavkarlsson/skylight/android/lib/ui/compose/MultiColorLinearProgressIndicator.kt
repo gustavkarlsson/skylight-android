@@ -23,21 +23,12 @@ fun MultiColorLinearProgressIndicator(
     )
 }
 
-private const val MIDDLE_COLOR_CHANCE = 0.5
-
 @Composable
 private fun getColor(progress: Float?): Color {
     if (progress == null) {
         return Color.Transparent
     }
-
-    return if (progress < MIDDLE_COLOR_CHANCE) {
-        val blendAmount = (progress / MIDDLE_COLOR_CHANCE).toFloat()
-        blend(Colors.progressLowest, Colors.progressMedium, blendAmount)
-    } else {
-        val blendAmount = ((progress - MIDDLE_COLOR_CHANCE) / MIDDLE_COLOR_CHANCE).toFloat()
-        blend(Colors.progressMedium, Colors.progressHighest, blendAmount)
-    }
+    return blend(Colors.secondaryVariant, Colors.primaryVariant, progress)
 }
 
 private fun blend(first: Color, second: Color, ratio: Float): Color {

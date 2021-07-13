@@ -264,7 +264,7 @@ private fun PlaceButtons(
                 val icon = if (notificationsButtonState.checked) {
                     Icons.Notifications
                 } else Icons.NotificationsNone
-                Icon(icon, tint = Colors.bell, contentDescription = null)
+                Icon(icon, tint = Colors.primary, contentDescription = null)
             }
         }
         AnimatedVisibility(visible = favoriteButtonState.visible) {
@@ -275,7 +275,7 @@ private fun PlaceButtons(
                 val icon = if (favoriteButtonState.checked) {
                     Icons.Bookmark
                 } else Icons.BookmarkBorder
-                Icon(icon, tint = Colors.bookmark, contentDescription = null)
+                Icon(icon, tint = Colors.primary, contentDescription = null)
             }
         }
     }

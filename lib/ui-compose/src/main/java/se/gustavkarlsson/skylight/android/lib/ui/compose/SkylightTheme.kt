@@ -19,11 +19,6 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 data class SkylightColors(
     val material: Colors,
     val onSurfaceWeaker: Color,
-    val progressLowest: Color,
-    val progressMedium: Color,
-    val progressHighest: Color,
-    val bell: Color,
-    val bookmark: Color,
 ) {
     val primary: Color get() = material.primary
     val primaryVariant: Color get() = material.primaryVariant
@@ -51,11 +46,6 @@ private val darkPalette = SkylightColors(
         onSecondary = Color.White,
     ),
     onSurfaceWeaker = Color(0x8AFFFFFF),
-    progressLowest = Color(0xFFF44336),
-    progressMedium = Color(0xFFF0F436),
-    progressHighest = Color(0xFF34B4E2),
-    bell = Color(0xFFFFEE58),
-    bookmark = Color(0xFF008000),
 )
 
 private val lightPalette = SkylightColors(
@@ -68,11 +58,6 @@ private val lightPalette = SkylightColors(
         onSecondary = Color.White,
     ),
     onSurfaceWeaker = Color(0x8A000000),
-    progressLowest = Color(0xFFF44336),
-    progressMedium = Color(0xFFF0F436),
-    progressHighest = Color(0xFF34B4E2),
-    bell = Color(0xFFFFEE58),
-    bookmark = Color(0xFF008000),
 )
 
 private val LocalColors = staticCompositionLocalOf { lightPalette }
