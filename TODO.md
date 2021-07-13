@@ -1,4 +1,5 @@
 ## ASAP
+* Sometimes, switching places will not load the new report
 
 ## Soon
 * Readme
