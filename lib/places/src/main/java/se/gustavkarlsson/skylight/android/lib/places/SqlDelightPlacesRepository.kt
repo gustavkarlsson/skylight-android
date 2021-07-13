@@ -24,23 +24,17 @@ internal class SqlDelightPlacesRepository(
     private val maxRecentCount: Int,
 ) : PlacesRepository {
 
-    override suspend fun addBookmark(placeId: PlaceId.Saved): Place.Saved = withContext(dispatcher) {
-        val now = time.now()
-        queries.updateBookmarked(1, now.toEpochMilli(), placeId.value)
-        queries.selectById(placeId.value)
-            .exactlyOne()
-            .toPlace()
-    }
-
-    override suspend fun removeBookmark(placeId: PlaceId.Saved): Place.Saved = withContext(dispatcher) {
-        val now = time.now()
-        queries.updateBookmarked(0, now.toEpochMilli(), placeId.value)
-        val updated = queries.selectById(placeId.value)
-            .exactlyOne()
-            .toPlace()
-        removeOldRecents()
-        updated
-    }
+    override suspend fun setBookmarked(placeId: PlaceId.Saved, bookmarked: Boolean): Place.Saved =
+        withContext(dispatcher) {
+            val now = time.now()
+            val bookmarkedLong = if (bookmarked) {
+                1L
+            } else 0L
+            queries.updateBookmarked(bookmarkedLong, now.toEpochMilli(), placeId.value)
+            queries.selectById(placeId.value)
+                .exactlyOne()
+                .toPlace()
+        }
 
     override suspend fun insert(name: String, location: Location): Place.Saved = withContext(dispatcher) {
         val now = time.now()

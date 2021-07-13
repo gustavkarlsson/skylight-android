@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
+import app.cash.exhaustive.Exhaustive
 import kotlinx.coroutines.channels.SendChannel
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.issue
@@ -25,17 +26,17 @@ internal class EventHandler @Inject constructor(
 ) {
 
     suspend fun onEvent(event: Event) {
-        @Suppress("UNUSED_VARIABLE")
-        val dummy: Any = when (event) {
-            is Event.AddBookmark -> placesRepository.addBookmark(event.place.id)
+        @Exhaustive
+        when (event) {
+            is Event.AddBookmark -> placesRepository.setBookmarked(event.place.id, true)
             is Event.RemoveBookmark -> {
                 settings.setNotificationTriggerLevel(event.place.id, TriggerLevel.NEVER)
-                placesRepository.removeBookmark(event.place.id)
+                placesRepository.setBookmarked(event.place.id, false)
             }
             is Event.SetNotificationLevel -> {
                 if (event.place is Place.Saved && !event.place.bookmarked) {
                     if (event.level != TriggerLevel.NEVER) {
-                        placesRepository.addBookmark(event.place.id)
+                        placesRepository.setBookmarked(event.place.id, true)
                     }
                 }
                 settings.setNotificationTriggerLevel(event.place.id, event.level)
