@@ -6,6 +6,7 @@ import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
+import se.gustavkarlsson.skylight.android.lib.places.savedLocation
 import javax.inject.Inject
 
 internal class StreamSelectedPlaceAction @Inject constructor(
@@ -16,15 +17,17 @@ internal class StreamSelectedPlaceAction @Inject constructor(
             .distinctUntilChanged()
             .collectLatest { selectedPlace ->
                 stateFlow.update {
-                    val loading = LoadableAuroraReport.LOADING // TODO Get from cache?
+                    val newReport = if (selectedPlace.savedLocation == this.selectedPlace?.savedLocation) {
+                        selectedAuroraReport
+                    } else LoadableAuroraReport.LOADING // TODO Get from cache?
                     when (this) {
                         is State.Loading -> copy(
                             selectedPlace = selectedPlace,
-                            selectedAuroraReport = loading,
+                            selectedAuroraReport = newReport,
                         )
                         is State.Ready -> copy(
                             selectedPlace = selectedPlace,
-                            selectedAuroraReport = loading,
+                            selectedAuroraReport = newReport,
                         )
                     }
                 }

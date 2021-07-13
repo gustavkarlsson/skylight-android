@@ -32,6 +32,12 @@ sealed interface Place {
     }
 }
 
+val Place.savedLocation: Location?
+    get() = when (this) {
+        Place.Current -> null
+        is Place.Saved -> location
+    }
+
 sealed interface PlaceId {
     val value: Long
 

@@ -5,6 +5,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -21,6 +22,7 @@ import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.places.Place
+import se.gustavkarlsson.skylight.android.lib.places.savedLocation
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -58,7 +60,7 @@ internal class StreamReportsLiveAction @Inject constructor(
 
     private fun Flow<State>.selectedPlaces(): Flow<Place> =
         mapNotNull { state -> state.selectedPlace }
-            .distinctUntilChanged()
+            .distinctUntilChangedBy { place -> place.savedLocation }
 
     private fun Flow<State>.locations(selectedPlace: Place): Flow<Loadable<LocationResult>> =
         when (selectedPlace) {
