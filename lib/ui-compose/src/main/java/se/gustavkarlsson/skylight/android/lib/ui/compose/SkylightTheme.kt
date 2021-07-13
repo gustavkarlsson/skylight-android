@@ -14,12 +14,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 data class SkylightColors(
@@ -83,12 +77,6 @@ private val lightPalette = SkylightColors(
 
 private val LocalColors = staticCompositionLocalOf { lightPalette }
 
-private val openSansCondensed = FontFamily(
-    Font(R.font.open_sans_condensed_light, weight = FontWeight.Light),
-    Font(R.font.open_sans_condensed_bold, weight = FontWeight.Bold),
-    Font(R.font.open_sans_condensed_light_italic, weight = FontWeight.Light, style = FontStyle.Italic),
-)
-
 private val skylightTypography = Typography().run {
     val newH6 = h6.copy(fontSize = h6.fontSize * 0.9)
     copy(h6 = newH6)
@@ -126,11 +114,5 @@ val Shapes: Shapes
 val Typography: Typography
     @Composable
     get() = MaterialTheme.typography
-
-val Typography.chanceTitle: TextStyle
-    get() = h3.copy(fontFamily = openSansCondensed)
-
-val Typography.chanceSubtitle: TextStyle
-    get() = subtitle1.copy(fontFamily = openSansCondensed, fontSize = 20.sp)
 
 val Icons: Icons.Filled = Icons.Default

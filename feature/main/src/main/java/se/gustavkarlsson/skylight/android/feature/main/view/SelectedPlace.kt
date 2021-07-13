@@ -59,7 +59,6 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.MultiColorLinearProgressIndicator
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
-import se.gustavkarlsson.skylight.android.lib.ui.compose.chanceTitle
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 import java.util.Locale
 
@@ -296,7 +295,7 @@ private fun CenterText(
         ) {
             Text(
                 text = title,
-                style = Typography.chanceTitle,
+                style = Typography.h4,
             )
         }
     }
