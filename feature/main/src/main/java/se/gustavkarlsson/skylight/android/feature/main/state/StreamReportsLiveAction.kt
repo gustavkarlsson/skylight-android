@@ -70,7 +70,7 @@ internal class StreamReportsLiveAction @Inject constructor(
 
     private suspend fun AtomicStateFlow<State>.tryUpdate(updateData: UpdateData) {
         update {
-            if (updateData.place == selectedPlace) {
+            if (updateData.place == selectedPlace) { // FIXME this fails often
                 when (this) {
                     is State.Loading -> copy(selectedAuroraReport = updateData.report)
                     is State.Ready -> copy(selectedAuroraReport = updateData.report)
