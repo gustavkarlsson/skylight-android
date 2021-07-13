@@ -4,7 +4,8 @@ CREATE TABLE DbPlace (
   latitude REAL NOT NULL,
   longitude REAL NOT NULL,
   type TEXT NOT NULL DEFAULT "favorite",
-  lastChangedMillis INTEGER NOT NULL DEFAULT 0
+  lastChangedMillis INTEGER NOT NULL DEFAULT 0,
+  bookmarked INTEGER NOT NULL DEFAULT 0
 );
 
 selectLastInserted:
@@ -16,13 +17,13 @@ SELECT * FROM DbPlace WHERE id = ? LIMIT 1;
 selectAll:
 SELECT * FROM DbPlace;
 
-insertRecent:
-INSERT INTO DbPlace (name, latitude, longitude, type, lastChangedMillis)
-  VALUES (?, ?, ?, "recent", ?);
+insert:
+INSERT INTO DbPlace (name, latitude, longitude, type, lastChangedMillis, bookmarked)
+  VALUES (?, ?, ?, "unused", ?, 0);
 
-updateType:
+updateBookmarked:
 UPDATE DbPlace
-  SET type = ?, lastChangedMillis = ?
+  SET bookmarked = ?, lastChangedMillis = ?
   WHERE id = ?;
 
 updateLastChanged:
@@ -32,12 +33,12 @@ UPDATE DbPlace
 
 keepMostRecent:
 DELETE FROM DbPlace
-  WHERE type = "recent" AND id NOT IN (
+  WHERE bookmarked = 0 AND id NOT IN (
     SELECT id
     FROM (
       SELECT id
         FROM DbPlace
-        WHERE type = "recent"
+        WHERE bookmarked = 0
         ORDER BY lastChangedMillis DESC
         LIMIT ?
     ) dummy

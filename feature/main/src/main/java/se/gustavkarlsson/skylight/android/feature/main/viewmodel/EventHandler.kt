@@ -59,7 +59,7 @@ internal class EventHandler @Inject constructor(
                 placesRepository.updateLastChanged(result.place.id)
             }
             is SearchResult.New -> {
-                placesRepository.addRecent(result.name, result.location)
+                placesRepository.insert(result.name, result.location)
             }
         }
         selectedPlaceRepository.set(place.id)

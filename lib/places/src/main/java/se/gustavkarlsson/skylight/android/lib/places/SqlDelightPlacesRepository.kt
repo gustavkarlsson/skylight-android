@@ -26,7 +26,7 @@ internal class SqlDelightPlacesRepository(
 
     override suspend fun addBookmark(placeId: PlaceId.Saved): Place.Saved = withContext(dispatcher) {
         val now = time.now()
-        queries.updateType(TYPE_FAVORITE, now.toEpochMilli(), placeId.value)
+        queries.updateBookmarked(1, now.toEpochMilli(), placeId.value)
         queries.selectById(placeId.value)
             .exactlyOne()
             .toPlace()
@@ -34,7 +34,7 @@ internal class SqlDelightPlacesRepository(
 
     override suspend fun removeBookmark(placeId: PlaceId.Saved): Place.Saved = withContext(dispatcher) {
         val now = time.now()
-        queries.updateType(TYPE_RECENT, now.toEpochMilli(), placeId.value)
+        queries.updateBookmarked(0, now.toEpochMilli(), placeId.value)
         val updated = queries.selectById(placeId.value)
             .exactlyOne()
             .toPlace()
@@ -42,9 +42,9 @@ internal class SqlDelightPlacesRepository(
         updated
     }
 
-    override suspend fun addRecent(name: String, location: Location): Place.Saved = withContext(dispatcher) {
+    override suspend fun insert(name: String, location: Location): Place.Saved = withContext(dispatcher) {
         val now = time.now()
-        queries.insertRecent(name, location.latitude, location.longitude, now.toEpochMilli())
+        queries.insert(name, location.latitude, location.longitude, now.toEpochMilli())
         val inserted = queries.selectLastInserted()
             .exactlyOne()
             .toPlace()
@@ -87,13 +87,10 @@ private fun DbPlace.toPlace(): Place.Saved {
     val placeId = PlaceId.Saved(id)
     val location = Location(latitude, longitude)
     val lastChanged = Instant.ofEpochMilli(lastChangedMillis)
-    val bookmarked = when (type) {
-        TYPE_FAVORITE -> true
-        TYPE_RECENT -> false
-        else -> error("Unexpected location type: $type")
+    val bookmarked = when (bookmarked) {
+        1L -> true
+        0L -> false
+        else -> error("Unexpected bookmarked value: $bookmarked")
     }
     return Place.Saved(placeId, name, location, bookmarked, lastChanged)
 }
-
-private const val TYPE_FAVORITE = "favorite"
-private const val TYPE_RECENT = "recent"

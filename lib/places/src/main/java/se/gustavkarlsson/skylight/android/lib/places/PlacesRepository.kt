@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.lib.location.Location
 interface PlacesRepository {
     suspend fun addBookmark(placeId: PlaceId.Saved): Place.Saved
     suspend fun removeBookmark(placeId: PlaceId.Saved): Place.Saved
-    suspend fun addRecent(name: String, location: Location): Place.Saved
+    suspend fun insert(name: String, location: Location): Place.Saved
     suspend fun updateLastChanged(placeId: PlaceId.Saved): Place.Saved
     fun stream(): Flow<NonEmptyList<Place>>
 }
