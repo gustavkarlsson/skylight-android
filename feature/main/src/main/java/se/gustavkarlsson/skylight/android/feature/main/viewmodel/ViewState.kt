@@ -38,9 +38,9 @@ internal sealed interface ContentState {
         val chanceLevelText: TextRef,
         val errorBannerData: BannerData?,
         val notificationsButtonState: ToggleButtonState,
-        val favoriteButtonState: ToggleButtonState,
+        val bookmarkButtonState: ToggleButtonState,
         val factorItems: List<FactorItem>,
-        val onFavoriteClickedEvent: Event,
+        val onBookmarkClickedEvent: Event,
         val notificationLevelItems: List<NotificationLevelItem>,
     ) : ContentState
 
@@ -117,10 +117,9 @@ internal sealed interface SearchResult {
             override val title: TextRef get() = TextRef.string(place.name)
             override val subtitle: Nothing? = null
             override val icon: ImageVector
-                get() = when (place) {
-                    is Place.Saved.Favorite -> Icons.Bookmark
-                    is Place.Saved.Recent -> Icons.History
-                }
+                get() = if (place.bookmarked) {
+                    Icons.Bookmark
+                } else Icons.History
             override val trailingIcon: ImageVector?
                 get() = if (notifications) {
                     Icons.Notifications
@@ -150,8 +149,8 @@ internal data class NotificationLevelItem(
 )
 
 internal sealed interface Event {
-    data class AddFavorite(val place: Place.Saved.Recent) : Event
-    data class RemoveFavorite(val place: Place.Saved.Favorite) : Event
+    data class AddBookmark(val place: Place.Saved) : Event
+    data class RemoveBookmark(val place: Place.Saved) : Event
     data class SetNotificationLevel(val place: Place, val level: TriggerLevel) : Event
     data class SearchChanged(val state: SearchFieldState) : Event
     data class SelectSearchResult(val result: SearchResult) : Event

@@ -1,0 +1,3 @@
+ALTER TABLE DbPlace ADD COLUMN bookmarked INTEGER NOT NULL DEFAULT 0;
+UPDATE DbPlace SET bookmarked = 1 WHERE type = "favorite";
+UPDATE DbPlace SET type = "unused";

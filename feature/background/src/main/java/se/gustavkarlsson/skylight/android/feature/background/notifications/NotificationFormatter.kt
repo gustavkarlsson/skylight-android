@@ -32,8 +32,9 @@ private val comparator =
         .thenByDescending { it.chanceLevel }
 
 private fun placeTypeComparable(placeWithChance: PlaceWithChance) =
-    when (placeWithChance.place) {
-        Place.Current -> -1
-        is Place.Saved.Favorite -> 1
-        is Place.Saved.Recent -> 2
+    when (val place = placeWithChance.place) {
+        Place.Current -> 1
+        is Place.Saved -> if (place.bookmarked) {
+            2
+        } else 3
     }

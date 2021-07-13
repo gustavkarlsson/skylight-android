@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
+import app.cash.exhaustive.Exhaustive
 import kotlinx.coroutines.channels.SendChannel
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.issue
@@ -25,20 +26,17 @@ internal class EventHandler @Inject constructor(
 ) {
 
     suspend fun onEvent(event: Event) {
-        @Suppress("UNUSED_VARIABLE")
-        val dummy: Any = when (event) {
-            is Event.AddFavorite -> placesRepository.setFavorite(event.place.id)
-            is Event.RemoveFavorite -> {
+        @Exhaustive
+        when (event) {
+            is Event.AddBookmark -> placesRepository.setBookmarked(event.place.id, true)
+            is Event.RemoveBookmark -> {
                 settings.setNotificationTriggerLevel(event.place.id, TriggerLevel.NEVER)
-                placesRepository.setRecent(event.place.id)
+                placesRepository.setBookmarked(event.place.id, false)
             }
             is Event.SetNotificationLevel -> {
-                when (event.place) {
-                    Place.Current, is Place.Saved.Favorite -> Unit
-                    is Place.Saved.Recent -> {
-                        if (event.level != TriggerLevel.NEVER) {
-                            placesRepository.setFavorite(event.place.id)
-                        }
+                if (event.place is Place.Saved && !event.place.bookmarked) {
+                    if (event.level != TriggerLevel.NEVER) {
+                        placesRepository.setBookmarked(event.place.id, true)
                     }
                 }
                 settings.setNotificationTriggerLevel(event.place.id, event.level)
@@ -62,7 +60,7 @@ internal class EventHandler @Inject constructor(
                 placesRepository.updateLastChanged(result.place.id)
             }
             is SearchResult.New -> {
-                placesRepository.addRecent(result.name, result.location)
+                placesRepository.insert(result.name, result.location)
             }
         }
         selectedPlaceRepository.set(place.id)

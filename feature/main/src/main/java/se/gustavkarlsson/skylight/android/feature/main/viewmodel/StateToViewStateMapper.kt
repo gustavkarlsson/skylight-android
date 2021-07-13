@@ -117,9 +117,9 @@ internal class StateToViewStateMapper @Inject constructor(
             chanceLevelText = createChangeLevelText(state),
             errorBannerData = createErrorBannerData(state),
             notificationsButtonState = createNotificationButtonState(state),
-            favoriteButtonState = createFavoriteButtonState(state),
+            bookmarkButtonState = createBookmarkButtonState(state),
             factorItems = createFactorItems(state),
-            onFavoriteClickedEvent = createOnFavoritesClickedEvent(state),
+            onBookmarkClickedEvent = createOnBookmarkClickedEvent(state),
             notificationLevelItems = createNotificationLevelItems(state),
         )
     }
@@ -159,11 +159,10 @@ internal class StateToViewStateMapper @Inject constructor(
         return ToggleButtonState.Enabled(notificationChecked)
     }
 
-    private fun createFavoriteButtonState(state: State.Ready): ToggleButtonState {
-        return when (state.selectedPlace) {
+    private fun createBookmarkButtonState(state: State.Ready): ToggleButtonState {
+        return when (val selectedPlace = state.selectedPlace) {
             Place.Current -> ToggleButtonState.Gone
-            is Place.Saved.Recent -> ToggleButtonState.Enabled(checked = false)
-            is Place.Saved.Favorite -> ToggleButtonState.Enabled(checked = true)
+            is Place.Saved -> ToggleButtonState.Enabled(selectedPlace.bookmarked)
         }
     }
 
@@ -249,11 +248,12 @@ internal class StateToViewStateMapper @Inject constructor(
             .orNull()
     }
 
-    private fun createOnFavoritesClickedEvent(state: State.Ready): Event {
+    private fun createOnBookmarkClickedEvent(state: State.Ready): Event {
         return when (val selectedPlace = state.selectedPlace) {
             Place.Current -> Event.Noop
-            is Place.Saved.Recent -> Event.AddFavorite(selectedPlace)
-            is Place.Saved.Favorite -> Event.RemoveFavorite(selectedPlace)
+            is Place.Saved -> if (selectedPlace.bookmarked) {
+                Event.RemoveBookmark(selectedPlace)
+            } else Event.AddBookmark(selectedPlace)
         }
     }
 
@@ -324,10 +324,9 @@ private val searchResultOrderComparator: Comparator<SearchResult>
 private val SearchResult.typePriority: Int
     get() = when (this) {
         is SearchResult.Known.Current -> 1
-        is SearchResult.Known.Saved -> when (place) {
-            is Place.Saved.Favorite -> 2
-            is Place.Saved.Recent -> 3
-        }
+        is SearchResult.Known.Saved -> if (place.bookmarked) {
+            2
+        } else 3
         is SearchResult.New -> 4
     }
 

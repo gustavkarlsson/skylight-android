@@ -10,26 +10,13 @@ sealed interface Place {
         override val id = PlaceId.Current
     }
 
-    sealed interface Saved : Place {
-        abstract override val id: PlaceId.Saved
-        val location: Location
-        val name: String
-        val lastChanged: Instant
-
-        data class Favorite(
-            override val id: PlaceId.Saved,
-            override val name: String,
-            override val location: Location,
-            override val lastChanged: Instant,
-        ) : Saved
-
-        data class Recent(
-            override val id: PlaceId.Saved,
-            override val name: String,
-            override val location: Location,
-            override val lastChanged: Instant,
-        ) : Saved
-    }
+    data class Saved(
+        override val id: PlaceId.Saved,
+        val name: String,
+        val location: Location,
+        val bookmarked: Boolean,
+        val lastChanged: Instant,
+    ) : Place
 }
 
 val Place.savedLocation: Location?
