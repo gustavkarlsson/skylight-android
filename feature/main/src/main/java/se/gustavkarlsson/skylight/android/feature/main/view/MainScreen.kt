@@ -112,9 +112,9 @@ private fun PreviewContent() {
                 chanceLevelText = TextRef.EMPTY,
                 errorBannerData = null,
                 notificationsButtonState = ToggleButtonState.Enabled(checked = false),
-                favoriteButtonState = ToggleButtonState.Enabled(checked = true),
+                bookmarkButtonState = ToggleButtonState.Enabled(checked = true),
                 factorItems = emptyList(),
-                onFavoriteClickedEvent = Event.Noop,
+                onBookmarkClickedEvent = Event.Noop,
                 notificationLevelItems = emptyList(),
             )
         ),

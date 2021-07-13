@@ -71,7 +71,7 @@ private fun PreviewSelectedPlace() {
             chanceLevelText = TextRef.string("What chance?"),
             errorBannerData = null,
             notificationsButtonState = ToggleButtonState.Enabled(checked = false),
-            favoriteButtonState = ToggleButtonState.Enabled(checked = true),
+            bookmarkButtonState = ToggleButtonState.Enabled(checked = true),
             factorItems = listOf(
                 FactorItem(
                     title = TextRef.string("Factor 1"),
@@ -82,7 +82,7 @@ private fun PreviewSelectedPlace() {
                     errorText = null,
                 )
             ),
-            onFavoriteClickedEvent = Event.Noop,
+            onBookmarkClickedEvent = Event.Noop,
             notificationLevelItems = emptyList(),
         ),
         onBannerActionClicked = {},
@@ -126,9 +126,9 @@ internal fun SelectedPlace(
                     end.linkTo(parent.end)
                 },
             notificationsButtonState = state.notificationsButtonState,
-            favoriteButtonState = state.favoriteButtonState,
+            bookmarkButtonState = state.bookmarkButtonState,
             onNotificationsClicked = { showDialog = true },
-            onFavoriteClicked = { onEvent(state.onFavoriteClickedEvent) },
+            onBookmarkClicked = { onEvent(state.onBookmarkClickedEvent) },
         )
 
         CenterText(
@@ -251,9 +251,9 @@ private fun SetNotificationLevelAlertDialog(
 private fun PlaceButtons(
     modifier: Modifier,
     notificationsButtonState: ToggleButtonState,
-    favoriteButtonState: ToggleButtonState,
+    bookmarkButtonState: ToggleButtonState,
     onNotificationsClicked: () -> Unit,
-    onFavoriteClicked: () -> Unit,
+    onBookmarkClicked: () -> Unit,
 ) {
     Row(modifier = modifier) {
         AnimatedVisibility(visible = notificationsButtonState.visible) {
@@ -267,12 +267,12 @@ private fun PlaceButtons(
                 Icon(icon, tint = Colors.primary, contentDescription = null)
             }
         }
-        AnimatedVisibility(visible = favoriteButtonState.visible) {
+        AnimatedVisibility(visible = bookmarkButtonState.visible) {
             IconToggleButton(
-                checked = favoriteButtonState.checked,
-                onCheckedChange = { onFavoriteClicked() },
+                checked = bookmarkButtonState.checked,
+                onCheckedChange = { onBookmarkClicked() },
             ) {
-                val icon = if (favoriteButtonState.checked) {
+                val icon = if (bookmarkButtonState.checked) {
                     Icons.Bookmark
                 } else Icons.BookmarkBorder
                 Icon(icon, tint = Colors.primary, contentDescription = null)

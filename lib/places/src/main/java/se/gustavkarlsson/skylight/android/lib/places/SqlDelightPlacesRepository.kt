@@ -24,7 +24,7 @@ internal class SqlDelightPlacesRepository(
     private val maxRecentCount: Int,
 ) : PlacesRepository {
 
-    override suspend fun setFavorite(placeId: PlaceId.Saved): Place.Saved.Favorite = withContext(dispatcher) {
+    override suspend fun addBookmark(placeId: PlaceId.Saved): Place.Saved = withContext(dispatcher) {
         val now = time.now()
         queries.updateType(TYPE_FAVORITE, now.toEpochMilli(), placeId.value)
         queries.selectById(placeId.value)
@@ -32,22 +32,22 @@ internal class SqlDelightPlacesRepository(
             .toPlace()
     }
 
-    override suspend fun setRecent(placeId: PlaceId.Saved): Place.Saved.Recent = withContext(dispatcher) {
+    override suspend fun removeBookmark(placeId: PlaceId.Saved): Place.Saved = withContext(dispatcher) {
         val now = time.now()
         queries.updateType(TYPE_RECENT, now.toEpochMilli(), placeId.value)
         val updated = queries.selectById(placeId.value)
             .exactlyOne()
-            .toPlace<Place.Saved.Recent>()
+            .toPlace()
         removeOldRecents()
         updated
     }
 
-    override suspend fun addRecent(name: String, location: Location): Place.Saved.Recent = withContext(dispatcher) {
+    override suspend fun addRecent(name: String, location: Location): Place.Saved = withContext(dispatcher) {
         val now = time.now()
         queries.insertRecent(name, location.latitude, location.longitude, now.toEpochMilli())
         val inserted = queries.selectLastInserted()
             .exactlyOne()
-            .toPlace<Place.Saved.Recent>()
+            .toPlace()
         removeOldRecents()
         inserted
     }
@@ -56,7 +56,7 @@ internal class SqlDelightPlacesRepository(
         queries.keepMostRecent(maxRecentCount.toLong())
     }
 
-    override suspend fun updateLastChanged(placeId: PlaceId.Saved): Place = withContext(dispatcher) {
+    override suspend fun updateLastChanged(placeId: PlaceId.Saved): Place.Saved = withContext(dispatcher) {
         val now = time.now()
         queries.updateLastChanged(now.toEpochMilli(), placeId.value)
         queries.selectById(placeId.value)
@@ -76,23 +76,23 @@ internal class SqlDelightPlacesRepository(
             .mapToList(dispatcher)
             .map { dbPlaces ->
                 val places = dbPlaces.map { dbPlace ->
-                    dbPlace.toPlace<Place>()
+                    dbPlace.toPlace()
                 }
                 NonEmptyList(Place.Current, places)
             }
             .distinctUntilChanged()
 }
 
-private inline fun <reified T : Place> DbPlace.toPlace(): T {
+private fun DbPlace.toPlace(): Place.Saved {
     val placeId = PlaceId.Saved(id)
     val location = Location(latitude, longitude)
     val lastChanged = Instant.ofEpochMilli(lastChangedMillis)
-    val place = when (type) {
-        TYPE_FAVORITE -> Place.Saved.Favorite(placeId, name, location, lastChanged)
-        TYPE_RECENT -> Place.Saved.Recent(placeId, name, location, lastChanged)
+    val bookmarked = when (type) {
+        TYPE_FAVORITE -> true
+        TYPE_RECENT -> false
         else -> error("Unexpected location type: $type")
     }
-    return place as? T ?: error("Unexpected last inserted place type: ${place.javaClass.name}")
+    return Place.Saved(placeId, name, location, bookmarked, lastChanged)
 }
 
 private const val TYPE_FAVORITE = "favorite"

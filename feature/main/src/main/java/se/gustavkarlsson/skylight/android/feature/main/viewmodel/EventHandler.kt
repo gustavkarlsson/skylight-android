@@ -27,18 +27,15 @@ internal class EventHandler @Inject constructor(
     suspend fun onEvent(event: Event) {
         @Suppress("UNUSED_VARIABLE")
         val dummy: Any = when (event) {
-            is Event.AddFavorite -> placesRepository.setFavorite(event.place.id)
-            is Event.RemoveFavorite -> {
+            is Event.AddBookmark -> placesRepository.addBookmark(event.place.id)
+            is Event.RemoveBookmark -> {
                 settings.setNotificationTriggerLevel(event.place.id, TriggerLevel.NEVER)
-                placesRepository.setRecent(event.place.id)
+                placesRepository.removeBookmark(event.place.id)
             }
             is Event.SetNotificationLevel -> {
-                when (event.place) {
-                    Place.Current, is Place.Saved.Favorite -> Unit
-                    is Place.Saved.Recent -> {
-                        if (event.level != TriggerLevel.NEVER) {
-                            placesRepository.setFavorite(event.place.id)
-                        }
+                if (event.place is Place.Saved && !event.place.bookmarked) {
+                    if (event.level != TriggerLevel.NEVER) {
+                        placesRepository.addBookmark(event.place.id)
                     }
                 }
                 settings.setNotificationTriggerLevel(event.place.id, event.level)
