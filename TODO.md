@@ -1,9 +1,6 @@
 ## ASAP
-* Look into migrating to Arrow NonEmptyList
-* Fix flicker when toggling bookmark. Does it go into loading?
 
 ## Soon
-
 * Readme
 * Look into introducing some functional type instead of Report
 * Dark mode splash screen for Android 12
