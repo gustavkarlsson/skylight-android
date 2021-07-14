@@ -1,7 +1,10 @@
 package se.gustavkarlsson.skylight.android.lib.geomaglocation
 
 import arrow.core.right
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onEach
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
@@ -26,20 +29,8 @@ internal class GeomagLocationProviderImpl(
         return report
     }
 
-    override fun stream(
-        locations: Flow<Loadable<LocationResult>>
-    ): Flow<Loadable<Report<GeomagLocation>>> =
-        locations
-            .map { loadableLocation ->
-                loadableLocation.map { location ->
-                    getSingleGeomagLocation(location, time.now())
-                }
-            }
-            .distinctUntilChanged()
-            .onEach { logInfo { "Streamed geomag location: $it" } }
-
     // FIXME simplify
-    override fun streamNew(location: Location): Flow<Loadable<Report<GeomagLocation>>> =
+    override fun stream(location: Location): Flow<Loadable<Report<GeomagLocation>>> =
         flow {
             emit(Loaded(getSingleGeomagLocation(location.right(), time.now())))
         }.distinctUntilChanged()

@@ -8,6 +8,5 @@ import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 
 interface WeatherProvider {
     suspend fun get(locationResult: LocationResult, fresh: Boolean = false): Report<Weather>
-    fun stream(locations: Flow<Loadable<LocationResult>>): Flow<Loadable<Report<Weather>>>
-    fun streamNew(location: Location): Flow<Loadable<Report<Weather>>>
+    fun stream(location: Location): Flow<Loadable<Report<Weather>>>
 }

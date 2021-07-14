@@ -43,7 +43,7 @@ internal class StreamReportsLiveAction @Inject constructor(
                 if (location == null) {
                     flowOf(LoadableAuroraReport.LOADING)
                 } else flow {
-                    emitAll(auroraReportProvider.streamNew(location))
+                    emitAll(auroraReportProvider.stream(location))
                 }
             }
 

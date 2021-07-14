@@ -8,6 +8,5 @@ import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 
 interface DarknessProvider {
     fun get(locationResult: LocationResult): Report<Darkness>
-    fun stream(locations: Flow<Loadable<LocationResult>>): Flow<Loadable<Report<Darkness>>>
-    fun streamNew(location: Location): Flow<Loadable<Report<Darkness>>>
+    fun stream(location: Location): Flow<Loadable<Report<Darkness>>>
 }

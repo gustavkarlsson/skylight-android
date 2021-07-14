@@ -1,13 +1,18 @@
 package se.gustavkarlsson.skylight.android.lib.darkness
 
 import arrow.core.right
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.onEach
 import net.e175.klaus.solarpositioning.Grena3
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.core.entities.*
+import se.gustavkarlsson.skylight.android.core.entities.Cause
+import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Loaded
+import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationError
@@ -26,22 +31,8 @@ internal class KlausBrunnerDarknessProvider(
         return report
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun stream(
-        locations: Flow<Loadable<LocationResult>>
-    ): Flow<Loadable<Report<Darkness>>> =
-        locations
-            .flatMapLatest { loadableLocation ->
-                loadableLocation.fold(
-                    ifEmpty = { flowOf(Loading) },
-                    ifSome = { location -> pollLocation(location) }
-                )
-            }
-            .distinctUntilChanged()
-            .onEach { logInfo { "Streamed darkness: $it" } }
-
     // FIXME simplify
-    override fun streamNew(location: Location): Flow<Loadable<Report<Darkness>>> =
+    override fun stream(location: Location): Flow<Loadable<Report<Darkness>>> =
         pollLocation(location.right())
             .distinctUntilChanged()
             .onEach { logInfo { "Streamed darkness: $it" } }
