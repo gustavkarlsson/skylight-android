@@ -9,7 +9,9 @@ import kotlinx.coroutines.flow.onEach
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.core.entities.*
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
-import se.gustavkarlsson.skylight.android.lib.location.*
+import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
+import se.gustavkarlsson.skylight.android.lib.location.Location
+import se.gustavkarlsson.skylight.android.lib.location.approximate
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.io.IOException
 
@@ -19,35 +21,25 @@ internal class StoreWeatherProvider(
     private val approximationMeters: Double,
 ) : WeatherProvider {
 
-    override suspend fun get(locationResult: LocationResult, fresh: Boolean): Report<Weather> =
-        getReport(locationResult, fresh, time.now())
-
-    private suspend fun getReport(locationResult: LocationResult, fresh: Boolean, timestamp: Instant): Report<Weather> {
-        val report = locationResult.fold(
-            ifLeft = { error ->
-                val cause = when (error) {
-                    LocationError.NoPermission -> Cause.NoLocationPermission
-                    LocationError.Unknown -> Cause.NoLocation
-                }
-                Report.Error(cause, timestamp)
-            },
-            ifRight = { location ->
-                try {
-                    val weather = if (fresh) {
-                        store.fresh(location.approximate(approximationMeters))
-                    } else {
-                        store.get(location.approximate(approximationMeters))
-                    }
-                    Report.Success(weather, timestamp)
-                } catch (e: CancellationException) {
-                    throw e
-                } catch (e: Exception) {
-                    Report.Error(getCause(e), timestamp)
-                }
-            }
-        )
+    override suspend fun get(location: Location, fresh: Boolean): Report<Weather> {
+        val report = getReport(location, fresh, time.now())
         logInfo { "Provided weather: $report" }
         return report
+    }
+
+    private suspend fun getReport(location: Location, fresh: Boolean, timestamp: Instant): Report<Weather> {
+        return try {
+            val weather = if (fresh) {
+                store.fresh(location.approximate(approximationMeters))
+            } else {
+                store.get(location.approximate(approximationMeters))
+            }
+            Report.Success(weather, timestamp)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Report.Error(getCause(e), timestamp)
+        }
     }
 
     override fun stream(location: Location): Flow<Loadable<Report<Weather>>> =

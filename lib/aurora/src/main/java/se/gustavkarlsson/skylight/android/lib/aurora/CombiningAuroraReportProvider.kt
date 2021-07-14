@@ -13,7 +13,6 @@ import se.gustavkarlsson.skylight.android.lib.darkness.DarknessProvider
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexProvider
 import se.gustavkarlsson.skylight.android.lib.location.Location
-import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherProvider
 
@@ -24,13 +23,12 @@ internal class CombiningAuroraReportProvider(
     private val weatherProvider: WeatherProvider,
     private val time: Time,
 ) : AuroraReportProvider {
-    override suspend fun get(getLocation: suspend () -> LocationResult): CompleteAuroraReport =
+    override suspend fun get(location: Location): CompleteAuroraReport =
         coroutineScope {
-            val location = async { getLocation() }
             val kpIndex = async { kpIndexProvider.get() }
-            val geomagLocation = async { geomagLocationProvider.get(location.await()) }
-            val darkness = async { darknessProvider.get(location.await()) }
-            val weather = async { weatherProvider.get(location.await()) }
+            val geomagLocation = async { geomagLocationProvider.get(location) }
+            val darkness = async { darknessProvider.get(location) }
+            val weather = async { weatherProvider.get(location) }
             val report = CompleteAuroraReport(
                 kpIndex.await(),
                 geomagLocation.await(),

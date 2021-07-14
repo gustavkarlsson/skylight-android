@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.darkness
 
-import arrow.core.right
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -9,14 +8,11 @@ import kotlinx.coroutines.flow.onEach
 import net.e175.klaus.solarpositioning.Grena3
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Loaded
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.Location
-import se.gustavkarlsson.skylight.android.lib.location.LocationError
-import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.util.*
 
@@ -25,8 +21,8 @@ internal class KlausBrunnerDarknessProvider(
     private val pollingInterval: Duration,
 ) : DarknessProvider {
 
-    override fun get(locationResult: LocationResult): Report<Darkness> {
-        val report = getDarknessReport(locationResult, time.now())
+    override fun get(location: Location): Report<Darkness> {
+        val report = getReport(location, time.now())
         logInfo { "Provided darkness: $report" }
         return report
     }
@@ -38,7 +34,7 @@ internal class KlausBrunnerDarknessProvider(
 
     private fun pollDarkness(location: Location) = flow {
         while (true) {
-            val darknessReport = getDarknessReport(location.right(), time.now())
+            val darknessReport = getReport(location, time.now())
             this.emit(Loaded(darknessReport))
             delay(pollingInterval.toMillis())
         }
@@ -46,20 +42,10 @@ internal class KlausBrunnerDarknessProvider(
 
 }
 
-private fun getDarknessReport(locationResult: LocationResult, timestamp: Instant): Report<Darkness> =
-    locationResult.fold(
-        ifLeft = { error ->
-            val cause = when (error) {
-                LocationError.NoPermission -> Cause.NoLocationPermission
-                LocationError.Unknown -> Cause.NoLocation
-            }
-            Report.Error(cause, timestamp)
-        },
-        ifRight = { location ->
-            val sunZenithAngle = calculateSunZenithAngle(location, timestamp)
-            Report.Success(Darkness(sunZenithAngle), timestamp)
-        }
-    )
+private fun getReport(location: Location, timestamp: Instant): Report<Darkness> {
+    val sunZenithAngle = calculateSunZenithAngle(location, timestamp)
+    return Report.Success(Darkness(sunZenithAngle), timestamp)
+}
 
 private fun calculateSunZenithAngle(location: Location, time: Instant): Double {
     val date = time.toGregorianCalendar()

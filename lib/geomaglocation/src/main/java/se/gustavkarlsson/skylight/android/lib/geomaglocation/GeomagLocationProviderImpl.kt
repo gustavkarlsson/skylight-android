@@ -1,12 +1,8 @@
 package se.gustavkarlsson.skylight.android.lib.geomaglocation
 
-import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.Location
-import se.gustavkarlsson.skylight.android.lib.location.LocationError
-import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.lang.Math.toDegrees
 import java.lang.Math.toRadians
@@ -14,10 +10,15 @@ import kotlin.math.*
 
 internal class GeomagLocationProviderImpl(private val time: Time) : GeomagLocationProvider {
 
-    override fun get(locationResult: LocationResult): Report<GeomagLocation> {
-        val report = getSingleGeomagLocation(locationResult, time.now())
+    // FIXME merge with getNew
+    override fun get(location: Location): Report<GeomagLocation> {
+        val report = getReport(location)
         logInfo { "Provided geomag location: $report" }
         return report
+    }
+
+    private fun getReport(location: Location): Report.Success<GeomagLocation> {
+        return Report.Success(getNew(location), time.now())
     }
 
     override fun getNew(location: Location): GeomagLocation {
@@ -26,24 +27,6 @@ internal class GeomagLocationProviderImpl(private val time: Time) : GeomagLocati
         logInfo { "Provided geomag location: $location" }
         return geomagLocation
     }
-
-    private fun getSingleGeomagLocation(locationResult: LocationResult, timestamp: Instant): Report<GeomagLocation> =
-        locationResult.fold(
-            ifLeft = { error ->
-                val cause = when (error) {
-                    LocationError.NoPermission -> Cause.NoLocationPermission
-                    LocationError.Unknown -> Cause.NoLocation
-                }
-                Report.Error(cause, timestamp)
-            },
-            ifRight = { location ->
-                val geomagneticLatitude = calculateGeomagneticLatitude(
-                    location.latitude,
-                    location.longitude,
-                )
-                Report.Success(GeomagLocation(geomagneticLatitude), timestamp)
-            }
-        )
 
     // http://stackoverflow.com/a/7949249/940731
     private fun calculateGeomagneticLatitude(latitude1: Double, longitude1: Double): Double {

@@ -1,21 +1,16 @@
 package se.gustavkarlsson.skylight.android.feature.background.scheduling
 
-import arrow.core.right
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.utils.nonEmpty
-import se.gustavkarlsson.skylight.android.feature.background.notifications.AppVisibilityEvaluator
-import se.gustavkarlsson.skylight.android.feature.background.notifications.Notification
-import se.gustavkarlsson.skylight.android.feature.background.notifications.NotificationEvaluator
-import se.gustavkarlsson.skylight.android.feature.background.notifications.Notifier
-import se.gustavkarlsson.skylight.android.feature.background.notifications.PlaceWithChance
+import se.gustavkarlsson.skylight.android.feature.background.notifications.*
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
+import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
-import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
@@ -73,16 +68,17 @@ internal class BackgroundWorkImpl(
     private suspend fun getPlaceWithChance(placeId: PlaceId): PlaceWithChance? {
         val places = placesRepository.stream().firstOrNull() ?: return null
         val place = places.find { place -> place.id == placeId } ?: return null
-        val report = reportProvider.get { getLocation(place) }
+        val location = getLocation(place) ?: return null
+        val report = reportProvider.get(location)
         val chance = chanceEvaluator.evaluate(report)
         val chanceLevel = ChanceLevel.fromChance(chance)
         return PlaceWithChance(place, chanceLevel)
     }
 
-    private suspend fun getLocation(place: Place): LocationResult =
+    private suspend fun getLocation(place: Place): Location? =
         when (place) {
-            Place.Current -> locationProvider.get()
-            is Place.Saved -> place.location.right()
+            Place.Current -> locationProvider.get().orNull()
+            is Place.Saved -> place.location
         }
 }
 
