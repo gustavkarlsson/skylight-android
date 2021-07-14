@@ -12,6 +12,7 @@ import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexProvider
+import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherProvider
 
@@ -28,13 +29,15 @@ object LibAuroraModule {
         darknessProvider: DarknessProvider,
         geomagLocationProvider: GeomagLocationProvider,
         kpIndexProvider: KpIndexProvider,
-        weatherProvider: WeatherProvider
+        weatherProvider: WeatherProvider,
+        time: Time,
     ): AuroraReportProvider =
         CombiningAuroraReportProvider(
             darknessProvider,
             geomagLocationProvider,
             kpIndexProvider,
             weatherProvider,
+            time,
         )
 
     @Provides
@@ -49,6 +52,6 @@ object LibAuroraModule {
             kpIndexEvaluator,
             geomagLocationEvaluator,
             weatherEvaluator,
-            darknessEvaluator
+            darknessEvaluator,
         )
 }

@@ -22,7 +22,7 @@ import java.util.*
 
 internal class KlausBrunnerDarknessProvider(
     private val time: Time,
-    private val pollingInterval: Duration
+    private val pollingInterval: Duration,
 ) : DarknessProvider {
 
     override fun get(locationResult: LocationResult): Report<Darkness> {
@@ -31,41 +31,37 @@ internal class KlausBrunnerDarknessProvider(
         return report
     }
 
-    // FIXME simplify
     override fun stream(location: Location): Flow<Loadable<Report<Darkness>>> =
-        pollLocation(location.right())
+        pollDarkness(location).distinctUntilChanged()
             .distinctUntilChanged()
             .onEach { logInfo { "Streamed darkness: $it" } }
 
-    private fun pollLocation(location: LocationResult): Flow<Loadable<Report<Darkness>>> =
-        flow {
-            while (true) {
-                val darknessReport = getDarknessReport(location, time.now())
-                emit(Loaded(darknessReport))
-                delay(pollingInterval.toMillis())
-            }
+    private fun pollDarkness(location: Location) = flow {
+        while (true) {
+            val darknessReport = getDarknessReport(location.right(), time.now())
+            this.emit(Loaded(darknessReport))
+            delay(pollingInterval.toMillis())
         }
+    }
 
-    private fun getDarknessReport(locationResult: LocationResult, timestamp: Instant): Report<Darkness> =
-        locationResult.fold(
-            ifLeft = { error ->
-                val cause = when (error) {
-                    LocationError.NoPermission -> Cause.NoLocationPermission
-                    LocationError.Unknown -> Cause.NoLocation
-                }
-                Report.Error(cause, timestamp)
-            },
-            ifRight = { location ->
-                val sunZenithAngle = calculateSunZenithAngle(location, timestamp)
-                Report.Success(Darkness(sunZenithAngle), timestamp)
-            }
-        )
 }
 
-private fun calculateSunZenithAngle(
-    location: Location,
-    time: Instant
-): Double {
+private fun getDarknessReport(locationResult: LocationResult, timestamp: Instant): Report<Darkness> =
+    locationResult.fold(
+        ifLeft = { error ->
+            val cause = when (error) {
+                LocationError.NoPermission -> Cause.NoLocationPermission
+                LocationError.Unknown -> Cause.NoLocation
+            }
+            Report.Error(cause, timestamp)
+        },
+        ifRight = { location ->
+            val sunZenithAngle = calculateSunZenithAngle(location, timestamp)
+            Report.Success(Darkness(sunZenithAngle), timestamp)
+        }
+    )
+
+private fun calculateSunZenithAngle(location: Location, time: Instant): Double {
     val date = time.toGregorianCalendar()
     val azimuthAndZenithAngle = Grena3.calculateSolarPosition(
         date,
