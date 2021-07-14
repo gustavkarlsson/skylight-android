@@ -1,29 +1,16 @@
 package se.gustavkarlsson.skylight.android.feature.main.state
 
-import arrow.core.right
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.*
 import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
-import se.gustavkarlsson.skylight.android.core.entities.Loadable
-import se.gustavkarlsson.skylight.android.core.entities.Loaded
-import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.core.utils.throttle
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.StreamThrottle
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
-import se.gustavkarlsson.skylight.android.lib.location.LocationResult
+import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.Place
-import se.gustavkarlsson.skylight.android.lib.places.savedLocation
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -36,12 +23,12 @@ internal class StreamReportsLiveAction @Inject constructor(
             .isLive()
             .flatMapLatest { live ->
                 if (live) {
-                    stateFlow.updates()
+                    stateFlow.reports()
                 } else emptyFlow()
             }
             .throttle(throttleDuration.toMillis())
-            .collectLatest { updateData ->
-                stateFlow.tryUpdate(updateData)
+            .collectLatest { report ->
+                stateFlow.update(report)
             }
     }
 
@@ -50,35 +37,30 @@ internal class StreamReportsLiveAction @Inject constructor(
             .map { count -> count > 0 }
             .distinctUntilChanged()
 
-    private fun Flow<State>.updates(): Flow<UpdateData> =
-        selectedPlaces()
-            .flatMapLatest { selectedPlace ->
-                auroraReportProvider.stream(locations(selectedPlace))
-                    .map { report ->
-                        UpdateData(selectedPlace, report)
-                    }
+    private fun Flow<State>.reports(): Flow<LoadableAuroraReport> =
+        selectedPlaceLocations()
+            .flatMapLatest { location ->
+                if (location == null) {
+                    flowOf(LoadableAuroraReport.LOADING)
+                } else flow {
+                    emitAll(auroraReportProvider.streamNew(location))
+                }
             }
 
-    private fun Flow<State>.selectedPlaces(): Flow<Place> =
-        mapNotNull { state -> state.selectedPlace }
-            .distinctUntilChangedBy { place -> place.savedLocation }
+    private fun Flow<State>.selectedPlaceLocations(): Flow<Location?> =
+        map { state ->
+            when (val selectedPlace = state.selectedPlace) {
+                null -> null
+                Place.Current -> state.currentLocation.orNull()?.orNull()
+                is Place.Saved -> selectedPlace.location
+            }
+        }.distinctUntilChanged()
 
-    private fun Flow<State>.locations(selectedPlace: Place): Flow<Loadable<LocationResult>> =
-        when (selectedPlace) {
-            Place.Current -> this.map { state -> state.currentLocation }
-            is Place.Saved -> flowOf(Loaded(selectedPlace.location.right()))
-        }
-
-    private suspend fun AtomicStateFlow<State>.tryUpdate(updateData: UpdateData) {
+    private suspend fun AtomicStateFlow<State>.update(report: LoadableAuroraReport) {
         update {
-            if (updateData.place.savedLocation == selectedPlace?.savedLocation) {
-                when (this) {
-                    is State.Loading -> copy(selectedAuroraReport = updateData.report)
-                    is State.Ready -> copy(selectedAuroraReport = updateData.report)
-                }
-            } else {
-                logWarn { "Update data does not match selected place" }
-                this
+            when (this) {
+                is State.Loading -> copy(selectedAuroraReport = report)
+                is State.Ready -> copy(selectedAuroraReport = report)
             }
         }
     }
