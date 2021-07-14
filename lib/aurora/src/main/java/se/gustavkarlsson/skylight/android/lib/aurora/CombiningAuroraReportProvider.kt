@@ -11,6 +11,7 @@ import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.darkness.DarknessProvider
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexProvider
+import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherProvider
 
@@ -45,6 +46,18 @@ internal class CombiningAuroraReportProvider(
             geomagLocationProvider.stream(locations),
             darknessProvider.stream(locations),
             weatherProvider.stream(locations)
+        ) { kpIndex, geomagLocation, darkness, weather ->
+            LoadableAuroraReport(kpIndex, geomagLocation, darkness, weather)
+        }
+            .distinctUntilChanged()
+            .onEach { logInfo { "Streamed aurora report: $it" } }
+
+    override fun streamNew(location: Location): Flow<LoadableAuroraReport> =
+        combine(
+            kpIndexProvider.stream(),
+            geomagLocationProvider.streamNew(location),
+            darknessProvider.streamNew(location),
+            weatherProvider.streamNew(location)
         ) { kpIndex, geomagLocation, darkness, weather ->
             LoadableAuroraReport(kpIndex, geomagLocation, darkness, weather)
         }
