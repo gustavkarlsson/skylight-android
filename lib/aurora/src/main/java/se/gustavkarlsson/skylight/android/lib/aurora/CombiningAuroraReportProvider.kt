@@ -2,11 +2,9 @@ package se.gustavkarlsson.skylight.android.lib.aurora
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.darkness.DarknessProvider
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationProvider
@@ -61,6 +59,9 @@ internal class CombiningAuroraReportProvider(
         ) { kpIndex, geomagLocation, darkness, weather ->
             LoadableAuroraReport(kpIndex, geomagLocation, darkness, weather)
         }
+            .onStart {
+                LoadableAuroraReport(Loading, Loading, Loading, Loading)
+            }
             .distinctUntilChanged()
             .onEach { logInfo { "Streamed aurora report: $it" } }
 }

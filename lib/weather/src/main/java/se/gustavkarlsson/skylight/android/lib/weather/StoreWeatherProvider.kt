@@ -1,30 +1,13 @@
 package se.gustavkarlsson.skylight.android.lib.weather
 
-import com.dropbox.android.external.store4.Store
-import com.dropbox.android.external.store4.StoreRequest
-import com.dropbox.android.external.store4.StoreResponse
-import com.dropbox.android.external.store4.fresh
-import com.dropbox.android.external.store4.get
+import com.dropbox.android.external.store4.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.core.entities.Cause
-import se.gustavkarlsson.skylight.android.core.entities.Loadable
-import se.gustavkarlsson.skylight.android.core.entities.Loaded
-import se.gustavkarlsson.skylight.android.core.entities.Loading
-import se.gustavkarlsson.skylight.android.core.entities.Report
+import se.gustavkarlsson.skylight.android.core.entities.*
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
-import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
-import se.gustavkarlsson.skylight.android.lib.location.Location
-import se.gustavkarlsson.skylight.android.lib.location.LocationError
-import se.gustavkarlsson.skylight.android.lib.location.LocationResult
-import se.gustavkarlsson.skylight.android.lib.location.approximate
+import se.gustavkarlsson.skylight.android.lib.location.*
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.io.IOException
 
@@ -89,6 +72,11 @@ internal class StoreWeatherProvider(
                     }
                 )
             }
+            .distinctUntilChanged()
+            .onEach { logInfo { "Streamed weather: $it" } }
+
+    override fun streamNew(location: Location): Flow<Loadable<Report<Weather>>> =
+        streamReports(location)
             .distinctUntilChanged()
             .onEach { logInfo { "Streamed weather: $it" } }
 
