@@ -16,7 +16,6 @@ dependencies {
     implementation(project(":lib:geomaglocation"))
     implementation(project(":lib:reversegeocoder"))
     implementation(project(":lib:location"))
-    implementation(project(":lib:time"))
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 

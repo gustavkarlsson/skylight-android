@@ -8,7 +8,7 @@ import se.gustavkarlsson.skylight.android.lib.weather.Weather
 
 data class CompleteAuroraReport(
     val kpIndex: Report<KpIndex>,
-    val geomagLocation: Report<GeomagLocation>,
+    val geomagLocation: GeomagLocation,
     val darkness: Report<Darkness>,
     val weather: Report<Weather>
 )

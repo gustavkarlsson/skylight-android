@@ -5,8 +5,7 @@ import dagger.Provides
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
-import se.gustavkarlsson.skylight.android.lib.time.Time
-import java.util.Locale
+import java.util.*
 
 @Module
 object LibGeomagLocationModule {
@@ -23,6 +22,6 @@ object LibGeomagLocationModule {
 
     @Provides
     @Reusable
-    internal fun geomagLocationProvider(time: Time): GeomagLocationProvider =
-        GeomagLocationProviderImpl(time)
+    internal fun geomagLocationProvider(): GeomagLocationProvider =
+        GeomagLocationProviderImpl
 }

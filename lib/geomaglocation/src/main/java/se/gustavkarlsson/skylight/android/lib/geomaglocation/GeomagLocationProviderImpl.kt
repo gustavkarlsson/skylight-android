@@ -1,27 +1,14 @@
 package se.gustavkarlsson.skylight.android.lib.geomaglocation
 
-import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.Location
-import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.lang.Math.toDegrees
 import java.lang.Math.toRadians
 import kotlin.math.*
 
-internal class GeomagLocationProviderImpl(private val time: Time) : GeomagLocationProvider {
+internal object GeomagLocationProviderImpl : GeomagLocationProvider {
 
-    // FIXME merge with getNew
-    override fun get(location: Location): Report<GeomagLocation> {
-        val report = getReport(location)
-        logInfo { "Provided geomag location: $report" }
-        return report
-    }
-
-    private fun getReport(location: Location): Report.Success<GeomagLocation> {
-        return Report.Success(getNew(location), time.now())
-    }
-
-    override fun getNew(location: Location): GeomagLocation {
+    override fun get(location: Location): GeomagLocation {
         val geomagneticLatitude = calculateGeomagneticLatitude(location.latitude, location.longitude)
         val geomagLocation = GeomagLocation(geomagneticLatitude)
         logInfo { "Provided geomag location: $location" }
@@ -86,8 +73,6 @@ internal class GeomagLocationProviderImpl(private val time: Time) : GeomagLocati
         return c
     }
 
-    companion object {
-        private const val MAGNETIC_NORTH_POLE_LATITUDE = 80.4
-        private const val MAGNETIC_NORTH_POLE_LONGITUDE = -72.6
-    }
+    private const val MAGNETIC_NORTH_POLE_LATITUDE = 80.4
+    private const val MAGNETIC_NORTH_POLE_LONGITUDE = -72.6
 }

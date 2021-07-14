@@ -4,12 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.filled.Warning
 import com.ioki.textref.TextRef
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.core.entities.Cause
-import se.gustavkarlsson.skylight.android.core.entities.Chance
-import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
-import se.gustavkarlsson.skylight.android.core.entities.Loadable
-import se.gustavkarlsson.skylight.android.core.entities.Report
-import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
+import se.gustavkarlsson.skylight.android.core.entities.*
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.feature.main.R
@@ -27,7 +22,7 @@ import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
-import java.util.Comparator
+import java.util.*
 import javax.inject.Inject
 
 internal class StateToViewStateMapper @Inject constructor(
@@ -177,7 +172,7 @@ internal class StateToViewStateMapper @Inject constructor(
 
     private fun createKpIndexItem(state: State): FactorItem {
         return state.selectedAuroraReport.kpIndex
-            .toFactorItem(
+            .reportToFactorItem(
                 texts = ItemTexts.KP_INDEX,
                 evaluator = kpIndexChanceEvaluator,
                 formatter = kpIndexFormatter,
@@ -195,7 +190,7 @@ internal class StateToViewStateMapper @Inject constructor(
 
     private fun createDarknessItem(state: State): FactorItem {
         return state.selectedAuroraReport.darkness
-            .toFactorItem(
+            .reportToFactorItem(
                 texts = ItemTexts.DARKNESS,
                 evaluator = darknessChanceEvaluator,
                 formatter = darknessFormatter,
@@ -204,7 +199,7 @@ internal class StateToViewStateMapper @Inject constructor(
 
     private fun createWeatherItem(state: State): FactorItem {
         return state.selectedAuroraReport.weather
-            .toFactorItem(
+            .reportToFactorItem(
                 texts = ItemTexts.WEATHER,
                 evaluator = weatherChanceEvaluator,
                 formatter = weatherFormatter,
@@ -269,7 +264,7 @@ internal class StateToViewStateMapper @Inject constructor(
             }
     }
 
-    private fun <T : Any> Loadable<Report<T>>.toFactorItem(
+    private fun <T : Any> Loadable<Report<T>>.reportToFactorItem(
         texts: ItemTexts,
         evaluator: ChanceEvaluator<T>,
         formatter: Formatter<T>,
@@ -287,8 +282,9 @@ internal class StateToViewStateMapper @Inject constructor(
         ifSome = { report ->
             when (report) {
                 is Report.Success -> {
-                    val valueText = formatter.format(report.value)
-                    val chance = evaluator.evaluate(report.value).value
+                    val value = report.value
+                    val valueText = formatter.format(value)
+                    val chance = evaluator.evaluate(value).value
                     FactorItem(
                         title = TextRef.stringRes(texts.shortTitle),
                         valueText = valueText,
@@ -308,6 +304,36 @@ internal class StateToViewStateMapper @Inject constructor(
                 )
                 else -> error("Invalid report: $report")
             }
+        }
+    )
+
+    // FIXME avoid duplication with reportToFactorItem
+    private fun <T : Any> Loadable<T>.toFactorItem(
+        texts: ItemTexts,
+        evaluator: ChanceEvaluator<T>,
+        formatter: Formatter<T>,
+    ): FactorItem = fold(
+        ifEmpty = {
+            FactorItem(
+                title = TextRef.stringRes(texts.shortTitle),
+                valueText = TextRef.string("…"),
+                descriptionText = TextRef.stringRes(texts.description),
+                valueTextColor = { onSurface.copy(alpha = 0.7F) },
+                progress = null,
+                errorText = null,
+            )
+        },
+        ifSome = { value ->
+            val valueText = formatter.format(value)
+            val chance = evaluator.evaluate(value).value
+            FactorItem(
+                title = TextRef.stringRes(texts.shortTitle),
+                valueText = valueText,
+                descriptionText = TextRef.stringRes(texts.description),
+                valueTextColor = { onSurface },
+                progress = chance,
+                errorText = null,
+            )
         }
     )
 }

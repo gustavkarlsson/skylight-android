@@ -11,7 +11,7 @@ import se.gustavkarlsson.skylight.android.lib.weather.Weather
 
 data class LoadableAuroraReport(
     val kpIndex: Loadable<Report<KpIndex>>,
-    val geomagLocation: Loadable<Report<GeomagLocation>>,
+    val geomagLocation: Loadable<GeomagLocation>,
     val darkness: Loadable<Report<Darkness>>,
     val weather: Loadable<Report<Weather>>
 ) {
