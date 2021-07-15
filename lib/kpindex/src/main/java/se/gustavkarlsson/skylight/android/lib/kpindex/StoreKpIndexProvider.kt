@@ -17,12 +17,12 @@ import java.io.IOException
 internal class StoreKpIndexProvider(private val store: Store<Unit, KpIndex>) : KpIndexProvider {
 
     override suspend fun get(fresh: Boolean): KpIndexResult {
-        val report = getReport(fresh)
-        logInfo { "Provided Kp index: $report" }
-        return report
+        val result = getResult(fresh)
+        logInfo { "Provided Kp index: $result" }
+        return result
     }
 
-    private suspend fun getReport(fresh: Boolean): KpIndexResult {
+    private suspend fun getResult(fresh: Boolean): KpIndexResult {
         return try {
             val kpIndex = if (fresh) {
                 store.fresh(Unit)
@@ -36,11 +36,11 @@ internal class StoreKpIndexProvider(private val store: Store<Unit, KpIndex>) : K
     }
 
     override fun stream(): Flow<Loadable<KpIndexResult>> =
-        streamReports()
+        streamResults()
             .distinctUntilChanged()
             .onEach { logInfo { "Streamed Kp index: $it" } }
 
-    private fun streamReports(): Flow<Loadable<KpIndexResult>> =
+    private fun streamResults(): Flow<Loadable<KpIndexResult>> =
         store.stream(StoreRequest.cached(Unit, refresh = false))
             .map { response ->
                 when (response) {

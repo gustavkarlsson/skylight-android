@@ -41,7 +41,7 @@ internal class StreamReportsLiveAction @Inject constructor(
         selectedPlaceLocations()
             .flatMapLatest { location ->
                 if (location == null) {
-                    flowOf(LoadableAuroraReport.LOADING)
+                    flowOf(LoadableAuroraReport.LOADING) // FIXME replace with "no location"
                 } else flow {
                     emitAll(auroraReportProvider.stream(location))
                 }
