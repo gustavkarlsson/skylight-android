@@ -43,7 +43,7 @@ object LibKpIndexModule {
     internal fun kpIndexProvider(
         okHttpClient: OkHttpClient,
         @Io dispatcher: CoroutineDispatcher,
-        time: Time
+        time: Time,
     ): KpIndexProvider {
         val json = Json { ignoreUnknownKeys = true }
 
@@ -62,7 +62,8 @@ object LibKpIndexModule {
             api = api,
             retryDelay = 15.seconds,
             pollingInterval = pollingInterval,
-            dispatcher = dispatcher
+            dispatcher = dispatcher,
+            time = time,
         )
 
         val expiry = Duration.milliseconds(pollingInterval.toMillis() / 2)
@@ -74,9 +75,6 @@ object LibKpIndexModule {
             .cachePolicy(cachePolicy)
             .build()
 
-        return StoreKpIndexProvider(
-            store = store,
-            time = time
-        )
+        return StoreKpIndexProvider(store = store)
     }
 }

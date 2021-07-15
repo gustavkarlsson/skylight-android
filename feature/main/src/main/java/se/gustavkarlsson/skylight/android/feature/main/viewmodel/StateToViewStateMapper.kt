@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.filled.Warning
+import arrow.core.Either
 import com.ioki.textref.TextRef
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.core.entities.*
@@ -172,7 +173,7 @@ internal class StateToViewStateMapper @Inject constructor(
 
     private fun createKpIndexItem(state: State): FactorItem {
         return state.selectedAuroraReport.kpIndex
-            .reportToFactorItem(
+            .newReportToFactorItem(
                 texts = ItemTexts.KP_INDEX,
                 evaluator = kpIndexChanceEvaluator,
                 formatter = kpIndexFormatter,
@@ -307,7 +308,50 @@ internal class StateToViewStateMapper @Inject constructor(
         }
     )
 
-    // FIXME avoid duplication with reportToFactorItem
+    private fun <L, R> Loadable<Either<L, R>>.newReportToFactorItem(
+        texts: ItemTexts,
+        evaluator: ChanceEvaluator<R>,
+        formatter: Formatter<R>,
+    ): FactorItem = fold(
+        ifEmpty = {
+            FactorItem(
+                title = TextRef.stringRes(texts.shortTitle),
+                valueText = TextRef.string("…"),
+                descriptionText = TextRef.stringRes(texts.description),
+                valueTextColor = { onSurface.copy(alpha = 0.7F) },
+                progress = null,
+                errorText = null,
+            )
+        },
+        ifSome = { report ->
+            report.fold(
+                ifLeft = { error ->
+                    FactorItem(
+                        title = TextRef.stringRes(texts.shortTitle),
+                        valueText = TextRef.string("?"),
+                        descriptionText = TextRef.stringRes(texts.description),
+                        valueTextColor = { this.error },
+                        progress = null,
+                        errorText = TextRef.EMPTY, // FIXME get error message
+                    )
+                },
+                ifRight = { value ->
+                    val valueText = formatter.format(value)
+                    val chance = evaluator.evaluate(value).value
+                    FactorItem(
+                        title = TextRef.stringRes(texts.shortTitle),
+                        valueText = valueText,
+                        descriptionText = TextRef.stringRes(texts.description),
+                        valueTextColor = { onSurface },
+                        progress = chance,
+                        errorText = null,
+                    )
+                }
+            )
+        }
+    )
+
+    // FIXME avoid duplication with similar functions above
     private fun <T : Any> Loadable<T>.toFactorItem(
         texts: ItemTexts,
         evaluator: ChanceEvaluator<T>,
