@@ -1,11 +1,13 @@
 package se.gustavkarlsson.skylight.android.feature.main.state
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
 import se.gustavkarlsson.skylight.android.core.utils.throttle
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.StayAlive
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.StreamThrottle
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
@@ -17,6 +19,7 @@ import javax.inject.Inject
 internal class StreamReportsLiveAction @Inject constructor(
     private val auroraReportProvider: AuroraReportProvider,
     @StreamThrottle private val throttleDuration: Duration,
+    @StayAlive private val stayAlive: Duration,
 ) : Action<State> {
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         stateFlow
@@ -34,7 +37,13 @@ internal class StreamReportsLiveAction @Inject constructor(
 
     private fun AtomicStateFlow<State>.isLive(): Flow<Boolean> =
         storeSubscriberCount
-            .map { count -> count > 0 }
+            .mapLatest { count ->
+                val live = count > 0
+                if (!live) {
+                    delay(stayAlive.toMillis())
+                }
+                live
+            }
             .distinctUntilChanged()
 
     private fun Flow<State>.reports(): Flow<LoadableAuroraReport> =
