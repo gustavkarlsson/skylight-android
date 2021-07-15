@@ -41,7 +41,8 @@ internal class StreamReportsLiveAction @Inject constructor(
         selectedPlaceLocations()
             .flatMapLatest { location ->
                 if (location == null) {
-                    flowOf(LoadableAuroraReport.LOADING) // FIXME replace with "no location"
+                    // FIXME replace with "no location", and maybe eventually show error?
+                    flowOf(LoadableAuroraReport.LOADING)
                 } else flow {
                     emitAll(auroraReportProvider.stream(location))
                 }
@@ -65,5 +66,3 @@ internal class StreamReportsLiveAction @Inject constructor(
         }
     }
 }
-
-private data class UpdateData(val place: Place, val report: LoadableAuroraReport)

@@ -176,7 +176,6 @@ internal class StateToViewStateMapper @Inject constructor(
         )
     }
 
-    // FIXME improve error formatting
     private fun createKpIndexItem(state: State): FactorItem {
         return state.selectedAuroraReport.kpIndex
             .resultToFactorItem(
@@ -287,6 +286,7 @@ internal class StateToViewStateMapper @Inject constructor(
             }
     }
 
+    // TODO avoid duplication with similar function below
     private fun <L, R> Loadable<Either<L, R>>.resultToFactorItem(
         texts: ItemTexts,
         evaluator: ChanceEvaluator<R>,
@@ -331,7 +331,7 @@ internal class StateToViewStateMapper @Inject constructor(
         }
     )
 
-    // FIXME avoid duplication with similar function above
+    // TODO avoid duplication with similar function above
     private fun <T : Any> Loadable<T>.toFactorItem(
         texts: ItemTexts,
         evaluator: ChanceEvaluator<T>,
