@@ -2,4 +2,4 @@ package se.gustavkarlsson.skylight.android.lib.kpindex
 
 import arrow.core.Either
 
-typealias KpIndexReport = Either<KpIndexError, KpIndex>
+typealias KpIndexResult = Either<KpIndexError, KpIndex>

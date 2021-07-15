@@ -22,7 +22,7 @@ internal class CompleteAuroraReportEvaluator(
         )
         val locationChance = geomagLocationEvaluator.evaluate(value.geomagLocation)
         val weatherChance = value.weather.getChance(weatherEvaluator)
-        val darknessChance = value.darkness.getChance(darknessEvaluator)
+        val darknessChance = darknessEvaluator.evaluate(value.darkness)
 
         val chances = listOf(activityChance, locationChance, weatherChance, darknessChance)
 

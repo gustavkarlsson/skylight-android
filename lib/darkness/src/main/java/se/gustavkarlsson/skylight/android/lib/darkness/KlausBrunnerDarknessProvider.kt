@@ -10,7 +10,6 @@ import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Loaded
-import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.time.Time
@@ -21,20 +20,20 @@ internal class KlausBrunnerDarknessProvider(
     private val pollingInterval: Duration,
 ) : DarknessProvider {
 
-    override fun get(location: Location): Report<Darkness> {
-        val report = getReport(location, time.now())
-        logInfo { "Provided darkness: $report" }
-        return report
+    override fun get(location: Location): Darkness {
+        val darkness = getDarkness(location, time.now())
+        logInfo { "Provided darkness: $darkness" }
+        return darkness
     }
 
-    override fun stream(location: Location): Flow<Loadable<Report<Darkness>>> =
+    override fun stream(location: Location): Flow<Loadable<Darkness>> =
         pollDarkness(location).distinctUntilChanged()
             .distinctUntilChanged()
             .onEach { logInfo { "Streamed darkness: $it" } }
 
     private fun pollDarkness(location: Location) = flow {
         while (true) {
-            val darknessReport = getReport(location, time.now())
+            val darknessReport = getDarkness(location, time.now())
             this.emit(Loaded(darknessReport))
             delay(pollingInterval.toMillis())
         }
@@ -42,9 +41,9 @@ internal class KlausBrunnerDarknessProvider(
 
 }
 
-private fun getReport(location: Location, timestamp: Instant): Report<Darkness> {
+private fun getDarkness(location: Location, timestamp: Instant): Darkness {
     val sunZenithAngle = calculateSunZenithAngle(location, timestamp)
-    return Report.Success(Darkness(sunZenithAngle), timestamp)
+    return Darkness(sunZenithAngle, timestamp)
 }
 
 private fun calculateSunZenithAngle(location: Location, time: Instant): Double {

@@ -173,7 +173,7 @@ internal class StateToViewStateMapper @Inject constructor(
 
     private fun createKpIndexItem(state: State): FactorItem {
         return state.selectedAuroraReport.kpIndex
-            .newReportToFactorItem(
+            .resultToFactorItem(
                 texts = ItemTexts.KP_INDEX,
                 evaluator = kpIndexChanceEvaluator,
                 formatter = kpIndexFormatter,
@@ -191,7 +191,7 @@ internal class StateToViewStateMapper @Inject constructor(
 
     private fun createDarknessItem(state: State): FactorItem {
         return state.selectedAuroraReport.darkness
-            .reportToFactorItem(
+            .toFactorItem(
                 texts = ItemTexts.DARKNESS,
                 evaluator = darknessChanceEvaluator,
                 formatter = darknessFormatter,
@@ -308,7 +308,7 @@ internal class StateToViewStateMapper @Inject constructor(
         }
     )
 
-    private fun <L, R> Loadable<Either<L, R>>.newReportToFactorItem(
+    private fun <L, R> Loadable<Either<L, R>>.resultToFactorItem(
         texts: ItemTexts,
         evaluator: ChanceEvaluator<R>,
         formatter: Formatter<R>,
@@ -323,8 +323,8 @@ internal class StateToViewStateMapper @Inject constructor(
                 errorText = null,
             )
         },
-        ifSome = { report ->
-            report.fold(
+        ifSome = { result ->
+            result.fold(
                 ifLeft = { error ->
                     FactorItem(
                         title = TextRef.stringRes(texts.shortTitle),
