@@ -1,5 +1,4 @@
 ## ASAP
-* State visibly goes into loading when app goes into background (not live any more)
 
 ## Soon
 * Don't send location streams to stream other data
