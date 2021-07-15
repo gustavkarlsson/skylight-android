@@ -14,7 +14,6 @@ internal class CompleteAuroraReportEvaluator(
     private val darknessEvaluator: ChanceEvaluator<Darkness>,
 ) : ChanceEvaluator<CompleteAuroraReport> {
 
-    // FIXME use validated?
     override fun evaluate(value: CompleteAuroraReport): Chance {
         val activityChance = value.kpIndex.fold(
             ifLeft = { Chance.UNKNOWN },
