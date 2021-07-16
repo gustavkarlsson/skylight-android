@@ -13,7 +13,7 @@ import se.gustavkarlsson.skylight.android.core.entities.Loaded
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.time.Time
-import java.util.*
+import java.util.GregorianCalendar
 
 internal class KlausBrunnerDarknessProvider(
     private val time: Time,
@@ -38,7 +38,6 @@ internal class KlausBrunnerDarknessProvider(
             delay(pollingInterval.toMillis())
         }
     }
-
 }
 
 private fun getDarkness(location: Location, timestamp: Instant): Darkness {

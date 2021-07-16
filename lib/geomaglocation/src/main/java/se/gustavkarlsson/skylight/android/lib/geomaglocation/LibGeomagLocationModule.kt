@@ -5,7 +5,7 @@ import dagger.Provides
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
-import java.util.*
+import java.util.Locale
 
 @Module
 object LibGeomagLocationModule {
