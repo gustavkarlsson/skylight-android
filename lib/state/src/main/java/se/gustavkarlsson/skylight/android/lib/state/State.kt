@@ -15,7 +15,3 @@ class State private constructor(private val map: Map<Any, Any?>) {
         return State(mutableMap)
     }
 }
-
-interface StateKey<S> {
-    fun createState(state: State): S
-}
