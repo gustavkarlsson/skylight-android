@@ -27,6 +27,7 @@ internal class CombiningAuroraReportProvider(
             val darkness = darknessProvider.get(location)
             val weather = async { weatherProvider.get(location) }
             val report = CompleteAuroraReport(
+                location,
                 kpIndex.await(),
                 geomagLocation,
                 darkness,
@@ -43,7 +44,7 @@ internal class CombiningAuroraReportProvider(
             darknessProvider.stream(location),
             weatherProvider.stream(location)
         ) { kpIndex, darkness, weather ->
-            LoadableAuroraReport(kpIndex, geomagLocation, darkness, weather)
+            LoadableAuroraReport(location, kpIndex, geomagLocation, darkness, weather)
         }
             .distinctUntilChanged()
             .onEach { logInfo { "Streamed aurora report: $it" } }
