@@ -28,7 +28,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherError
-import java.util.*
+import java.util.Comparator
 import javax.inject.Inject
 
 internal class StateToViewStateMapper @Inject constructor(
