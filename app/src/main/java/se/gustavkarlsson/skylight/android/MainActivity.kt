@@ -4,6 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -53,6 +55,10 @@ internal class MainActivity :
             initialBackstack = listOf(screens.main),
             navigationOverrides = NavigationComponent.instance.navigationOverrides(),
         )
+    }
+
+    private val state by lazy {
+        ViewModelProvider(this).get<MainViewModel>().state
     }
 
     private val renderer: Renderer by lazy {

@@ -111,6 +111,7 @@ dependencies {
     implementation(project(":lib:runversion"))
     implementation(project(":lib:permissions"))
     implementation(project(":lib:places"))
+    implementation(project(":lib:state"))
     implementation(project(":lib:time"))
     implementation(project(":lib:ui"))
     implementation(project(":lib:ui-compose"))
