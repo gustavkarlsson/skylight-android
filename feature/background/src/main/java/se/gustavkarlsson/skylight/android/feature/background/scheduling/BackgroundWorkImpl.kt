@@ -6,7 +6,11 @@ import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.utils.nonEmpty
-import se.gustavkarlsson.skylight.android.feature.background.notifications.*
+import se.gustavkarlsson.skylight.android.feature.background.notifications.AppVisibilityEvaluator
+import se.gustavkarlsson.skylight.android.feature.background.notifications.Notification
+import se.gustavkarlsson.skylight.android.feature.background.notifications.NotificationEvaluator
+import se.gustavkarlsson.skylight.android.feature.background.notifications.Notifier
+import se.gustavkarlsson.skylight.android.feature.background.notifications.PlaceWithChance
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.lib.location.Location
