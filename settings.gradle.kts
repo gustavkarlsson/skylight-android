@@ -18,6 +18,7 @@ include(
     ":lib:runversion",
     ":lib:scopedservice",
     ":lib:settings",
+    ":lib:state",
     ":lib:time",
     ":lib:ui",
     ":lib:ui-compose",
