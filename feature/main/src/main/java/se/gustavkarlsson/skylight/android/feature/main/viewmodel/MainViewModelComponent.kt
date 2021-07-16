@@ -95,6 +95,10 @@ internal annotation class SearchThrottle
 @Retention(AnnotationRetention.RUNTIME)
 internal annotation class StreamThrottle
 
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+internal annotation class StayAlive
+
 @Module
 internal object MainViewModelModule {
 
@@ -115,6 +119,10 @@ internal object MainViewModelModule {
     @Provides
     @StreamThrottle
     fun provideStreamThrottle(): Duration = 500.millis
+
+    @Provides
+    @StayAlive
+    fun provideStayAlive(): Duration = 1000.millis
 
     @Provides
     fun startActions(

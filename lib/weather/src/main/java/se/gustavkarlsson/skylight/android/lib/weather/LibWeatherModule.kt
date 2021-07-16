@@ -44,7 +44,7 @@ object LibWeatherModule {
     internal fun weatherProvider(
         okHttpClient: OkHttpClient,
         @Io dispatcher: CoroutineDispatcher,
-        time: Time
+        time: Time,
     ): WeatherProvider {
         val json = Json { ignoreUnknownKeys = true }
 
@@ -64,7 +64,8 @@ object LibWeatherModule {
             appId = BuildConfig.OPENWEATHERMAP_API_KEY,
             retryDelay = 15.seconds,
             pollingInterval = pollingInterval,
-            dispatcher = dispatcher
+            dispatcher = dispatcher,
+            time = time,
         )
 
         val expiry = Duration.milliseconds(pollingInterval.toMillis() / 2)
@@ -79,7 +80,6 @@ object LibWeatherModule {
 
         return StoreWeatherProvider(
             store = store,
-            time = time,
             approximationMeters = 1000.0,
         )
     }

@@ -1,17 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.geomaglocation
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.core.entities.Cause
-import se.gustavkarlsson.skylight.android.core.entities.Loadable
-import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
-import se.gustavkarlsson.skylight.android.lib.location.LocationError
-import se.gustavkarlsson.skylight.android.lib.location.LocationResult
-import se.gustavkarlsson.skylight.android.lib.time.Time
+import se.gustavkarlsson.skylight.android.lib.location.Location
 import java.lang.Math.toDegrees
 import java.lang.Math.toRadians
 import kotlin.math.PI
@@ -21,45 +11,14 @@ import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
-internal class GeomagLocationProviderImpl(
-    private val time: Time
-) : GeomagLocationProvider {
+internal object GeomagLocationProviderImpl : GeomagLocationProvider {
 
-    override fun get(locationResult: LocationResult): Report<GeomagLocation> {
-        val report = getSingleGeomagLocation(locationResult, time.now())
-        logInfo { "Provided geomag location: $report" }
-        return report
+    override fun get(location: Location): GeomagLocation {
+        val geomagneticLatitude = calculateGeomagneticLatitude(location.latitude, location.longitude)
+        val geomagLocation = GeomagLocation(geomagneticLatitude)
+        logInfo { "Provided geomag location: $location" }
+        return geomagLocation
     }
-
-    override fun stream(
-        locations: Flow<Loadable<LocationResult>>
-    ): Flow<Loadable<Report<GeomagLocation>>> =
-        locations
-            .map { loadableLocation ->
-                loadableLocation.map { location ->
-                    getSingleGeomagLocation(location, time.now())
-                }
-            }
-            .distinctUntilChanged()
-            .onEach { logInfo { "Streamed geomag location: $it" } }
-
-    private fun getSingleGeomagLocation(locationResult: LocationResult, timestamp: Instant): Report<GeomagLocation> =
-        locationResult.fold(
-            ifLeft = { error ->
-                val cause = when (error) {
-                    LocationError.NoPermission -> Cause.NoLocationPermission
-                    LocationError.Unknown -> Cause.NoLocation
-                }
-                Report.Error(cause, timestamp)
-            },
-            ifRight = { location ->
-                val geomagneticLatitude = calculateGeomagneticLatitude(
-                    location.latitude,
-                    location.longitude,
-                )
-                Report.Success(GeomagLocation(geomagneticLatitude), timestamp)
-            }
-        )
 
     // http://stackoverflow.com/a/7949249/940731
     private fun calculateGeomagneticLatitude(latitude1: Double, longitude1: Double): Double {
@@ -119,8 +78,6 @@ internal class GeomagLocationProviderImpl(
         return c
     }
 
-    companion object {
-        private const val MAGNETIC_NORTH_POLE_LATITUDE = 80.4
-        private const val MAGNETIC_NORTH_POLE_LONGITUDE = -72.6
-    }
+    private const val MAGNETIC_NORTH_POLE_LATITUDE = 80.4
+    private const val MAGNETIC_NORTH_POLE_LONGITUDE = -72.6
 }

@@ -27,21 +27,28 @@ internal class Renderer(
                 SupervisorJob() + Dispatchers.Main + CoroutineName("viewScope")
             }
             val change by navigator.backstackChanges.collectAsLifecycleAwareState()
-            val backstack = change.new.takeIf { it.isNotEmpty() } ?: change.old
-            val topScreen = backstack.lastOrNull()
-            // TODO Backstack crashes when navigating to GooglePlayServicesScreen
-            //  Key -35963410 was used multiple times
+            val topScreen = change.new.lastOrNull()
             RenderSimple(topScreen, scope)
         }
     }
 
+    // FIXME Does not render when the last screen is removed. Screen turns blank while it animates to background
     @Composable
     private fun RenderSimple(screen: Screen?, scope: CoroutineScope) {
+        screen?.run { activity.Content(scope) }
+    }
+
+    // TODO This doesn't work. When screen has changed, the old screen will still re-fetch the service and start over while fading out
+    @Composable
+    private fun RenderCrossfade(screen: Screen?, scope: CoroutineScope) {
         Crossfade(targetState = screen) { screenToRender ->
             screenToRender?.run { activity.Content(scope) }
         }
     }
 
+    // TODO Backstack crashes when navigating to GooglePlayServicesScreen
+    //  Key -35963410 was used multiple times
+    //  Does tih also have the same problem as crossfade?
     @Composable
     private fun RenderBackstack(backstack: Backstack, scope: CoroutineScope) {
         Backstack(
