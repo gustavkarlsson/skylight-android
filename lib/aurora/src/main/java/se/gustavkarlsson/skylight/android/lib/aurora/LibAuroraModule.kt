@@ -28,7 +28,7 @@ object LibAuroraModule {
         darknessProvider: DarknessProvider,
         geomagLocationProvider: GeomagLocationProvider,
         kpIndexProvider: KpIndexProvider,
-        weatherProvider: WeatherProvider
+        weatherProvider: WeatherProvider,
     ): AuroraReportProvider =
         CombiningAuroraReportProvider(
             darknessProvider,
@@ -49,6 +49,6 @@ object LibAuroraModule {
             kpIndexEvaluator,
             geomagLocationEvaluator,
             weatherEvaluator,
-            darknessEvaluator
+            darknessEvaluator,
         )
 }

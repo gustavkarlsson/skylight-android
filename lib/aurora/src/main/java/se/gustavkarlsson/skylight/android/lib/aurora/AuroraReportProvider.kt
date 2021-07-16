@@ -1,10 +1,9 @@
 package se.gustavkarlsson.skylight.android.lib.aurora
 
 import kotlinx.coroutines.flow.Flow
-import se.gustavkarlsson.skylight.android.core.entities.Loadable
-import se.gustavkarlsson.skylight.android.lib.location.LocationResult
+import se.gustavkarlsson.skylight.android.lib.location.Location
 
 interface AuroraReportProvider {
-    suspend fun get(getLocation: suspend () -> LocationResult): CompleteAuroraReport
-    fun stream(locations: Flow<Loadable<LocationResult>>): Flow<LoadableAuroraReport>
+    suspend fun get(location: Location): CompleteAuroraReport
+    fun stream(location: Location): Flow<LoadableAuroraReport>
 }

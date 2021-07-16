@@ -2,13 +2,12 @@ package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.filled.Warning
+import arrow.core.Either
 import com.ioki.textref.TextRef
 import org.threeten.bp.Instant
-import se.gustavkarlsson.skylight.android.core.entities.Cause
 import se.gustavkarlsson.skylight.android.core.entities.Chance
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
-import se.gustavkarlsson.skylight.android.core.entities.Report
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
@@ -20,6 +19,7 @@ import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
+import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexError
 import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.Permission
 import se.gustavkarlsson.skylight.android.lib.places.Place
@@ -27,6 +27,7 @@ import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
+import se.gustavkarlsson.skylight.android.lib.weather.WeatherError
 import java.util.Comparator
 import javax.inject.Inject
 
@@ -177,10 +178,18 @@ internal class StateToViewStateMapper @Inject constructor(
 
     private fun createKpIndexItem(state: State): FactorItem {
         return state.selectedAuroraReport.kpIndex
-            .toFactorItem(
+            .resultToFactorItem(
                 texts = ItemTexts.KP_INDEX,
                 evaluator = kpIndexChanceEvaluator,
                 formatter = kpIndexFormatter,
+                errorFormatter = { error ->
+                    val text = when (error) {
+                        KpIndexError.Connectivity -> R.string.cause_connectivity
+                        KpIndexError.ServerResponse -> R.string.cause_server_response
+                        KpIndexError.Unknown -> R.string.cause_unknown
+                    }
+                    TextRef.stringRes(text)
+                },
             )
     }
 
@@ -204,10 +213,18 @@ internal class StateToViewStateMapper @Inject constructor(
 
     private fun createWeatherItem(state: State): FactorItem {
         return state.selectedAuroraReport.weather
-            .toFactorItem(
+            .resultToFactorItem(
                 texts = ItemTexts.WEATHER,
                 evaluator = weatherChanceEvaluator,
                 formatter = weatherFormatter,
+                errorFormatter = { error ->
+                    val text = when (error) {
+                        WeatherError.Connectivity -> R.string.cause_connectivity
+                        WeatherError.ServerResponse -> R.string.cause_server_response
+                        WeatherError.Unknown -> R.string.cause_unknown
+                    }
+                    TextRef.stringRes(text)
+                },
             )
     }
 
@@ -269,7 +286,53 @@ internal class StateToViewStateMapper @Inject constructor(
             }
     }
 
-    private fun <T : Any> Loadable<Report<T>>.toFactorItem(
+    // TODO avoid duplication with similar function below
+    private fun <L, R> Loadable<Either<L, R>>.resultToFactorItem(
+        texts: ItemTexts,
+        evaluator: ChanceEvaluator<R>,
+        formatter: Formatter<R>,
+        errorFormatter: Formatter<L>,
+    ): FactorItem = fold(
+        ifEmpty = {
+            FactorItem(
+                title = TextRef.stringRes(texts.shortTitle),
+                valueText = TextRef.string("…"),
+                descriptionText = TextRef.stringRes(texts.description),
+                valueTextColor = { onSurface.copy(alpha = 0.7F) },
+                progress = null,
+                errorText = null,
+            )
+        },
+        ifSome = { result ->
+            result.fold(
+                ifLeft = { error ->
+                    FactorItem(
+                        title = TextRef.stringRes(texts.shortTitle),
+                        valueText = TextRef.string("?"),
+                        descriptionText = TextRef.stringRes(texts.description),
+                        valueTextColor = { this.error },
+                        progress = null,
+                        errorText = errorFormatter.format(error)
+                    )
+                },
+                ifRight = { value ->
+                    val valueText = formatter.format(value)
+                    val chance = evaluator.evaluate(value).value
+                    FactorItem(
+                        title = TextRef.stringRes(texts.shortTitle),
+                        valueText = valueText,
+                        descriptionText = TextRef.stringRes(texts.description),
+                        valueTextColor = { onSurface },
+                        progress = chance,
+                        errorText = null,
+                    )
+                }
+            )
+        }
+    )
+
+    // TODO avoid duplication with similar function above
+    private fun <T : Any> Loadable<T>.toFactorItem(
         texts: ItemTexts,
         evaluator: ChanceEvaluator<T>,
         formatter: Formatter<T>,
@@ -284,30 +347,17 @@ internal class StateToViewStateMapper @Inject constructor(
                 errorText = null,
             )
         },
-        ifSome = { report ->
-            when (report) {
-                is Report.Success -> {
-                    val valueText = formatter.format(report.value)
-                    val chance = evaluator.evaluate(report.value).value
-                    FactorItem(
-                        title = TextRef.stringRes(texts.shortTitle),
-                        valueText = valueText,
-                        descriptionText = TextRef.stringRes(texts.description),
-                        valueTextColor = { onSurface },
-                        progress = chance,
-                        errorText = null,
-                    )
-                }
-                is Report.Error -> FactorItem(
-                    title = TextRef.stringRes(texts.shortTitle),
-                    valueText = TextRef.string("?"),
-                    descriptionText = TextRef.stringRes(texts.description),
-                    valueTextColor = { error },
-                    progress = null,
-                    errorText = format(report.cause),
-                )
-                else -> error("Invalid report: $report")
-            }
+        ifSome = { value ->
+            val valueText = formatter.format(value)
+            val chance = evaluator.evaluate(value).value
+            FactorItem(
+                title = TextRef.stringRes(texts.shortTitle),
+                valueText = valueText,
+                descriptionText = TextRef.stringRes(texts.description),
+                valueTextColor = { onSurface },
+                progress = chance,
+                errorText = null,
+            )
         }
     )
 }
@@ -340,17 +390,6 @@ private fun PlaceSuggestion.toDetailsString(): String {
     return fullName
         .removePrefix(simpleName)
         .dropWhile { !it.isLetterOrDigit() }
-}
-
-private fun format(cause: Cause): TextRef {
-    val id = when (cause) {
-        Cause.NoLocationPermission -> R.string.cause_location_permission
-        Cause.NoLocation -> R.string.cause_location
-        Cause.Connectivity -> R.string.cause_connectivity
-        Cause.ServerResponse -> R.string.cause_server_response
-        Cause.Unknown -> R.string.cause_unknown
-    }
-    return TextRef.stringRes(id)
 }
 
 private val TriggerLevel.displayIndex: Int

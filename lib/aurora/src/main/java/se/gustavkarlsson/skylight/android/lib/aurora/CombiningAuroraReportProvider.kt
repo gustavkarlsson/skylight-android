@@ -6,48 +6,47 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onEach
-import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Loaded
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.darkness.DarknessProvider
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationProvider
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexProvider
-import se.gustavkarlsson.skylight.android.lib.location.LocationResult
+import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherProvider
 
 internal class CombiningAuroraReportProvider(
     private val darknessProvider: DarknessProvider,
     private val geomagLocationProvider: GeomagLocationProvider,
     private val kpIndexProvider: KpIndexProvider,
-    private val weatherProvider: WeatherProvider
+    private val weatherProvider: WeatherProvider,
 ) : AuroraReportProvider {
-    override suspend fun get(getLocation: suspend () -> LocationResult): CompleteAuroraReport =
+    override suspend fun get(location: Location): CompleteAuroraReport =
         coroutineScope {
-            val location = async { getLocation() }
             val kpIndex = async { kpIndexProvider.get() }
-            val geomagLocation = async { geomagLocationProvider.get(location.await()) }
-            val darkness = async { darknessProvider.get(location.await()) }
-            val weather = async { weatherProvider.get(location.await()) }
+            val geomagLocation = geomagLocationProvider.get(location)
+            val darkness = darknessProvider.get(location)
+            val weather = async { weatherProvider.get(location) }
             val report = CompleteAuroraReport(
+                location,
                 kpIndex.await(),
-                geomagLocation.await(),
-                darkness.await(),
+                geomagLocation,
+                darkness,
                 weather.await()
             )
             logInfo { "Provided aurora report: $report" }
             report
         }
 
-    override fun stream(
-        locations: Flow<Loadable<LocationResult>>
-    ): Flow<LoadableAuroraReport> =
-        combine(
+    override fun stream(location: Location): Flow<LoadableAuroraReport> {
+        val geomagLocation = Loaded(geomagLocationProvider.get(location))
+        return combine(
             kpIndexProvider.stream(),
-            geomagLocationProvider.stream(locations),
-            darknessProvider.stream(locations),
-            weatherProvider.stream(locations)
-        ) { kpIndex, geomagLocation, darkness, weather ->
-            LoadableAuroraReport(kpIndex, geomagLocation, darkness, weather)
+            darknessProvider.stream(location),
+            weatherProvider.stream(location)
+        ) { kpIndex, darkness, weather ->
+            LoadableAuroraReport(location, kpIndex, geomagLocation, darkness, weather)
         }
             .distinctUntilChanged()
             .onEach { logInfo { "Streamed aurora report: $it" } }
+    }
 }
