@@ -19,7 +19,7 @@ interface Screen : Parcelable {
     fun AppCompatActivity.onStartStopScope(scope: CoroutineScope) = Unit
     fun AppCompatActivity.onResumePauseScope(scope: CoroutineScope) = Unit
 
-    fun AppCompatActivity.onBackPress(): BackPress = BackPress.NOT_HANDLED
+    fun onBackPress(): BackPress = BackPress.NOT_HANDLED
 
     @Composable
     fun AppCompatActivity.Content(tag: ServiceTag, scope: CoroutineScope)

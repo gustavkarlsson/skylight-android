@@ -41,6 +41,7 @@ internal class MainActivity :
 
     override val screens: Screens = DefaultScreens
 
+    // FIXME Inject overrides
     override val navigator: MasterNavigator by lazy {
         val installer = NavigationSetupComponent.create().navigationInstaller()
         installer.install(
@@ -165,7 +166,7 @@ internal class MainActivity :
         super.onPause()
     }
 
-    override fun onBackPressed() = navigator.onBackPress(this)
+    override fun onBackPressed() = navigator.onBackPress()
 
     private fun createLifecycleScope(name: String) = MainScope() + CoroutineName(name)
 

@@ -48,14 +48,14 @@ object MainScreen : Screen {
 
     override val scopeStart get() = "main"
 
-    private val AppCompatActivity.optionalViewModel: MainViewModel?
+    private val optionalViewModel: MainViewModel?
         get() = getService(VIEW_MODEL_ID)
 
     override fun AppCompatActivity.onStartStopScope(scope: CoroutineScope) {
         optionalViewModel?.onEvent(Event.RefreshLocationPermission)
     }
 
-    override fun AppCompatActivity.onBackPress(): BackPress {
+    override fun onBackPress(): BackPress {
         return when ((optionalViewModel?.state?.value as? ViewState.Ready)?.appBar) {
             null, is AppBarState.PlaceSelected -> BackPress.NOT_HANDLED
             is AppBarState.Searching -> {

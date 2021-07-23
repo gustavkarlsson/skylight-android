@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.navigationsetup
 
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -75,11 +74,9 @@ internal class ViewModelNavigator private constructor(
         stack.takeWhile { it.scopeStart != scope }
     }
 
-    override fun onBackPress(activity: AppCompatActivity) {
+    override fun onBackPress() {
         val topScreen = backstackChanges.value.new.lastOrNull()
-        val result = topScreen?.run {
-            activity.onBackPress()
-        }
+        val result = topScreen?.onBackPress()
         when (result) {
             null -> logInfo { "No top screen to handle back press" }
             BackPress.HANDLED -> logInfo { "Top screen handled back press" }
