@@ -25,9 +25,7 @@ import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.lib.places.getPlaceId
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedServiceComponent
-import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceCatalog
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceClearer
-import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceHost
 import se.gustavkarlsson.skylight.android.lib.ui.ScopeHost
 import se.gustavkarlsson.skylight.android.navigation.DefaultScreens
 
@@ -35,15 +33,11 @@ internal class MainActivity :
     AppCompatActivity(),
     NavigatorHost,
     ScreensHost,
-    ScopeHost,
-    ServiceHost {
+    ScopeHost {
 
     private val serviceClearer: ServiceClearer = ScopedServiceComponent.instance.serviceClearer()
 
     private val selectedPlaceRepository: SelectedPlaceRepository = PlacesComponent.instance.selectedPlaceRepository()
-
-    // FIXME Why get service catalog through activity?
-    override val serviceCatalog: ServiceCatalog = ScopedServiceComponent.instance.serviceCatalog()
 
     override val screens: Screens = DefaultScreens
 
