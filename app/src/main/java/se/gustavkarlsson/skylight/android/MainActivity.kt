@@ -29,6 +29,7 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceClearer
 import se.gustavkarlsson.skylight.android.lib.ui.ScopeHost
 import se.gustavkarlsson.skylight.android.navigation.DefaultScreens
 
+// TODO Inject things
 internal class MainActivity :
     AppCompatActivity(),
     NavigatorHost,
@@ -41,7 +42,7 @@ internal class MainActivity :
 
     override val screens: Screens = DefaultScreens
 
-    // FIXME Inject overrides
+    // TODO Remove activity completely from navigator
     override val navigator: MasterNavigator by lazy {
         val installer = NavigationSetupComponent.create().navigationInstaller()
         installer.install(
@@ -52,7 +53,6 @@ internal class MainActivity :
     }
 
     private val renderer: Renderer by lazy {
-        // FIXME Why not inject these?
         Renderer(this, navigator, serviceClearer)
     }
 

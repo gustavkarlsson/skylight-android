@@ -6,7 +6,6 @@ import se.gustavkarlsson.skylight.android.core.logging.logInfo
 internal class ServiceRegistry : ServiceCatalog, ServiceClearer {
     private val services = mutableMapOf<ServiceId, ServiceEntry>()
 
-    // FIXME Only allow to register through render call
     @Synchronized
     override fun register(id: ServiceId, tag: ServiceTag, service: ScopedService) {
         require(id !in services.keys) { "Service already exists for ${id.value}" }
