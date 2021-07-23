@@ -30,6 +30,8 @@ import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.permissions.Permission
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceId
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
@@ -38,7 +40,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.getService
 import se.gustavkarlsson.skylight.android.lib.ui.startStopScope
 
-private const val VIEW_MODEL_ID = "mainViewModel"
+private val VIEW_MODEL_ID = ServiceId("mainViewModel")
 
 @Parcelize
 object MainScreen : Screen {
@@ -79,7 +81,7 @@ object MainScreen : Screen {
     }
 
     @Composable
-    override fun AppCompatActivity.Content(tag: String, scope: CoroutineScope) {
+    override fun AppCompatActivity.Content(tag: ServiceTag, scope: CoroutineScope) {
         val viewModel = getOrRegisterService(VIEW_MODEL_ID, tag) {
             MainViewModelComponent.build().viewModel()
         }

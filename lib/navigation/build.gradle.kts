@@ -10,6 +10,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":lib:scopedservice"))
 
     implementation("androidx.compose.runtime:runtime:${Versions.compose}")
 }

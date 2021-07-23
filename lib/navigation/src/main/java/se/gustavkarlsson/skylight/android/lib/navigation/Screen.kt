@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
 import kotlinx.coroutines.CoroutineScope
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
 
 interface Screen : Parcelable {
     // TODO Rename to ScreenType?
@@ -21,7 +22,7 @@ interface Screen : Parcelable {
     fun AppCompatActivity.onBackPress(): BackPress = BackPress.NOT_HANDLED
 
     @Composable
-    fun AppCompatActivity.Content(tag: String, scope: CoroutineScope)
+    fun AppCompatActivity.Content(tag: ServiceTag, scope: CoroutineScope)
 }
 
 enum class BackPress {

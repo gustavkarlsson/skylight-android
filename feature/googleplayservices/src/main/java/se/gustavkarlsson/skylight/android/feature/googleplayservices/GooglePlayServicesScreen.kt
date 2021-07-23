@@ -32,6 +32,8 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceId
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ErrorSnackbar
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
@@ -40,7 +42,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.collectAsLifecycleAware
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.getService
 
-private const val VIEW_MODEL_ID = "googlePlayServicesViewModel"
+private val VIEW_MODEL_ID = ServiceId("googlePlayServicesViewModel")
 
 @Parcelize
 internal data class GooglePlayServicesScreen(private val target: Backstack) : Screen {
@@ -64,7 +66,7 @@ internal data class GooglePlayServicesScreen(private val target: Backstack) : Sc
     }
 
     @Composable
-    override fun AppCompatActivity.Content(tag: String, scope: CoroutineScope) {
+    override fun AppCompatActivity.Content(tag: ServiceTag, scope: CoroutineScope) {
         val viewModel = getOrRegisterService(VIEW_MODEL_ID, tag) {
             GooglePlayServicesComponent.build().viewModel()
         }

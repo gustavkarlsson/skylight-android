@@ -16,6 +16,7 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceClearer
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
 import se.gustavkarlsson.skylight.android.lib.ui.compose.collectAsLifecycleAwareState
 import se.gustavkarlsson.skylight.android.transitions.CrossFadeZoom
 
@@ -41,11 +42,14 @@ internal class Renderer(
     private fun RenderCrossfade(scope: CoroutineScope, screen: Screen?, getBackstack: () -> Backstack) {
         Crossfade(targetState = screen) { renderingScreen ->
             if (renderingScreen != null) {
-                val tag = renderingScreen.id
+                val tag = renderingScreen.toTag()
                 DisposableEffect(key1 = tag) {
                     onDispose {
                         val backstack = getBackstack()
-                        val tagInBackstack = backstack.any { screen -> screen.id == tag }
+                        val tagInBackstack = backstack.any { screen ->
+                            val currentTag = screen.toTag()
+                            currentTag == tag
+                        }
                         if (!tagInBackstack) {
                             serviceClearer.clear(tag)
                         }
@@ -65,7 +69,12 @@ internal class Renderer(
             backstack = backstack,
             transition = CrossFadeZoom,
         ) { screen ->
-            screen.run { activity.Content(id, scope) }
+            screen.run {
+                val tag = screen.toTag()
+                activity.Content(tag, scope)
+            }
         }
     }
 }
+
+private fun Screen.toTag(): ServiceTag = ServiceTag(id)

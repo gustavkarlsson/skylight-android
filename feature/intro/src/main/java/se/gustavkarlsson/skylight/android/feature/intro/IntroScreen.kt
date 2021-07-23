@@ -21,9 +21,13 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceId
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
 import se.gustavkarlsson.skylight.android.lib.ui.compose.LargeDialog
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
+
+private val VIEW_MODEL_ID = ServiceId("introViewModel")
 
 @Parcelize
 internal data class IntroScreen(private val target: Backstack) : Screen {
@@ -36,8 +40,8 @@ internal data class IntroScreen(private val target: Backstack) : Screen {
     override val name = ScreenName.Intro
 
     @Composable
-    override fun AppCompatActivity.Content(tag: String, scope: CoroutineScope) {
-        val viewModel = getOrRegisterService("introViewModel", tag) {
+    override fun AppCompatActivity.Content(tag: ServiceTag, scope: CoroutineScope) {
+        val viewModel = getOrRegisterService(VIEW_MODEL_ID, tag) {
             IntroComponent.build().viewModel()
         }
         Content(

@@ -3,13 +3,15 @@ package se.gustavkarlsson.skylight.android.lib.ui
 import android.app.Activity
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceHost
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceId
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
 
-fun Activity.registerService(id: String, tag: String, service: ScopedService) {
+fun Activity.registerService(id: ServiceId, tag: ServiceTag, service: ScopedService) {
     val host = this as? ServiceHost ?: error("Activity does not implement ${ScopedService::class.java.name}")
     host.serviceCatalog.register(id, tag, service)
 }
 
-inline fun <reified T : ScopedService> Activity.getService(id: String): T? {
+inline fun <reified T : ScopedService> Activity.getService(id: ServiceId): T? {
     val host = this as? ServiceHost ?: error("Activity does not implement ${ScopedService::class.java.name}")
     val service = host.serviceCatalog[id] ?: return null
     check(service is T) {
@@ -19,8 +21,8 @@ inline fun <reified T : ScopedService> Activity.getService(id: String): T? {
 }
 
 inline fun <reified T : ScopedService> Activity.getOrRegisterService(
-    id: String,
-    tag: String,
+    id: ServiceId,
+    tag: ServiceTag,
     createService: () -> T,
 ): T {
     val existingService = getService<T>(id)

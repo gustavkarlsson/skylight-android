@@ -32,6 +32,7 @@ import se.gustavkarlsson.skylight.android.feature.privacypolicy.R
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.MarkdownText
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
@@ -41,7 +42,7 @@ object PrivacyPolicyScreen : Screen {
     override val name get() = ScreenName.PrivacyPolicy
 
     @Composable
-    override fun AppCompatActivity.Content(tag: String, scope: CoroutineScope) {
+    override fun AppCompatActivity.Content(tag: ServiceTag, scope: CoroutineScope) {
         var markdownText by remember { mutableStateOf("") }
         LaunchedEffect(key1 = null) {
             withContext(Dispatchers.IO) {

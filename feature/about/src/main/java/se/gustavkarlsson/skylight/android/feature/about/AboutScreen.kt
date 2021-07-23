@@ -30,19 +30,23 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceId
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ClickableText
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
 
+private val VIEW_MODE_ID = ServiceId("aboutViewModel")
+
 @Parcelize
 object AboutScreen : Screen {
     override val name get() = ScreenName.About
 
     @Composable
-    override fun AppCompatActivity.Content(tag: String, scope: CoroutineScope) {
-        val viewModel = getOrRegisterService("aboutViewModel", tag) {
+    override fun AppCompatActivity.Content(tag: ServiceTag, scope: CoroutineScope) {
+        val viewModel = getOrRegisterService(VIEW_MODE_ID, tag) {
             AboutComponent.build().viewModel()
         }
         val text = viewModel.detailsText.resolve(this)
