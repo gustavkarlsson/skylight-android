@@ -6,6 +6,7 @@ import se.gustavkarlsson.skylight.android.core.logging.logInfo
 internal class ServiceRegistry : ServiceCatalog, ServiceClearer {
     private val services = mutableMapOf<ServiceId, ServiceEntry>()
 
+    // FIXME Only allow to register through render call
     @Synchronized
     override fun register(id: ServiceId, tag: ServiceTag, service: ScopedService) {
         require(id !in services.keys) { "Service already exists for ${id.value}" }
@@ -13,14 +14,15 @@ internal class ServiceRegistry : ServiceCatalog, ServiceClearer {
         services[id] = ServiceEntry(tag, service)
     }
 
-    override fun clear(tag: ServiceTag) {
+    override fun clear(tags: Collection<ServiceTag>) {
+        if (tags.isEmpty()) return
         val ids = services
             .mapNotNull { (id, entry) ->
-                if (entry.tag == tag) {
+                if (entry.tag in tags) {
                     id
                 } else null
             }
-        logInfo { "Clearing services for tag '${tag.value}': '$ids'" }
+        logInfo { "Clearing services for tags '${tags.map { it.value }}': '${ids.map { it.value }}'" }
         for (id in ids) {
             services[id]?.service?.onCleared()
             services.remove(id)

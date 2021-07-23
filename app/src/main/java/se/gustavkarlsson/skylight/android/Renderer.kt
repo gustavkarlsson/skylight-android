@@ -32,28 +32,20 @@ internal class Renderer(
             }
             val change by navigator.backstackChanges.collectAsLifecycleAwareState()
             RenderCrossfade(scope, change.new.lastOrNull()) {
-                // FIXME passa function that does all of this automatically
-                navigator.backstackChanges.value.new
+                val removedScreens = change.old - change.new
+                val tagsToClear = removedScreens.map { it.toTag() }
+                serviceClearer.clear(tagsToClear)
             }
         }
     }
 
     @Composable
-    private fun RenderCrossfade(scope: CoroutineScope, screen: Screen?, getBackstack: () -> Backstack) {
+    private fun RenderCrossfade(scope: CoroutineScope, screen: Screen?, onDispose: () -> Unit) {
         Crossfade(targetState = screen) { renderingScreen ->
             if (renderingScreen != null) {
                 val tag = renderingScreen.toTag()
                 DisposableEffect(key1 = tag) {
-                    onDispose {
-                        val backstack = getBackstack()
-                        val tagInBackstack = backstack.any { screen ->
-                            val currentTag = screen.toTag()
-                            currentTag == tag
-                        }
-                        if (!tagInBackstack) {
-                            serviceClearer.clear(tag)
-                        }
-                    }
+                    onDispose(onDispose)
                 }
                 renderingScreen.run { activity.Content(tag, scope) }
             }
