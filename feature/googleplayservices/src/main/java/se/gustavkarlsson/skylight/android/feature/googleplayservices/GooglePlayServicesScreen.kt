@@ -38,6 +38,9 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.collectAsLifecycleAwareState
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
+import se.gustavkarlsson.skylight.android.lib.ui.getService
+
+private const val VIEW_MODEL_ID = "googlePlayServicesViewModel"
 
 @Parcelize
 internal data class GooglePlayServicesScreen(private val target: Backstack) : Screen {
@@ -49,21 +52,22 @@ internal data class GooglePlayServicesScreen(private val target: Backstack) : Sc
     @IgnoredOnParcel
     override val name = ScreenName.GooglePlayServices
 
-    private val AppCompatActivity.viewModel: GooglePlayServicesViewModel
-        get() = getOrRegisterService(this@GooglePlayServicesScreen, "googlePlayServicesViewModel") {
-            GooglePlayServicesComponent.build().viewModel()
-        }
+    private val AppCompatActivity.optionalViewModel: GooglePlayServicesViewModel?
+        get() = getService(VIEW_MODEL_ID)
 
     override fun AppCompatActivity.onCreateDestroyScope(scope: CoroutineScope) {
         scope.launch {
-            viewModel.success.collect {
+            optionalViewModel?.success?.collect {
                 navigator.setBackstack(target)
             }
         }
     }
 
     @Composable
-    override fun AppCompatActivity.Content(scope: CoroutineScope) {
+    override fun AppCompatActivity.Content(tag: String, scope: CoroutineScope) {
+        val viewModel = getOrRegisterService(VIEW_MODEL_ID, tag) {
+            GooglePlayServicesComponent.build().viewModel()
+        }
         val errorSnackbarVisible = viewModel.error.collectAsLifecycleAwareState()
         Content(
             errorSnackbarVisible = errorSnackbarVisible.value,

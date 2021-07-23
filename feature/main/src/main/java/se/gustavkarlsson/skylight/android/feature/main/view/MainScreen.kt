@@ -35,7 +35,10 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.collectAsLifecycleAwareState
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
+import se.gustavkarlsson.skylight.android.lib.ui.getService
 import se.gustavkarlsson.skylight.android.lib.ui.startStopScope
+
+private const val VIEW_MODEL_ID = "mainViewModel"
 
 @Parcelize
 object MainScreen : Screen {
@@ -43,20 +46,18 @@ object MainScreen : Screen {
 
     override val scopeStart get() = "main"
 
-    private val AppCompatActivity.viewModel: MainViewModel
-        get() = getOrRegisterService(this@MainScreen, "mainViewModel") {
-            MainViewModelComponent.build().viewModel()
-        }
+    private val AppCompatActivity.optionalViewModel: MainViewModel?
+        get() = getService(VIEW_MODEL_ID)
 
     override fun AppCompatActivity.onStartStopScope(scope: CoroutineScope) {
-        viewModel.onEvent(Event.RefreshLocationPermission)
+        optionalViewModel?.onEvent(Event.RefreshLocationPermission)
     }
 
     override fun AppCompatActivity.onBackPress(): BackPress {
-        return when ((viewModel.state.value as? ViewState.Ready)?.appBar) {
+        return when ((optionalViewModel?.state?.value as? ViewState.Ready)?.appBar) {
             null, is AppBarState.PlaceSelected -> BackPress.NOT_HANDLED
             is AppBarState.Searching -> {
-                viewModel.onEvent(Event.SearchChanged(SearchFieldState.Inactive))
+                optionalViewModel?.onEvent(Event.SearchChanged(SearchFieldState.Inactive))
                 BackPress.HANDLED
             }
         }
@@ -78,8 +79,8 @@ object MainScreen : Screen {
     }
 
     @Composable
-    override fun AppCompatActivity.Content(scope: CoroutineScope) {
-        val viewModel = getOrRegisterService(this@MainScreen, "mainViewModel") {
+    override fun AppCompatActivity.Content(tag: String, scope: CoroutineScope) {
+        val viewModel = getOrRegisterService(VIEW_MODEL_ID, tag) {
             MainViewModelComponent.build().viewModel()
         }
         val state by viewModel.state.collectAsLifecycleAwareState()

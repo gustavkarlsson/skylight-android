@@ -1,13 +1,12 @@
 package se.gustavkarlsson.skylight.android.lib.ui
 
 import android.app.Activity
-import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceHost
 
-fun Activity.registerService(screen: Screen, id: String, service: ScopedService) {
+fun Activity.registerService(id: String, tag: String, service: ScopedService) {
     val host = this as? ServiceHost ?: error("Activity does not implement ${ScopedService::class.java.name}")
-    host.serviceCatalog.register(id, screen.tag, service)
+    host.serviceCatalog.register(id, tag, service)
 }
 
 inline fun <reified T : ScopedService> Activity.getService(id: String): T? {
@@ -20,13 +19,13 @@ inline fun <reified T : ScopedService> Activity.getService(id: String): T? {
 }
 
 inline fun <reified T : ScopedService> Activity.getOrRegisterService(
-    screen: Screen,
     id: String,
-    createService: () -> T
+    tag: String,
+    createService: () -> T,
 ): T {
     val existingService = getService<T>(id)
     if (existingService != null) return existingService
     val createdService = createService()
-    registerService(screen, id, createdService)
+    registerService(id, tag, createdService)
     return createdService
 }

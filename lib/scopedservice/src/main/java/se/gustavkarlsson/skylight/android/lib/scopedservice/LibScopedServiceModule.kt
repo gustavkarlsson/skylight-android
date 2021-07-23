@@ -9,6 +9,11 @@ object LibScopedServiceModule {
 
     @Provides
     @AppScope
-    internal fun provideServiceRegistry(): ServiceRegistry =
-        DefaultServiceRegistry()
+    internal fun provideServiceRegistry(): ServiceRegistry = ServiceRegistry()
+
+    @Provides
+    internal fun provideServiceCatalog(registry: ServiceRegistry): ServiceCatalog = registry
+
+    @Provides
+    internal fun provideServiceClearer(registry: ServiceRegistry): ServiceClearer = registry
 }

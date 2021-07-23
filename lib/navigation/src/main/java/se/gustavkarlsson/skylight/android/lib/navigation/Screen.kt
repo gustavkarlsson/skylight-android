@@ -6,10 +6,14 @@ import androidx.compose.runtime.Composable
 import kotlinx.coroutines.CoroutineScope
 
 interface Screen : Parcelable {
+    // TODO Rename to ScreenType?
     val name: ScreenName
-    val tag: String get() = "$name[${hashCode()}]"
+
+    // TODO Combine id and scopeStart in one? And make sure each is unique
+    val id: String get() = "$name[${hashCode()}]"
     val scopeStart: String? get() = null
 
+    // TODO Don't extend activity
     fun AppCompatActivity.onCreateDestroyScope(scope: CoroutineScope) = Unit
     fun AppCompatActivity.onStartStopScope(scope: CoroutineScope) = Unit
     fun AppCompatActivity.onResumePauseScope(scope: CoroutineScope) = Unit
@@ -17,7 +21,7 @@ interface Screen : Parcelable {
     fun AppCompatActivity.onBackPress(): BackPress = BackPress.NOT_HANDLED
 
     @Composable
-    fun AppCompatActivity.Content(scope: CoroutineScope)
+    fun AppCompatActivity.Content(tag: String, scope: CoroutineScope)
 }
 
 enum class BackPress {

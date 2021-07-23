@@ -40,13 +40,11 @@ import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
 object AboutScreen : Screen {
     override val name get() = ScreenName.About
 
-    private val AppCompatActivity.viewModel: AboutViewModel
-        get() = getOrRegisterService(this@AboutScreen, "aboutViewModel") {
+    @Composable
+    override fun AppCompatActivity.Content(tag: String, scope: CoroutineScope) {
+        val viewModel = getOrRegisterService("aboutViewModel", tag) {
             AboutComponent.build().viewModel()
         }
-
-    @Composable
-    override fun AppCompatActivity.Content(scope: CoroutineScope) {
         val text = viewModel.detailsText.resolve(this)
         Content(
             text = text,

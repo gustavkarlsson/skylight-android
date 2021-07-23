@@ -4,6 +4,7 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import com.zachklipp.compose.backstack.Backstack
@@ -14,12 +15,14 @@ import kotlinx.coroutines.SupervisorJob
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceClearer
 import se.gustavkarlsson.skylight.android.lib.ui.compose.collectAsLifecycleAwareState
 import se.gustavkarlsson.skylight.android.transitions.CrossFadeZoom
 
 internal class Renderer(
     private val activity: AppCompatActivity,
     private val navigator: Navigator,
+    private val serviceClearer: ServiceClearer,
 ) {
     fun render() {
         activity.setContent {
@@ -27,22 +30,29 @@ internal class Renderer(
                 SupervisorJob() + Dispatchers.Main + CoroutineName("viewScope")
             }
             val change by navigator.backstackChanges.collectAsLifecycleAwareState()
-            val topScreen = change.new.lastOrNull()
-            RenderSimple(topScreen, scope)
+            RenderCrossfade(scope, change.new.lastOrNull()) {
+                // FIXME passa function that does all of this automatically
+                navigator.backstackChanges.value.new
+            }
         }
     }
 
-    // FIXME Does not render when the last screen is removed. Screen turns blank while it animates to background
     @Composable
-    private fun RenderSimple(screen: Screen?, scope: CoroutineScope) {
-        screen?.run { activity.Content(scope) }
-    }
-
-    // TODO This doesn't work. When screen has changed, the old screen will still re-fetch the service and start over while fading out
-    @Composable
-    private fun RenderCrossfade(screen: Screen?, scope: CoroutineScope) {
-        Crossfade(targetState = screen) { screenToRender ->
-            screenToRender?.run { activity.Content(scope) }
+    private fun RenderCrossfade(scope: CoroutineScope, screen: Screen?, getBackstack: () -> Backstack) {
+        Crossfade(targetState = screen) { renderingScreen ->
+            if (renderingScreen != null) {
+                val tag = renderingScreen.id
+                DisposableEffect(key1 = tag) {
+                    onDispose {
+                        val backstack = getBackstack()
+                        val tagInBackstack = backstack.any { screen -> screen.id == tag }
+                        if (!tagInBackstack) {
+                            serviceClearer.clear(tag)
+                        }
+                    }
+                }
+                renderingScreen.run { activity.Content(tag, scope) }
+            }
         }
     }
 
@@ -55,7 +65,7 @@ internal class Renderer(
             backstack = backstack,
             transition = CrossFadeZoom,
         ) { screen ->
-            screen.run { activity.Content(scope) }
+            screen.run { activity.Content(id, scope) }
         }
     }
 }

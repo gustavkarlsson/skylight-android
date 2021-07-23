@@ -35,26 +35,20 @@ internal data class IntroScreen(private val target: Backstack) : Screen {
     @IgnoredOnParcel
     override val name = ScreenName.Intro
 
-    private val AppCompatActivity.viewModel: IntroViewModel
-        get() = getOrRegisterService(this@IntroScreen, "introViewModel") {
+    @Composable
+    override fun AppCompatActivity.Content(tag: String, scope: CoroutineScope) {
+        val viewModel = getOrRegisterService("introViewModel", tag) {
             IntroComponent.build().viewModel()
         }
-
-    @Composable
-    override fun AppCompatActivity.Content(scope: CoroutineScope) {
         Content(
-            onPrivacyPolicyClicked = { onPrivacyPolicyClicked() },
-            onContinueClicked = { onContinueClicked() },
+            onPrivacyPolicyClicked = {
+                navigator.goTo(screens.privacyPolicy)
+            },
+            onContinueClicked = {
+                viewModel.registerScreenSeen()
+                navigator.setBackstack(target)
+            },
         )
-    }
-
-    private fun AppCompatActivity.onPrivacyPolicyClicked() {
-        navigator.goTo(screens.privacyPolicy)
-    }
-
-    private fun AppCompatActivity.onContinueClicked() {
-        viewModel.registerScreenSeen()
-        navigator.setBackstack(target)
     }
 }
 

@@ -26,8 +26,8 @@ import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.lib.places.getPlaceId
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedServiceComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceCatalog
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceClearer
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceHost
-import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceRegistry
 import se.gustavkarlsson.skylight.android.lib.ui.ScopeHost
 import se.gustavkarlsson.skylight.android.navigation.DefaultScreens
 
@@ -38,11 +38,12 @@ internal class MainActivity :
     ScopeHost,
     ServiceHost {
 
-    private val serviceRegistry: ServiceRegistry = ScopedServiceComponent.instance.serviceRegistry()
+    private val serviceClearer: ServiceClearer = ScopedServiceComponent.instance.serviceClearer()
 
     private val selectedPlaceRepository: SelectedPlaceRepository = PlacesComponent.instance.selectedPlaceRepository()
 
-    override val serviceCatalog: ServiceCatalog get() = serviceRegistry
+    // FIXME Why get service catalog through activity?
+    override val serviceCatalog: ServiceCatalog = ScopedServiceComponent.instance.serviceCatalog()
 
     override val screens: Screens = DefaultScreens
 
@@ -56,7 +57,8 @@ internal class MainActivity :
     }
 
     private val renderer: Renderer by lazy {
-        Renderer(this, navigator)
+        // FIXME Why not inject these?
+        Renderer(this, navigator, serviceClearer)
     }
 
     // Create Destroy
@@ -90,15 +92,9 @@ internal class MainActivity :
 
     // TODO Implement listeners instead?
     private fun onBackstackChange(change: BackstackChange) {
-        notifyServiceRegistry(change)
         passScopesToNewScreens(change)
         trackScreenChange(change)
         finishIfEmpty(change)
-    }
-
-    private fun notifyServiceRegistry(change: BackstackChange) {
-        val tags = change.new.map(Screen::tag)
-        serviceRegistry.onTagsChanged(tags)
     }
 
     private fun passScopesToNewScreens(change: BackstackChange) {

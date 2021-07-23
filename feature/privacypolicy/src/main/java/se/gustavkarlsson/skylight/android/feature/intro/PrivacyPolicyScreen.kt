@@ -41,7 +41,7 @@ object PrivacyPolicyScreen : Screen {
     override val name get() = ScreenName.PrivacyPolicy
 
     @Composable
-    override fun AppCompatActivity.Content(scope: CoroutineScope) {
+    override fun AppCompatActivity.Content(tag: String, scope: CoroutineScope) {
         var markdownText by remember { mutableStateOf("") }
         LaunchedEffect(key1 = null) {
             withContext(Dispatchers.IO) {
