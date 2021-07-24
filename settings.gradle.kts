@@ -10,7 +10,6 @@ include(
     ":lib:kpindex",
     ":lib:location",
     ":lib:navigation",
-    ":lib:navigationsetup",
     ":lib:okhttp",
     ":lib:permissions",
     ":lib:places",

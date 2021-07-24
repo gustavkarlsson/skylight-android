@@ -105,7 +105,7 @@ dependencies {
     implementation(project(":lib:geomaglocation"))
     implementation(project(":lib:aurora"))
     implementation(project(":lib:geocoder"))
-    implementation(project(":lib:navigationsetup"))
+    implementation(project(":lib:navigation"))
     implementation(project(":lib:scopedservice"))
     implementation(project(":lib:reversegeocoder"))
     implementation(project(":lib:runversion"))

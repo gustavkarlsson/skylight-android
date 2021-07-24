@@ -12,14 +12,12 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
+import se.gustavkarlsson.skylight.android.lib.navigation.BackPressHandler
 import se.gustavkarlsson.skylight.android.lib.navigation.BackstackChange
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
-import se.gustavkarlsson.skylight.android.lib.navigation.NavigatorHost
+import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
-import se.gustavkarlsson.skylight.android.lib.navigation.Screens
-import se.gustavkarlsson.skylight.android.lib.navigation.ScreensHost
-import se.gustavkarlsson.skylight.android.lib.navigationsetup.MasterNavigator
-import se.gustavkarlsson.skylight.android.lib.navigationsetup.NavigationSetupComponent
+import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
@@ -27,33 +25,22 @@ import se.gustavkarlsson.skylight.android.lib.places.getPlaceId
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedServiceComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceClearer
 import se.gustavkarlsson.skylight.android.lib.ui.ScopeHost
-import se.gustavkarlsson.skylight.android.navigation.DefaultScreens
 
 // TODO Inject things
 internal class MainActivity :
     AppCompatActivity(),
-    NavigatorHost,
-    ScreensHost,
     ScopeHost {
 
     private val serviceClearer: ServiceClearer = ScopedServiceComponent.instance.serviceClearer()
 
     private val selectedPlaceRepository: SelectedPlaceRepository = PlacesComponent.instance.selectedPlaceRepository()
 
-    override val screens: Screens = DefaultScreens
+    private val navigator: Navigator = NavigationComponent.instance.navigator()
 
-    // TODO Remove activity completely from navigator
-    override val navigator: MasterNavigator by lazy {
-        val installer = NavigationSetupComponent.create().navigationInstaller()
-        installer.install(
-            activity = this,
-            initialBackstack = listOf(screens.main),
-            navigationOverrides = NavigationComponent.instance.navigationOverrides(),
-        )
-    }
+    private val backPressHandler: BackPressHandler = NavigationComponent.instance.backPressHandler()
 
     private val renderer: Renderer by lazy {
-        Renderer(this, navigator, serviceClearer)
+        Renderer(this, NavigationComponent.instance.navigator(), serviceClearer)
     }
 
     // Create Destroy
@@ -66,6 +53,7 @@ internal class MainActivity :
         val scope = createLifecycleScope("createDestroyScope")
         createDestroyScope = scope
         onEachScreen { onCreateDestroyScope(scope) }
+        // FIXME If just starting, navigate to main?
         scope.launch { navigator.backstackChanges.collect(::onBackstackChange) }
         intent?.getPlaceId()?.let { placeId ->
             onNewPlaceId(placeId)
@@ -82,7 +70,7 @@ internal class MainActivity :
 
     private fun onNewPlaceId(placeId: PlaceId) {
         selectedPlaceRepository.set(placeId)
-        navigator.setBackstack(listOf(screens.main))
+        navigator.setBackstack(listOf(screens.main)) // FIXME Inject instead?
     }
 
     // TODO Implement listeners instead?
@@ -166,7 +154,7 @@ internal class MainActivity :
         super.onPause()
     }
 
-    override fun onBackPressed() = navigator.onBackPress()
+    override fun onBackPressed() = backPressHandler.onBackPress()
 
     private fun createLifecycleScope(name: String) = MainScope() + CoroutineName(name)
 

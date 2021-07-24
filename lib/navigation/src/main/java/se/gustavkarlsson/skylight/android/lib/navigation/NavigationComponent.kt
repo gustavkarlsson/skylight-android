@@ -2,7 +2,11 @@ package se.gustavkarlsson.skylight.android.lib.navigation
 
 interface NavigationComponent {
 
-    fun navigationOverrides(): Set<NavigationOverride>
+    fun navigator(): Navigator
+
+    fun screens(): Screens
+
+    fun backPressHandler(): BackPressHandler
 
     interface Setter {
         fun setNavigationComponent(component: NavigationComponent) {

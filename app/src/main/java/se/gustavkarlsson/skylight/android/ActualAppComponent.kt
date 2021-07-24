@@ -23,6 +23,7 @@ import se.gustavkarlsson.skylight.android.lib.kpindex.LibKpIndexModule
 import se.gustavkarlsson.skylight.android.lib.location.LibLocationModule
 import se.gustavkarlsson.skylight.android.lib.location.LocationComponent
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
+import se.gustavkarlsson.skylight.android.lib.navigation.NavigationModule
 import se.gustavkarlsson.skylight.android.lib.okhttp.LibOkHttpModule
 import se.gustavkarlsson.skylight.android.lib.permissions.LibPermissionsModule
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
@@ -64,7 +65,8 @@ import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
         LibAuroraModule::class,
         FeatureGooglePlayServicesModule::class,
         FeatureIntroModule::class,
-        FeatureBackgroundModule::class
+        FeatureBackgroundModule::class,
+        NavigationModule::class,
     ]
 )
 internal interface ActualAppComponent :

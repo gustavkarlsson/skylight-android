@@ -16,6 +16,7 @@ import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationCompo
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexComponent
 import se.gustavkarlsson.skylight.android.lib.location.LocationComponent
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
+import se.gustavkarlsson.skylight.android.lib.navigation.NavigationModule
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoderComponent
@@ -24,6 +25,7 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedServiceCompone
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
+import se.gustavkarlsson.skylight.android.navigation.DefaultScreens
 
 private object Setter :
     AppComponent.Setter,
@@ -48,6 +50,7 @@ private object Setter :
 internal fun Application.initDagger() {
     val component = DaggerActualAppComponent.builder()
         .appModule(AppModule(this))
+        .navigationModule(NavigationModule(DefaultScreens))
         .build()
 
     with(Setter) {
