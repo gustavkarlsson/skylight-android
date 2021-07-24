@@ -69,4 +69,4 @@ internal class Renderer(
     }
 }
 
-private fun Screen.toTag(): ServiceTag = ServiceTag(id)
+private fun Screen.toTag(): ServiceTag = ServiceTag("$type[${hashCode()}]")
