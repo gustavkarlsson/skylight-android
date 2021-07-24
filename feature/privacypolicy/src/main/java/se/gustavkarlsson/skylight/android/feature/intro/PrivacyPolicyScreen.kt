@@ -42,11 +42,11 @@ object PrivacyPolicyScreen : Screen {
     override val name get() = ScreenName.PrivacyPolicy
 
     @Composable
-    override fun AppCompatActivity.Content(tag: ServiceTag, scope: CoroutineScope) {
+    override fun Content(activity: AppCompatActivity, tag: ServiceTag, scope: CoroutineScope) {
         var markdownText by remember { mutableStateOf("") }
         LaunchedEffect(key1 = null) {
             withContext(Dispatchers.IO) {
-                val privacyPolicyMarkdown = resources.openRawResource(R.raw.privacy_policy)
+                val privacyPolicyMarkdown = activity.resources.openRawResource(R.raw.privacy_policy)
                     .bufferedReader()
                     .readText()
                 markdownText = privacyPolicyMarkdown

@@ -56,7 +56,7 @@ internal class MainActivity :
         }
         val scope = createLifecycleScope("createDestroyScope")
         createDestroyScope = scope
-        onEachScreen { onCreateDestroyScope(scope) }
+        onEachScreen { onCreateDestroyScope(this@MainActivity, scope) }
         scope.launch { navigator.backstackChanges.collect(::onBackstackChange) }
         intent?.getPlaceId()?.let { placeId ->
             onNewPlaceId(placeId)
@@ -86,13 +86,13 @@ internal class MainActivity :
     private fun passScopesToNewScreens(change: BackstackChange) {
         val addedScreens = change.new - change.old
         addedScreens.tryPassScope(createDestroyScope) { scope ->
-            onCreateDestroyScope(scope)
+            onCreateDestroyScope(this@MainActivity, scope)
         }
         addedScreens.tryPassScope(startStopScope) { scope ->
-            onStartStopScope(scope)
+            onStartStopScope(this@MainActivity, scope)
         }
         addedScreens.tryPassScope(resumePauseScope) { scope ->
-            onResumePauseScope(scope)
+            onResumePauseScope(this@MainActivity, scope)
         }
     }
 
@@ -131,7 +131,7 @@ internal class MainActivity :
         super.onStart()
         val scope = createLifecycleScope("startStopScope")
         startStopScope = scope
-        onEachScreen { onStartStopScope(scope) }
+        onEachScreen { onStartStopScope(this@MainActivity, scope) }
     }
 
     override fun onStop() {
@@ -148,7 +148,7 @@ internal class MainActivity :
         super.onResume()
         val scope = createLifecycleScope("resumePauseScope")
         resumePauseScope = scope
-        onEachScreen { onResumePauseScope(scope) }
+        onEachScreen { onResumePauseScope(this@MainActivity, scope) }
     }
 
     override fun onPause() {

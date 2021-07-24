@@ -14,15 +14,14 @@ interface Screen : Parcelable {
     val id: String get() = "$name[${hashCode()}]"
     val scopeStart: String? get() = null
 
-    // TODO Don't extend activity
-    fun AppCompatActivity.onCreateDestroyScope(scope: CoroutineScope) = Unit
-    fun AppCompatActivity.onStartStopScope(scope: CoroutineScope) = Unit
-    fun AppCompatActivity.onResumePauseScope(scope: CoroutineScope) = Unit
+    fun onCreateDestroyScope(activity: AppCompatActivity, scope: CoroutineScope) = Unit
+    fun onStartStopScope(activity: AppCompatActivity, scope: CoroutineScope) = Unit
+    fun onResumePauseScope(activity: AppCompatActivity, scope: CoroutineScope) = Unit
 
     fun onBackPress(): BackPress = BackPress.NOT_HANDLED
 
     @Composable
-    fun AppCompatActivity.Content(tag: ServiceTag, scope: CoroutineScope)
+    fun Content(activity: AppCompatActivity, tag: ServiceTag, scope: CoroutineScope)
 }
 
 enum class BackPress {

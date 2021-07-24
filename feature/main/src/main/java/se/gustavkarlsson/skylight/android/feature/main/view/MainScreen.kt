@@ -48,10 +48,9 @@ object MainScreen : Screen {
 
     override val scopeStart get() = "main"
 
-    private val optionalViewModel: MainViewModel?
-        get() = getService(VIEW_MODEL_ID)
+    private val optionalViewModel get() = getService<MainViewModel>(VIEW_MODEL_ID)
 
-    override fun AppCompatActivity.onStartStopScope(scope: CoroutineScope) {
+    override fun onStartStopScope(activity: AppCompatActivity, scope: CoroutineScope) {
         optionalViewModel?.onEvent(Event.RefreshLocationPermission)
     }
 
@@ -65,23 +64,23 @@ object MainScreen : Screen {
         }
     }
 
-    private fun Activity.openAppDetails() {
+    private fun openAppDetails(activity: Activity) {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        intent.data = Uri.fromParts("package", packageName, null)
-        startActivity(intent)
+        intent.data = Uri.fromParts("package", activity.packageName, null)
+        activity.startActivity(intent)
     }
 
-    private fun FragmentActivity.requestPermission(permission: Permission) {
-        startStopScope?.launch {
+    private fun requestPermission(activity: FragmentActivity, permission: Permission) {
+        activity.startStopScope?.launch {
             withContext(Dispatchers.Main) {
                 PermissionsComponent.instance.permissionRequester()
-                    .request(this@requestPermission, permission)
+                    .request(activity, permission)
             }
         }
     }
 
     @Composable
-    override fun AppCompatActivity.Content(tag: ServiceTag, scope: CoroutineScope) {
+    override fun Content(activity: AppCompatActivity, tag: ServiceTag, scope: CoroutineScope) {
         val viewModel = getOrRegisterService(VIEW_MODEL_ID, tag) {
             MainViewModelComponent.build().viewModel()
         }
@@ -91,13 +90,13 @@ object MainScreen : Screen {
             onBannerActionClicked = { event ->
                 when (event) {
                     BannerData.Event.RequestBackgroundLocationPermission ->
-                        requestPermission(Permission.BackgroundLocation)
+                        requestPermission(activity, Permission.BackgroundLocation)
                     BannerData.Event.OpenAppDetails ->
-                        openAppDetails()
+                        openAppDetails(activity)
                 }
             },
-            onClickGrantLocationPermission = { requestPermission(Permission.Location) },
-            onClickOpenSettings = { openAppDetails() },
+            onClickGrantLocationPermission = { requestPermission(activity, Permission.Location) },
+            onClickOpenSettings = { openAppDetails(activity) },
             onClickTurnOffNotifications = { viewModel.onEvent(Event.TurnOffCurrentLocationNotifications) },
             onAboutClicked = { navigator.goTo(screens.about) },
             onEvent = { event -> viewModel.onEvent(event) },

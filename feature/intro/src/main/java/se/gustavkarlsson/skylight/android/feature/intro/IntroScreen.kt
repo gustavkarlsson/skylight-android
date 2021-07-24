@@ -40,7 +40,7 @@ internal data class IntroScreen(private val target: Backstack) : Screen {
     override val name = ScreenName.Intro
 
     @Composable
-    override fun AppCompatActivity.Content(tag: ServiceTag, scope: CoroutineScope) {
+    override fun Content(activity: AppCompatActivity, tag: ServiceTag, scope: CoroutineScope) {
         val viewModel = getOrRegisterService(VIEW_MODEL_ID, tag) {
             IntroComponent.build().viewModel()
         }

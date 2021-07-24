@@ -54,10 +54,9 @@ internal data class GooglePlayServicesScreen(private val target: Backstack) : Sc
     @IgnoredOnParcel
     override val name = ScreenName.GooglePlayServices
 
-    private val AppCompatActivity.optionalViewModel: GooglePlayServicesViewModel?
-        get() = getService(VIEW_MODEL_ID)
+    private val optionalViewModel get() = getService<GooglePlayServicesViewModel>(VIEW_MODEL_ID)
 
-    override fun AppCompatActivity.onCreateDestroyScope(scope: CoroutineScope) {
+    override fun onCreateDestroyScope(activity: AppCompatActivity, scope: CoroutineScope) {
         scope.launch {
             optionalViewModel?.success?.collect {
                 navigator.setBackstack(target)
@@ -66,14 +65,14 @@ internal data class GooglePlayServicesScreen(private val target: Backstack) : Sc
     }
 
     @Composable
-    override fun AppCompatActivity.Content(tag: ServiceTag, scope: CoroutineScope) {
+    override fun Content(activity: AppCompatActivity, tag: ServiceTag, scope: CoroutineScope) {
         val viewModel = getOrRegisterService(VIEW_MODEL_ID, tag) {
             GooglePlayServicesComponent.build().viewModel()
         }
         val errorSnackbarVisible = viewModel.error.collectAsLifecycleAwareState()
         Content(
             errorSnackbarVisible = errorSnackbarVisible.value,
-            onInstallClicked = { viewModel.installGooglePlayServices(this@Content) },
+            onInstallClicked = { viewModel.installGooglePlayServices(activity) },
             onErrorSnackbarDismissed = viewModel::clearError,
         )
     }
