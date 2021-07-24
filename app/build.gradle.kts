@@ -136,7 +136,6 @@ dependencies {
     // Compose
     implementation("androidx.activity:activity-compose:${Versions.androidActivity}")
     implementation("androidx.compose.animation:animation:${Versions.compose}")
-    implementation("com.zachklipp:compose-backstack:${Versions.backstack}")
 
     // Testing
     testImplementation("junit:junit:${Versions.junit}")

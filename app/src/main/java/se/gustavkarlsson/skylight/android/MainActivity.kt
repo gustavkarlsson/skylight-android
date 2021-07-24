@@ -16,7 +16,7 @@ import se.gustavkarlsson.skylight.android.lib.navigation.BackPressHandler
 import se.gustavkarlsson.skylight.android.lib.navigation.BackstackChange
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
-import se.gustavkarlsson.skylight.android.lib.navigation.screens
+import se.gustavkarlsson.skylight.android.lib.navigation.Screens
 import se.gustavkarlsson.skylight.android.lib.navigation.topScreen
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
@@ -42,6 +42,9 @@ internal class MainActivity :
 
     @Inject
     lateinit var backPressHandler: BackPressHandler
+
+    @Inject
+    lateinit var screens: Screens
 
     // Create Destroy
     override var createDestroyScope: CoroutineScope? = null
@@ -73,7 +76,7 @@ internal class MainActivity :
 
     private fun onNewPlaceId(placeId: PlaceId) {
         selectedPlaceRepository.set(placeId)
-        navigator.setBackstack(listOf(screens.main)) // FIXME Inject instead?
+        navigator.setBackstack(listOf(screens.main))
     }
 
     // TODO Implement listeners instead?

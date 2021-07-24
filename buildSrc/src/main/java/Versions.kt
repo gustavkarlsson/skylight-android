@@ -54,7 +54,6 @@ object Versions {
     val compose = "1.0.0-rc01"
     val composeConstraintLayout = "1.0.0-alpha08"
     val accompanist = "0.13.0"
-    val backstack = "0.9.0+1.0.0-beta07"
 
     // Test
     val junit = "4.12"
