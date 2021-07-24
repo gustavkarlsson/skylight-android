@@ -45,7 +45,7 @@ object AboutScreen : Screen {
     override val type: Screen.Type get() = Screen.Type.About
 
     @Composable
-    override fun Content(activity: AppCompatActivity, tag: ServiceTag, scope: CoroutineScope) {
+    override fun Content(activity: AppCompatActivity, scope: CoroutineScope, tag: ServiceTag) {
         val viewModel = getOrRegisterService(VIEW_MODE_ID, tag) {
             AboutComponent.build().viewModel()
         }

@@ -79,7 +79,7 @@ object MainScreen : Screen {
     }
 
     @Composable
-    override fun Content(activity: AppCompatActivity, tag: ServiceTag, scope: CoroutineScope) {
+    override fun Content(activity: AppCompatActivity, scope: CoroutineScope, tag: ServiceTag) {
         val viewModel = getOrRegisterService(VIEW_MODEL_ID, tag) {
             MainViewModelComponent.build().viewModel()
         }

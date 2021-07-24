@@ -20,7 +20,7 @@ interface Screen : Parcelable {
     fun onBackPress(): BackPress = BackPress.NOT_HANDLED
 
     @Composable
-    fun Content(activity: AppCompatActivity, tag: ServiceTag, scope: CoroutineScope)
+    fun Content(activity: AppCompatActivity, scope: CoroutineScope, tag: ServiceTag)
 
     enum class Type {
         Intro,

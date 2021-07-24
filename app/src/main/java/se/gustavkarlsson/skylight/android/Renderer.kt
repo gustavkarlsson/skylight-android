@@ -47,7 +47,7 @@ internal class Renderer(
                 DisposableEffect(key1 = tag) {
                     onDispose(onDispose)
                 }
-                renderingScreen.run { Content(activity, tag, scope) }
+                renderingScreen.run { Content(activity, scope, tag) }
             }
         }
     }
@@ -63,7 +63,7 @@ internal class Renderer(
         ) { screen ->
             screen.run {
                 val tag = screen.toTag()
-                Content(activity, tag, scope)
+                Content(activity, scope, tag)
             }
         }
     }
