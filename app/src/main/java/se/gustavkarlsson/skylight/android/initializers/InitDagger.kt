@@ -6,6 +6,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import se.gustavkarlsson.skylight.android.AppModule
 import se.gustavkarlsson.skylight.android.DaggerActualAppComponent
+import se.gustavkarlsson.skylight.android.MainActivityComponent
 import se.gustavkarlsson.skylight.android.core.AppComponent
 import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
 import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
@@ -45,7 +46,8 @@ private object Setter :
     NavigationComponent.Setter,
     DarknessComponent.Setter,
     KpIndexComponent.Setter,
-    GeomagLocationComponent.Setter
+    GeomagLocationComponent.Setter,
+    MainActivityComponent.Setter
 
 internal fun Application.initDagger() {
     val component = DaggerActualAppComponent.builder()
@@ -55,6 +57,7 @@ internal fun Application.initDagger() {
 
     with(Setter) {
         setAppComponent(component)
+        setMainActivityComponent(component)
         setAnalyticsComponent(component)
         setBackgroundComponent(component)
         setTimeComponent(component)

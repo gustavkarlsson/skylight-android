@@ -71,6 +71,7 @@ import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
 )
 internal interface ActualAppComponent :
     AppComponent,
+    MainActivityComponent,
     AnalyticsComponent,
     BackgroundComponent,
     TimeComponent,

@@ -2,8 +2,6 @@ package se.gustavkarlsson.skylight.android.lib.scopedservice
 
 interface ScopedServiceComponent {
 
-    fun serviceClearer(): ServiceClearer
-
     fun serviceCatalog(): ServiceCatalog
 
     interface Setter {

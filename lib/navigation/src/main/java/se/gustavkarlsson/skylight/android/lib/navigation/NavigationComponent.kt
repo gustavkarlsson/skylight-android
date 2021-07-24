@@ -6,8 +6,6 @@ interface NavigationComponent {
 
     fun screens(): Screens
 
-    fun backPressHandler(): BackPressHandler
-
     interface Setter {
         fun setNavigationComponent(component: NavigationComponent) {
             instance = component

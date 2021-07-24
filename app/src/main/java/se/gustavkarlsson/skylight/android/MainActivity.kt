@@ -11,38 +11,37 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.plus
-import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
+import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 import se.gustavkarlsson.skylight.android.lib.navigation.BackPressHandler
 import se.gustavkarlsson.skylight.android.lib.navigation.BackstackChange
-import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.navigation.topScreen
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
-import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.lib.places.getPlaceId
-import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedServiceComponent
-import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceClearer
 import se.gustavkarlsson.skylight.android.lib.ui.ScopeHost
+import javax.inject.Inject
 
-// TODO Inject things
 internal class MainActivity :
     AppCompatActivity(),
     ScopeHost {
 
-    private val serviceClearer: ServiceClearer = ScopedServiceComponent.instance.serviceClearer()
+    @Inject
+    lateinit var navigator: Navigator
 
-    private val selectedPlaceRepository: SelectedPlaceRepository = PlacesComponent.instance.selectedPlaceRepository()
+    @Inject
+    lateinit var renderer: Renderer
 
-    private val navigator: Navigator = NavigationComponent.instance.navigator()
+    @Inject
+    lateinit var selectedPlaceRepository: SelectedPlaceRepository
 
-    private val backPressHandler: BackPressHandler = NavigationComponent.instance.backPressHandler()
+    @Inject
+    lateinit var analytics: Analytics
 
-    private val renderer: Renderer by lazy {
-        Renderer(this, NavigationComponent.instance.navigator(), serviceClearer)
-    }
+    @Inject
+    lateinit var backPressHandler: BackPressHandler
 
     // Create Destroy
     override var createDestroyScope: CoroutineScope? = null
@@ -51,6 +50,7 @@ internal class MainActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        MainActivityComponent.instance.inject(this)
         if (savedInstanceState == null && navigator.topScreen == null) {
             navigator.goTo(screens.main)
         }
@@ -61,7 +61,7 @@ internal class MainActivity :
         intent?.getPlaceId()?.let { placeId ->
             onNewPlaceId(placeId)
         }
-        renderer.render()
+        renderer.render(this)
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -107,7 +107,7 @@ internal class MainActivity :
         val oldTop = change.old.lastOrNull()
         val newTop = change.new.lastOrNull()
         if (newTop != null && oldTop != newTop) {
-            AnalyticsComponent.instance.analytics().logScreen(newTop.type.name)
+            analytics.logScreen(newTop.type.name)
         }
     }
 

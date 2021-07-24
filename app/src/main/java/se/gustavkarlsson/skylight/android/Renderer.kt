@@ -19,19 +19,19 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceClearer
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
 import se.gustavkarlsson.skylight.android.lib.ui.compose.collectAsLifecycleAwareState
 import se.gustavkarlsson.skylight.android.transitions.CrossFadeZoom
+import javax.inject.Inject
 
-internal class Renderer(
-    private val activity: AppCompatActivity,
+internal class Renderer @Inject constructor(
     private val navigator: Navigator,
     private val serviceClearer: ServiceClearer,
 ) {
-    fun render() {
+    fun render(activity: AppCompatActivity) {
         activity.setContent {
             val scope = rememberCoroutineScope {
                 SupervisorJob() + Dispatchers.Main + CoroutineName("viewScope")
             }
             val change by navigator.backstackChanges.collectAsLifecycleAwareState()
-            RenderCrossfade(scope, change.new.lastOrNull()) {
+            RenderCrossfade(activity, scope, change.new.lastOrNull()) {
                 val removedScreens = change.old - change.new
                 val tagsToClear = removedScreens.map { it.toTag() }
                 serviceClearer.clear(tagsToClear)
@@ -40,14 +40,19 @@ internal class Renderer(
     }
 
     @Composable
-    private fun RenderCrossfade(scope: CoroutineScope, screen: Screen?, onDispose: () -> Unit) {
+    private fun RenderCrossfade(
+        activity: AppCompatActivity,
+        scope: CoroutineScope,
+        screen: Screen?,
+        onDispose: () -> Unit,
+    ) {
         Crossfade(targetState = screen) { renderingScreen ->
             if (renderingScreen != null) {
                 val tag = renderingScreen.toTag()
                 DisposableEffect(key1 = tag) {
                     onDispose(onDispose)
                 }
-                renderingScreen.run { Content(activity, scope, tag) }
+                renderingScreen.Content(activity, scope, tag)
             }
         }
     }
@@ -56,15 +61,17 @@ internal class Renderer(
     //  Key -35963410 was used multiple times
     //  Does tih also have the same problem as crossfade?
     @Composable
-    private fun RenderBackstack(backstack: Backstack, scope: CoroutineScope) {
+    private fun RenderBackstack(
+        activity: AppCompatActivity,
+        backstack: Backstack,
+        scope: CoroutineScope,
+    ) {
         Backstack(
             backstack = backstack,
             transition = CrossFadeZoom,
         ) { screen ->
-            screen.run {
-                val tag = screen.toTag()
-                Content(activity, scope, tag)
-            }
+            val tag = screen.toTag()
+            screen.Content(activity, scope, tag)
         }
     }
 }
