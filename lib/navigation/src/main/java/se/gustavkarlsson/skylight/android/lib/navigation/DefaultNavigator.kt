@@ -6,17 +6,10 @@ import se.gustavkarlsson.skylight.android.core.logging.logInfo
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class DefaultNavigator(
-    initialBackstack: Backstack,
     private val overrides: Iterable<NavigationOverride>,
 ) : Navigator, BackPressHandler {
 
-    private val mutableBackstackChanges: MutableStateFlow<BackstackChange>
-
-    init {
-        val actualInitialBackstack = overrideBackstack(emptyList(), initialBackstack)
-        val initialChange = BackstackChange(emptyList(), actualInitialBackstack)
-        mutableBackstackChanges = MutableStateFlow(initialChange)
-    }
+    private val mutableBackstackChanges = MutableStateFlow(BackstackChange(emptyList(), emptyList()))
 
     override val backstackChanges = mutableBackstackChanges
 
@@ -53,7 +46,6 @@ internal class DefaultNavigator(
     }
 
     override fun onBackPress() {
-        val topScreen = backstackChanges.value.new.lastOrNull()
         val result = topScreen?.onBackPress()
         when (result) {
             null -> logInfo { "No top screen to handle back press" }

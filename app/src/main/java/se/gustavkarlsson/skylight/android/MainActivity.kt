@@ -18,6 +18,7 @@ import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
+import se.gustavkarlsson.skylight.android.lib.navigation.topScreen
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
@@ -50,10 +51,12 @@ internal class MainActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        if (savedInstanceState == null && navigator.topScreen == null) {
+            navigator.goTo(screens.main)
+        }
         val scope = createLifecycleScope("createDestroyScope")
         createDestroyScope = scope
         onEachScreen { onCreateDestroyScope(scope) }
-        // FIXME If just starting, navigate to main?
         scope.launch { navigator.backstackChanges.collect(::onBackstackChange) }
         intent?.getPlaceId()?.let { placeId ->
             onNewPlaceId(placeId)

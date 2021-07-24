@@ -11,3 +11,5 @@ interface Navigator {
     fun closeScreen()
     fun closeScope(scope: String)
 }
+
+val Navigator.topScreen: Screen? get() = backstackChanges.value.new.lastOrNull()
