@@ -107,7 +107,7 @@ internal class MainActivity :
         val oldTop = change.old.lastOrNull()
         val newTop = change.new.lastOrNull()
         if (newTop != null && oldTop != newTop) {
-            AnalyticsComponent.instance.analytics().logScreen(newTop.name.name)
+            AnalyticsComponent.instance.analytics().logScreen(newTop.type.name)
         }
     }
 

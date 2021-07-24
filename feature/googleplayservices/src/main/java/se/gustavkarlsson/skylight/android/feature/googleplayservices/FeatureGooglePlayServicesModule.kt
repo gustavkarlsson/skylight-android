@@ -7,7 +7,7 @@ import dagger.Reusable
 import dagger.multibindings.IntoSet
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
-import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
+import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 
 @Module
 object FeatureGooglePlayServicesModule {
@@ -19,7 +19,7 @@ object FeatureGooglePlayServicesModule {
         object : NavigationOverride {
             override val priority = 8
 
-            private val REQUIRING_SCREEN_NAMES = setOf(ScreenName.Main)
+            private val REQUIRING_SCREEN_NAMES = setOf(Screen.Type.Main)
 
             override fun override(
                 oldBackstack: Backstack,
@@ -27,8 +27,8 @@ object FeatureGooglePlayServicesModule {
             ): Backstack? {
                 val googlePlayServicesChecker = GmsGooglePlayServicesChecker(context)
                 return when {
-                    targetBackstack.any { it.name in REQUIRING_SCREEN_NAMES } &&
-                        targetBackstack.none { it.name == ScreenName.GooglePlayServices } &&
+                    targetBackstack.any { it.type in REQUIRING_SCREEN_NAMES } &&
+                        targetBackstack.none { it.type == Screen.Type.GooglePlayServices } &&
                         !googlePlayServicesChecker.isAvailable ->
                         listOf(GooglePlayServicesScreen(targetBackstack))
                     else -> null

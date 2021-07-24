@@ -18,7 +18,6 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
-import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceId
@@ -37,7 +36,7 @@ internal data class IntroScreen(private val target: Backstack) : Screen {
     }
 
     @IgnoredOnParcel
-    override val name = ScreenName.Intro
+    override val type: Screen.Type = Screen.Type.Intro
 
     @Composable
     override fun Content(activity: AppCompatActivity, tag: ServiceTag, scope: CoroutineScope) {

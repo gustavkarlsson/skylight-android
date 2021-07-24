@@ -25,7 +25,6 @@ import se.gustavkarlsson.skylight.android.feature.main.viewmodel.MainViewModelCo
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
 import se.gustavkarlsson.skylight.android.lib.navigation.BackPress
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
-import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.permissions.Permission
@@ -44,7 +43,7 @@ private val VIEW_MODEL_ID = ServiceId("mainViewModel")
 
 @Parcelize
 object MainScreen : Screen {
-    override val name get() = ScreenName.Main
+    override val type: Screen.Type get() = Screen.Type.Main
 
     override val scopeStart get() = "main"
 

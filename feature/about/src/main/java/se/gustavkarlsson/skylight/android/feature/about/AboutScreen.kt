@@ -27,7 +27,6 @@ import com.google.accompanist.insets.ui.TopAppBar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
-import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceId
@@ -43,7 +42,7 @@ private val VIEW_MODE_ID = ServiceId("aboutViewModel")
 
 @Parcelize
 object AboutScreen : Screen {
-    override val name get() = ScreenName.About
+    override val type: Screen.Type get() = Screen.Type.About
 
     @Composable
     override fun Content(activity: AppCompatActivity, tag: ServiceTag, scope: CoroutineScope) {

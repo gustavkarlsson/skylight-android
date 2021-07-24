@@ -9,7 +9,7 @@ import kotlinx.coroutines.runBlocking
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
-import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
+import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionManager
 
 @Module
@@ -28,7 +28,7 @@ object FeatureIntroModule {
             runBlocking(dispatcher) {
                 when {
                     targetBackstack.isNotEmpty() &&
-                        targetBackstack.none { it.name == ScreenName.Intro } &&
+                        targetBackstack.none { it.type == Screen.Type.Intro } &&
                         runVersionManager.isFirstRun ->
                         listOf(IntroScreen(targetBackstack))
                     else -> null

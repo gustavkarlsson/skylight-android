@@ -30,7 +30,6 @@ import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.feature.privacypolicy.R
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
-import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
@@ -39,7 +38,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 
 @Parcelize
 object PrivacyPolicyScreen : Screen {
-    override val name get() = ScreenName.PrivacyPolicy
+    override val type: Screen.Type get() = Screen.Type.PrivacyPolicy
 
     @Composable
     override fun Content(activity: AppCompatActivity, tag: ServiceTag, scope: CoroutineScope) {

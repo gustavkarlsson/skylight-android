@@ -30,7 +30,6 @@ import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
-import se.gustavkarlsson.skylight.android.lib.navigation.ScreenName
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceId
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
@@ -52,7 +51,7 @@ internal data class GooglePlayServicesScreen(private val target: Backstack) : Sc
     }
 
     @IgnoredOnParcel
-    override val name = ScreenName.GooglePlayServices
+    override val type: Screen.Type = Screen.Type.GooglePlayServices
 
     private val optionalViewModel get() = getService<GooglePlayServicesViewModel>(VIEW_MODEL_ID)
 
