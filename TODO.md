@@ -1,11 +1,10 @@
 ## ASAP
+* Better colors
 
 ## Soon
-* Don't send location streams to stream other data
-* Readme
-* Look into introducing some functional type instead of Report
-* Dark mode splash screen for Android 12
 * Global notification level?
+* Readme
+* Dark mode splash screen for Android 12
 * Notifications on/off without dialog (or only dialog when enabling). Needs a way to select current setting
 * Only subscribe to current location reports when location is turned on?
 * Show helper about location turned off?
