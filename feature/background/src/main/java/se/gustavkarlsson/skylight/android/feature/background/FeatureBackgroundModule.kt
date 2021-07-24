@@ -67,7 +67,7 @@ object FeatureBackgroundModule {
         NotifyScheduler(context, scheduleInterval = 15.minutes)
 
     @Provides
-    @AppScope
+    @Reusable
     internal fun lastNotificationRepository(context: Context): LastNotificationRepository =
         SharedPrefsLastNotificationRepository(context)
 

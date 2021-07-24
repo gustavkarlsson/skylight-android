@@ -10,7 +10,6 @@ import javax.inject.Named
 object LibRunVersionModule {
 
     @Provides
-    @AppScope
     internal fun runVersionManager(
         context: Context,
         @Named("versionCode") versionCode: Int

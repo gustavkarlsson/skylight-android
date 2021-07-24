@@ -30,7 +30,6 @@ object LibPlacesModule {
     }
 
     @Provides
-    @AppScope
     internal fun selectedPlaceRepository(
         context: Context,
         placesRepository: PlacesRepository,
@@ -46,7 +45,6 @@ object LibPlacesModule {
     }
 
     @Provides
-    @AppScope
     @IntoSet
     fun moduleStarter(
         placesRepository: PlacesRepository,

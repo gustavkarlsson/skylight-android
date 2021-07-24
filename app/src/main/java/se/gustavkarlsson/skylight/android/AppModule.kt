@@ -24,7 +24,6 @@ internal class AppModule(private val application: Application) {
 
     @OptIn(DelicateCoroutinesApi::class)
     @Provides
-    @AppScope
     @Global
     fun scope(): CoroutineScope = GlobalScope
 

@@ -42,7 +42,6 @@ import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.lib.weather.LibWeatherModule
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
 
-// TODO Do all of these actually need to be app scoped!?
 @AppScope
 @Component(
     modules = [
