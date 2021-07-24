@@ -9,7 +9,6 @@ import dagger.Provides
 import dagger.Reusable
 import dagger.multibindings.IntoSet
 import kotlinx.coroutines.CoroutineScope
-import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.Global
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
