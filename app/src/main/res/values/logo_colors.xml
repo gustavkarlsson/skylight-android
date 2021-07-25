@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="logo_background">#434343</color>
-    <color name="logo_primary">#0F9386</color>
-    <color name="logo_secondary">#B0DCD8</color>
+    <color name="logo_background">#414141</color>
+    <color name="logo_primary">#14CC98</color>
+    <color name="logo_secondary">#85CCB8</color>
 </resources>

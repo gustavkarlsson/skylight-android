@@ -38,10 +38,10 @@ data class SkylightColors(
 
 private val darkPalette = SkylightColors(
     material = darkColors(
-        primary = Color(0xFF0F9386),
-        primaryVariant = Color(0xFF55C4B6),
-        secondary = Color(0xFFFF4081),
-        secondaryVariant = Color(0xFFFF79B0),
+        primary = Color(0xFF33CCA1),
+        primaryVariant = Color(0xFF66CCAF),
+        secondary = Color(0xFFCC3366),
+        secondaryVariant = Color(0xFFCC6688),
         onPrimary = Color.White,
         onSecondary = Color.White,
     ),
@@ -50,10 +50,10 @@ private val darkPalette = SkylightColors(
 
 private val lightPalette = SkylightColors(
     material = lightColors(
-        primary = Color(0xFF0F9386),
-        primaryVariant = Color(0xFF55C4B6),
-        secondary = Color(0xFFFF4081),
-        secondaryVariant = Color(0xFFFF79B0),
+        primary = Color(0xFF33CCA1),
+        primaryVariant = Color(0xFF66CCAF),
+        secondary = Color(0xFFCC3366),
+        secondaryVariant = Color(0xFFCC6688),
         onPrimary = Color.White,
         onSecondary = Color.White,
     ),
