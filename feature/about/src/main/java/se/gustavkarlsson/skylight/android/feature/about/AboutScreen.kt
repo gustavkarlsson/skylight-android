@@ -5,9 +5,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -97,15 +97,11 @@ private fun Content(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Spacer(modifier = Modifier.height(64.dp))
                 Image(
-                    modifier = Modifier
-                        .width(200.dp)
-                        .height(100.dp),
+                    modifier = Modifier.fillMaxWidth(0.75f),
                     painter = painterResource(R.drawable.app_logo),
                     contentDescription = null,
                 )
-                Spacer(modifier = Modifier.height(32.dp))
                 Text(
                     text = stringResource(R.string.app_name),
                     style = Typography.h4,

@@ -3,9 +3,8 @@ package se.gustavkarlsson.skylight.android.feature.intro
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -77,10 +76,7 @@ private fun Content(
                 .systemBarsPadding(),
             image = {
                 Image(
-                    modifier = Modifier
-                        .padding(vertical = 32.dp)
-                        .width(200.dp)
-                        .height(100.dp),
+                    modifier = Modifier.fillMaxWidth(0.75f),
                     painter = painterResource(R.drawable.app_logo),
                     contentDescription = null,
                 )
