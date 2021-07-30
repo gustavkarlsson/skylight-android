@@ -7,7 +7,7 @@ object Versions {
     val targetSdk = 30
     val java = JavaVersion.VERSION_1_8
     val kotlin = "1.5.10" // Must also update in buildSrc/build.gradle.kts AND exhaustive
-    val androidGradle = "7.0.0-rc01" // Must also update in buildSrc/build.gradle.kts
+    val androidGradle = "7.0.0" // Must also update in buildSrc/build.gradle.kts
     val jgit = "5.12.0.202106070339-r"
 
     val axionRelease = "1.13.3"
@@ -51,9 +51,9 @@ object Versions {
     val textref = "1.3.1"
     val markwon = "4.6.2"
     val store = "4.0.2-KT15"
-    val compose = "1.0.0-rc02"
+    val compose = "1.0.0"
     val composeConstraintLayout = "1.0.0-alpha08"
-    val accompanist = "0.13.0"
+    val accompanist = "0.15.0"
 
     // Test
     val junit = "4.12"
