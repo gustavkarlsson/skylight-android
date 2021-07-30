@@ -5,5 +5,5 @@ import se.gustavkarlsson.skylight.android.lib.location.Location
 
 interface AuroraReportProvider {
     suspend fun get(location: Location): CompleteAuroraReport
-    fun stream(location: Location): Flow<LoadableAuroraReport>
+    fun stream(location: Location?): Flow<LoadableAuroraReport>
 }
