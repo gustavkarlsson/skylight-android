@@ -2,14 +2,16 @@ package se.gustavkarlsson.skylight.android.lib.settings
 
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
+import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.settings.proto.SettingsMessage
 
 internal class DataStoreSettingsRepository(
     private val dataStore: DataStore<SettingsMessage>,
+    private val placesRepository: PlacesRepository,
 ) : SettingsRepository {
 
     override suspend fun setNotificationTriggerLevel(level: TriggerLevel) {
@@ -36,22 +38,23 @@ internal class DataStoreSettingsRepository(
         }
     }
 
-    // FIXME Remove place ID:s for places that do not exist
     override fun stream(): Flow<Settings> {
-        return dataStore.data
-            .map { message ->
-                val notificationTriggerLevel = triggerLevelFromId(message.triggerLevelId)
-                val placeIdsWithNotification = message.placeIdNotificationMap
-                    .filterValues { it }
-                    .mapKeys { (placeIdLong, _) ->
-                        PlaceId.fromLong(placeIdLong)
-                    }
-                    .keys
-                Settings(
-                    notificationTriggerLevel = notificationTriggerLevel,
-                    placeIdsWithNotification = placeIdsWithNotification,
-                )
-            }
+        return combine(dataStore.data, placesRepository.stream()) { message, places ->
+            val notificationTriggerLevel = triggerLevelFromId(message.triggerLevelId)
+            val placeIdsWithNotification = message.placeIdNotificationMap
+                .filterValues { it }
+                .mapKeys { (placeIdLong, _) ->
+                    PlaceId.fromLong(placeIdLong)
+                }
+                .filterKeys { placeId ->
+                    placeId in places.map { it.id }
+                }
+                .keys
+            Settings(
+                notificationTriggerLevel = notificationTriggerLevel,
+                placeIdsWithNotification = placeIdsWithNotification,
+            )
+        }
     }
 }
 

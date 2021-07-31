@@ -5,7 +5,7 @@ import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 
 class Settings internal constructor(
     val notificationTriggerLevel: TriggerLevel,
-    val placeIdsWithNotification: Set<PlaceId>, // FIXME change to Place instead of ID
+    val placeIdsWithNotification: Set<PlaceId>,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

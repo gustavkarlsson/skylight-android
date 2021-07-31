@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
+import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.settings.proto.SettingsMessage
 
 @Module
@@ -20,9 +21,10 @@ object LibSettingsModule {
     @AppScope
     internal fun settings(
         context: Context,
+        placesRepository: PlacesRepository,
     ): SettingsRepository {
         val dataStore = context.settingsDataStore
-        return DataStoreSettingsRepository(dataStore)
+        return DataStoreSettingsRepository(dataStore, placesRepository)
     }
 
     @Provides
