@@ -54,8 +54,7 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createNonLoadingState(state: State.Ready): ViewState {
-        val triggerLevel = state.settings.notificationTriggerLevel
-        val requiresBackgroundLocationPermission = triggerLevel != TriggerLevel.NEVER
+        val requiresBackgroundLocationPermission = state.settings.placeIdsWithNotification.isNotEmpty()
         val hasBackgroundPermission = state.permissions[Permission.BackgroundLocation] == Access.Granted
         return if (requiresBackgroundLocationPermission && !hasBackgroundPermission) {
             ViewState.RequiresBackgroundLocationPermission
@@ -154,7 +153,7 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createNotificationButtonState(state: State.Ready): ToggleButtonState {
-        val notificationChecked = state.settings.notificationTriggerLevel != TriggerLevel.NEVER
+        val notificationChecked = state.settings.placeIdsWithNotification.isNotEmpty()
         return ToggleButtonState.Enabled(notificationChecked)
     }
 
@@ -392,7 +391,6 @@ private fun PlaceSuggestion.toDetailsString(): String {
 
 private val TriggerLevel.displayIndex: Int
     get() = when (this) {
-        TriggerLevel.NEVER -> 1
         TriggerLevel.HIGH -> 2
         TriggerLevel.MEDIUM -> 3
         TriggerLevel.LOW -> 4
@@ -400,7 +398,6 @@ private val TriggerLevel.displayIndex: Int
 
 private val TriggerLevel.shortText: TextRef
     get() = when (this) {
-        TriggerLevel.NEVER -> TextRef.stringRes(R.string.notify_never)
         TriggerLevel.LOW -> TextRef.stringRes(R.string.notify_at_low)
         TriggerLevel.MEDIUM -> TextRef.stringRes(R.string.notify_at_medium)
         TriggerLevel.HIGH -> TextRef.stringRes(R.string.notify_at_high)

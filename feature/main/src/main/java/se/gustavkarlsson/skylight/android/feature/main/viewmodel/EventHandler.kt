@@ -35,13 +35,10 @@ internal class EventHandler @Inject constructor(
             }
             is Event.SetNotificationLevel -> {
                 if (event.place is Place.Saved && !event.place.bookmarked) {
-                    if (event.level != TriggerLevel.NEVER) {
-                        placesRepository.setBookmarked(event.place.id, true)
-                    }
+                    placesRepository.setBookmarked(event.place.id, true)
                 }
                 settingsRepository.setNotificationTriggerLevel(event.level)
-                val notificationsEnabled = event.level != TriggerLevel.NEVER
-                settingsRepository.setPlaceNotification(event.place.id, notificationsEnabled)
+                settingsRepository.setPlaceNotification(event.place.id, true)
             }
             is Event.SearchChanged -> searchChannel.send(event.state)
             is Event.SelectSearchResult -> onSearchResultClicked(event.result)

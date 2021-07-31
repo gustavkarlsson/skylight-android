@@ -56,20 +56,21 @@ internal class DataStoreSettingsRepository(
 }
 
 private fun triggerLevelFromId(id: Long): TriggerLevel = when (id) {
-    0L -> TriggerLevel.LOW
-    1L -> TriggerLevel.MEDIUM
-    2L -> TriggerLevel.HIGH
-    3L -> TriggerLevel.NEVER
+    0L -> DEFAULT_TRIGGER_LEVEL
+    1L -> TriggerLevel.LOW
+    2L -> TriggerLevel.MEDIUM
+    3L -> TriggerLevel.HIGH
     else -> {
         logError { "Unsupported trigger level id: $id" }
-        TriggerLevel.NEVER
+        DEFAULT_TRIGGER_LEVEL
     }
 }
 
+private val DEFAULT_TRIGGER_LEVEL: TriggerLevel get() = TriggerLevel.MEDIUM
+
 private val TriggerLevel.id: Long
     get() = when (this) {
-        TriggerLevel.LOW -> 0
-        TriggerLevel.MEDIUM -> 1
-        TriggerLevel.HIGH -> 2
-        TriggerLevel.NEVER -> 3
+        TriggerLevel.LOW -> 1
+        TriggerLevel.MEDIUM -> 2
+        TriggerLevel.HIGH -> 3
     }

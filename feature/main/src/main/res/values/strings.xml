@@ -63,7 +63,6 @@
     <string name="place_search_failed_io">Place search failed. Are you connected to the internet?</string>
 
     <string name="notify_title">Notify about aurora</string>
-    <string name="notify_never">Never</string>
     <string name="notify_at_high">At high chance</string>
     <string name="notify_at_medium">At medium chance</string>
     <string name="notify_at_low">At low chance</string>
