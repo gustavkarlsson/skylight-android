@@ -28,19 +28,21 @@ internal class DataStoreSettingsRepository(
         }
     }
 
+    // FIXME Remove place ID:s for places that do not exist
     override fun stream(): Flow<Settings> {
         return dataStore.data
             .map { message ->
-                val storedTriggerLevel = triggerLevelFromId(message.triggerLevelId)
-                val map = message.placeIdNotificationMap
-                    .entries.associate { (placeIdLong, enable) ->
-                        val placeId = PlaceId.fromLong(placeIdLong)
-                        val triggerLevel = if (enable) {
-                            storedTriggerLevel
-                        } else TriggerLevel.NEVER
-                        placeId to triggerLevel
+                val notificationTriggerLevel = triggerLevelFromId(message.triggerLevelId)
+                val placeIdsWithNotification = message.placeIdNotificationMap
+                    .filterValues { it }
+                    .mapKeys { (placeIdLong, _) ->
+                        PlaceId.fromLong(placeIdLong)
                     }
-                Settings(map)
+                    .keys
+                Settings(
+                    notificationTriggerLevel = notificationTriggerLevel,
+                    placeIdsWithNotification = placeIdsWithNotification,
+                )
             }
     }
 }

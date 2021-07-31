@@ -41,8 +41,6 @@ internal sealed interface State {
         val places: NonEmptyList<Place>,
         val settings: Settings,
     ) : State {
-        val selectedPlaceTriggerLevel: TriggerLevel
-            get() = settings[selectedPlace.id]
     }
 }
 

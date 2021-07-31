@@ -16,6 +16,7 @@ internal class SettingsModuleStarter(
     private val dispatcher: CoroutineDispatcher,
 ) : ModuleStarter {
     override suspend fun start() {
+        // FIXME Migrate places too
         migrateFromSqlDelightToDataStore()
     }
 

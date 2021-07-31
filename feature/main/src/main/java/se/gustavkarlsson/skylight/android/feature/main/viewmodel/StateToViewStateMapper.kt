@@ -54,7 +54,7 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createNonLoadingState(state: State.Ready): ViewState {
-        val triggerLevel = state.settings[PlaceId.Current]
+        val triggerLevel = state.settings.notificationTriggerLevel
         val requiresBackgroundLocationPermission = triggerLevel != TriggerLevel.NEVER
         val hasBackgroundPermission = state.permissions[Permission.BackgroundLocation] == Access.Granted
         return if (requiresBackgroundLocationPermission && !hasBackgroundPermission) {
@@ -134,9 +134,7 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createErrorBannerData(state: State.Ready): BannerData? {
-        val needsBackgroundLocation = state.settings.asMap().any { (placeId, triggerLevel) ->
-            placeId == PlaceId.Current && triggerLevel != TriggerLevel.NEVER
-        }
+        val needsBackgroundLocation = PlaceId.Current in state.settings.placeIdsWithNotification
         val backgroundLocationDeniedSomehow = when (state.permissions[Permission.BackgroundLocation]) {
             Access.Denied, Access.DeniedForever -> true
             Access.Granted -> false
@@ -156,7 +154,7 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createNotificationButtonState(state: State.Ready): ToggleButtonState {
-        val notificationChecked = state.selectedPlaceTriggerLevel != TriggerLevel.NEVER
+        val notificationChecked = state.settings.notificationTriggerLevel != TriggerLevel.NEVER
         return ToggleButtonState.Enabled(notificationChecked)
     }
 
@@ -240,7 +238,7 @@ internal class StateToViewStateMapper @Inject constructor(
             }
             .map { place ->
                 val selected = place.id == state.selectedPlace.id
-                val notifications = state.settings[place.id] != TriggerLevel.NEVER
+                val notifications = place.id in state.settings.placeIdsWithNotification
                 when (place) {
                     Place.Current -> {
                         val name = createCurrentLocationDisplayName(state)
@@ -280,7 +278,7 @@ internal class StateToViewStateMapper @Inject constructor(
             .map { level ->
                 NotificationLevelItem(
                     text = level.shortText,
-                    selected = level == state.selectedPlaceTriggerLevel,
+                    selected = level == state.settings.notificationTriggerLevel,
                     selectEvent = Event.SetNotificationLevel(state.selectedPlace, level),
                 )
             }
