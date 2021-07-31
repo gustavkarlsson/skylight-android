@@ -13,20 +13,33 @@ internal class DataStoreSettingsRepository(
 ) : SettingsRepository {
 
     override suspend fun setNotificationTriggerLevel(placeId: PlaceId, level: TriggerLevel) {
-        val levelId = level.id
-        dataStore.updateData {
-            SettingsMessage.newBuilder()
-                .setTriggerLevelId(levelId)
-                .build()
+        val levelIdLong = level.id
+        val placeIdLong = placeId.value
+        dataStore.updateData { message ->
+            with(message.toBuilder()) {
+                triggerLevelId = levelIdLong
+                if (level == TriggerLevel.NEVER) {
+                    removePlaceIdNotification(placeIdLong)
+                } else {
+                    putPlaceIdNotification(placeIdLong, true)
+                }
+                build()
+            }
         }
     }
 
     override fun stream(): Flow<Settings> {
         return dataStore.data
             .map { message ->
-                val map = mapOf(
-                    PlaceId.Current as PlaceId to triggerLevelFromId(message.triggerLevelId)
-                )
+                val storedTriggerLevel = triggerLevelFromId(message.triggerLevelId)
+                val map = message.placeIdNotificationMap
+                    .entries.associate { (placeIdLong, enable) ->
+                        val placeId = PlaceId.fromLong(placeIdLong)
+                        val triggerLevel = if (enable) {
+                            storedTriggerLevel
+                        } else TriggerLevel.NEVER
+                        placeId to triggerLevel
+                    }
                 Settings(map)
             }
     }

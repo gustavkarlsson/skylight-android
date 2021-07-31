@@ -4,5 +4,6 @@ option java_package = "se.gustavkarlsson.skylight.android.lib.settings.proto";
 option java_multiple_files = true;
 
 message SettingsMessage {
-    int64 trigger_level_id = 3;
+    int64 trigger_level_id = 1;
+    map<int64, bool> place_id_notification = 2;
 }

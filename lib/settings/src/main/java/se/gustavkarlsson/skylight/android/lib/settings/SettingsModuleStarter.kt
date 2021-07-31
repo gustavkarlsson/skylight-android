@@ -16,6 +16,10 @@ internal class SettingsModuleStarter(
     private val dispatcher: CoroutineDispatcher,
 ) : ModuleStarter {
     override suspend fun start() {
+        migrateFromSqlDelightToDataStore()
+    }
+
+    private suspend fun migrateFromSqlDelightToDataStore() {
         val oldTriggerLevels = oldQueries
             .selectAll()
             .asFlow()
