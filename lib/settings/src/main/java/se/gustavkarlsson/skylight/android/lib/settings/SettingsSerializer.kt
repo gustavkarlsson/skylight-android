@@ -9,10 +9,12 @@ internal object SettingsSerializer : Serializer<SettingsMessage> {
     override val defaultValue: SettingsMessage = SettingsMessage.getDefaultInstance()
 
     override suspend fun readFrom(input: InputStream): SettingsMessage {
+        @Suppress("BlockingMethodInNonBlockingContext")
         return SettingsMessage.parseFrom(input)
     }
 
     override suspend fun writeTo(t: SettingsMessage, output: OutputStream) {
+        @Suppress("BlockingMethodInNonBlockingContext")
         t.writeTo(output)
     }
 }

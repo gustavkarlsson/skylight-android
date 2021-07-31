@@ -40,7 +40,7 @@ protobuf {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:places")) // FIXME remove dependency?
+    implementation(project(":lib:places"))
 
     // Legacy. Only exists for migration purposes
     implementation("com.squareup.sqldelight:android-driver:${Versions.sqldelight}")
