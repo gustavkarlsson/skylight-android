@@ -8,7 +8,6 @@ import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.core.entities.Chance
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
-import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.feature.main.R
@@ -54,7 +53,7 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createNonLoadingState(state: State.Ready): ViewState {
-        val requiresBackgroundLocationPermission = state.settings.placeIdsWithNotification.isNotEmpty()
+        val requiresBackgroundLocationPermission = PlaceId.Current in state.settings.placeIdsWithNotification
         val hasBackgroundPermission = state.permissions[Permission.BackgroundLocation] == Access.Granted
         return if (requiresBackgroundLocationPermission && !hasBackgroundPermission) {
             ViewState.RequiresBackgroundLocationPermission
@@ -120,7 +119,7 @@ internal class StateToViewStateMapper @Inject constructor(
             bookmarkButtonState = createBookmarkButtonState(state),
             factorItems = createFactorItems(state),
             onBookmarkClickedEvent = createOnBookmarkClickedEvent(state),
-            notificationLevelItems = createNotificationLevelItems(state),
+            onNotificationClickedEvent = createOnNotificationClickedEvent(state),
         )
     }
 
@@ -153,7 +152,7 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createNotificationButtonState(state: State.Ready): ToggleButtonState {
-        val notificationChecked = state.settings.placeIdsWithNotification.isNotEmpty()
+        val notificationChecked = state.selectedPlace.id in state.settings.placeIdsWithNotification
         return ToggleButtonState.Enabled(notificationChecked)
     }
 
@@ -271,16 +270,12 @@ internal class StateToViewStateMapper @Inject constructor(
         }
     }
 
-    private fun createNotificationLevelItems(state: State.Ready): List<NotificationLevelItem> {
-        return TriggerLevel.values()
-            .sortedBy { level -> level.displayIndex }
-            .map { level ->
-                NotificationLevelItem(
-                    text = level.shortText,
-                    selected = level == state.settings.notificationTriggerLevel,
-                    selectEvent = Event.SetNotificationLevel(state.selectedPlace, level),
-                )
-            }
+    private fun createOnNotificationClickedEvent(state: State.Ready): Event {
+        val selectedPlace = state.selectedPlace
+        val isEnabled = selectedPlace.id in state.settings.placeIdsWithNotification
+        return if (isEnabled) {
+            Event.DisableNotifications(selectedPlace)
+        } else Event.EnableNotifications(selectedPlace)
     }
 
     // TODO avoid duplication with similar function below
@@ -388,20 +383,6 @@ private fun PlaceSuggestion.toDetailsString(): String {
         .removePrefix(simpleName)
         .dropWhile { !it.isLetterOrDigit() }
 }
-
-private val TriggerLevel.displayIndex: Int
-    get() = when (this) {
-        TriggerLevel.HIGH -> 2
-        TriggerLevel.MEDIUM -> 3
-        TriggerLevel.LOW -> 4
-    }
-
-private val TriggerLevel.shortText: TextRef
-    get() = when (this) {
-        TriggerLevel.LOW -> TextRef.stringRes(R.string.notify_at_low)
-        TriggerLevel.MEDIUM -> TextRef.stringRes(R.string.notify_at_medium)
-        TriggerLevel.HIGH -> TextRef.stringRes(R.string.notify_at_high)
-    }
 
 private enum class ItemTexts(
     @StringRes val shortTitle: Int,

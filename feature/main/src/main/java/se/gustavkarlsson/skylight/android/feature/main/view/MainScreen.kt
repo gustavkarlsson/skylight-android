@@ -116,7 +116,7 @@ private fun PreviewContent() {
                 bookmarkButtonState = ToggleButtonState.Enabled(checked = true),
                 factorItems = emptyList(),
                 onBookmarkClickedEvent = Event.Noop,
-                notificationLevelItems = emptyList(),
+                onNotificationClickedEvent = Event.Noop,
             )
         ),
         onBannerActionClicked = {},

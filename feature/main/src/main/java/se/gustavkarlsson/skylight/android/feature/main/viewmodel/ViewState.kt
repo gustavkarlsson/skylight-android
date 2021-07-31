@@ -9,7 +9,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.core.R
-import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
@@ -41,7 +40,7 @@ internal sealed interface ContentState {
         val bookmarkButtonState: ToggleButtonState,
         val factorItems: List<FactorItem>,
         val onBookmarkClickedEvent: Event,
-        val notificationLevelItems: List<NotificationLevelItem>,
+        val onNotificationClickedEvent: Event,
     ) : ContentState
 
     sealed interface Searching : ContentState {
@@ -142,16 +141,11 @@ internal sealed interface SearchResult {
     }
 }
 
-internal data class NotificationLevelItem(
-    val text: TextRef,
-    val selected: Boolean,
-    val selectEvent: Event,
-)
-
 internal sealed interface Event {
     data class AddBookmark(val place: Place.Saved) : Event
     data class RemoveBookmark(val place: Place.Saved) : Event
-    data class SetNotificationLevel(val place: Place, val level: TriggerLevel) : Event
+    data class EnableNotifications(val place: Place) : Event
+    data class DisableNotifications(val place: Place) : Event
     data class SearchChanged(val state: SearchFieldState) : Event
     data class SelectSearchResult(val result: SearchResult) : Event
     object RefreshLocationPermission : Event

@@ -4,7 +4,6 @@ import app.cash.exhaustive.Exhaustive
 import kotlinx.coroutines.channels.SendChannel
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.issue
-import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.feature.main.state.Search
 import se.gustavkarlsson.skylight.android.feature.main.state.State
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
@@ -33,12 +32,14 @@ internal class EventHandler @Inject constructor(
                 settingsRepository.setPlaceNotification(event.place.id, false)
                 placesRepository.setBookmarked(event.place.id, false)
             }
-            is Event.SetNotificationLevel -> {
+            is Event.EnableNotifications -> {
                 if (event.place is Place.Saved && !event.place.bookmarked) {
                     placesRepository.setBookmarked(event.place.id, true)
                 }
-                settingsRepository.setNotificationTriggerLevel(event.level)
                 settingsRepository.setPlaceNotification(event.place.id, true)
+            }
+            is Event.DisableNotifications -> {
+                settingsRepository.setPlaceNotification(event.place.id, false)
             }
             is Event.SearchChanged -> searchChannel.send(event.state)
             is Event.SelectSearchResult -> onSearchResultClicked(event.result)
