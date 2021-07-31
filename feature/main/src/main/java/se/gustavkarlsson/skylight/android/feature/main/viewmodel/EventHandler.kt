@@ -30,7 +30,7 @@ internal class EventHandler @Inject constructor(
         when (event) {
             is Event.AddBookmark -> placesRepository.setBookmarked(event.place.id, true)
             is Event.RemoveBookmark -> {
-                settingsRepository.setNotificationTriggerLevel(event.place.id, TriggerLevel.NEVER)
+                settingsRepository.setPlaceNotification(event.place.id, false)
                 placesRepository.setBookmarked(event.place.id, false)
             }
             is Event.SetNotificationLevel -> {
@@ -39,13 +39,15 @@ internal class EventHandler @Inject constructor(
                         placesRepository.setBookmarked(event.place.id, true)
                     }
                 }
-                settingsRepository.setNotificationTriggerLevel(event.place.id, event.level)
+                settingsRepository.setNotificationTriggerLevel(event.level)
+                val notificationsEnabled = event.level != TriggerLevel.NEVER
+                settingsRepository.setPlaceNotification(event.place.id, notificationsEnabled)
             }
             is Event.SearchChanged -> searchChannel.send(event.state)
             is Event.SelectSearchResult -> onSearchResultClicked(event.result)
             Event.RefreshLocationPermission -> permissionChecker.refresh()
             Event.TurnOffCurrentLocationNotifications -> {
-                settingsRepository.setNotificationTriggerLevel(PlaceId.Current, TriggerLevel.NEVER)
+                settingsRepository.setPlaceNotification(PlaceId.Current, false)
             }
             Event.Noop -> Unit
         }

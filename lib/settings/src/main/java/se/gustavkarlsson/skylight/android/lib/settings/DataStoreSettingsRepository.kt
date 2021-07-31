@@ -12,16 +12,24 @@ internal class DataStoreSettingsRepository(
     private val dataStore: DataStore<SettingsMessage>,
 ) : SettingsRepository {
 
-    override suspend fun setNotificationTriggerLevel(placeId: PlaceId, level: TriggerLevel) {
-        val levelIdLong = level.id
+    override suspend fun setNotificationTriggerLevel(level: TriggerLevel) {
+        val triggerLevelIdLong = level.id
+        dataStore.updateData { message ->
+            with(message.toBuilder()) {
+                triggerLevelId = triggerLevelIdLong
+                build()
+            }
+        }
+    }
+
+    override suspend fun setPlaceNotification(placeId: PlaceId, enabled: Boolean) {
         val placeIdLong = placeId.value
         dataStore.updateData { message ->
             with(message.toBuilder()) {
-                triggerLevelId = levelIdLong
-                if (level == TriggerLevel.NEVER) {
-                    removePlaceIdNotification(placeIdLong)
-                } else {
+                if (enabled) {
                     putPlaceIdNotification(placeIdLong, true)
+                } else {
+                    removePlaceIdNotification(placeIdLong)
                 }
                 build()
             }
