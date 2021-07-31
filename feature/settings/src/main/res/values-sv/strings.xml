@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notify_title">Avisera om norrsken</string>
+    <string name="notify_at_high">Vid hög chans</string>
+    <string name="notify_at_medium">Vid medium chans</string>
+    <string name="notify_at_low">Vid låg chans</string>
+</resources>

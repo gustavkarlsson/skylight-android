@@ -97,7 +97,7 @@ object MainScreen : Screen {
             onClickGrantLocationPermission = { requestPermission(activity, Permission.Location) },
             onClickOpenSettings = { openAppDetails(activity) },
             onClickTurnOffNotifications = { viewModel.onEvent(Event.TurnOffCurrentLocationNotifications) },
-            onAboutClicked = { navigator.goTo(screens.about) },
+            onSettingsClicked = { navigator.goTo(screens.settings) },
             onEvent = { event -> viewModel.onEvent(event) },
         )
     }
@@ -123,7 +123,7 @@ private fun PreviewContent() {
         onClickGrantLocationPermission = {},
         onClickOpenSettings = {},
         onClickTurnOffNotifications = {},
-        onAboutClicked = {},
+        onSettingsClicked = {},
         onEvent = {},
     )
 }
@@ -135,7 +135,7 @@ private fun Content(
     onClickGrantLocationPermission: () -> Unit,
     onClickOpenSettings: () -> Unit,
     onClickTurnOffNotifications: () -> Unit,
-    onAboutClicked: () -> Unit,
+    onSettingsClicked: () -> Unit,
     onEvent: (Event) -> Unit,
 ) {
     ScreenBackground {
@@ -146,7 +146,7 @@ private fun Content(
                 Ready(
                     state = state,
                     onBannerActionClicked = onBannerActionClicked,
-                    onAboutClicked = onAboutClicked,
+                    onSettingsClicked = onSettingsClicked,
                     onEvent = onEvent,
                     onClickGrantLocationPermission = onClickGrantLocationPermission,
                     onClickOpenSettings = onClickOpenSettings,

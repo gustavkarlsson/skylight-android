@@ -121,6 +121,7 @@ dependencies {
     implementation(project(":feature:background"))
     implementation(project(":feature:main"))
     implementation(project(":feature:privacypolicy"))
+    implementation(project(":feature:settings"))
 
     implementation("androidx.annotation:annotation:${Versions.androidAnnotation}")
 

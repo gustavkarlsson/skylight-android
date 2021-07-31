@@ -23,6 +23,7 @@ import androidx.compose.material.contentColorFor
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -50,7 +51,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 private fun PreviewTopAppBar() {
     TopAppBar(
         state = AppBarState.Searching("I'm searchi"),
-        onAboutClicked = {},
+        onSettingsClicked = {},
         onEvent = {},
     )
 }
@@ -58,7 +59,7 @@ private fun PreviewTopAppBar() {
 @Composable
 internal fun TopAppBar(
     state: AppBarState,
-    onAboutClicked: () -> Unit,
+    onSettingsClicked: () -> Unit,
     onEvent: (Event) -> Unit,
 ) {
     TopAppBar(
@@ -96,8 +97,8 @@ internal fun TopAppBar(
             )
         },
         actions = {
-            IconButton(onClick = onAboutClicked) {
-                Icon(Icons.Info, contentDescription = stringResource(R.string.about))
+            IconButton(onClick = onSettingsClicked) {
+                Icon(Icons.Settings, contentDescription = stringResource(R.string.settings))
             }
         }
     )
