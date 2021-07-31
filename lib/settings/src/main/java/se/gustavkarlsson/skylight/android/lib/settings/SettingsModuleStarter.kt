@@ -12,7 +12,7 @@ import se.gustavkarlsson.skylight.android.lib.settings.db.DbSettingsQueries
 
 internal class SettingsModuleStarter(
     private val oldQueries: DbSettingsQueries,
-    private val newSettings: Settings,
+    private val newSettingsRepository: SettingsRepository,
     private val dispatcher: CoroutineDispatcher,
 ) : ModuleStarter {
     override suspend fun start() {
@@ -26,7 +26,7 @@ internal class SettingsModuleStarter(
             }
 
         val lowestTriggerLevel = oldTriggerLevels.minOrNull() ?: return
-        newSettings.setNotificationTriggerLevel(PlaceId.Current, lowestTriggerLevel)
+        newSettingsRepository.setNotificationTriggerLevel(PlaceId.Current, lowestTriggerLevel)
         oldQueries.deleteAll()
     }
 }

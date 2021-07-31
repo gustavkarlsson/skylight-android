@@ -20,9 +20,9 @@ object LibSettingsModule {
     @AppScope
     internal fun settings(
         context: Context,
-    ): Settings {
+    ): SettingsRepository {
         val dataStore = context.settingsDataStore
-        return DataStoreSettings(dataStore)
+        return DataStoreSettingsRepository(dataStore)
     }
 
     @Provides
@@ -30,12 +30,12 @@ object LibSettingsModule {
     fun moduleStarter(
         context: Context,
         @Io dispatcher: CoroutineDispatcher,
-        settings: Settings,
+        settingsRepository: SettingsRepository,
     ): ModuleStarter {
         val driver = AndroidSqliteDriver(Database.Schema, context, "settings.db")
         val database = Database(driver)
         val queries = database.dbSettingsQueries
-        return SettingsModuleStarter(queries, settings, dispatcher)
+        return SettingsModuleStarter(queries, settingsRepository, dispatcher)
     }
 }
 

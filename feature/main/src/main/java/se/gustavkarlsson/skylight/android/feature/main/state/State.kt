@@ -10,7 +10,7 @@ import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.permissions.Permissions
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingResult
-import se.gustavkarlsson.skylight.android.lib.settings.NotificationTriggerLevels
+import se.gustavkarlsson.skylight.android.lib.settings.Settings
 
 internal sealed interface State {
     val permissions: Permissions
@@ -28,7 +28,7 @@ internal sealed interface State {
         override val selectedAuroraReport: LoadableAuroraReport,
         override val search: Search,
         val places: NonEmptyList<Place>?,
-        val notificationTriggerLevels: NotificationTriggerLevels?,
+        val settings: Settings?,
     ) : State
 
     data class Ready(
@@ -39,10 +39,10 @@ internal sealed interface State {
         override val selectedAuroraReport: LoadableAuroraReport,
         override val search: Search,
         val places: NonEmptyList<Place>,
-        val notificationTriggerLevels: NotificationTriggerLevels,
+        val settings: Settings,
     ) : State {
         val selectedPlaceTriggerLevel: TriggerLevel
-            get() = notificationTriggerLevels[selectedPlace.id]
+            get() = settings[selectedPlace.id]
     }
 }
 

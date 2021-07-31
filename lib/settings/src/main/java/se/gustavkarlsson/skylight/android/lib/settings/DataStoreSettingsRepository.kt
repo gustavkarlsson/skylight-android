@@ -8,9 +8,9 @@ import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.settings.proto.SettingsMessage
 
-internal class DataStoreSettings(
+internal class DataStoreSettingsRepository(
     private val dataStore: DataStore<SettingsMessage>,
-) : Settings {
+) : SettingsRepository {
 
     override suspend fun setNotificationTriggerLevel(placeId: PlaceId, level: TriggerLevel) {
         val levelId = level.id
@@ -21,13 +21,13 @@ internal class DataStoreSettings(
         }
     }
 
-    override fun streamNotificationTriggerLevels(): Flow<NotificationTriggerLevels> {
+    override fun stream(): Flow<Settings> {
         return dataStore.data
             .map { message ->
                 val map = mapOf(
                     PlaceId.Current as PlaceId to triggerLevelFromId(message.triggerLevelId)
                 )
-                NotificationTriggerLevels(map)
+                Settings(map)
             }
     }
 }

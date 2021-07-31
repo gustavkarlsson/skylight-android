@@ -158,7 +158,7 @@ internal object MainViewModelModule {
         selectedAuroraReport = LoadableAuroraReport.LOADING,
         search = Search.Inactive,
         places = null,
-        notificationTriggerLevels = null,
+        settings = null,
     )
 
     @Provides

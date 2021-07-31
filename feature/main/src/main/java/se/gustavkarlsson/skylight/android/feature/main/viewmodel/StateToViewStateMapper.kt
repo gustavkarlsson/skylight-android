@@ -54,7 +54,7 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createNonLoadingState(state: State.Ready): ViewState {
-        val triggerLevel = state.notificationTriggerLevels[PlaceId.Current]
+        val triggerLevel = state.settings[PlaceId.Current]
         val requiresBackgroundLocationPermission = triggerLevel != TriggerLevel.NEVER
         val hasBackgroundPermission = state.permissions[Permission.BackgroundLocation] == Access.Granted
         return if (requiresBackgroundLocationPermission && !hasBackgroundPermission) {
@@ -134,7 +134,7 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createErrorBannerData(state: State.Ready): BannerData? {
-        val needsBackgroundLocation = state.notificationTriggerLevels.asMap().any { (placeId, triggerLevel) ->
+        val needsBackgroundLocation = state.settings.asMap().any { (placeId, triggerLevel) ->
             placeId == PlaceId.Current && triggerLevel != TriggerLevel.NEVER
         }
         val backgroundLocationDeniedSomehow = when (state.permissions[Permission.BackgroundLocation]) {
@@ -240,7 +240,7 @@ internal class StateToViewStateMapper @Inject constructor(
             }
             .map { place ->
                 val selected = place.id == state.selectedPlace.id
-                val notifications = state.notificationTriggerLevels[place.id] != TriggerLevel.NEVER
+                val notifications = state.settings[place.id] != TriggerLevel.NEVER
                 when (place) {
                     Place.Current -> {
                         val name = createCurrentLocationDisplayName(state)

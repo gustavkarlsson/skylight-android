@@ -22,7 +22,7 @@ internal class FinishLoadingAction @Inject constructor() : Action<State> {
 }
 
 private fun State.Loading.updateLoading(): State {
-    return if (selectedPlace != null && places != null && notificationTriggerLevels != null) {
+    return if (selectedPlace != null && places != null && settings != null) {
         State.Ready(
             permissions = permissions,
             currentLocation = currentLocation,
@@ -31,7 +31,7 @@ private fun State.Loading.updateLoading(): State {
             selectedAuroraReport = selectedAuroraReport,
             search = search,
             places = places,
-            notificationTriggerLevels = notificationTriggerLevels,
+            settings = settings,
         )
     } else this
 }

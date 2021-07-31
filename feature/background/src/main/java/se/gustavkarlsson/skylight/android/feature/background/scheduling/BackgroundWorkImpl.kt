@@ -18,12 +18,12 @@ import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
-import se.gustavkarlsson.skylight.android.lib.settings.Settings
+import se.gustavkarlsson.skylight.android.lib.settings.SettingsRepository
 import se.gustavkarlsson.skylight.android.lib.time.Time
 
 internal class BackgroundWorkImpl(
     private val placesRepository: PlacesRepository,
-    private val settings: Settings,
+    private val settingsRepository: SettingsRepository,
     private val appVisibilityEvaluator: AppVisibilityEvaluator,
     private val locationProvider: LocationProvider,
     private val reportProvider: AuroraReportProvider,
@@ -57,7 +57,7 @@ internal class BackgroundWorkImpl(
     }
 
     private suspend fun getPlaceIdsToCheck(): List<PlaceIdWithTriggerLevel> {
-        val triggerLevels = settings.streamNotificationTriggerLevels()
+        val triggerLevels = settingsRepository.stream()
             .first()
         return triggerLevels.asMap()
             .map { (placeId, triggerLevel) ->
