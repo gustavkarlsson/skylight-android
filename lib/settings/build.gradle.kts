@@ -8,7 +8,7 @@ plugins {
     kotlin("android")
     kotlin("kapt")
     id("com.squareup.sqldelight")
-    id("com.google.protobuf") version "0.8.17" // FIXME Versions.x
+    id("com.google.protobuf")
 }
 
 android {

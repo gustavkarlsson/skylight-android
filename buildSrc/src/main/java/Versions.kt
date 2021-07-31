@@ -47,6 +47,7 @@ object Versions {
     val sqldelight = "1.5.0"
     val dataStore = "1.0.0-rc02"
     val protobuf = "3.17.3"
+    val protobufGradle = "0.8.17"
     val leakcanary = "2.7"
     val mapboxServices = "5.8.0"
     val conveyor = "cc93e41adc" // TODO use release version
