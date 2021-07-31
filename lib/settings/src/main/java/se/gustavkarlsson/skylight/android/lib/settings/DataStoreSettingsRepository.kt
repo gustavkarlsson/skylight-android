@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.lib.settings
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
@@ -54,7 +55,7 @@ internal class DataStoreSettingsRepository(
                 notificationTriggerLevel = notificationTriggerLevel,
                 placeIdsWithNotification = placeIdsWithNotification,
             )
-        }
+        }.distinctUntilChanged()
     }
 }
 
