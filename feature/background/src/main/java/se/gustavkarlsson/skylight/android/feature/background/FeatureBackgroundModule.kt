@@ -35,7 +35,7 @@ import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
-import se.gustavkarlsson.skylight.android.lib.settings.Settings
+import se.gustavkarlsson.skylight.android.lib.settings.SettingsRepository
 import se.gustavkarlsson.skylight.android.lib.time.Time
 
 @Module
@@ -120,14 +120,14 @@ object FeatureBackgroundModule {
     internal fun moduleStarter(
         context: Context,
         scheduler: Scheduler,
-        settings: Settings,
+        settingsRepository: SettingsRepository,
         notificationChannelCreator: NotificationChannelCreator,
         @Global globalScope: CoroutineScope,
     ): ModuleStarter =
         BackgroundModuleStarter(
             context = context,
             scheduler = scheduler,
-            settings = settings,
+            settingsRepository = settingsRepository,
             notificationChannelCreator = notificationChannelCreator,
             globalScope = globalScope,
         )
@@ -136,7 +136,7 @@ object FeatureBackgroundModule {
     @Reusable
     internal fun backgroundWork(
         placesRepository: PlacesRepository,
-        settings: Settings,
+        settingsRepository: SettingsRepository,
         appVisibilityEvaluator: AppVisibilityEvaluator,
         locationProvider: LocationProvider,
         reportProvider: AuroraReportProvider,
@@ -147,7 +147,7 @@ object FeatureBackgroundModule {
     ): BackgroundWork =
         BackgroundWorkImpl(
             placesRepository = placesRepository,
-            settings = settings,
+            settingsRepository = settingsRepository,
             appVisibilityEvaluator = appVisibilityEvaluator,
             locationProvider = locationProvider,
             reportProvider = reportProvider,

@@ -27,5 +27,6 @@ include(
     ":feature:googleplayservices",
     ":feature:intro",
     ":feature:main",
+    ":feature:settings",
     ":feature:privacypolicy"
 )

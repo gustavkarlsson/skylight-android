@@ -3,14 +3,13 @@ package se.gustavkarlsson.skylight.android.feature.main.state
 import arrow.core.NonEmptyList
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
-import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
 import se.gustavkarlsson.skylight.android.lib.permissions.Permissions
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingResult
-import se.gustavkarlsson.skylight.android.lib.settings.NotificationTriggerLevels
+import se.gustavkarlsson.skylight.android.lib.settings.Settings
 
 internal sealed interface State {
     val permissions: Permissions
@@ -28,7 +27,7 @@ internal sealed interface State {
         override val selectedAuroraReport: LoadableAuroraReport,
         override val search: Search,
         val places: NonEmptyList<Place>?,
-        val notificationTriggerLevels: NotificationTriggerLevels?,
+        val settings: Settings?,
     ) : State
 
     data class Ready(
@@ -39,11 +38,8 @@ internal sealed interface State {
         override val selectedAuroraReport: LoadableAuroraReport,
         override val search: Search,
         val places: NonEmptyList<Place>,
-        val notificationTriggerLevels: NotificationTriggerLevels,
-    ) : State {
-        val selectedPlaceTriggerLevel: TriggerLevel
-            get() = notificationTriggerLevels[selectedPlace.id]
-    }
+        val settings: Settings,
+    ) : State
 }
 
 internal sealed interface Search {

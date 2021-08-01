@@ -9,25 +9,20 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconToggleButton
-import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.icons.filled.Bookmark
@@ -41,18 +36,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.ioki.textref.TextRef
-import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.FactorItem
-import se.gustavkarlsson.skylight.android.feature.main.viewmodel.NotificationLevelItem
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Banner
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
@@ -83,7 +75,7 @@ private fun PreviewSelectedPlace() {
                 )
             ),
             onBookmarkClickedEvent = Event.Noop,
-            notificationLevelItems = emptyList(),
+            onNotificationClickedEvent = Event.Noop,
         ),
         onBannerActionClicked = {},
         onEvent = {},
@@ -112,12 +104,6 @@ internal fun SelectedPlace(
             onBannerActionClicked = onBannerActionClicked,
         )
 
-        var showDialog by remember { mutableStateOf(false) }
-        SetNotificationLevelAlertDialog(
-            items = if (showDialog) state.notificationLevelItems else null,
-            onDismiss = { showDialog = false },
-            onEvent = onEvent,
-        )
         PlaceButtons(
             modifier = Modifier
                 .padding(end = 16.dp, bottom = 8.dp)
@@ -127,7 +113,7 @@ internal fun SelectedPlace(
                 },
             notificationsButtonState = state.notificationsButtonState,
             bookmarkButtonState = state.bookmarkButtonState,
-            onNotificationsClicked = { showDialog = true },
+            onNotificationsClicked = { onEvent(state.onNotificationClickedEvent) },
             onBookmarkClicked = { onEvent(state.onBookmarkClickedEvent) },
         )
 
@@ -204,45 +190,6 @@ private fun ErrorBanner(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun SetNotificationLevelAlertDialog(
-    items: List<NotificationLevelItem>?,
-    onEvent: (Event) -> Unit,
-    onDismiss: () -> Unit,
-) {
-    if (items != null) {
-        AlertDialog(
-            onDismissRequest = onDismiss,
-            title = {
-                Text(text = stringResource(R.string.notify_title))
-            },
-            text = {
-                Column {
-                    for (item in items) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    onEvent(item.selectEvent)
-                                    onDismiss()
-                                }
-                                .padding(8.dp),
-                        ) {
-                            RadioButton(
-                                selected = item.selected,
-                                onClick = null,
-                            )
-                            Spacer(modifier = Modifier.width(16.dp))
-                            Text(textRef(textRef = item.text))
-                        }
-                    }
-                }
-            },
-            confirmButton = {},
-        )
     }
 }
 

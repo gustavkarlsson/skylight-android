@@ -25,7 +25,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 internal fun Ready(
     state: ViewState.Ready,
     onBannerActionClicked: (BannerData.Event) -> Unit,
-    onAboutClicked: () -> Unit,
+    onSettingsClicked: () -> Unit,
     onEvent: (Event) -> Unit,
     onClickGrantLocationPermission: () -> Unit,
     onClickOpenSettings: () -> Unit
@@ -34,7 +34,7 @@ internal fun Ready(
         topBar = {
             TopAppBar(
                 state = state.appBar,
-                onAboutClicked = onAboutClicked,
+                onSettingsClicked = onSettingsClicked,
                 onEvent = onEvent,
             )
         },

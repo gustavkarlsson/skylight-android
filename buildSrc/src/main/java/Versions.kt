@@ -45,6 +45,9 @@ object Versions {
     val threetenabp = "1.3.1"
     val solarPositioning = "0.0.9"
     val sqldelight = "1.5.0"
+    val dataStore = "1.0.0-rc02"
+    val protobuf = "3.17.3"
+    val protobufGradle = "0.8.17"
     val leakcanary = "2.7"
     val mapboxServices = "5.8.0"
     val conveyor = "cc93e41adc" // TODO use release version
