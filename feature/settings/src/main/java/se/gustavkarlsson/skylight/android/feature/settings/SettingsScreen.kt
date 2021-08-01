@@ -25,7 +25,10 @@ import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceId
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
-import se.gustavkarlsson.skylight.android.lib.ui.compose.*
+import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
+import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
+import se.gustavkarlsson.skylight.android.lib.ui.compose.collectAsLifecycleAwareState
+import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
 
 private val VIEW_MODE_ID = ServiceId("settingsViewModel")
@@ -42,6 +45,7 @@ object SettingsScreen : Screen {
         val viewState by viewModel.state.collectAsLifecycleAwareState()
         Content(
             notificationLevelText = textRef(viewState.triggerLevelText),
+            placesWithTriggerLevelText = textRef(viewState.placesWithTriggerLevelText),
             triggerLevelItems = viewState.triggerLevelItems,
             onTriggerLevelChanged = { triggerLevel ->
                 viewModel.onTriggerLevelChanged(triggerLevel)
@@ -57,6 +61,7 @@ object SettingsScreen : Screen {
 private fun PreviewContent() {
     Content(
         notificationLevelText = "At low chance",
+        placesWithTriggerLevelText = "2 places",
         triggerLevelItems = emptyList(),
         onTriggerLevelChanged = {},
         onBackClicked = {},
@@ -67,6 +72,7 @@ private fun PreviewContent() {
 @Composable
 private fun Content(
     notificationLevelText: String,
+    placesWithTriggerLevelText: String,
     triggerLevelItems: List<TriggerLevelItem>,
     onTriggerLevelChanged: (TriggerLevel) -> Unit,
     onBackClicked: () -> Unit,
@@ -94,6 +100,7 @@ private fun Content(
             ) {
                 TriggerLevelItem(
                     notificationLevelText,
+                    placesWithTriggerLevelText,
                     triggerLevelItems,
                     onTriggerLevelChanged,
                 )
@@ -108,6 +115,7 @@ private fun Content(
 @Composable
 private fun TriggerLevelItem(
     triggerLevelText: String,
+    placesWithTriggerLevelText: String,
     triggerLevelItems: List<TriggerLevelItem>,
     onTriggerLevelChanged: (TriggerLevel) -> Unit,
 ) {
@@ -119,13 +127,15 @@ private fun TriggerLevelItem(
             onDismiss = { showDialog = false },
         )
     }
-    // FIXME show how many places?
     ListItem(
         modifier = Modifier.clickable { showDialog = true },
         icon = {
             Icon(imageVector = Icons.Notifications, contentDescription = null)
         },
         secondaryText = {
+            Text(placesWithTriggerLevelText)
+        },
+        trailing = {
             Text(triggerLevelText)
         },
     ) {

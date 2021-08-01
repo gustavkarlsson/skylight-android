@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="places_count">
+        <item quantity="one">Aktiv för %d plats</item>
+        <item quantity="other">Aktiv för %d platser</item>
+    </plurals>
     <string name="notify_title">Avisera om norrsken</string>
     <string name="notify_at_high">Vid hög chans</string>
     <string name="notify_at_medium">Vid medium chans</string>

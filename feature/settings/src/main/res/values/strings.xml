@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <plurals name="places_count">
+        <item quantity="one">Enabled for %d place</item>
+        <item quantity="other">Enabled for %d places</item>
+    </plurals>
     <string name="notify_title">Notify about aurora</string>
     <string name="notify_at_high">At high chance</string>
     <string name="notify_at_medium">At medium chance</string>

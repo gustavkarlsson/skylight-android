@@ -1,9 +1,13 @@
 package se.gustavkarlsson.skylight.android.feature.settings
 
 import com.ioki.textref.TextRef
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
+import se.gustavkarlsson.skylight.android.lib.settings.Settings
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsRepository
 import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
 
@@ -14,6 +18,7 @@ internal class SettingsViewModel(
         .map { settings ->
             ViewState(
                 triggerLevelText = settings.notificationTriggerLevel.shortText,
+                placesWithTriggerLevelText = createPlacesWithTriggerLevelText(settings),
                 triggerLevelItems = createTriggerLevelItems(settings.notificationTriggerLevel)
             )
         }
@@ -24,6 +29,11 @@ internal class SettingsViewModel(
             settingsRepository.setNotificationTriggerLevel(triggerLevel)
         }
     }
+}
+
+private fun createPlacesWithTriggerLevelText(settings: Settings): TextRef {
+    val count = settings.placeIdsWithNotification.size
+    return TextRef.pluralsRes(R.plurals.places_count, count, count)
 }
 
 private fun createTriggerLevelItems(notificationTriggerLevel: TriggerLevel): List<TriggerLevelItem> {
@@ -52,10 +62,11 @@ private val TriggerLevel.shortText: TextRef
 
 internal data class ViewState(
     val triggerLevelText: TextRef,
+    val placesWithTriggerLevelText: TextRef,
     val triggerLevelItems: List<TriggerLevelItem>,
 ) {
     companion object {
-        val INITIAL = ViewState(TextRef.EMPTY, emptyList())
+        val INITIAL = ViewState(TextRef.EMPTY, TextRef.EMPTY, emptyList())
     }
 }
 
