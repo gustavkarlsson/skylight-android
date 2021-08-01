@@ -3,17 +3,8 @@ CREATE TABLE DbTriggerLevel (
   levelId INTEGER NOT NULL
 );
 
-getById:
-SELECT * FROM DbTriggerLevel WHERE placeId == ?;
-
 selectAll:
 SELECT * FROM DbTriggerLevel;
 
-update:
-UPDATE DbTriggerLevel SET levelId = ? WHERE placeId == ?;
-
-insert:
-INSERT INTO DbTriggerLevel (placeId, levelId) VALUES (?, ?);
-
-delete:
-DELETE FROM DbTriggerLevel WHERE placeId = ?;
+deleteAll:
+DELETE FROM DbTriggerLevel;

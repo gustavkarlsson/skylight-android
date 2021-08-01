@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import org.threeten.bp.Duration
@@ -58,10 +57,7 @@ internal class StreamReportsLiveAction @Inject constructor(
     private fun Flow<State>.reports(): Flow<LoadableAuroraReport> =
         selectedPlaceLocations()
             .flatMapLatest { location ->
-                if (location == null) {
-                    // FIXME replace with "no location", and maybe eventually show error?
-                    flowOf(LoadableAuroraReport.LOADING)
-                } else flow {
+                flow {
                     emitAll(auroraReportProvider.stream(location))
                 }
             }

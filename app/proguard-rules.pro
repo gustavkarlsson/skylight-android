@@ -16,3 +16,6 @@
 -keepclasseswithmembers class se.gustavkarlsson.skylight.android.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
+
+# Protobuf
+-shrinkunusedprotofields

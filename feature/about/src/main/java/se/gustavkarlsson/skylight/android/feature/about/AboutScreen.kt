@@ -28,10 +28,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
-import se.gustavkarlsson.skylight.android.lib.navigation.screens
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceId
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
-import se.gustavkarlsson.skylight.android.lib.ui.compose.ClickableText
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
@@ -53,7 +51,6 @@ object AboutScreen : Screen {
         Content(
             text = text,
             onBackClicked = { navigator.closeScreen() },
-            onPrivacyPolicyClicked = { navigator.goTo(screens.privacyPolicy) },
         )
     }
 }
@@ -64,7 +61,6 @@ private fun PreviewContent() {
     Content(
         text = "Line1\nLine2",
         onBackClicked = {},
-        onPrivacyPolicyClicked = {},
     )
 }
 
@@ -72,7 +68,6 @@ private fun PreviewContent() {
 private fun Content(
     text: String,
     onBackClicked: () -> Unit,
-    onPrivacyPolicyClicked: () -> Unit,
 ) {
     ScreenBackground {
         Scaffold(
@@ -108,11 +103,6 @@ private fun Content(
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(text = text, textAlign = TextAlign.Center)
-                Spacer(modifier = Modifier.height(16.dp))
-                ClickableText(
-                    text = stringResource(R.string.privacy_policy),
-                    onClick = onPrivacyPolicyClicked,
-                )
             }
         }
     }

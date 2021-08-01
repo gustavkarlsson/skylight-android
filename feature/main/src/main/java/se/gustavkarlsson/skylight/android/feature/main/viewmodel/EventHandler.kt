@@ -4,7 +4,6 @@ import app.cash.exhaustive.Exhaustive
 import kotlinx.coroutines.channels.SendChannel
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.issue
-import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.feature.main.state.Search
 import se.gustavkarlsson.skylight.android.feature.main.state.State
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
@@ -12,14 +11,14 @@ import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
-import se.gustavkarlsson.skylight.android.lib.settings.Settings
+import se.gustavkarlsson.skylight.android.lib.settings.SettingsRepository
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import javax.inject.Inject
 
 internal class EventHandler @Inject constructor(
     private val store: Store<State>,
     private val placesRepository: PlacesRepository,
-    private val settings: Settings,
+    private val settingsRepository: SettingsRepository,
     private val permissionChecker: PermissionChecker,
     private val selectedPlaceRepository: SelectedPlaceRepository,
     private val searchChannel: SendChannel<@JvmSuppressWildcards SearchFieldState>,
@@ -30,22 +29,23 @@ internal class EventHandler @Inject constructor(
         when (event) {
             is Event.AddBookmark -> placesRepository.setBookmarked(event.place.id, true)
             is Event.RemoveBookmark -> {
-                settings.setNotificationTriggerLevel(event.place.id, TriggerLevel.NEVER)
+                settingsRepository.setPlaceNotification(event.place.id, false)
                 placesRepository.setBookmarked(event.place.id, false)
             }
-            is Event.SetNotificationLevel -> {
+            is Event.EnableNotifications -> {
                 if (event.place is Place.Saved && !event.place.bookmarked) {
-                    if (event.level != TriggerLevel.NEVER) {
-                        placesRepository.setBookmarked(event.place.id, true)
-                    }
+                    placesRepository.setBookmarked(event.place.id, true)
                 }
-                settings.setNotificationTriggerLevel(event.place.id, event.level)
+                settingsRepository.setPlaceNotification(event.place.id, true)
+            }
+            is Event.DisableNotifications -> {
+                settingsRepository.setPlaceNotification(event.place.id, false)
             }
             is Event.SearchChanged -> searchChannel.send(event.state)
             is Event.SelectSearchResult -> onSearchResultClicked(event.result)
             Event.RefreshLocationPermission -> permissionChecker.refresh()
             Event.TurnOffCurrentLocationNotifications -> {
-                settings.setNotificationTriggerLevel(PlaceId.Current, TriggerLevel.NEVER)
+                settingsRepository.setPlaceNotification(PlaceId.Current, false)
             }
             Event.Noop -> Unit
         }

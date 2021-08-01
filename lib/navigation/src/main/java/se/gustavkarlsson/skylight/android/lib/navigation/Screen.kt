@@ -23,6 +23,7 @@ interface Screen : Parcelable {
         GooglePlayServices,
         Main,
         About,
+        Settings,
         PrivacyPolicy,
     }
 }

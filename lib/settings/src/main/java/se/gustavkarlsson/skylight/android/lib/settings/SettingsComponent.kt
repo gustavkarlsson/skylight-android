@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.lib.settings
 
 interface SettingsComponent {
 
-    fun settings(): Settings
+    fun settings(): SettingsRepository
 
     interface Setter {
         fun setSettingsComponent(component: SettingsComponent) {

@@ -7,16 +7,15 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
-import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.feature.background.notifications.NotificationChannelCreator
 import se.gustavkarlsson.skylight.android.feature.background.scheduling.Scheduler
-import se.gustavkarlsson.skylight.android.lib.settings.Settings
+import se.gustavkarlsson.skylight.android.lib.settings.SettingsRepository
 import java.io.File
 
 internal class BackgroundModuleStarter(
     private val context: Context,
     private val scheduler: Scheduler,
-    private val settings: Settings,
+    private val settingsRepository: SettingsRepository,
     private val notificationChannelCreator: NotificationChannelCreator,
     private val globalScope: CoroutineScope,
 ) : ModuleStarter {
@@ -34,11 +33,9 @@ internal class BackgroundModuleStarter(
     }
 
     private suspend fun scheduleBasedOnSettings() {
-        settings.streamNotificationTriggerLevels()
-            .map { levels ->
-                levels.asMap().values.any { triggerLevel ->
-                    triggerLevel != TriggerLevel.NEVER
-                }
+        settingsRepository.stream()
+            .map { settings ->
+                settings.placeIdsWithNotification.isNotEmpty()
             }
             .distinctUntilChanged()
             .collect { enable ->
