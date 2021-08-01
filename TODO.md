@@ -2,7 +2,6 @@
 * Better colors
 
 ## Soon
-* Global notification level?
 * Readme
 * Dark mode splash screen for Android 12
 * Notifications on/off without dialog (or only dialog when enabling). Needs a way to select current setting
