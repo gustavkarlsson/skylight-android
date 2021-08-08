@@ -2,8 +2,10 @@ package se.gustavkarlsson.skylight.android.feature.intro
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -75,11 +77,13 @@ private fun Content(
                 .padding(vertical = 16.dp, horizontal = 32.dp)
                 .systemBarsPadding(),
             image = {
+                Spacer(modifier = Modifier.height(64.dp))
                 Image(
                     modifier = Modifier.fillMaxWidth(0.75f),
                     painter = painterResource(R.drawable.app_logo),
                     contentDescription = null,
                 )
+                Spacer(modifier = Modifier.height(32.dp))
             },
             title = stringResource(R.string.intro_title),
             description = stringResource(R.string.intro_desc),

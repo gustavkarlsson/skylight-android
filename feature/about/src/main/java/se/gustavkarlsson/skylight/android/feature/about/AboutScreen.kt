@@ -92,11 +92,13 @@ private fun Content(
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                Spacer(modifier = Modifier.height(64.dp))
                 Image(
                     modifier = Modifier.fillMaxWidth(0.75f),
                     painter = painterResource(R.drawable.app_logo),
                     contentDescription = null,
                 )
+                Spacer(modifier = Modifier.height(32.dp))
                 Text(
                     text = stringResource(R.string.app_name),
                     style = Typography.h4,
