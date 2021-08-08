@@ -116,9 +116,7 @@ internal class StateToViewStateMapper @Inject constructor(
             chanceLevelText = createChangeLevelText(state),
             errorBannerData = createErrorBannerData(state),
             notificationsButtonState = createNotificationButtonState(state),
-            bookmarkButtonState = createBookmarkButtonState(state),
             factorItems = createFactorItems(state),
-            onBookmarkClickedEvent = createOnBookmarkClickedEvent(state),
             onNotificationClickedEvent = createOnNotificationClickedEvent(state),
         )
     }
@@ -154,13 +152,6 @@ internal class StateToViewStateMapper @Inject constructor(
     private fun createNotificationButtonState(state: State.Ready): ToggleButtonState {
         val notificationChecked = state.selectedPlace.id in state.settings.placeIdsWithNotification
         return ToggleButtonState.Enabled(notificationChecked)
-    }
-
-    private fun createBookmarkButtonState(state: State.Ready): ToggleButtonState {
-        return when (val selectedPlace = state.selectedPlace) {
-            Place.Current -> ToggleButtonState.Gone
-            is Place.Saved -> ToggleButtonState.Enabled(selectedPlace.bookmarked)
-        }
     }
 
     private fun createFactorItems(state: State): List<FactorItem> {
@@ -261,15 +252,6 @@ internal class StateToViewStateMapper @Inject constructor(
             .orNull()
     }
 
-    private fun createOnBookmarkClickedEvent(state: State.Ready): Event {
-        return when (val selectedPlace = state.selectedPlace) {
-            Place.Current -> Event.Noop
-            is Place.Saved -> if (selectedPlace.bookmarked) {
-                Event.RemoveBookmark(selectedPlace)
-            } else Event.AddBookmark(selectedPlace)
-        }
-    }
-
     private fun createOnNotificationClickedEvent(state: State.Ready): Event {
         val selectedPlace = state.selectedPlace
         val isEnabled = selectedPlace.id in state.settings.placeIdsWithNotification
@@ -366,10 +348,8 @@ private val searchResultOrderComparator: Comparator<SearchResult>
 private val SearchResult.typePriority: Int
     get() = when (this) {
         is SearchResult.Known.Current -> 1
-        is SearchResult.Known.Saved -> if (place.bookmarked) {
-            2
-        } else 3
-        is SearchResult.New -> 4
+        is SearchResult.Known.Saved -> 2
+        is SearchResult.New -> 3
     }
 
 private val SearchResult.lastChanged: Instant

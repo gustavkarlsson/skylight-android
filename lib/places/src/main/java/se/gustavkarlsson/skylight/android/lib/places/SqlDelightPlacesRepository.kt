@@ -24,18 +24,6 @@ internal class SqlDelightPlacesRepository(
     private val maxRecentCount: Int,
 ) : PlacesRepository {
 
-    override suspend fun setBookmarked(placeId: PlaceId.Saved, bookmarked: Boolean): Place.Saved =
-        withContext(dispatcher) {
-            val now = time.now()
-            val bookmarkedLong = if (bookmarked) {
-                1L
-            } else 0L
-            queries.updateBookmarked(bookmarkedLong, now.toEpochMilli(), placeId.value)
-            queries.selectById(placeId.value)
-                .exactlyOne()
-                .toPlace()
-        }
-
     override suspend fun insert(name: String, location: Location): Place.Saved = withContext(dispatcher) {
         val now = time.now()
         queries.insert(name, location.latitude, location.longitude, now.toEpochMilli())
@@ -77,14 +65,10 @@ internal class SqlDelightPlacesRepository(
             .distinctUntilChanged()
 }
 
+// FIXME Remove bookmarked from db
 private fun DbPlace.toPlace(): Place.Saved {
     val placeId = PlaceId.Saved(id)
     val location = Location(latitude, longitude)
     val lastChanged = Instant.ofEpochMilli(lastChangedMillis)
-    val bookmarked = when (bookmarked) {
-        1L -> true
-        0L -> false
-        else -> error("Unexpected bookmarked value: $bookmarked")
-    }
-    return Place.Saved(placeId, name, location, bookmarked, lastChanged)
+    return Place.Saved(placeId, name, location, lastChanged)
 }

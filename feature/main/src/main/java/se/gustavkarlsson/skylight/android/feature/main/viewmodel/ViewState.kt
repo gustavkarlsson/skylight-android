@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
-import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.MyLocation
@@ -37,9 +36,7 @@ internal sealed interface ContentState {
         val chanceLevelText: TextRef,
         val errorBannerData: BannerData?,
         val notificationsButtonState: ToggleButtonState,
-        val bookmarkButtonState: ToggleButtonState,
         val factorItems: List<FactorItem>,
-        val onBookmarkClickedEvent: Event,
         val onNotificationClickedEvent: Event,
     ) : ContentState
 
@@ -115,10 +112,7 @@ internal sealed interface SearchResult {
         ) : Known {
             override val title: TextRef get() = TextRef.string(place.name)
             override val subtitle: Nothing? = null
-            override val icon: ImageVector
-                get() = if (place.bookmarked) {
-                    Icons.Bookmark
-                } else Icons.History
+            override val icon: ImageVector = Icons.History
             override val trailingIcon: ImageVector?
                 get() = if (notifications) {
                     Icons.Notifications
@@ -142,8 +136,6 @@ internal sealed interface SearchResult {
 }
 
 internal sealed interface Event {
-    data class AddBookmark(val place: Place.Saved) : Event
-    data class RemoveBookmark(val place: Place.Saved) : Event
     data class EnableNotifications(val place: Place) : Event
     data class DisableNotifications(val place: Place) : Event
     data class SearchChanged(val state: SearchFieldState) : Event

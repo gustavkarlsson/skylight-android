@@ -27,15 +27,8 @@ internal class EventHandler @Inject constructor(
     suspend fun onEvent(event: Event) {
         @Exhaustive
         when (event) {
-            is Event.AddBookmark -> placesRepository.setBookmarked(event.place.id, true)
-            is Event.RemoveBookmark -> {
-                settingsRepository.setPlaceNotification(event.place.id, false)
-                placesRepository.setBookmarked(event.place.id, false)
-            }
+            // FIXME Combine these
             is Event.EnableNotifications -> {
-                if (event.place is Place.Saved && !event.place.bookmarked) {
-                    placesRepository.setBookmarked(event.place.id, true)
-                }
                 settingsRepository.setPlaceNotification(event.place.id, true)
             }
             is Event.DisableNotifications -> {

@@ -48,21 +48,9 @@ private fun PreviewSearchResults() {
                 ),
                 SearchResult.Known.Saved(
                     place = Place.Saved(
-                        id = PlaceId.Saved(1),
-                        name = "Bookmarked",
-                        location = Location(1.0, 2.0),
-                        bookmarked = true,
-                        lastChanged = Instant.EPOCH,
-                    ),
-                    selected = false,
-                    notifications = true,
-                ),
-                SearchResult.Known.Saved(
-                    place = Place.Saved(
                         id = PlaceId.Saved(2),
                         name = "Recent",
                         location = Location(3.0, 4.0),
-                        bookmarked = false,
                         lastChanged = Instant.EPOCH,
                     ),
                     selected = false,
