@@ -65,7 +65,6 @@ internal class SqlDelightPlacesRepository(
             .distinctUntilChanged()
 }
 
-// FIXME Remove bookmarked from db
 private fun DbPlace.toPlace(): Place.Saved {
     val placeId = PlaceId.Saved(id)
     val location = Location(latitude, longitude)
