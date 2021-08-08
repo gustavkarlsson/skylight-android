@@ -27,13 +27,7 @@ internal class EventHandler @Inject constructor(
     suspend fun onEvent(event: Event) {
         @Exhaustive
         when (event) {
-            // FIXME Combine these
-            is Event.EnableNotifications -> {
-                settingsRepository.setPlaceNotification(event.place.id, true)
-            }
-            is Event.DisableNotifications -> {
-                settingsRepository.setPlaceNotification(event.place.id, false)
-            }
+            is Event.SetNotifications -> settingsRepository.setPlaceNotification(event.place.id, event.enabled)
             is Event.SearchChanged -> searchChannel.send(event.state)
             is Event.SelectSearchResult -> onSearchResultClicked(event.result)
             Event.RefreshLocationPermission -> permissionChecker.refresh()

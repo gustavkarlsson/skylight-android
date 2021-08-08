@@ -254,10 +254,8 @@ internal class StateToViewStateMapper @Inject constructor(
 
     private fun createOnNotificationClickedEvent(state: State.Ready): Event {
         val selectedPlace = state.selectedPlace
-        val isEnabled = selectedPlace.id in state.settings.placeIdsWithNotification
-        return if (isEnabled) {
-            Event.DisableNotifications(selectedPlace)
-        } else Event.EnableNotifications(selectedPlace)
+        val enabled = selectedPlace.id in state.settings.placeIdsWithNotification
+        return Event.SetNotifications(selectedPlace, enabled)
     }
 
     // TODO avoid duplication with similar function below

@@ -136,8 +136,7 @@ internal sealed interface SearchResult {
 }
 
 internal sealed interface Event {
-    data class EnableNotifications(val place: Place) : Event
-    data class DisableNotifications(val place: Place) : Event
+    data class SetNotifications(val place: Place, val enabled: Boolean) : Event
     data class SearchChanged(val state: SearchFieldState) : Event
     data class SelectSearchResult(val result: SearchResult) : Event
     object RefreshLocationPermission : Event
