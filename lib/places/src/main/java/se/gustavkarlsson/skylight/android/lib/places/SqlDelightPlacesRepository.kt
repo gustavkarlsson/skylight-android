@@ -21,9 +21,10 @@ internal class SqlDelightPlacesRepository(
     private val queries: DbPlaceQueries,
     private val dispatcher: CoroutineDispatcher,
     private val time: Time,
-    private val maxRecentCount: Int,
+    private val keepCount: Int,
 ) : PlacesRepository {
 
+    // TODO Don't insert duplicates
     override suspend fun insert(name: String, location: Location): Place.Saved = withContext(dispatcher) {
         val now = time.now()
         queries.insert(name, location.latitude, location.longitude, now.toEpochMilli())
@@ -35,7 +36,7 @@ internal class SqlDelightPlacesRepository(
     }
 
     private suspend fun removeOldRecents() = withContext(dispatcher) {
-        queries.keepMostRecent(maxRecentCount.toLong())
+        queries.keepMostRecent(keepCount.toLong())
     }
 
     override suspend fun updateLastChanged(placeId: PlaceId.Saved): Place.Saved = withContext(dispatcher) {

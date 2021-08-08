@@ -1,1 +1,2 @@
+ALTER TABLE DbPlace ADD COLUMN notifications INTEGER NOT NULL DEFAULT 0;
 UPDATE DbPlace SET type = "unused";
