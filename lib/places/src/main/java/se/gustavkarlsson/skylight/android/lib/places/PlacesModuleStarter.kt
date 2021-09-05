@@ -14,14 +14,9 @@ internal class PlacesModuleStarter(
     private val globalScope: CoroutineScope,
 ) : ModuleStarter {
     override suspend fun start() {
-        migrateNotificationsToPlacesDb()
         globalScope.launch {
             updateAnalyticsPlacesCount()
         }
-    }
-
-    private suspend fun migrateNotificationsToPlacesDb() {
-        TODO("FIXME Not yet implemented")
     }
 
     private suspend fun updateAnalyticsPlacesCount() {
