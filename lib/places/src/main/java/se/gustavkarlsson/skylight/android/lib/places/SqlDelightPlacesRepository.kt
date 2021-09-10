@@ -28,15 +28,15 @@ internal class SqlDelightPlacesRepository(
     override suspend fun insert(name: String, location: Location): Place.Saved = withContext(dispatcher) {
         val now = time.now()
         queries.insert(name, location.latitude, location.longitude, now.toEpochMilli())
-        val inserted = queries.selectLastInserted()
+        queries.selectLastInserted()
             .exactlyOne()
             .toPlace()
-        removeOldRecents()
-        inserted
     }
 
-    private suspend fun removeOldRecents() = withContext(dispatcher) {
-        queries.keepMostRecent(keepCount.toLong())
+    override suspend fun delete(id: PlaceId.Saved): Boolean {
+        queries.deleteById(id.value)
+        val changedRows = queries.selectChangedCount().exactlyOne()
+        return changedRows > 0
     }
 
     override suspend fun updateLastChanged(placeId: PlaceId.Saved): Place.Saved = withContext(dispatcher) {

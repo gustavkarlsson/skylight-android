@@ -25,11 +25,9 @@ UPDATE DbPlace
   SET lastChangedMillis = ?
   WHERE id = ?;
 
-keepMostRecent:
+deleteById:
 DELETE FROM DbPlace
-  WHERE id NOT IN (
-    SELECT id
-      FROM DbPlace
-      ORDER BY lastChangedMillis DESC
-      LIMIT ?
-  );
+  WHERE id = ?;
+
+selectChangedCount:
+SELECT changes();
