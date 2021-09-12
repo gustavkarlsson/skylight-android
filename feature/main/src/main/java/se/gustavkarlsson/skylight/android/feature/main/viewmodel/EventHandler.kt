@@ -16,7 +16,7 @@ import se.gustavkarlsson.skylight.android.lib.settings.SettingsRepository
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import javax.inject.Inject
 
-private const val SAVED_PLACES_TO_KEEP =3
+private const val SAVED_PLACES_TO_KEEP = 3
 
 internal class EventHandler @Inject constructor(
     private val store: Store<State>,
