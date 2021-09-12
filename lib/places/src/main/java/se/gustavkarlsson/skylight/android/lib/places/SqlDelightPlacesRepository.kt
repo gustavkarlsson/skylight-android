@@ -21,7 +21,6 @@ internal class SqlDelightPlacesRepository(
     private val queries: DbPlaceQueries,
     private val dispatcher: CoroutineDispatcher,
     private val time: Time,
-    private val keepCount: Int,
 ) : PlacesRepository {
 
     // TODO Don't insert duplicates

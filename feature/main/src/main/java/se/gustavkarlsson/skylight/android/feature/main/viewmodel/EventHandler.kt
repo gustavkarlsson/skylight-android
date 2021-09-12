@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
 import app.cash.exhaustive.Exhaustive
 import kotlinx.coroutines.channels.SendChannel
-import kotlinx.coroutines.flow.first
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.issue
 import se.gustavkarlsson.skylight.android.feature.main.state.Search
@@ -15,8 +14,6 @@ import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsRepository
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import javax.inject.Inject
-
-private const val SAVED_PLACES_TO_KEEP = 3
 
 internal class EventHandler @Inject constructor(
     private val store: Store<State>,
@@ -32,13 +29,16 @@ internal class EventHandler @Inject constructor(
         when (event) {
             is Event.SetNotifications -> {
                 settingsRepository.setPlaceNotification(event.place.id, event.enabled)
-                if (!event.enabled) {
-                    trimPlaces()
-                }
             }
-            is Event.SearchChanged -> searchChannel.send(event.state)
-            is Event.SelectSearchResult -> onSearchResultClicked(event.result)
-            Event.RefreshLocationPermission -> permissionChecker.refresh()
+            is Event.SearchChanged -> {
+                searchChannel.send(event.state)
+            }
+            is Event.SelectSearchResult -> {
+                onSearchResultClicked(event.result)
+            }
+            Event.RefreshLocationPermission -> {
+                permissionChecker.refresh()
+            }
             Event.TurnOffCurrentLocationNotifications -> {
                 settingsRepository.setPlaceNotification(PlaceId.Current, false)
             }
@@ -55,9 +55,7 @@ internal class EventHandler @Inject constructor(
                 placesRepository.updateLastChanged(result.place.id)
             }
             is SearchResult.New -> {
-                placesRepository.insert(result.name, result.location).also {
-                    trimPlaces()
-                }
+                placesRepository.insert(result.name, result.location)
             }
         }
         selectedPlaceRepository.set(place.id)
@@ -68,23 +66,6 @@ internal class EventHandler @Inject constructor(
                     is State.Ready -> copy(search = Search.Inactive)
                 }
             }
-        }
-    }
-
-    private suspend fun trimPlaces() {
-        val allPlaces = placesRepository.stream().first()
-        val savedPlaces = allPlaces.filterIsInstance<Place.Saved>()
-        if (savedPlaces.size < SAVED_PLACES_TO_KEEP) return
-        val settings = settingsRepository.stream().first()
-        val placeIdsToDelete = savedPlaces
-            .filter { place ->
-                place.id !in settings.placeIdsWithNotification
-            }
-            .sortedByDescending { it.lastChanged }
-            .drop(SAVED_PLACES_TO_KEEP)
-            .map { it.id }
-        for (id in placeIdsToDelete) {
-            placesRepository.delete(id)
         }
     }
 }
