@@ -1,5 +1,5 @@
 ## ASAP
-* Permissions, both coarse and fine
+* Test permissions
 * Don't finish activity
 * Look into restricted bucket
 * Better colors

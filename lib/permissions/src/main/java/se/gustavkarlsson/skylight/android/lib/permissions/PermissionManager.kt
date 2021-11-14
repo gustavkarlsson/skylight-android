@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import arrow.core.NonEmptyList
 import com.github.florent37.runtimepermission.kotlin.PermissionException
 import com.github.florent37.runtimepermission.kotlin.coroutines.experimental.askPermission
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,43 +23,47 @@ internal class PermissionManager @Inject constructor(
     override val permissions: StateFlow<Permissions> get() = state
 
     override fun refresh() {
-        val new = Permissions(getPermissions())
+        val newMap = getPermissions()
+        val new = Permissions(newMap)
         val old = state.value
         state.value = new
         logInfo { "Permissions changed from $old to $new" }
     }
 
     private fun getPermissions(): Map<Permission, Access> {
-        return Permission.values().map { permission ->
+        return Permission.values().associate { permission ->
             val access = getAccess(permission)
             permission to access
-        }.toMap()
+        }
     }
 
     private fun getAccess(permission: Permission): Access {
-        val result = ContextCompat.checkSelfPermission(context, permission.key)
+        val result = ContextCompat.checkSelfPermission(context, permission.checkKey)
         return if (result == PackageManager.PERMISSION_GRANTED) {
             Access.Granted
         } else Access.Denied
     }
 
     override suspend fun request(activity: FragmentActivity, permission: Permission) {
-        logInfo { "Requesting permission for $permission using key '${permission.key}'" }
+        logInfo { "Requesting permission for $permission" }
 
-        // The implementation of this lib is a bit wonky. askPermission returns a result,
-        // but throws whenever the result is not granted. Hence the catch
-        val newAccess = try {
-            activity.askPermission(permission.key)
-            Access.Granted
-        } catch (e: PermissionException) {
-            when (permission.key) {
-                in e.foreverDenied -> Access.DeniedForever
-                in e.denied -> Access.Denied
-                else -> throw IllegalStateException("Unexpected state for key: ${permission.key}", e)
-            }
-        }
+        val newAccess = doRequest(activity, permission.requestKeys)
         val old = state.value
         val new = old.update(permission, newAccess)
         state.value = new
+    }
+
+    // The implementation of this lib is a bit wonky. askPermission returns a result,
+    // but throws whenever the result is not granted. Hence the catch
+    private suspend fun doRequest(activity: FragmentActivity, keys: NonEmptyList<String>): Access = try {
+        activity.askPermission(*keys.toTypedArray())
+        Access.Granted
+    } catch (e: PermissionException) {
+        when {
+            keys.any { it in e.accepted } -> Access.Granted
+            keys.any { it in e.denied } -> Access.Denied
+            keys.any { it in e.foreverDenied } -> Access.DeniedForever
+            else -> throw IllegalStateException("Unexpected state for keys: $keys", e)
+        }
     }
 }

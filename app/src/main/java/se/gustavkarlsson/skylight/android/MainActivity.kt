@@ -80,6 +80,7 @@ internal class MainActivity :
     }
 
     // TODO Implement listeners instead?
+    // FIXME this is called on every configuration change
     private fun onBackstackChange(change: BackstackChange) {
         passScopesToNewScreens(change)
         trackScreenChange(change)
@@ -134,7 +135,9 @@ internal class MainActivity :
         super.onStart()
         val scope = createLifecycleScope("startStopScope")
         startStopScope = scope
-        onEachScreen { onStartStopScope(this@MainActivity, scope) }
+        onEachScreen {
+            onStartStopScope(this@MainActivity, scope)
+        }
     }
 
     override fun onStop() {
