@@ -1,9 +1,9 @@
 ## ASAP
 * Test permissions
-* Look into restricted bucket
 * Better colors
 
 ## Soon
+* Look into restricted bucket
 * Move to firebase BOM (https://firebase.google.com/docs/android/learn-more#bom)
 * Trailing comma rule
 * Readme
