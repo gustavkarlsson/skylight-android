@@ -18,7 +18,6 @@ fun <T> StateFlow<T>.collectAsLifecycleAwareState(
 ): State<T> {
     val lifecycleOwner = LocalLifecycleOwner.current
     val lifecycleAwareFlow = remember(this, lifecycleOwner, minActiveState) {
-        // FIXME verify when this re-runs
         flowWithLifecycle(lifecycleOwner.lifecycle, minActiveState)
             .stateIn(lifecycleOwner.lifecycleScope, SharingStarted.WhileSubscribed(), initialValue = value)
     }

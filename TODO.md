@@ -5,6 +5,7 @@
 * Better colors
 
 ## Soon
+* Move to firebase BOM (https://firebase.google.com/docs/android/learn-more#bom)
 * Trailing comma rule
 * Readme
 * Integrate SettingsClient? (https://developer.android.com/topic/performance/appstandby#restricted-bucket, )
