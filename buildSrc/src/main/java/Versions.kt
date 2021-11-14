@@ -16,20 +16,20 @@ object Versions {
 
     // App
     // Google
-    val googleServices = "4.3.8"
+    val googleServices = "4.3.10"
     val playServicesLocation = "18.0.0"
     val playServicesGcm = "17.0.0"
 
-    val firebaseAnalytics = "19.0.0"
-    val crashlyticsGradle = "2.7.0"
-    val crashlytics = "18.0.1"
+    val firebaseAnalytics = "20.0.0"
+    val crashlyticsGradle = "2.8.0"
+    val crashlytics = "18.2.4"
 
-    val androidAppcompat = "1.3.0"
-    val androidActivity = "1.3.0-beta01"
-    val androidAnnotation = "1.2.0"
-    val androidWorkManager = "2.6.0-beta01"
-    val androidCore = "1.5.0"
-    val androidLifecycle = "2.4.0-alpha02"
+    val androidAppcompat = "1.3.1"
+    val androidActivity = "1.4.0"
+    val androidAnnotation = "1.3.0"
+    val androidWorkManager = "2.7.0"
+    val androidCore = "1.7.0"
+    val androidLifecycle = "2.4.0"
 
     val runtimePermissionKotlin = "1.1.2"
     val kotlinxCoroutines = "1.5.2"
