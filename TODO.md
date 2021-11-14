@@ -1,8 +1,13 @@
 ## ASAP
+* Permissions, both coarse and fine
+* Don't finish activity
+* Look into restricted bucket
 * Better colors
 
 ## Soon
+* Trailing comma rule
 * Readme
+* Integrate SettingsClient? (https://developer.android.com/topic/performance/appstandby#restricted-bucket, )
 * Dark mode splash screen for Android 12
 * Notifications on/off without dialog (or only dialog when enabling). Needs a way to select current setting
 * Only subscribe to current location reports when location is turned on?

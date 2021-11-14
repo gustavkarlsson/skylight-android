@@ -3,16 +3,16 @@ import org.gradle.api.JavaVersion
 object Versions {
     // Config
     val minSdk = 23
-    val compileSdk = 30
-    val targetSdk = 30
+    val compileSdk = 31
+    val targetSdk = 31
     val java = JavaVersion.VERSION_1_8
-    val kotlin = "1.5.10" // Must also update in buildSrc/build.gradle.kts AND exhaustive
-    val androidGradle = "7.0.0" // Must also update in buildSrc/build.gradle.kts
+    val kotlin = "1.5.31" // Must also update in buildSrc/build.gradle.kts AND exhaustive
+    val androidGradle = "7.0.3" // Must also update in buildSrc/build.gradle.kts
     val jgit = "5.12.0.202106070339-r"
 
     val axionRelease = "1.13.3"
-    val playPublisher = "3.5.0-agp7.0"
-    val ktlint = "10.1.0"
+    val playPublisher = "3.6.0"
+    val ktlint = "10.2.0"
 
     // App
     // Google
@@ -32,21 +32,21 @@ object Versions {
     val androidLifecycle = "2.4.0-alpha02"
 
     val runtimePermissionKotlin = "1.1.2"
-    val kotlinxCoroutines = "1.5.0"
+    val kotlinxCoroutines = "1.5.2"
 
-    val okHttp = "4.9.1"
+    val okHttp = "4.9.2"
     val retrofit = "2.9.0"
     val retrofitKotlinSerialization = "0.8.0"
-    val kotlinxSerialization = "1.2.1"
+    val kotlinxSerialization = "1.3.1"
 
-    val arrow = "0.13.2"
-    val dagger = "2.37"
-    val exhaustive = "0.1.1" // Must work with kotlin version
+    val arrow = "1.0.1"
+    val dagger = "2.40.1"
+    val exhaustive = "0.2.0" // Must work with kotlin version
     val threetenabp = "1.3.1"
     val solarPositioning = "0.0.9"
-    val sqldelight = "1.5.0"
-    val dataStore = "1.0.0-rc02"
-    val protobuf = "3.17.3"
+    val sqldelight = "1.5.2"
+    val dataStore = "1.0.0"
+    val protobuf = "3.19.1"
     val protobufGradle = "0.8.17"
     val leakcanary = "2.7"
     val mapboxServices = "5.8.0"
@@ -54,9 +54,9 @@ object Versions {
     val textref = "1.3.1"
     val markwon = "4.6.2"
     val store = "4.0.2-KT15"
-    val compose = "1.0.0"
-    val composeConstraintLayout = "1.0.0-alpha08"
-    val accompanist = "0.15.0"
+    val compose = "1.1.0-beta02"
+    val composeConstraintLayout = "1.0.0-rc01"
+    val accompanist = "0.21.2-beta"
 
     // Test
     val junit = "4.12"

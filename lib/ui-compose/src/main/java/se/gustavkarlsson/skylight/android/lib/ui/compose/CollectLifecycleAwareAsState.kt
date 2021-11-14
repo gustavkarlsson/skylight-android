@@ -7,15 +7,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 
 @Composable
 fun <T> StateFlow<T>.collectAsLifecycleAwareState(
     minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
 ): State<T> {
     val lifecycleOwner = LocalLifecycleOwner.current
-    val lifecycleAwareFlow = remember(key1 = this, key2 = lifecycleOwner, key3 = minActiveState) {
+    val lifecycleAwareFlow = remember(this, lifecycleOwner, minActiveState) {
+        // FIXME verify when this re-runs
         flowWithLifecycle(lifecycleOwner.lifecycle, minActiveState)
+            .stateIn(lifecycleOwner.lifecycleScope, SharingStarted.WhileSubscribed(), initialValue = value)
     }
-    return lifecycleAwareFlow.collectAsState(initial = value)
+    return lifecycleAwareFlow.collectAsState()
 }
