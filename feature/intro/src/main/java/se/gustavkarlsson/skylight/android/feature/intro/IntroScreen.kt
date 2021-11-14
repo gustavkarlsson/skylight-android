@@ -31,10 +31,6 @@ private val VIEW_MODEL_ID = ServiceId("introViewModel")
 @Parcelize
 internal data class IntroScreen(private val target: Backstack) : Screen {
 
-    init {
-        require(target.isNotEmpty()) { "Target backstack must not be empty" }
-    }
-
     @IgnoredOnParcel
     override val type: Screen.Type = Screen.Type.Intro
 

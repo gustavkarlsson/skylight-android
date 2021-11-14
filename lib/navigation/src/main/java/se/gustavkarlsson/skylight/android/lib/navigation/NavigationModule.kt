@@ -10,11 +10,15 @@ class NavigationModule(private val screens: Screens) {
     @Provides
     internal fun provideScreens(): Screens = screens
 
+    @Provides
+    internal fun provideDefaultScreen(screens: Screens): Screen = screens.main
+
     @AppScope
     @Provides
     internal fun provideDefaultNavigator(
+        screen: Screen,
         overrides: Set<@JvmSuppressWildcards NavigationOverride>,
-    ): DefaultNavigator = DefaultNavigator(overrides)
+    ): DefaultNavigator = DefaultNavigator(defaultScreen = screen, overrides)
 
     @Provides
     internal fun provideNavigator(navigator: DefaultNavigator): Navigator = navigator

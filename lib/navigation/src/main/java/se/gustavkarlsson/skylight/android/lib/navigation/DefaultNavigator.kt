@@ -1,64 +1,86 @@
 package se.gustavkarlsson.skylight.android.lib.navigation
 
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import arrow.core.NonEmptyList
+import arrow.core.getOrElse
+import arrow.core.nonEmptyListOf
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
+import se.gustavkarlsson.skylight.android.core.utils.nonEmpty
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class DefaultNavigator(
+    private val defaultScreen: Screen,
     private val overrides: Iterable<NavigationOverride>,
 ) : Navigator, BackPressHandler {
 
-    private val mutableBackstackChanges = MutableStateFlow(BackstackChange(emptyList(), emptyList()))
+    private val mutableBackstackChanges = MutableStateFlow(
+        BackstackChange(Backstack(defaultScreen), Backstack(defaultScreen)),
+    )
 
     override val backstackChanges = mutableBackstackChanges
 
-    override fun setBackstack(backstack: Backstack) = changeBackstack {
-        logInfo { "Setting backstack to $backstack" }
-        backstack
+    private val mutableLeaveFlow = MutableSharedFlow<Unit>(
+        extraBufferCapacity = 1,
+        onBufferOverflow = BufferOverflow.DROP_LATEST,
+    )
+
+    override val leave = mutableLeaveFlow
+
+    override fun setBackstack(newBackstack: Backstack) = changeBackstack {
+        logInfo { "Setting backstack to $newBackstack" }
+        newBackstack.screens
     }
 
-    override fun goTo(screen: Screen) = changeBackstack { stack ->
+    override fun goTo(screen: Screen) = changeBackstack { screens ->
         logInfo { "Going to $screen" }
-        stack + screen
+        screens + screen
     }
 
-    override fun closeScreenAndGoTo(screen: Screen) = changeBackstack { stack ->
+    override fun closeScreenAndGoTo(screen: Screen) = changeBackstack { screens ->
         logInfo { "Closing screen and going to $screen" }
-        val remaining = stack.dropLast(1)
+        val remaining = screens.dropLast(1)
         remaining + screen
     }
 
-    override fun closeScopeAndGoTo(scope: String, screen: Screen) = changeBackstack { stack ->
+    override fun closeScopeAndGoTo(scope: String, screen: Screen) = changeBackstack { screens ->
         logInfo { "Closing scope '$scope' and going to $screen" }
-        val remaining = stack.takeWhile { it.scopeStart != scope }
+        val remaining = screens.takeWhile { it.scopeStart != scope }
         remaining + screen
     }
 
-    override fun closeScreen() = changeBackstack { stack ->
+    override fun closeScreen() = changeBackstack { screens ->
         logInfo { "Closing screen" }
-        stack.dropLast(1)
+        screens.dropLast(1)
     }
 
-    override fun closeScope(scope: String) = changeBackstack { stack ->
+    override fun closeScope(scope: String) = changeBackstack { screens ->
         logInfo { "Closing scope '$scope'" }
-        stack.takeWhile { it.scopeStart != scope }
+        screens.takeWhile { it.scopeStart != scope }
     }
 
     override fun onBackPress() {
-        val result = topScreen?.onBackPress()
-        when (result) {
-            null -> logInfo { "No top screen to handle back press" }
-            BackPress.HANDLED -> logInfo { "Top screen handled back press" }
-            BackPress.NOT_HANDLED -> logInfo { "Top screen did not handle back press" }
+        when (topScreen.onBackPress()) {
+            BackPress.HANDLED -> {
+                logInfo { "Top screen handled back press" }
+            }
+            BackPress.NOT_HANDLED -> {
+                logInfo { "Top screen did not handle back press" }
+                closeScreen()
+            }
         }
-        if (result != BackPress.HANDLED) closeScreen()
     }
 
     // TODO Atomic update
-    private fun changeBackstack(change: (stack: Backstack) -> Backstack) {
+    private fun changeBackstack(change: (screens: NonEmptyList<Screen>) -> List<Screen>) {
         val oldBackstack = backstackChanges.value.new
-        val targetBackstack = change(oldBackstack)
+        val changedScreens = change(oldBackstack.screens)
+        val targetScreens = changedScreens.nonEmpty().getOrElse {
+            logInfo { "Nothing more on backstack, resetting to $defaultScreen and leaving" }
+            mutableLeaveFlow.tryEmit(Unit)
+            nonEmptyListOf(defaultScreen)
+        }
+        val targetBackstack = Backstack(targetScreens)
         val newBackstack = overrideBackstack(oldBackstack, targetBackstack)
         logInfo { "Backstack is now: $newBackstack" }
         mutableBackstackChanges.value = BackstackChange(oldBackstack, newBackstack)

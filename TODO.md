@@ -1,6 +1,5 @@
 ## ASAP
 * Test permissions
-* Don't finish activity
 * Look into restricted bucket
 * Better colors
 

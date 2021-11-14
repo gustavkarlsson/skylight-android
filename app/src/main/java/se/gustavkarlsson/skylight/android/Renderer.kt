@@ -28,8 +28,8 @@ internal class Renderer @Inject constructor(
                 SupervisorJob() + Dispatchers.Main + CoroutineName("viewScope")
             }
             val change by navigator.backstackChanges.collectAsLifecycleAwareState()
-            RenderCrossfade(activity, scope, change.new.lastOrNull()) {
-                val removedScreens = change.old - change.new
+            RenderCrossfade(activity, scope, change.new.screens.last()) {
+                val removedScreens = change.old.screens - change.new.screens
                 val tagsToClear = removedScreens.map { it.toTag() }
                 serviceClearer.clear(tagsToClear)
             }
@@ -40,17 +40,15 @@ internal class Renderer @Inject constructor(
     private fun RenderCrossfade(
         activity: AppCompatActivity,
         scope: CoroutineScope,
-        screen: Screen?,
+        screen: Screen,
         onDispose: () -> Unit,
     ) {
         Crossfade(targetState = screen) { renderingScreen ->
-            if (renderingScreen != null) {
-                val tag = renderingScreen.toTag()
-                DisposableEffect(key1 = tag) {
-                    onDispose(onDispose)
-                }
-                renderingScreen.Content(activity, scope, tag)
+            val tag = renderingScreen.toTag()
+            DisposableEffect(key1 = tag) {
+                onDispose(onDispose)
             }
+            renderingScreen.Content(activity, scope, tag)
         }
     }
 }

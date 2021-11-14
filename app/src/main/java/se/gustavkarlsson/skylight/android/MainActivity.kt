@@ -4,20 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.plus
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
-import se.gustavkarlsson.skylight.android.lib.navigation.BackPressHandler
-import se.gustavkarlsson.skylight.android.lib.navigation.BackstackChange
-import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
-import se.gustavkarlsson.skylight.android.lib.navigation.Screen
-import se.gustavkarlsson.skylight.android.lib.navigation.Screens
-import se.gustavkarlsson.skylight.android.lib.navigation.topScreen
+import se.gustavkarlsson.skylight.android.lib.navigation.*
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.lib.places.getPlaceId
@@ -54,13 +44,11 @@ internal class MainActivity :
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
         MainActivityComponent.instance.inject(this)
-        if (savedInstanceState == null && navigator.topScreen == null) {
-            navigator.goTo(screens.main)
-        }
         val scope = createLifecycleScope("createDestroyScope")
         createDestroyScope = scope
         onEachScreen { onCreateDestroyScope(this@MainActivity, scope) }
         scope.launch { navigator.backstackChanges.collect(::onBackstackChange) }
+        scope.launch { navigator.leave.collect { super.onBackPressed() } }
         intent?.getPlaceId()?.let { placeId ->
             onNewPlaceId(placeId)
         }
@@ -76,7 +64,7 @@ internal class MainActivity :
 
     private fun onNewPlaceId(placeId: PlaceId) {
         selectedPlaceRepository.set(placeId)
-        navigator.setBackstack(listOf(screens.main))
+        navigator.setBackstack(Backstack(screens.main))
     }
 
     // TODO Implement listeners instead?
@@ -84,11 +72,10 @@ internal class MainActivity :
     private fun onBackstackChange(change: BackstackChange) {
         passScopesToNewScreens(change)
         trackScreenChange(change)
-        finishIfEmpty(change)
     }
 
     private fun passScopesToNewScreens(change: BackstackChange) {
-        val addedScreens = change.new - change.old
+        val addedScreens = change.new.screens - change.old.screens
         addedScreens.tryPassScope(createDestroyScope) { scope ->
             onCreateDestroyScope(this@MainActivity, scope)
         }
@@ -108,16 +95,10 @@ internal class MainActivity :
     }
 
     private fun trackScreenChange(change: BackstackChange) {
-        val oldTop = change.old.lastOrNull()
-        val newTop = change.new.lastOrNull()
+        val oldTop = change.old.screens.lastOrNull()
+        val newTop = change.new.screens.lastOrNull()
         if (newTop != null && oldTop != newTop) {
             analytics.logScreen(newTop.type.name)
-        }
-    }
-
-    private fun finishIfEmpty(change: BackstackChange) {
-        if (change.new.isEmpty()) {
-            finish()
         }
     }
 
@@ -169,7 +150,7 @@ internal class MainActivity :
 
     private fun onEachScreen(block: Screen.() -> Unit) {
         val change = navigator.backstackChanges.value
-        change.new.forEach { screen ->
+        change.new.screens.forEach { screen ->
             screen.block()
         }
     }

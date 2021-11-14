@@ -27,10 +27,10 @@ object FeatureGooglePlayServicesModule {
             ): Backstack? {
                 val googlePlayServicesChecker = GmsGooglePlayServicesChecker(context)
                 return when {
-                    targetBackstack.any { it.type in REQUIRING_SCREEN_NAMES } &&
-                        targetBackstack.none { it.type == Screen.Type.GooglePlayServices } &&
+                    targetBackstack.screens.any { it.type in REQUIRING_SCREEN_NAMES } &&
+                        targetBackstack.screens.none { it.type == Screen.Type.GooglePlayServices } &&
                         !googlePlayServicesChecker.isAvailable ->
-                        listOf(GooglePlayServicesScreen(targetBackstack))
+                        Backstack(GooglePlayServicesScreen(targetBackstack))
                     else -> null
                 }
             }
