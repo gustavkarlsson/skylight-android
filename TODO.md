@@ -3,6 +3,8 @@
 * Better colors
 
 ## Soon
+* Progressive mode: https://kotlinlang.org/docs/whatsnew13.html#progressive-mode
+* Kotlin 1.6
 * Look into restricted bucket
 * Move to firebase BOM (https://firebase.google.com/docs/android/learn-more#bom)
 * Trailing comma rule
