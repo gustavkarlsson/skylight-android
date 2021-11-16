@@ -14,9 +14,12 @@ internal class DefaultNavigator(
     private val overrides: Iterable<NavigationOverride>,
 ) : Navigator, BackPressHandler {
 
-    private val mutableBackstackChanges = MutableStateFlow(
-        BackstackChange(Backstack(defaultScreen), Backstack(defaultScreen)),
-    )
+    private val mutableBackstackChanges = let {
+        val targetBackstack = Backstack(defaultScreen)
+        val newBackstack = overrideBackstack(targetBackstack, targetBackstack)
+        logInfo { "Setting initial backstack to: $newBackstack" }
+        MutableStateFlow(BackstackChange(newBackstack, newBackstack))
+    }
 
     override val backstackChanges = mutableBackstackChanges
 
