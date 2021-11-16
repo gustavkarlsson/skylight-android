@@ -1,4 +1,5 @@
 ## ASAP
+* FIX permission screen showing before intro screen!
 * Test permissions
 * Better colors
 
