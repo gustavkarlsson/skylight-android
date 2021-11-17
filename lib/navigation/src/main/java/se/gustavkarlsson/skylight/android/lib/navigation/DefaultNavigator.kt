@@ -8,16 +8,19 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.core.utils.nonEmpty
+import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 
 internal class DefaultNavigator(
     private val defaultScreen: Screen,
     private val overrides: Iterable<NavigationOverride>,
+    private val analytics: Analytics,
 ) : Navigator, BackPressHandler {
 
     private val mutableBackstackChanges = let {
         val targetBackstack = Backstack(defaultScreen)
         val newBackstack = overrideBackstack(targetBackstack, targetBackstack)
-        logInfo { "Setting initial backstack to: $newBackstack" }
+        logInfo { "Setting backstack to: $newBackstack" }
+        analytics.logScreen(newBackstack.topScreen.type.name)
         MutableStateFlow(BackstackChange(newBackstack, newBackstack))
     }
 
@@ -63,7 +66,7 @@ internal class DefaultNavigator(
     }
 
     override fun onBackPress() {
-        when (currentScreens.head.onBackPress()) {
+        when (currentBackstack.topScreen.onBackPress()) {
             BackPress.HANDLED -> {
                 logInfo { "Top screen handled back press" }
             }
@@ -85,7 +88,8 @@ internal class DefaultNavigator(
         }
         val targetBackstack = Backstack(targetScreens)
         val newBackstack = overrideBackstack(oldBackstack, targetBackstack)
-        logInfo { "Backstack is now: $newBackstack" }
+        logInfo { "Setting backstack to: $newBackstack" }
+        trackScreenChange(oldBackstack, newBackstack)
         mutableBackstackChanges.value = BackstackChange(oldBackstack, newBackstack)
     }
 
@@ -98,5 +102,16 @@ internal class DefaultNavigator(
             logInfo { "Overrode $oldBackstack with $overridden instead of $newBackstack" }
         }
         return overridden ?: newBackstack
+    }
+
+    private fun trackScreenChange(
+        oldBackstack: Backstack,
+        newBackstack: Backstack,
+    ) {
+        val oldTop = oldBackstack.topScreen
+        val newTop = newBackstack.topScreen
+        if (oldTop != newTop) {
+            analytics.logScreen(newTop.type.name)
+        }
     }
 }

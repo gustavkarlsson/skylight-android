@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 import se.gustavkarlsson.skylight.android.lib.navigation.*
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
@@ -26,9 +25,6 @@ internal class MainActivity :
 
     @Inject
     lateinit var selectedPlaceRepository: SelectedPlaceRepository
-
-    @Inject
-    lateinit var analytics: Analytics
 
     @Inject
     lateinit var backPressHandler: BackPressHandler
@@ -71,7 +67,6 @@ internal class MainActivity :
     // FIXME this is called on every configuration change
     private fun onBackstackChange(change: BackstackChange) {
         passScopesToNewScreens(change)
-        trackScreenChange(change)
     }
 
     private fun passScopesToNewScreens(change: BackstackChange) {
@@ -91,14 +86,6 @@ internal class MainActivity :
         if (scope == null) return
         for (element in this) {
             element.action(scope)
-        }
-    }
-
-    private fun trackScreenChange(change: BackstackChange) {
-        val oldTop = change.old.screens.lastOrNull()
-        val newTop = change.new.screens.lastOrNull()
-        if (newTop != null && oldTop != newTop) {
-            analytics.logScreen(newTop.type.name)
         }
     }
 
@@ -149,7 +136,7 @@ internal class MainActivity :
     private fun createLifecycleScope(name: String) = MainScope() + CoroutineName(name)
 
     private fun onEachScreen(block: Screen.() -> Unit) {
-        navigator.currentScreens.forEach { screen ->
+        navigator.currentBackstack.screens.forEach { screen ->
             screen.block()
         }
     }

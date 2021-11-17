@@ -37,3 +37,5 @@ fun Backstack.update(block: (NonEmptyList<Screen>) -> NonEmptyList<Screen>): Bac
     val newScreens = block(screens)
     return Backstack(newScreens)
 }
+
+val Backstack.topScreen: Screen get() = screens.last()
