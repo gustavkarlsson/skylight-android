@@ -149,8 +149,7 @@ internal class MainActivity :
     private fun createLifecycleScope(name: String) = MainScope() + CoroutineName(name)
 
     private fun onEachScreen(block: Screen.() -> Unit) {
-        val change = navigator.backstackChanges.value
-        change.new.screens.forEach { screen ->
+        navigator.currentScreens.forEach { screen ->
             screen.block()
         }
     }

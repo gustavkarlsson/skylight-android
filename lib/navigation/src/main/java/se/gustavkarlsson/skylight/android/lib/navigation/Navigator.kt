@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.navigation
 
+import arrow.core.NonEmptyList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -14,4 +15,4 @@ interface Navigator {
     fun closeScope(scope: String)
 }
 
-val Navigator.topScreen: Screen get() = backstackChanges.value.new.screens.head
+val Navigator.currentScreens: NonEmptyList<Screen> get() = backstackChanges.value.new.screens

@@ -63,7 +63,7 @@ internal class DefaultNavigator(
     }
 
     override fun onBackPress() {
-        when (topScreen.onBackPress()) {
+        when (currentScreens.head.onBackPress()) {
             BackPress.HANDLED -> {
                 logInfo { "Top screen handled back press" }
             }
