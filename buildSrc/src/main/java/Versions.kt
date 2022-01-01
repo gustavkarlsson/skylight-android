@@ -6,8 +6,8 @@ object Versions {
     val compileSdk = 31
     val targetSdk = 31
     val java = JavaVersion.VERSION_1_8
-    val kotlin = "1.5.31" // Must also update in buildSrc/build.gradle.kts AND exhaustive
-    val androidGradle = "7.0.3" // Must also update in buildSrc/build.gradle.kts
+    val kotlin = "1.6.10" // Must also update in buildSrc/build.gradle.kts
+    val androidGradle = "7.0.4" // Must also update in buildSrc/build.gradle.kts
     val jgit = "5.12.0.202106070339-r"
 
     val axionRelease = "1.13.3"
@@ -32,16 +32,15 @@ object Versions {
     val androidLifecycle = "2.4.0"
 
     val runtimePermissionKotlin = "1.1.2"
-    val kotlinxCoroutines = "1.5.2"
+    val kotlinxCoroutines = "1.6.0"
 
-    val okHttp = "4.9.2"
+    val okHttp = "4.9.3"
     val retrofit = "2.9.0"
     val retrofitKotlinSerialization = "0.8.0"
-    val kotlinxSerialization = "1.3.1"
+    val kotlinxSerialization = "1.3.2"
 
     val arrow = "1.0.1"
     val dagger = "2.40.1"
-    val exhaustive = "0.2.0" // Must work with kotlin version
     val threetenabp = "1.3.1"
     val solarPositioning = "0.0.9"
     val sqldelight = "1.5.2"
@@ -53,10 +52,11 @@ object Versions {
     val conveyor = "cc93e41adc" // TODO use release version
     val textref = "1.3.1"
     val markwon = "4.6.2"
-    val store = "4.0.2-KT15"
-    val compose = "1.1.0-beta02"
-    val composeConstraintLayout = "1.0.0-rc01"
-    val accompanist = "0.21.2-beta"
+    val store = "4.0.4-KT15"
+    val compose = "1.1.0-rc01"
+    val composeCompiler = "1.1.0-rc02" // Temporary diverge because Kotlin 1.6.10
+    val composeConstraintLayout = "1.0.0-rc02"
+    val accompanist = "0.22.0-rc"
 
     // Test
     val junit = "4.12"

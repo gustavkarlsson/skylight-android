@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
@@ -16,7 +17,6 @@ buildscript {
         classpath("pl.allegro.tech.build:axion-release-plugin:${Versions.axionRelease}")
         classpath("com.squareup.sqldelight:gradle-plugin:${Versions.sqldelight}")
         classpath("org.jlleitschuh.gradle:ktlint-gradle:${Versions.ktlint}")
-        classpath("app.cash.exhaustive:exhaustive-gradle:${Versions.exhaustive}")
         classpath("com.google.protobuf:protobuf-gradle-plugin:${Versions.protobufGradle}")
     }
 }
@@ -37,6 +37,15 @@ allprojects {
         kotlinOptions {
             jvmTarget = Versions.java.toString()
             freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
+        }
+    }
+    afterEvaluate {
+        extensions.findByType<KotlinProjectExtension>()?.apply {
+            sourceSets.all {
+                languageSettings {
+                    progressiveMode = true
+                }
+            }
         }
     }
 }

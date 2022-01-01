@@ -19,7 +19,7 @@ import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.core.utils.seconds
 import se.gustavkarlsson.skylight.android.lib.time.Time
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
 
 @Module
@@ -66,7 +66,7 @@ object LibKpIndexModule {
             time = time,
         )
 
-        val expiry = Duration.milliseconds(pollingInterval.toMillis() / 2)
+        val expiry = (pollingInterval.toMillis() / 2).milliseconds
         val cachePolicy = MemoryPolicy.builder<Unit, KpIndex>()
             .setExpireAfterWrite(expiry)
             .build()

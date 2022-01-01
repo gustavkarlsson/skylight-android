@@ -19,7 +19,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import app.cash.exhaustive.Exhaustive
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.rememberInsetsPaddingValues
@@ -90,7 +89,6 @@ internal fun SearchResults(
         elevation = AppBarDefaults.TopAppBarElevation / 2,
         color = Colors.primarySurface,
     ) {
-        @Exhaustive
         when (state) {
             is ContentState.Searching.Error -> {
                 Box(
