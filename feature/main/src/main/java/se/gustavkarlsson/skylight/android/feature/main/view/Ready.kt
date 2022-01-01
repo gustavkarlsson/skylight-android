@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import app.cash.exhaustive.Exhaustive
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.ui.Scaffold
 import se.gustavkarlsson.skylight.android.feature.main.R
@@ -39,7 +38,6 @@ internal fun Ready(
             )
         },
     ) { paddingValues ->
-        @Exhaustive
         when (val content = state.content) {
             is ContentState.PlaceSelected -> {
                 SelectedPlace(

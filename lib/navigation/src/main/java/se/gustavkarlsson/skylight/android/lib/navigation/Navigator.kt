@@ -1,10 +1,12 @@
 package se.gustavkarlsson.skylight.android.lib.navigation
 
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 interface Navigator {
     val backstackChanges: StateFlow<BackstackChange>
-    fun setBackstack(backstack: Backstack)
+    val leave: Flow<Unit>
+    fun setBackstack(newBackstack: Backstack)
     fun goTo(screen: Screen)
     fun closeScreenAndGoTo(screen: Screen)
     fun closeScopeAndGoTo(scope: String, screen: Screen)
@@ -12,4 +14,4 @@ interface Navigator {
     fun closeScope(scope: String)
 }
 
-val Navigator.topScreen: Screen? get() = backstackChanges.value.new.lastOrNull()
+val Navigator.currentBackstack: Backstack get() = backstackChanges.value.new

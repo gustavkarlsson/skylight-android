@@ -6,13 +6,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.AbstractFlow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -69,7 +68,7 @@ fun <T, R> StateFlow<T>.mapState(
 private class MappedStateFlow<T, R>(
     private val source: StateFlow<T>,
     private val transform: (T) -> R,
-) : AbstractFlow<R>(), StateFlow<R> {
+) : Flow<R>, StateFlow<R> {
 
     override val value: R
         get() = transform(source.value)
@@ -77,9 +76,10 @@ private class MappedStateFlow<T, R>(
     override val replayCache: List<R>
         get() = source.replayCache.map(transform)
 
-    override suspend fun collectSafely(collector: FlowCollector<R>) {
+    override suspend fun collect(collector: FlowCollector<R>): Nothing {
         source
             .map { transform(it) }
             .collect { collector.emit(it) }
+        awaitCancellation()
     }
 }

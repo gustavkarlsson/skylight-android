@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
-import app.cash.exhaustive.Exhaustive
 import kotlinx.coroutines.channels.SendChannel
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.issue
@@ -25,7 +24,6 @@ internal class EventHandler @Inject constructor(
 ) {
 
     suspend fun onEvent(event: Event) {
-        @Exhaustive
         when (event) {
             is Event.AddBookmark -> placesRepository.setBookmarked(event.place.id, true)
             is Event.RemoveBookmark -> {

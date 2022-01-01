@@ -1,9 +1,15 @@
 ## ASAP
+* Test permissions
 * Better colors
+* Dark mode splash screen for Android 12
 
 ## Soon
+* Add kotlin bom
+* Look into restricted bucket
+* Move to firebase BOM (https://firebase.google.com/docs/android/learn-more#bom)
+* Trailing comma rule
 * Readme
-* Dark mode splash screen for Android 12
+* Integrate SettingsClient? (https://developer.android.com/topic/performance/appstandby#restricted-bucket, )
 * Notifications on/off without dialog (or only dialog when enabling). Needs a way to select current setting
 * Only subscribe to current location reports when location is turned on?
 * Show helper about location turned off?

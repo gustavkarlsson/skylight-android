@@ -20,7 +20,7 @@ import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.core.utils.seconds
 import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
 import se.gustavkarlsson.skylight.android.lib.time.Time
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
 
 @Module
@@ -68,7 +68,7 @@ object LibWeatherModule {
             time = time,
         )
 
-        val expiry = Duration.milliseconds(pollingInterval.toMillis() / 2)
+        val expiry = (pollingInterval.toMillis() / 2).milliseconds
         val cachePolicy = MemoryPolicy.builder<ApproximatedLocation, Weather>()
             .setExpireAfterWrite(expiry)
             .setMaxSize(16)

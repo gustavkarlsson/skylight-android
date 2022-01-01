@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.lib.navigation
 import dagger.Module
 import dagger.Provides
 import se.gustavkarlsson.skylight.android.core.AppScope
+import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 
 @Module
 class NavigationModule(private val screens: Screens) {
@@ -10,11 +11,16 @@ class NavigationModule(private val screens: Screens) {
     @Provides
     internal fun provideScreens(): Screens = screens
 
+    @Provides
+    internal fun provideDefaultScreen(screens: Screens): Screen = screens.main
+
     @AppScope
     @Provides
     internal fun provideDefaultNavigator(
+        screen: Screen,
         overrides: Set<@JvmSuppressWildcards NavigationOverride>,
-    ): DefaultNavigator = DefaultNavigator(overrides)
+        analytics: Analytics,
+    ): DefaultNavigator = DefaultNavigator(defaultScreen = screen, overrides, analytics)
 
     @Provides
     internal fun provideNavigator(navigator: DefaultNavigator): Navigator = navigator
