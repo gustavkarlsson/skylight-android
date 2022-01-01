@@ -23,9 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.systemBarsPadding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
@@ -51,20 +48,17 @@ internal data class GooglePlayServicesScreen(private val target: Backstack) : Sc
 
     private val optionalViewModel get() = getService<GooglePlayServicesViewModel>(VIEW_MODEL_ID)
 
-    override fun onCreateDestroyScope(activity: AppCompatActivity, scope: CoroutineScope) {
-        scope.launch {
-            optionalViewModel?.success?.collect {
-                navigator.setBackstack(target)
-            }
-        }
-    }
-
     @Composable
-    override fun Content(activity: AppCompatActivity, scope: CoroutineScope, tag: ServiceTag) {
+    override fun Content(activity: AppCompatActivity, tag: ServiceTag) {
         val viewModel = getOrRegisterService(VIEW_MODEL_ID, tag) {
             GooglePlayServicesComponent.build().viewModel()
         }
         val errorSnackbarVisible = viewModel.error.collectAsLifecycleAwareState()
+        LaunchedEffect(key1 = null) {
+            optionalViewModel?.success?.collect {
+                navigator.setBackstack(target)
+            }
+        }
         Content(
             errorSnackbarVisible = errorSnackbarVisible.value,
             onInstallClicked = { viewModel.installGooglePlayServices(activity) },
