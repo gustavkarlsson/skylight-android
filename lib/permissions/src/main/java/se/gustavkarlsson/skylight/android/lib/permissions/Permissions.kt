@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
-import se.gustavkarlsson.skylight.android.lib.permissions.Access.*
 import se.gustavkarlsson.skylight.android.lib.permissions.Permission.BackgroundLocation
 import se.gustavkarlsson.skylight.android.lib.permissions.Permission.Location
 
@@ -42,9 +41,9 @@ class Permissions internal constructor(
 internal fun Permissions.update(permission: Permission, newAccess: Access): Permissions {
     val newMap = map.toMutableMap()
     newMap[permission] = newAccess
-    if (permission == Location && (newAccess == Denied || newAccess == DeniedForever)) {
+    if (permission == Location && (newAccess == Access.Denied || newAccess == Access.DeniedForever)) {
         newMap[BackgroundLocation] = newAccess
-    } else if (permission == BackgroundLocation && newAccess == Granted) {
+    } else if (permission == BackgroundLocation && newAccess == Access.Granted) {
         newMap[Location] = newAccess
     }
     return Permissions(newMap)

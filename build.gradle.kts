@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 buildscript {
     repositories {
@@ -39,6 +40,11 @@ allprojects {
             freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
         }
     }
+
+    configure<KtlintExtension> {
+        android.set(true)
+    }
+
     afterEvaluate {
         extensions.findByType<KotlinProjectExtension>()?.apply {
             sourceSets.all {
