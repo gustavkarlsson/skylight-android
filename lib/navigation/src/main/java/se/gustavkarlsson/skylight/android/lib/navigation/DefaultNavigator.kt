@@ -4,6 +4,7 @@ import arrow.core.NonEmptyList
 import arrow.core.getOrElse
 import arrow.core.nonEmptyListOf
 import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
@@ -31,7 +32,7 @@ internal class DefaultNavigator(
         onBufferOverflow = BufferOverflow.DROP_LATEST,
     )
 
-    override val leave = mutableLeaveFlow
+    override val leave: Flow<Unit> = mutableLeaveFlow
 
     override fun setBackstack(newBackstack: Backstack) = changeBackstack {
         logInfo { "Setting backstack to $newBackstack" }
