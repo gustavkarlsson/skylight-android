@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.geocoder
 
 import arrow.core.Either
+import arrow.core.NonEmptyList
 import arrow.core.left
 import arrow.core.right
 import com.mapbox.api.geocoding.v5.MapboxGeocoding
@@ -24,7 +25,7 @@ import kotlin.coroutines.resume
 
 internal class MapboxGeocoder(
     private val accessToken: String,
-    private val getLocale: () -> Locale,
+    private val getLocales: () -> NonEmptyList<Locale>,
     private val dispatcher: CoroutineDispatcher
 ) : Geocoder {
 
@@ -34,7 +35,7 @@ internal class MapboxGeocoder(
         }
         return withContext(dispatcher + CoroutineName("geocode")) {
             try {
-                val geocoding = createGeocoding(accessToken, getLocale(), locationName, biasAround)
+                val geocoding = createGeocoding(accessToken, getLocales(), locationName, biasAround)
                 doGeocode(geocoding)
             } catch (e: CancellationException) {
                 throw e
@@ -82,12 +83,12 @@ private class ContinuationCallback(
 
 private fun createGeocoding(
     accessToken: String,
-    locale: Locale,
+    locales: List<Locale>,
     locationName: String,
     biasAround: Location?,
 ) = MapboxGeocoding.builder()
     .accessToken(accessToken)
-    .languages(locale)
+    .languages(*locales.toTypedArray())
     .limit(10)
     .autocomplete(true)
     .query(locationName)
