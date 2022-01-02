@@ -112,6 +112,7 @@ internal sealed interface SearchResult {
         ) : Known {
             override val title: TextRef get() = TextRef.string(place.name)
             override val subtitle: Nothing? = null
+            // FIXME Change this to Icons.Map and merge places from db and search
             override val icon: ImageVector = Icons.History
             override val trailingIcon: ImageVector?
                 get() = if (notifications) {
