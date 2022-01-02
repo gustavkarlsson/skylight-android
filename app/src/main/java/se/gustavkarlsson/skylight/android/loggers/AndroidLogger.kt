@@ -47,7 +47,7 @@ private fun Logger.Level.toPriority() = when (this) {
 
 private const val MAX_TAG_LENGTH = 23
 private fun limitTagLength(tag: String) =
-    if (tag.length <= MAX_TAG_LENGTH || Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    if (tag.length <= MAX_TAG_LENGTH) {
         tag
     } else {
         tag.substring(0, MAX_TAG_LENGTH)
