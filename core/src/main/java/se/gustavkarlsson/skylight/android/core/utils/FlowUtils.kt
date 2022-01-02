@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.withContext
-import java.util.concurrent.atomic.AtomicReference
 
 // TODO Replace these with built-in once available
 
@@ -67,29 +66,29 @@ private class MappedStateFlow<T, R>(
     private val transform: (T) -> R,
 ) : Flow<R>, StateFlow<R> {
 
-    private val cache = AtomicReference<Pair<T, R>?>(null)
+    private var cache: Pair<T, R>? = null
 
     override val value: R
-        get() = cache.getOrRefresh(source.value)
+        get() = getOrRefresh(source.value)
 
     override val replayCache: List<R>
         get() = listOf(value)
 
     override suspend fun collect(collector: FlowCollector<R>): Nothing {
         source
-            .map { cache.getOrRefresh(it) }
+            .map { getOrRefresh(it) }
             .collect { collector.emit(it) }
         awaitCancellation()
     }
 
-    private fun AtomicReference<Pair<T, R>?>.getOrRefresh(sourceValue: T): R {
-        val result = updateAndGet { cached ->
-            if (sourceValue === cached?.first) {
-                cached
-            } else {
-                sourceValue to transform(sourceValue)
-            }
+    private fun getOrRefresh(sourceValue: T): R {
+        val cache = cache
+        return if (cache != null && cache.first === sourceValue) {
+            return cache.second
+        } else {
+            val transformed = transform(sourceValue)
+            this.cache = sourceValue to transformed
+            transformed
         }
-        return result!!.second
     }
 }
