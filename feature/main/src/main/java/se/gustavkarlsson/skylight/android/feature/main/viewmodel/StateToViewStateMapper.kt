@@ -27,7 +27,6 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherError
-import java.util.Comparator
 import javax.inject.Inject
 
 internal class StateToViewStateMapper @Inject constructor(
@@ -91,8 +90,9 @@ internal class StateToViewStateMapper @Inject constructor(
                 ContentState.Searching.Ok(searchResults)
             }
             is Search.Active.Filled -> {
-                val searchResults = createPlacesSearchResults(state, filter = search.query)
+                val searchResults = createPlacesSearchResults(state, filter = search.query.trim())
                     .plus(createGeocodedSearchResults(search))
+                    .mergeDuplicates()
                     .sortedWith(searchResultOrderComparator)
                 ContentState.Searching.Ok(searchResults)
             }
@@ -138,7 +138,7 @@ internal class StateToViewStateMapper @Inject constructor(
         return when {
             needsBackgroundLocation && backgroundLocationDeniedSomehow -> {
                 BannerData(
-                    TextRef.stringRes(R.string.background_location_permission_denied_message),
+                    TextRef.stringRes(R.string.background_location_permission_denied_message), // FIXME pass string argument
                     TextRef.stringRes(R.string.open_settings),
                     Icons.Warning,
                     BannerData.Event.OpenAppDetails,
@@ -355,6 +355,18 @@ private val SearchResult.lastChanged: Instant
         is SearchResult.Known.Saved -> place.lastChanged
         is SearchResult.Known.Current, is SearchResult.New -> Instant.EPOCH
     }
+
+private fun List<SearchResult>.mergeDuplicates(): List<SearchResult> {
+    return groupBy { result ->
+        when (result) {
+            is SearchResult.Known.Current -> null
+            is SearchResult.Known.Saved -> result.place.location
+            is SearchResult.New -> result.location
+        }
+    }.mapValues { (_, results) ->
+        results.firstOrNull { it is SearchResult.Known } ?: results.first()
+    }.values.toList()
+}
 
 private fun PlaceSuggestion.toDetailsString(): String {
     return fullName

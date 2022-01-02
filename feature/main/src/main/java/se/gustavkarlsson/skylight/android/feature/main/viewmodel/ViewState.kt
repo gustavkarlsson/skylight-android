@@ -1,9 +1,9 @@
 package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
 import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.ioki.textref.TextRef
@@ -112,7 +112,6 @@ internal sealed interface SearchResult {
         ) : Known {
             override val title: TextRef get() = TextRef.string(place.name)
             override val subtitle: Nothing? = null
-            // FIXME Change this to Icons.Map and merge places from db and search
             override val icon: ImageVector = Icons.History
             override val trailingIcon: ImageVector?
                 get() = if (notifications) {
@@ -129,7 +128,7 @@ internal sealed interface SearchResult {
     ) : SearchResult {
         override val title: TextRef get() = TextRef.string(name)
         override val subtitle: TextRef get() = TextRef.string(details)
-        override val icon: ImageVector = Icons.Map
+        override val icon: ImageVector = Icons.Search
         override val trailingIcon: Nothing? = null
         override val selected: Boolean = false
         override val selectEvent: Event get() = Event.SelectSearchResult(this)
