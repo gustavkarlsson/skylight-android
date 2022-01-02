@@ -46,7 +46,7 @@ internal class StoreReverseGeocoder(
             emit(Loaded(result))
             val shouldRetry = result.fold(
                 ifLeft = { error -> error == ReverseGeocodingError.Io },
-                ifRight = { false }
+                ifRight = { false },
             )
             if (shouldRetry) {
                 delay(retryDelay.toMillis())

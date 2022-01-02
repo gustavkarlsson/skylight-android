@@ -97,7 +97,7 @@ internal class ContinuouslySearchAction @Inject constructor(
             },
             ifRight = { suggestions ->
                 search.update(suggestions)
-            }
+            },
         )
         return when (this) {
             is State.Loading -> copy(search = newSearch)

@@ -52,7 +52,7 @@ object PrivacyPolicyScreen : Screen {
         }
         Content(
             markdownText = markdownText,
-            onBackClicked = { navigator.closeScreen() }
+            onBackClicked = { navigator.closeScreen() },
         )
     }
 }
@@ -97,7 +97,7 @@ private fun Content(
                     markdownText = markdownText,
                 )
                 Spacer(
-                    modifier = Modifier.padding(rememberInsetsPaddingValues(LocalWindowInsets.current.navigationBars))
+                    modifier = Modifier.padding(rememberInsetsPaddingValues(LocalWindowInsets.current.navigationBars)),
                 )
             }
         }

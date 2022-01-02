@@ -110,7 +110,7 @@ private fun Content(
             },
         ) { paddingValues ->
             Column(
-                modifier = Modifier.padding(paddingValues)
+                modifier = Modifier.padding(paddingValues),
             ) {
                 TriggerLevelItem(
                     notificationLevelText,

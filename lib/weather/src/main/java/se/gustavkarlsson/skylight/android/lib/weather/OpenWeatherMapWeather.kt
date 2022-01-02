@@ -9,6 +9,6 @@ internal data class OpenWeatherMapWeather(val clouds: Clouds) {
         /**
          * Cloud percentage
          */
-        val all: Int
+        val all: Int,
     )
 }

@@ -16,7 +16,7 @@ import java.io.IOException
 
 internal fun createAndroidReverseGeocoderFetcher(
     geocoder: Geocoder,
-    dispatcher: CoroutineDispatcher
+    dispatcher: CoroutineDispatcher,
 ): Fetcher<ApproximatedLocation, Option<String>> = Fetcher.ofResult { location ->
     withContext(dispatcher + CoroutineName("reverseGeocoderFetcher")) {
         try {

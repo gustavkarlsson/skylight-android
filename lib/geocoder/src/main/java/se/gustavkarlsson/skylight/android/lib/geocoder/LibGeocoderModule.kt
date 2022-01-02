@@ -17,6 +17,6 @@ object LibGeocoderModule {
         MapboxGeocoder(
             accessToken = BuildConfig.MAPBOX_API_KEY,
             getLocales = getLocales,
-            dispatcher = dispatcher
+            dispatcher = dispatcher,
         )
 }

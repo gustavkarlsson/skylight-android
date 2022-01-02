@@ -17,7 +17,7 @@ buildscript {
         classpath("org.eclipse.jgit:org.eclipse.jgit:${Versions.jgit}")
         classpath("pl.allegro.tech.build:axion-release-plugin:${Versions.axionRelease}")
         classpath("com.squareup.sqldelight:gradle-plugin:${Versions.sqldelight}")
-        classpath("org.jlleitschuh.gradle:ktlint-gradle:${Versions.ktlint}")
+        classpath("org.jlleitschuh.gradle:ktlint-gradle:${Versions.ktlintGradle}")
         classpath("com.google.protobuf:protobuf-gradle-plugin:${Versions.protobufGradle}")
     }
 }
@@ -43,6 +43,8 @@ allprojects {
 
     configure<KtlintExtension> {
         android.set(true)
+        version.set(Versions.ktlint)
+        enableExperimentalRules.set(true)
     }
 
     afterEvaluate {

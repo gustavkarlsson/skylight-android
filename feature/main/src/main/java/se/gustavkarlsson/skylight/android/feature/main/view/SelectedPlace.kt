@@ -71,7 +71,7 @@ private fun PreviewSelectedPlace() {
                     valueTextColor = { primary },
                     progress = 0.7,
                     errorText = null,
-                )
+                ),
             ),
             onBookmarkClickedEvent = Event.Noop,
             onNotificationClickedEvent = Event.Noop,
@@ -86,7 +86,7 @@ internal fun SelectedPlace(
     modifier: Modifier,
     state: ContentState.PlaceSelected,
     onBannerActionClicked: (BannerData.Event) -> Unit,
-    onEvent: (Event) -> Unit
+    onEvent: (Event) -> Unit,
 ) {
     ConstraintLayout(modifier = modifier) {
         val (errorBanner, placeButtons, centerText, cards) = createRefs()
@@ -148,7 +148,7 @@ private fun ErrorBanner(
         AnimatedVisibility(
             visible = errorBannerData != null,
             enter = slideInVertically(initialOffsetY = { y -> -y }),
-            exit = slideOutVertically(targetOffsetY = { y -> -y })
+            exit = slideOutVertically(targetOffsetY = { y -> -y }),
         ) {
             if (errorBannerData != null) {
                 Banner(

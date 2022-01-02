@@ -28,5 +28,5 @@ include(
     ":feature:intro",
     ":feature:main",
     ":feature:settings",
-    ":feature:privacypolicy"
+    ":feature:privacypolicy",
 )

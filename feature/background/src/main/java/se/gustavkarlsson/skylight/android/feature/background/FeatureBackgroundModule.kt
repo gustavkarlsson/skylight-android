@@ -74,26 +74,26 @@ object FeatureBackgroundModule {
     @Reusable
     internal fun notificationChannelCreator(
         context: Context,
-        notificationManager: NotificationManager
+        notificationManager: NotificationManager,
     ): NotificationChannelCreator =
         NotificationChannelCreator(
             notificationManager,
             NOTIFICATION_CHANNEL_ID,
-            context.getString(R.string.aurora_alerts_channel_name)
+            context.getString(R.string.aurora_alerts_channel_name),
         )
 
     @Provides
     @Reusable
     internal fun notificationEvaluator(
         outdatedEvaluator: OutdatedEvaluator,
-        lastNotificationRepository: LastNotificationRepository
+        lastNotificationRepository: LastNotificationRepository,
     ): NotificationEvaluator =
         NotificationEvaluatorImpl(lastNotificationRepository, outdatedEvaluator)
 
     @Provides
     @Reusable
     internal fun notificationFormatter(
-        chanceLevelFormatter: Formatter<ChanceLevel>
+        chanceLevelFormatter: Formatter<ChanceLevel>,
     ): Formatter<Notification> = NotificationFormatter(chanceLevelFormatter)
 
     @Provides
@@ -103,7 +103,7 @@ object FeatureBackgroundModule {
         notificationManager: NotificationManager,
         notificationFormatter: Formatter<Notification>,
         activityClass: Class<out Activity>,
-        analytics: Analytics
+        analytics: Analytics,
     ): Notifier =
         NotifierImpl(
             context,
@@ -111,7 +111,7 @@ object FeatureBackgroundModule {
             notificationFormatter,
             activityClass,
             NOTIFICATION_CHANNEL_ID,
-            analytics
+            analytics,
         )
 
     @Provides
@@ -143,7 +143,7 @@ object FeatureBackgroundModule {
         notificationEvaluator: NotificationEvaluator,
         chanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
         notifier: Notifier,
-        time: Time
+        time: Time,
     ): BackgroundWork =
         BackgroundWorkImpl(
             placesRepository = placesRepository,
@@ -154,7 +154,7 @@ object FeatureBackgroundModule {
             notificationEvaluator = notificationEvaluator,
             chanceEvaluator = chanceEvaluator,
             notifier = notifier,
-            time = time
+            time = time,
         )
 }
 

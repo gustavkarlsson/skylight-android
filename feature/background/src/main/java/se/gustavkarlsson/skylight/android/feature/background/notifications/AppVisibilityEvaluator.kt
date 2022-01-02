@@ -5,7 +5,7 @@ import android.app.ActivityManager.RunningAppProcessInfo
 import android.app.KeyguardManager
 
 internal class AppVisibilityEvaluator(
-    private val keyguardManager: KeyguardManager
+    private val keyguardManager: KeyguardManager,
 ) {
 
     fun isVisible(): Boolean {

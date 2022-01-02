@@ -19,7 +19,7 @@ internal class SettingsViewModel(
             ViewState(
                 triggerLevelText = settings.notificationTriggerLevel.shortText,
                 placesWithTriggerLevelText = createPlacesWithTriggerLevelText(settings),
-                triggerLevelItems = createTriggerLevelItems(settings.notificationTriggerLevel)
+                triggerLevelItems = createTriggerLevelItems(settings.notificationTriggerLevel),
             )
         }
         .stateIn(scope, started = SharingStarted.WhileSubscribed(), ViewState.INITIAL)

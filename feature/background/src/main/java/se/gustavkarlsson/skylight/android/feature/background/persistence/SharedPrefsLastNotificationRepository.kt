@@ -10,7 +10,7 @@ import se.gustavkarlsson.skylight.android.feature.background.notifications.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 
 internal class SharedPrefsLastNotificationRepository(
-    context: Context
+    context: Context,
 ) : LastNotificationRepository {
 
     private val sharedPreferences by lazy {

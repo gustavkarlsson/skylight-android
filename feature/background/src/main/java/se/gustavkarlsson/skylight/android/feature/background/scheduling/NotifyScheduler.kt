@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 
 internal class NotifyScheduler(
     private val appContext: Context,
-    private val scheduleInterval: Duration
+    private val scheduleInterval: Duration,
 ) : Scheduler {
 
     private val workManager get() = WorkManager.getInstance(appContext)
@@ -22,7 +22,7 @@ internal class NotifyScheduler(
         workManager.enqueueUniquePeriodicWork(
             UNIQUE_NAME_NOTIFY,
             ExistingPeriodicWorkPolicy.KEEP,
-            request
+            request,
         )
         logDebug { "Scheduled periodic updates" }
     }

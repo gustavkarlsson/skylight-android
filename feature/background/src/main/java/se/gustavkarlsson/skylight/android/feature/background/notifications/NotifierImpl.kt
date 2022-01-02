@@ -22,7 +22,7 @@ internal class NotifierImpl(
     private val notificationFormatter: Formatter<Notification>,
     private val activityClass: Class<out Activity>,
     private val channelId: String,
-    private val analytics: Analytics
+    private val analytics: Analytics,
 ) : Notifier {
 
     override fun notify(notification: Notification) {

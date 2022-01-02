@@ -6,7 +6,6 @@
 * Add kotlin bom
 * Look into restricted bucket
 * Move to firebase BOM (https://firebase.google.com/docs/android/learn-more#bom)
-* Trailing comma rule
 * Readme
 * Integrate SettingsClient? (https://developer.android.com/topic/performance/appstandby#restricted-bucket, )
 * Notifications on/off without dialog (or only dialog when enabling). Needs a way to select current setting

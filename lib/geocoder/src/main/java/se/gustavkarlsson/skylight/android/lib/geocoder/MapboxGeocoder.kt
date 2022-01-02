@@ -26,7 +26,7 @@ import kotlin.coroutines.resume
 internal class MapboxGeocoder(
     private val accessToken: String,
     private val getLocales: () -> NonEmptyList<Locale>,
-    private val dispatcher: CoroutineDispatcher
+    private val dispatcher: CoroutineDispatcher,
 ) : Geocoder {
 
     override suspend fun geocode(locationName: String, biasAround: Location?): GeocodingResult {
@@ -105,14 +105,15 @@ private fun GeocodingResponse.toGeocodingResultSuccess(): Either.Right<List<Plac
         val center = feature.center()
         val fullName = feature.placeName() ?: feature.text()
         val simpleName = feature.text() ?: feature.placeName()
-        if (center == null || fullName == null || simpleName == null)
+        if (center == null || fullName == null || simpleName == null) {
             null
-        else
+        } else {
             PlaceSuggestion(
                 Location(center.latitude(), center.longitude()),
                 fullName,
-                simpleName
+                simpleName,
             )
+        }
     }
     return Either.Right(suggestions)
 }

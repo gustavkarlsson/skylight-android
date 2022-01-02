@@ -131,7 +131,7 @@ private fun PreviewContent() {
                 factorItems = emptyList(),
                 onBookmarkClickedEvent = Event.Noop,
                 onNotificationClickedEvent = Event.Noop,
-            )
+            ),
         ),
         onBannerActionClicked = {},
         onClickGrantLocationPermission = {},

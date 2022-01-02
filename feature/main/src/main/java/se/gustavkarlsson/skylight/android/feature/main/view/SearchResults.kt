@@ -72,7 +72,7 @@ private fun PreviewSearchResults() {
                     details = "Somewhere street",
                     location = Location(5.0, 6.0),
                 ),
-            )
+            ),
         ),
         onEvent = {},
     )
@@ -82,7 +82,7 @@ private fun PreviewSearchResults() {
 internal fun SearchResults(
     modifier: Modifier = Modifier,
     state: ContentState.Searching,
-    onEvent: (Event) -> Unit
+    onEvent: (Event) -> Unit,
 ) {
     Surface(
         modifier = modifier,
@@ -121,7 +121,7 @@ internal fun SearchResults(
 @Composable
 private fun ListItem(
     item: SearchResult,
-    onEvent: (Event) -> Unit
+    onEvent: (Event) -> Unit,
 ) {
     val itemModifier = if (item.selected) {
         Modifier.background(Colors.onSurface.copy(alpha = 0.1f))
@@ -153,7 +153,7 @@ private fun ListItem(
                     contentDescription = null,
                 )
             }
-        }
+        },
     ) {
         Text(
             text = textRef(item.title),

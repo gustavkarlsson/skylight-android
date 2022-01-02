@@ -3,7 +3,6 @@ package se.gustavkarlsson.skylight.android.lib.places
 import arrow.core.NonEmptyList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
@@ -16,11 +15,11 @@ import se.gustavkarlsson.skylight.android.core.logging.logWarn
 internal class PlacesRepoSelectedPlaceRepository(
     placesRepo: PlacesRepository,
     private val placeSelectionStorage: PlaceSelectionStorage,
-    scope: CoroutineScope
+    scope: CoroutineScope,
 ) : SelectedPlaceRepository {
     private val store = Store(
         initialState = State.Loading(suggestedId = null),
-        startActions = listOf(StreamPlacesAction(placeSelectionStorage::loadId, placesRepo.stream()))
+        startActions = listOf(StreamPlacesAction(placeSelectionStorage::loadId, placesRepo.stream())),
     )
 
     init {

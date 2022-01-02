@@ -27,7 +27,7 @@ internal fun Ready(
     onSettingsClicked: () -> Unit,
     onEvent: (Event) -> Unit,
     onClickGrantLocationPermission: () -> Unit,
-    onClickOpenSettings: () -> Unit
+    onClickOpenSettings: () -> Unit,
 ) {
     Scaffold(
         topBar = {

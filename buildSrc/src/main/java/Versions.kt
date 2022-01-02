@@ -12,7 +12,8 @@ object Versions {
 
     val axionRelease = "1.13.3"
     val playPublisher = "3.6.0"
-    val ktlint = "10.2.0"
+    val ktlintGradle = "10.2.0"
+    val ktlint = "0.43.2"
 
     // App
     // Google
