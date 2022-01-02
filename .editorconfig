@@ -9,3 +9,5 @@ end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
 ij_kotlin_imports_layout = *,java.**,javax.**,kotlin.**,^
+ij_kotlin_allow_trailing_comma = true
+ij_kotlin_allow_trailing_comma_on_call_site = true

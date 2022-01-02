@@ -141,7 +141,7 @@ internal class StateToViewStateMapper @Inject constructor(
                     TextRef.stringRes(R.string.background_location_permission_denied_message),
                     TextRef.stringRes(R.string.open_settings),
                     Icons.Warning,
-                    BannerData.Event.OpenAppDetails
+                    BannerData.Event.OpenAppDetails,
                 )
             }
             state.selectedPlace != Place.Current -> null
@@ -284,7 +284,7 @@ internal class StateToViewStateMapper @Inject constructor(
                         descriptionText = TextRef.stringRes(texts.description),
                         valueTextColor = { this.error },
                         progress = null,
-                        errorText = errorFormatter.format(error)
+                        errorText = errorFormatter.format(error),
                     )
                 },
                 ifRight = { value ->
@@ -298,9 +298,9 @@ internal class StateToViewStateMapper @Inject constructor(
                         progress = chance,
                         errorText = null,
                     )
-                }
+                },
             )
-        }
+        },
     )
 
     // TODO avoid duplication with similar function above
@@ -330,7 +330,7 @@ internal class StateToViewStateMapper @Inject constructor(
                 progress = chance,
                 errorText = null,
             )
-        }
+        },
     )
 }
 

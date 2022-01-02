@@ -27,9 +27,9 @@ internal class StreamCurrentLocationNameAction @Inject constructor(
                     ifSome = { locationResult ->
                         locationResult.fold(
                             ifLeft = { flowOf(Loading) },
-                            ifRight = { location -> reverseGeocoder.stream(location) }
+                            ifRight = { location -> reverseGeocoder.stream(location) },
                         )
-                    }
+                    },
                 )
             }
             .distinctUntilChanged()

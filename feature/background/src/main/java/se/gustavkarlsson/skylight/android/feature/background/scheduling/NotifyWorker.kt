@@ -11,7 +11,7 @@ import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
 
 internal class NotifyWorker(
     appContext: Context,
-    workerParams: WorkerParameters
+    workerParams: WorkerParameters,
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {

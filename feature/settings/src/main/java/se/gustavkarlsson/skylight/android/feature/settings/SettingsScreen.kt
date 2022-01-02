@@ -32,7 +32,6 @@ import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.ui.Scaffold
 import com.google.accompanist.insets.ui.TopAppBar
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
@@ -53,7 +52,7 @@ object SettingsScreen : Screen {
     override val type: Screen.Type get() = Screen.Type.Settings
 
     @Composable
-    override fun Content(activity: AppCompatActivity, scope: CoroutineScope, tag: ServiceTag) {
+    override fun Content(activity: AppCompatActivity, tag: ServiceTag) {
         val viewModel = getOrRegisterService(VIEW_MODE_ID, tag) {
             SettingsComponent.build().viewModel()
         }
@@ -111,7 +110,7 @@ private fun Content(
             },
         ) { paddingValues ->
             Column(
-                modifier = Modifier.padding(paddingValues)
+                modifier = Modifier.padding(paddingValues),
             ) {
                 TriggerLevelItem(
                     notificationLevelText,

@@ -6,15 +6,16 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
-import app.cash.exhaustive.Exhaustive
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.whenCreated
 import com.ioki.textref.TextRef
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.AppBarState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
@@ -37,7 +38,6 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.collectAsLifecycleAwareState
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.getService
-import se.gustavkarlsson.skylight.android.lib.ui.startStopScope
 
 private val VIEW_MODEL_ID = ServiceId("mainViewModel")
 
@@ -48,10 +48,6 @@ object MainScreen : Screen {
     override val scopeStart get() = "main"
 
     private val optionalViewModel get() = getService<MainViewModel>(VIEW_MODEL_ID)
-
-    override fun onStartStopScope(activity: AppCompatActivity, scope: CoroutineScope) {
-        optionalViewModel?.onEvent(Event.RefreshLocationPermission)
-    }
 
     override fun onBackPress(): BackPress {
         return when ((optionalViewModel?.state?.value as? ViewState.Ready)?.appBar) {
@@ -70,8 +66,8 @@ object MainScreen : Screen {
     }
 
     private fun requestPermission(activity: FragmentActivity, permission: Permission) {
-        activity.startStopScope?.launch {
-            withContext(Dispatchers.Main) {
+        activity.lifecycleScope.launch {
+            activity.lifecycle.whenCreated {
                 PermissionsComponent.instance.permissionRequester()
                     .request(activity, permission)
             }
@@ -79,11 +75,12 @@ object MainScreen : Screen {
     }
 
     @Composable
-    override fun Content(activity: AppCompatActivity, scope: CoroutineScope, tag: ServiceTag) {
+    override fun Content(activity: AppCompatActivity, tag: ServiceTag) {
         val viewModel = getOrRegisterService(VIEW_MODEL_ID, tag) {
             MainViewModelComponent.build().viewModel()
         }
         val state by viewModel.state.collectAsLifecycleAwareState()
+        RefreshLocationPermission(activity)
         Content(
             state = state,
             onBannerActionClicked = { event ->
@@ -94,12 +91,29 @@ object MainScreen : Screen {
                         openAppDetails(activity)
                 }
             },
-            onClickGrantLocationPermission = { requestPermission(activity, Permission.Location) },
+            onClickGrantLocationPermission = {
+                requestPermission(activity, Permission.Location)
+            },
             onClickOpenSettings = { openAppDetails(activity) },
             onClickTurnOffNotifications = { viewModel.onEvent(Event.TurnOffCurrentLocationNotifications) },
             onSettingsClicked = { navigator.goTo(screens.settings) },
             onEvent = { event -> viewModel.onEvent(event) },
         )
+    }
+
+    @Composable
+    private fun RefreshLocationPermission(activity: AppCompatActivity) {
+        DisposableEffect(key1 = null) {
+            val observer = object : DefaultLifecycleObserver {
+                override fun onStart(owner: LifecycleOwner) {
+                    optionalViewModel?.onEvent(Event.RefreshLocationPermission)
+                }
+            }
+            activity.lifecycle.addObserver(observer)
+            onDispose {
+                activity.lifecycle.removeObserver(observer)
+            }
+        }
     }
 }
 
@@ -115,7 +129,7 @@ private fun PreviewContent() {
                 notificationsButtonState = ToggleButtonState.Enabled(checked = false),
                 factorItems = emptyList(),
                 onNotificationClickedEvent = Event.Noop,
-            )
+            ),
         ),
         onBannerActionClicked = {},
         onClickGrantLocationPermission = {},
@@ -137,7 +151,6 @@ private fun Content(
     onEvent: (Event) -> Unit,
 ) {
     ScreenBackground {
-        @Exhaustive
         when (state) {
             ViewState.Loading -> Unit
             is ViewState.Ready -> {

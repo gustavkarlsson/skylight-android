@@ -33,7 +33,7 @@ internal class CombiningAuroraReportProvider(
                 kpIndex.await(),
                 geomagLocation,
                 darkness,
-                weather.await()
+                weather.await(),
             )
             logInfo { "Provided aurora report: $report" }
             report
@@ -55,7 +55,7 @@ internal class CombiningAuroraReportProvider(
         return combine(
             kpIndexProvider.stream(),
             darknessProvider.stream(location),
-            weatherProvider.stream(location)
+            weatherProvider.stream(location),
         ) { kpIndex, darkness, weather ->
             LoadableAuroraReport(location, kpIndex, geomagLocation, darkness, weather)
         }

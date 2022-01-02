@@ -43,7 +43,7 @@ object LibAuroraModule {
         kpIndexEvaluator: ChanceEvaluator<KpIndex>,
         geomagLocationEvaluator: ChanceEvaluator<GeomagLocation>,
         weatherEvaluator: ChanceEvaluator<Weather>,
-        darknessEvaluator: ChanceEvaluator<Darkness>
+        darknessEvaluator: ChanceEvaluator<Darkness>,
     ): ChanceEvaluator<CompleteAuroraReport> =
         CompleteAuroraReportEvaluator(
             kpIndexEvaluator,

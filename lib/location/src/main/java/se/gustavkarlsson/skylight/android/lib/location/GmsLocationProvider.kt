@@ -195,7 +195,6 @@ private fun FusedLocationProviderClient.streamWithRetry(
     } while (true)
 }
 
-@OptIn(ExperimentalCoroutinesApi::class)
 private fun FusedLocationProviderClient.streamUntilError(
     locationRequest: LocationRequest,
 ): Flow<LocationResult> = callbackFlow {

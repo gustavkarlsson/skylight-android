@@ -10,12 +10,12 @@ internal object KpIndexFormatter : Formatter<KpIndex> {
         val part = kpIndex - whole
         val partString =
             parsePart(
-                part
+                part,
             )
         val wholeString =
             parseWhole(
                 whole,
-                partString
+                partString,
             )
         return TextRef.string(wholeString + partString)
     }

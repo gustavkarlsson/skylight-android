@@ -55,7 +55,7 @@ internal data class BannerData(
     val message: TextRef,
     val buttonText: TextRef,
     val icon: ImageVector,
-    val buttonEvent: Event
+    val buttonEvent: Event,
 ) {
     enum class Event {
         RequestBackgroundLocationPermission, OpenAppDetails
@@ -68,7 +68,7 @@ internal data class FactorItem(
     val descriptionText: TextRef,
     val valueTextColor: SkylightColors.() -> Color,
     val progress: Double?,
-    val errorText: TextRef?
+    val errorText: TextRef?,
 )
 
 internal sealed interface SearchResult {
