@@ -19,7 +19,6 @@ enum class Permission(
         ),
     ),
 
-    @OptIn(ExperimentalStdlibApi::class)
     BackgroundLocation(
         checkKey = if (supportsBackgroundLocation) {
             Manifest.permission.ACCESS_BACKGROUND_LOCATION

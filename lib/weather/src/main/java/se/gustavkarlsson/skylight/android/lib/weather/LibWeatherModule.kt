@@ -7,8 +7,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
@@ -34,11 +32,7 @@ object LibWeatherModule {
     @Reusable
     internal fun weatherEvaluator(): ChanceEvaluator<Weather> = WeatherEvaluator
 
-    @OptIn(
-        FlowPreview::class,
-        ExperimentalCoroutinesApi::class,
-        ExperimentalTime::class,
-    )
+    @OptIn(ExperimentalTime::class)
     @Provides
     @Reusable
     internal fun weatherProvider(

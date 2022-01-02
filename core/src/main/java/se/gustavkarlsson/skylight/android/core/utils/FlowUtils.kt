@@ -3,8 +3,6 @@ package se.gustavkarlsson.skylight.android.core.utils
 import arrow.core.NonEmptyList
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.coroutineScope
@@ -21,7 +19,6 @@ import java.util.concurrent.atomic.AtomicReference
 
 // TODO Replace these with built-in once available
 
-@OptIn(ExperimentalCoroutinesApi::class)
 fun <T> Flow<T>.windowed(size: Int): Flow<NonEmptyList<T>> {
     require(size > 0) { "Requested size $size is non-positive." }
     return scan(emptyList<T>()) { oldItems, newItem ->

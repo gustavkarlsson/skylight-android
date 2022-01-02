@@ -7,8 +7,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
@@ -33,11 +31,7 @@ object LibKpIndexModule {
     @Reusable
     internal fun kpIndexEvaluator(): ChanceEvaluator<KpIndex> = KpIndexEvaluator
 
-    @OptIn(
-        FlowPreview::class,
-        ExperimentalCoroutinesApi::class,
-        ExperimentalTime::class,
-    )
+    @OptIn(ExperimentalTime::class)
     @Provides
     @Reusable
     internal fun kpIndexProvider(

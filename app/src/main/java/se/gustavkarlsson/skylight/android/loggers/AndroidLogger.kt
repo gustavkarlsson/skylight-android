@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.loggers
 
-import android.os.Build
 import android.util.Log
 import se.gustavkarlsson.skylight.android.core.logging.Logger
 import java.io.PrintWriter
