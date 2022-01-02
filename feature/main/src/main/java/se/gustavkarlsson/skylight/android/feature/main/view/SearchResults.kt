@@ -1,7 +1,8 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -105,7 +106,7 @@ internal fun SearchResults(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 private fun ListItem(
     item: SearchResult,
@@ -115,9 +116,10 @@ private fun ListItem(
         Modifier.background(Colors.onSurface.copy(alpha = 0.1f))
     } else Modifier
     ListItem(
-        modifier = itemModifier.clickable {
-            onEvent(item.selectEvent)
-        },
+        modifier = itemModifier.combinedClickable(
+            onLongClick = item.longClickEvent?.let { { onEvent(it) } },
+            onClick = { onEvent(item.clickEvent) },
+        ),
         icon = {
             Icon(
                 imageVector = item.icon,

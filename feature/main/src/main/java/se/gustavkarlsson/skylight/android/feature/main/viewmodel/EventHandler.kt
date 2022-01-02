@@ -31,8 +31,11 @@ internal class EventHandler @Inject constructor(
             is Event.SearchChanged -> {
                 searchChannel.send(event.state)
             }
-            is Event.SelectSearchResult -> {
+            is Event.ClickSearchResult -> {
                 onSearchResultClicked(event.result)
+            }
+            is Event.LongClickSearchResult -> {
+                onSearchResultLongClicked(event.result)
             }
             Event.RefreshLocationPermission -> {
                 permissionChecker.refresh()
@@ -64,6 +67,13 @@ internal class EventHandler @Inject constructor(
                     is State.Ready -> copy(search = Search.Inactive)
                 }
             }
+        }
+    }
+
+    private suspend fun onSearchResultLongClicked(result: SearchResult) {
+        // FIXME show confirm dialog
+        if (result is SearchResult.Known.Saved) {
+            placesRepository.delete(result.place.id)
         }
     }
 }

@@ -77,7 +77,8 @@ internal sealed interface SearchResult {
     val icon: ImageVector
     val trailingIcon: ImageVector?
     val selected: Boolean
-    val selectEvent: Event
+    val clickEvent: Event
+    val longClickEvent: Event?
 
     sealed interface Known : SearchResult {
         data class Current(
@@ -102,7 +103,8 @@ internal sealed interface SearchResult {
                 get() = if (notifications) {
                     Icons.Notifications
                 } else null
-            override val selectEvent: Event get() = Event.SelectSearchResult(this)
+            override val clickEvent: Event get() = Event.ClickSearchResult(this)
+            override val longClickEvent: Nothing? = null
         }
 
         data class Saved(
@@ -117,7 +119,8 @@ internal sealed interface SearchResult {
                 get() = if (notifications) {
                     Icons.Notifications
                 } else null
-            override val selectEvent: Event get() = Event.SelectSearchResult(this)
+            override val clickEvent: Event get() = Event.ClickSearchResult(this)
+            override val longClickEvent: Event get() = Event.LongClickSearchResult(this)
         }
     }
 
@@ -131,14 +134,16 @@ internal sealed interface SearchResult {
         override val icon: ImageVector = Icons.Search
         override val trailingIcon: Nothing? = null
         override val selected: Boolean = false
-        override val selectEvent: Event get() = Event.SelectSearchResult(this)
+        override val clickEvent: Event get() = Event.ClickSearchResult(this)
+        override val longClickEvent: Nothing? = null
     }
 }
 
 internal sealed interface Event {
     data class SetNotifications(val place: Place, val enabled: Boolean) : Event
     data class SearchChanged(val state: SearchFieldState) : Event
-    data class SelectSearchResult(val result: SearchResult) : Event
+    data class ClickSearchResult(val result: SearchResult) : Event
+    data class LongClickSearchResult(val result: SearchResult) : Event
     object RefreshLocationPermission : Event
     object TurnOffCurrentLocationNotifications : Event
     object Noop : Event
