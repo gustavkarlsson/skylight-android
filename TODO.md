@@ -1,7 +1,6 @@
 ## ASAP
 * Test permissions
 * Better colors
-* Dark mode splash screen for Android 12
 
 ## Soon
 * Add kotlin bom
