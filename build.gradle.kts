@@ -1,4 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jlleitschuh.gradle.ktlint.KtlintExtension
 
 buildscript {
     repositories {
@@ -15,8 +17,7 @@ buildscript {
         classpath("org.eclipse.jgit:org.eclipse.jgit:${Versions.jgit}")
         classpath("pl.allegro.tech.build:axion-release-plugin:${Versions.axionRelease}")
         classpath("com.squareup.sqldelight:gradle-plugin:${Versions.sqldelight}")
-        classpath("org.jlleitschuh.gradle:ktlint-gradle:${Versions.ktlint}")
-        classpath("app.cash.exhaustive:exhaustive-gradle:${Versions.exhaustive}")
+        classpath("org.jlleitschuh.gradle:ktlint-gradle:${Versions.ktlintGradle}")
         classpath("com.google.protobuf:protobuf-gradle-plugin:${Versions.protobufGradle}")
     }
 }
@@ -39,8 +40,24 @@ allprojects {
             freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.RequiresOptIn"
         }
     }
+
+    configure<KtlintExtension> {
+        android.set(true)
+        version.set(Versions.ktlint)
+        enableExperimentalRules.set(true)
+    }
+
+    afterEvaluate {
+        extensions.findByType<KotlinProjectExtension>()?.apply {
+            sourceSets.all {
+                languageSettings {
+                    progressiveMode = true
+                }
+            }
+        }
+    }
 }
 
-task("clean", Delete::class) {
+task<Delete>("clean") {
     delete(rootProject.buildDir)
 }

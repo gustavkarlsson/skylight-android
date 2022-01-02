@@ -19,7 +19,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import app.cash.exhaustive.Exhaustive
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.navigationBarsWithImePadding
 import com.google.accompanist.insets.rememberInsetsPaddingValues
@@ -73,7 +72,7 @@ private fun PreviewSearchResults() {
                     details = "Somewhere street",
                     location = Location(5.0, 6.0),
                 ),
-            )
+            ),
         ),
         onEvent = {},
     )
@@ -83,14 +82,13 @@ private fun PreviewSearchResults() {
 internal fun SearchResults(
     modifier: Modifier = Modifier,
     state: ContentState.Searching,
-    onEvent: (Event) -> Unit
+    onEvent: (Event) -> Unit,
 ) {
     Surface(
         modifier = modifier,
         elevation = AppBarDefaults.TopAppBarElevation / 2,
         color = Colors.primarySurface,
     ) {
-        @Exhaustive
         when (state) {
             is ContentState.Searching.Error -> {
                 Box(
@@ -123,7 +121,7 @@ internal fun SearchResults(
 @Composable
 private fun ListItem(
     item: SearchResult,
-    onEvent: (Event) -> Unit
+    onEvent: (Event) -> Unit,
 ) {
     val itemModifier = if (item.selected) {
         Modifier.background(Colors.onSurface.copy(alpha = 0.1f))
@@ -155,7 +153,7 @@ private fun ListItem(
                     contentDescription = null,
                 )
             }
-        }
+        },
     ) {
         Text(
             text = textRef(item.title),

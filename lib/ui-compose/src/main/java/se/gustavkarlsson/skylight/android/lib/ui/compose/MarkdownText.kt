@@ -18,6 +18,6 @@ fun MarkdownText(
         },
         update = { view ->
             Markwon.create(view.context).setMarkdown(view, markdownText)
-        }
+        },
     )
 }

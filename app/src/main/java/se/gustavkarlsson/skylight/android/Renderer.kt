@@ -6,11 +6,6 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceClearer
@@ -24,12 +19,9 @@ internal class Renderer @Inject constructor(
 ) {
     fun render(activity: AppCompatActivity) {
         activity.setContent {
-            val scope = rememberCoroutineScope {
-                SupervisorJob() + Dispatchers.Main + CoroutineName("viewScope")
-            }
             val change by navigator.backstackChanges.collectAsLifecycleAwareState()
-            RenderCrossfade(activity, scope, change.new.lastOrNull()) {
-                val removedScreens = change.old - change.new
+            RenderCrossfade(activity, change.new.screens.last()) {
+                val removedScreens = change.old.screens - change.new.screens
                 val tagsToClear = removedScreens.map { it.toTag() }
                 serviceClearer.clear(tagsToClear)
             }
@@ -39,18 +31,15 @@ internal class Renderer @Inject constructor(
     @Composable
     private fun RenderCrossfade(
         activity: AppCompatActivity,
-        scope: CoroutineScope,
-        screen: Screen?,
+        screen: Screen,
         onDispose: () -> Unit,
     ) {
         Crossfade(targetState = screen) { renderingScreen ->
-            if (renderingScreen != null) {
-                val tag = renderingScreen.toTag()
-                DisposableEffect(key1 = tag) {
-                    onDispose(onDispose)
-                }
-                renderingScreen.Content(activity, scope, tag)
+            val tag = renderingScreen.toTag()
+            DisposableEffect(key1 = tag) {
+                onDispose(onDispose)
             }
+            renderingScreen.Content(activity, tag)
         }
     }
 }

@@ -13,12 +13,13 @@ dependencies {
     implementation(project(":lib:analytics"))
     api(project(":lib:ui"))
 
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${Versions.androidLifecycle}")
     implementation("io.noties.markwon:core:${Versions.markwon}")
+
+    api("androidx.lifecycle:lifecycle-runtime-ktx:${Versions.androidLifecycle}")
 
     api("androidx.compose.ui:ui:${Versions.compose}")
     api("androidx.compose.ui:ui-tooling-preview:${Versions.compose}")
-    api("androidx.compose.compiler:compiler:${Versions.compose}")
+    api("androidx.compose.compiler:compiler:${Versions.composeCompiler}")
     api("androidx.compose.foundation:foundation:${Versions.compose}")
     api("androidx.compose.material:material:${Versions.compose}")
     api("androidx.compose.material:material-icons-core:${Versions.compose}")

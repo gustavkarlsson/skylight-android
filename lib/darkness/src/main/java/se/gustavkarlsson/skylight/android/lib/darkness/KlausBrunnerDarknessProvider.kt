@@ -51,7 +51,7 @@ private fun calculateSunZenithAngle(location: Location, time: Instant): Double {
         date,
         location.latitude,
         location.longitude,
-        0.0
+        0.0,
     )
     return azimuthAndZenithAngle.zenithAngle
 }

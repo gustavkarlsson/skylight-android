@@ -6,7 +6,6 @@ import arrow.core.flatMap
 import arrow.core.rightIfNotNull
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.get
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -34,7 +33,6 @@ internal class StoreReverseGeocoder(
         return result
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     override fun stream(location: Location): Flow<Loadable<ReverseGeocodingResult>> {
         return getNameWithRetry(location)
             .distinctUntilChanged()
@@ -48,7 +46,7 @@ internal class StoreReverseGeocoder(
             emit(Loaded(result))
             val shouldRetry = result.fold(
                 ifLeft = { error -> error == ReverseGeocodingError.Io },
-                ifRight = { false }
+                ifRight = { false },
             )
             if (shouldRetry) {
                 delay(retryDelay.toMillis())

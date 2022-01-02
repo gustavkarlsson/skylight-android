@@ -24,7 +24,6 @@ import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.insets.rememberInsetsPaddingValues
 import com.google.accompanist.insets.ui.Scaffold
 import com.google.accompanist.insets.ui.TopAppBar
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
@@ -41,7 +40,7 @@ object PrivacyPolicyScreen : Screen {
     override val type: Screen.Type get() = Screen.Type.PrivacyPolicy
 
     @Composable
-    override fun Content(activity: AppCompatActivity, scope: CoroutineScope, tag: ServiceTag) {
+    override fun Content(activity: AppCompatActivity, tag: ServiceTag) {
         var markdownText by remember { mutableStateOf("") }
         LaunchedEffect(key1 = null) {
             withContext(Dispatchers.IO) {
@@ -53,7 +52,7 @@ object PrivacyPolicyScreen : Screen {
         }
         Content(
             markdownText = markdownText,
-            onBackClicked = { navigator.closeScreen() }
+            onBackClicked = { navigator.closeScreen() },
         )
     }
 }
@@ -98,7 +97,7 @@ private fun Content(
                     markdownText = markdownText,
                 )
                 Spacer(
-                    modifier = Modifier.padding(rememberInsetsPaddingValues(LocalWindowInsets.current.navigationBars))
+                    modifier = Modifier.padding(rememberInsetsPaddingValues(LocalWindowInsets.current.navigationBars)),
                 )
             }
         }

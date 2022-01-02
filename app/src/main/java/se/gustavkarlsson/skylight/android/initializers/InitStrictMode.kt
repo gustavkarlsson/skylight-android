@@ -22,7 +22,7 @@ internal fun initStrictMode() {
                 } else {
                     penaltyLog()
                 }
-            }.build()
+            }.build(),
         )
         StrictMode.setVmPolicy(
             StrictMode.VmPolicy.Builder().apply {
@@ -49,7 +49,7 @@ internal fun initStrictMode() {
                 } else {
                     penaltyLog()
                 }
-            }.build()
+            }.build(),
         )
     }
 }

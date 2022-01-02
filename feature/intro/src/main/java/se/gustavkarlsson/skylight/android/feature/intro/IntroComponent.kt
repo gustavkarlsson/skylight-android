@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionComponent
 @Component(
     dependencies = [
         AppComponent::class,
-        RunVersionComponent::class
+        RunVersionComponent::class,
     ]
 )
 internal interface IntroComponent {

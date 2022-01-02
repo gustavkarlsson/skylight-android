@@ -6,7 +6,7 @@ import se.gustavkarlsson.skylight.android.core.logging.logDebug
 
 internal class SharedPreferencesRunVersionManager(
     context: Context,
-    private val currentVersionCode: Int
+    private val currentVersionCode: Int,
 ) : RunVersionManager {
 
     private val prefs by lazy {

@@ -26,7 +26,7 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
     implementation(
         "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:" +
-            Versions.retrofitKotlinSerialization
+            Versions.retrofitKotlinSerialization,
     )
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.kotlinxSerialization}")
     implementation("com.dropbox.mobile.store:store4:${Versions.store}")

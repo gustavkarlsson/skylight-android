@@ -27,7 +27,7 @@ internal class OutdatedEvaluatorTest {
     fun setUp() {
         whenever(mockTime.zoneId()).thenReturn(ZONE_OFFSET)
         impl = OutdatedEvaluator(
-            mockTime
+            mockTime,
         )
     }
 

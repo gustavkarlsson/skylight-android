@@ -10,6 +10,6 @@ internal interface OpenWeatherMapApi {
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
         @Query("mode") mode: String,
-        @Query("appid") appId: String
+        @Query("appid") appId: String,
     ): Response<OpenWeatherMapWeather>
 }

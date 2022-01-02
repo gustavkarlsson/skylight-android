@@ -36,8 +36,10 @@ data class SkylightColors(
     val primarySurface: Color get() = material.primarySurface
 }
 
+// background linked to theme.xml
 private val darkPalette = SkylightColors(
     material = darkColors(
+        background = Color(0xFF121212),
         primary = Color(0xFF33CCA1),
         primaryVariant = Color(0xFF66CCAF),
         secondary = Color(0xFFCC3366),
@@ -48,8 +50,10 @@ private val darkPalette = SkylightColors(
     onSurfaceWeaker = Color(0x8AFFFFFF),
 )
 
+// background linked to theme.xml
 private val lightPalette = SkylightColors(
     material = lightColors(
+        background = Color(0xFFFFFFFF),
         primary = Color(0xFF33CCA1),
         primaryVariant = Color(0xFF66CCAF),
         secondary = Color(0xFFCC3366),

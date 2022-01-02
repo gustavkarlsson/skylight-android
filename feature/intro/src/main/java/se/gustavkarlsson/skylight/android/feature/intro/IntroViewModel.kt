@@ -5,7 +5,7 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import javax.inject.Inject
 
 internal class IntroViewModel @Inject constructor(
-    private val versionManager: RunVersionManager
+    private val versionManager: RunVersionManager,
 ) : ScopedService {
     fun registerScreenSeen() = versionManager.signalRunCompleted()
 }

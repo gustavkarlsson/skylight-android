@@ -6,7 +6,7 @@ import se.gustavkarlsson.skylight.android.core.utils.until
 import se.gustavkarlsson.skylight.android.lib.time.Time
 
 internal class OutdatedEvaluator(
-    private val time: Time
+    private val time: Time,
 ) {
 
     fun isOutdated(time: Instant): Boolean {

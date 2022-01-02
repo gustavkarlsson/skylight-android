@@ -13,7 +13,7 @@ import javax.inject.Named
     modules = [AboutModule::class],
     dependencies = [
         AppComponent::class,
-        TimeComponent::class
+        TimeComponent::class,
     ]
 )
 internal interface AboutComponent {
@@ -35,7 +35,7 @@ internal object AboutModule {
     fun viewModel(
         time: Time,
         @Named("versionCode") versionCode: Int,
-        @Named("versionName") versionName: String
+        @Named("versionName") versionName: String,
     ): AboutViewModel = AboutViewModel(
         time = time,
         showDevelopData = BuildConfig.DEVELOP,
@@ -43,6 +43,6 @@ internal object AboutModule {
         versionName = versionName,
         gitBranch = BuildConfig.GIT_BRANCH,
         gitSha1 = BuildConfig.GIT_SHA1,
-        buildTime = Instant.ofEpochMilli(BuildConfig.BUILD_TIME_MILLIS)
+        buildTime = Instant.ofEpochMilli(BuildConfig.BUILD_TIME_MILLIS),
     )
 }

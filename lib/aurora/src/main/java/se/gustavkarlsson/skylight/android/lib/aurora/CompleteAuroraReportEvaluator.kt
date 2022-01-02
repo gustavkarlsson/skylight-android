@@ -17,12 +17,12 @@ internal class CompleteAuroraReportEvaluator(
     override fun evaluate(value: CompleteAuroraReport): Chance {
         val activityChance = value.kpIndex.fold(
             ifLeft = { Chance.UNKNOWN },
-            ifRight = { kpIndex -> kpIndexEvaluator.evaluate(kpIndex) }
+            ifRight = { kpIndex -> kpIndexEvaluator.evaluate(kpIndex) },
         )
         val locationChance = geomagLocationEvaluator.evaluate(value.geomagLocation)
         val weatherChance = value.weather.fold(
             ifLeft = { Chance.UNKNOWN },
-            ifRight = { weather -> weatherEvaluator.evaluate(weather) }
+            ifRight = { weather -> weatherEvaluator.evaluate(weather) },
         )
         val darknessChance = darknessEvaluator.evaluate(value.darkness)
 

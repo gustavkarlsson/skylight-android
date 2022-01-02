@@ -27,10 +27,8 @@ object FeatureIntroModule {
         override fun override(oldBackstack: Backstack, targetBackstack: Backstack): Backstack? =
             runBlocking(dispatcher) {
                 when {
-                    targetBackstack.isNotEmpty() &&
-                        targetBackstack.none { it.type == Screen.Type.Intro } &&
-                        runVersionManager.isFirstRun ->
-                        listOf(IntroScreen(targetBackstack))
+                    targetBackstack.screens.none { it.type == Screen.Type.Intro } &&
+                        runVersionManager.isFirstRun -> Backstack(IntroScreen(targetBackstack))
                     else -> null
                 }
             }

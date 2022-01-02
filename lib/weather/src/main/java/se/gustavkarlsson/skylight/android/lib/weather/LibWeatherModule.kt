@@ -7,8 +7,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
@@ -20,7 +18,7 @@ import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.core.utils.seconds
 import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
 import se.gustavkarlsson.skylight.android.lib.time.Time
-import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.ExperimentalTime
 
 @Module
@@ -34,11 +32,7 @@ object LibWeatherModule {
     @Reusable
     internal fun weatherEvaluator(): ChanceEvaluator<Weather> = WeatherEvaluator
 
-    @OptIn(
-        FlowPreview::class,
-        ExperimentalCoroutinesApi::class,
-        ExperimentalTime::class,
-    )
+    @OptIn(ExperimentalTime::class)
     @Provides
     @Reusable
     internal fun weatherProvider(
@@ -68,7 +62,7 @@ object LibWeatherModule {
             time = time,
         )
 
-        val expiry = Duration.milliseconds(pollingInterval.toMillis() / 2)
+        val expiry = (pollingInterval.toMillis() / 2).milliseconds
         val cachePolicy = MemoryPolicy.builder<ApproximatedLocation, Weather>()
             .setExpireAfterWrite(expiry)
             .setMaxSize(16)

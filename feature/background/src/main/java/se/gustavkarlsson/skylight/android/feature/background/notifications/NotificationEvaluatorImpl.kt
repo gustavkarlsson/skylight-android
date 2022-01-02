@@ -5,7 +5,7 @@ import se.gustavkarlsson.skylight.android.feature.background.persistence.Notific
 
 internal class NotificationEvaluatorImpl(
     private val lastNotificationRepository: LastNotificationRepository,
-    private val outdatedEvaluator: OutdatedEvaluator
+    private val outdatedEvaluator: OutdatedEvaluator,
 ) : NotificationEvaluator {
 
     override fun shouldNotify(notification: Notification): Boolean {

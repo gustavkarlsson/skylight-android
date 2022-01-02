@@ -14,7 +14,7 @@ internal class AboutViewModel(
     private val versionName: String,
     private val gitBranch: String,
     private val gitSha1: String,
-    private val buildTime: Instant?
+    private val buildTime: Instant?,
 ) : ScopedService {
 
     val detailsText: TextRef = createDetailsText()
@@ -32,7 +32,7 @@ internal class AboutViewModel(
             ifDevelop { TextRef.stringRes(R.string.about_version_code, versionCode) },
             ifDevelop { getBuildTime() },
             ifDevelop { TextRef.stringRes(R.string.about_branch, gitBranch) },
-            ifDevelop { TextRef.stringRes(R.string.about_sha1, gitSha1.substring(0, 7)) }
+            ifDevelop { TextRef.stringRes(R.string.about_sha1, gitSha1.substring(0, 7)) },
         )
 
     private fun ifDevelop(text: () -> TextRef): TextRef? = if (showDevelopData) text() else null

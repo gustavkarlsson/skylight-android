@@ -11,10 +11,10 @@ object LibRunVersionModule {
     @Provides
     internal fun runVersionManager(
         context: Context,
-        @Named("versionCode") versionCode: Int
+        @Named("versionCode") versionCode: Int,
     ): RunVersionManager =
         SharedPreferencesRunVersionManager(
             context,
-            versionCode
+            versionCode,
         )
 }

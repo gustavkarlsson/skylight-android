@@ -72,7 +72,7 @@ internal fun TopAppBar(
                     } else {
                         onEvent(Event.SearchChanged(SearchFieldState.Active("")))
                     }
-                }
+                },
             ) {
                 Crossfade(targetState = active) { active ->
                     val imageVector = if (active) {
@@ -99,7 +99,7 @@ internal fun TopAppBar(
             IconButton(onClick = onSettingsClicked) {
                 Icon(Icons.Settings, contentDescription = stringResource(R.string.settings))
             }
-        }
+        },
     )
 }
 
@@ -125,7 +125,7 @@ private fun TopAppBar(
     Surface(
         color = backgroundColor,
         elevation = elevation,
-        modifier = modifier
+        modifier = modifier,
     ) {
         val content: @Composable RowScope.() -> Unit = {
             if (navigationIcon == null) {
@@ -134,7 +134,7 @@ private fun TopAppBar(
                 Row(TitleIconModifier, verticalAlignment = Alignment.CenterVertically) {
                     CompositionLocalProvider(
                         LocalContentAlpha provides ContentAlpha.high,
-                        content = navigationIcon
+                        content = navigationIcon,
                     )
                 }
             }
@@ -143,12 +143,12 @@ private fun TopAppBar(
                 Modifier
                     .fillMaxHeight()
                     .weight(1f),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 ProvideTextStyle(value = MaterialTheme.typography.h6) {
                     CompositionLocalProvider(
                         LocalContentAlpha provides ContentAlpha.high,
-                        content = title
+                        content = title,
                     )
                 }
             }
@@ -158,7 +158,7 @@ private fun TopAppBar(
                     Modifier.fillMaxHeight(),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically,
-                    content = actions
+                    content = actions,
                 )
             }
         }

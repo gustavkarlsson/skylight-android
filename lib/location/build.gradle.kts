@@ -14,7 +14,7 @@ dependencies {
 
     implementation("com.google.android.gms:play-services-location:${Versions.playServicesLocation}")
     implementation(
-        "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.kotlinxCoroutines}"
+        "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.kotlinxCoroutines}",
     )
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")

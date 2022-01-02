@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.os.Build
+import arrow.core.NonEmptyList
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -40,15 +40,20 @@ internal class AppModule(private val application: Application) {
 
     @Provides
     @Reusable
-    fun getLocale(context: Context): () -> Locale =
-        {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                context.resources.configuration.locales[0]
-            } else {
-                @Suppress("DEPRECATION")
-                context.resources.configuration.locale
+    fun getLocale(getLocales: () -> NonEmptyList<Locale>): () -> Locale = { getLocales().head }
+
+    @Provides
+    @Reusable
+    fun getLocales(context: Context): () -> NonEmptyList<Locale> = {
+        val locales = context.resources.configuration.locales
+        require(!locales.isEmpty) { "locales should not be empty" }
+        val list = buildList {
+            for (i in 0 until locales.size()) {
+                add(locales[i])
             }
         }
+        NonEmptyList.fromListUnsafe(list)
+    }
 
     @Provides
     @Reusable

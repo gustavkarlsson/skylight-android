@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.feature.main.view
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
@@ -72,7 +71,7 @@ private fun PreviewSelectedPlace() {
                     valueTextColor = { primary },
                     progress = 0.7,
                     errorText = null,
-                )
+                ),
             ),
             onBookmarkClickedEvent = Event.Noop,
             onNotificationClickedEvent = Event.Noop,
@@ -87,7 +86,7 @@ internal fun SelectedPlace(
     modifier: Modifier,
     state: ContentState.PlaceSelected,
     onBannerActionClicked: (BannerData.Event) -> Unit,
-    onEvent: (Event) -> Unit
+    onEvent: (Event) -> Unit,
 ) {
     ConstraintLayout(modifier = modifier) {
         val (errorBanner, placeButtons, centerText, cards) = createRefs()
@@ -139,7 +138,6 @@ internal fun SelectedPlace(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun ErrorBanner(
     modifier: Modifier,
@@ -150,7 +148,7 @@ private fun ErrorBanner(
         AnimatedVisibility(
             visible = errorBannerData != null,
             enter = slideInVertically(initialOffsetY = { y -> -y }),
-            exit = slideOutVertically(targetOffsetY = { y -> -y })
+            exit = slideOutVertically(targetOffsetY = { y -> -y }),
         ) {
             if (errorBannerData != null) {
                 Banner(
@@ -193,7 +191,6 @@ private fun ErrorBanner(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun PlaceButtons(
     modifier: Modifier,
