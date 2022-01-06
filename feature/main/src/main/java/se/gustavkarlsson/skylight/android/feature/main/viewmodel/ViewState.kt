@@ -23,7 +23,9 @@ internal sealed interface ViewState {
         val content: ContentState,
     ) : ViewState
 
-    object RequiresBackgroundLocationPermission : ViewState
+    data class RequiresBackgroundLocationPermission(
+        val description: TextRef,
+    ) : ViewState
 }
 
 internal sealed interface AppBarState {

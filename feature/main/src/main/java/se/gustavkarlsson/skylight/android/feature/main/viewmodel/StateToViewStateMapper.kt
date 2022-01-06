@@ -40,6 +40,7 @@ internal class StateToViewStateMapper @Inject constructor(
     private val kpIndexFormatter: Formatter<KpIndex>,
     private val weatherChanceEvaluator: ChanceEvaluator<Weather>,
     private val weatherFormatter: Formatter<Weather>,
+    @BackgroundLocationName private val backgroundLocationName: String,
 ) {
 
     fun map(state: State): ViewState = createViewState(state)
@@ -55,7 +56,11 @@ internal class StateToViewStateMapper @Inject constructor(
         val requiresBackgroundLocationPermission = PlaceId.Current in state.settings.placeIdsWithNotification
         val hasBackgroundPermission = state.permissions[Permission.BackgroundLocation] == Access.Granted
         return if (requiresBackgroundLocationPermission && !hasBackgroundPermission) {
-            ViewState.RequiresBackgroundLocationPermission
+            val description = TextRef.stringRes(
+                R.string.background_location_permission_denied_message,
+                backgroundLocationName,
+            )
+            ViewState.RequiresBackgroundLocationPermission(description)
         } else {
             ViewState.Ready(
                 appBar = createToolbarState(state),
@@ -138,7 +143,7 @@ internal class StateToViewStateMapper @Inject constructor(
         return when {
             needsBackgroundLocation && backgroundLocationDeniedSomehow -> {
                 BannerData(
-                    TextRef.stringRes(R.string.background_location_permission_denied_message), // FIXME pass string argument
+                    TextRef.stringRes(R.string.background_location_permission_denied_message, backgroundLocationName),
                     TextRef.stringRes(R.string.open_settings),
                     Icons.Warning,
                     BannerData.Event.OpenAppDetails,

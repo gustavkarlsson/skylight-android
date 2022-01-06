@@ -163,8 +163,9 @@ private fun Content(
                     onClickOpenSettings = onClickOpenSettings,
                 )
             }
-            ViewState.RequiresBackgroundLocationPermission -> {
+            is ViewState.RequiresBackgroundLocationPermission -> {
                 RequiresBackgroundLocationPermission(
+                    description = state.description,
                     onClickOpenSettings = onClickOpenSettings,
                     onClickTurnOffNotifications = onClickTurnOffNotifications,
                 )
