@@ -1,17 +1,20 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ListItem
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,7 +42,7 @@ private fun PreviewSearchResults() {
     SearchResults(
         modifier = Modifier,
         state = ContentState.Searching.Ok(
-            listOf(
+            searchResults = listOf(
                 SearchResult.Known.Current(
                     name = "Umeå",
                     selected = true,
@@ -47,21 +50,9 @@ private fun PreviewSearchResults() {
                 ),
                 SearchResult.Known.Saved(
                     place = Place.Saved(
-                        id = PlaceId.Saved(1),
-                        name = "Bookmarked",
-                        location = Location(1.0, 2.0),
-                        bookmarked = true,
-                        lastChanged = Instant.EPOCH,
-                    ),
-                    selected = false,
-                    notifications = true,
-                ),
-                SearchResult.Known.Saved(
-                    place = Place.Saved(
                         id = PlaceId.Saved(2),
                         name = "Recent",
                         location = Location(3.0, 4.0),
-                        bookmarked = false,
                         lastChanged = Instant.EPOCH,
                     ),
                     selected = false,
@@ -73,6 +64,7 @@ private fun PreviewSearchResults() {
                     location = Location(5.0, 6.0),
                 ),
             ),
+            deletePlaceDialog = null,
         ),
         onEvent = {},
     )
@@ -112,12 +104,36 @@ internal fun SearchResults(
                         ListItem(item = item, onEvent = onEvent)
                     }
                 }
+                state.deletePlaceDialog?.let { dialogData ->
+                    AlertDialog(
+                        onDismissRequest = { onEvent(dialogData.dismissEvent) },
+                        confirmButton = {
+                            val confirmData = dialogData.confirmData
+                            TextButton(
+                                onClick = { onEvent(confirmData.event) },
+                            ) {
+                                Text(text = textRef(confirmData.text))
+                            }
+                        },
+                        dismissButton = {
+                            val cancelData = dialogData.cancelData
+                            TextButton(
+                                onClick = { onEvent(cancelData.event) },
+                            ) {
+                                Text(text = textRef(cancelData.text))
+                            }
+                        },
+                        text = {
+                            Text(text = textRef(dialogData.text))
+                        },
+                    )
+                }
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 private fun ListItem(
     item: SearchResult,
@@ -127,9 +143,10 @@ private fun ListItem(
         Modifier.background(Colors.onSurface.copy(alpha = 0.1f))
     } else Modifier
     ListItem(
-        modifier = itemModifier.clickable {
-            onEvent(item.selectEvent)
-        },
+        modifier = itemModifier.combinedClickable(
+            onLongClick = item.longClickEvent?.let { { onEvent(it) } },
+            onClick = { onEvent(item.clickEvent) },
+        ),
         icon = {
             Icon(
                 imageVector = item.icon,

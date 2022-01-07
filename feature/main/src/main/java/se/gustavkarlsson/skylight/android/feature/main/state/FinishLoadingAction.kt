@@ -32,6 +32,7 @@ private fun State.Loading.updateLoading(): State {
             search = search,
             places = places,
             settings = settings,
+            placeToDelete = null,
         )
     } else this
 }

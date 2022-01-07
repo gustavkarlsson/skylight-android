@@ -14,4 +14,5 @@
     <string name="aurora_chance_medium">Medium chans</string>
     <string name="aurora_chance_high">Hög chans</string>
     <string name="aurora_chance_unknown">Okänd chans</string>
+    <string name="delete">Ta bort</string>
 </resources>

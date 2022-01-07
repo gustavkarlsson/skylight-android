@@ -27,7 +27,6 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherError
-import java.util.Comparator
 import javax.inject.Inject
 
 internal class StateToViewStateMapper @Inject constructor(
@@ -41,6 +40,7 @@ internal class StateToViewStateMapper @Inject constructor(
     private val kpIndexFormatter: Formatter<KpIndex>,
     private val weatherChanceEvaluator: ChanceEvaluator<Weather>,
     private val weatherFormatter: Formatter<Weather>,
+    @BackgroundLocationName private val backgroundLocationName: String,
 ) {
 
     fun map(state: State): ViewState = createViewState(state)
@@ -56,7 +56,11 @@ internal class StateToViewStateMapper @Inject constructor(
         val requiresBackgroundLocationPermission = PlaceId.Current in state.settings.placeIdsWithNotification
         val hasBackgroundPermission = state.permissions[Permission.BackgroundLocation] == Access.Granted
         return if (requiresBackgroundLocationPermission && !hasBackgroundPermission) {
-            ViewState.RequiresBackgroundLocationPermission
+            val description = TextRef.stringRes(
+                R.string.background_location_permission_denied_message,
+                backgroundLocationName,
+            )
+            ViewState.RequiresBackgroundLocationPermission(description)
         } else {
             ViewState.Ready(
                 appBar = createToolbarState(state),
@@ -84,17 +88,25 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createContent(state: State.Ready): ContentState {
+        val deletePlaceDialog = state.placeToDelete?.let(::createDeletePlaceDialog)
         return when (val search = state.search) {
             is Search.Active.Blank -> {
                 val searchResults = createPlacesSearchResults(state, filter = null)
                     .sortedWith(searchResultOrderComparator)
-                ContentState.Searching.Ok(searchResults)
+                ContentState.Searching.Ok(
+                    searchResults = searchResults,
+                    deletePlaceDialog = deletePlaceDialog,
+                )
             }
             is Search.Active.Filled -> {
-                val searchResults = createPlacesSearchResults(state, filter = search.query)
+                val searchResults = createPlacesSearchResults(state, filter = search.query.trim())
                     .plus(createGeocodedSearchResults(search))
+                    .mergeDuplicates()
                     .sortedWith(searchResultOrderComparator)
-                ContentState.Searching.Ok(searchResults)
+                ContentState.Searching.Ok(
+                    searchResults = searchResults,
+                    deletePlaceDialog = deletePlaceDialog,
+                )
             }
             is Search.Active.Error -> ContentState.Searching.Error(search.text)
             Search.Inactive -> {
@@ -111,14 +123,21 @@ internal class StateToViewStateMapper @Inject constructor(
         }
     }
 
+    private fun createDeletePlaceDialog(placeToDelete: Place.Saved): DialogData {
+        return DialogData(
+            text = TextRef.stringRes(R.string.delete_place_question, placeToDelete.name),
+            dismissEvent = Event.CancelPlaceDeletion,
+            confirmData = ButtonData(TextRef.stringRes(R.string.delete), Event.DeletePlace(placeToDelete)),
+            cancelData = ButtonData(TextRef.stringRes(R.string.cancel), Event.CancelPlaceDeletion),
+        )
+    }
+
     private fun createSelectedPlaceContent(state: State.Ready): ContentState.PlaceSelected {
         return ContentState.PlaceSelected(
             chanceLevelText = createChangeLevelText(state),
             errorBannerData = createErrorBannerData(state),
             notificationsButtonState = createNotificationButtonState(state),
-            bookmarkButtonState = createBookmarkButtonState(state),
             factorItems = createFactorItems(state),
-            onBookmarkClickedEvent = createOnBookmarkClickedEvent(state),
             onNotificationClickedEvent = createOnNotificationClickedEvent(state),
         )
     }
@@ -140,7 +159,7 @@ internal class StateToViewStateMapper @Inject constructor(
         return when {
             needsBackgroundLocation && backgroundLocationDeniedSomehow -> {
                 BannerData(
-                    TextRef.stringRes(R.string.background_location_permission_denied_message),
+                    TextRef.stringRes(R.string.background_location_permission_denied_message, backgroundLocationName),
                     TextRef.stringRes(R.string.open_settings),
                     Icons.Warning,
                     BannerData.Event.OpenAppDetails,
@@ -154,13 +173,6 @@ internal class StateToViewStateMapper @Inject constructor(
     private fun createNotificationButtonState(state: State.Ready): ToggleButtonState {
         val notificationChecked = state.selectedPlace.id in state.settings.placeIdsWithNotification
         return ToggleButtonState.Enabled(notificationChecked)
-    }
-
-    private fun createBookmarkButtonState(state: State.Ready): ToggleButtonState {
-        return when (val selectedPlace = state.selectedPlace) {
-            Place.Current -> ToggleButtonState.Gone
-            is Place.Saved -> ToggleButtonState.Enabled(selectedPlace.bookmarked)
-        }
     }
 
     private fun createFactorItems(state: State): List<FactorItem> {
@@ -261,21 +273,10 @@ internal class StateToViewStateMapper @Inject constructor(
             .orNull()
     }
 
-    private fun createOnBookmarkClickedEvent(state: State.Ready): Event {
-        return when (val selectedPlace = state.selectedPlace) {
-            Place.Current -> Event.Noop
-            is Place.Saved -> if (selectedPlace.bookmarked) {
-                Event.RemoveBookmark(selectedPlace)
-            } else Event.AddBookmark(selectedPlace)
-        }
-    }
-
     private fun createOnNotificationClickedEvent(state: State.Ready): Event {
         val selectedPlace = state.selectedPlace
-        val isEnabled = selectedPlace.id in state.settings.placeIdsWithNotification
-        return if (isEnabled) {
-            Event.DisableNotifications(selectedPlace)
-        } else Event.EnableNotifications(selectedPlace)
+        val enabled = selectedPlace.id in state.settings.placeIdsWithNotification
+        return Event.SetNotifications(selectedPlace, !enabled)
     }
 
     // TODO avoid duplication with similar function below
@@ -366,10 +367,8 @@ private val searchResultOrderComparator: Comparator<SearchResult>
 private val SearchResult.typePriority: Int
     get() = when (this) {
         is SearchResult.Known.Current -> 1
-        is SearchResult.Known.Saved -> if (place.bookmarked) {
-            2
-        } else 3
-        is SearchResult.New -> 4
+        is SearchResult.Known.Saved -> 2
+        is SearchResult.New -> 3
     }
 
 private val SearchResult.lastChanged: Instant
@@ -377,6 +376,18 @@ private val SearchResult.lastChanged: Instant
         is SearchResult.Known.Saved -> place.lastChanged
         is SearchResult.Known.Current, is SearchResult.New -> Instant.EPOCH
     }
+
+private fun List<SearchResult>.mergeDuplicates(): List<SearchResult> {
+    return groupBy { result ->
+        when (result) {
+            is SearchResult.Known.Current -> null
+            is SearchResult.Known.Saved -> result.place.location
+            is SearchResult.New -> result.location
+        }
+    }.mapValues { (_, results) ->
+        results.firstOrNull { it is SearchResult.Known } ?: results.first()
+    }.values.toList()
+}
 
 private fun PlaceSuggestion.toDetailsString(): String {
     return fullName

@@ -1,5 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
+import android.content.Context
+import android.os.Build
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -13,6 +15,7 @@ import se.gustavkarlsson.skylight.android.core.AppComponent
 import se.gustavkarlsson.skylight.android.core.ViewModelScope
 import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.utils.millis
+import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.state.ContinuouslySearchAction
 import se.gustavkarlsson.skylight.android.feature.main.state.FinishLoadingAction
 import se.gustavkarlsson.skylight.android.feature.main.state.PermissionsAction
@@ -162,9 +165,23 @@ internal object MainViewModelModule {
     )
 
     @Provides
+    @BackgroundLocationName
+    fun provideBackgroundLocationName(context: Context): String {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            context.packageManager.backgroundPermissionOptionLabel.toString()
+        } else {
+            context.getString(R.string.allow_all_the_time)
+        }
+    }
+
+    @Provides
     @ViewModelScope
     fun store(
         initialState: State,
         startActions: List<@JvmSuppressWildcards Action<State>>,
     ): Store<State> = Store(initialState, startActions)
 }
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class BackgroundLocationName

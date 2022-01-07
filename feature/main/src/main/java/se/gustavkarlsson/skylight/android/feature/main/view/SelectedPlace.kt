@@ -11,7 +11,6 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -24,8 +23,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconToggleButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
-import androidx.compose.material.icons.filled.Bookmark
-import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.runtime.Composable
@@ -62,7 +59,6 @@ private fun PreviewSelectedPlace() {
             chanceLevelText = TextRef.string("What chance?"),
             errorBannerData = null,
             notificationsButtonState = ToggleButtonState.Enabled(checked = false),
-            bookmarkButtonState = ToggleButtonState.Enabled(checked = true),
             factorItems = listOf(
                 FactorItem(
                     title = TextRef.string("Factor 1"),
@@ -73,7 +69,6 @@ private fun PreviewSelectedPlace() {
                     errorText = null,
                 ),
             ),
-            onBookmarkClickedEvent = Event.Noop,
             onNotificationClickedEvent = Event.Noop,
         ),
         onBannerActionClicked = {},
@@ -111,9 +106,7 @@ internal fun SelectedPlace(
                     end.linkTo(parent.end)
                 },
             notificationsButtonState = state.notificationsButtonState,
-            bookmarkButtonState = state.bookmarkButtonState,
             onNotificationsClicked = { onEvent(state.onNotificationClickedEvent) },
-            onBookmarkClicked = { onEvent(state.onBookmarkClickedEvent) },
         )
 
         CenterText(
@@ -195,32 +188,20 @@ private fun ErrorBanner(
 private fun PlaceButtons(
     modifier: Modifier,
     notificationsButtonState: ToggleButtonState,
-    bookmarkButtonState: ToggleButtonState,
     onNotificationsClicked: () -> Unit,
-    onBookmarkClicked: () -> Unit,
 ) {
-    Row(modifier = modifier) {
-        AnimatedVisibility(visible = notificationsButtonState.visible) {
-            IconToggleButton(
-                checked = notificationsButtonState.checked,
-                onCheckedChange = { onNotificationsClicked() },
-            ) {
-                val icon = if (notificationsButtonState.checked) {
-                    Icons.Notifications
-                } else Icons.NotificationsNone
-                Icon(icon, tint = Colors.primary, contentDescription = null)
-            }
-        }
-        AnimatedVisibility(visible = bookmarkButtonState.visible) {
-            IconToggleButton(
-                checked = bookmarkButtonState.checked,
-                onCheckedChange = { onBookmarkClicked() },
-            ) {
-                val icon = if (bookmarkButtonState.checked) {
-                    Icons.Bookmark
-                } else Icons.BookmarkBorder
-                Icon(icon, tint = Colors.primary, contentDescription = null)
-            }
+    AnimatedVisibility(
+        modifier = modifier,
+        visible = notificationsButtonState.visible,
+    ) {
+        IconToggleButton(
+            checked = notificationsButtonState.checked,
+            onCheckedChange = { onNotificationsClicked() },
+        ) {
+            val icon = if (notificationsButtonState.checked) {
+                Icons.Notifications
+            } else Icons.NotificationsNone
+            Icon(icon, tint = Colors.primary, contentDescription = null)
         }
     }
 }
