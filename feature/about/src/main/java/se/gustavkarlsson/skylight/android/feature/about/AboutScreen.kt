@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -93,8 +94,9 @@ private fun Content(
             ) {
                 Spacer(modifier = Modifier.height(64.dp))
                 Image(
-                    modifier = Modifier.fillMaxWidth(0.75f),
+                    modifier = Modifier.fillMaxWidth(0.6f),
                     painter = painterResource(R.drawable.app_logo),
+                    contentScale = ContentScale.FillWidth,
                     contentDescription = null,
                 )
                 Spacer(modifier = Modifier.height(32.dp))
