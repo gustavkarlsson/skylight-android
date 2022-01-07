@@ -1,10 +1,9 @@
 package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
-import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Map
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.ioki.textref.TextRef
@@ -24,7 +23,9 @@ internal sealed interface ViewState {
         val content: ContentState,
     ) : ViewState
 
-    object RequiresBackgroundLocationPermission : ViewState
+    data class RequiresBackgroundLocationPermission(
+        val description: TextRef,
+    ) : ViewState
 }
 
 internal sealed interface AppBarState {
@@ -37,14 +38,16 @@ internal sealed interface ContentState {
         val chanceLevelText: TextRef,
         val errorBannerData: BannerData?,
         val notificationsButtonState: ToggleButtonState,
-        val bookmarkButtonState: ToggleButtonState,
         val factorItems: List<FactorItem>,
-        val onBookmarkClickedEvent: Event,
         val onNotificationClickedEvent: Event,
     ) : ContentState
 
     sealed interface Searching : ContentState {
-        data class Ok(val searchResults: List<SearchResult>) : Searching
+        data class Ok(
+            val searchResults: List<SearchResult>,
+            val deletePlaceDialog: DialogData?,
+        ) : Searching
+
         data class Error(val text: TextRef) : Searching
     }
 
@@ -65,6 +68,18 @@ internal data class BannerData(
     }
 }
 
+internal data class DialogData(
+    val text: TextRef,
+    val dismissEvent: Event,
+    val confirmData: ButtonData,
+    val cancelData: ButtonData,
+)
+
+internal data class ButtonData(
+    val text: TextRef,
+    val event: Event,
+)
+
 internal data class FactorItem(
     val title: TextRef,
     val valueText: TextRef,
@@ -80,7 +95,8 @@ internal sealed interface SearchResult {
     val icon: ImageVector
     val trailingIcon: ImageVector?
     val selected: Boolean
-    val selectEvent: Event
+    val clickEvent: Event
+    val longClickEvent: Event?
 
     sealed interface Known : SearchResult {
         data class Current(
@@ -105,7 +121,8 @@ internal sealed interface SearchResult {
                 get() = if (notifications) {
                     Icons.Notifications
                 } else null
-            override val selectEvent: Event get() = Event.SelectSearchResult(this)
+            override val clickEvent: Event get() = Event.ClickSearchResult(this)
+            override val longClickEvent: Nothing? = null
         }
 
         data class Saved(
@@ -115,15 +132,13 @@ internal sealed interface SearchResult {
         ) : Known {
             override val title: TextRef get() = TextRef.string(place.name)
             override val subtitle: Nothing? = null
-            override val icon: ImageVector
-                get() = if (place.bookmarked) {
-                    Icons.Bookmark
-                } else Icons.History
+            override val icon: ImageVector = Icons.History
             override val trailingIcon: ImageVector?
                 get() = if (notifications) {
                     Icons.Notifications
                 } else null
-            override val selectEvent: Event get() = Event.SelectSearchResult(this)
+            override val clickEvent: Event get() = Event.ClickSearchResult(this)
+            override val longClickEvent: Event get() = Event.LongClickSearchResult(this)
         }
     }
 
@@ -134,20 +149,21 @@ internal sealed interface SearchResult {
     ) : SearchResult {
         override val title: TextRef get() = TextRef.string(name)
         override val subtitle: TextRef get() = TextRef.string(details)
-        override val icon: ImageVector = Icons.Map
+        override val icon: ImageVector = Icons.Search
         override val trailingIcon: Nothing? = null
         override val selected: Boolean = false
-        override val selectEvent: Event get() = Event.SelectSearchResult(this)
+        override val clickEvent: Event get() = Event.ClickSearchResult(this)
+        override val longClickEvent: Nothing? = null
     }
 }
 
 internal sealed interface Event {
-    data class AddBookmark(val place: Place.Saved) : Event
-    data class RemoveBookmark(val place: Place.Saved) : Event
-    data class EnableNotifications(val place: Place) : Event
-    data class DisableNotifications(val place: Place) : Event
+    data class SetNotifications(val place: Place, val enabled: Boolean) : Event
     data class SearchChanged(val state: SearchFieldState) : Event
-    data class SelectSearchResult(val result: SearchResult) : Event
+    data class ClickSearchResult(val result: SearchResult) : Event
+    data class LongClickSearchResult(val result: SearchResult) : Event
+    data class DeletePlace(val place: Place.Saved) : Event
+    object CancelPlaceDeletion : Event
     object RefreshLocationPermission : Event
     object TurnOffCurrentLocationNotifications : Event
     object Noop : Event

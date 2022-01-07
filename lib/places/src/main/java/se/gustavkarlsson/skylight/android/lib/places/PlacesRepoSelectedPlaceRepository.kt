@@ -74,9 +74,9 @@ private fun selectBestId(
         },
         initialSelectedId,
     )
-    return selectedIdCandidates.first { placeId ->
+    return selectedIdCandidates.firstOrNull { placeId ->
         placeId in newPlaces.ids()
-    }
+    } ?: newPlaces.ids().first()
 }
 
 private class SelectionChangedAction(

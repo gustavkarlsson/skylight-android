@@ -14,7 +14,6 @@ sealed interface Place {
         override val id: PlaceId.Saved,
         val name: String,
         val location: Location,
-        val bookmarked: Boolean,
         val lastChanged: Instant,
     ) : Place
 }

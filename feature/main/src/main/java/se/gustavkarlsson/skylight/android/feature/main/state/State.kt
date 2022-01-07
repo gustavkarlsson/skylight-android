@@ -18,6 +18,8 @@ internal sealed interface State {
     val selectedAuroraReport: LoadableAuroraReport
     val search: Search
     val selectedPlace: Place?
+    val places: NonEmptyList<Place>?
+    val settings: Settings?
 
     data class Loading(
         override val permissions: Permissions,
@@ -26,8 +28,8 @@ internal sealed interface State {
         override val selectedPlace: Place?,
         override val selectedAuroraReport: LoadableAuroraReport,
         override val search: Search,
-        val places: NonEmptyList<Place>?,
-        val settings: Settings?,
+        override val places: NonEmptyList<Place>?,
+        override val settings: Settings?,
     ) : State
 
     data class Ready(
@@ -37,8 +39,9 @@ internal sealed interface State {
         override val selectedPlace: Place,
         override val selectedAuroraReport: LoadableAuroraReport,
         override val search: Search,
-        val places: NonEmptyList<Place>,
-        val settings: Settings,
+        override val places: NonEmptyList<Place>,
+        override val settings: Settings,
+        val placeToDelete: Place.Saved?,
     ) : State
 }
 

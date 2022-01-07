@@ -25,27 +25,47 @@ internal class EventHandler @Inject constructor(
 
     suspend fun onEvent(event: Event) {
         when (event) {
-            is Event.AddBookmark -> placesRepository.setBookmarked(event.place.id, true)
-            is Event.RemoveBookmark -> {
-                settingsRepository.setPlaceNotification(event.place.id, false)
-                placesRepository.setBookmarked(event.place.id, false)
+            is Event.SetNotifications -> {
+                settingsRepository.setPlaceNotification(event.place.id, event.enabled)
             }
-            is Event.EnableNotifications -> {
-                if (event.place is Place.Saved && !event.place.bookmarked) {
-                    placesRepository.setBookmarked(event.place.id, true)
-                }
-                settingsRepository.setPlaceNotification(event.place.id, true)
+            is Event.SearchChanged -> {
+                searchChannel.send(event.state)
             }
-            is Event.DisableNotifications -> {
-                settingsRepository.setPlaceNotification(event.place.id, false)
+            is Event.ClickSearchResult -> {
+                onSearchResultClicked(event.result)
             }
-            is Event.SearchChanged -> searchChannel.send(event.state)
-            is Event.SelectSearchResult -> onSearchResultClicked(event.result)
-            Event.RefreshLocationPermission -> permissionChecker.refresh()
+            is Event.LongClickSearchResult -> {
+                onSearchResultLongClicked(event.result)
+            }
+            is Event.DeletePlace -> {
+                onDeletePlace(event.place)
+            }
+            Event.RefreshLocationPermission -> {
+                permissionChecker.refresh()
+            }
             Event.TurnOffCurrentLocationNotifications -> {
                 settingsRepository.setPlaceNotification(PlaceId.Current, false)
             }
+            Event.CancelPlaceDeletion -> {
+                onCancelPlaceDeletion()
+            }
             Event.Noop -> Unit
+        }
+    }
+
+    private suspend fun onDeletePlace(place: Place.Saved) {
+        placesRepository.delete(place.id)
+        onCancelPlaceDeletion()
+    }
+
+    private suspend fun onCancelPlaceDeletion() {
+        store.issue { stateFlow ->
+            stateFlow.update {
+                when (this) {
+                    is State.Loading -> this
+                    is State.Ready -> copy(placeToDelete = null)
+                }
+            }
         }
     }
 
@@ -67,6 +87,22 @@ internal class EventHandler @Inject constructor(
                 when (this) {
                     is State.Loading -> copy(search = Search.Inactive)
                     is State.Ready -> copy(search = Search.Inactive)
+                }
+            }
+        }
+    }
+
+    private suspend fun onSearchResultLongClicked(result: SearchResult) {
+        when (result) {
+            is SearchResult.Known.Current, is SearchResult.New -> return
+            is SearchResult.Known.Saved -> {
+                store.issue { stateFlow ->
+                    stateFlow.update {
+                        when (this) {
+                            is State.Loading -> this
+                            is State.Ready -> copy(placeToDelete = result.place)
+                        }
+                    }
                 }
             }
         }

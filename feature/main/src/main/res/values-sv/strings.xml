@@ -3,6 +3,7 @@
     <string name="right_now">Just nu</string>
     <string name="open_settings">Öppna Appinformation</string>
     <string name="location_permission">Platsbehörighet</string>
+    <string name="delete_place_question">Ta bort %s?</string>
 
     <string name="factor_geomag_location_title_full">Geomagnetisk plats</string>
     <string name="factor_geomag_location_title_compact">Plats</string>
