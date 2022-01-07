@@ -37,13 +37,35 @@ internal class EventHandler @Inject constructor(
             is Event.LongClickSearchResult -> {
                 onSearchResultLongClicked(event.result)
             }
+            is Event.DeletePlace -> {
+                onDeletePlace(event.place)
+            }
             Event.RefreshLocationPermission -> {
                 permissionChecker.refresh()
             }
             Event.TurnOffCurrentLocationNotifications -> {
                 settingsRepository.setPlaceNotification(PlaceId.Current, false)
             }
+            Event.CancelPlaceDeletion -> {
+                onCancelPlaceDeletion()
+            }
             Event.Noop -> Unit
+        }
+    }
+
+    private suspend fun onDeletePlace(place: Place.Saved) {
+        placesRepository.delete(place.id)
+        onCancelPlaceDeletion()
+    }
+
+    private suspend fun onCancelPlaceDeletion() {
+        store.issue { stateFlow ->
+            stateFlow.update {
+                when (this) {
+                    is State.Loading -> this
+                    is State.Ready -> copy(placeToDelete = null)
+                }
+            }
         }
     }
 
@@ -71,9 +93,18 @@ internal class EventHandler @Inject constructor(
     }
 
     private suspend fun onSearchResultLongClicked(result: SearchResult) {
-        // FIXME show confirm dialog
-        if (result is SearchResult.Known.Saved) {
-            placesRepository.delete(result.place.id)
+        when (result) {
+            is SearchResult.Known.Current, is SearchResult.New -> return
+            is SearchResult.Known.Saved -> {
+                store.issue { stateFlow ->
+                    stateFlow.update {
+                        when (this) {
+                            is State.Loading -> this
+                            is State.Ready -> copy(placeToDelete = result.place)
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -43,7 +43,11 @@ internal sealed interface ContentState {
     ) : ContentState
 
     sealed interface Searching : ContentState {
-        data class Ok(val searchResults: List<SearchResult>) : Searching
+        data class Ok(
+            val searchResults: List<SearchResult>,
+            val deletePlaceDialog: DialogData?,
+        ) : Searching
+
         data class Error(val text: TextRef) : Searching
     }
 
@@ -63,6 +67,18 @@ internal data class BannerData(
         RequestBackgroundLocationPermission, OpenAppDetails
     }
 }
+
+internal data class DialogData(
+    val text: TextRef,
+    val dismissEvent: Event,
+    val confirmData: ButtonData,
+    val cancelData: ButtonData,
+)
+
+internal data class ButtonData(
+    val text: TextRef,
+    val event: Event,
+)
 
 internal data class FactorItem(
     val title: TextRef,
@@ -146,6 +162,8 @@ internal sealed interface Event {
     data class SearchChanged(val state: SearchFieldState) : Event
     data class ClickSearchResult(val result: SearchResult) : Event
     data class LongClickSearchResult(val result: SearchResult) : Event
+    data class DeletePlace(val place: Place.Saved) : Event
+    object CancelPlaceDeletion : Event
     object RefreshLocationPermission : Event
     object TurnOffCurrentLocationNotifications : Event
     object Noop : Event

@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.ListItem
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +42,7 @@ private fun PreviewSearchResults() {
     SearchResults(
         modifier = Modifier,
         state = ContentState.Searching.Ok(
-            listOf(
+            searchResults = listOf(
                 SearchResult.Known.Current(
                     name = "Umeå",
                     selected = true,
@@ -62,6 +64,7 @@ private fun PreviewSearchResults() {
                     location = Location(5.0, 6.0),
                 ),
             ),
+            deletePlaceDialog = null,
         ),
         onEvent = {},
     )
@@ -100,6 +103,30 @@ internal fun SearchResults(
                     items(state.searchResults) { item ->
                         ListItem(item = item, onEvent = onEvent)
                     }
+                }
+                state.deletePlaceDialog?.let { dialogData ->
+                    AlertDialog(
+                        onDismissRequest = { onEvent(dialogData.dismissEvent) },
+                        confirmButton = {
+                            val confirmData = dialogData.confirmData
+                            TextButton(
+                                onClick = { onEvent(confirmData.event) },
+                            ) {
+                                Text(text = textRef(confirmData.text))
+                            }
+                        },
+                        dismissButton = {
+                            val cancelData = dialogData.cancelData
+                            TextButton(
+                                onClick = { onEvent(cancelData.event) },
+                            ) {
+                                Text(text = textRef(cancelData.text))
+                            }
+                        },
+                        text = {
+                            Text(text = textRef(dialogData.text))
+                        },
+                    )
                 }
             }
         }

@@ -3,6 +3,7 @@
     <string name="right_now">Right now</string>
     <string name="open_settings">Open App info</string>
     <string name="location_permission">Location permission</string>
+    <string name="delete_place_question">Delete %s?</string>
 
     <string name="factor_geomag_location_title_full">Geomagnetic location</string>
     <string name="factor_geomag_location_title_compact">Location</string>

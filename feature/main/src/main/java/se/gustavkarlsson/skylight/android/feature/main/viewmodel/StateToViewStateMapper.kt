@@ -88,18 +88,25 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createContent(state: State.Ready): ContentState {
+        val deletePlaceDialog = state.placeToDelete?.let(::createDeletePlaceDialog)
         return when (val search = state.search) {
             is Search.Active.Blank -> {
                 val searchResults = createPlacesSearchResults(state, filter = null)
                     .sortedWith(searchResultOrderComparator)
-                ContentState.Searching.Ok(searchResults)
+                ContentState.Searching.Ok(
+                    searchResults = searchResults,
+                    deletePlaceDialog = deletePlaceDialog,
+                )
             }
             is Search.Active.Filled -> {
                 val searchResults = createPlacesSearchResults(state, filter = search.query.trim())
                     .plus(createGeocodedSearchResults(search))
                     .mergeDuplicates()
                     .sortedWith(searchResultOrderComparator)
-                ContentState.Searching.Ok(searchResults)
+                ContentState.Searching.Ok(
+                    searchResults = searchResults,
+                    deletePlaceDialog = deletePlaceDialog,
+                )
             }
             is Search.Active.Error -> ContentState.Searching.Error(search.text)
             Search.Inactive -> {
@@ -114,6 +121,15 @@ internal class StateToViewStateMapper @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun createDeletePlaceDialog(placeToDelete: Place.Saved): DialogData {
+        return DialogData(
+            text = TextRef.stringRes(R.string.delete_place_question, placeToDelete.name),
+            dismissEvent = Event.CancelPlaceDeletion,
+            confirmData = ButtonData(TextRef.stringRes(R.string.delete), Event.DeletePlace(placeToDelete)),
+            cancelData = ButtonData(TextRef.stringRes(R.string.cancel), Event.CancelPlaceDeletion),
+        )
     }
 
     private fun createSelectedPlaceContent(state: State.Ready): ContentState.PlaceSelected {
