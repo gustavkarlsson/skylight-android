@@ -1,5 +1,4 @@
 ## ASAP
-* Test permissions
 * Better colors
 
 ## Soon

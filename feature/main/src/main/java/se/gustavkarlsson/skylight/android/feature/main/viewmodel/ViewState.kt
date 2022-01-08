@@ -34,24 +34,32 @@ internal sealed interface AppBarState {
 }
 
 internal sealed interface ContentState {
+    val dialog: DialogData?
+
     data class PlaceSelected(
         val chanceLevelText: TextRef,
         val errorBannerData: BannerData?,
         val notificationsButtonState: ToggleButtonState,
         val factorItems: List<FactorItem>,
         val onNotificationClickedEvent: Event,
-    ) : ContentState
+    ) : ContentState {
+        override val dialog: Nothing? = null
+    }
 
     sealed interface Searching : ContentState {
         data class Ok(
             val searchResults: List<SearchResult>,
-            val deletePlaceDialog: DialogData?,
+            override val dialog: DialogData?,
         ) : Searching
 
-        data class Error(val text: TextRef) : Searching
+        data class Error(val text: TextRef) : Searching {
+            override val dialog: Nothing? = null
+        }
     }
 
     sealed interface RequiresLocationPermission : ContentState {
+        override val dialog: Nothing? get() = null
+
         object UseDialog : RequiresLocationPermission
         object UseAppSettings : RequiresLocationPermission
     }

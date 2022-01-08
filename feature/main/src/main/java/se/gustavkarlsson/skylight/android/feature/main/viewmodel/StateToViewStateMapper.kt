@@ -95,7 +95,7 @@ internal class StateToViewStateMapper @Inject constructor(
                     .sortedWith(searchResultOrderComparator)
                 ContentState.Searching.Ok(
                     searchResults = searchResults,
-                    deletePlaceDialog = deletePlaceDialog,
+                    dialog = deletePlaceDialog,
                 )
             }
             is Search.Active.Filled -> {
@@ -105,7 +105,7 @@ internal class StateToViewStateMapper @Inject constructor(
                     .sortedWith(searchResultOrderComparator)
                 ContentState.Searching.Ok(
                     searchResults = searchResults,
-                    deletePlaceDialog = deletePlaceDialog,
+                    dialog = deletePlaceDialog,
                 )
             }
             is Search.Active.Error -> ContentState.Searching.Error(search.text)
