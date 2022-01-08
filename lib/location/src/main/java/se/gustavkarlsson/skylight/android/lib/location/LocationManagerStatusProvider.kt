@@ -28,6 +28,11 @@ internal class LocationManagerStatusProvider @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     @SuppressLint("MissingPermission")
     override val locationServicesStatus: Flow<Boolean> = callbackFlow {
+        val initiallyEnabled = LocationManagerCompat.isLocationEnabled(locationManager)
+        logInfo { "Location status is initially $initiallyEnabled" }
+        trySend(initiallyEnabled).onFailure {
+            logError { "Sending blocking should never fail when conflated channel" }
+        }
         val callback = LocationServiceStatusListener(locationManager) { enabled ->
             logInfo { "Location status is now $enabled" }
             trySend(enabled).onFailure {

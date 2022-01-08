@@ -24,6 +24,7 @@ object LibLocationModule {
     internal fun locationProvider(
         context: Context,
         permissionChecker: PermissionChecker,
+        locationServiceStatusProvider: LocationServiceStatusProvider,
         @Global globalScope: CoroutineScope,
         @Io dispatcher: CoroutineDispatcher,
     ): LocationProvider {
@@ -39,6 +40,7 @@ object LibLocationModule {
         return GmsLocationProvider(
             client = client,
             locationRequest = locationRequest,
+            locationServiceStatusProvider = locationServiceStatusProvider,
             freshLocationRequestPriority = requestPriority,
             permissionChecker = permissionChecker,
             streamRetryDuration = 15.seconds,
