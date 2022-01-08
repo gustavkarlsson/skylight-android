@@ -22,17 +22,17 @@ internal class LocationManagerStatusProvider @Inject constructor(
     private val permissionChecker: PermissionChecker,
 ) : LocationServiceStatusProvider {
 
-    private val _locationServicesStatus = MutableStateFlow(getStatus()).apply {
+    private val _locationServiceStatus = MutableStateFlow(getStatus()).apply {
         logInfo { "Location service is initially $value" }
     }
-    override val locationServicesStatus: StateFlow<LocationServiceStatus> = _locationServicesStatus
+    override val locationServiceStatus: StateFlow<LocationServiceStatus> = _locationServiceStatus
 
     @SuppressLint("MissingPermission")
     suspend fun run() {
         val callback = LocationServiceStatusListener {
             val status = getStatus()
             logInfo { "Location service is now $status" }
-            _locationServicesStatus.value = status
+            _locationServiceStatus.value = status
         }
         permissionChecker.permissions.collectLatest { granted ->
             if (granted[Permission.Location] == Access.Granted) {

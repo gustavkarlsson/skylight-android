@@ -25,6 +25,7 @@ private fun State.Loading.updateLoading(): State {
     return if (selectedPlace != null && places != null && settings != null) {
         State.Ready(
             permissions = permissions,
+            locationServiceStatus = locationServiceStatus,
             currentLocation = currentLocation,
             currentLocationName = currentLocationName,
             selectedPlace = selectedPlace,

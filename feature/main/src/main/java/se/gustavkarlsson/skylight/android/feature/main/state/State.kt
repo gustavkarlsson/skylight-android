@@ -6,6 +6,7 @@ import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
+import se.gustavkarlsson.skylight.android.lib.location.LocationServiceStatus
 import se.gustavkarlsson.skylight.android.lib.permissions.Permissions
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocodingResult
@@ -13,6 +14,7 @@ import se.gustavkarlsson.skylight.android.lib.settings.Settings
 
 internal sealed interface State {
     val permissions: Permissions
+    val locationServiceStatus: LocationServiceStatus // FIXME use this in error banner
     val currentLocation: Loadable<LocationResult>
     val currentLocationName: Loadable<ReverseGeocodingResult>
     val selectedAuroraReport: LoadableAuroraReport
@@ -23,6 +25,7 @@ internal sealed interface State {
 
     data class Loading(
         override val permissions: Permissions,
+        override val locationServiceStatus: LocationServiceStatus,
         override val currentLocation: Loadable<LocationResult>,
         override val currentLocationName: Loadable<ReverseGeocodingResult>,
         override val selectedPlace: Place?,
@@ -34,6 +37,7 @@ internal sealed interface State {
 
     data class Ready(
         override val permissions: Permissions,
+        override val locationServiceStatus: LocationServiceStatus,
         override val currentLocation: Loadable<LocationResult>,
         override val currentLocationName: Loadable<ReverseGeocodingResult>,
         override val selectedPlace: Place,

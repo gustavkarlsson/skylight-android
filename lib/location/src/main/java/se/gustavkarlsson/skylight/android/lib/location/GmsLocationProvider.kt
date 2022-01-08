@@ -130,7 +130,7 @@ internal class GmsLocationProvider(
     }
 
     private fun isLocationServiceEnabled(): Boolean {
-        val status = locationServiceStatusProvider.locationServicesStatus.value
+        val status = locationServiceStatusProvider.locationServiceStatus.value
         logDebug { "Location service is $status" }
         return when (status) {
             LocationServiceStatus.Enabled -> true
@@ -150,7 +150,7 @@ internal class GmsLocationProvider(
     private fun FusedLocationProviderClient.stream(): Flow<Loadable<LocationResult>> =
         combine(
             streamLocationPermission(),
-            locationServiceStatusProvider.locationServicesStatus,
+            locationServiceStatusProvider.locationServiceStatus,
         ) { permissionGranted, locationServiceStatus ->
             permissionGranted to locationServiceStatus
         }.flatMapLatest { (permissionGranted, locationServiceStatus) ->
