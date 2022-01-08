@@ -5,11 +5,17 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
+import dagger.multibindings.IntoSet
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.Global
 import se.gustavkarlsson.skylight.android.core.Io
+import se.gustavkarlsson.skylight.android.core.ModuleStarter
+import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.core.utils.seconds
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
@@ -43,4 +49,25 @@ object LibLocationModule {
             dispatcher = dispatcher,
         )
     }
+
+    @Provides
+    @AppScope
+    @LocationServiceStatus
+    fun locationServiceStatusMutableStateFlow(context: Context): MutableStateFlow<Boolean> {
+        val initialValue = isLocationEnabled(context)
+        logInfo { "Location status is initially $initialValue" }
+        return MutableStateFlow(initialValue)
+    }
+
+    @Provides
+    @AppScope
+    @LocationServiceStatus
+    fun locationServiceStatusStateFlow(@LocationServiceStatus flow: MutableStateFlow<Boolean>): StateFlow<Boolean> = flow
+
+    @Provides
+    @Reusable
+    @IntoSet
+    fun moduleStarter(
+        context: Context,
+    ): ModuleStarter = LocationModuleStarter(context, LocationServiceStatusProvider())
 }

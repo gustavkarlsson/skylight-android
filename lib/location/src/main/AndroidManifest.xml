@@ -5,5 +5,19 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
     <uses-feature android:name="android.hardware.location.gps" />
+
+    <!-- FIXME test this on API24 -->
+    <!-- FIXME: Can we remove application:name ? -->
+    <!-- FIXME exported? -->
+    <application android:name="se.gustavkarlsson.skylight.android.Skylight">
+        <receiver
+            android:name=".LocationServiceStatusProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.location.PROVIDERS_CHANGED" />
+            </intent-filter>
+        </receiver>
+    </application>
 </manifest>
