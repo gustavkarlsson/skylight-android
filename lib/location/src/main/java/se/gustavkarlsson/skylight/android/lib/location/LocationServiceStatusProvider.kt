@@ -1,9 +1,9 @@
 package se.gustavkarlsson.skylight.android.lib.location
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 interface LocationServiceStatusProvider {
-    val locationServicesStatus: Flow<LocationServiceStatus>
+    val locationServicesStatus: StateFlow<LocationServiceStatus>
 }
 
 enum class LocationServiceStatus {

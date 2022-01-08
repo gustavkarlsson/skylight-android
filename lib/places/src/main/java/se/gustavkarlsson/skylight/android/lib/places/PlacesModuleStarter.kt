@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.places
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -11,10 +10,10 @@ import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 internal class PlacesModuleStarter(
     private val placesRepository: PlacesRepository,
     private val analytics: Analytics,
-    private val globalScope: CoroutineScope,
+    private val scope: CoroutineScope,
 ) : ModuleStarter {
     override suspend fun start() {
-        globalScope.launch {
+        scope.launch {
             updateAnalyticsPlacesCount()
         }
     }

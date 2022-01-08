@@ -130,9 +130,8 @@ internal class GmsLocationProvider(
         return locationPermission == Access.Granted
     }
 
-    private suspend fun isLocationServiceEnabled(): Boolean {
-        // FIXME change to stateflow so we don't need to suspend
-        val status = locationServiceStatusProvider.locationServicesStatus.first()
+    private fun isLocationServiceEnabled(): Boolean {
+        val status = locationServiceStatusProvider.locationServicesStatus.value
         logDebug { "Location service is $status" }
         return when (status) {
             LocationServiceStatus.Enabled -> true
