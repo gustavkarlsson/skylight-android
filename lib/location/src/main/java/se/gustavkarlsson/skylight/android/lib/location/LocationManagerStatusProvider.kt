@@ -27,15 +27,16 @@ internal class LocationManagerStatusProvider @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @SuppressLint("MissingPermission")
-    override val locationServicesStatus: Flow<Boolean> = callbackFlow {
-        val initiallyEnabled = LocationManagerCompat.isLocationEnabled(locationManager)
-        logInfo { "Location status is initially $initiallyEnabled" }
-        trySend(initiallyEnabled).onFailure {
+    override val locationServicesStatus: Flow<LocationServiceStatus> = callbackFlow {
+        val initialStatus = getStatus()
+        logInfo { "Location service is initially $initialStatus" }
+        trySend(initialStatus).onFailure {
             logError { "Sending blocking should never fail when conflated channel" }
         }
-        val callback = LocationServiceStatusListener(locationManager) { enabled ->
-            logInfo { "Location status is now $enabled" }
-            trySend(enabled).onFailure {
+        val callback = LocationServiceStatusListener {
+            val status = getStatus()
+            logInfo { "Location service is now $status" }
+            trySend(status).onFailure {
                 logError { "Sending blocking should never fail when conflated channel" }
             }
         }
@@ -56,25 +57,20 @@ internal class LocationManagerStatusProvider @Inject constructor(
             }
         }
     }.distinctUntilChanged().conflate()
+
+    private fun getStatus(): LocationServiceStatus {
+        return if (LocationManagerCompat.isLocationEnabled(locationManager)) {
+            LocationServiceStatus.Enabled
+        } else {
+            LocationServiceStatus.Disabled
+        }
+    }
 }
 
 private class LocationServiceStatusListener(
-    private val locationManager: LocationManager,
-    private val onChange: (Boolean) -> Unit,
+    private val onChange: () -> Unit,
 ) : LocationListener {
-
     override fun onLocationChanged(location: Location) = Unit
-
-    override fun onProviderEnabled(provider: String) {
-        onChange()
-    }
-
-    override fun onProviderDisabled(provider: String) {
-        onChange()
-    }
-
-    private fun onChange() {
-        val enabled = LocationManagerCompat.isLocationEnabled(locationManager)
-        onChange(enabled)
-    }
+    override fun onProviderEnabled(provider: String) = onChange()
+    override fun onProviderDisabled(provider: String) = onChange()
 }

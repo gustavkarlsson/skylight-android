@@ -132,9 +132,12 @@ internal class GmsLocationProvider(
 
     private suspend fun isLocationServiceEnabled(): Boolean {
         // FIXME change to stateflow so we don't need to suspend
-        val enabled = locationServiceStatusProvider.locationServicesStatus.first()
-        logDebug { "Location service availability is $enabled" }
-        return enabled
+        val status = locationServiceStatusProvider.locationServicesStatus.first()
+        logDebug { "Location service is $status" }
+        return when (status) {
+            LocationServiceStatus.Enabled -> true
+            LocationServiceStatus.Disabled -> false
+        }
     }
 
     override fun stream(): Flow<Loadable<LocationResult>> = sharedStream
@@ -150,21 +153,22 @@ internal class GmsLocationProvider(
         combine(
             streamLocationPermission(),
             locationServiceStatusProvider.locationServicesStatus,
-        ) { permissionGranted, serviceEnabled ->
-            permissionGranted to serviceEnabled
-        }.flatMapLatest { (permissionGranted, serviceEnabled) ->
-            when {
-                !serviceEnabled -> {
+        ) { permissionGranted, locationServiceStatus ->
+            permissionGranted to locationServiceStatus
+        }.flatMapLatest { (permissionGranted, locationServiceStatus) ->
+            when (locationServiceStatus) {
+                LocationServiceStatus.Enabled -> {
+                    if (permissionGranted) {
+                        logInfo { "Permission granted and service enabled. Starting stream" }
+                        streamWithPermission()
+                    } else {
+                        logInfo { "Permission denied" }
+                        flowOf(Loaded(LocationError.NoPermission.left()))
+                    }
+                }
+                LocationServiceStatus.Disabled -> {
                     logInfo { "Location service disabled" }
                     flowOf(Loaded(LocationError.LocationDisabled.left()))
-                }
-                !permissionGranted -> {
-                    logInfo { "Permission denied" }
-                    flowOf(Loaded(LocationError.NoPermission.left()))
-                }
-                else -> {
-                    logInfo { "Permission granted and service enabled. Starting stream" }
-                    streamWithPermission()
                 }
             }
         }
