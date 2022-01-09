@@ -158,7 +158,7 @@ internal class GmsLocationProvider(
                 LocationServiceStatus.Enabled -> {
                     if (permissionGranted) {
                         logInfo { "Permission granted and service enabled. Starting stream" }
-                        streamWithPermission()
+                        streamWhenReady()
                     } else {
                         logInfo { "Permission denied" }
                         flowOf(Loaded(LocationError.NoPermission.left()))
@@ -177,7 +177,7 @@ internal class GmsLocationProvider(
         }
         .distinctUntilChanged()
 
-    private fun FusedLocationProviderClient.streamWithPermission(): Flow<Loadable<LocationResult>> = flow {
+    private fun FusedLocationProviderClient.streamWhenReady(): Flow<Loadable<LocationResult>> = flow {
         emit(Loading)
         emit(Loaded(getCachedLocation()))
         emitAll(streamWithRetry(locationRequest, streamRetryDuration).map { Loaded(it) })
