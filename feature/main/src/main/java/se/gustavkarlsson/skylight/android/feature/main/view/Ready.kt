@@ -1,11 +1,13 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
+import android.app.Activity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.navigationBarsPadding
@@ -88,6 +90,7 @@ internal fun Ready(
                 )
             }
             is ContentState.RequiresLocationService -> {
+                val activity = LocalContext.current as Activity
                 LargeDialog(
                     modifier = Modifier
                         .dialogModifiers()
@@ -95,8 +98,8 @@ internal fun Ready(
                     image = { LocationIcon() },
                     title = stringResource(R.string.location_service_disabled_title),
                     description = stringResource(R.string.location_service_disabled_message),
-                    primaryActionText = "Enable it!", // FIXME string res
-                    onClickPrimaryAction = {}, // FIXME string res
+                    primaryActionText = stringResource(R.string.enable),
+                    onClickPrimaryAction = { onEvent(Event.ResolveLocationSettings(activity)) },
                     secondaryActionText = stringResource(R.string.location_permission_select_other),
                     onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
                 )

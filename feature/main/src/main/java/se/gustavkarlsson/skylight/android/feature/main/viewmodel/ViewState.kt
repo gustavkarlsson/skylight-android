@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
+import android.app.Activity
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material.icons.filled.Notifications
@@ -175,6 +176,7 @@ internal sealed interface Event {
     data class ClickSearchResult(val result: SearchResult) : Event
     data class LongClickSearchResult(val result: SearchResult) : Event
     data class DeletePlace(val place: Place.Saved) : Event
+    data class ResolveLocationSettings(val activity: Activity) : Event
     object CancelPlaceDeletion : Event
     object RefreshLocationPermission : Event
     object TurnOffCurrentLocationNotifications : Event

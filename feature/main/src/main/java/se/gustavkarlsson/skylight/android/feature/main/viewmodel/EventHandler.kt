@@ -3,8 +3,11 @@ package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 import kotlinx.coroutines.channels.SendChannel
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.issue
+import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.feature.main.state.Search
 import se.gustavkarlsson.skylight.android.feature.main.state.State
+import se.gustavkarlsson.skylight.android.lib.location.LocationSettingsResolver
+import se.gustavkarlsson.skylight.android.lib.location.Resolution
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
@@ -19,6 +22,7 @@ internal class EventHandler @Inject constructor(
     private val placesRepository: PlacesRepository,
     private val settingsRepository: SettingsRepository,
     private val permissionChecker: PermissionChecker,
+    private val locationSettingsResolver: LocationSettingsResolver,
     private val selectedPlaceRepository: SelectedPlaceRepository,
     private val searchChannel: SendChannel<@JvmSuppressWildcards SearchFieldState>,
 ) {
@@ -39,6 +43,12 @@ internal class EventHandler @Inject constructor(
             }
             is Event.DeletePlace -> {
                 onDeletePlace(event.place)
+            }
+            is Event.ResolveLocationSettings -> {
+                val resolution = locationSettingsResolver.resolve(event.activity)
+                if (resolution != Resolution.Offered) {
+                    logError { "Could not offer location settings resolution" }
+                }
             }
             Event.RefreshLocationPermission -> {
                 permissionChecker.refresh()
