@@ -19,6 +19,7 @@ import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexError
+import se.gustavkarlsson.skylight.android.lib.location.LocationServiceStatus
 import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.Permission
 import se.gustavkarlsson.skylight.android.lib.places.Place
@@ -111,8 +112,13 @@ internal class StateToViewStateMapper @Inject constructor(
             is Search.Active.Error -> ContentState.Searching.Error(search.text)
             Search.Inactive -> {
                 val currentSelected = state.selectedPlace == Place.Current
+                val locationServiceEnabled = state.locationServiceStatus == LocationServiceStatus.Enabled
                 val locationAccess = state.permissions[Permission.Location]
-                if (currentSelected && locationAccess == Access.Denied) {
+
+                // FIXME cleanup
+                if (currentSelected && !locationServiceEnabled) {
+                    ContentState.RequiresLocationService
+                } else if (currentSelected && locationAccess == Access.Denied) {
                     ContentState.RequiresLocationPermission.UseDialog
                 } else if (currentSelected && locationAccess == Access.DeniedForever) {
                     ContentState.RequiresLocationPermission.UseAppSettings

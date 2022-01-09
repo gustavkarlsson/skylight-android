@@ -57,6 +57,9 @@
         3. Välj Plats\n
         4. Välj %s\n
         5. Återvänd till appen</string>
+    <string name="location_service_disabled_title">Platstjänster är avstängda</string>
+    <string name="location_service_disabled_message">För att beräkna chansen att se norrsken där du är,
+        aktivera platstjänster</string>
     <string name="turn_off_notifications_instead">Stäng av aviseringar istället</string>
     <string name="place_search">Sök</string>
     <string name="place_search_failed_generic">Platssökningen misslyckades</string>

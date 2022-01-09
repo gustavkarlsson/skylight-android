@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.feature.main.view
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
-import androidx.compose.material.icons.filled.MyLocation
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -64,7 +64,7 @@ internal fun Ready(
                     modifier = Modifier
                         .dialogModifiers()
                         .padding(paddingValues),
-                    image = { MyLocationIcon() },
+                    image = { LocationIcon() },
                     title = stringResource(R.string.location_permission_required),
                     description = stringResource(R.string.location_permission_denied_message),
                     primaryActionText = stringResource(R.string.location_permission),
@@ -78,11 +78,25 @@ internal fun Ready(
                     modifier = Modifier
                         .dialogModifiers()
                         .padding(paddingValues),
-                    image = { MyLocationIcon() },
+                    image = { LocationIcon() },
                     title = stringResource(R.string.location_permission_denied_forever_title),
                     description = stringResource(R.string.location_permission_denied_forever_message),
                     primaryActionText = stringResource(R.string.open_settings),
                     onClickPrimaryAction = onClickOpenSettings,
+                    secondaryActionText = stringResource(R.string.location_permission_select_other),
+                    onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
+                )
+            }
+            is ContentState.RequiresLocationService -> {
+                LargeDialog(
+                    modifier = Modifier
+                        .dialogModifiers()
+                        .padding(paddingValues),
+                    image = { LocationIcon() },
+                    title = stringResource(R.string.location_service_disabled_title),
+                    description = stringResource(R.string.location_service_disabled_message),
+                    primaryActionText = "Enable it!", // FIXME string res
+                    onClickPrimaryAction = {}, // FIXME string res
                     secondaryActionText = stringResource(R.string.location_permission_select_other),
                     onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
                 )
@@ -99,10 +113,10 @@ private fun Modifier.dialogModifiers(): Modifier {
 }
 
 @Composable
-private fun MyLocationIcon() {
+private fun LocationIcon() {
     Icon(
         modifier = Modifier.fillMaxSize(0.3f),
-        imageVector = Icons.MyLocation,
+        imageVector = Icons.LocationOn,
         contentDescription = null,
         tint = Colors.onBackground,
     )

@@ -63,6 +63,10 @@ internal sealed interface ContentState {
         object UseDialog : RequiresLocationPermission
         object UseAppSettings : RequiresLocationPermission
     }
+
+    object RequiresLocationService : ContentState {
+        override val dialog: Nothing? = null
+    }
 }
 
 internal data class BannerData(

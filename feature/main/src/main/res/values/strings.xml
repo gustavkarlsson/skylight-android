@@ -57,6 +57,9 @@
         3. Select Location\n
         4. Select %s\n
         5. Return to the app</string>
+    <string name="location_service_disabled_title">Location services disabled</string>
+    <string name="location_service_disabled_message">To determine aurora chances where you are,
+        you must turn on location services.</string>
     <string name="turn_off_notifications_instead">Turn off notifications instead</string>
     <string name="place_search">Search</string>
     <string name="place_search_failed_generic">Place search failed</string>
