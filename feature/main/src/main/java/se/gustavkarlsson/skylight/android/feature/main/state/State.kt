@@ -14,7 +14,7 @@ import se.gustavkarlsson.skylight.android.lib.settings.Settings
 
 internal sealed interface State {
     val permissions: Permissions
-    val locationServiceStatus: LocationServiceStatus // FIXME use this in error banner
+    val locationServiceStatus: LocationServiceStatus
     val currentLocation: Loadable<LocationResult>
     val currentLocationName: Loadable<ReverseGeocodingResult>
     val selectedAuroraReport: LoadableAuroraReport
