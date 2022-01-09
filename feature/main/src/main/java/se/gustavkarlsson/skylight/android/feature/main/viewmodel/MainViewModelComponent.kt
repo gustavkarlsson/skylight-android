@@ -18,6 +18,7 @@ import se.gustavkarlsson.skylight.android.core.utils.millis
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.state.ContinuouslySearchAction
 import se.gustavkarlsson.skylight.android.feature.main.state.FinishLoadingAction
+import se.gustavkarlsson.skylight.android.feature.main.state.LocationServiceStatusAction
 import se.gustavkarlsson.skylight.android.feature.main.state.PermissionsAction
 import se.gustavkarlsson.skylight.android.feature.main.state.Search
 import se.gustavkarlsson.skylight.android.feature.main.state.State
@@ -35,6 +36,7 @@ import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationComponent
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexComponent
 import se.gustavkarlsson.skylight.android.lib.location.LocationComponent
+import se.gustavkarlsson.skylight.android.lib.location.LocationServiceStatusProvider
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
@@ -130,6 +132,7 @@ internal object MainViewModelModule {
     @Provides
     fun startActions(
         permissionsAction: PermissionsAction,
+        locationServiceStatusAction: LocationServiceStatusAction,
         streamTriggerLevelsAction: StreamTriggerLevelsAction,
         streamSelectedPlaceAction: StreamSelectedPlaceAction,
         streamPlacesAction: StreamPlacesAction,
@@ -140,6 +143,7 @@ internal object MainViewModelModule {
         finishLoadingAction: FinishLoadingAction,
     ): List<Action<State>> = listOf(
         permissionsAction,
+        locationServiceStatusAction,
         streamSelectedPlaceAction,
         streamPlacesAction,
         streamCurrentLocationAction,
@@ -153,8 +157,10 @@ internal object MainViewModelModule {
     @Provides
     fun initialState(
         permissionChecker: PermissionChecker,
+        locationServiceStatusProvider: LocationServiceStatusProvider,
     ): State = State.Loading(
         permissions = permissionChecker.permissions.value,
+        locationServiceStatus = locationServiceStatusProvider.locationServiceStatus.value,
         currentLocation = Loading,
         currentLocationName = Loading,
         selectedPlace = null,

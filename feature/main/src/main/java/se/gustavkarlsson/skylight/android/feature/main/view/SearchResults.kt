@@ -64,7 +64,7 @@ private fun PreviewSearchResults() {
                     location = Location(5.0, 6.0),
                 ),
             ),
-            deletePlaceDialog = null,
+            dialog = null,
         ),
         onEvent = {},
     )
@@ -104,7 +104,7 @@ internal fun SearchResults(
                         ListItem(item = item, onEvent = onEvent)
                     }
                 }
-                state.deletePlaceDialog?.let { dialogData ->
+                state.dialog?.let { dialogData ->
                     AlertDialog(
                         onDismissRequest = { onEvent(dialogData.dismissEvent) },
                         confirmButton = {

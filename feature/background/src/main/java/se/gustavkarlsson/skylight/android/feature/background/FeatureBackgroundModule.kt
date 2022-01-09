@@ -129,7 +129,7 @@ object FeatureBackgroundModule {
             scheduler = scheduler,
             settingsRepository = settingsRepository,
             notificationChannelCreator = notificationChannelCreator,
-            globalScope = globalScope,
+            scope = globalScope,
         )
 
     @Provides

@@ -66,7 +66,7 @@ internal class StreamReportsLiveAction @Inject constructor(
         map { state ->
             when (val selectedPlace = state.selectedPlace) {
                 null -> null
-                Place.Current -> state.currentLocation.orNull()?.orNull()
+                Place.Current -> state.currentLocation.orNull()?.orNull() // TODO don't ignore location errors?
                 is Place.Saved -> selectedPlace.location
             }
         }.distinctUntilChanged()

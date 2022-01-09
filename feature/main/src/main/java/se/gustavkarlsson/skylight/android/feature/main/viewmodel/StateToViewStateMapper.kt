@@ -19,6 +19,7 @@ import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexError
+import se.gustavkarlsson.skylight.android.lib.location.LocationServiceStatus
 import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.Permission
 import se.gustavkarlsson.skylight.android.lib.places.Place
@@ -95,7 +96,7 @@ internal class StateToViewStateMapper @Inject constructor(
                     .sortedWith(searchResultOrderComparator)
                 ContentState.Searching.Ok(
                     searchResults = searchResults,
-                    deletePlaceDialog = deletePlaceDialog,
+                    dialog = deletePlaceDialog,
                 )
             }
             is Search.Active.Filled -> {
@@ -105,19 +106,27 @@ internal class StateToViewStateMapper @Inject constructor(
                     .sortedWith(searchResultOrderComparator)
                 ContentState.Searching.Ok(
                     searchResults = searchResults,
-                    deletePlaceDialog = deletePlaceDialog,
+                    dialog = deletePlaceDialog,
                 )
             }
             is Search.Active.Error -> ContentState.Searching.Error(search.text)
             Search.Inactive -> {
                 val currentSelected = state.selectedPlace == Place.Current
+                val locationServiceEnabled = state.locationServiceStatus == LocationServiceStatus.Enabled
                 val locationAccess = state.permissions[Permission.Location]
-                if (currentSelected && locationAccess == Access.Denied) {
-                    ContentState.RequiresLocationPermission.UseDialog
-                } else if (currentSelected && locationAccess == Access.DeniedForever) {
-                    ContentState.RequiresLocationPermission.UseAppSettings
-                } else {
-                    createSelectedPlaceContent(state)
+                when {
+                    currentSelected && !locationServiceEnabled -> {
+                        ContentState.RequiresLocationService
+                    }
+                    currentSelected && locationAccess == Access.Denied -> {
+                        ContentState.RequiresLocationPermission.UseDialog
+                    }
+                    currentSelected && locationAccess == Access.DeniedForever -> {
+                        ContentState.RequiresLocationPermission.UseAppSettings
+                    }
+                    else -> {
+                        createSelectedPlaceContent(state)
+                    }
                 }
             }
         }
