@@ -114,16 +114,19 @@ internal class StateToViewStateMapper @Inject constructor(
                 val currentSelected = state.selectedPlace == Place.Current
                 val locationServiceEnabled = state.locationServiceStatus == LocationServiceStatus.Enabled
                 val locationAccess = state.permissions[Permission.Location]
-
-                // FIXME cleanup
-                if (currentSelected && !locationServiceEnabled) {
-                    ContentState.RequiresLocationService
-                } else if (currentSelected && locationAccess == Access.Denied) {
-                    ContentState.RequiresLocationPermission.UseDialog
-                } else if (currentSelected && locationAccess == Access.DeniedForever) {
-                    ContentState.RequiresLocationPermission.UseAppSettings
-                } else {
-                    createSelectedPlaceContent(state)
+                when {
+                    currentSelected && !locationServiceEnabled -> {
+                        ContentState.RequiresLocationService
+                    }
+                    currentSelected && locationAccess == Access.Denied -> {
+                        ContentState.RequiresLocationPermission.UseDialog
+                    }
+                    currentSelected && locationAccess == Access.DeniedForever -> {
+                        ContentState.RequiresLocationPermission.UseAppSettings
+                    }
+                    else -> {
+                        createSelectedPlaceContent(state)
+                    }
                 }
             }
         }
