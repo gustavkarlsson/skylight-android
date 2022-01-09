@@ -2,7 +2,6 @@ package se.gustavkarlsson.skylight.android.feature.background
 
 import android.content.Context
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -17,11 +16,11 @@ internal class BackgroundModuleStarter(
     private val scheduler: Scheduler,
     private val settingsRepository: SettingsRepository,
     private val notificationChannelCreator: NotificationChannelCreator,
-    private val globalScope: CoroutineScope,
+    private val scope: CoroutineScope,
 ) : ModuleStarter {
     override suspend fun start() {
         deleteOldNotifiedPrefsFile()
-        globalScope.launch {
+        scope.launch {
             notificationChannelCreator.createChannel()
             scheduleBasedOnSettings()
         }

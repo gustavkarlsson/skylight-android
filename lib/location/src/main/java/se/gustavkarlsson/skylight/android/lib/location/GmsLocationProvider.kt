@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
@@ -50,6 +51,7 @@ import com.google.android.gms.location.LocationResult as GmsLocationResult
 internal class GmsLocationProvider(
     private val client: FusedLocationProviderClient,
     private val locationRequest: LocationRequest,
+    private val locationServiceStatusProvider: LocationServiceStatusProvider,
     private val freshLocationRequestPriority: Int,
     private val permissionChecker: PermissionChecker,
     private val streamRetryDuration: Duration,
@@ -57,6 +59,16 @@ internal class GmsLocationProvider(
     private val dispatcher: CoroutineDispatcher,
 ) : LocationProvider {
     override suspend fun get(fresh: Boolean): LocationResult = withContext(dispatcher) {
+        logDebug { "Checking location service availability" }
+        if (!isLocationServiceEnabled()) {
+            logDebug { "Location service disabled" }
+            return@withContext LocationError.LocationDisabled.left()
+        }
+        logDebug { "Checking location permission" }
+        if (!hasLocationPermission()) {
+            logDebug { "Location permission denied" }
+            return@withContext LocationError.NoPermission.left()
+        }
         val result = try {
             if (fresh) {
                 logInfo { "Getting fresh location" }
@@ -79,11 +91,6 @@ internal class GmsLocationProvider(
     }
 
     private suspend fun getFreshLocation(): LocationResult {
-        logDebug { "Checking location permission" }
-        if (!hasLocationPermission()) {
-            logDebug { "Location permission denied" }
-            return LocationError.NoPermission.left()
-        }
         logDebug { "Trying to get current location" }
         @SuppressLint("MissingPermission")
         val location = client.awaitCurrentLocation(freshLocationRequestPriority)
@@ -97,11 +104,6 @@ internal class GmsLocationProvider(
     }
 
     private suspend fun getCachedLocation(): LocationResult {
-        logDebug { "Checking location permission" }
-        if (!hasLocationPermission()) {
-            logDebug { "Location permission denied" }
-            return LocationError.NoPermission.left()
-        }
         logDebug { "Checking if last location is up to date" }
         @SuppressLint("MissingPermission")
         if (!client.awaitIsLocationAvailable()) {
@@ -127,6 +129,15 @@ internal class GmsLocationProvider(
         return locationPermission == Access.Granted
     }
 
+    private fun isLocationServiceEnabled(): Boolean {
+        val status = locationServiceStatusProvider.locationServiceStatus.value
+        logDebug { "Location service is $status" }
+        return when (status) {
+            LocationServiceStatus.Enabled -> true
+            LocationServiceStatus.Disabled -> false
+        }
+    }
+
     override fun stream(): Flow<Loadable<LocationResult>> = sharedStream
 
     private val sharedStream: SharedFlow<Loadable<LocationResult>> = client.stream()
@@ -137,16 +148,28 @@ internal class GmsLocationProvider(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun FusedLocationProviderClient.stream(): Flow<Loadable<LocationResult>> =
-        streamLocationPermission()
-            .flatMapLatest { permissionGranted ->
-                if (permissionGranted) {
-                    logInfo { "Permission granted. Starting stream" }
-                    streamWithPermission()
-                } else {
-                    logInfo { "Permission denied" }
-                    flowOf(Loaded(LocationError.NoPermission.left()))
+        combine(
+            streamLocationPermission(),
+            locationServiceStatusProvider.locationServiceStatus,
+        ) { permissionGranted, locationServiceStatus ->
+            permissionGranted to locationServiceStatus
+        }.flatMapLatest { (permissionGranted, locationServiceStatus) ->
+            when (locationServiceStatus) {
+                LocationServiceStatus.Enabled -> {
+                    if (permissionGranted) {
+                        logInfo { "Permission granted and service enabled. Starting stream" }
+                        streamWhenReady()
+                    } else {
+                        logInfo { "Permission denied" }
+                        flowOf(Loaded(LocationError.NoPermission.left()))
+                    }
+                }
+                LocationServiceStatus.Disabled -> {
+                    logInfo { "Location service disabled" }
+                    flowOf(Loaded(LocationError.LocationDisabled.left()))
                 }
             }
+        }
 
     private fun streamLocationPermission(): Flow<Boolean> = permissionChecker.permissions
         .map { permissions ->
@@ -154,7 +177,7 @@ internal class GmsLocationProvider(
         }
         .distinctUntilChanged()
 
-    private fun FusedLocationProviderClient.streamWithPermission(): Flow<Loadable<LocationResult>> = flow {
+    private fun FusedLocationProviderClient.streamWhenReady(): Flow<Loadable<LocationResult>> = flow {
         emit(Loading)
         emit(Loaded(getCachedLocation()))
         emitAll(streamWithRetry(locationRequest, streamRetryDuration).map { Loaded(it) })

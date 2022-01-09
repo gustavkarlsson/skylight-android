@@ -1,5 +1,4 @@
 ## ASAP
-* Test permissions
 * Better colors
 
 ## Soon
@@ -7,16 +6,12 @@
 * Look into restricted bucket
 * Move to firebase BOM (https://firebase.google.com/docs/android/learn-more#bom)
 * Readme
-* Integrate SettingsClient? (https://developer.android.com/topic/performance/appstandby#restricted-bucket, )
 * Notifications on/off without dialog (or only dialog when enabling). Needs a way to select current setting
-* Only subscribe to current location reports when location is turned on?
-* Show helper about location turned off?
 * Consider using jetpack BackHandler
 * Consider using accompanist permissions
 * Standard dimensions?
 * Standard animations?
-* Make location refresh on phone location on/off, or permission granted
-* Show actionable banner for missing location, permission, internet, notifications denied, with better action text than "fix"
+* Show errors for missing internet, notifications denied, etc.
 * Migrate libraries using sqldelight to use store?
 * Simpler configuration of required keys (move to root? fail if not present?)
 * Retire ThreeTenABP

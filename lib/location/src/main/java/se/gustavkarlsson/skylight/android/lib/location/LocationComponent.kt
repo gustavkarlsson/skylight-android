@@ -1,8 +1,9 @@
 package se.gustavkarlsson.skylight.android.lib.location
 
 interface LocationComponent {
-
     fun locationProvider(): LocationProvider
+    fun locationServiceStatusProvider(): LocationServiceStatusProvider
+    fun locationSettingsResolver(): LocationSettingsResolver
 
     interface Setter {
         fun setLocationComponent(component: LocationComponent) {
