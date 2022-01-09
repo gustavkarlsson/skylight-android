@@ -22,6 +22,7 @@ import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 @Module
 object LibLocationModule {
 
+    // Why can't this be a provides function?
     private val locationRequest = LocationRequest.create().apply {
         priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
         fastestInterval = 1.minutes.toMillis()
@@ -64,7 +65,7 @@ object LibLocationModule {
         impl: LocationManagerStatusProvider,
     ): LocationServiceStatusProvider = impl
 
-    // FIXME make this internal somehow
+    // Why can't this be internal?
     @Provides
     fun locationSettingsResolver(): LocationSettingsResolver =
         SettingsClientLocationSettingsResolver(locationRequest)
