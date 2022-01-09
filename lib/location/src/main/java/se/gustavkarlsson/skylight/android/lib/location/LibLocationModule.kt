@@ -21,6 +21,15 @@ import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 
 @Module
 object LibLocationModule {
+
+    private val locationRequest = LocationRequest.create().apply {
+        priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+        fastestInterval = 1.minutes.toMillis()
+        interval = 10.minutes.toMillis()
+        maxWaitTime = 15.minutes.toMillis()
+        smallestDisplacement = 200.toFloat()
+    }
+
     @Provides
     @AppScope
     internal fun locationProvider(
@@ -31,19 +40,11 @@ object LibLocationModule {
         @Io dispatcher: CoroutineDispatcher,
     ): LocationProvider {
         val client = LocationServices.getFusedLocationProviderClient(context)
-        val requestPriority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
-        val locationRequest = LocationRequest.create().apply {
-            priority = requestPriority
-            fastestInterval = 1.minutes.toMillis()
-            interval = 10.minutes.toMillis()
-            maxWaitTime = 15.minutes.toMillis()
-            smallestDisplacement = 200.toFloat()
-        }
         return GmsLocationProvider(
             client = client,
             locationRequest = locationRequest,
             locationServiceStatusProvider = locationServiceStatusProvider,
-            freshLocationRequestPriority = requestPriority,
+            freshLocationRequestPriority = locationRequest.priority,
             permissionChecker = permissionChecker,
             streamRetryDuration = 15.seconds,
             shareScope = globalScope,
@@ -62,6 +63,11 @@ object LibLocationModule {
     internal fun locationServiceStatusProvider(
         impl: LocationManagerStatusProvider,
     ): LocationServiceStatusProvider = impl
+
+    // FIXME make this internal somehow
+    @Provides
+    fun locationSettingsResolver(): LocationSettingsResolver =
+        SettingsClientLocationSettingsResolver(locationRequest)
 
     @Provides
     @Reusable
