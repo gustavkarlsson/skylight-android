@@ -62,7 +62,7 @@ import javax.inject.Qualifier
         GeocoderComponent::class,
         ReverseGeocoderComponent::class,
         SettingsComponent::class,
-    ],
+    ]
 )
 internal interface MainViewModelComponent {
     fun viewModel(): MainViewModel
@@ -96,10 +96,14 @@ object MainViewModelModule {
     internal fun provideSearchChannel(): Channel<SearchFieldState> = Channel(Channel.CONFLATED)
 
     @Provides
-    internal fun provideSearchSendChannel(channel: Channel<SearchFieldState>): SendChannel<SearchFieldState> = channel
+    internal fun provideSearchSendChannel(
+        channel: Channel<SearchFieldState>,
+    ): SendChannel<SearchFieldState> = channel
 
     @Provides
-    internal fun provideSearchReceiveChannel(channel: Channel<SearchFieldState>): ReceiveChannel<SearchFieldState> = channel
+    internal fun provideSearchReceiveChannel(
+        channel: Channel<SearchFieldState>,
+    ): ReceiveChannel<SearchFieldState> = channel
 
     @Provides
     internal fun startActions(

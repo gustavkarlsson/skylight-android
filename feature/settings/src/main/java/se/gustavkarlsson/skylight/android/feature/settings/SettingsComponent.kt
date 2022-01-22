@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.settings
 
 import com.squareup.anvil.annotations.MergeComponent
-import dagger.Component
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent as LibSettingsComponent
 
 @MergeComponent(
