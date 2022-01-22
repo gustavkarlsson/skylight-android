@@ -5,16 +5,13 @@ import dagger.Provides
 import dagger.Reusable
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
-import java.util.Locale
 
 @Module
 object LibGeomagLocationModule {
 
-    // FIXME clean up
     @Provides
     @Reusable
-    internal fun geomagLocationFormatter(locale: () -> Locale): Formatter<GeomagLocation> =
-        GeomagLocationFormatter(locale)
+    internal fun geomagLocationFormatter(impl: GeomagLocationFormatter): Formatter<GeomagLocation> = impl
 
     @Provides
     @Reusable
