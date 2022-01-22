@@ -79,6 +79,7 @@ internal fun Application.initDagger() {
 
     runBlocking {
         component.moduleStarters()
+            .also { check(it.size == 4) } // FIXME remove
             .map { starter ->
                 launch { starter.start() }
             }
