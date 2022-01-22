@@ -32,6 +32,7 @@ internal interface AboutComponent {
 @Module
 internal object AboutModule {
 
+    // FIXME clean up
     @Provides
     fun viewModel(
         time: Time,

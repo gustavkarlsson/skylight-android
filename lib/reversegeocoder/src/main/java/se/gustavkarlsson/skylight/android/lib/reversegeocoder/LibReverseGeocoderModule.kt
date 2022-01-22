@@ -13,6 +13,7 @@ import se.gustavkarlsson.skylight.android.core.utils.seconds
 @Module
 object LibReverseGeocoderModule {
 
+    // FIXME clean up
     @Provides
     @Reusable
     internal fun reverseGeocoder(context: Context, @Io dispatcher: CoroutineDispatcher): ReverseGeocoder {

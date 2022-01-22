@@ -14,6 +14,7 @@ class NavigationModule(private val screens: Screens) {
     @Provides
     internal fun provideDefaultScreen(screens: Screens): Screen = screens.main
 
+    // FIXME clean up
     @AppScope
     @Provides
     internal fun provideDefaultNavigator(

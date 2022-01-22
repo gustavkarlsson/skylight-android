@@ -10,6 +10,7 @@ import java.util.Locale
 @Module
 object LibGeomagLocationModule {
 
+    // FIXME clean up
     @Provides
     @Reusable
     internal fun geomagLocationFormatter(locale: () -> Locale): Formatter<GeomagLocation> =

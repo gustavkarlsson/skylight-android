@@ -7,6 +7,7 @@ import se.gustavkarlsson.skylight.android.core.AppScope
 @Module
 object LibScopedServiceModule {
 
+    // FIXME clean up
     @Provides
     @AppScope
     internal fun provideServiceRegistry(): ServiceRegistry = ServiceRegistry()

@@ -15,6 +15,7 @@ import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionManager
 @Module
 object FeatureIntroModule {
 
+    // FIXME clean up
     @Provides
     @Reusable
     @IntoSet

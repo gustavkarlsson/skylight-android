@@ -31,6 +31,7 @@ object LibLocationModule {
         smallestDisplacement = 200.toFloat()
     }
 
+    // FIXME clean up?
     @Provides
     @AppScope
     internal fun locationProvider(
@@ -65,10 +66,12 @@ object LibLocationModule {
         impl: LocationManagerStatusProvider,
     ): LocationServiceStatusProvider = impl
 
+    // FIXME clean up?
     @Provides
     internal fun locationSettingsResolver(): LocationSettingsResolver =
         SettingsClientLocationSettingsResolver(locationRequest)
 
+    // FIXME clean up
     @Provides
     @Reusable
     @IntoSet

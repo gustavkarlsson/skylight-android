@@ -22,6 +22,7 @@ object LibAuroraModule {
     @Reusable
     internal fun chanceLevelFormatter(): Formatter<ChanceLevel> = ChanceLevelFormatter
 
+    // FIXME clean up
     @Provides
     @Reusable
     internal fun auroraReportProvider(
@@ -37,6 +38,7 @@ object LibAuroraModule {
             weatherProvider,
         )
 
+    // FIXME clean up
     @Provides
     @Reusable
     internal fun completeAuroraReportChanceEvaluator(

@@ -12,6 +12,7 @@ import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 @Module
 object FeatureGooglePlayServicesModule {
 
+    // FIXME clean up
     @Provides
     @Reusable
     @IntoSet

@@ -19,6 +19,7 @@ object LibDarknessModule {
     @Reusable
     internal fun darknessEvaluator(): ChanceEvaluator<Darkness> = DarknessEvaluator
 
+    // FIXME clean up
     @Provides
     @Reusable
     internal fun darknessProvider(time: Time): DarknessProvider =

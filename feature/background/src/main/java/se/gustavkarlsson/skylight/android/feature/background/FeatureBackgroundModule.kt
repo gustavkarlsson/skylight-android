@@ -51,25 +51,30 @@ object FeatureBackgroundModule {
     internal fun keyguardManager(context: Context): KeyguardManager =
         context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
 
+    // FIXME clean up
     @Provides
     @Reusable
     internal fun outdatedEvaluator(time: Time): OutdatedEvaluator = OutdatedEvaluator(time)
 
+    // FIXME clean up
     @Provides
     @Reusable
     internal fun appVisibilityEvaluator(keyguardManager: KeyguardManager): AppVisibilityEvaluator =
         AppVisibilityEvaluator(keyguardManager)
 
+    // FIXME clean up
     @Provides
     @Reusable
     internal fun scheduler(context: Context): Scheduler =
         NotifyScheduler(context, scheduleInterval = 15.minutes)
 
+    // FIXME clean up
     @Provides
     @Reusable
     internal fun lastNotificationRepository(context: Context): LastNotificationRepository =
         SharedPrefsLastNotificationRepository(context)
 
+    // FIXME clean up
     @Provides
     @Reusable
     internal fun notificationChannelCreator(
@@ -82,6 +87,7 @@ object FeatureBackgroundModule {
             context.getString(R.string.aurora_alerts_channel_name),
         )
 
+    // FIXME clean up
     @Provides
     @Reusable
     internal fun notificationEvaluator(
@@ -90,12 +96,14 @@ object FeatureBackgroundModule {
     ): NotificationEvaluator =
         NotificationEvaluatorImpl(lastNotificationRepository, outdatedEvaluator)
 
+    // FIXME clean up
     @Provides
     @Reusable
     internal fun notificationFormatter(
         chanceLevelFormatter: Formatter<ChanceLevel>,
     ): Formatter<Notification> = NotificationFormatter(chanceLevelFormatter)
 
+    // FIXME clean up
     @Provides
     @Reusable
     internal fun notifier(
@@ -114,6 +122,7 @@ object FeatureBackgroundModule {
             analytics,
         )
 
+    // FIXME clean up
     @Provides
     @Reusable
     @IntoSet
@@ -132,6 +141,7 @@ object FeatureBackgroundModule {
             scope = globalScope,
         )
 
+    // FIXME clean up
     @Provides
     @Reusable
     internal fun backgroundWork(

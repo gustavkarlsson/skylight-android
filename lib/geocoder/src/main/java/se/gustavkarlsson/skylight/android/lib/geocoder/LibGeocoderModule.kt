@@ -11,6 +11,7 @@ import java.util.Locale
 @Module
 object LibGeocoderModule {
 
+    // FIXME clean up
     @Provides
     @Reusable
     internal fun geocoder(getLocales: () -> NonEmptyList<Locale>, @Io dispatcher: CoroutineDispatcher): Geocoder =

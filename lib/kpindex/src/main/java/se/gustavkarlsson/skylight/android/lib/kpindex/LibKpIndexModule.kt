@@ -69,6 +69,7 @@ object LibKpIndexModule {
             .cachePolicy(cachePolicy)
             .build()
 
+        // FIXME clean up?
         return StoreKpIndexProvider(store = store)
     }
 }

@@ -17,6 +17,7 @@ import se.gustavkarlsson.skylight.android.lib.settings.proto.SettingsMessage
 @Module
 object LibSettingsModule {
 
+    // FIXME clean up?
     @Provides
     @AppScope
     internal fun settings(
@@ -27,6 +28,7 @@ object LibSettingsModule {
         return DataStoreSettingsRepository(dataStore, placesRepository)
     }
 
+    // FIXME clean up?
     @Provides
     @IntoSet
     fun moduleStarter(

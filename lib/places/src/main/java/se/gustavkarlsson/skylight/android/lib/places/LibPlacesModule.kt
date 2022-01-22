@@ -17,6 +17,7 @@ import se.gustavkarlsson.skylight.android.lib.time.Time
 @Module
 object LibPlacesModule {
 
+    // FIXME clean up
     @Provides
     @AppScope
     internal fun placesRepository(
@@ -29,6 +30,7 @@ object LibPlacesModule {
         return SqlDelightPlacesRepository(database.dbPlaceQueries, dispatcher, time)
     }
 
+    // FIXME clean up
     @Provides
     @AppScope
     internal fun selectedPlaceRepository(
@@ -45,6 +47,7 @@ object LibPlacesModule {
         )
     }
 
+    // FIXME clean up
     @Provides
     @IntoSet
     fun moduleStarter(

@@ -24,6 +24,7 @@ internal interface SettingsComponent {
 @Module
 internal object SettingsModule {
 
+    // FIXME clean up
     @Provides
     fun viewModel(
         settingsRepository: SettingsRepository,
