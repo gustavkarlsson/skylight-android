@@ -8,13 +8,11 @@ import dagger.Provides
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
-import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.skylight.android.core.AppComponent
 import se.gustavkarlsson.skylight.android.core.ViewModelScope
 import se.gustavkarlsson.skylight.android.core.entities.Loading
-import se.gustavkarlsson.skylight.android.core.utils.millis
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.state.ContinuouslySearchAction
 import se.gustavkarlsson.skylight.android.feature.main.state.FinishLoadingAction
@@ -67,7 +65,7 @@ import javax.inject.Qualifier
         GeocoderComponent::class,
         ReverseGeocoderComponent::class,
         SettingsComponent::class,
-    ]
+    ],
 )
 internal interface MainViewModelComponent {
     fun viewModel(): MainViewModel
@@ -92,14 +90,6 @@ internal interface MainViewModelComponent {
     }
 }
 
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-internal annotation class StreamThrottle
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-internal annotation class StayAlive
-
 @Module
 internal object MainViewModelModule {
 
@@ -112,14 +102,6 @@ internal object MainViewModelModule {
 
     @Provides
     fun provideSearchReceiveChannel(channel: Channel<SearchFieldState>): ReceiveChannel<SearchFieldState> = channel
-
-    @Provides
-    @StreamThrottle
-    fun provideStreamThrottle(): Duration = 500.millis
-
-    @Provides
-    @StayAlive
-    fun provideStayAlive(): Duration = 1000.millis
 
     @Provides
     fun startActions(

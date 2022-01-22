@@ -14,9 +14,8 @@ import kotlinx.coroutines.flow.mapLatest
 import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
+import se.gustavkarlsson.skylight.android.core.utils.millis
 import se.gustavkarlsson.skylight.android.core.utils.throttle
-import se.gustavkarlsson.skylight.android.feature.main.viewmodel.StayAlive
-import se.gustavkarlsson.skylight.android.feature.main.viewmodel.StreamThrottle
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.location.Location
@@ -24,11 +23,21 @@ import se.gustavkarlsson.skylight.android.lib.places.Place
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class StreamReportsLiveAction @Inject constructor(
+internal class StreamReportsLiveAction(
     private val auroraReportProvider: AuroraReportProvider,
-    @StreamThrottle private val throttleDuration: Duration,
-    @StayAlive private val stayAlive: Duration,
+    private val throttleDuration: Duration,
+    private val stayAlive: Duration,
 ) : Action<State> {
+
+    @Inject
+    constructor(
+        auroraReportProvider: AuroraReportProvider,
+    ) : this(
+        auroraReportProvider = auroraReportProvider,
+        throttleDuration = 500.millis,
+        stayAlive = 1000.millis,
+    )
+
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         stateFlow
             .isLive()
