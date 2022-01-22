@@ -16,23 +16,22 @@ import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.lib.places.getPlaceId
 import javax.inject.Inject
 
-internal class MainActivity :
-    AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var navigator: Navigator
+    internal lateinit var navigator: Navigator
 
     @Inject
-    lateinit var renderer: Renderer
+    internal lateinit var renderer: Renderer
 
     @Inject
-    lateinit var selectedPlaceRepository: SelectedPlaceRepository
+    internal lateinit var selectedPlaceRepository: SelectedPlaceRepository
 
     @Inject
-    lateinit var backPressHandler: BackPressHandler
+    internal lateinit var backPressHandler: BackPressHandler
 
     @Inject
-    lateinit var screens: Screens
+    internal lateinit var screens: Screens
 
     init {
         lifecycleScope.launch {
