@@ -2,7 +2,8 @@ package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
 import android.content.Context
 import android.os.Build
-import dagger.Component
+import com.squareup.anvil.annotations.ContributesTo
+import com.squareup.anvil.annotations.MergeComponent
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.channels.Channel
@@ -26,7 +27,6 @@ import se.gustavkarlsson.skylight.android.feature.main.state.StreamPlacesAction
 import se.gustavkarlsson.skylight.android.feature.main.state.StreamReportsLiveAction
 import se.gustavkarlsson.skylight.android.feature.main.state.StreamSelectedPlaceAction
 import se.gustavkarlsson.skylight.android.feature.main.state.StreamTriggerLevelsAction
-import se.gustavkarlsson.skylight.android.feature.main.util.RelativeTimeFormatterModule
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.darkness.DarknessComponent
@@ -46,11 +46,8 @@ import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
 import javax.inject.Qualifier
 
 @ViewModelScope
-@Component(
-    modules = [
-        MainViewModelModule::class,
-        RelativeTimeFormatterModule::class,
-    ],
+@MergeComponent(
+    scope = MainScopeMarker::class,
     dependencies = [
         AppComponent::class,
         TimeComponent::class,
@@ -65,7 +62,7 @@ import javax.inject.Qualifier
         GeocoderComponent::class,
         ReverseGeocoderComponent::class,
         SettingsComponent::class,
-    ]
+    ],
 )
 internal interface MainViewModelComponent {
     fun viewModel(): MainViewModel
@@ -91,20 +88,21 @@ internal interface MainViewModelComponent {
 }
 
 @Module
-internal object MainViewModelModule {
+@ContributesTo(MainScopeMarker::class)
+object MainViewModelModule {
 
     @Provides
     @ViewModelScope
-    fun provideSearchChannel(): Channel<SearchFieldState> = Channel(Channel.CONFLATED)
+    internal fun provideSearchChannel(): Channel<SearchFieldState> = Channel(Channel.CONFLATED)
 
     @Provides
-    fun provideSearchSendChannel(channel: Channel<SearchFieldState>): SendChannel<SearchFieldState> = channel
+    internal fun provideSearchSendChannel(channel: Channel<SearchFieldState>): SendChannel<SearchFieldState> = channel
 
     @Provides
-    fun provideSearchReceiveChannel(channel: Channel<SearchFieldState>): ReceiveChannel<SearchFieldState> = channel
+    internal fun provideSearchReceiveChannel(channel: Channel<SearchFieldState>): ReceiveChannel<SearchFieldState> = channel
 
     @Provides
-    fun startActions(
+    internal fun startActions(
         permissionsAction: PermissionsAction,
         locationServiceStatusAction: LocationServiceStatusAction,
         streamTriggerLevelsAction: StreamTriggerLevelsAction,
@@ -129,7 +127,7 @@ internal object MainViewModelModule {
     )
 
     @Provides
-    fun initialState(
+    internal fun initialState(
         permissionChecker: PermissionChecker,
         locationServiceStatusProvider: LocationServiceStatusProvider,
     ): State = State.Loading(
@@ -146,7 +144,7 @@ internal object MainViewModelModule {
 
     @Provides
     @BackgroundLocationName
-    fun provideBackgroundLocationName(context: Context): String {
+    internal fun provideBackgroundLocationName(context: Context): String {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             context.packageManager.backgroundPermissionOptionLabel.toString()
         } else {
@@ -156,7 +154,7 @@ internal object MainViewModelModule {
 
     @Provides
     @ViewModelScope
-    fun store(
+    internal fun store(
         initialState: State,
         startActions: List<@JvmSuppressWildcards Action<State>>,
     ): Store<State> = Store(initialState, startActions)
@@ -165,3 +163,5 @@ internal object MainViewModelModule {
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 internal annotation class BackgroundLocationName
+
+abstract class MainScopeMarker private constructor()

@@ -1,9 +1,11 @@
 package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
+import com.squareup.anvil.annotations.MergeComponent
 import dagger.Component
 import se.gustavkarlsson.skylight.android.core.AppComponent
 
-@Component(
+@MergeComponent(
+    scope = GooglePlayServicesScopeMarker::class,
     dependencies = [AppComponent::class]
 )
 internal interface GooglePlayServicesComponent {
@@ -16,3 +18,5 @@ internal interface GooglePlayServicesComponent {
                 .build()
     }
 }
+
+abstract class GooglePlayServicesScopeMarker private constructor()

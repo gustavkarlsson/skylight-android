@@ -2,17 +2,20 @@ package se.gustavkarlsson.skylight.android.feature.main.util
 
 import android.text.format.DateUtils
 import com.ioki.textref.TextRef
+import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import org.threeten.bp.Duration
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.core.utils.until
 import se.gustavkarlsson.skylight.android.feature.main.R
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.MainScopeMarker
 
 @Module
-internal object RelativeTimeFormatterModule {
+@ContributesTo(MainScopeMarker::class)
+object RelativeTimeFormatterModule {
     @Provides
-    fun relativeTimeFormatter(): RelativeTimeFormatter = DateUtilsRelativeTimeFormatter
+    internal fun relativeTimeFormatter(): RelativeTimeFormatter = DateUtilsRelativeTimeFormatter
 }
 
 internal interface RelativeTimeFormatter {
