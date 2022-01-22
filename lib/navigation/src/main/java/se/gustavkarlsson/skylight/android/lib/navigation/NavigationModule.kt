@@ -21,7 +21,9 @@ class NavigationModule(private val screens: Screens) {
         screen: Screen,
         overrides: Set<@JvmSuppressWildcards NavigationOverride>,
         analytics: Analytics,
-    ): DefaultNavigator = DefaultNavigator(defaultScreen = screen, overrides, analytics)
+    ): DefaultNavigator = DefaultNavigator(defaultScreen = screen, overrides, analytics).also {
+        check(overrides.size == 2) // FIXME remove
+    }
 
     @Provides
     internal fun provideNavigator(navigator: DefaultNavigator): Navigator = navigator
