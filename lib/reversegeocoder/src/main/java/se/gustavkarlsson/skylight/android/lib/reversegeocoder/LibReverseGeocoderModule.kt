@@ -15,7 +15,6 @@ import java.util.Locale
 object LibReverseGeocoderModule {
 
     @Provides
-    @Reusable
     internal fun getGeocoder(
         context: Context,
         getLocale: () -> Locale,

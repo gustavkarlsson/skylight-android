@@ -24,11 +24,9 @@ import kotlin.time.ExperimentalTime
 object LibKpIndexModule {
 
     @Provides
-    @Reusable
     internal fun kpIndexFormatter(): Formatter<KpIndex> = KpIndexFormatter
 
     @Provides
-    @Reusable
     internal fun kpIndexEvaluator(): ChanceEvaluator<KpIndex> = KpIndexEvaluator
 
     @OptIn(ExperimentalTime::class)

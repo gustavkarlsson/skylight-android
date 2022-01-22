@@ -55,24 +55,19 @@ object FeatureBackgroundModule {
     internal fun auroraAlertsChannelId(): String = "aurora"
 
     @Provides
-    @Reusable
     internal fun notificationEvaluator(impl: NotificationEvaluatorImpl): NotificationEvaluator = impl
 
     @Provides
-    @Reusable
     internal fun notificationFormatter(impl: NotificationFormatter): Formatter<Notification> = impl
 
     @Provides
-    @Reusable
     internal fun notifier(impl: NotifierImpl): Notifier = impl
 
     @Provides
-    @Reusable
     @IntoSet
     internal fun moduleStarter(impl: BackgroundModuleStarter): ModuleStarter = impl
 
     @Provides
-    @Reusable
     internal fun backgroundWork(impl: BackgroundWorkImpl): BackgroundWork = impl
 }
 

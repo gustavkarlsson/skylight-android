@@ -25,11 +25,9 @@ import kotlin.time.ExperimentalTime
 object LibWeatherModule {
 
     @Provides
-    @Reusable
     internal fun weatherFormatter(): Formatter<Weather> = WeatherFormatter
 
     @Provides
-    @Reusable
     internal fun weatherEvaluator(): ChanceEvaluator<Weather> = WeatherEvaluator
 
     @OptIn(ExperimentalTime::class)
