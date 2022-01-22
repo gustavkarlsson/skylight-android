@@ -32,7 +32,6 @@ object LibWeatherModule {
     @Reusable
     internal fun weatherEvaluator(): ChanceEvaluator<Weather> = WeatherEvaluator
 
-    // FIXME clean up?
     @OptIn(ExperimentalTime::class)
     @Provides
     @Reusable
