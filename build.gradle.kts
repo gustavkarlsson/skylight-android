@@ -19,6 +19,7 @@ buildscript {
         classpath("com.squareup.sqldelight:gradle-plugin:${Versions.sqldelight}")
         classpath("org.jlleitschuh.gradle:ktlint-gradle:${Versions.ktlintGradle}")
         classpath("com.google.protobuf:protobuf-gradle-plugin:${Versions.protobufGradle}")
+        classpath("com.squareup.anvil:gradle-plugin:${Versions.anvil}")
     }
 }
 

@@ -1,9 +1,10 @@
 package se.gustavkarlsson.skylight.android.feature.settings
 
-import dagger.Component
+import com.squareup.anvil.annotations.MergeComponent
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent as LibSettingsComponent
 
-@Component(
+@MergeComponent(
+    scope = SettingsScopeMarker::class,
     dependencies = [LibSettingsComponent::class]
 )
 internal interface SettingsComponent {
@@ -16,3 +17,5 @@ internal interface SettingsComponent {
                 .build()
     }
 }
+
+abstract class SettingsScopeMarker private constructor()

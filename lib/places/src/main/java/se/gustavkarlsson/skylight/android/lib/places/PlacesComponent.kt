@@ -1,5 +1,9 @@
 package se.gustavkarlsson.skylight.android.lib.places
 
+import com.squareup.anvil.annotations.ContributesTo
+import se.gustavkarlsson.skylight.android.core.AppScopeMarker
+
+@ContributesTo(AppScopeMarker::class)
 interface PlacesComponent {
 
     fun placesRepository(): PlacesRepository

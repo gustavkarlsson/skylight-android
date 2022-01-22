@@ -1,12 +1,15 @@
 package se.gustavkarlsson.skylight.android.lib.aurora
 
+import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
+import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 
 @Module
+@ContributesTo(AppScopeMarker::class)
 object LibAuroraModule {
 
     @Provides

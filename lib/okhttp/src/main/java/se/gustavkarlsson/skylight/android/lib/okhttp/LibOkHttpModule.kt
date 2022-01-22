@@ -1,14 +1,17 @@
 package se.gustavkarlsson.skylight.android.lib.okhttp
 
+import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import okhttp3.OkHttpClient
 import org.threeten.bp.Duration
+import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 import se.gustavkarlsson.skylight.android.core.utils.seconds
 import java.util.concurrent.TimeUnit
 
 @Module
+@ContributesTo(AppScopeMarker::class)
 object LibOkHttpModule {
 
     @Provides

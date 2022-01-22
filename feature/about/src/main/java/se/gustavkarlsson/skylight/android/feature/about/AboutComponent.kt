@@ -1,10 +1,11 @@
 package se.gustavkarlsson.skylight.android.feature.about
 
-import dagger.Component
+import com.squareup.anvil.annotations.MergeComponent
 import se.gustavkarlsson.skylight.android.core.AppComponent
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 
-@Component(
+@MergeComponent(
+    scope = AboutScopeMarker::class,
     dependencies = [
         AppComponent::class,
         TimeComponent::class,
@@ -21,3 +22,5 @@ internal interface AboutComponent {
                 .build()
     }
 }
+
+abstract class AboutScopeMarker private constructor()

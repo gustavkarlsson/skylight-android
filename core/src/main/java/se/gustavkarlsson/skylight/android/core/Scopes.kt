@@ -9,3 +9,5 @@ annotation class ViewModelScope
 @Scope
 @Retention(AnnotationRetention.RUNTIME)
 annotation class AppScope
+
+abstract class AppScopeMarker private constructor()

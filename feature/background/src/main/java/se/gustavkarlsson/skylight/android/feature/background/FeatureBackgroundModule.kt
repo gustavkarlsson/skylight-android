@@ -4,10 +4,12 @@ import android.app.KeyguardManager
 import android.app.NotificationManager
 import android.content.Context
 import androidx.core.content.getSystemService
+import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import dagger.multibindings.IntoSet
+import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notification
@@ -25,6 +27,7 @@ import se.gustavkarlsson.skylight.android.feature.background.scheduling.Schedule
 import javax.inject.Qualifier
 
 @Module
+@ContributesTo(AppScopeMarker::class)
 object FeatureBackgroundModule {
 
     @Provides

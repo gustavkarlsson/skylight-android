@@ -1,8 +1,10 @@
 package se.gustavkarlsson.skylight.android.core
 
 import android.content.Context
+import com.squareup.anvil.annotations.ContributesTo
 import kotlinx.coroutines.CoroutineDispatcher
 
+@ContributesTo(AppScopeMarker::class)
 interface AppComponent {
 
     fun context(): Context

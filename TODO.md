@@ -21,6 +21,7 @@
 * Improve feature graphics
 * Main screen: Tell a story, one or a few sentences?
 * Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
+* Use Anvil ContributesBinding (Problematic because anvil needs implementation to be be public. It also does not support type parameters at the time of writing this)
 
 ## Some day
 * Oversee text style usage (also use TextAppearance instead of style in XML)
