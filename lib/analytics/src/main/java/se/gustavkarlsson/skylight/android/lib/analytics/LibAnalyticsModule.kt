@@ -8,7 +8,6 @@ import dagger.Provides
 @Module
 object LibAnalyticsModule {
 
-    // FIXME clean up
     @Provides
     internal fun analytics(context: Context): Analytics =
         FirebasedAnalytics(FirebaseAnalytics.getInstance(context))

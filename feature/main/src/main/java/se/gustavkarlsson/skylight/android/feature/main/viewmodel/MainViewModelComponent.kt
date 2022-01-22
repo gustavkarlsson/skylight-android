@@ -103,7 +103,6 @@ internal object MainViewModelModule {
     @Provides
     fun provideSearchReceiveChannel(channel: Channel<SearchFieldState>): ReceiveChannel<SearchFieldState> = channel
 
-    // FIXME clean up
     @Provides
     fun startActions(
         permissionsAction: PermissionsAction,
