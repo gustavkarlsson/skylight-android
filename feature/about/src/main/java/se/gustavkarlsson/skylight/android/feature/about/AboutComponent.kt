@@ -1,17 +1,10 @@
 package se.gustavkarlsson.skylight.android.feature.about
 
 import dagger.Component
-import dagger.Module
-import dagger.Provides
-import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.core.AppComponent
-import se.gustavkarlsson.skylight.android.core.VersionCode
-import se.gustavkarlsson.skylight.android.core.VersionName
-import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 
 @Component(
-    modules = [AboutModule::class],
     dependencies = [
         AppComponent::class,
         TimeComponent::class,
@@ -27,24 +20,4 @@ internal interface AboutComponent {
                 .timeComponent(TimeComponent.instance)
                 .build()
     }
-}
-
-@Module
-internal object AboutModule {
-
-    // FIXME clean up
-    @Provides
-    fun viewModel(
-        time: Time,
-        @VersionCode versionCode: Int,
-        @VersionName versionName: String,
-    ): AboutViewModel = AboutViewModel(
-        time = time,
-        showDevelopData = BuildConfig.DEVELOP,
-        versionCode = versionCode,
-        versionName = versionName,
-        gitBranch = BuildConfig.GIT_BRANCH,
-        gitSha1 = BuildConfig.GIT_SHA1,
-        buildTime = Instant.ofEpochMilli(BuildConfig.BUILD_TIME_MILLIS),
-    )
 }
