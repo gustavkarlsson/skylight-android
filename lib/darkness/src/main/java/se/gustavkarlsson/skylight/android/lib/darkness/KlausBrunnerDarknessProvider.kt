@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.darkness
 
+import dagger.Reusable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -11,14 +12,25 @@ import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Loaded
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
+import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.util.GregorianCalendar
+import javax.inject.Inject
 
+@Reusable
 internal class KlausBrunnerDarknessProvider(
     private val time: Time,
     private val pollingInterval: Duration,
 ) : DarknessProvider {
+
+    @Inject
+    constructor(
+        time: Time,
+    ) : this(
+        time = time,
+        pollingInterval = 1.minutes,
+    )
 
     override fun get(location: Location): Darkness {
         val darkness = getDarkness(location, time.now())
