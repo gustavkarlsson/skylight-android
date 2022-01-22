@@ -65,9 +65,8 @@ object LibLocationModule {
         impl: LocationManagerStatusProvider,
     ): LocationServiceStatusProvider = impl
 
-    // Why can't this be internal?
     @Provides
-    fun locationSettingsResolver(): LocationSettingsResolver =
+    internal fun locationSettingsResolver(): LocationSettingsResolver =
         SettingsClientLocationSettingsResolver(locationRequest)
 
     @Provides
