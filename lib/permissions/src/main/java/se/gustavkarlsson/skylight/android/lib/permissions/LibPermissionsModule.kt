@@ -1,17 +1,17 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.Reusable
 
 @Module
-abstract class LibPermissionsModule {
+object LibPermissionsModule {
 
-    @Binds
+    @Provides
     @Reusable
-    internal abstract fun bindPermissionChecker(permissionManager: PermissionManager): PermissionChecker
+    internal fun bindPermissionChecker(impl: PermissionManager): PermissionChecker = impl
 
-    @Binds
+    @Provides
     @Reusable
-    internal abstract fun bindPermissionRequester(permissionManager: PermissionManager): PermissionRequester
+    internal fun bindPermissionRequester(impl: PermissionManager): PermissionRequester = impl
 }
