@@ -7,6 +7,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
 import dagger.multibindings.IntoSet
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
@@ -53,9 +54,9 @@ object LibLocationModule {
     }
 
     @Provides
-    internal fun locationManager(context: Context): LocationManager {
-        return context.getSystemService()!!
-    }
+    @Reusable
+    internal fun locationManager(context: Context): LocationManager =
+        context.getSystemService()!!
 
     @Provides
     internal fun locationServiceStatusProvider(
