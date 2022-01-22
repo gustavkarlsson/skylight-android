@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.lib.runversion
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import javax.inject.Named
+import se.gustavkarlsson.skylight.android.core.VersionCode
 
 @Module
 object LibRunVersionModule {
@@ -11,7 +11,7 @@ object LibRunVersionModule {
     @Provides
     internal fun runVersionManager(
         context: Context,
-        @Named("versionCode") versionCode: Int,
+        @VersionCode versionCode: Int,
     ): RunVersionManager =
         SharedPreferencesRunVersionManager(
             context,

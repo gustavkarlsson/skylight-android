@@ -5,16 +5,17 @@ import dagger.Module
 import dagger.Provides
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.core.AppComponent
+import se.gustavkarlsson.skylight.android.core.VersionCode
+import se.gustavkarlsson.skylight.android.core.VersionName
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
-import javax.inject.Named
 
 @Component(
     modules = [AboutModule::class],
     dependencies = [
         AppComponent::class,
         TimeComponent::class,
-    ]
+    ],
 )
 internal interface AboutComponent {
     fun viewModel(): AboutViewModel
@@ -34,8 +35,8 @@ internal object AboutModule {
     @Provides
     fun viewModel(
         time: Time,
-        @Named("versionCode") versionCode: Int,
-        @Named("versionName") versionName: String,
+        @VersionCode versionCode: Int,
+        @VersionName versionName: String,
     ): AboutViewModel = AboutViewModel(
         time = time,
         showDevelopData = BuildConfig.DEVELOP,

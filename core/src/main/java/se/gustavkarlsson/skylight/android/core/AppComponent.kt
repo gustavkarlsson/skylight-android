@@ -2,16 +2,15 @@ package se.gustavkarlsson.skylight.android.core
 
 import android.content.Context
 import kotlinx.coroutines.CoroutineDispatcher
-import javax.inject.Named
 
 interface AppComponent {
 
     fun context(): Context
 
-    @Named("versionCode")
+    @VersionCode
     fun versionCode(): Int
 
-    @Named("versionName")
+    @VersionName
     fun versionName(): String
 
     @Main
