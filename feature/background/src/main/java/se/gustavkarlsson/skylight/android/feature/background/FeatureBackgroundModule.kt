@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.feature.background
 import android.app.KeyguardManager
 import android.app.NotificationManager
 import android.content.Context
+import androidx.core.content.getSystemService
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -29,12 +30,12 @@ object FeatureBackgroundModule {
     @Provides
     @Reusable
     internal fun notificationManager(context: Context): NotificationManager =
-        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        context.getSystemService()!!
 
     @Provides
     @Reusable
     internal fun keyguardManager(context: Context): KeyguardManager =
-        context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+        context.getSystemService()!!
 
     @Provides
     internal fun scheduler(impl: NotifyScheduler): Scheduler = impl
