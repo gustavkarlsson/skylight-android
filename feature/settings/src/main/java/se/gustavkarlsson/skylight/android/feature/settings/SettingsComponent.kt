@@ -4,7 +4,7 @@ import dagger.Component
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent as LibSettingsComponent
 
 @Component(
-    dependencies = [LibSettingsComponent::class],
+    dependencies = [LibSettingsComponent::class]
 )
 internal interface SettingsComponent {
     fun viewModel(): SettingsViewModel
