@@ -8,8 +8,9 @@ import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notification
 import se.gustavkarlsson.skylight.android.feature.background.notifications.PlaceWithChance
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
+import javax.inject.Inject
 
-internal class SharedPrefsLastNotificationRepository(
+internal class SharedPrefsLastNotificationRepository @Inject constructor(
     context: Context,
 ) : LastNotificationRepository {
 

@@ -4,8 +4,9 @@ import org.threeten.bp.Instant
 import org.threeten.bp.LocalTime.NOON
 import se.gustavkarlsson.skylight.android.core.utils.until
 import se.gustavkarlsson.skylight.android.lib.time.Time
+import javax.inject.Inject
 
-internal class OutdatedEvaluator(
+internal class OutdatedEvaluator @Inject constructor(
     private val time: Time,
 ) {
 
