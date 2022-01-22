@@ -2,6 +2,7 @@
 * Better colors
 
 ## Soon
+* Should everything using Store also be singletons? (to utilize its cache)?
 * Add kotlin bom
 * Look into restricted bucket
 * Move to firebase BOM (https://firebase.google.com/docs/android/learn-more#bom)
