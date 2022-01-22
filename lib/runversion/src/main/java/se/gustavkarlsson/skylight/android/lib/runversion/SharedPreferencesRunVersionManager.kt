@@ -2,11 +2,15 @@ package se.gustavkarlsson.skylight.android.lib.runversion
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import dagger.Reusable
+import se.gustavkarlsson.skylight.android.core.VersionCode
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
+import javax.inject.Inject
 
-internal class SharedPreferencesRunVersionManager(
+@Reusable
+internal class SharedPreferencesRunVersionManager @Inject constructor(
     context: Context,
-    private val currentVersionCode: Int,
+    @VersionCode private val currentVersionCode: Int,
 ) : RunVersionManager {
 
     private val prefs by lazy {
