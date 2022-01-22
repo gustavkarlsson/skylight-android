@@ -1,12 +1,17 @@
 package se.gustavkarlsson.skylight.android.feature.about
 
 import com.ioki.textref.TextRef
+import dagger.Reusable
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
+import se.gustavkarlsson.skylight.android.core.VersionCode
+import se.gustavkarlsson.skylight.android.core.VersionName
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.lib.time.Time
+import javax.inject.Inject
 
+@Reusable
 internal class AboutViewModel(
     private val time: Time,
     private val showDevelopData: Boolean,
@@ -14,8 +19,23 @@ internal class AboutViewModel(
     private val versionName: String,
     private val gitBranch: String,
     private val gitSha1: String,
-    private val buildTime: Instant?,
+    private val buildTime: Instant,
 ) : ScopedService {
+
+    @Inject
+    constructor(
+        time: Time,
+        @VersionCode versionCode: Int,
+        @VersionName versionName: String,
+    ) : this(
+        time = time,
+        showDevelopData = BuildConfig.DEVELOP,
+        versionCode = versionCode,
+        versionName = versionName,
+        gitBranch = BuildConfig.GIT_BRANCH,
+        gitSha1 = BuildConfig.GIT_SHA1,
+        buildTime = Instant.ofEpochMilli(BuildConfig.BUILD_TIME_MILLIS),
+    )
 
     val detailsText: TextRef = createDetailsText()
 

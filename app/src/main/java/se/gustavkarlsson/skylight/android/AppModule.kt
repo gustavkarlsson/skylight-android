@@ -15,8 +15,9 @@ import kotlinx.coroutines.GlobalScope
 import se.gustavkarlsson.skylight.android.core.Global
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.Main
+import se.gustavkarlsson.skylight.android.core.VersionCode
+import se.gustavkarlsson.skylight.android.core.VersionName
 import java.util.Locale
-import javax.inject.Named
 
 @Module
 internal class AppModule(private val application: Application) {
@@ -27,19 +28,15 @@ internal class AppModule(private val application: Application) {
     fun scope(): CoroutineScope = GlobalScope
 
     @Provides
-    @Reusable
     fun application(): Application = application
 
     @Provides
-    @Reusable
     fun context(): Context = application
 
     @Provides
-    @Reusable
     fun activityClass(): Class<out Activity> = MainActivity::class.java
 
     @Provides
-    @Reusable
     fun getLocale(getLocales: () -> NonEmptyList<Locale>): () -> Locale = { getLocales().head }
 
     @Provides
@@ -56,22 +53,18 @@ internal class AppModule(private val application: Application) {
     }
 
     @Provides
-    @Reusable
-    @Named("versionCode")
+    @VersionCode
     fun versionCode(): Int = BuildConfig.VERSION_CODE
 
     @Provides
-    @Reusable
-    @Named("versionName")
+    @VersionName
     fun versionName(): String = BuildConfig.VERSION_NAME
 
     @Provides
-    @Reusable
     @Main
     fun mainDispatcher(): CoroutineDispatcher = Dispatchers.Main
 
     @Provides
-    @Reusable
     @Io
     fun ioDispatcher(): CoroutineDispatcher = Dispatchers.IO
 }

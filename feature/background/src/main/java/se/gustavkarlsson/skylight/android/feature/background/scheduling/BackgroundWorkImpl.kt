@@ -19,8 +19,9 @@ import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsRepository
 import se.gustavkarlsson.skylight.android.lib.time.Time
+import javax.inject.Inject
 
-internal class BackgroundWorkImpl(
+internal class BackgroundWorkImpl @Inject constructor(
     private val placesRepository: PlacesRepository,
     private val settingsRepository: SettingsRepository,
     private val appVisibilityEvaluator: AppVisibilityEvaluator,

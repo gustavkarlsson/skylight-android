@@ -2,6 +2,7 @@
 * Better colors
 
 ## Soon
+* Should everything using Store also be singletons? (to utilize its cache)?
 * Add kotlin bom
 * Look into restricted bucket
 * Move to firebase BOM (https://firebase.google.com/docs/android/learn-more#bom)
@@ -32,7 +33,6 @@
 * Firebase performance monitoring
 * Add manual clearing of "notification sent" in develop mode
 * Add more testing options (individual overrides for example)
-* Look into country changes while app running (Locale etc)
 * Additional analytics(Failed remote calls, Notifications on/off, Manually started app, Started app from notification, denied location permission, no Google Play Services installed, first start)
 * Add performance traces
 * Integrate code coverage (Coveralls or Codecov)

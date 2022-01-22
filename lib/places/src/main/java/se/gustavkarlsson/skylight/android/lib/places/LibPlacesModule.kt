@@ -6,12 +6,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoSet
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import se.gustavkarlsson.skylight.android.core.AppScope
-import se.gustavkarlsson.skylight.android.core.Global
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
-import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 import se.gustavkarlsson.skylight.android.lib.time.Time
 
 @Module
@@ -30,27 +27,12 @@ object LibPlacesModule {
     }
 
     @Provides
-    @AppScope
-    internal fun selectedPlaceRepository(
-        context: Context,
-        placesRepository: PlacesRepository,
-        @Global globalScope: CoroutineScope,
-        @Io dispatcher: CoroutineDispatcher,
-    ): SelectedPlaceRepository {
-        val storage = SharedPrefsPlaceSelectionStorage(context, dispatcher)
-        return PlacesRepoSelectedPlaceRepository(
-            placesRepo = placesRepository,
-            placeSelectionStorage = storage,
-            scope = globalScope,
-        )
-    }
+    internal fun placeSelectionStorage(impl: SharedPrefsPlaceSelectionStorage): PlaceSelectionStorage = impl
+
+    @Provides
+    internal fun selectedPlaceRepository(impl: PlacesRepoSelectedPlaceRepository): SelectedPlaceRepository = impl
 
     @Provides
     @IntoSet
-    fun moduleStarter(
-        placesRepository: PlacesRepository,
-        analytics: Analytics,
-        @Global globalScope: CoroutineScope,
-    ): ModuleStarter =
-        PlacesModuleStarter(placesRepository, analytics, globalScope)
+    internal fun moduleStarter(impl: PlacesModuleStarter): ModuleStarter = impl
 }

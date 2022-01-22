@@ -55,26 +55,19 @@ object LibLocationModule {
 
     @Provides
     @Reusable
-    internal fun locationManager(context: Context): LocationManager {
-        return context.getSystemService()!!
-    }
+    internal fun locationManager(context: Context): LocationManager =
+        context.getSystemService()!!
 
     @Provides
-    @AppScope
     internal fun locationServiceStatusProvider(
         impl: LocationManagerStatusProvider,
     ): LocationServiceStatusProvider = impl
 
-    // Why can't this be internal?
     @Provides
-    fun locationSettingsResolver(): LocationSettingsResolver =
+    internal fun locationSettingsResolver(): LocationSettingsResolver =
         SettingsClientLocationSettingsResolver(locationRequest)
 
     @Provides
-    @Reusable
     @IntoSet
-    internal fun moduleStarter(
-        locationManagerStatusProvider: LocationManagerStatusProvider,
-        @Global globalScope: CoroutineScope,
-    ): ModuleStarter = LocationModuleStarter(locationManagerStatusProvider, globalScope)
+    internal fun moduleStarter(impl: LocationModuleStarter): ModuleStarter = impl
 }

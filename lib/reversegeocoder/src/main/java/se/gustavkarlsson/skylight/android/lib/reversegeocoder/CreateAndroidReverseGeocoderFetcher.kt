@@ -15,10 +15,11 @@ import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
 import java.io.IOException
 
 internal fun createAndroidReverseGeocoderFetcher(
-    geocoder: Geocoder,
+    getGeocoder: () -> Geocoder,
     dispatcher: CoroutineDispatcher,
 ): Fetcher<ApproximatedLocation, Option<String>> = Fetcher.ofResult { location ->
     withContext(dispatcher + CoroutineName("reverseGeocoderFetcher")) {
+        val geocoder = getGeocoder()
         try {
             @Suppress("BlockingMethodInNonBlockingContext")
             val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 10)

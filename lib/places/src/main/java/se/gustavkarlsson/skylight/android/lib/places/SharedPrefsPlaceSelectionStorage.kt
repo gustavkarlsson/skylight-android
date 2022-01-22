@@ -3,12 +3,17 @@ package se.gustavkarlsson.skylight.android.lib.places
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import androidx.core.content.edit
+import dagger.Reusable
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import se.gustavkarlsson.skylight.android.core.Io
+import javax.inject.Inject
 
-internal class SharedPrefsPlaceSelectionStorage(
+// TODO Use coroutines
+@Reusable
+internal class SharedPrefsPlaceSelectionStorage @Inject constructor(
     context: Context,
-    private val dispatcher: CoroutineDispatcher,
+    @Io private val dispatcher: CoroutineDispatcher,
 ) : PlaceSelectionStorage {
 
     private val sharedPreferences by lazy {

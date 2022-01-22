@@ -9,13 +9,17 @@ import kotlinx.coroutines.flow.map
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
 import se.gustavkarlsson.conveyor.Store
+import se.gustavkarlsson.skylight.android.core.AppScope
+import se.gustavkarlsson.skylight.android.core.Global
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
+import javax.inject.Inject
 
-internal class PlacesRepoSelectedPlaceRepository(
+@AppScope
+internal class PlacesRepoSelectedPlaceRepository @Inject constructor(
     placesRepo: PlacesRepository,
     private val placeSelectionStorage: PlaceSelectionStorage,
-    scope: CoroutineScope,
+    @Global scope: CoroutineScope,
 ) : SelectedPlaceRepository {
     private val store = Store(
         initialState = State.Loading(suggestedId = null),

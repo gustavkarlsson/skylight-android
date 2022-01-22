@@ -4,11 +4,14 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
+import se.gustavkarlsson.skylight.android.feature.background.AuroraAlertsChannelId
+import se.gustavkarlsson.skylight.android.feature.background.AuroraAlertsChannelName
+import javax.inject.Inject
 
-internal class NotificationChannelCreator(
+internal class NotificationChannelCreator @Inject constructor(
     private val notificationManager: NotificationManager,
-    private val id: String,
-    private val name: String,
+    @AuroraAlertsChannelId private val id: String,
+    @AuroraAlertsChannelName private val name: String,
 ) {
 
     fun createChannel() {
