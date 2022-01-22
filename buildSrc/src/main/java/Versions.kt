@@ -42,6 +42,7 @@ object Versions {
 
     val arrow = "1.0.1"
     val dagger = "2.40.1"
+    val anvil = "2.3.10-1-6-0"
     val threetenabp = "1.3.1"
     val solarPositioning = "0.0.9"
     val sqldelight = "1.5.2"

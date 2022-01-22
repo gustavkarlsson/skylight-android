@@ -3,15 +3,18 @@ package se.gustavkarlsson.skylight.android.lib.reversegeocoder
 import android.content.Context
 import android.location.Geocoder
 import com.dropbox.android.external.store4.StoreBuilder
+import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import kotlinx.coroutines.CoroutineDispatcher
+import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.utils.seconds
 import java.util.Locale
 
 @Module
+@ContributesTo(AppScopeMarker::class)
 object LibReverseGeocoderModule {
 
     @Provides
