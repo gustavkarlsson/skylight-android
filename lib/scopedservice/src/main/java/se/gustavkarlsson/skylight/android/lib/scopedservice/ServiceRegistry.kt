@@ -1,9 +1,12 @@
 package se.gustavkarlsson.skylight.android.lib.scopedservice
 
+import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
+import javax.inject.Inject
 
-internal class ServiceRegistry : ServiceCatalog, ServiceClearer {
+@AppScope
+internal class ServiceRegistry @Inject constructor() : ServiceCatalog, ServiceClearer {
     private val services = mutableMapOf<ServiceId, ServiceEntry>()
 
     @Synchronized
