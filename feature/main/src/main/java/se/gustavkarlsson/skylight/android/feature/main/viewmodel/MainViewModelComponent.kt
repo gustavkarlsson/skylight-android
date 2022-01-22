@@ -164,4 +164,4 @@ internal object MainViewModelModule {
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class BackgroundLocationName
+internal annotation class BackgroundLocationName
