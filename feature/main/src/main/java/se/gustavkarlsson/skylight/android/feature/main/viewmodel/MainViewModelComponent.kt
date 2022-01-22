@@ -94,10 +94,6 @@ internal interface MainViewModelComponent {
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-internal annotation class SearchThrottle
-
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
 internal annotation class StreamThrottle
 
 @Qualifier
@@ -116,10 +112,6 @@ internal object MainViewModelModule {
 
     @Provides
     fun provideSearchReceiveChannel(channel: Channel<SearchFieldState>): ReceiveChannel<SearchFieldState> = channel
-
-    @Provides
-    @SearchThrottle
-    fun provideSearchThrottle(): Duration = 500.millis
 
     @Provides
     @StreamThrottle
