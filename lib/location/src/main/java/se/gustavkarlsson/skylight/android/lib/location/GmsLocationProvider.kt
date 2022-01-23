@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -129,8 +130,8 @@ internal class GmsLocationProvider(
         return locationPermission == Access.Granted
     }
 
-    private fun isLocationServiceEnabled(): Boolean {
-        val status = locationServiceStatusProvider.locationServiceStatus.value
+    private suspend fun isLocationServiceEnabled(): Boolean {
+        val status = locationServiceStatusProvider.locationServiceStatus.first()
         logDebug { "Location service is $status" }
         return when (status) {
             LocationServiceStatus.Enabled -> true

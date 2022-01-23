@@ -6,49 +6,49 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Looper
 import androidx.core.location.LocationManagerCompat
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collectLatest
-import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.Permission
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import javax.inject.Inject
 
-@AppScope // TODO Can we make this not a singleton?
 internal class LocationManagerStatusProvider @Inject constructor(
     private val locationManager: LocationManager,
     private val permissionChecker: PermissionChecker,
 ) : LocationServiceStatusProvider {
 
-    private val _locationServiceStatus = MutableStateFlow(getStatus()).apply {
-        logInfo { "Location service is initially $value" }
-    }
-    override val locationServiceStatus: StateFlow<LocationServiceStatus> = _locationServiceStatus
-
+    @OptIn(ExperimentalCoroutinesApi::class)
     @SuppressLint("MissingPermission")
-    suspend fun run() {
-        val callback = LocationServiceStatusListener {
+    override val locationServiceStatus: Flow<LocationServiceStatus> = callbackFlow {
+        val callback: () -> Unit = {
             val status = getStatus()
             logInfo { "Location service is now $status" }
-            _locationServiceStatus.value = status
+            trySend(status)
         }
+        callback()
+        val listener = LocationServiceStatusListener(callback)
+        invokeOnClose { locationManager.removeUpdates(listener) }
         permissionChecker.permissions.collectLatest { granted ->
             if (granted[Permission.Location] == Access.Granted) {
                 locationManager.requestLocationUpdates(
                     LocationManager.PASSIVE_PROVIDER,
                     Long.MAX_VALUE,
                     Float.MAX_VALUE,
-                    callback,
+                    listener,
                     Looper.getMainLooper(),
                 )
             } else {
-                locationManager.removeUpdates(callback)
+                locationManager.removeUpdates(listener)
             }
         }
         error("Collect should never end")
-    }
+    }.buffer(capacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     private fun getStatus(): LocationServiceStatus {
         return if (LocationManagerCompat.isLocationEnabled(locationManager)) {
@@ -60,9 +60,9 @@ internal class LocationManagerStatusProvider @Inject constructor(
 }
 
 private class LocationServiceStatusListener(
-    private val onChange: () -> Unit,
+    private val callback: () -> Unit,
 ) : LocationListener {
     override fun onLocationChanged(location: Location) = Unit
-    override fun onProviderEnabled(provider: String) = onChange()
-    override fun onProviderDisabled(provider: String) = onChange()
+    override fun onProviderEnabled(provider: String) = callback()
+    override fun onProviderDisabled(provider: String) = callback()
 }

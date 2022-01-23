@@ -34,7 +34,6 @@ import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationComponent
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexComponent
 import se.gustavkarlsson.skylight.android.lib.location.LocationComponent
-import se.gustavkarlsson.skylight.android.lib.location.LocationServiceStatusProvider
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
@@ -133,10 +132,9 @@ object MainViewModelModule {
     @Provides
     internal fun initialState(
         permissionChecker: PermissionChecker,
-        locationServiceStatusProvider: LocationServiceStatusProvider,
     ): State = State.Loading(
         permissions = permissionChecker.permissions.value,
-        locationServiceStatus = locationServiceStatusProvider.locationServiceStatus.value,
+        locationServiceStatus = Loading,
         currentLocation = Loading,
         currentLocationName = Loading,
         selectedPlace = null,

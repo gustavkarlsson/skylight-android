@@ -15,7 +15,7 @@ import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import javax.inject.Inject
 
-@AppScope// TODO Can we make this not a singleton? What about the global scope?
+@AppScope // TODO Can we make this not a singleton? What about the global scope?
 internal class PlacesRepoSelectedPlaceRepository @Inject constructor(
     placesRepo: PlacesRepository,
     private val placeSelectionStorage: PlaceSelectionStorage,

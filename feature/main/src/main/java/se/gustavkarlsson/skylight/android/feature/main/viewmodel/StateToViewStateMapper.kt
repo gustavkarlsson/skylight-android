@@ -112,10 +112,10 @@ internal class StateToViewStateMapper @Inject constructor(
             is Search.Active.Error -> ContentState.Searching.Error(search.text)
             Search.Inactive -> {
                 val currentSelected = state.selectedPlace == Place.Current
-                val locationServiceEnabled = state.locationServiceStatus == LocationServiceStatus.Enabled
+                val locationServiceDisabled = state.locationServiceStatus.orNull() == LocationServiceStatus.Disabled
                 val locationAccess = state.permissions[Permission.Location]
                 when {
-                    currentSelected && !locationServiceEnabled -> {
+                    currentSelected && locationServiceDisabled -> {
                         ContentState.RequiresLocationService
                     }
                     currentSelected && locationAccess == Access.Denied -> {

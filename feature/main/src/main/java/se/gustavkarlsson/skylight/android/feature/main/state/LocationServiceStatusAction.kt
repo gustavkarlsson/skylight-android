@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.state
 
+import arrow.core.toOption
 import kotlinx.coroutines.flow.collectLatest
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
@@ -13,8 +14,8 @@ internal class LocationServiceStatusAction @Inject constructor(
         locationServiceStatusProvider.locationServiceStatus.collectLatest { locationServiceStatus ->
             stateFlow.update {
                 when (this) {
-                    is State.Loading -> copy(locationServiceStatus = locationServiceStatus)
-                    is State.Ready -> copy(locationServiceStatus = locationServiceStatus)
+                    is State.Loading -> copy(locationServiceStatus = locationServiceStatus.toOption())
+                    is State.Ready -> copy(locationServiceStatus = locationServiceStatus.toOption())
                 }
             }
         }
