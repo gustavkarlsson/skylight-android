@@ -1,13 +1,16 @@
 package se.gustavkarlsson.skylight.android.lib.places
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import com.squareup.anvil.annotations.ContributesTo
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
 import dagger.multibindings.IntoSet
 import kotlinx.coroutines.CoroutineDispatcher
-import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
@@ -18,7 +21,7 @@ import se.gustavkarlsson.skylight.android.lib.time.Time
 object LibPlacesModule {
 
     @Provides
-    @AppScope
+    @Reusable
     internal fun placesRepository(
         context: Context,
         @Io dispatcher: CoroutineDispatcher,
@@ -30,12 +33,18 @@ object LibPlacesModule {
     }
 
     @Provides
-    internal fun placeSelectionStorage(impl: SharedPrefsPlaceSelectionStorage): PlaceSelectionStorage = impl
-
-    @Provides
-    internal fun selectedPlaceRepository(impl: PlacesRepoSelectedPlaceRepository): SelectedPlaceRepository = impl
+    @Reusable
+    internal fun placeSelectionStorage(
+        context: Context,
+        placesRepository: PlacesRepository,
+    ): SelectedPlaceRepository {
+        val datastore = context.dataStore
+        return PlacesRepoSelectedPlaceRepository(placesRepository, datastore)
+    }
 
     @Provides
     @IntoSet
     internal fun moduleStarter(impl: PlacesModuleStarter): ModuleStarter = impl
 }
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "selected_place")

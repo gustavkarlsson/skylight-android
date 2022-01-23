@@ -14,7 +14,7 @@ import se.gustavkarlsson.skylight.android.core.utils.nonEmpty
 import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 import javax.inject.Inject
 
-@AppScope
+@AppScope // TODO Scope to Activity instead using a ViewModel?
 internal class DefaultNavigator @Inject constructor(
     private val defaultScreen: Screen,
     private val overrides: Set<@JvmSuppressWildcards NavigationOverride>,

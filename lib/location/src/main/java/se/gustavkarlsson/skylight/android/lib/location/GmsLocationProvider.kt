@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -75,7 +76,13 @@ internal class GmsLocationProvider(
                 getFreshLocation()
             } else {
                 logInfo { "Getting cached location" }
-                getCachedLocation()
+                val cached = getCachedLocation()
+                if (cached != null) {
+                    cached
+                } else {
+                    logWarn { "Getting fresh location instead" }
+                    getFreshLocation()
+                }
             }
         } catch (e: CancellationException) {
             throw e
@@ -103,23 +110,23 @@ internal class GmsLocationProvider(
         }
     }
 
-    private suspend fun getCachedLocation(): LocationResult {
+    private suspend fun getCachedLocation(): LocationResultSuccess? {
         logDebug { "Checking if last location is up to date" }
         @SuppressLint("MissingPermission")
         if (!client.awaitIsLocationAvailable()) {
-            logWarn { "Last location is not up to date. Trying with fresh location" }
-            return getFreshLocation()
+            logWarn { "Last location is not up to date." }
+            return null
         }
         logDebug { "Last location is up to date" }
         logDebug { "Trying to get last location" }
         @SuppressLint("MissingPermission")
         val lastLocation = client.awaitLastLocation()
         if (lastLocation == null) {
-            logWarn { "Failed to get last location. Trying with fresh location" }
-            return getFreshLocation()
+            logWarn { "Failed to get last location." }
+            return null
         }
         logDebug { "Successfully got last location" }
-        return lastLocation.right()
+        return LocationResultSuccess(lastLocation)
     }
 
     private fun hasLocationPermission(): Boolean {
@@ -129,8 +136,8 @@ internal class GmsLocationProvider(
         return locationPermission == Access.Granted
     }
 
-    private fun isLocationServiceEnabled(): Boolean {
-        val status = locationServiceStatusProvider.locationServiceStatus.value
+    private suspend fun isLocationServiceEnabled(): Boolean {
+        val status = locationServiceStatusProvider.locationServiceStatus.first()
         logDebug { "Location service is $status" }
         return when (status) {
             LocationServiceStatus.Enabled -> true
@@ -178,17 +185,22 @@ internal class GmsLocationProvider(
         .distinctUntilChanged()
 
     private fun FusedLocationProviderClient.streamWhenReady(): Flow<Loadable<LocationResult>> = flow {
-        emit(Loading)
-        emit(Loaded(getCachedLocation()))
+        val cached = getCachedLocation()
+        val firstLocation = if (cached != null) {
+            Loaded(cached)
+        } else {
+            Loading
+        }
+        emit(firstLocation)
         emitAll(streamWithRetry(locationRequest, streamRetryDuration).map { Loaded(it) })
     }.distinctUntilChanged()
 }
 
 @RequiresPermission(anyOf = ["android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"])
-private suspend fun FusedLocationProviderClient.awaitCurrentLocation(priorityHighAccuracy: Int): AndroidLocation? {
+private suspend fun FusedLocationProviderClient.awaitCurrentLocation(priority: Int): AndroidLocation? {
     val cancellationSource = CancellationTokenSource()
     return try {
-        getCurrentLocation(priorityHighAccuracy, cancellationSource.token).await()
+        getCurrentLocation(priority, cancellationSource.token).await()
     } catch (e: CancellationException) {
         cancellationSource.cancel()
         throw e

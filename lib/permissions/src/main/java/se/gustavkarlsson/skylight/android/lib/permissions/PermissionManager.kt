@@ -18,23 +18,23 @@ internal class PermissionManager @Inject constructor(
     private val context: Context,
 ) : PermissionChecker, PermissionRequester {
 
-    private val state = MutableStateFlow(Permissions(getPermissions()))
+    private val state = MutableStateFlow(getPermissions())
 
-    override val permissions: StateFlow<Permissions> get() = state
+    override val permissions: StateFlow<Permissions> = state
 
     override fun refresh() {
-        val newMap = getPermissions()
-        val new = Permissions(newMap)
+        val new = getPermissions()
         val old = state.value
         state.value = new
         logInfo { "Permissions changed from $old to $new" }
     }
 
-    private fun getPermissions(): Map<Permission, Access> {
-        return Permission.values().associate { permission ->
+    private fun getPermissions(): Permissions {
+        val map = Permission.values().associate { permission ->
             val access = getAccess(permission)
             permission to access
         }
+        return Permissions(map)
     }
 
     private fun getAccess(permission: Permission): Access {

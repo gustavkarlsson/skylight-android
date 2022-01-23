@@ -9,14 +9,12 @@ import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import dagger.multibindings.IntoSet
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 import se.gustavkarlsson.skylight.android.core.Global
 import se.gustavkarlsson.skylight.android.core.Io
-import se.gustavkarlsson.skylight.android.core.ModuleStarter
 import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.core.utils.seconds
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
@@ -69,8 +67,4 @@ object LibLocationModule {
     @Provides
     internal fun locationSettingsResolver(): LocationSettingsResolver =
         SettingsClientLocationSettingsResolver(locationRequest)
-
-    @Provides
-    @IntoSet
-    internal fun moduleStarter(impl: LocationModuleStarter): ModuleStarter = impl
 }

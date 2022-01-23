@@ -5,7 +5,7 @@ import se.gustavkarlsson.skylight.android.core.logging.logDebug
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import javax.inject.Inject
 
-@AppScope
+@AppScope // TODO Scope to Activity instead using a ViewModel?
 internal class ServiceRegistry @Inject constructor() : ServiceCatalog, ServiceClearer {
     private val services = mutableMapOf<ServiceId, ServiceEntry>()
 

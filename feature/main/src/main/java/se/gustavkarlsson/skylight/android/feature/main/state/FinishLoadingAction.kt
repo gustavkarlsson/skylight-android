@@ -22,7 +22,7 @@ internal class FinishLoadingAction @Inject constructor() : Action<State> {
 }
 
 private fun State.Loading.updateLoading(): State {
-    return if (selectedPlace != null && places != null && settings != null) {
+    return if (locationServiceStatus != null && selectedPlace != null && places != null && settings != null) {
         State.Ready(
             permissions = permissions,
             locationServiceStatus = locationServiceStatus,

@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.core.VersionCode
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
 import javax.inject.Inject
 
-// TODO Use coroutines
+// TODO Use datastore
 @Reusable
 internal class SharedPreferencesRunVersionManager @Inject constructor(
     context: Context,

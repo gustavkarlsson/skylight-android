@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.whenCreated
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.lib.navigation.BackPressHandler
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
@@ -62,9 +63,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private var onNewPlaceJob: Job? = null
     private fun onNewPlaceId(placeId: PlaceId) {
-        selectedPlaceRepository.set(placeId)
-        navigator.setBackstack(Backstack(screens.main))
+        onNewPlaceJob?.cancel()
+        onNewPlaceJob = lifecycleScope.launch {
+            selectedPlaceRepository.set(placeId)
+            navigator.setBackstack(Backstack(screens.main))
+        }
     }
 
     override fun onBackPressed() = backPressHandler.onBackPress()

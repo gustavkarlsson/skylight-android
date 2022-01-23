@@ -24,7 +24,7 @@ internal class BackgroundModuleStarter @Inject constructor(
         deleteOldNotifiedPrefsFile()
         scope.launch {
             notificationChannelCreator.createChannel()
-            scheduleBasedOnSettings()
+            scheduleBasedOnSettings() // TODO scheduling can be tied to activity lifecycle instead
         }
     }
 
