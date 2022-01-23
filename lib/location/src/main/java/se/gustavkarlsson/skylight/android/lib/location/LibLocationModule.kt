@@ -33,7 +33,7 @@ object LibLocationModule {
     }
 
     @Provides
-    @AppScope // TODO Can we make this not a singleton? What about the global scope?
+    @AppScope
     internal fun locationProvider(
         context: Context,
         permissionChecker: PermissionChecker,
