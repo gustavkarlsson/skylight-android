@@ -1,6 +1,9 @@
 package se.gustavkarlsson.skylight.android.lib.places
 
 import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import com.squareup.anvil.annotations.ContributesTo
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Module
@@ -30,12 +33,18 @@ object LibPlacesModule {
     }
 
     @Provides
-    internal fun placeSelectionStorage(impl: SharedPrefsPlaceSelectionStorage): PlaceSelectionStorage = impl
-
-    @Provides
-    internal fun selectedPlaceRepository(impl: PlacesRepoSelectedPlaceRepository): SelectedPlaceRepository = impl
+    @Reusable
+    internal fun placeSelectionStorage(
+        context: Context,
+        placesRepository: PlacesRepository,
+    ): SelectedPlaceRepository {
+        val datastore = context.dataStore
+        return PlacesRepoSelectedPlaceRepository(placesRepository, datastore)
+    }
 
     @Provides
     @IntoSet
     internal fun moduleStarter(impl: PlacesModuleStarter): ModuleStarter = impl
 }
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "selected_place")
