@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.Permission
@@ -48,7 +49,8 @@ internal class LocationManagerStatusProvider @Inject constructor(
             }
         }
         error("Collect should never end")
-    }.buffer(capacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    }.distinctUntilChanged()
+        .buffer(capacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
     private fun getStatus(): LocationServiceStatus {
         return if (LocationManagerCompat.isLocationEnabled(locationManager)) {
