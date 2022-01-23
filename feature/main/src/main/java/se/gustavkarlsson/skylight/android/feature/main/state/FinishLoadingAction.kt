@@ -22,6 +22,7 @@ internal class FinishLoadingAction @Inject constructor() : Action<State> {
 }
 
 private fun State.Loading.updateLoading(): State {
+    // FIXME can we make a few nullable/Loadable things more concrete?
     return if (selectedPlace != null && places != null && settings != null) {
         State.Ready(
             permissions = permissions,
