@@ -16,7 +16,7 @@ import se.gustavkarlsson.skylight.android.lib.permissions.Permission
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import javax.inject.Inject
 
-@AppScope
+@AppScope // TODO Can we make this not a singleton?
 internal class LocationManagerStatusProvider @Inject constructor(
     private val locationManager: LocationManager,
     private val permissionChecker: PermissionChecker,

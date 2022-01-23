@@ -13,7 +13,7 @@ import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import javax.inject.Inject
 
-@AppScope
+@AppScope // TODO Can we make this not a singleton?
 internal class PermissionManager @Inject constructor(
     private val context: Context,
 ) : PermissionChecker, PermissionRequester {
