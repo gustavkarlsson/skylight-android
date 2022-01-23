@@ -16,7 +16,7 @@ internal class PlacesModuleStarter @Inject constructor(
 ) : ModuleStarter {
     override suspend fun start() {
         scope.launch {
-            updateAnalyticsPlacesCount()
+            updateAnalyticsPlacesCount() // TODO this can be tied to activity lifecycle instead
         }
     }
 
