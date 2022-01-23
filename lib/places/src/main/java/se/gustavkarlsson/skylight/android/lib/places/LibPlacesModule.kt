@@ -5,9 +5,9 @@ import com.squareup.anvil.annotations.ContributesTo
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Module
 import dagger.Provides
+import dagger.Reusable
 import dagger.multibindings.IntoSet
 import kotlinx.coroutines.CoroutineDispatcher
-import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
@@ -18,7 +18,7 @@ import se.gustavkarlsson.skylight.android.lib.time.Time
 object LibPlacesModule {
 
     @Provides
-    @AppScope
+    @Reusable
     internal fun placesRepository(
         context: Context,
         @Io dispatcher: CoroutineDispatcher,
