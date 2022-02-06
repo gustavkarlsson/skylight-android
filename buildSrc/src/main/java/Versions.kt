@@ -7,7 +7,7 @@ object Versions {
     val targetSdk = 31
     val java = JavaVersion.VERSION_1_8
     val kotlin = "1.6.10" // Must also update in buildSrc/build.gradle.kts
-    val androidGradle = "7.1.0-rc01" // Must also update in buildSrc/build.gradle.kts
+    val androidGradle = "7.1.1" // Must also update in buildSrc/build.gradle.kts
     val jgit = "5.12.0.202106070339-r"
 
     val axionRelease = "1.13.3"
