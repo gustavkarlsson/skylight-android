@@ -11,7 +11,7 @@ internal object WeatherEvaluator : ChanceEvaluator<Weather> {
         if (clouds < 0 || clouds > 100) {
             return UNKNOWN
         }
-        val chance = -1.0 / 50.0 * clouds.toDouble() + 1.0
+        val chance = -1.0 / 50.0 * clouds.toDouble() + 1.0 // 50-0 maps to 0-1
         return Chance(chance)
     }
 }
