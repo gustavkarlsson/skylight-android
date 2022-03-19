@@ -7,6 +7,11 @@ on:
         description: Version number
         required: true
         default: x.y.z
+      createTag:
+        description: Create tag
+        required: true
+        type: boolean
+        default: true
 
 jobs:
   test:
@@ -40,13 +45,17 @@ jobs:
       - name: Run checks
         run: ./gradlew check
 
-      - name: Run release
+      - name: Create tag
+        if: ${{ github.event.inputs.createTag }}
         env:
-          VERSION_NUMBER: ${{ github.event.inputs.versionNumber }}
-        run: ./gradlew release -Prelease.forceVersion="$VERSION_NUMBER"
+          TAG_NAME: ${{ github.event.inputs.versionNumber }}
+        run: |
+          git tag "$TAG_NAME"
+          git push origin "$TAG_NAME"
 
       - name: Run publish
         env:
+          ORG_GRADLE_PROJECT_version_name: ${{ github.event.inputs.versionNumber }}
           ORG_GRADLE_PROJECT_android_store_file: /tmp/android.jks
           ORG_GRADLE_PROJECT_android_store_password: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
           ORG_GRADLE_PROJECT_android_key_alias: ${{ secrets.RELEASE_KEY_ALIAS }}
