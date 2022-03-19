@@ -61,7 +61,7 @@ import javax.inject.Qualifier
         GeocoderComponent::class,
         ReverseGeocoderComponent::class,
         SettingsComponent::class,
-    ]
+    ],
 )
 internal interface MainViewModelComponent {
     fun viewModel(): MainViewModel

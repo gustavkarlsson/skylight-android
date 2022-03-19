@@ -5,7 +5,7 @@ import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent as LibS
 
 @MergeComponent(
     scope = SettingsScopeMarker::class,
-    dependencies = [LibSettingsComponent::class]
+    dependencies = [LibSettingsComponent::class],
 )
 internal interface SettingsComponent {
     fun viewModel(): SettingsViewModel

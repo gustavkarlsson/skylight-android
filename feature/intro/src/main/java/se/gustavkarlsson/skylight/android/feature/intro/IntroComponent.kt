@@ -9,7 +9,7 @@ import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionComponent
     dependencies = [
         AppComponent::class,
         RunVersionComponent::class,
-    ]
+    ],
 )
 internal interface IntroComponent {
     fun viewModel(): IntroViewModel

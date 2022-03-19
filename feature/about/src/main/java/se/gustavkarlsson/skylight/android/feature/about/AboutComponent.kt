@@ -9,7 +9,7 @@ import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
     dependencies = [
         AppComponent::class,
         TimeComponent::class,
-    ]
+    ],
 )
 internal interface AboutComponent {
     fun viewModel(): AboutViewModel
