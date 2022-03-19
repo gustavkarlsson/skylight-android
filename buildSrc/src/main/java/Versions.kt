@@ -10,7 +10,6 @@ object Versions {
     val androidGradle = "7.1.1" // Must also update in buildSrc/build.gradle.kts
     val jgit = "5.12.0.202106070339-r"
 
-    val axionRelease = "1.13.3"
     val playPublisher = "3.7.0"
     val ktlintGradle = "10.2.0"
     val ktlint = "0.43.2"

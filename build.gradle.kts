@@ -15,7 +15,6 @@ buildscript {
         classpath("com.google.gms:google-services:${Versions.googleServices}")
         classpath("com.google.firebase:firebase-crashlytics-gradle:${Versions.crashlyticsGradle}")
         classpath("org.eclipse.jgit:org.eclipse.jgit:${Versions.jgit}")
-        classpath("pl.allegro.tech.build:axion-release-plugin:${Versions.axionRelease}")
         classpath("com.squareup.sqldelight:gradle-plugin:${Versions.sqldelight}")
         classpath("org.jlleitschuh.gradle:ktlint-gradle:${Versions.ktlintGradle}")
         classpath("com.google.protobuf:protobuf-gradle-plugin:${Versions.protobufGradle}")
