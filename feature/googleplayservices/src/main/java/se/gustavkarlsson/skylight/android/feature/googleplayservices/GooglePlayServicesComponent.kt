@@ -5,7 +5,7 @@ import se.gustavkarlsson.skylight.android.core.AppComponent
 
 @MergeComponent(
     scope = GooglePlayServicesScopeMarker::class,
-    dependencies = [AppComponent::class]
+    dependencies = [AppComponent::class],
 )
 internal interface GooglePlayServicesComponent {
     fun viewModel(): GooglePlayServicesViewModel

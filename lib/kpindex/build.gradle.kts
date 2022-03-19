@@ -27,7 +27,6 @@ dependencies {
 
     // Testing
     testImplementation("junit:junit:${Versions.junit}")
-    testImplementation("org.robolectric:robolectric:${Versions.robolectric}")
     testImplementation("org.mockito:mockito-inline:${Versions.mockito}")
     testImplementation("com.nhaarman:mockito-kotlin-kt1.1:${Versions.mockitoKotlin}") {
         exclude("org.jetbrains.kotlin")
