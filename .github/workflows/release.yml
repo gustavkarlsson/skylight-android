@@ -63,3 +63,10 @@ jobs:
           ORG_GRADLE_PROJECT_mapbox_api_key: ${{ secrets.MAPBOX_API_KEY }}
           ORG_GRADLE_PROJECT_openweathermap_api_key: ${{ secrets.OPENWEATHERMAP_API_KEY }}
         run: ./gradlew publishProductionReleaseApps
+
+      - name: Upload bundle
+        uses: actions/upload-artifact@v3
+        if: ${{ always() }}
+        with:
+          name: skylight-${{ github.event.inputs.versionNumber }}
+          path: ${{ github.workspace }}/app/build/outputs/bundle/*
