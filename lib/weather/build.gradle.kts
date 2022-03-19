@@ -6,14 +6,29 @@ plugins {
     kotlin("plugin.serialization") version Versions.kotlin
 }
 
+val parsedOpenWeatherMapApiKey: String? by lazy {
+    val property = findProperty("openweathermap_api_key") as String?
+    if (property == null) {
+        logger.warn("No openweathermap_api_key property set")
+        null
+    } else {
+        property
+    }
+}
+
+tasks.matching { it.name.startsWith("publish") }.configureEach {
+    doFirst {
+        requireNotNull(parsedOpenWeatherMapApiKey) {
+            "No OpenWeatherMap API key set"
+        }
+    }
+}
+
 android {
     commonConfig()
 
     defaultConfig {
-        val openWeatherMapApiKey = findProperty("openweathermap_api_key") ?: run {
-            logger.warn("WARNING: openweathermap_api_key not set")
-            "openweathermap_api_key_not_set"
-        }
+        val openWeatherMapApiKey = parsedOpenWeatherMapApiKey ?: "openweathermap_api_key_not_set"
         buildConfigField("String", "OPENWEATHERMAP_API_KEY", "\"$openWeatherMapApiKey\"")
     }
 }
