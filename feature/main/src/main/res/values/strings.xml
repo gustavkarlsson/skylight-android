@@ -35,20 +35,22 @@
     <string name="cause_server_response">Server error. Try again later.</string>
     <string name="cause_unknown">Something has gone wrong ☹</string>
 
-    <string name="location_permission_required">Location permission required</string>
+    <string name="where_are_you">Where are you?</string>
     <string name="background_location_permission_required">Background location permission required</string>
     <string name="location_permission_denied_forever_title">Permission previously denied</string>
     <string name="allow_all_the_time">Allow all the time</string>
-    <string name="location_permission_denied_message">To determine aurora chances where you are,
-        you must allow Skylight access to your location.</string>
+    <string name="location_permission_denied_message">
+        To determine aurora chances,
+        give Skylight permission to use your location or select a location manually.</string>
     <string name="location_permission_denied_forever_message">
         You have previously denied location permission for Skylight.\n\n
+        If you wish to use your current location, please:\n\n
         1. Open App info\n
         2. Select Permissions\n
         3. Select Location\n
         4. Allow\n
         5. Return to the app</string>
-    <string name="location_permission_select_other">Select another location instead</string>
+    <string name="location_permission_select_manually">Select manually</string>
     <string name="background_location_permission_denied_message">
         You have enabled notifications for your current location.
         This only works if Skylight has access to your location all the time.\n\n
