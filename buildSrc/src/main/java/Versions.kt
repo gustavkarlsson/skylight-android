@@ -20,7 +20,6 @@ object Versions {
     val playServicesLocation = "19.0.1"
     val playServicesGcm = "17.0.0"
 
-    val firebaseAnalytics = "20.1.1"
     val crashlyticsGradle = "2.8.1"
     val crashlytics = "18.2.9"
 

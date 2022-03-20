@@ -9,11 +9,9 @@ import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import dagger.multibindings.IntoSet
 import kotlinx.coroutines.CoroutineDispatcher
 import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 import se.gustavkarlsson.skylight.android.core.Io
-import se.gustavkarlsson.skylight.android.core.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.time.Time
 
 @Module
@@ -41,10 +39,6 @@ object LibPlacesModule {
         val datastore = context.dataStore
         return PlacesRepoSelectedPlaceRepository(placesRepository, datastore)
     }
-
-    @Provides
-    @IntoSet
-    internal fun moduleStarter(impl: PlacesModuleStarter): ModuleStarter = impl
 }
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "selected_place")

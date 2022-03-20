@@ -10,7 +10,6 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:analytics"))
     api(project(":lib:ui"))
 
     implementation("io.noties.markwon:core:${Versions.markwon}")
