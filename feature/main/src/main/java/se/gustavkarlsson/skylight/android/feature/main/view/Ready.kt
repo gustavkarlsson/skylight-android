@@ -67,11 +67,11 @@ internal fun Ready(
                         .dialogModifiers()
                         .padding(paddingValues),
                     image = { LocationIcon() },
-                    title = stringResource(R.string.location_permission_required),
+                    title = stringResource(R.string.where_are_you),
                     description = stringResource(R.string.location_permission_denied_message),
                     primaryActionText = stringResource(R.string.location_permission),
                     onClickPrimaryAction = onClickGrantLocationPermission,
-                    secondaryActionText = stringResource(R.string.location_permission_select_other),
+                    secondaryActionText = stringResource(R.string.location_permission_select_manually),
                     onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
                 )
             }
@@ -85,7 +85,7 @@ internal fun Ready(
                     description = stringResource(R.string.location_permission_denied_forever_message),
                     primaryActionText = stringResource(R.string.open_settings),
                     onClickPrimaryAction = onClickOpenSettings,
-                    secondaryActionText = stringResource(R.string.location_permission_select_other),
+                    secondaryActionText = stringResource(R.string.location_permission_select_manually),
                     onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
                 )
             }
@@ -100,7 +100,7 @@ internal fun Ready(
                     description = stringResource(R.string.location_service_disabled_message),
                     primaryActionText = stringResource(R.string.enable),
                     onClickPrimaryAction = { onEvent(Event.ResolveLocationSettings(activity)) },
-                    secondaryActionText = stringResource(R.string.location_permission_select_other),
+                    secondaryActionText = stringResource(R.string.location_permission_select_manually),
                     onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
                 )
             }

@@ -35,20 +35,22 @@
     <string name="cause_server_response">Serverfel. Försök igen senare.</string>
     <string name="cause_unknown">Något gick fel ☹</string>
 
-    <string name="location_permission_required">Platsbehörighet krävs</string>
+    <string name="where_are_you">Var är du?</string>
     <string name="background_location_permission_required">Platsbehörighet i bakgrunden krävs</string>
     <string name="location_permission_denied_forever_title">Behörighet tidigare nekad</string>
     <string name="allow_all_the_time">Tillåt alltid</string>
-    <string name="location_permission_denied_message">För att beräkna chansen att se norrsken där du är,
-        tillåt att Skylight kan läsa din plats.</string>
+    <string name="location_permission_denied_message">
+        För att beräkna chansen att se norrsken,
+        ge Skylight behörighet till din plats eller välj en plats manuellt.</string>
     <string name="location_permission_denied_forever_message">
         Du har tidigare nekat platsbehörighet för Skylight.\n\n
+        Om du vill använda din plats, var god:\n\n
         1. Öppna Appinformation\n
         2. Välj Behörigheter\n
         3. Välj Plats\n
         4. Tillåt\n
         5. Återvänd till appen</string>
-    <string name="location_permission_select_other">Välj en annan plats istället</string>
+    <string name="location_permission_select_manually">Välj manuellt</string>
     <string name="background_location_permission_denied_message">
         Du har aktiverat aviseringar för din nuvarande plats.
         Detta fungerar endast om Skylight alltid kan läsa din plats.\n\n
