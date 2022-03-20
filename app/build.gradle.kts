@@ -156,7 +156,6 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:analytics"))
     implementation(project(":lib:location"))
     implementation(project(":lib:okhttp"))
     implementation(project(":lib:weather"))

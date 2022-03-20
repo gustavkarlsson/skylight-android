@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.core.entities
 
 enum class ChanceLevel {
-    // Warning. The names are used to report analytics data
     UNKNOWN,
     NONE,
     LOW,

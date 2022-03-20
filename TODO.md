@@ -34,7 +34,6 @@
 * Firebase performance monitoring
 * Add manual clearing of "notification sent" in develop mode
 * Add more testing options (individual overrides for example)
-* Additional analytics(Failed remote calls, Notifications on/off, Manually started app, Started app from notification, denied location permission, no Google Play Services installed, first start)
 * Add performance traces
 * Integrate code coverage (Coveralls or Codecov)
 * Look into using Spek (problems with junit5 and android)

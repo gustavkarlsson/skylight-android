@@ -14,7 +14,6 @@ import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.feature.background.AuroraAlertsChannelId
 import se.gustavkarlsson.skylight.android.feature.background.R
-import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
 import se.gustavkarlsson.skylight.android.lib.places.setPlaceId
 import javax.inject.Inject
 
@@ -24,7 +23,6 @@ internal class NotifierImpl @Inject constructor(
     private val notificationFormatter: Formatter<Notification>,
     private val activityClass: Class<out Activity>,
     @AuroraAlertsChannelId private val channelId: String,
-    private val analytics: Analytics,
 ) : Notifier {
 
     override fun notify(notification: Notification) {
@@ -42,7 +40,6 @@ internal class NotifierImpl @Inject constructor(
         }
 
         notificationManager.notify(1, androidNotification)
-        analytics.logEvent("notification_sent")
     }
 
     private fun NotificationCompat.Builder.setText(notification: Notification) {

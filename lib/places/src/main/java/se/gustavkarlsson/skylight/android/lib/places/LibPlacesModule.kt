@@ -41,10 +41,6 @@ object LibPlacesModule {
         val datastore = context.dataStore
         return PlacesRepoSelectedPlaceRepository(placesRepository, datastore)
     }
-
-    @Provides
-    @IntoSet
-    internal fun moduleStarter(impl: PlacesModuleStarter): ModuleStarter = impl
 }
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "selected_place")

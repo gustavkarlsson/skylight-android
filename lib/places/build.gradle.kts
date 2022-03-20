@@ -19,7 +19,6 @@ sqldelight {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:analytics"))
     implementation(project(":lib:location"))
     implementation(project(":lib:time"))
 

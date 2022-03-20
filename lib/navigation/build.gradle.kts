@@ -14,7 +14,6 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":lib:scopedservice"))
-    implementation(project(":lib:analytics"))
 
     implementation("androidx.compose.runtime:runtime:${Versions.compose}")
 
