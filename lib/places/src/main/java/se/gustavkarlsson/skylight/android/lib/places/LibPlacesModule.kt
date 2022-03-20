@@ -9,11 +9,9 @@ import com.squareup.sqldelight.android.AndroidSqliteDriver
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
-import dagger.multibindings.IntoSet
 import kotlinx.coroutines.CoroutineDispatcher
 import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 import se.gustavkarlsson.skylight.android.core.Io
-import se.gustavkarlsson.skylight.android.core.ModuleStarter
 import se.gustavkarlsson.skylight.android.lib.time.Time
 
 @Module
