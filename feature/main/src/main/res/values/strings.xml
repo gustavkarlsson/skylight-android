@@ -36,7 +36,7 @@
     <string name="cause_unknown">Something has gone wrong ☹</string>
 
     <string name="where_are_you">Where are you?</string>
-    <string name="background_location_permission_required">Background location permission required</string>
+    <string name="background_location_permission_required">Background location permission</string>
     <string name="location_permission_denied_forever_title">Permission previously denied</string>
     <string name="allow_all_the_time">Allow all the time</string>
     <string name="location_permission_denied_message">
@@ -52,8 +52,9 @@
         5. Return to the app</string>
     <string name="location_permission_select_manually">Select manually</string>
     <string name="background_location_permission_denied_message">
-        You have enabled notifications for your current location.
-        This only works if Skylight has access to your location all the time.\n\n
+        This app collects location data to enable notifications for your current location,
+        even when the app is closed or not in use.
+        If you wish to enable notifications:\n\n
         1. Open App info\n
         2. Select Permissions\n
         3. Select Location\n
