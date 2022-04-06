@@ -21,14 +21,19 @@ import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.LeadingIconTab
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Surface
+import androidx.compose.material.TabRow
+import androidx.compose.material.Text
 import androidx.compose.material.contentColorFor
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.CalendarViewMonth
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Today
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -43,6 +48,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.feature.main.R
+import se.gustavkarlsson.skylight.android.feature.main.state.TimeSpan
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.AppBarState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.lib.ui.compose.AutoMirroredIcons
@@ -115,7 +121,40 @@ internal fun TopAppBar(
                 Icon(Icons.Settings, contentDescription = stringResource(CoreR.string.settings))
             }
         },
+        bottomRow = (state as? AppBarState.PlaceSelected)?.let {
+            {
+                Tabs(state, onEvent)
+            }
+        },
     )
+}
+
+@Composable
+private fun Tabs(
+    state: AppBarState.PlaceSelected,
+    onEvent: (Event) -> Unit,
+) {
+    TabRow(
+        selectedTabIndex = state.selectedTabIndex,
+        backgroundColor = Color.Transparent,
+    ) {
+        for (tab in state.tabs) {
+            LeadingIconTab(
+                selected = tab.selected,
+                onClick = { onEvent(tab.onClickedEvent) },
+                text = {
+                    Text(textRef(tab.text))
+                },
+                icon = {
+                    val icon = when (tab.timeSpan) { // FIXME better icons
+                        TimeSpan.Current -> Icons.Today
+                        TimeSpan.Forecast -> Icons.CalendarViewMonth
+                    }
+                    Icon(icon, contentDescription = null)
+                },
+            )
+        }
+    }
 }
 
 private fun AppBarState.toSearchFieldState(): SearchFieldState {

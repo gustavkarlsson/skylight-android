@@ -46,6 +46,7 @@ internal sealed interface State {
         override val places: NonEmptyList<Place>,
         override val settings: Settings,
         val placeToDelete: Place.Saved?,
+        val timeSpan: TimeSpan,
     ) : State
 }
 
@@ -73,4 +74,8 @@ internal sealed interface Search {
             override val suggestions get() = emptyList<PlaceSuggestion>()
         }
     }
+}
+
+internal enum class TimeSpan {
+    Current, Forecast
 }
