@@ -16,11 +16,13 @@ import androidx.lifecycle.lifecycleScope
 import com.ioki.textref.TextRef
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import se.gustavkarlsson.skylight.android.feature.main.state.TimeSpan
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.AppBarState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.MainViewModel
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.MainViewModelComponent
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.TabItem
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
@@ -102,7 +104,23 @@ object MainScreen : Screen {
 private fun PreviewContent() {
     Content(
         state = ViewState.Ready(
-            appBar = AppBarState.PlaceSelected(TextRef.string("Some Place")),
+            appBar = AppBarState.PlaceSelected(
+                title = TextRef.string("Some Place"),
+                tabs = listOf(
+                    TabItem(
+                        timeSpan = TimeSpan.Current,
+                        text = TextRef.string("Now"),
+                        selected = true,
+                        onClickedEvent = Event.Noop,
+                    ),
+                    TabItem(
+                        timeSpan = TimeSpan.Forecast,
+                        text = TextRef.string("Forecast"),
+                        selected = false,
+                        onClickedEvent = Event.Noop,
+                    ),
+                ),
+            ),
             content = ContentState.PlaceSelected(
                 chanceLevelText = TextRef.EMPTY,
                 errorBannerData = null,

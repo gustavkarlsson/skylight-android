@@ -13,6 +13,7 @@ import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.state.Search
 import se.gustavkarlsson.skylight.android.feature.main.state.State
+import se.gustavkarlsson.skylight.android.feature.main.state.TimeSpan
 import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
@@ -94,11 +95,29 @@ internal class StateToViewStateMapper @Inject constructor(
                     }
                     is Place.Saved -> TextRef.string(selectedPlace.name)
                 }
-                AppBarState.PlaceSelected(title)
+                AppBarState.PlaceSelected(
+                    title = title,
+                    tabs = createTabItems(state),
+                )
             }
             is Search.Active -> AppBarState.Searching(state.search.query)
         }
     }
+
+    private fun createTabItems(state: State.Ready): List<TabItem> = listOf(
+        TabItem(
+            timeSpan = TimeSpan.Current,
+            text = TextRef.string("Now"), // FIXME string res
+            selected = state.timeSpan == TimeSpan.Current,
+            onClickedEvent = Event.SelectTimeSpan(TimeSpan.Current),
+        ),
+        TabItem(
+            timeSpan = TimeSpan.Forecast,
+            text = TextRef.string("Forecast"), // FIXME string res
+            selected = state.timeSpan == TimeSpan.Forecast,
+            onClickedEvent = Event.SelectTimeSpan(TimeSpan.Forecast),
+        ),
+    )
 
     private fun createContent(state: State.Ready): ContentState {
         val deletePlaceDialog = state.placeToDelete?.let(::createDeletePlaceDialog)

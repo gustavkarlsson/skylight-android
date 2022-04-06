@@ -34,6 +34,7 @@ private fun State.Loading.updateLoading(): State {
             places = places,
             settings = settings,
             placeToDelete = null,
+            timeSpan = TimeSpan.Current,
         )
     } else {
         this

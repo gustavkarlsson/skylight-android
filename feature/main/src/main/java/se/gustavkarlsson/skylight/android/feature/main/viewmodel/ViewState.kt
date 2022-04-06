@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.core.R
+import se.gustavkarlsson.skylight.android.feature.main.state.TimeSpan
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
@@ -37,9 +38,22 @@ internal sealed interface ViewState {
 }
 
 internal sealed interface AppBarState {
-    data class PlaceSelected(val title: TextRef) : AppBarState
+    data class PlaceSelected(
+        val title: TextRef,
+        val tabs: List<TabItem>,
+    ) : AppBarState {
+        val selectedTabIndex: Int get() = tabs.indexOfFirst { it.selected }
+    }
+
     data class Searching(val query: String) : AppBarState
 }
+
+internal data class TabItem(
+    val timeSpan: TimeSpan,
+    val text: TextRef,
+    val selected: Boolean,
+    val onClickedEvent: Event,
+)
 
 internal sealed interface ContentState {
     val dialog: DialogData?
@@ -189,6 +203,7 @@ internal sealed interface Event {
     data class DeletePlace(val place: Place.Saved) : Event
     data class ResolveLocationSettings(val activity: Activity) : Event
     data class SelectPlace(val placeId: PlaceId) : Event
+    data class SelectTimeSpan(val timeSpan: TimeSpan) : Event
     object CancelPlaceDeletion : Event
     object RefreshLocationPermission : Event
     object TurnOffCurrentLocationNotifications : Event
