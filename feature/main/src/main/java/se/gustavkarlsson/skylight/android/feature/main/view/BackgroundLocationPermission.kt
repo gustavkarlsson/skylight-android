@@ -35,7 +35,7 @@ internal fun RequiresBackgroundLocationPermission(
                 tint = Colors.onBackground,
             )
         },
-        title = stringResource(R.string.background_location_permission_required),
+        title = stringResource(R.string.background_location_permission_required_title),
         description = textRef(description),
         primaryActionText = stringResource(R.string.open_settings),
         onClickPrimaryAction = onClickOpenSettings,

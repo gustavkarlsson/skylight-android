@@ -67,8 +67,8 @@ internal fun Ready(
                         .dialogModifiers()
                         .padding(paddingValues),
                     image = { LocationIcon() },
-                    title = stringResource(R.string.where_are_you),
-                    description = stringResource(R.string.location_permission_denied_message),
+                    title = stringResource(R.string.location_permission_title),
+                    description = stringResource(R.string.location_permission_message),
                     primaryActionText = stringResource(R.string.location_permission),
                     onClickPrimaryAction = onClickGrantLocationPermission,
                     secondaryActionText = stringResource(R.string.location_permission_select_manually),

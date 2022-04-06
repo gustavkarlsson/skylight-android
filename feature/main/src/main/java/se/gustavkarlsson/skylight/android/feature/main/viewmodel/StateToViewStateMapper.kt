@@ -58,7 +58,7 @@ internal class StateToViewStateMapper @Inject constructor(
         val hasBackgroundPermission = state.permissions[Permission.BackgroundLocation] == Access.Granted
         return if (requiresBackgroundLocationPermission && !hasBackgroundPermission) {
             val description = TextRef.stringRes(
-                R.string.background_location_permission_denied_message,
+                R.string.background_location_permission_required_message,
                 backgroundLocationName,
             )
             ViewState.RequiresBackgroundLocationPermission(description)
@@ -168,7 +168,7 @@ internal class StateToViewStateMapper @Inject constructor(
         return when {
             needsBackgroundLocation && backgroundLocationDeniedSomehow -> {
                 BannerData(
-                    TextRef.stringRes(R.string.background_location_permission_denied_message, backgroundLocationName),
+                    TextRef.stringRes(R.string.background_location_permission_required_message, backgroundLocationName),
                     TextRef.stringRes(R.string.open_settings),
                     Icons.Warning,
                     BannerData.Event.OpenAppDetails,
