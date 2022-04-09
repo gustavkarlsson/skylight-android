@@ -35,13 +35,25 @@
     <string name="cause_server_response">Server error. Try again later.</string>
     <string name="cause_unknown">Something has gone wrong ☹</string>
 
-    <string name="where_are_you">Where are you?</string>
-    <string name="background_location_permission_required">Background location permission</string>
-    <string name="location_permission_denied_forever_title">Permission previously denied</string>
-    <string name="allow_all_the_time">Allow all the time</string>
-    <string name="location_permission_denied_message">
+    <string name="location_permission_title">Where are you?</string>
+    <string name="location_permission_message">
         To determine aurora chances,
         give Skylight permission to use your location or select a location manually.</string>
+    <string name="background_location_permission_required_title">Using your location</string>
+    <string name="background_location_permission_required_message">
+        To get notifications about aurora chances at your current location,
+        allow Skylight to use your location all of the time.
+
+        Skylight collects location data to enable notifications about aurora chances
+        at your current location, even when the app is closed or not in use.
+        If you wish to enable these notifications:\n\n
+        1. Open App info\n
+        2. Select Permissions\n
+        3. Select Location\n
+        4. Select %s\n
+        5. Return to the app</string>
+    <string name="allow_all_the_time">Allow all the time</string>
+    <string name="location_permission_denied_forever_title">Permission previously denied</string>
     <string name="location_permission_denied_forever_message">
         You have previously denied location permission for Skylight.\n\n
         If you wish to use your current location, please:\n\n
@@ -51,15 +63,6 @@
         4. Allow\n
         5. Return to the app</string>
     <string name="location_permission_select_manually">Select manually</string>
-    <string name="background_location_permission_denied_message">
-        This app collects location data to enable notifications for your current location,
-        even when the app is closed or not in use.
-        If you wish to enable notifications:\n\n
-        1. Open App info\n
-        2. Select Permissions\n
-        3. Select Location\n
-        4. Select %s\n
-        5. Return to the app</string>
     <string name="location_service_disabled_title">Location services disabled</string>
     <string name="location_service_disabled_message">To determine aurora chances where you are,
         you must enable location services.</string>
