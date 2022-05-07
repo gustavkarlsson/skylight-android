@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.ui.Scaffold
 import se.gustavkarlsson.skylight.android.feature.main.R
-import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
@@ -25,7 +24,6 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 @Composable
 internal fun Ready(
     state: ViewState.Ready,
-    onBannerActionClicked: (BannerData.Event) -> Unit,
     onSettingsClicked: () -> Unit,
     onEvent: (Event) -> Unit,
     onClickGrantLocationPermission: () -> Unit,
@@ -48,7 +46,6 @@ internal fun Ready(
                         .padding(paddingValues)
                         .navigationBarsPadding(),
                     state = content,
-                    onBannerActionClicked = onBannerActionClicked,
                     onEvent = onEvent,
                 )
             }
@@ -69,7 +66,7 @@ internal fun Ready(
                     image = { LocationIcon() },
                     title = stringResource(R.string.location_permission_title),
                     description = stringResource(R.string.location_permission_message),
-                    primaryActionText = stringResource(R.string.location_permission),
+                    primaryActionText = stringResource(R.string.grant_permission),
                     onClickPrimaryAction = onClickGrantLocationPermission,
                     secondaryActionText = stringResource(R.string.location_permission_select_manually),
                     onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },

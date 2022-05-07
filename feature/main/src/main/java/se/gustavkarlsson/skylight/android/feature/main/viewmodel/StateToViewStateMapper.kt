@@ -55,13 +55,22 @@ internal class StateToViewStateMapper @Inject constructor(
 
     private fun createNonLoadingState(state: State.Ready): ViewState {
         val requiresBackgroundLocationPermission = PlaceId.Current in state.settings.placeIdsWithNotification
+        val hasLocationPermission = state.permissions[Permission.Location] == Access.Granted
         val hasBackgroundPermission = state.permissions[Permission.BackgroundLocation] == Access.Granted
-        return if (requiresBackgroundLocationPermission && !hasBackgroundPermission) {
-            val description = TextRef.stringRes(
-                R.string.background_location_permission_required_message,
-                backgroundLocationName,
-            )
-            ViewState.RequiresBackgroundLocationPermission(description)
+        return if (hasLocationPermission && requiresBackgroundLocationPermission && !hasBackgroundPermission) {
+            if (state.permissions[Permission.BackgroundLocation] == Access.DeniedForever) {
+                val description = TextRef.stringRes(
+                    R.string.background_location_permission_denied_forever_message,
+                    backgroundLocationName,
+                )
+                ViewState.RequiresBackgroundLocationPermission.UseAppSettings(description)
+            } else {
+                val description = TextRef.stringRes(
+                    R.string.background_location_permission_required_message,
+                    backgroundLocationName,
+                )
+                ViewState.RequiresBackgroundLocationPermission.UseDialog(description)
+            }
         } else {
             ViewState.Ready(
                 appBar = createToolbarState(state),
@@ -168,10 +177,10 @@ internal class StateToViewStateMapper @Inject constructor(
         return when {
             needsBackgroundLocation && backgroundLocationDeniedSomehow -> {
                 BannerData(
-                    TextRef.stringRes(R.string.background_location_permission_required_message, backgroundLocationName),
-                    TextRef.stringRes(R.string.open_settings),
+                    TextRef.stringRes(R.string.banner_location_permission_issue),
+                    TextRef.stringRes(R.string.fix),
                     Icons.Warning,
-                    BannerData.Event.OpenAppDetails,
+                    Event.SelectPlace(PlaceId.Current),
                 )
             }
             state.selectedPlace != Place.Current -> null

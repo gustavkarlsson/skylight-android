@@ -30,7 +30,7 @@ object Versions {
     val androidLifecycle = "2.4.1"
     val androidWorkManager = "2.7.1"
 
-    val runtimePermissionKotlin = "1.1.2"
+    val assent = "3.0.0-RC4"
     val kotlinxCoroutines = "1.6.0"
 
     val okHttp = "4.9.3"
