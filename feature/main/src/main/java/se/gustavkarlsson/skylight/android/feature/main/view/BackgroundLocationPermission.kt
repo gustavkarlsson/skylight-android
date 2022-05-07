@@ -17,7 +17,35 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.LargeDialog
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
 @Composable
-internal fun RequiresBackgroundLocationPermission(
+internal fun RequiresBackgroundLocationPermissionUseDialog(
+    description: TextRef,
+    onClickGrantBackgroundLocationPermission: () -> Unit,
+    onClickTurnOffNotifications: () -> Unit,
+) {
+    LargeDialog(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(vertical = 16.dp, horizontal = 32.dp)
+            .systemBarsPadding(),
+        image = {
+            Icon(
+                modifier = Modifier.fillMaxSize(0.3f),
+                imageVector = Icons.MyLocation,
+                contentDescription = null,
+                tint = Colors.onBackground,
+            )
+        },
+        title = stringResource(R.string.background_location_permission_required_title),
+        description = textRef(description),
+        primaryActionText = stringResource(R.string.grant_permission),
+        onClickPrimaryAction = onClickGrantBackgroundLocationPermission,
+        secondaryActionText = stringResource(R.string.turn_off_notifications_instead),
+        onClickSecondaryAction = onClickTurnOffNotifications,
+    )
+}
+
+@Composable
+internal fun RequiresBackgroundLocationPermissionUseAppSettings(
     description: TextRef,
     onClickOpenSettings: () -> Unit,
     onClickTurnOffNotifications: () -> Unit,
@@ -35,7 +63,7 @@ internal fun RequiresBackgroundLocationPermission(
                 tint = Colors.onBackground,
             )
         },
-        title = stringResource(R.string.background_location_permission_required_title),
+        title = stringResource(R.string.location_permission_denied_forever_title),
         description = textRef(description),
         primaryActionText = stringResource(R.string.open_settings),
         onClickPrimaryAction = onClickOpenSettings,

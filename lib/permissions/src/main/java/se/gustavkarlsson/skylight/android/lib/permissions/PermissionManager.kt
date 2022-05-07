@@ -48,8 +48,8 @@ internal class PermissionManager @Inject constructor(
         logInfo { "Requesting permission for $permission" }
 
         val newAccess = doRequest(activity, permission.requestKeys)
-        val old = state.value
-        val new = old.update(permission, newAccess)
+        val latest = getPermissions()
+        val new = latest.update(permission, newAccess)
         state.value = new
     }
 
@@ -63,7 +63,7 @@ internal class PermissionManager @Inject constructor(
             keys.any { it in e.accepted } -> Access.Granted
             keys.any { it in e.denied } -> Access.Denied
             keys.any { it in e.foreverDenied } -> Access.DeniedForever
-            else -> throw IllegalStateException("Unexpected state for keys: $keys", e)
+            else -> throw IllegalStateException("Unexpected state for keys: $keys", e) // FIXME change permission lib?
         }
     }
 }
