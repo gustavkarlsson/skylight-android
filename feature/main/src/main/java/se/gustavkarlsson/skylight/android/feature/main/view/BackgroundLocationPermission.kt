@@ -1,14 +1,16 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.systemBarsPadding
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
@@ -25,8 +27,8 @@ internal fun RequiresBackgroundLocationPermissionUseDialog(
     LargeDialog(
         modifier = Modifier
             .fillMaxSize()
-            .padding(vertical = 16.dp, horizontal = 32.dp)
-            .systemBarsPadding(),
+            .padding(WindowInsets.systemBars.asPaddingValues())
+            .padding(vertical = 16.dp, horizontal = 32.dp),
         image = {
             Icon(
                 modifier = Modifier.fillMaxSize(0.3f),
@@ -53,8 +55,8 @@ internal fun RequiresBackgroundLocationPermissionUseAppSettings(
     LargeDialog(
         modifier = Modifier
             .fillMaxSize()
-            .padding(vertical = 16.dp, horizontal = 32.dp)
-            .systemBarsPadding(),
+            .padding(WindowInsets.systemBars.asPaddingValues())
+            .padding(vertical = 16.dp, horizontal = 32.dp),
         image = {
             Icon(
                 modifier = Modifier.fillMaxSize(0.3f),
