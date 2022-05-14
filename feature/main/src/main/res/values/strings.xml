@@ -36,10 +36,12 @@
     <string name="cause_server_response">Server error. Try again later.</string>
     <string name="cause_unknown">Something has gone wrong ☹</string>
 
-    <string name="location_permission_title">Where are you?</string>
-    <string name="location_permission_message">To determine aurora chances where you are,
+    <string name="location_permission_title">Accessing your location</string>
+    <string name="location_permission_message">Skylight can collect location data to determine aurora chances
+        at your current location. This may happen even when the app is closed or not in use.
+        \n\nTo determine aurora chances where you are,
         give Skylight permission to use your location. You can also select a location manually.</string>
-    <string name="background_location_permission_required_title">Using your location</string>
+    <string name="background_location_permission_required_title">Notifications for your location</string>
     <string name="background_location_permission_required_message">You have enabled notifications for your current location.
         \n\nSkylight collects location data to enable notifications about aurora chances
         at your current location, even when the app is closed or not in use.

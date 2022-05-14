@@ -36,10 +36,12 @@
     <string name="cause_server_response">Serverfel. Försök igen senare.</string>
     <string name="cause_unknown">Något gick fel ☹</string>
 
-    <string name="location_permission_title">Var är du?</string>
-    <string name="location_permission_message">För att beräkna chansen att se norrsken,
-        ge Skylight behörighet till din plats. Du kan även välj en plats manuellt.</string>
-    <string name="background_location_permission_required_title">Din plats</string>
+    <string name="location_permission_title">Tillgång till din plats</string>
+    <string name="location_permission_message">Skylight kan samla in platsdata för att beräkna chansen att se norrsken
+        på din nuvarande plats. Detta kan ske även när appen är stängd eller inte används.
+        \n\nFör att beräkna chansen att se norrsken där du är,
+        ge Skylight tillgång till din plats. Du kan också en plats manuellt.</string>
+    <string name="background_location_permission_required_title">Aviseringar för din plats</string>
     <string name="background_location_permission_required_message">Du har aktiverat aviseringar för din nuvarande plats.
         \n\nSkylight samlar in platsdata för att kunna visa aviseringar för norrsken
         på din nuvarande plats, även när appen är stängd eller inte används.
