@@ -6,8 +6,8 @@ object Versions {
     val compileSdk = 31
     val targetSdk = 31
     val java = JavaVersion.VERSION_1_8
-    val kotlin = "1.6.10" // Must also update in buildSrc/build.gradle.kts
-    val androidGradle = "7.1.2" // Must also update in buildSrc/build.gradle.kts
+    val kotlin = "1.6.21" // Must also update in buildSrc/build.gradle.kts
+    val androidGradle = "7.2.0" // Must also update in buildSrc/build.gradle.kts
     val jgit = "5.12.0.202106070339-r"
 
     val playPublisher = "3.7.0"
@@ -52,10 +52,10 @@ object Versions {
     val conveyor = "cc93e41adc" // TODO use release version
     val textref = "1.3.1"
     val markwon = "4.6.2"
-    val store = "4.0.4-KT15"
-    val compose = "1.1.1"
+    val store = "4.0.5"
+    val compose = "1.2.0-beta01"
     val composeConstraintLayout = "1.0.0"
-    val accompanist = "0.23.1"
+    val accompanist = "0.24.8-beta"
 
     // Test
     val junit = "4.12"
