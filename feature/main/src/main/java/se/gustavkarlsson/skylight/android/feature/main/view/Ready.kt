@@ -1,16 +1,19 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
 import android.app.Activity
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.ui.Scaffold
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
@@ -43,8 +46,8 @@ internal fun Ready(
                 SelectedPlace(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(paddingValues)
-                        .navigationBarsPadding(),
+                        .padding(WindowInsets.navigationBars.asPaddingValues())
+                        .padding(paddingValues),
                     state = content,
                     onEvent = onEvent,
                 )
@@ -108,8 +111,10 @@ internal fun Ready(
 private fun Modifier.dialogModifiers(): Modifier {
     return this
         .fillMaxSize()
+        .composed {
+            padding(WindowInsets.navigationBars.asPaddingValues())
+        }
         .padding(vertical = 16.dp, horizontal = 32.dp)
-        .navigationBarsPadding()
 }
 
 @Composable
