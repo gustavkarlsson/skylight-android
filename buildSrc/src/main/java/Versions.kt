@@ -48,6 +48,7 @@ object Versions {
     const val protobuf = "3.20.1"
     const val protobufGradle = "0.8.18"
     const val leakcanary = "2.9.1"
+    const val logcat = "0.1"
     const val mapboxServices = "5.8.0"
     const val conveyor = "cc93e41adc" // TODO use release version
     const val textref = "1.3.1"
