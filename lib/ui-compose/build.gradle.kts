@@ -26,7 +26,6 @@ dependencies {
     api("androidx.compose.animation:animation:${Versions.compose}")
     api("androidx.constraintlayout:constraintlayout-compose:${Versions.composeConstraintLayout}")
 
-    api("com.google.accompanist:accompanist-insets:${Versions.accompanist}")
     api("com.google.accompanist:accompanist-insets-ui:${Versions.accompanist}")
     api("com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}")
 }

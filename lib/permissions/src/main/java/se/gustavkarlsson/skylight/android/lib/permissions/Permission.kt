@@ -26,9 +26,10 @@ enum class Permission(
             Manifest.permission.ACCESS_COARSE_LOCATION
         },
         requestKeys = buildList {
-            add(Manifest.permission.ACCESS_COARSE_LOCATION)
             if (supportsBackgroundLocation) {
                 add(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+            } else {
+                add(Manifest.permission.ACCESS_COARSE_LOCATION)
             }
         }.nonEmptyUnsafe(),
     );

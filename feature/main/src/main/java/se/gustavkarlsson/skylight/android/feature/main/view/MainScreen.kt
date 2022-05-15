@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import se.gustavkarlsson.skylight.android.feature.main.state.TimeSpan
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.AppBarState
-import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.MainViewModel
@@ -85,16 +84,11 @@ object MainScreen : Screen {
         RefreshLocationPermission(activity)
         Content(
             state = state,
-            onBannerActionClicked = { event ->
-                when (event) {
-                    BannerData.Event.RequestBackgroundLocationPermission ->
-                        requestPermission(activity, Permission.BackgroundLocation)
-                    BannerData.Event.OpenAppDetails ->
-                        openAppDetails(activity)
-                }
-            },
             onClickGrantLocationPermission = {
                 requestPermission(activity, Permission.Location)
+            },
+            onClickGrantBackgroundLocationPermission = {
+                requestPermission(activity, Permission.BackgroundLocation)
             },
             onClickOpenSettings = { openAppDetails(activity) },
             onClickTurnOffNotifications = { viewModel.onEvent(Event.TurnOffCurrentLocationNotifications) },
@@ -149,8 +143,8 @@ private fun PreviewContent() {
                 onNotificationClickedEvent = Event.Noop,
             ),
         ),
-        onBannerActionClicked = {},
         onClickGrantLocationPermission = {},
+        onClickGrantBackgroundLocationPermission = {},
         onClickOpenSettings = {},
         onClickTurnOffNotifications = {},
         onSettingsClicked = {},
@@ -161,8 +155,8 @@ private fun PreviewContent() {
 @Composable
 private fun Content(
     state: ViewState,
-    onBannerActionClicked: (BannerData.Event) -> Unit,
     onClickGrantLocationPermission: () -> Unit,
+    onClickGrantBackgroundLocationPermission: () -> Unit,
     onClickOpenSettings: () -> Unit,
     onClickTurnOffNotifications: () -> Unit,
     onSettingsClicked: () -> Unit,
@@ -174,15 +168,21 @@ private fun Content(
             is ViewState.Ready -> {
                 Ready(
                     state = state,
-                    onBannerActionClicked = onBannerActionClicked,
                     onSettingsClicked = onSettingsClicked,
                     onEvent = onEvent,
                     onClickGrantLocationPermission = onClickGrantLocationPermission,
                     onClickOpenSettings = onClickOpenSettings,
                 )
             }
-            is ViewState.RequiresBackgroundLocationPermission -> {
-                RequiresBackgroundLocationPermission(
+            is ViewState.RequiresBackgroundLocationPermission.UseDialog -> {
+                RequiresBackgroundLocationPermissionUseDialog(
+                    description = state.description,
+                    onClickGrantBackgroundLocationPermission = onClickGrantBackgroundLocationPermission,
+                    onClickTurnOffNotifications = onClickTurnOffNotifications,
+                )
+            }
+            is ViewState.RequiresBackgroundLocationPermission.UseAppSettings -> {
+                RequiresBackgroundLocationPermissionUseAppSettings(
                     description = state.description,
                     onClickOpenSettings = onClickOpenSettings,
                     onClickTurnOffNotifications = onClickTurnOffNotifications,

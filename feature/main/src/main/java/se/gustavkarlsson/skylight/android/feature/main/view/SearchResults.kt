@@ -4,7 +4,12 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.AlertDialog
@@ -22,9 +27,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.LocalWindowInsets
-import com.google.accompanist.insets.navigationBarsWithImePadding
-import com.google.accompanist.insets.rememberInsetsPaddingValues
 import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
@@ -33,7 +35,6 @@ import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
-import se.gustavkarlsson.skylight.android.lib.ui.compose.navigationBarsWithIme
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 
 @Preview
@@ -85,7 +86,11 @@ internal fun SearchResults(
             is ContentState.Searching.Error -> {
                 Box(
                     modifier = Modifier
-                        .navigationBarsWithImePadding()
+                        .padding(
+                            WindowInsets.navigationBars
+                                .union(WindowInsets.ime)
+                                .asPaddingValues(),
+                        )
                         .padding(16.dp),
                     contentAlignment = Alignment.Center,
                 ) {
@@ -98,7 +103,7 @@ internal fun SearchResults(
             }
             is ContentState.Searching.Ok -> {
                 LazyColumn(
-                    contentPadding = rememberInsetsPaddingValues(LocalWindowInsets.current.navigationBarsWithIme),
+                    contentPadding = WindowInsets.navigationBars.union(WindowInsets.ime).asPaddingValues(),
                 ) {
                     items(state.searchResults) { item ->
                         ListItem(item = item, onEvent = onEvent)

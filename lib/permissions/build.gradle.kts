@@ -12,7 +12,7 @@ android {
 dependencies {
     implementation(project(":core"))
 
-    implementation("com.github.florent37:runtime-permission-kotlin:${Versions.runtimePermissionKotlin}")
+    implementation("com.afollestad.assent:coroutines:${Versions.assent}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

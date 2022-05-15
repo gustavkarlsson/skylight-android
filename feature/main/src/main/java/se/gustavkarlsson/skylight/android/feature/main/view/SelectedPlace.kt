@@ -71,7 +71,6 @@ private fun PreviewSelectedPlace() {
             ),
             onNotificationClickedEvent = Event.Noop,
         ),
-        onBannerActionClicked = {},
         onEvent = {},
     )
 }
@@ -80,7 +79,6 @@ private fun PreviewSelectedPlace() {
 internal fun SelectedPlace(
     modifier: Modifier,
     state: ContentState.PlaceSelected,
-    onBannerActionClicked: (BannerData.Event) -> Unit,
     onEvent: (Event) -> Unit,
 ) {
     ConstraintLayout(modifier = modifier) {
@@ -95,7 +93,7 @@ internal fun SelectedPlace(
                     height = Dimension.wrapContent
                 },
             errorBannerData = state.errorBannerData,
-            onBannerActionClicked = onBannerActionClicked,
+            onEvent = onEvent,
         )
 
         PlaceButtons(
@@ -135,7 +133,7 @@ internal fun SelectedPlace(
 private fun ErrorBanner(
     modifier: Modifier,
     errorBannerData: BannerData?,
-    onBannerActionClicked: (BannerData.Event) -> Unit,
+    onEvent: (Event) -> Unit,
 ) {
     Box(modifier = modifier) {
         AnimatedVisibility(
@@ -163,7 +161,7 @@ private fun ErrorBanner(
                                     .copy(alpha = ContentAlpha.disabled),
                             ),
                             onClick = {
-                                onBannerActionClicked(errorBannerData.buttonEvent)
+                                onEvent(errorBannerData.buttonEvent)
                             },
                         ) {
                             Crossfade(targetState = errorBannerData.buttonText) { text ->
