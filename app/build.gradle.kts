@@ -193,6 +193,9 @@ dependencies {
     // Leakcanary
     debugImplementation("com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}")
 
+    // Logcat
+    implementation("com.squareup.logcat:logcat:${Versions.logcat}")
+
     // Compose
     implementation("androidx.activity:activity-compose:${Versions.androidActivity}")
     implementation("androidx.compose.animation:animation:${Versions.compose}")
