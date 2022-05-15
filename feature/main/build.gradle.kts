@@ -42,6 +42,8 @@ dependencies {
     implementation(project(":lib:settings"))
 
     implementation("com.github.gustavkarlsson.conveyor:conveyor-core:${Versions.conveyor}")
+    implementation("com.google.accompanist:accompanist-pager:${Versions.accompanist}")
+    implementation("com.google.accompanist:accompanist-pager-indicators:${Versions.accompanist}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

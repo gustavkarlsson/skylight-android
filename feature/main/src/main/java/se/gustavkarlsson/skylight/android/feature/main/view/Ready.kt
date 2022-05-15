@@ -15,6 +15,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.insets.ui.Scaffold
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
@@ -24,6 +27,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.LargeDialog
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 internal fun Ready(
     state: ViewState.Ready,
@@ -32,10 +36,12 @@ internal fun Ready(
     onClickGrantLocationPermission: () -> Unit,
     onClickOpenSettings: () -> Unit,
 ) {
+    val pagerState = rememberPagerState()
     Scaffold(
         topBar = {
             TopAppBar(
                 state = state.appBar,
+                pagerState = pagerState,
                 onSettingsClicked = onSettingsClicked,
                 onEvent = onEvent,
             )
@@ -43,14 +49,20 @@ internal fun Ready(
     ) { paddingValues ->
         when (val content = state.content) {
             is ContentState.PlaceSelected -> {
-                SelectedPlace(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(WindowInsets.navigationBars.asPaddingValues())
-                        .padding(paddingValues),
-                    state = content,
-                    onEvent = onEvent,
-                )
+                HorizontalPager(
+                    count = pagerState.pageCount, // FIXME get from content instead?
+                    state = pagerState,
+                ) { page ->
+                    // FIXME show different based on tab
+                    SelectedPlace(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(WindowInsets.navigationBars.asPaddingValues())
+                            .padding(paddingValues),
+                        state = content,
+                        onEvent = onEvent,
+                    )
+                }
             }
             is ContentState.Searching -> {
                 SearchResults(
