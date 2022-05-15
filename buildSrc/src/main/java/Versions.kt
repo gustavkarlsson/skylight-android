@@ -11,8 +11,8 @@ object Versions {
     const val jgit = "5.12.0.202106070339-r"
 
     const val playPublisher = "3.7.0"
-    const val ktlintGradle = "10.2.1"
-    const val ktlint = "0.44.0" // Skip 0.45.0 as it seems borked
+    const val ktlintGradle = "10.3.0"
+    const val ktlint = "0.44.0" // Skip 0.45.2 as it has a bug: https://github.com/pinterest/ktlint/pull/1450
 
     // App
     // Google
@@ -21,7 +21,7 @@ object Versions {
     const val playServicesGcm = "17.0.0"
 
     const val crashlyticsGradle = "2.8.1"
-    const val crashlytics = "18.2.9"
+    const val crashlytics = "18.2.10"
 
     const val androidAppcompat = "1.4.1"
     const val androidActivity = "1.4.0"
@@ -31,23 +31,23 @@ object Versions {
     const val androidWorkManager = "2.7.1"
 
     const val assent = "3.0.0-RC4"
-    const val kotlinxCoroutines = "1.6.0"
+    const val kotlinxCoroutines = "1.6.1"
 
     const val okHttp = "4.9.3"
     const val retrofit = "2.9.0"
     const val retrofitKotlinSerialization = "0.8.0"
-    const val kotlinxSerialization = "1.3.2"
+    const val kotlinxSerialization = "1.3.3"
 
-    const val arrow = "1.0.1"
-    const val dagger = "2.41"
-    const val anvil = "2.3.11-1-6-10"
-    const val threetenabp = "1.3.1"
+    const val arrow = "1.1.2"
+    const val dagger = "2.42"
+    const val anvil = "2.4.0"
+    const val threetenabp = "1.4.0"
     const val solarPositioning = "0.0.9"
     const val sqldelight = "1.5.3"
     const val dataStore = "1.0.0"
-    const val protobuf = "3.19.4"
+    const val protobuf = "3.20.1"
     const val protobufGradle = "0.8.18"
-    const val leakcanary = "2.8.1"
+    const val leakcanary = "2.9.1"
     const val mapboxServices = "5.8.0"
     const val conveyor = "cc93e41adc" // TODO use release version
     const val textref = "1.3.1"
