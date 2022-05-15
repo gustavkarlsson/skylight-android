@@ -33,10 +33,12 @@ internal fun Ready(
     onClickGrantLocationPermission: () -> Unit,
     onClickOpenSettings: () -> Unit,
 ) {
+    val pagerState = rememberPagerState()
     Scaffold(
         topBar = {
             TopAppBar(
                 state = state.appBar,
+                pagerState = pagerState,
                 onSettingsClicked = onSettingsClicked,
                 onEvent = onEvent,
             )
@@ -44,14 +46,20 @@ internal fun Ready(
     ) { paddingValues ->
         when (val content = state.content) {
             is ContentState.PlaceSelected -> {
-                SelectedPlace(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(WindowInsets.navigationBars.asPaddingValues())
-                        .padding(paddingValues),
-                    state = content,
-                    onEvent = onEvent,
-                )
+                HorizontalPager(
+                    count = pagerState.pageCount, // FIXME get from content instead?
+                    state = pagerState,
+                ) { page ->
+                    // FIXME show different based on tab
+                    SelectedPlace(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(WindowInsets.navigationBars.asPaddingValues())
+                            .padding(paddingValues),
+                        state = content,
+                        onEvent = onEvent,
+                    )
+                }
             }
             is ContentState.Searching -> {
                 SearchResults(

@@ -27,6 +27,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Surface
 import androidx.compose.material.TabRow
+import androidx.compose.material.TabRowDefaults
 import androidx.compose.material.Text
 import androidx.compose.material.contentColorFor
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -46,6 +47,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.PagerState
+import com.google.accompanist.pager.pagerTabIndicatorOffset
+import com.google.accompanist.pager.rememberPagerState
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.state.TimeSpan
@@ -59,19 +64,23 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 import se.gustavkarlsson.skylight.android.core.R as CoreR
 
+@OptIn(ExperimentalPagerApi::class)
 @Preview
 @Composable
 private fun PreviewTopAppBar() {
     TopAppBar(
         state = AppBarState.Searching("I'm searchi"),
+        pagerState = rememberPagerState(),
         onSettingsClicked = {},
         onEvent = {},
     )
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 internal fun TopAppBar(
     state: AppBarState,
+    pagerState: PagerState,
     onSettingsClicked: () -> Unit,
     onEvent: (Event) -> Unit,
 ) {
@@ -123,24 +132,31 @@ internal fun TopAppBar(
         },
         bottomRow = (state as? AppBarState.PlaceSelected)?.let {
             {
-                Tabs(state, onEvent)
+                Tabs(state, pagerState, onEvent)
             }
         },
     )
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun Tabs(
     state: AppBarState.PlaceSelected,
+    pagerState: PagerState,
     onEvent: (Event) -> Unit,
 ) {
     TabRow(
-        selectedTabIndex = state.selectedTabIndex,
+        selectedTabIndex = pagerState.currentPage,
+        indicator = { tabPositions ->
+            TabRowDefaults.Indicator(
+                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
+            )
+        },
         backgroundColor = Color.Transparent,
     ) {
-        for (tab in state.tabs) {
+        state.tabs.forEachIndexed { index, tab ->
             LeadingIconTab(
-                selected = tab.selected,
+                selected = pagerState.currentPage == index, // FIXME use tab or pagerState?
                 onClick = { onEvent(tab.onClickedEvent) },
                 text = {
                     Text(textRef(tab.text))
