@@ -2,32 +2,33 @@
 <resources>
     <string name="right_now">Right now</string>
     <string name="open_settings">Open App info</string>
-    <string name="location_permission">Location permission</string>
+    <string name="grant_permission">Grant permission</string>
     <string name="delete_place_question">Delete %s?</string>
+    <string name="fix">Fix</string>
 
     <string name="factor_geomag_location_title_full">Geomagnetic location</string>
     <string name="factor_geomag_location_title_compact">Location</string>
     <string name="factor_geomag_location_desc">The aurora is only visible close to
-		the geomagnetic poles located close to the magnetic north and south poles.
-		This value shows your geomagnetic latitude.
-		The best latitude for aurora sightings is around 67° and -67°.</string>
+        the geomagnetic poles located close to the magnetic north and south poles.
+        This value shows your geomagnetic latitude.
+        The best latitude for aurora sightings is around 67° and -67°.</string>
     <string name="factor_kp_index_title_full">Kp index</string>
     <string name="factor_kp_index_title_compact">Kp index</string>
     <string name="factor_kp_index_desc">The basic cause of the aurora involves the
-		interaction of the solar wind with the Earth\'s magnetosphere.
-		This can be represented as a value on the Kp index scale, ranging from
+        interaction of the solar wind with the Earth\'s magnetosphere.
+        This can be represented as a value on the Kp index scale, ranging from
         0 to 9. A higher value means higher chance to see the aurora.</string>
     <string name="factor_weather_title_full">Weather conditions</string>
     <string name="factor_weather_title_compact">Weather</string>
     <string name="factor_weather_desc">Bad weather can block your view of the aurora.
-		This value indicates the current weather conditions.
-		Clear skies ensure good visibility of the aurora.</string>
+        This value indicates the current weather conditions.
+        Clear skies ensure good visibility of the aurora.</string>
     <string name="factor_darkness_title_full">Outdoor darkness</string>
     <string name="factor_darkness_title_compact">Darkness</string>
     <string name="factor_darkness_desc">Since the aurora is only visible in the dark
-		the position of the sun is important.
-		This value shows how dark your current location is based on the sun\'s position.
-		100\% darkness is perfect for aurora sightings.</string>
+        the position of the sun is important.
+        This value shows how dark your current location is based on the sun\'s position.
+        100\% darkness is perfect for aurora sightings.</string>
 
     <string name="cause_location_permission">Location permission missing</string>
     <string name="cause_location">Could not determine the current location</string>
@@ -35,28 +36,33 @@
     <string name="cause_server_response">Server error. Try again later.</string>
     <string name="cause_unknown">Something has gone wrong ☹</string>
 
-    <string name="location_permission_required">Location permission required</string>
-    <string name="background_location_permission_required">Background location permission required</string>
-    <string name="location_permission_denied_forever_title">Permission previously denied</string>
+    <string name="location_permission_title">Accessing your location</string>
+    <string name="location_permission_message">Skylight can collect location data to determine aurora chances
+        at your current location. This may happen even when the app is closed or not in use.
+        \n\nTo determine aurora chances where you are,
+        give Skylight permission to use your location. You can also select a location manually.</string>
+    <string name="background_location_permission_required_title">Notifications for your location</string>
+    <string name="background_location_permission_required_message">You have enabled notifications for your current location.
+        \n\nSkylight collects location data to enable notifications about aurora chances
+        at your current location, even when the app is closed or not in use.
+        \n\nIf you want these notifications, grant the location permission by selecting \"%s\".</string>
+    <string name="background_location_permission_denied_forever_message">You have previously denied background location permission for Skylight.
+        \n\nIf you wish notifications for your current location, please:
+        \n1. Open App info
+        \n2. Select Permissions
+        \n3. Select Location
+        \n4. %s
+        \n5. Return to the app</string>
     <string name="allow_all_the_time">Allow all the time</string>
-    <string name="location_permission_denied_message">To determine aurora chances where you are,
-        you must allow Skylight access to your location.</string>
-    <string name="location_permission_denied_forever_message">
-        You have previously denied location permission for Skylight.\n\n
-        1. Open App info\n
-        2. Select Permissions\n
-        3. Select Location\n
-        4. Allow\n
-        5. Return to the app</string>
-    <string name="location_permission_select_other">Select another location instead</string>
-    <string name="background_location_permission_denied_message">
-        You have enabled notifications for your current location.
-        This only works if Skylight has access to your location all the time.\n\n
-        1. Open App info\n
-        2. Select Permissions\n
-        3. Select Location\n
-        4. Select %s\n
-        5. Return to the app</string>
+    <string name="location_permission_denied_forever_title">Permission previously denied</string>
+    <string name="location_permission_denied_forever_message">You have previously denied location permission for Skylight.
+        \n\nIf you wish to use your current location, please:
+        \n1. Open App info
+        \n2. Select Permissions
+        \n3. Select Location
+        \n4. Allow
+        \n5. Return to the app</string>
+    <string name="location_permission_select_manually">Select manually</string>
     <string name="location_service_disabled_title">Location services disabled</string>
     <string name="location_service_disabled_message">To determine aurora chances where you are,
         you must enable location services.</string>
@@ -65,4 +71,5 @@
     <string name="place_search_failed_generic">Place search failed</string>
     <string name="place_search_failed_server_response">Place search failed. Server error.</string>
     <string name="place_search_failed_io">Place search failed. Are you connected to the internet?</string>
+    <string name="banner_location_permission_issue">There is an issue with your location permission settings.</string>
 </resources>

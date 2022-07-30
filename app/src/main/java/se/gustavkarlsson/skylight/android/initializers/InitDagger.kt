@@ -9,7 +9,6 @@ import se.gustavkarlsson.skylight.android.DaggerActualAppComponent
 import se.gustavkarlsson.skylight.android.MainActivityComponent
 import se.gustavkarlsson.skylight.android.core.AppComponent
 import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
-import se.gustavkarlsson.skylight.android.lib.analytics.AnalyticsComponent
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
 import se.gustavkarlsson.skylight.android.lib.darkness.DarknessComponent
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocoderComponent
@@ -30,7 +29,6 @@ import se.gustavkarlsson.skylight.android.navigation.DefaultScreens
 
 private object Setter :
     AppComponent.Setter,
-    AnalyticsComponent.Setter,
     BackgroundComponent.Setter,
     TimeComponent.Setter,
     SettingsComponent.Setter,
@@ -58,7 +56,6 @@ internal fun Application.initDagger() {
     with(Setter) {
         setAppComponent(component)
         setMainActivityComponent(component)
-        setAnalyticsComponent(component)
         setBackgroundComponent(component)
         setTimeComponent(component)
         setSettingsComponent(component)

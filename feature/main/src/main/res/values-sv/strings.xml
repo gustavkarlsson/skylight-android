@@ -2,32 +2,33 @@
 <resources>
     <string name="right_now">Just nu</string>
     <string name="open_settings">Öppna Appinformation</string>
-    <string name="location_permission">Platsbehörighet</string>
+    <string name="grant_permission">Ge behörighet</string>
     <string name="delete_place_question">Ta bort %s?</string>
+    <string name="fix">Fixa</string>
 
     <string name="factor_geomag_location_title_full">Geomagnetisk plats</string>
     <string name="factor_geomag_location_title_compact">Plats</string>
     <string name="factor_geomag_location_desc">Norrsken är bara synligt nära
-		de geomagnetiska polerna belägna nära de magnetiska nord och syd-polerna.
-		Det här värdet visar din geomagnetiska latitud.
-		Bäst förhållanden hittas kring 67° och -67°.</string>
+        de geomagnetiska polerna belägna nära de magnetiska nord och syd-polerna.
+        Det här värdet visar din geomagnetiska latitud.
+        Bäst förhållanden hittas kring 67° och -67°.</string>
     <string name="factor_kp_index_title_full">Kp index</string>
     <string name="factor_kp_index_title_compact">Kp index</string>
     <string name="factor_kp_index_desc">Grundorsaken till norrsken
-		kommer från interaktionen mellan solarvindar och jordens magnetosfär.
-		Detta kan representeras som ett värde på Kp index-skalan som går
-		från 0 till 9. Högre värde betyder högre chans att se norrsken.</string>
+        kommer från interaktionen mellan solarvindar och jordens magnetosfär.
+        Detta kan representeras som ett värde på Kp index-skalan som går
+        från 0 till 9. Högre värde betyder högre chans att se norrsken.</string>
     <string name="factor_weather_title_full">Väderförhållanden</string>
     <string name="factor_weather_title_compact">Väder</string>
     <string name="factor_weather_desc">Dåligt väder kan blockera sikten och göra det svårt att se
-		norrsken. Det här värdet indikerar nuvarande väderförhållanden.
-		Klar himmel innebär god sikt.</string>
+        norrsken. Det här värdet indikerar nuvarande väderförhållanden.
+        Klar himmel innebär god sikt.</string>
     <string name="factor_darkness_title_full">Utomhusmörker</string>
     <string name="factor_darkness_title_compact">Mörker</string>
     <string name="factor_darkness_desc">Eftersom norrsken bara syns i mörker är solens position
-		på himlen viktig.
-		Det här värdet visar hur mörkt det är ute på nuvarande plats baserat på solens position.
-		100\% mörker är perfekt för att se norrsken.</string>
+        på himlen viktig.
+        Det här värdet visar hur mörkt det är ute på nuvarande plats baserat på solens position.
+        100\% mörker är perfekt för att se norrsken.</string>
 
     <string name="cause_location_permission">Åtkomst till plats saknas</string>
     <string name="cause_location">Kunde inte hitta din nuvarande plats</string>
@@ -35,28 +36,33 @@
     <string name="cause_server_response">Serverfel. Försök igen senare.</string>
     <string name="cause_unknown">Något gick fel ☹</string>
 
-    <string name="location_permission_required">Platsbehörighet krävs</string>
-    <string name="background_location_permission_required">Platsbehörighet i bakgrunden krävs</string>
-    <string name="location_permission_denied_forever_title">Behörighet tidigare nekad</string>
+    <string name="location_permission_title">Tillgång till din plats</string>
+    <string name="location_permission_message">Skylight kan samla in platsdata för att beräkna chansen att se norrsken
+        på din nuvarande plats. Detta kan ske även när appen är stängd eller inte används.
+        \n\nFör att beräkna chansen att se norrsken där du är,
+        ge Skylight tillgång till din plats. Du kan också en plats manuellt.</string>
+    <string name="background_location_permission_required_title">Aviseringar för din plats</string>
+    <string name="background_location_permission_required_message">Du har aktiverat aviseringar för din nuvarande plats.
+        \n\nSkylight samlar in platsdata för att kunna visa aviseringar för norrsken
+        på din nuvarande plats, även när appen är stängd eller inte används.
+        \n\nOm du vill ha dessa aviseringar, ge tillgång till din plats genom att välja \"%s\".</string>
+    <string name="background_location_permission_denied_forever_message">Du har tidigare nekat platsbehörighet i bakgrunden för Skylight.
+        \n\nOm du vill använda din plats, var god:
+        \n1. Öppna Appinformation
+        \n2. Välj Behörigheter
+        \n3. Välj Plats
+        \n4. %s
+        \n5. Återvänd till appen</string>
     <string name="allow_all_the_time">Tillåt alltid</string>
-    <string name="location_permission_denied_message">För att beräkna chansen att se norrsken där du är,
-        tillåt att Skylight kan läsa din plats.</string>
-    <string name="location_permission_denied_forever_message">
-        Du har tidigare nekat platsbehörighet för Skylight.\n\n
-        1. Öppna Appinformation\n
-        2. Välj Behörigheter\n
-        3. Välj Plats\n
-        4. Tillåt\n
-        5. Återvänd till appen</string>
-    <string name="location_permission_select_other">Välj en annan plats istället</string>
-    <string name="background_location_permission_denied_message">
-        Du har aktiverat aviseringar för din nuvarande plats.
-        Detta fungerar endast om Skylight alltid kan läsa din plats.\n\n
-        1. Öppna Appinformation\n
-        2. Välj Behörigheter\n
-        3. Välj Plats\n
-        4. Välj %s\n
-        5. Återvänd till appen</string>
+    <string name="location_permission_denied_forever_title">Behörighet tidigare nekad</string>
+    <string name="location_permission_denied_forever_message">Du har tidigare nekat platsbehörighet för Skylight.
+        \n\nOm du vill använda din plats, var god:
+        \n1. Öppna Appinformation
+        \n2. Välj Behörigheter
+        \n3. Välj Plats
+        \n4. Tillåt
+        \n5. Återvänd till appen</string>
+    <string name="location_permission_select_manually">Välj manuellt</string>
     <string name="location_service_disabled_title">Platstjänster är avstängda</string>
     <string name="location_service_disabled_message">För att beräkna chansen att se norrsken där du är,
         aktivera platstjänster</string>
@@ -65,4 +71,5 @@
     <string name="place_search_failed_generic">Platssökningen misslyckades</string>
     <string name="place_search_failed_server_response">Platssökningen misslyckades. Serverfel.</string>
     <string name="place_search_failed_io">Platssökningen misslyckades. Är du ansluten till internet?</string>
+    <string name="banner_location_permission_issue">Något är fel i inställningarna för platsbehörighet.</string>
 </resources>

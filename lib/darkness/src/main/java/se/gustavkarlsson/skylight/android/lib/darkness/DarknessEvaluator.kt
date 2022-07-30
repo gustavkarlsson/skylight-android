@@ -8,8 +8,8 @@ internal object DarknessEvaluator : ChanceEvaluator<Darkness> {
 
     // Technique explained here: https://stackoverflow.com/a/7869457/940731
     override fun evaluate(value: Darkness): Chance {
-        val zenithAngle = value.sunZenithAngle
-        val smallestZenithAnglePositive = abs((zenithAngle + 180) % 360 - 180)
-        return Chance(1.0 / 12.0 * smallestZenithAnglePositive - 8.0) // 96-108
+        val smallestZenithAnglePositive = abs((value.sunZenithAngle + 180) % 360 - 180) // outcome: 0-180
+        val chance = 1.0 / 12.0 * smallestZenithAnglePositive - 8.0 // 96-108 maps to 0-1
+        return Chance(chance)
     }
 }

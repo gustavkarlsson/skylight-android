@@ -7,6 +7,7 @@ import arrow.core.right
 import com.mapbox.api.geocoding.v5.MapboxGeocoding
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse
 import com.mapbox.geojson.Point
+import dagger.Reusable
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,18 +17,31 @@ import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import java.io.IOException
 import java.util.Locale
+import javax.inject.Inject
 import kotlin.coroutines.resume
 
+@Reusable
 internal class MapboxGeocoder(
     private val accessToken: String,
     private val getLocales: () -> NonEmptyList<Locale>,
     private val dispatcher: CoroutineDispatcher,
 ) : Geocoder {
+
+    @Inject
+    constructor(
+        getLocales: () -> NonEmptyList<Locale>,
+        @Io dispatcher: CoroutineDispatcher,
+    ) : this(
+        accessToken = BuildConfig.MAPBOX_API_KEY,
+        getLocales = getLocales,
+        dispatcher = dispatcher,
+    )
 
     override suspend fun geocode(locationName: String, biasAround: Location?): GeocodingResult {
         if (locationName.isBlank()) {

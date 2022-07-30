@@ -1,19 +1,21 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
 import android.app.Activity
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.ui.Scaffold
 import se.gustavkarlsson.skylight.android.feature.main.R
-import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
@@ -25,7 +27,6 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 @Composable
 internal fun Ready(
     state: ViewState.Ready,
-    onBannerActionClicked: (BannerData.Event) -> Unit,
     onSettingsClicked: () -> Unit,
     onEvent: (Event) -> Unit,
     onClickGrantLocationPermission: () -> Unit,
@@ -45,10 +46,9 @@ internal fun Ready(
                 SelectedPlace(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(paddingValues)
-                        .navigationBarsPadding(),
+                        .padding(WindowInsets.navigationBars.asPaddingValues())
+                        .padding(paddingValues),
                     state = content,
-                    onBannerActionClicked = onBannerActionClicked,
                     onEvent = onEvent,
                 )
             }
@@ -67,11 +67,11 @@ internal fun Ready(
                         .dialogModifiers()
                         .padding(paddingValues),
                     image = { LocationIcon() },
-                    title = stringResource(R.string.location_permission_required),
-                    description = stringResource(R.string.location_permission_denied_message),
-                    primaryActionText = stringResource(R.string.location_permission),
+                    title = stringResource(R.string.location_permission_title),
+                    description = stringResource(R.string.location_permission_message),
+                    primaryActionText = stringResource(R.string.grant_permission),
                     onClickPrimaryAction = onClickGrantLocationPermission,
-                    secondaryActionText = stringResource(R.string.location_permission_select_other),
+                    secondaryActionText = stringResource(R.string.location_permission_select_manually),
                     onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
                 )
             }
@@ -85,7 +85,7 @@ internal fun Ready(
                     description = stringResource(R.string.location_permission_denied_forever_message),
                     primaryActionText = stringResource(R.string.open_settings),
                     onClickPrimaryAction = onClickOpenSettings,
-                    secondaryActionText = stringResource(R.string.location_permission_select_other),
+                    secondaryActionText = stringResource(R.string.location_permission_select_manually),
                     onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
                 )
             }
@@ -100,7 +100,7 @@ internal fun Ready(
                     description = stringResource(R.string.location_service_disabled_message),
                     primaryActionText = stringResource(R.string.enable),
                     onClickPrimaryAction = { onEvent(Event.ResolveLocationSettings(activity)) },
-                    secondaryActionText = stringResource(R.string.location_permission_select_other),
+                    secondaryActionText = stringResource(R.string.location_permission_select_manually),
                     onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
                 )
             }
@@ -111,8 +111,10 @@ internal fun Ready(
 private fun Modifier.dialogModifiers(): Modifier {
     return this
         .fillMaxSize()
+        .composed {
+            padding(WindowInsets.navigationBars.asPaddingValues())
+        }
         .padding(vertical = 16.dp, horizontal = 32.dp)
-        .navigationBarsPadding()
 }
 
 @Composable

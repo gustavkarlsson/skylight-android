@@ -50,6 +50,9 @@ internal class EventHandler @Inject constructor(
                     logError { "Could not offer location settings resolution" }
                 }
             }
+            is Event.SelectPlace -> {
+                selectedPlaceRepository.set(event.placeId)
+            }
             Event.RefreshLocationPermission -> {
                 permissionChecker.refresh()
             }

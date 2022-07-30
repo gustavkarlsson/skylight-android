@@ -1,20 +1,14 @@
 package se.gustavkarlsson.skylight.android.lib.runversion
 
-import android.content.Context
+import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import javax.inject.Named
+import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 
 @Module
+@ContributesTo(AppScopeMarker::class)
 object LibRunVersionModule {
 
     @Provides
-    internal fun runVersionManager(
-        context: Context,
-        @Named("versionCode") versionCode: Int,
-    ): RunVersionManager =
-        SharedPreferencesRunVersionManager(
-            context,
-            versionCode,
-        )
+    internal fun runVersionManager(impl: SharedPreferencesRunVersionManager): RunVersionManager = impl
 }

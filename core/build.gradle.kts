@@ -1,7 +1,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    kotlin("kapt")
+    id("com.squareup.anvil")
 }
 
 android {
@@ -19,6 +19,4 @@ dependencies {
     api("com.github.ioki-mobility:TextRef:${Versions.textref}")
     api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlinxCoroutines}")
     api("androidx.appcompat:appcompat:${Versions.androidAppcompat}")
-
-    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

@@ -1,27 +1,24 @@
 package se.gustavkarlsson.skylight.android.lib.geomaglocation
 
+import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import dagger.Reusable
+import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
-import java.util.Locale
 
 @Module
+@ContributesTo(AppScopeMarker::class)
 object LibGeomagLocationModule {
 
     @Provides
-    @Reusable
-    internal fun geomagLocationFormatter(locale: () -> Locale): Formatter<GeomagLocation> =
-        GeomagLocationFormatter(locale)
+    internal fun geomagLocationFormatter(impl: GeomagLocationFormatter): Formatter<GeomagLocation> = impl
 
     @Provides
-    @Reusable
     internal fun geomagLocationEvaluator(): ChanceEvaluator<GeomagLocation> =
         GeomagLocationEvaluator
 
     @Provides
-    @Reusable
     internal fun geomagLocationProvider(): GeomagLocationProvider =
         GeomagLocationProviderImpl
 }

@@ -13,9 +13,9 @@ import kotlinx.coroutines.launch
 import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
+import se.gustavkarlsson.skylight.android.core.utils.millis
 import se.gustavkarlsson.skylight.android.core.utils.throttle
 import se.gustavkarlsson.skylight.android.feature.main.R
-import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchThrottle
 import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocodingError
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocodingResult
@@ -23,11 +23,22 @@ import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import javax.inject.Inject
 
-internal class ContinuouslySearchAction @Inject constructor(
-    private val searchChannel: ReceiveChannel<@JvmSuppressWildcards SearchFieldState>,
+internal class ContinuouslySearchAction(
+    private val searchChannel: ReceiveChannel<SearchFieldState>,
     private val geocoder: Geocoder,
-    @SearchThrottle private val queryThrottleDuration: Duration,
+    private val queryThrottleDuration: Duration,
 ) : Action<State> {
+
+    @Inject
+    constructor(
+        searchChannel: ReceiveChannel<@JvmSuppressWildcards SearchFieldState>,
+        geocoder: Geocoder,
+    ) : this(
+        searchChannel = searchChannel,
+        geocoder = geocoder,
+        queryThrottleDuration = 500.millis,
+    )
+
     override suspend fun execute(stateFlow: AtomicStateFlow<State>): Unit = coroutineScope {
         launch {
             searchChannel.consumeEach { searchFieldState ->

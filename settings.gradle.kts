@@ -2,7 +2,6 @@ include(
     ":app",
     ":core",
 
-    ":lib:analytics",
     ":lib:aurora",
     ":lib:darkness",
     ":lib:geocoder",

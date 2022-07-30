@@ -1,22 +1,14 @@
 package se.gustavkarlsson.skylight.android.lib.geocoder
 
-import arrow.core.NonEmptyList
+import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import dagger.Reusable
-import kotlinx.coroutines.CoroutineDispatcher
-import se.gustavkarlsson.skylight.android.core.Io
-import java.util.Locale
+import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 
 @Module
+@ContributesTo(AppScopeMarker::class)
 object LibGeocoderModule {
 
     @Provides
-    @Reusable
-    internal fun geocoder(getLocales: () -> NonEmptyList<Locale>, @Io dispatcher: CoroutineDispatcher): Geocoder =
-        MapboxGeocoder(
-            accessToken = BuildConfig.MAPBOX_API_KEY,
-            getLocales = getLocales,
-            dispatcher = dispatcher,
-        )
+    internal fun geocoder(impl: MapboxGeocoder): Geocoder = impl
 }

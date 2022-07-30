@@ -1,5 +1,9 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
+import com.squareup.anvil.annotations.ContributesTo
+import se.gustavkarlsson.skylight.android.core.AppScopeMarker
+
+@ContributesTo(AppScopeMarker::class)
 interface PermissionsComponent {
 
     fun permissionChecker(): PermissionChecker

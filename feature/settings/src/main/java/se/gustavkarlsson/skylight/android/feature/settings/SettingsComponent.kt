@@ -1,14 +1,11 @@
 package se.gustavkarlsson.skylight.android.feature.settings
 
-import dagger.Component
-import dagger.Module
-import dagger.Provides
-import se.gustavkarlsson.skylight.android.lib.settings.SettingsRepository
+import com.squareup.anvil.annotations.MergeComponent
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent as LibSettingsComponent
 
-@Component(
-    modules = [SettingsModule::class],
-    dependencies = [LibSettingsComponent::class]
+@MergeComponent(
+    scope = SettingsScopeMarker::class,
+    dependencies = [LibSettingsComponent::class],
 )
 internal interface SettingsComponent {
     fun viewModel(): SettingsViewModel
@@ -21,11 +18,4 @@ internal interface SettingsComponent {
     }
 }
 
-@Module
-internal object SettingsModule {
-
-    @Provides
-    fun viewModel(
-        settingsRepository: SettingsRepository,
-    ): SettingsViewModel = SettingsViewModel(settingsRepository)
-}
+abstract class SettingsScopeMarker private constructor()

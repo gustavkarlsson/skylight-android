@@ -1,17 +1,17 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
-import dagger.Binds
+import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
-import dagger.Reusable
+import dagger.Provides
+import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 
 @Module
-abstract class LibPermissionsModule {
+@ContributesTo(AppScopeMarker::class)
+object LibPermissionsModule {
 
-    @Binds
-    @Reusable
-    internal abstract fun bindPermissionChecker(permissionManager: PermissionManager): PermissionChecker
+    @Provides
+    internal fun bindPermissionChecker(impl: PermissionManager): PermissionChecker = impl
 
-    @Binds
-    @Reusable
-    internal abstract fun bindPermissionRequester(permissionManager: PermissionManager): PermissionRequester
+    @Provides
+    internal fun bindPermissionRequester(impl: PermissionManager): PermissionRequester = impl
 }

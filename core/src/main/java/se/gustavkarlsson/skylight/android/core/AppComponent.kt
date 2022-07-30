@@ -1,17 +1,18 @@
 package se.gustavkarlsson.skylight.android.core
 
 import android.content.Context
+import com.squareup.anvil.annotations.ContributesTo
 import kotlinx.coroutines.CoroutineDispatcher
-import javax.inject.Named
 
+@ContributesTo(AppScopeMarker::class)
 interface AppComponent {
 
     fun context(): Context
 
-    @Named("versionCode")
+    @VersionCode
     fun versionCode(): Int
 
-    @Named("versionName")
+    @VersionName
     fun versionName(): String
 
     @Main

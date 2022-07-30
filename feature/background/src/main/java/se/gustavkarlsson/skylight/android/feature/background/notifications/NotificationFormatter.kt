@@ -5,8 +5,9 @@ import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.feature.background.R
 import se.gustavkarlsson.skylight.android.lib.places.Place
+import javax.inject.Inject
 
-internal class NotificationFormatter(
+internal class NotificationFormatter @Inject constructor(
     private val chanceLevelFormatter: Formatter<ChanceLevel>,
 ) : Formatter<Notification> {
     override fun format(value: Notification): TextRef {

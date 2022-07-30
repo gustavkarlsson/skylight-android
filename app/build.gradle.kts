@@ -1,19 +1,79 @@
-import pl.allegro.tech.build.axion.release.domain.TagNameSerializationConfig
-
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
+    id("com.squareup.anvil")
     id("kotlin-parcelize")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
-    id("pl.allegro.tech.build.axion-release")
     id("com.github.triplet.play") version Versions.playPublisher
 }
 
-scmVersion {
-    tag = TagNameSerializationConfig().apply {
-        prefix = ""
+val versionNameProperty: String? by lazy {
+    val property = findProperty("version_name") as String?
+    if (property == null) {
+        logger.warn("No version_name property set")
+        null
+    } else {
+        property
+    }
+}
+
+val parsedVersionName: String? by lazy {
+    val versionName = versionNameProperty?.trim()?.takeIf { it.matches(Regex("\\d{1,2}\\.\\d{1,2}\\.\\d{1,2}")) }
+    if (versionName == null) {
+        logger.warn("Could not parse version name from '$versionNameProperty'")
+        null
+    } else {
+        versionName
+    }
+}
+
+val parsedVersionCode: Int? by lazy {
+    val versionName = parsedVersionName
+    if (versionName == null) {
+        logger.warn("Could not parse version code from '$versionName'")
+        null
+    } else {
+        generateVersionCode(versionName)
+    }
+}
+
+/**
+ * Calculates an Android version code from a version number string.<br>
+ * Because of legacy reasons, every code ends with 01
+ * Examples:
+ * <ul>
+ *     <li>"0.0.1" => 101</li><
+ *     <li>"1.2.3" => 1020301</li>
+ *     <li>"11.22.33" => 11223301</li>
+ * </ul>
+ * @param version A version number following "semantic versioning"
+ * @return A version code
+ */
+fun generateVersionCode(version: String): Int {
+    val type = 1
+    val (major, minor, patch) = version
+        .split('.')
+        .map { it.replace("\\D".toRegex(), "") }
+        .map { it.toInt() }
+    require(major in 0..2000)
+    require(minor in 0..99)
+    require(patch in 0..99)
+    require(type in 0..99)
+    val versionCode = (major * 1000000) + (minor * 10000) + (patch * 100) + type
+    require(versionCode in 1..2100000000)
+    return versionCode
+}
+
+tasks.matching { it.name.startsWith("publish") }.configureEach {
+    doFirst {
+        requireNotNull(parsedVersionName) {
+            "No version name set"
+        }
+        requireNotNull(parsedVersionCode) {
+            "No version code set"
+        }
     }
 }
 
@@ -30,8 +90,8 @@ android {
     defaultConfig {
         applicationId = "se.gustavkarlsson.skylight.android"
         targetSdk = Versions.targetSdk
-        versionCode = generateVersionCode(scmVersion.version)
-        versionName = scmVersion.version
+        versionCode = parsedVersionCode ?: 99999999
+        versionName = parsedVersionName ?: "99.99.99"
     }
 
     signingConfigs {
@@ -96,7 +156,6 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":lib:analytics"))
     implementation(project(":lib:location"))
     implementation(project(":lib:okhttp"))
     implementation(project(":lib:weather"))
@@ -134,6 +193,9 @@ dependencies {
     // Leakcanary
     debugImplementation("com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}")
 
+    // Logcat
+    implementation("com.squareup.logcat:logcat:${Versions.logcat}")
+
     // Compose
     implementation("androidx.activity:activity-compose:${Versions.androidActivity}")
     implementation("androidx.compose.animation:animation:${Versions.compose}")
@@ -147,34 +209,4 @@ dependencies {
     testImplementation("com.willowtreeapps.assertk:assertk:${Versions.assertk}") {
         exclude("org.jetbrains.kotlin")
     }
-}
-
-/**
- * Calculates an Android version code from a version number string.<br>
- * <br>
- * Note that versions containing the string "snapshot" (case insensitive) will get a lower
- * version code than a release version, since release versions come after snapshot Versions.<br>
- * <br>
- * Examples:
- * <ul>
- *     <li>"0.0.1-SNAPSHOT" => 100</li><
- *     <li>"1.2.3-SNAPSHOT" => 1020300</li>
- *     <li>"11.22.33" => 11223301</li>
- * </ul>
- * @param version A version number following "semantic versioning"
- * @return A version code
- */
-fun generateVersionCode(version: String): Int {
-    val type = if (version.toLowerCase().contains("snapshot")) 0 else 1
-    val (major, minor, patch) = version
-        .split('.')
-        .map { it.replace("\\D".toRegex(), "") }
-        .map { it.toInt() }
-    val versionCode = (major * 1000000) + (minor * 10000) + (patch * 100) + type
-    require(major in 0..2000)
-    require(minor in 0..99)
-    require(patch in 0..99)
-    require(type in 0..99)
-    require(versionCode in 1..2100000000)
-    return versionCode
 }

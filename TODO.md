@@ -2,6 +2,7 @@
 * Better colors
 
 ## Soon
+* Should everything using Store also be singletons? (to utilize its cache)?
 * Add kotlin bom
 * Look into restricted bucket
 * Move to firebase BOM (https://firebase.google.com/docs/android/learn-more#bom)
@@ -20,6 +21,7 @@
 * Improve feature graphics
 * Main screen: Tell a story, one or a few sentences?
 * Look into adding screen with open source licenses: https://developers.google.com/android/guides/opensource
+* Use Anvil ContributesBinding (Problematic because anvil needs implementation to be be public. It also does not support type parameters at the time of writing this)
 
 ## Some day
 * Oversee text style usage (also use TextAppearance instead of style in XML)
@@ -32,8 +34,6 @@
 * Firebase performance monitoring
 * Add manual clearing of "notification sent" in develop mode
 * Add more testing options (individual overrides for example)
-* Look into country changes while app running (Locale etc)
-* Additional analytics(Failed remote calls, Notifications on/off, Manually started app, Started app from notification, denied location permission, no Google Play Services installed, first start)
 * Add performance traces
 * Integrate code coverage (Coveralls or Codecov)
 * Look into using Spek (problems with junit5 and android)

@@ -8,12 +8,20 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
+import se.gustavkarlsson.skylight.android.core.utils.minutes
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 internal class NotifyScheduler(
     private val appContext: Context,
     private val scheduleInterval: Duration,
 ) : Scheduler {
+
+    @Inject
+    constructor(context: Context) : this(
+        appContext = context,
+        scheduleInterval = 15.minutes,
+    )
 
     private val workManager get() = WorkManager.getInstance(appContext)
 

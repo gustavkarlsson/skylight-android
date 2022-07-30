@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="location_permission_message">För att beräkna chansen att se norrsken där du är,
+        ge Skylight tillgång till din plats. Du kan också välja en plats manuellt.</string>
+</resources>

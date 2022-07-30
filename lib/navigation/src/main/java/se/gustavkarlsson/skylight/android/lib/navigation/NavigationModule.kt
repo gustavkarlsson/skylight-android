@@ -1,11 +1,12 @@
 package se.gustavkarlsson.skylight.android.lib.navigation
 
+import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import se.gustavkarlsson.skylight.android.core.AppScope
-import se.gustavkarlsson.skylight.android.lib.analytics.Analytics
+import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 
 @Module
+@ContributesTo(AppScopeMarker::class)
 class NavigationModule(private val screens: Screens) {
 
     @Provides
@@ -13,14 +14,6 @@ class NavigationModule(private val screens: Screens) {
 
     @Provides
     internal fun provideDefaultScreen(screens: Screens): Screen = screens.main
-
-    @AppScope
-    @Provides
-    internal fun provideDefaultNavigator(
-        screen: Screen,
-        overrides: Set<@JvmSuppressWildcards NavigationOverride>,
-        analytics: Analytics,
-    ): DefaultNavigator = DefaultNavigator(defaultScreen = screen, overrides, analytics)
 
     @Provides
     internal fun provideNavigator(navigator: DefaultNavigator): Navigator = navigator

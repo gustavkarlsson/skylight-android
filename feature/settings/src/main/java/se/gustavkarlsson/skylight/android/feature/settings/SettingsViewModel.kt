@@ -10,8 +10,9 @@ import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsRepository
 import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
+import javax.inject.Inject
 
-internal class SettingsViewModel(
+internal class SettingsViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
 ) : CoroutineScopedService() {
     val state: StateFlow<ViewState> = settingsRepository.stream()

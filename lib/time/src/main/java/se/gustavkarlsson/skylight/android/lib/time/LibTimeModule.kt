@@ -1,13 +1,14 @@
 package se.gustavkarlsson.skylight.android.lib.time
 
+import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import dagger.Reusable
+import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 
 @Module
+@ContributesTo(AppScopeMarker::class)
 object LibTimeModule {
 
     @Provides
-    @Reusable
     internal fun time(): Time = SystemTime
 }

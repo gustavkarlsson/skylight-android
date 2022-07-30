@@ -14,7 +14,7 @@ import se.gustavkarlsson.skylight.android.lib.settings.Settings
 
 internal sealed interface State {
     val permissions: Permissions
-    val locationServiceStatus: LocationServiceStatus
+    val locationServiceStatus: LocationServiceStatus?
     val currentLocation: Loadable<LocationResult>
     val currentLocationName: Loadable<ReverseGeocodingResult>
     val selectedAuroraReport: LoadableAuroraReport
@@ -25,7 +25,7 @@ internal sealed interface State {
 
     data class Loading(
         override val permissions: Permissions,
-        override val locationServiceStatus: LocationServiceStatus,
+        override val locationServiceStatus: LocationServiceStatus?,
         override val currentLocation: Loadable<LocationResult>,
         override val currentLocationName: Loadable<ReverseGeocodingResult>,
         override val selectedPlace: Place?,

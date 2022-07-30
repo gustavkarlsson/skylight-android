@@ -11,6 +11,7 @@ import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.core.R
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.Place
+import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SkylightColors
@@ -24,9 +25,15 @@ internal sealed interface ViewState {
         val content: ContentState,
     ) : ViewState
 
-    data class RequiresBackgroundLocationPermission(
-        val description: TextRef,
-    ) : ViewState
+    sealed interface RequiresBackgroundLocationPermission : ViewState {
+        data class UseDialog(
+            val description: TextRef,
+        ) : RequiresBackgroundLocationPermission
+
+        data class UseAppSettings(
+            val description: TextRef,
+        ) : RequiresBackgroundLocationPermission
+    }
 }
 
 internal sealed interface AppBarState {
@@ -75,11 +82,7 @@ internal data class BannerData(
     val buttonText: TextRef,
     val icon: ImageVector,
     val buttonEvent: Event,
-) {
-    enum class Event {
-        RequestBackgroundLocationPermission, OpenAppDetails
-    }
-}
+)
 
 internal data class DialogData(
     val text: TextRef,
@@ -177,6 +180,7 @@ internal sealed interface Event {
     data class LongClickSearchResult(val result: SearchResult) : Event
     data class DeletePlace(val place: Place.Saved) : Event
     data class ResolveLocationSettings(val activity: Activity) : Event
+    data class SelectPlace(val placeId: PlaceId) : Event
     object CancelPlaceDeletion : Event
     object RefreshLocationPermission : Event
     object TurnOffCurrentLocationNotifications : Event

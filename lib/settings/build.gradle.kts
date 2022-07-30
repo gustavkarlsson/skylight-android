@@ -7,6 +7,7 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
+    id("com.squareup.anvil")
     id("com.squareup.sqldelight")
     id("com.google.protobuf")
 }

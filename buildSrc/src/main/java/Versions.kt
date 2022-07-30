@@ -2,68 +2,66 @@ import org.gradle.api.JavaVersion
 
 object Versions {
     // Config
-    val minSdk = 24
-    val compileSdk = 31
-    val targetSdk = 31
+    const val minSdk = 24
+    const val compileSdk = 32
+    const val targetSdk = 32
     val java = JavaVersion.VERSION_1_8
-    val kotlin = "1.6.10" // Must also update in buildSrc/build.gradle.kts
-    val androidGradle = "7.1.0-rc01" // Must also update in buildSrc/build.gradle.kts
-    val jgit = "5.12.0.202106070339-r"
+    const val kotlin = "1.7.0" // Must also update in buildSrc/build.gradle.kts
+    const val androidGradle = "7.2.1" // Must also update in buildSrc/build.gradle.kts
+    const val jgit = "5.12.0.202106070339-r"
 
-    val axionRelease = "1.13.3"
-    val playPublisher = "3.6.0"
-    val ktlintGradle = "10.2.0"
-    val ktlint = "0.43.2"
+    const val playPublisher = "3.7.0"
+    const val ktlintGradle = "10.3.0"
+    const val ktlint = "0.44.0" // Skip 0.45.x as it has a bug: https://github.com/pinterest/ktlint/pull/1450
 
     // App
     // Google
-    val googleServices = "4.3.10"
-    val playServicesLocation = "18.0.0"
-    val playServicesGcm = "17.0.0"
+    const val googleServices = "4.3.10"
+    const val playServicesLocation = "19.0.1"
+    const val playServicesGcm = "17.0.0"
 
-    val firebaseAnalytics = "20.0.0"
-    val crashlyticsGradle = "2.8.0"
-    val crashlytics = "18.2.4"
+    const val crashlyticsGradle = "2.8.1"
+    const val crashlytics = "18.2.10"
 
-    val androidAppcompat = "1.3.1"
-    val androidActivity = "1.4.0"
-    val androidAnnotation = "1.3.0"
-    val androidWorkManager = "2.7.0"
-    val androidCore = "1.7.0"
-    val androidLifecycle = "2.4.0"
+    const val androidAppcompat = "1.4.1"
+    const val androidActivity = "1.4.0"
+    const val androidAnnotation = "1.3.0"
+    const val androidCore = "1.7.0"
+    const val androidLifecycle = "2.4.1"
+    const val androidWorkManager = "2.7.1"
 
-    val runtimePermissionKotlin = "1.1.2"
-    val kotlinxCoroutines = "1.6.0"
+    const val assent = "3.0.0-RC4"
+    const val kotlinxCoroutines = "1.6.1"
 
-    val okHttp = "4.9.3"
-    val retrofit = "2.9.0"
-    val retrofitKotlinSerialization = "0.8.0"
-    val kotlinxSerialization = "1.3.2"
+    const val okHttp = "4.9.3"
+    const val retrofit = "2.9.0"
+    const val retrofitKotlinSerialization = "0.8.0"
+    const val kotlinxSerialization = "1.3.3"
 
-    val arrow = "1.0.1"
-    val dagger = "2.40.1"
-    val threetenabp = "1.3.1"
-    val solarPositioning = "0.0.9"
-    val sqldelight = "1.5.2"
-    val dataStore = "1.0.0"
-    val protobuf = "3.19.1"
-    val protobufGradle = "0.8.17"
-    val leakcanary = "2.7"
-    val mapboxServices = "5.8.0"
-    val conveyor = "cc93e41adc" // TODO use release version
-    val textref = "1.3.1"
-    val markwon = "4.6.2"
-    val store = "4.0.4-KT15"
-    val compose = "1.1.0-rc01"
-    val composeCompiler = "1.1.0-rc02" // Temporary diverge because Kotlin 1.6.10
-    val composeConstraintLayout = "1.0.0-rc02"
-    val accompanist = "0.22.0-rc"
+    const val arrow = "1.1.2"
+    const val dagger = "2.43.1"
+    const val anvil = "2.4.1"
+    const val threetenabp = "1.4.0"
+    const val solarPositioning = "0.0.9"
+    const val sqldelight = "1.5.3"
+    const val dataStore = "1.0.0"
+    const val protobuf = "3.20.1"
+    const val protobufGradle = "0.8.18"
+    const val leakcanary = "2.9.1"
+    const val logcat = "0.1"
+    const val mapboxServices = "5.8.0"
+    const val conveyor = "cc93e41adc" // TODO use release version
+    const val textref = "1.3.1"
+    const val markwon = "4.6.2"
+    const val store = "4.0.5"
+    const val compose = "1.2.0"
+    const val composeConstraintLayout = "1.0.1"
+    const val accompanist = "0.25.0"
 
     // Test
-    val junit = "4.12"
-    val assertk = "0.10"
-    val mockito = "2.22.0"
-    val mockitoKotlin = "1.6.0"
-    val commonsIo = "2.4"
-    val robolectric = "3.4.2"
+    const val junit = "4.12"
+    const val assertk = "0.10"
+    const val mockito = "2.22.0"
+    const val mockitoKotlin = "1.6.0"
+    const val commonsIo = "2.4"
 }

@@ -1,26 +1,22 @@
 package se.gustavkarlsson.skylight.android.lib.darkness
 
+import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
-import dagger.Reusable
+import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
-import se.gustavkarlsson.skylight.android.core.utils.minutes
-import se.gustavkarlsson.skylight.android.lib.time.Time
 
 @Module
+@ContributesTo(AppScopeMarker::class)
 object LibDarknessModule {
 
     @Provides
-    @Reusable
     internal fun darknessformatter(): Formatter<Darkness> = DarknessFormatter
 
     @Provides
-    @Reusable
     internal fun darknessEvaluator(): ChanceEvaluator<Darkness> = DarknessEvaluator
 
     @Provides
-    @Reusable
-    internal fun darknessProvider(time: Time): DarknessProvider =
-        KlausBrunnerDarknessProvider(time, pollingInterval = 1.minutes)
+    internal fun darknessProvider(impl: KlausBrunnerDarknessProvider): DarknessProvider = impl
 }

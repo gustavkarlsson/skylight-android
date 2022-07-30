@@ -4,19 +4,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.google.accompanist.insets.ProvideWindowInsets
 
 @Composable
 fun ScreenBackground(
     content: @Composable () -> Unit,
 ) {
     SkylightTheme {
-        ProvideWindowInsets {
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = Colors.background,
-                content = content,
-            )
-        }
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = Colors.background,
+            content = content,
+        )
     }
 }

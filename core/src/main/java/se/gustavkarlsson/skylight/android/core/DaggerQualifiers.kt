@@ -17,3 +17,11 @@ annotation class Computation
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 annotation class Global
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class VersionCode
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class VersionName
