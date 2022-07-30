@@ -12,7 +12,7 @@ object Versions {
 
     const val playPublisher = "3.7.0"
     const val ktlintGradle = "10.3.0"
-    const val ktlint = "0.45.1" // Skip 0.45.2 as it has a bug: https://github.com/pinterest/ktlint/pull/1450
+    const val ktlint = "0.44.0" // Skip 0.45.x as it has a bug: https://github.com/pinterest/ktlint/pull/1450
 
     // App
     // Google
