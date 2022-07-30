@@ -39,8 +39,8 @@ object Versions {
     const val kotlinxSerialization = "1.3.3"
 
     const val arrow = "1.1.2"
-    const val dagger = "2.42"
-    const val anvil = "2.4.0"
+    const val dagger = "2.43.1"
+    const val anvil = "2.4.1"
     const val threetenabp = "1.4.0"
     const val solarPositioning = "0.0.9"
     const val sqldelight = "1.5.3"
