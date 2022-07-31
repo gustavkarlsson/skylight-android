@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.PlaceData
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
@@ -47,18 +49,32 @@ internal fun Ready(
         when (val content = state.content) {
             is ContentState.PlaceSelected -> {
                 HorizontalPager(
-                    count = pagerState.pageCount, // FIXME get from content instead?
+                    count = content.placeData.size,
                     state = pagerState,
                 ) { page ->
-                    // FIXME show different based on tab
-                    SelectedPlace(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(WindowInsets.navigationBars.asPaddingValues())
-                            .padding(paddingValues),
-                        state = content,
-                        onEvent = onEvent,
-                    )
+                    when (val data = content.placeData[page]) {
+                        is PlaceData.Current -> {
+                            Current(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(WindowInsets.navigationBars.asPaddingValues())
+                                    .padding(paddingValues),
+                                state = data,
+                                onEvent = onEvent,
+                            )
+                        }
+                        PlaceData.Forecast -> {
+                            // FIXME implement
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(WindowInsets.navigationBars.asPaddingValues())
+                                    .padding(paddingValues)
+                                    .padding(32.dp),
+                                text = "Forecast",
+                            )
+                        }
+                    }
                 }
             }
             is ContentState.Searching -> {

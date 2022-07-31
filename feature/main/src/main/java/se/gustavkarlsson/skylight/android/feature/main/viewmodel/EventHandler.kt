@@ -53,9 +53,6 @@ internal class EventHandler @Inject constructor(
             is Event.SelectPlace -> {
                 selectedPlaceRepository.set(event.placeId)
             }
-            is Event.SelectTimeSpan -> {
-                onTimeSelected(event)
-            }
             Event.RefreshLocationPermission -> {
                 permissionChecker.refresh()
             }
@@ -72,17 +69,6 @@ internal class EventHandler @Inject constructor(
     private suspend fun onDeletePlace(place: Place.Saved) {
         placesRepository.delete(place.id)
         onCancelPlaceDeletion()
-    }
-
-    private fun onTimeSelected(event: Event.SelectTimeSpan) {
-        store.issue { stateFlow ->
-            stateFlow.update {
-                when (this) {
-                    is State.Loading -> this
-                    is State.Ready -> copy(timeSpan = event.timeSpan)
-                }
-            }
-        }
     }
 
     private suspend fun onCancelPlaceDeletion() {

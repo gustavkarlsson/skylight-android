@@ -38,9 +38,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.BannerData
-import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.FactorItem
+import se.gustavkarlsson.skylight.android.feature.main.viewmodel.PlaceData
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Banner
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
@@ -52,10 +52,10 @@ import java.util.Locale
 
 @Preview
 @Composable
-private fun PreviewSelectedPlace() {
-    SelectedPlace(
+private fun PreviewCurrent() {
+    Current(
         modifier = Modifier.fillMaxSize(),
-        state = ContentState.PlaceSelected(
+        state = PlaceData.Current(
             chanceLevelText = TextRef.string("What chance?"),
             errorBannerData = null,
             notificationsButtonState = ToggleButtonState.Enabled(checked = false),
@@ -76,9 +76,9 @@ private fun PreviewSelectedPlace() {
 }
 
 @Composable
-internal fun SelectedPlace(
+internal fun Current(
     modifier: Modifier,
-    state: ContentState.PlaceSelected,
+    state: PlaceData.Current,
     onEvent: (Event) -> Unit,
 ) {
     ConstraintLayout(modifier = modifier) {

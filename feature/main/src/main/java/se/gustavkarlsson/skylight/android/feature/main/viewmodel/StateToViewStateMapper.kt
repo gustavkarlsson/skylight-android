@@ -108,14 +108,10 @@ internal class StateToViewStateMapper @Inject constructor(
         TabItem(
             timeSpan = TimeSpan.Current,
             text = TextRef.string("Now"), // FIXME string res
-            selected = state.timeSpan == TimeSpan.Current,
-            onClickedEvent = Event.SelectTimeSpan(TimeSpan.Current),
         ),
         TabItem(
             timeSpan = TimeSpan.Forecast,
             text = TextRef.string("Forecast"), // FIXME string res
-            selected = state.timeSpan == TimeSpan.Forecast,
-            onClickedEvent = Event.SelectTimeSpan(TimeSpan.Forecast),
         ),
     )
 
@@ -174,11 +170,16 @@ internal class StateToViewStateMapper @Inject constructor(
 
     private fun createSelectedPlaceContent(state: State.Ready): ContentState.PlaceSelected {
         return ContentState.PlaceSelected(
-            chanceLevelText = createChangeLevelText(state),
-            errorBannerData = createErrorBannerData(state),
-            notificationsButtonState = createNotificationButtonState(state),
-            factorItems = createFactorItems(state),
-            onNotificationClickedEvent = createOnNotificationClickedEvent(state),
+            placeData = listOf(
+                PlaceData.Current(
+                    chanceLevelText = createChangeLevelText(state),
+                    errorBannerData = createErrorBannerData(state),
+                    notificationsButtonState = createNotificationButtonState(state),
+                    factorItems = createFactorItems(state),
+                    onNotificationClickedEvent = createOnNotificationClickedEvent(state),
+                ),
+                PlaceData.Forecast,
+            ),
         )
     }
 

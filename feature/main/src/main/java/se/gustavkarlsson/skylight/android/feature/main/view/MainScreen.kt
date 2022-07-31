@@ -32,6 +32,7 @@ import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceId
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
+import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.collectAsLifecycleAwareState
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
@@ -110,23 +111,15 @@ private fun PreviewContent() {
                     TabItem(
                         timeSpan = TimeSpan.Current,
                         text = TextRef.string("Now"),
-                        selected = true,
-                        onClickedEvent = Event.Noop,
                     ),
                     TabItem(
                         timeSpan = TimeSpan.Forecast,
                         text = TextRef.string("Forecast"),
-                        selected = false,
-                        onClickedEvent = Event.Noop,
                     ),
                 ),
             ),
             content = ContentState.PlaceSelected(
-                chanceLevelText = TextRef.EMPTY,
-                errorBannerData = null,
-                notificationsButtonState = ToggleButtonState.Enabled(checked = false),
-                factorItems = emptyList(),
-                onNotificationClickedEvent = Event.Noop,
+                placeData = emptyList(),
             ),
         ),
         onClickGrantLocationPermission = {},

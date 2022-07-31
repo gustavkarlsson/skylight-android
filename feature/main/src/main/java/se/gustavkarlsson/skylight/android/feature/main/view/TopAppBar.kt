@@ -38,6 +38,7 @@ import androidx.compose.material.icons.filled.Today
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -52,6 +53,7 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.ioki.textref.TextRef
+import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.state.TimeSpan
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.AppBarState
@@ -132,7 +134,7 @@ internal fun TopAppBar(
         },
         bottomRow = (state as? AppBarState.PlaceSelected)?.let {
             {
-                Tabs(state, pagerState, onEvent)
+                Tabs(state, pagerState)
             }
         },
     )
@@ -143,7 +145,6 @@ internal fun TopAppBar(
 private fun Tabs(
     state: AppBarState.PlaceSelected,
     pagerState: PagerState,
-    onEvent: (Event) -> Unit,
 ) {
     TabRow(
         selectedTabIndex = pagerState.currentPage,
@@ -154,10 +155,15 @@ private fun Tabs(
         },
         backgroundColor = Color.Transparent,
     ) {
+        val scope = rememberCoroutineScope()
         state.tabs.forEachIndexed { index, tab ->
             LeadingIconTab(
-                selected = pagerState.currentPage == index, // FIXME use tab or pagerState?
-                onClick = { onEvent(tab.onClickedEvent) },
+                selected = pagerState.currentPage == index,
+                onClick = {
+                    scope.launch {
+                        pagerState.animateScrollToPage(index)
+                    }
+                },
                 text = {
                     Text(textRef(tab.text))
                 },
