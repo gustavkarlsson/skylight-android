@@ -41,9 +41,7 @@ internal sealed interface AppBarState {
     data class PlaceSelected(
         val title: TextRef,
         val tabs: List<TabItem>,
-    ) : AppBarState {
-        val selectedTabIndex: Int get() = tabs.indexOfFirst { it.selected }
-    }
+    ) : AppBarState
 
     data class Searching(val query: String) : AppBarState
 }
@@ -51,19 +49,13 @@ internal sealed interface AppBarState {
 internal data class TabItem(
     val timeSpan: TimeSpan,
     val text: TextRef,
-    val selected: Boolean,
-    val onClickedEvent: Event,
 )
 
 internal sealed interface ContentState {
     val dialog: DialogData?
 
     data class PlaceSelected(
-        val chanceLevelText: TextRef,
-        val errorBannerData: BannerData?,
-        val notificationsButtonState: ToggleButtonState,
-        val factorItems: List<FactorItem>,
-        val onNotificationClickedEvent: Event,
+        val placeData: List<PlaceData>,
     ) : ContentState {
         override val dialog: Nothing? = null
     }
@@ -88,6 +80,22 @@ internal sealed interface ContentState {
 
     object RequiresLocationService : ContentState {
         override val dialog: Nothing? = null
+    }
+}
+
+internal sealed interface PlaceData {
+    val errorBannerData: BannerData?
+
+    data class Current(
+        val chanceLevelText: TextRef,
+        override val errorBannerData: BannerData?,
+        val notificationsButtonState: ToggleButtonState,
+        val factorItems: List<FactorItem>,
+        val onNotificationClickedEvent: Event,
+    ) : PlaceData
+
+    object Forecast : PlaceData {
+        override val errorBannerData: BannerData? get() = null
     }
 }
 
@@ -203,7 +211,6 @@ internal sealed interface Event {
     data class DeletePlace(val place: Place.Saved) : Event
     data class ResolveLocationSettings(val activity: Activity) : Event
     data class SelectPlace(val placeId: PlaceId) : Event
-    data class SelectTimeSpan(val timeSpan: TimeSpan) : Event
     object CancelPlaceDeletion : Event
     object RefreshLocationPermission : Event
     object TurnOffCurrentLocationNotifications : Event
