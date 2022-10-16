@@ -48,7 +48,7 @@ object LibKpIndexModule {
         val api = Retrofit.Builder()
             .client(okHttpClient)
             .addConverterFactory(converterFactory)
-            .baseUrl("https://skylight-web-service-1.herokuapp.com/")
+            .baseUrl("https://skylight-api.com/")
             .build()
             .create(KpIndexApi::class.java)
 
