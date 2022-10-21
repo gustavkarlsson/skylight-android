@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.location
 
 import android.annotation.SuppressLint
+import android.os.Looper
 import androidx.annotation.RequiresPermission
 import arrow.core.left
 import arrow.core.right
@@ -171,6 +172,7 @@ internal class GmsLocationProvider(
                         flowOf(Loaded(LocationError.NoPermission.left()))
                     }
                 }
+
                 LocationServiceStatus.Disabled -> {
                     logInfo { "Location service disabled" }
                     flowOf(Loaded(LocationError.LocationDisabled.left()))
@@ -242,7 +244,7 @@ private fun FusedLocationProviderClient.streamUntilError(
     try {
         logDebug { "Requesting location updates" }
         // TODO Can we use a looper from a different thread?
-        val task = requestLocationUpdates(locationRequest, callback, looper)
+        val task = requestLocationUpdates(locationRequest, callback, Looper.getMainLooper())
         task.addOnFailureListener { e ->
             val result = if (e is SecurityException) {
                 logWarn(e) { "Failed to get location update" }

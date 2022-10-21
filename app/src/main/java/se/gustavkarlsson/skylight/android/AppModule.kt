@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import arrow.core.NonEmptyList
+import arrow.core.toNonEmptyListOrNull
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
@@ -52,7 +53,7 @@ class AppModule(private val application: Application) {
                 add(locales[i])
             }
         }
-        NonEmptyList.fromListUnsafe(list)
+        list.toNonEmptyListOrNull() ?: throw IndexOutOfBoundsException("Empty list")
     }
 
     @Provides

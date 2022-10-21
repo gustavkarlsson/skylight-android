@@ -8,6 +8,7 @@ android {
     commonConfig()
     composeConfig()
     sourceSets["main"].res.srcDir("$buildDir/generated/privacypolicy")
+    namespace = "se.gustavkarlsson.skylight.android.feature.privacypolicy"
 }
 
 dependencies {

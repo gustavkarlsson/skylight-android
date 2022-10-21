@@ -12,7 +12,7 @@ plugins {
 val versionNameProperty: String? by lazy {
     val property = findProperty("version_name") as String?
     if (property == null) {
-        logger.warn("No version_name property set")
+        logger.debug("No version_name property set")
         null
     } else {
         property
@@ -22,7 +22,7 @@ val versionNameProperty: String? by lazy {
 val parsedVersionName: String? by lazy {
     val versionName = versionNameProperty?.trim()?.takeIf { it.matches(Regex("\\d{1,2}\\.\\d{1,2}\\.\\d{1,2}")) }
     if (versionName == null) {
-        logger.warn("Could not parse version name from '$versionNameProperty'")
+        logger.debug("Could not parse version name from '$versionNameProperty'")
         null
     } else {
         versionName
@@ -32,7 +32,7 @@ val parsedVersionName: String? by lazy {
 val parsedVersionCode: Int? by lazy {
     val versionName = parsedVersionName
     if (versionName == null) {
-        logger.warn("Could not parse version code from '$versionName'")
+        logger.debug("Could not parse version code from '$versionName'")
         null
     } else {
         generateVersionCode(versionName)
@@ -115,7 +115,7 @@ android {
         getByName("debug")
     }
 
-    flavorDimensions += "environment"
+    setFlavorDimensions(listOf("environment"))
 
     productFlavors {
         create("production") {
@@ -152,6 +152,7 @@ android {
             add("META-INF/LGPL2.1")
         }
     }
+    namespace = "se.gustavkarlsson.skylight.android"
 }
 
 dependencies {

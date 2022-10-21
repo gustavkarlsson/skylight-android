@@ -31,6 +31,7 @@ android {
         val openWeatherMapApiKey = parsedOpenWeatherMapApiKey ?: "openweathermap_api_key_not_set"
         buildConfigField("String", "OPENWEATHERMAP_API_KEY", "\"$openWeatherMapApiKey\"")
     }
+    namespace = "se.gustavkarlsson.skylight.android.lib.weather"
 }
 
 dependencies {

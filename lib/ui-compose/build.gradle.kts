@@ -6,6 +6,7 @@ plugins {
 android {
     commonConfig()
     composeConfig()
+    namespace = "se.gustavkarlsson.skylight.android.lib.ui.compose"
 }
 
 dependencies {
