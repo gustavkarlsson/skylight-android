@@ -5,6 +5,7 @@ import android.location.LocationManager
 import androidx.core.content.getSystemService
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority.PRIORITY_BALANCED_POWER_ACCURACY
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
@@ -24,13 +25,11 @@ import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 object LibLocationModule {
 
     // Why can't this be a provides function?
-    private val locationRequest = LocationRequest.create().apply {
-        priority = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
-        fastestInterval = 1.minutes.toMillis()
-        interval = 10.minutes.toMillis()
-        maxWaitTime = 15.minutes.toMillis()
-        smallestDisplacement = 200.toFloat()
-    }
+    private val locationRequest = LocationRequest.Builder(PRIORITY_BALANCED_POWER_ACCURACY, 10.minutes.toMillis())
+        .setMinUpdateIntervalMillis(1.minutes.toMillis())
+        .setMaxUpdateDelayMillis(15.minutes.toMillis())
+        .setMinUpdateDistanceMeters(200.toFloat())
+        .build()
 
     @Provides
     @AppScope
