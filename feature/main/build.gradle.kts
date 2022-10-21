@@ -10,7 +10,7 @@ android {
     commonConfig()
     composeConfig()
 
-    flavorDimensions += "environment"
+    setFlavorDimensions(listOf("environment"))
 
     productFlavors {
         create("production") {
@@ -23,6 +23,7 @@ android {
             buildConfigField("boolean", "DEVELOP", "true")
         }
     }
+    namespace = "se.gustavkarlsson.skylight.android.feature.main"
 }
 
 dependencies {

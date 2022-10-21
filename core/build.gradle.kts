@@ -9,6 +9,7 @@ android {
     defaultConfig {
         resValue("string", "app_name", APP_NAME)
     }
+    namespace = "se.gustavkarlsson.skylight.android.core"
 }
 
 dependencies {

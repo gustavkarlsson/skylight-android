@@ -7,6 +7,7 @@ plugins {
 
 android {
     commonConfig()
+    namespace = "se.gustavkarlsson.skylight.android.lib.aurora"
 }
 
 dependencies {

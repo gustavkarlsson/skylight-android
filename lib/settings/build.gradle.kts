@@ -1,8 +1,3 @@
-import com.google.protobuf.gradle.builtins
-import com.google.protobuf.gradle.generateProtoTasks
-import com.google.protobuf.gradle.protobuf
-import com.google.protobuf.gradle.protoc
-
 plugins {
     id("com.android.library")
     kotlin("android")
@@ -14,6 +9,7 @@ plugins {
 
 android {
     commonConfig()
+    namespace = "se.gustavkarlsson.skylight.android.lib.settings"
 }
 
 sqldelight {

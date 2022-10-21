@@ -32,7 +32,7 @@ android {
         buildConfigField("long", "BUILD_TIME_MILLIS", "${buildTime}L")
     }
 
-    flavorDimensions += "environment"
+    setFlavorDimensions(listOf("environment"))
 
     productFlavors {
         create("production") {
@@ -45,6 +45,7 @@ android {
             buildConfigField("boolean", "DEVELOP", "true")
         }
     }
+    namespace = "se.gustavkarlsson.skylight.android.feature.about"
 }
 
 dependencies {

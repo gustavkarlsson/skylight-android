@@ -9,6 +9,7 @@ plugins {
 android {
     commonConfig()
     composeConfig()
+    namespace = "se.gustavkarlsson.skylight.android.lib.navigation"
 }
 
 dependencies {

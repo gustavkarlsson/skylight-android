@@ -8,6 +8,7 @@ plugins {
 
 android {
     commonConfig()
+    namespace = "se.gustavkarlsson.skylight.android.lib.places"
 }
 
 sqldelight {

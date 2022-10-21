@@ -30,6 +30,7 @@ android {
         val mapboxApiKey = parsedMapboxApiKey ?: "mapbox_api_key_not_set"
         buildConfigField("String", "MAPBOX_API_KEY", "\"$mapboxApiKey\"")
     }
+    namespace = "se.gustavkarlsson.skylight.android.lib.geocoder"
 }
 
 dependencies {

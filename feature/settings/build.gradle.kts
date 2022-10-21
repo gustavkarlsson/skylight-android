@@ -10,7 +10,8 @@ android {
     commonConfig()
     composeConfig()
 
-    flavorDimensions += "environment"
+    setFlavorDimensions(listOf("environment"))
+    namespace = "se.gustavkarlsson.skylight.android.feature.settings"
 }
 
 dependencies {
