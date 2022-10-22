@@ -1,7 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
 import androidx.annotation.StringRes
-import androidx.compose.material.icons.filled.Warning
 import arrow.core.Either
 import com.ioki.textref.TextRef
 import kotlinx.datetime.Instant
@@ -25,7 +24,6 @@ import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.Permission
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
-import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherError
@@ -57,9 +55,8 @@ internal class StateToViewStateMapper @Inject constructor(
 
     private fun createNonLoadingState(state: State.Ready): ViewState {
         val requiresBackgroundLocationPermission = PlaceId.Current in state.settings.placeIdsWithNotification
-        val hasLocationPermission = state.permissions[Permission.Location] == Access.Granted
         val hasBackgroundPermission = state.permissions[Permission.BackgroundLocation] == Access.Granted
-        return if (hasLocationPermission && requiresBackgroundLocationPermission && !hasBackgroundPermission) {
+        return if (requiresBackgroundLocationPermission && !hasBackgroundPermission) {
             if (state.permissions[Permission.BackgroundLocation] == Access.DeniedForever) {
                 val description = TextRef.stringRes(
                     R.string.background_location_permission_denied_forever_message,
@@ -74,14 +71,16 @@ internal class StateToViewStateMapper @Inject constructor(
                 ViewState.RequiresBackgroundLocationPermission.UseDialog(description)
             }
         } else {
+            val content = createContent(state)
+            val tabsVisible = content is ContentState.PlaceVisible
             ViewState.Ready(
-                appBar = createToolbarState(state),
-                content = createContent(state),
+                appBar = createToolbarState(state, tabsVisible),
+                content = content,
             )
         }
     }
 
-    private fun createToolbarState(state: State.Ready): AppBarState {
+    private fun createToolbarState(state: State.Ready, tabsVisible: Boolean): AppBarState {
         return when (state.search) {
             is Search.Inactive -> {
                 val title = when (val selectedPlace = state.selectedPlace) {
@@ -95,9 +94,10 @@ internal class StateToViewStateMapper @Inject constructor(
                     }
                     is Place.Saved -> TextRef.string(selectedPlace.name)
                 }
-                AppBarState.PlaceSelected(
+                AppBarState.PlaceVisible(
                     title = title,
                     tabs = createTabItems(state),
+                    tabsVisible = tabsVisible,
                 )
             }
             is Search.Active -> AppBarState.Searching(state.search.query)
@@ -152,7 +152,7 @@ internal class StateToViewStateMapper @Inject constructor(
                         ContentState.RequiresLocationPermission.UseAppSettings
                     }
                     else -> {
-                        createSelectedPlaceContent(state)
+                        createPlaceVisibleContent(state)
                     }
                 }
             }
@@ -168,12 +168,11 @@ internal class StateToViewStateMapper @Inject constructor(
         )
     }
 
-    private fun createSelectedPlaceContent(state: State.Ready): ContentState.PlaceSelected {
-        return ContentState.PlaceSelected(
+    private fun createPlaceVisibleContent(state: State.Ready): ContentState.PlaceVisible {
+        return ContentState.PlaceVisible(
             placeData = listOf(
                 PlaceData.Current(
                     chanceLevelText = createChangeLevelText(state),
-                    errorBannerData = createErrorBannerData(state),
                     notificationsButtonState = createNotificationButtonState(state),
                     factorItems = createFactorItems(state),
                     onNotificationClickedEvent = createOnNotificationClickedEvent(state),
@@ -189,26 +188,6 @@ internal class StateToViewStateMapper @Inject constructor(
             ?: Chance.UNKNOWN
         val level = ChanceLevel.fromChance(chance)
         return chanceLevelFormatter.format(level)
-    }
-
-    private fun createErrorBannerData(state: State.Ready): BannerData? {
-        val needsBackgroundLocation = PlaceId.Current in state.settings.placeIdsWithNotification
-        val backgroundLocationDeniedSomehow = when (state.permissions[Permission.BackgroundLocation]) {
-            Access.Denied, Access.DeniedForever -> true
-            Access.Granted -> false
-        }
-        return when {
-            needsBackgroundLocation && backgroundLocationDeniedSomehow -> {
-                BannerData(
-                    TextRef.stringRes(R.string.banner_location_permission_issue),
-                    TextRef.stringRes(R.string.fix),
-                    Icons.Warning,
-                    Event.SelectPlace(PlaceId.Current),
-                )
-            }
-            state.selectedPlace != Place.Current -> null
-            else -> null
-        }
     }
 
     private fun createNotificationButtonState(state: State.Ready): ToggleButtonState {

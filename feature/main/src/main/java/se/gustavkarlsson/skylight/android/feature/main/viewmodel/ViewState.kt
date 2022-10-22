@@ -38,9 +38,10 @@ internal sealed interface ViewState {
 }
 
 internal sealed interface AppBarState {
-    data class PlaceSelected(
+    data class PlaceVisible(
         val title: TextRef,
         val tabs: List<TabItem>,
+        val tabsVisible: Boolean,
     ) : AppBarState
 
     data class Searching(val query: String) : AppBarState
@@ -54,7 +55,7 @@ internal data class TabItem(
 internal sealed interface ContentState {
     val dialog: DialogData?
 
-    data class PlaceSelected(
+    data class PlaceVisible(
         val placeData: List<PlaceData>,
     ) : ContentState {
         override val dialog: Nothing? = null
@@ -84,19 +85,14 @@ internal sealed interface ContentState {
 }
 
 internal sealed interface PlaceData {
-    val errorBannerData: BannerData?
-
     data class Current(
         val chanceLevelText: TextRef,
-        override val errorBannerData: BannerData?,
         val notificationsButtonState: ToggleButtonState,
         val factorItems: List<FactorItem>,
         val onNotificationClickedEvent: Event,
     ) : PlaceData
 
-    object Forecast : PlaceData {
-        override val errorBannerData: BannerData? get() = null
-    }
+    object Forecast : PlaceData
 }
 
 internal data class BannerData(

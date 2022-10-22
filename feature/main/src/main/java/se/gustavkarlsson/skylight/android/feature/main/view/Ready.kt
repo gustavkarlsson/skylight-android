@@ -47,7 +47,7 @@ internal fun Ready(
         },
     ) { paddingValues ->
         when (val content = state.content) {
-            is ContentState.PlaceSelected -> {
+            is ContentState.PlaceVisible -> {
                 HorizontalPager(
                     count = content.placeData.size,
                     state = pagerState,

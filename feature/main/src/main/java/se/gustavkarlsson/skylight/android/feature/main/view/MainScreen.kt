@@ -105,7 +105,7 @@ object MainScreen : Screen {
 private fun PreviewContent() {
     Content(
         state = ViewState.Ready(
-            appBar = AppBarState.PlaceSelected(
+            appBar = AppBarState.PlaceVisible(
                 title = TextRef.string("Some Place"),
                 tabs = listOf(
                     TabItem(
@@ -117,8 +117,9 @@ private fun PreviewContent() {
                         text = TextRef.string("Forecast"),
                     ),
                 ),
+                tabsVisible = true,
             ),
-            content = ContentState.PlaceSelected(
+            content = ContentState.PlaceVisible(
                 placeData = emptyList(),
             ),
         ),
