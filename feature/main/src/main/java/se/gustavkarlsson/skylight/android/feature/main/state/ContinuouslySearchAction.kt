@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
-import se.gustavkarlsson.skylight.android.core.utils.throttle
+import se.gustavkarlsson.skylight.android.core.utils.throttleLatest
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocodingError
@@ -58,7 +58,7 @@ internal class ContinuouslySearchAction(
             .filterIsInstance<Search.Active>()
             .map { search -> search.query.trim() }
             .filter { query -> query.isNotBlank() }
-            .throttle(queryThrottleDuration)
+            .throttleLatest(queryThrottleDuration)
             .collectLatest { query ->
                 // TODO Ensure no race condition
                 launch {

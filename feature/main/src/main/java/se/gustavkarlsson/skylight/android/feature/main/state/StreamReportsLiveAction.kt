@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
-import se.gustavkarlsson.skylight.android.core.utils.throttle
+import se.gustavkarlsson.skylight.android.core.utils.throttleLatest
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.location.Location
@@ -46,7 +46,7 @@ internal class StreamReportsLiveAction(
                     stateFlow.reports()
                 } else emptyFlow()
             }
-            .throttle(throttleDuration)
+            .throttleLatest(throttleDuration)
             .collectLatest { report ->
                 stateFlow.update(report)
             }

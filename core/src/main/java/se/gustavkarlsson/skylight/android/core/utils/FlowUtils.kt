@@ -1,21 +1,21 @@
 package se.gustavkarlsson.skylight.android.core.utils
 
 import arrow.core.NonEmptyList
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.scan
-import kotlinx.coroutines.withContext
+import java.util.concurrent.atomic.AtomicReference
 import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
+import kotlin.time.TimeMark
+import kotlin.time.TimeSource
 
 // TODO Replace these with built-in once available
 
@@ -30,34 +30,22 @@ fun <T> Flow<T>.windowed(size: Int): Flow<NonEmptyList<T>> {
     }
 }
 
-fun <T> Flow<T>.throttle(wait: Duration): Flow<T> = flow {
-    val waitMillis = wait.inWholeMilliseconds
-    coroutineScope {
-        val context = coroutineContext
-        var nextMillis = 0L
-        var delayPost: Deferred<Unit>? = null
-        collect {
-            val current = System.currentTimeMillis() // FIXME use kotlin time
-            if (nextMillis < current) {
-                nextMillis = current + waitMillis
-                emit(it)
-                delayPost?.cancel()
-            } else {
-                val delayNext = nextMillis
-                delayPost?.cancel()
-                delayPost = async(Dispatchers.Default) {
-                    delay(nextMillis - current)
-                    if (delayNext == nextMillis) {
-                        nextMillis = System.currentTimeMillis() + waitMillis // FIXME use kotlin time
-                        withContext(context) {
-                            emit(it)
-                        }
-                    }
-                }
-            }
+@OptIn(ExperimentalTime::class)
+fun <T> Flow<T>.throttleLatest(minDelay: Duration): Flow<T> = channelFlow {
+    val lastEmitTimeRef = AtomicReference<TimeMark?>(null)
+    collectLatest { value ->
+        val lastEmitTime = lastEmitTimeRef.get()
+        if (lastEmitTime != null) {
+            val delayLeft = minDelay - lastEmitTime.elapsedNow()
+            delay(delayLeft)
         }
+        send(value)
+        lastEmitTimeRef.set(now())
     }
 }
+
+@OptIn(ExperimentalTime::class)
+private fun now(): TimeMark = TimeSource.Monotonic.markNow()
 
 fun <T, R> StateFlow<T>.mapState(
     transform: (value: T) -> R,
