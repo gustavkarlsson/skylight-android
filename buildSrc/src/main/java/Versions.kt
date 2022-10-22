@@ -2,7 +2,7 @@ import org.gradle.api.JavaVersion
 
 object Versions {
     // Config
-    const val minSdk = 24
+    const val minSdk = 26
     const val compileSdk = 33
     const val targetSdk = 33
     val java = JavaVersion.VERSION_1_8
@@ -41,7 +41,7 @@ object Versions {
     const val arrow = "1.1.3"
     const val dagger = "2.44"
     const val anvil = "2.4.2"
-    const val threetenabp = "1.4.2" // TODO Migrate to kotlin time?
+    const val kotlinDateTime = "0.4.0"
     const val solarPositioning = "0.0.9"
     const val sqldelight = "1.5.4"
     const val dataStore = "1.0.0"

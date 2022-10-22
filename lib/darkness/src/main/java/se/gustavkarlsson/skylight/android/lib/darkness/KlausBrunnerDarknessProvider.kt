@@ -6,17 +6,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
+import kotlinx.datetime.Instant
 import net.e175.klaus.solarpositioning.Grena3
-import org.threeten.bp.Duration
-import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Loaded
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
-import se.gustavkarlsson.skylight.android.core.utils.minutes
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.util.GregorianCalendar
 import javax.inject.Inject
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 @Reusable
 internal class KlausBrunnerDarknessProvider(
@@ -47,7 +47,7 @@ internal class KlausBrunnerDarknessProvider(
         while (true) {
             val darknessReport = getDarkness(location, time.now())
             this.emit(Loaded(darknessReport))
-            delay(pollingInterval.toMillis())
+            delay(pollingInterval)
         }
     }
 }
@@ -68,5 +68,4 @@ private fun calculateSunZenithAngle(location: Location, time: Instant): Double {
     return azimuthAndZenithAngle.zenithAngle
 }
 
-private fun Instant.toGregorianCalendar() =
-    GregorianCalendar().apply { timeInMillis = toEpochMilli() }
+private fun Instant.toGregorianCalendar() = GregorianCalendar().apply { timeInMillis = toEpochMilliseconds() }

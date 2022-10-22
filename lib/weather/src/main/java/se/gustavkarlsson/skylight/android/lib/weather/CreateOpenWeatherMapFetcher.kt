@@ -7,13 +7,13 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.io.IOException
+import kotlin.time.Duration
 
 internal fun createOpenWeatherMapFetcher(
     api: OpenWeatherMapApi,
@@ -28,10 +28,10 @@ internal fun createOpenWeatherMapFetcher(
             try {
                 val weather = Weather(api.requestClouds(location, appId), time.now())
                 emit(FetcherResult.Data(weather))
-                delay(pollingInterval.toMillis())
+                delay(pollingInterval)
             } catch (e: IOException) {
                 emit(FetcherResult.Error.Exception(e))
-                delay(retryDelay.toMillis())
+                delay(retryDelay)
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
@@ -50,7 +50,6 @@ private suspend fun OpenWeatherMapApi.requestClouds(location: ApproximatedLocati
         } else {
             val code = response.code()
 
-            @Suppress("BlockingMethodInNonBlockingContext")
             val body = response.errorBody()?.string() ?: "<empty>"
             logError { "Failed to get Weather from OpenWeatherMap API. HTTP $code: $body" }
             throw ServerResponseException(code, body)

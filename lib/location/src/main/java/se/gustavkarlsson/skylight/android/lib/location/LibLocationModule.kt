@@ -16,18 +16,21 @@ import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 import se.gustavkarlsson.skylight.android.core.Global
 import se.gustavkarlsson.skylight.android.core.Io
-import se.gustavkarlsson.skylight.android.core.utils.minutes
-import se.gustavkarlsson.skylight.android.core.utils.seconds
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 @Module
 @ContributesTo(AppScopeMarker::class)
 object LibLocationModule {
 
     // Why can't this be a provides function?
-    private val locationRequest = LocationRequest.Builder(PRIORITY_BALANCED_POWER_ACCURACY, 10.minutes.toMillis())
-        .setMinUpdateIntervalMillis(1.minutes.toMillis())
-        .setMaxUpdateDelayMillis(15.minutes.toMillis())
+    private val locationRequest = LocationRequest.Builder(
+        PRIORITY_BALANCED_POWER_ACCURACY,
+        10.minutes.inWholeMilliseconds,
+    )
+        .setMinUpdateIntervalMillis(1.minutes.inWholeMilliseconds)
+        .setMaxUpdateDelayMillis(15.minutes.inWholeMilliseconds)
         .setMinUpdateDistanceMeters(200.toFloat())
         .build()
 

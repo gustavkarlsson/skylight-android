@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import org.threeten.bp.Instant
+import kotlinx.datetime.Instant
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.db.DbPlace
 import se.gustavkarlsson.skylight.android.lib.places.db.DbPlaceQueries
@@ -27,10 +27,10 @@ internal class SqlDelightPlacesRepository(
                 .map(DbPlace::toPlace)
                 .find { it.name == name && it.location == location }
             if (existing != null) {
-                queries.updateLastChanged(now.toEpochMilli(), existing.id.value)
+                queries.updateLastChanged(now.toEpochMilliseconds(), existing.id.value)
                 queries.selectById(existing.id.value).executeAsOne()
             } else {
-                queries.insert(name, location.latitude, location.longitude, now.toEpochMilli())
+                queries.insert(name, location.latitude, location.longitude, now.toEpochMilliseconds())
                 queries.selectLastInserted().executeAsOne()
             }
         }.toPlace()
@@ -47,7 +47,7 @@ internal class SqlDelightPlacesRepository(
     override suspend fun updateLastChanged(placeId: PlaceId.Saved): Place.Saved = withContext(dispatcher) {
         val now = time.now()
         queries.transactionWithResult {
-            queries.updateLastChanged(now.toEpochMilli(), placeId.value)
+            queries.updateLastChanged(now.toEpochMilliseconds(), placeId.value)
             queries.selectById(placeId.value).executeAsOne()
         }.toPlace()
     }
@@ -66,6 +66,6 @@ internal class SqlDelightPlacesRepository(
 private fun DbPlace.toPlace(): Place.Saved {
     val placeId = PlaceId.Saved(id)
     val location = Location(latitude, longitude)
-    val lastChanged = Instant.ofEpochMilli(lastChangedMillis)
+    val lastChanged = Instant.fromEpochMilliseconds(lastChangedMillis)
     return Place.Saved(placeId, name, location, lastChanged)
 }

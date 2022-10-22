@@ -11,16 +11,16 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
-import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
-import se.gustavkarlsson.skylight.android.core.utils.millis
-import se.gustavkarlsson.skylight.android.core.utils.throttle
+import se.gustavkarlsson.skylight.android.core.utils.throttleLatest
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.Place
 import javax.inject.Inject
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class StreamReportsLiveAction(
@@ -34,8 +34,8 @@ internal class StreamReportsLiveAction(
         auroraReportProvider: AuroraReportProvider,
     ) : this(
         auroraReportProvider = auroraReportProvider,
-        throttleDuration = 500.millis,
-        stayAlive = 1000.millis,
+        throttleDuration = 500.milliseconds,
+        stayAlive = 1000.milliseconds,
     )
 
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
@@ -46,7 +46,7 @@ internal class StreamReportsLiveAction(
                     stateFlow.reports()
                 } else emptyFlow()
             }
-            .throttle(throttleDuration.toMillis())
+            .throttleLatest(throttleDuration)
             .collectLatest { report ->
                 stateFlow.update(report)
             }
@@ -57,7 +57,7 @@ internal class StreamReportsLiveAction(
             .mapLatest { count ->
                 val live = count > 0
                 if (!live) {
-                    delay(stayAlive.toMillis())
+                    delay(stayAlive)
                 }
                 live
             }

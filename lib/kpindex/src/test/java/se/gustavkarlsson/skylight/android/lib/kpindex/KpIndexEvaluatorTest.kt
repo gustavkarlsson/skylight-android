@@ -3,8 +3,8 @@ package se.gustavkarlsson.skylight.android.lib.kpindex
 import assertk.assert
 import assertk.assertions.isBetween
 import assertk.assertions.isEqualTo
+import kotlinx.datetime.Instant
 import org.junit.Test
-import org.threeten.bp.Instant
 import se.gustavkarlsson.skylight.android.core.entities.Chance
 import se.gustavkarlsson.skylight.android.core.entities.Chance.Companion.IMPOSSIBLE
 import se.gustavkarlsson.skylight.android.core.entities.Chance.Companion.MAX
@@ -12,7 +12,7 @@ import se.gustavkarlsson.skylight.android.core.entities.Chance.Companion.UNKNOWN
 
 class KpIndexEvaluatorTest {
 
-    private val timestamp = Instant.EPOCH
+    private val timestamp = Instant.fromEpochMilliseconds(0)
     private val impl = KpIndexEvaluator
 
     @Test

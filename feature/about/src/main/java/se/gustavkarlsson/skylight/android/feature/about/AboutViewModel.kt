@@ -2,13 +2,14 @@ package se.gustavkarlsson.skylight.android.feature.about
 
 import com.ioki.textref.TextRef
 import dagger.Reusable
-import org.threeten.bp.Instant
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.format.DateTimeFormatter
+import kotlinx.datetime.Instant
+import kotlinx.datetime.toJavaLocalDateTime
+import kotlinx.datetime.toLocalDateTime
 import se.gustavkarlsson.skylight.android.core.VersionCode
 import se.gustavkarlsson.skylight.android.core.VersionName
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.lib.time.Time
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @Reusable
@@ -34,7 +35,7 @@ internal class AboutViewModel(
         versionName = versionName,
         gitBranch = BuildConfig.GIT_BRANCH,
         gitSha1 = BuildConfig.GIT_SHA1,
-        buildTime = Instant.ofEpochMilli(BuildConfig.BUILD_TIME_MILLIS),
+        buildTime = Instant.fromEpochMilliseconds(BuildConfig.BUILD_TIME_MILLIS),
     )
 
     val detailsText: TextRef = createDetailsText()
@@ -59,9 +60,9 @@ internal class AboutViewModel(
 
     private fun getBuildTime(): TextRef {
         val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
-        val zoneId = time.zoneId()
-        val localDateTime = LocalDateTime.ofInstant(buildTime, zoneId)
-        val formattedTime = formatter.format(localDateTime)
+        val timeZone = time.timeZone()
+        val localDateTime = buildTime.toLocalDateTime(timeZone)
+        val formattedTime = formatter.format(localDateTime.toJavaLocalDateTime())
         return TextRef.stringRes(R.string.about_built_on, formattedTime)
     }
 }

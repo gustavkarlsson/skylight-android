@@ -14,9 +14,7 @@ internal fun initStrictMode() {
                 detectDiskWrites()
                 detectNetwork()
                 detectResourceMismatches()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    detectUnbufferedIo()
-                }
+                detectUnbufferedIo()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     penaltyListener(Runnable::run) { logError(it) }
                 } else {
@@ -34,12 +32,10 @@ internal fun initStrictMode() {
                 // Ignored for now since AppCompatDelegateImpl.computeFitSystemWindows calls this
                 // detectNonSdkApiUsage()
                 detectCleartextNetwork()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    detectContentUriWithoutPermission()
-                    // Ignored because OkHttp doesn't deal with this
-                    // https://github.com/square/okhttp/issues/3537#issuecomment-619414434
-                    // detectUntaggedSockets()
-                }
+                detectContentUriWithoutPermission()
+                // Ignored because OkHttp doesn't deal with this
+                // https://github.com/square/okhttp/issues/3537#issuecomment-619414434
+                // detectUntaggedSockets()
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     detectCredentialProtectedWhileLocked()
                     detectImplicitDirectBoot()

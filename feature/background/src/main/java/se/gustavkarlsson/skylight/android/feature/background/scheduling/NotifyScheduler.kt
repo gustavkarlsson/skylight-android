@@ -6,11 +6,11 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
-import se.gustavkarlsson.skylight.android.core.utils.minutes
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 
 internal class NotifyScheduler(
     private val appContext: Context,
@@ -44,8 +44,8 @@ internal class NotifyScheduler(
 private const val UNIQUE_NAME_NOTIFY = "NOTIFY"
 
 internal fun createRequest(interval: Duration) =
-    PeriodicWorkRequestBuilder<NotifyWorker>(interval.toMillis(), TimeUnit.MILLISECONDS)
-        .setInitialDelay(interval.toMillis(), TimeUnit.MILLISECONDS)
+    PeriodicWorkRequestBuilder<NotifyWorker>(interval.inWholeMilliseconds, TimeUnit.MILLISECONDS)
+        .setInitialDelay(interval.inWholeMilliseconds, TimeUnit.MILLISECONDS)
         .setConstraints(buildConstraints())
         .build()
 

@@ -1,9 +1,9 @@
 package se.gustavkarlsson.skylight.android.lib.time
 
-import org.threeten.bp.Instant
-import org.threeten.bp.ZoneId
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
 
 interface Time {
     fun now(): Instant
-    fun zoneId(): ZoneId
+    fun timeZone(): TimeZone // FIXME rename function
 }

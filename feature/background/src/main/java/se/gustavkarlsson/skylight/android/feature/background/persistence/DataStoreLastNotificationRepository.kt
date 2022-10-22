@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import kotlinx.coroutines.flow.first
-import org.threeten.bp.Instant
+import kotlinx.datetime.Instant
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notification
@@ -32,7 +32,7 @@ internal class DataStoreLastNotificationRepository(
 
     private fun Preferences.getTimestamp(): Instant? {
         val timestamp = get(TIMESTAMP_KEY) ?: return null
-        return Instant.ofEpochMilli(timestamp)
+        return Instant.fromEpochMilliseconds(timestamp)
     }
 
     private fun Preferences.getData(): Set<PlaceIdWithChance> {
@@ -68,7 +68,7 @@ internal class DataStoreLastNotificationRepository(
     }
 
     override suspend fun insert(notification: Notification) {
-        val timestampValue = notification.timestamp.toEpochMilli()
+        val timestampValue = notification.timestamp.toEpochMilliseconds()
         val dataPairs = notification.placesWithChance.map { placeWithChance ->
             val key = placeWithChance.getKey()
             val value = placeWithChance.getValue()

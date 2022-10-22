@@ -10,11 +10,9 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import org.threeten.bp.Duration
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
-import se.gustavkarlsson.skylight.android.core.utils.millis
-import se.gustavkarlsson.skylight.android.core.utils.throttle
+import se.gustavkarlsson.skylight.android.core.utils.throttleLatest
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.lib.geocoder.Geocoder
 import se.gustavkarlsson.skylight.android.lib.geocoder.GeocodingError
@@ -22,6 +20,8 @@ import se.gustavkarlsson.skylight.android.lib.geocoder.GeocodingResult
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import javax.inject.Inject
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 internal class ContinuouslySearchAction(
     private val searchChannel: ReceiveChannel<SearchFieldState>,
@@ -36,7 +36,7 @@ internal class ContinuouslySearchAction(
     ) : this(
         searchChannel = searchChannel,
         geocoder = geocoder,
-        queryThrottleDuration = 500.millis,
+        queryThrottleDuration = 500.milliseconds,
     )
 
     override suspend fun execute(stateFlow: AtomicStateFlow<State>): Unit = coroutineScope {
@@ -58,7 +58,7 @@ internal class ContinuouslySearchAction(
             .filterIsInstance<Search.Active>()
             .map { search -> search.query.trim() }
             .filter { query -> query.isNotBlank() }
-            .throttle(queryThrottleDuration.toMillis())
+            .throttleLatest(queryThrottleDuration)
             .collectLatest { query ->
                 // TODO Ensure no race condition
                 launch {
@@ -81,6 +81,7 @@ internal class ContinuouslySearchAction(
                         Search.Inactive, is Search.Active.Blank -> {
                             Search.Active.Filled(query, emptyList())
                         }
+
                         is Search.Active.Error -> search.copy(query)
                         is Search.Active.Filled -> search.copy(query)
                     }
