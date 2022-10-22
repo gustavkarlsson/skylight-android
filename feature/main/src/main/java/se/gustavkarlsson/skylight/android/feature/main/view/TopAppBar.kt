@@ -1,7 +1,10 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -121,7 +124,7 @@ internal fun TopAppBar(
                     .height(IntrinsicSize.Max)
                     .fillMaxWidth(),
                 state = state.toSearchFieldState(),
-                inactiveText = textRef(textRef = (state as? AppBarState.PlaceSelected)?.title ?: TextRef.EMPTY),
+                inactiveText = textRef(textRef = (state as? AppBarState.PlaceVisible)?.title ?: TextRef.EMPTY),
                 placeholderText = stringResource(id = R.string.place_search),
                 textStyle = Typography.h6,
                 onStateChanged = { state -> onEvent(Event.SearchChanged(state)) },
@@ -132,8 +135,8 @@ internal fun TopAppBar(
                 Icon(Icons.Settings, contentDescription = stringResource(CoreR.string.settings))
             }
         },
-        bottomRow = (state as? AppBarState.PlaceSelected)?.let {
-            {
+        bottomRow = {
+            if (state is AppBarState.PlaceVisible) {
                 Tabs(state, pagerState)
             }
         },
@@ -143,45 +146,51 @@ internal fun TopAppBar(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun Tabs(
-    state: AppBarState.PlaceSelected,
+    state: AppBarState.PlaceVisible,
     pagerState: PagerState,
 ) {
-    TabRow(
-        selectedTabIndex = pagerState.currentPage,
-        indicator = { tabPositions ->
-            TabRowDefaults.Indicator(
-                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
-            )
-        },
-        backgroundColor = Color.Transparent,
+    AnimatedVisibility(
+        visible = state.tabsVisible,
+        enter = expandVertically(expandFrom = Alignment.Top),
+        exit = shrinkVertically(shrinkTowards = Alignment.Top),
     ) {
-        val scope = rememberCoroutineScope()
-        state.tabs.forEachIndexed { index, tab ->
-            LeadingIconTab(
-                selected = pagerState.currentPage == index,
-                onClick = {
-                    scope.launch {
-                        pagerState.animateScrollToPage(index)
-                    }
-                },
-                text = {
-                    Text(textRef(tab.text))
-                },
-                icon = {
-                    val icon = when (tab.timeSpan) { // FIXME better icons
-                        TimeSpan.Current -> Icons.Today
-                        TimeSpan.Forecast -> Icons.CalendarViewMonth
-                    }
-                    Icon(icon, contentDescription = null)
-                },
-            )
+        TabRow(
+            selectedTabIndex = pagerState.currentPage,
+            indicator = { tabPositions ->
+                TabRowDefaults.Indicator(
+                    Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
+                )
+            },
+            backgroundColor = Color.Transparent,
+        ) {
+            val scope = rememberCoroutineScope()
+            state.tabs.forEachIndexed { index, tab ->
+                LeadingIconTab(
+                    selected = pagerState.currentPage == index,
+                    onClick = {
+                        scope.launch {
+                            pagerState.animateScrollToPage(index)
+                        }
+                    },
+                    text = {
+                        Text(textRef(tab.text))
+                    },
+                    icon = {
+                        val icon = when (tab.timeSpan) { // FIXME better icons
+                            TimeSpan.Current -> Icons.Today
+                            TimeSpan.Forecast -> Icons.CalendarViewMonth
+                        }
+                        Icon(icon, contentDescription = null)
+                    },
+                )
+            }
         }
     }
 }
 
 private fun AppBarState.toSearchFieldState(): SearchFieldState {
     return when (this) {
-        is AppBarState.PlaceSelected -> SearchFieldState.Inactive
+        is AppBarState.PlaceVisible -> SearchFieldState.Inactive
         is AppBarState.Searching -> SearchFieldState.Active(query)
     }
 }
@@ -194,7 +203,7 @@ private fun TopAppBar(
     contentPadding: PaddingValues = PaddingValues(0.dp),
     navigationIcon: @Composable (() -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {},
-    bottomRow: (@Composable () -> Unit)? = null,
+    bottomRow: @Composable () -> Unit = {},
     backgroundColor: Color = MaterialTheme.colors.primarySurface,
     contentColor: Color = contentColorFor(backgroundColor),
     elevation: Dp = AppBarDefaults.TopAppBarElevation,
@@ -250,7 +259,7 @@ private fun TopAppBar(
             content = {
                 Column(Modifier.fillMaxWidth()) {
                     topRow()
-                    bottomRow?.invoke()
+                    bottomRow()
                 }
             },
         )

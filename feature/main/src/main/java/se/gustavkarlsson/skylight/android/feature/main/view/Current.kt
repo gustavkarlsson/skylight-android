@@ -57,7 +57,6 @@ private fun PreviewCurrent() {
         modifier = Modifier.fillMaxSize(),
         state = PlaceData.Current(
             chanceLevelText = TextRef.string("What chance?"),
-            errorBannerData = null,
             notificationsButtonState = ToggleButtonState.Enabled(checked = false),
             factorItems = listOf(
                 FactorItem(
@@ -82,19 +81,7 @@ internal fun Current(
     onEvent: (Event) -> Unit,
 ) {
     ConstraintLayout(modifier = modifier) {
-        val (errorBanner, placeButtons, centerText, cards) = createRefs()
-
-        ErrorBanner(
-            modifier = Modifier
-                .padding(bottom = 8.dp)
-                .constrainAs(errorBanner) {
-                    linkTo(parent.start, parent.top, parent.end, centerText.top)
-                    width = Dimension.fillToConstraints
-                    height = Dimension.wrapContent
-                },
-            errorBannerData = state.errorBannerData,
-            onEvent = onEvent,
-        )
+        val (placeButtons, centerText, cards) = createRefs()
 
         PlaceButtons(
             modifier = Modifier
@@ -109,7 +96,7 @@ internal fun Current(
 
         CenterText(
             modifier = Modifier.constrainAs(centerText) {
-                linkTo(parent.start, errorBanner.bottom, parent.end, cards.top)
+                linkTo(parent.start, parent.top, parent.end, cards.top)
                 width = Dimension.fillToConstraints
                 height = Dimension.fillToConstraints
             },

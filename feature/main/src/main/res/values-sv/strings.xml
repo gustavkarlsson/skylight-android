@@ -4,7 +4,6 @@
     <string name="open_settings">Öppna Appinformation</string>
     <string name="grant_permission">Ge behörighet</string>
     <string name="delete_place_question">Ta bort %s?</string>
-    <string name="fix">Fixa</string>
 
     <string name="factor_geomag_location_title_full">Geomagnetisk plats</string>
     <string name="factor_geomag_location_title_compact">Plats</string>
@@ -71,5 +70,4 @@
     <string name="place_search_failed_generic">Platssökningen misslyckades</string>
     <string name="place_search_failed_server_response">Platssökningen misslyckades. Serverfel.</string>
     <string name="place_search_failed_io">Platssökningen misslyckades. Är du ansluten till internet?</string>
-    <string name="banner_location_permission_issue">Något är fel i inställningarna för platsbehörighet.</string>
 </resources>

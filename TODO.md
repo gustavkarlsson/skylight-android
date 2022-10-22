@@ -1,4 +1,5 @@
 ## ASAP
+* Enable Location service button does not work
 * Better colors
 
 ## Soon
