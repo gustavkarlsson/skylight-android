@@ -13,6 +13,9 @@ android {
 dependencies {
     implementation(project(":core"))
 
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:${Versions.dataStore}")
+
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 
     // Testing

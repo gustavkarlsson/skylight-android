@@ -59,7 +59,6 @@ private class MakeGooglePlayServicesAvailableAction(
     override suspend fun execute(stateFlow: AtomicStateFlow<Install>) {
         val newState = withContext(mainDispatcher + CoroutineName("makeGooglePlayServicesAvailable")) {
             try {
-                // TODO Extract to library module (together with GooglePlayServicesChecker)
                 GoogleApiAvailability.getInstance()
                     .makeGooglePlayServicesAvailable(activity)
                     .await()

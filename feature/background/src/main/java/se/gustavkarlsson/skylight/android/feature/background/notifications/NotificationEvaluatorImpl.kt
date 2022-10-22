@@ -9,7 +9,7 @@ internal class NotificationEvaluatorImpl @Inject constructor(
     private val outdatedEvaluator: OutdatedEvaluator,
 ) : NotificationEvaluator {
 
-    override fun shouldNotify(notification: Notification): Boolean {
+    override suspend fun shouldNotify(notification: Notification): Boolean {
         val lastData = lastNotificationRepository.get() ?: return true
         if (lastData.isOutdated) return true
         return notification hasHigherChanceThan lastData
@@ -18,7 +18,7 @@ internal class NotificationEvaluatorImpl @Inject constructor(
     private val NotificationRecord.isOutdated: Boolean
         get() = outdatedEvaluator.isOutdated(timestamp)
 
-    override fun onNotified(notification: Notification) {
+    override suspend fun onNotified(notification: Notification) {
         lastNotificationRepository.insert(notification)
     }
 }

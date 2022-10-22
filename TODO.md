@@ -2,6 +2,8 @@
 * Better colors
 
 ## Soon
+* Retire ThreeTenABP
+* Snackbar message when toggling notification using icon. Also mention level?
 * Should everything using Store also be singletons? (to utilize its cache)?
 * Add kotlin bom
 * Look into restricted bucket
@@ -15,7 +17,6 @@
 * Show errors for missing internet, notifications denied, etc.
 * Migrate libraries using sqldelight to use store?
 * Simpler configuration of required keys (move to root? fail if not present?)
-* Retire ThreeTenABP
 * Add Hyperion
 * Add prettier detail screens
 * Improve feature graphics

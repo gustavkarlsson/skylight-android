@@ -1,14 +1,11 @@
 package se.gustavkarlsson.skylight.android.lib.places
 
 import arrow.core.NonEmptyList
-import com.squareup.sqldelight.Query
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
-import com.squareup.sqldelight.runtime.coroutines.mapToOne
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Instant
@@ -23,33 +20,36 @@ internal class SqlDelightPlacesRepository(
     private val time: Time,
 ) : PlacesRepository {
 
-    // TODO Don't insert duplicates
     override suspend fun insert(name: String, location: Location): Place.Saved = withContext(dispatcher) {
         val now = time.now()
-        queries.insert(name, location.latitude, location.longitude, now.toEpochMilliseconds())
-        queries.selectLastInserted()
-            .exactlyOne()
-            .toPlace()
+        queries.transactionWithResult {
+            val existing = queries.selectAll().executeAsList()
+                .map(DbPlace::toPlace)
+                .find { it.name == name && it.location == location }
+            if (existing != null) {
+                queries.updateLastChanged(now.toEpochMilliseconds(), existing.id.value)
+                queries.selectById(existing.id.value).executeAsOne()
+            } else {
+                queries.insert(name, location.latitude, location.longitude, now.toEpochMilliseconds())
+                queries.selectLastInserted().executeAsOne()
+            }
+        }.toPlace()
     }
 
     override suspend fun delete(id: PlaceId.Saved): Boolean {
-        queries.deleteById(id.value)
-        val changedRows = queries.selectChangedCount().exactlyOne()
+        val changedRows = queries.transactionWithResult {
+            queries.deleteById(id.value)
+            queries.selectChangedCount().executeAsOne()
+        }
         return changedRows > 0
     }
 
     override suspend fun updateLastChanged(placeId: PlaceId.Saved): Place.Saved = withContext(dispatcher) {
         val now = time.now()
-        queries.updateLastChanged(now.toEpochMilliseconds(), placeId.value)
-        queries.selectById(placeId.value)
-            .exactlyOne()
-            .toPlace()
-    }
-
-    private suspend fun <T : Any> Query<T>.exactlyOne(): T {
-        return asFlow()
-            .mapToOne(dispatcher)
-            .first()
+        queries.transactionWithResult {
+            queries.updateLastChanged(now.toEpochMilliseconds(), placeId.value)
+            queries.selectById(placeId.value).executeAsOne()
+        }.toPlace()
     }
 
     override fun stream(): Flow<NonEmptyList<Place>> =
@@ -57,9 +57,7 @@ internal class SqlDelightPlacesRepository(
             .asFlow()
             .mapToList(dispatcher)
             .map { dbPlaces ->
-                val places = dbPlaces.map { dbPlace ->
-                    dbPlace.toPlace()
-                }
+                val places = dbPlaces.map(DbPlace::toPlace)
                 NonEmptyList(Place.Current, places)
             }
             .distinctUntilChanged()
