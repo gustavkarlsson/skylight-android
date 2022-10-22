@@ -4,6 +4,10 @@ import android.app.KeyguardManager
 import android.app.NotificationManager
 import android.content.Context
 import androidx.core.content.getSystemService
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.SharedPreferencesMigration
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
@@ -18,8 +22,8 @@ import se.gustavkarlsson.skylight.android.feature.background.notifications.Notif
 import se.gustavkarlsson.skylight.android.feature.background.notifications.NotificationFormatter
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notifier
 import se.gustavkarlsson.skylight.android.feature.background.notifications.NotifierImpl
+import se.gustavkarlsson.skylight.android.feature.background.persistence.DataStoreLastNotificationRepository
 import se.gustavkarlsson.skylight.android.feature.background.persistence.LastNotificationRepository
-import se.gustavkarlsson.skylight.android.feature.background.persistence.SharedPrefsLastNotificationRepository
 import se.gustavkarlsson.skylight.android.feature.background.scheduling.BackgroundWork
 import se.gustavkarlsson.skylight.android.feature.background.scheduling.BackgroundWorkImpl
 import se.gustavkarlsson.skylight.android.feature.background.scheduling.NotifyScheduler
@@ -42,11 +46,6 @@ object FeatureBackgroundModule {
 
     @Provides
     internal fun scheduler(impl: NotifyScheduler): Scheduler = impl
-
-    @Provides
-    internal fun lastNotificationRepository(
-        impl: SharedPrefsLastNotificationRepository,
-    ): LastNotificationRepository = impl
 
     @Provides
     @AuroraAlertsChannelName
@@ -73,7 +72,23 @@ object FeatureBackgroundModule {
 
     @Provides
     internal fun backgroundWork(impl: BackgroundWorkImpl): BackgroundWork = impl
+
+    @Provides
+    @Reusable
+    internal fun lastNotificationRepository(context: Context): LastNotificationRepository {
+        val dataStore = context.dataStore
+        return DataStoreLastNotificationRepository(dataStore)
+    }
 }
+
+private const val PREFS_FILE_NAME = "last_notification"
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
+    name = PREFS_FILE_NAME,
+    produceMigrations = { context ->
+        listOf(SharedPreferencesMigration(context, PREFS_FILE_NAME))
+    },
+)
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
