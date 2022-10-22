@@ -19,4 +19,7 @@ object LibDarknessModule {
 
     @Provides
     internal fun darknessProvider(impl: KlausBrunnerDarknessProvider): DarknessProvider = impl
+
+    @Provides
+    internal fun darknessForecastProvider(impl: KlausBrunnerDarknessForecastProvider): DarknessForecastProvider = impl
 }
