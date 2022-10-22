@@ -47,8 +47,7 @@ internal data class IntroScreen(private val target: Backstack) : Screen {
                 navigator.goTo(screens.privacyPolicy)
             },
             onContinueClicked = {
-                viewModel.registerScreenSeen()
-                navigator.setBackstack(target)
+                viewModel.registerScreenSeen(target)
             },
         )
     }
