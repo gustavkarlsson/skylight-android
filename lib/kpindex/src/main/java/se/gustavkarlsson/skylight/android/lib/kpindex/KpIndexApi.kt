@@ -5,5 +5,8 @@ import retrofit2.http.GET
 
 internal interface KpIndexApi {
     @GET("kp-index")
-    suspend fun get(): Response<KpIndexBody>
+    suspend fun getKpIndex(): Response<KpIndexBody>
+
+    @GET("kp-index-forecast")
+    suspend fun getKpIndexForecast(): Response<KpIndexForecastBody>
 }

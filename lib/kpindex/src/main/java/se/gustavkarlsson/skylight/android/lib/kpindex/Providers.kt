@@ -7,3 +7,8 @@ interface KpIndexProvider {
     suspend fun get(fresh: Boolean = false): KpIndexResult
     fun stream(): Flow<Loadable<KpIndexResult>>
 }
+
+interface KpIndexForecastProvider {
+    suspend fun get(fresh: Boolean = false): KpIndexForecastResult
+    fun stream(): Flow<Loadable<KpIndexForecastResult>>
+}

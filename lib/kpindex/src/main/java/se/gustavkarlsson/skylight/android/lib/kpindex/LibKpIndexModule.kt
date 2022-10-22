@@ -32,22 +32,28 @@ object LibKpIndexModule {
 
     @Provides
     @Reusable
-    internal fun kpIndexProvider(
-        okHttpClient: OkHttpClient,
-        @Io dispatcher: CoroutineDispatcher,
-        time: Time,
-    ): KpIndexProvider {
+    internal fun kpIndexApi(okHttpClient: OkHttpClient): KpIndexApi {
         val json = Json { ignoreUnknownKeys = true }
 
         @Suppress("EXPERIMENTAL_API_USAGE")
         val converterFactory = json.asConverterFactory(MediaType.get("application/json; charset=UTF8"))
 
-        val api = Retrofit.Builder()
+        return Retrofit.Builder()
             .client(okHttpClient)
             .addConverterFactory(converterFactory)
             .baseUrl("https://skylight-api.com/")
             .build()
             .create(KpIndexApi::class.java)
+    }
+
+    @OptIn(ExperimentalTime::class)
+    @Provides
+    @Reusable
+    internal fun kpIndexProvider(
+        api: KpIndexApi,
+        @Io dispatcher: CoroutineDispatcher,
+        time: Time,
+    ): KpIndexProvider {
 
         val pollingInterval = 15.minutes
         val fetcher = createKpIndexFetcher(
@@ -68,5 +74,33 @@ object LibKpIndexModule {
             .build()
 
         return StoreKpIndexProvider(store = store)
+    }
+
+    @OptIn(ExperimentalTime::class)
+    @Provides
+    @Reusable
+    internal fun kpIndexForecastProvider(
+        api: KpIndexApi,
+        @Io dispatcher: CoroutineDispatcher,
+    ): KpIndexForecastProvider {
+
+        val pollingInterval = 60.minutes
+        val fetcher = createKpIndexForecastFetcher(
+            api = api,
+            retryDelay = 15.seconds,
+            pollingInterval = pollingInterval,
+            dispatcher = dispatcher,
+        )
+
+        val expiry = (pollingInterval / 2)
+        val cachePolicy = MemoryPolicy.builder<Unit, KpIndexForecast>()
+            .setExpireAfterWrite(expiry)
+            .build()
+
+        val store = StoreBuilder.from(fetcher)
+            .cachePolicy(cachePolicy)
+            .build()
+
+        return StoreKpIndexForecastProvider(store = store)
     }
 }

@@ -16,7 +16,6 @@ import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Loaded
 import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
-import java.io.IOException
 
 internal class StoreKpIndexProvider(private val store: Store<Unit, KpIndex>) : KpIndexProvider {
 
@@ -54,15 +53,9 @@ internal class StoreKpIndexProvider(private val store: Store<Unit, KpIndex>) : K
                     is StoreReadResponse.Data -> Loaded(response.value.right())
                     is StoreReadResponse.Error.Exception ->
                         Loaded(response.error.toKpIndexError().left())
+
                     is StoreReadResponse.Error.Message, is StoreReadResponse.NoNewData ->
                         error("Unsupported response type: $response")
                 }
             }
 }
-
-private fun Throwable.toKpIndexError(): KpIndexError =
-    when (this) {
-        is IOException -> KpIndexError.Connectivity
-        is ServerResponseException -> KpIndexError.ServerResponse
-        else -> KpIndexError.Unknown
-    }
