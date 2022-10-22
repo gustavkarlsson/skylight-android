@@ -33,25 +33,30 @@ object LibWeatherModule {
 
     @Provides
     @Reusable
-    internal fun weatherProvider(
-        okHttpClient: OkHttpClient,
-        @Io dispatcher: CoroutineDispatcher,
-        time: Time,
-    ): WeatherProvider {
+    internal fun openWeatherMapApi(okHttpClient: OkHttpClient): OpenWeatherMapApi {
         val json = Json { ignoreUnknownKeys = true }
 
         @Suppress("EXPERIMENTAL_API_USAGE")
         val converterFactory = json.asConverterFactory(MediaType.get("application/json; charset=UTF8"))
 
-        val api = Retrofit.Builder()
+        return Retrofit.Builder()
             .client(okHttpClient)
             .addConverterFactory(converterFactory)
             .baseUrl("https://api.openweathermap.org/data/2.5/")
             .build()
             .create(OpenWeatherMapApi::class.java)
+    }
 
-        val pollingInterval = 15.minutes
-        val createFetcher = createOpenWeatherMapFetcher(
+    @OptIn(ExperimentalTime::class)
+    @Provides
+    @Reusable
+    internal fun weatherProvider(
+        api: OpenWeatherMapApi,
+        @Io dispatcher: CoroutineDispatcher,
+        time: Time,
+    ): WeatherProvider {
+        val pollingInterval = 60.minutes
+        val fetcher = createOwmWeatherFetcher(
             api = api,
             appId = BuildConfig.OPENWEATHERMAP_API_KEY,
             retryDelay = 15.seconds,
@@ -66,11 +71,43 @@ object LibWeatherModule {
             .setMaxSize(16)
             .build()
 
-        val store = StoreBuilder.from(createFetcher)
+        val store = StoreBuilder.from(fetcher)
             .cachePolicy(cachePolicy)
             .build()
 
         return StoreWeatherProvider(
+            store = store,
+            approximationMeters = 1000.0,
+        )
+    }
+
+    @OptIn(ExperimentalTime::class)
+    @Provides
+    @Reusable
+    internal fun weatherForecastProvider(
+        api: OpenWeatherMapApi,
+        @Io dispatcher: CoroutineDispatcher,
+    ): WeatherForecastProvider {
+        val pollingInterval = 120.minutes
+        val fetcher = createOwmWeatherForecastFetcher(
+            api = api,
+            appId = BuildConfig.OPENWEATHERMAP_API_KEY,
+            retryDelay = 15.seconds,
+            pollingInterval = pollingInterval,
+            dispatcher = dispatcher,
+        )
+
+        val expiry = (pollingInterval / 2)
+        val cachePolicy = MemoryPolicy.builder<ApproximatedLocation, WeatherForecast>()
+            .setExpireAfterWrite(expiry)
+            .setMaxSize(16)
+            .build()
+
+        val store = StoreBuilder.from(fetcher)
+            .cachePolicy(cachePolicy)
+            .build()
+
+        return StoreWeatherForecastProvider(
             store = store,
             approximationMeters = 1000.0,
         )
