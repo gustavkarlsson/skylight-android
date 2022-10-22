@@ -2,16 +2,16 @@ package se.gustavkarlsson.skylight.android.lib.weather
 
 import arrow.core.left
 import arrow.core.right
+import com.dropbox.android.external.store4.Store
+import com.dropbox.android.external.store4.StoreRequest
+import com.dropbox.android.external.store4.StoreResponse
+import com.dropbox.android.external.store4.fresh
+import com.dropbox.android.external.store4.get
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import org.mobilenativefoundation.store.store5.Store
-import org.mobilenativefoundation.store.store5.StoreReadRequest
-import org.mobilenativefoundation.store.store5.StoreReadResponse
-import org.mobilenativefoundation.store.store5.impl.extensions.fresh
-import org.mobilenativefoundation.store.store5.impl.extensions.get
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Loaded
 import se.gustavkarlsson.skylight.android.core.entities.Loading
@@ -20,18 +20,18 @@ import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.approximate
 
-internal class StoreWeatherProvider(
-    private val store: Store<ApproximatedLocation, Weather>,
+internal class StoreWeatherForecastProvider(
+    private val store: Store<ApproximatedLocation, WeatherForecast>,
     private val approximationMeters: Double,
-) : WeatherProvider {
+) : WeatherForecastProvider {
 
-    override suspend fun get(location: Location, fresh: Boolean): WeatherResult {
+    override suspend fun get(location: Location, fresh: Boolean): WeatherForecastResult {
         val result = getResult(location, fresh)
-        logInfo { "Provided weather: $result" }
+        logInfo { "Provided weather forecast: $result" }
         return result
     }
 
-    private suspend fun getResult(location: Location, fresh: Boolean): WeatherResult {
+    private suspend fun getResult(location: Location, fresh: Boolean): WeatherForecastResult {
         return try {
             val weather = if (fresh) {
                 store.fresh(location.approximate(approximationMeters))
@@ -46,22 +46,27 @@ internal class StoreWeatherProvider(
         }
     }
 
-    override fun stream(location: Location): Flow<Loadable<WeatherResult>> {
+    override fun stream(location: Location): Flow<Loadable<WeatherForecastResult>> {
         return streamResults(location)
             .distinctUntilChanged()
-            .onEach { logInfo { "Streamed weather: $it" } }
+            .onEach { logInfo { "Streamed weather forecast: $it" } }
     }
 
-    private fun streamResults(location: Location): Flow<Loadable<WeatherResult>> {
-        return store.stream(StoreReadRequest.cached(location.approximate(approximationMeters), refresh = false))
+    private fun streamResults(location: Location): Flow<Loadable<WeatherForecastResult>> {
+        return store.stream(
+            StoreRequest.cached(
+                location.approximate(approximationMeters),
+                refresh = false,
+            ),
+        )
             .map { response ->
                 when (response) {
-                    is StoreReadResponse.Loading -> Loading
-                    is StoreReadResponse.Data -> Loaded(response.value.right())
-                    is StoreReadResponse.Error.Exception ->
+                    is StoreResponse.Loading -> Loading
+                    is StoreResponse.Data -> Loaded(response.value.right())
+                    is StoreResponse.Error.Exception ->
                         Loaded(response.error.toWeatherError().left())
 
-                    is StoreReadResponse.Error.Message, is StoreReadResponse.NoNewData ->
+                    is StoreResponse.Error.Message, is StoreResponse.NoNewData ->
                         error("Unsupported response type: $response")
                 }
             }

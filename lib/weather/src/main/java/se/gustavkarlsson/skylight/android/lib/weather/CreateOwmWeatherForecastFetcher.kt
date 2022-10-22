@@ -1,33 +1,33 @@
 package se.gustavkarlsson.skylight.android.lib.weather
 
+import com.dropbox.android.external.store4.Fetcher
+import com.dropbox.android.external.store4.FetcherResult
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import org.mobilenativefoundation.store.store5.Fetcher
-import org.mobilenativefoundation.store.store5.FetcherResult
+import kotlinx.datetime.Instant
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
-import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.io.IOException
 import kotlin.time.Duration
 
-internal fun createOpenWeatherMapFetcher(
+internal fun createOwmWeatherForecastFetcher(
     api: OpenWeatherMapApi,
     appId: String,
     retryDelay: Duration,
     pollingInterval: Duration,
     dispatcher: CoroutineDispatcher,
-    time: Time,
-): Fetcher<ApproximatedLocation, Weather> = Fetcher.ofResultFlow { location ->
+): Fetcher<ApproximatedLocation, WeatherForecast> = Fetcher.ofResultFlow { location ->
     flow {
         while (true) {
             try {
-                val weather = Weather(api.requestClouds(location, appId), time.now())
-                emit(FetcherResult.Data(weather))
+                val apiForecast = api.requestWeatherForecast(location, appId)
+                val forecast = apiForecast.toWeatherForecast()
+                emit(FetcherResult.Data(forecast))
                 delay(pollingInterval)
             } catch (e: IOException) {
                 emit(FetcherResult.Error.Exception(e))
@@ -36,26 +36,36 @@ internal fun createOpenWeatherMapFetcher(
                 throw e
             } catch (e: Exception) {
                 emit(FetcherResult.Error.Exception(e))
-                return@flow
             }
         }
     }.flowOn(dispatcher)
 }
 
-private suspend fun OpenWeatherMapApi.requestClouds(location: ApproximatedLocation, appId: String): Int =
-    try {
-        val response = get(location.latitude, location.longitude, "json", appId)
+private fun OpenWeatherMapWeatherForecast.toWeatherForecast(): WeatherForecast {
+    val weathers = list
+        .sortedBy { it.dt }
+        .map { Weather(it.clouds.all, Instant.fromEpochSeconds(it.dt)) }
+    return WeatherForecast(weathers)
+}
+
+private suspend fun OpenWeatherMapApi.requestWeatherForecast(
+    location: ApproximatedLocation,
+    appId: String,
+): OpenWeatherMapWeatherForecast {
+    return try {
+        val response = getWeatherForecast(location.latitude, location.longitude, appId)
         if (response.isSuccessful) {
-            logInfo { "Got weather from OpenWeatherMap API: ${response.body()!!}" }
-            response.body()!!.clouds.all
+            logInfo { "Got weather forecast from OpenWeatherMap API: ${response.body()!!}" }
+            response.body()!!
         } else {
             val code = response.code()
 
             val body = response.errorBody()?.string() ?: "<empty>"
-            logError { "Failed to get Weather from OpenWeatherMap API. HTTP $code: $body" }
+            logError { "Failed to get Weather forecast from OpenWeatherMap API. HTTP $code: $body" }
             throw ServerResponseException(code, body)
         }
     } catch (e: IOException) {
-        logWarn(e) { "Failed to get Weather from OpenWeatherMap API" }
+        logWarn(e) { "Failed to get Weather forecast from OpenWeatherMap API" }
         throw e
     }
+}
