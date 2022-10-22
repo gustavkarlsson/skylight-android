@@ -8,3 +8,8 @@ interface DarknessProvider {
     fun get(location: Location): Darkness
     fun stream(location: Location): Flow<Loadable<Darkness>>
 }
+
+interface DarknessForecastProvider {
+    fun get(location: Location): DarknessForecast
+    fun stream(location: Location): Flow<Loadable<DarknessForecast>>
+}

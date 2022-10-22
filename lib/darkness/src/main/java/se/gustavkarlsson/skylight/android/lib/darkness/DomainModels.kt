@@ -6,3 +6,5 @@ data class Darkness(
     val sunZenithAngle: Double,
     val timestamp: Instant,
 )
+
+data class DarknessForecast(private val darknesses: List<Darkness>) : List<Darkness> by darknesses
