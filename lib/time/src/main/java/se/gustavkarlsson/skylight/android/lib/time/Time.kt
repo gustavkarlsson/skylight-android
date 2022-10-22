@@ -5,5 +5,5 @@ import kotlinx.datetime.TimeZone
 
 interface Time {
     fun now(): Instant
-    fun timeZone(): TimeZone // FIXME rename function
+    fun timeZone(): TimeZone
 }
