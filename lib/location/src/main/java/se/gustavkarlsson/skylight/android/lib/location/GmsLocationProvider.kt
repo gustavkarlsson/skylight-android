@@ -36,7 +36,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Loaded
 import se.gustavkarlsson.skylight.android.core.entities.Loading
@@ -47,6 +46,7 @@ import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.Permission
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
+import kotlin.time.Duration
 import android.location.Location as AndroidLocation
 import com.google.android.gms.location.LocationResult as GmsLocationResult
 
@@ -228,7 +228,7 @@ private fun FusedLocationProviderClient.streamWithRetry(
     do {
         emitAll(streamUntilError(locationRequest))
         logDebug { "Stream ended. Retrying in $retryDelay" }
-        delay(retryDelay.toMillis())
+        delay(retryDelay)
     } while (true)
 }
 

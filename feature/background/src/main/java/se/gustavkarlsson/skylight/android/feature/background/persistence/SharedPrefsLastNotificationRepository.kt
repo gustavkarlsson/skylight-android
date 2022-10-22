@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.feature.background.persistence
 import android.content.Context
 import androidx.core.content.edit
 import dagger.Reusable
-import org.threeten.bp.Instant
+import kotlinx.datetime.Instant
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notification
@@ -31,7 +31,7 @@ internal class SharedPrefsLastNotificationRepository @Inject constructor(
     private fun getTimestamp(): Instant? {
         val value = sharedPreferences.getLong(TIMESTAMP_KEY, MISSING_LONG)
             .let { if (it == MISSING_LONG) null else it }
-        return value?.let(Instant::ofEpochMilli)
+        return value?.let(Instant.Companion::fromEpochMilliseconds)
     }
 
     private fun getData() =
@@ -66,7 +66,7 @@ internal class SharedPrefsLastNotificationRepository @Inject constructor(
     override fun insert(data: Notification) {
         sharedPreferences.edit {
             clear()
-            putLong(TIMESTAMP_KEY, data.timestamp.toEpochMilli())
+            putLong(TIMESTAMP_KEY, data.timestamp.toEpochMilliseconds())
             data.placesWithChance.forEach { placeWithChance ->
                 val key = getKey(placeWithChance)
                 val value = getValue(placeWithChance)

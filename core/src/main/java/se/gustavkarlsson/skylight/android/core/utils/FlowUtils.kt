@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.withContext
+import kotlin.time.Duration
 
 // TODO Replace these with built-in once available
 
@@ -29,13 +30,14 @@ fun <T> Flow<T>.windowed(size: Int): Flow<NonEmptyList<T>> {
     }
 }
 
-fun <T> Flow<T>.throttle(waitMillis: Long): Flow<T> = flow {
+fun <T> Flow<T>.throttle(wait: Duration): Flow<T> = flow {
+    val waitMillis = wait.inWholeMilliseconds
     coroutineScope {
         val context = coroutineContext
         var nextMillis = 0L
         var delayPost: Deferred<Unit>? = null
         collect {
-            val current = System.currentTimeMillis()
+            val current = System.currentTimeMillis() // FIXME use kotlin time
             if (nextMillis < current) {
                 nextMillis = current + waitMillis
                 emit(it)
@@ -46,7 +48,7 @@ fun <T> Flow<T>.throttle(waitMillis: Long): Flow<T> = flow {
                 delayPost = async(Dispatchers.Default) {
                     delay(nextMillis - current)
                     if (delayNext == nextMillis) {
-                        nextMillis = System.currentTimeMillis() + waitMillis
+                        nextMillis = System.currentTimeMillis() + waitMillis // FIXME use kotlin time
                         withContext(context) {
                             emit(it)
                         }

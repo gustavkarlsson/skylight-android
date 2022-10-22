@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.filled.Warning
 import arrow.core.Either
 import com.ioki.textref.TextRef
-import org.threeten.bp.Instant
+import kotlinx.datetime.Instant
 import se.gustavkarlsson.skylight.android.core.entities.Chance
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
@@ -392,7 +392,7 @@ private val SearchResult.typePriority: Int
 private val SearchResult.lastChanged: Instant
     get() = when (this) {
         is SearchResult.Known.Saved -> place.lastChanged
-        is SearchResult.Known.Current, is SearchResult.New -> Instant.EPOCH
+        is SearchResult.Known.Current, is SearchResult.New -> Instant.fromEpochMilliseconds(0)
     }
 
 private fun List<SearchResult>.mergeDuplicates(): List<SearchResult> {

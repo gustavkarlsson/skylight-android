@@ -27,7 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.threeten.bp.Instant
+import kotlinx.datetime.Instant
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.SearchResult
@@ -54,7 +54,7 @@ private fun PreviewSearchResults() {
                         id = PlaceId.Saved(2),
                         name = "Recent",
                         location = Location(3.0, 4.0),
-                        lastChanged = Instant.EPOCH,
+                        lastChanged = Instant.fromEpochMilliseconds(0),
                     ),
                     selected = false,
                     notifications = false,

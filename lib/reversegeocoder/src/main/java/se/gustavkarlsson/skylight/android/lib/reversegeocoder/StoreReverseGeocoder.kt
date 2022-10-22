@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
-import org.threeten.bp.Duration
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Loaded
 import se.gustavkarlsson.skylight.android.core.entities.Loading
@@ -20,6 +19,7 @@ import se.gustavkarlsson.skylight.android.lib.location.ApproximatedLocation
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.approximate
 import java.io.IOException
+import kotlin.time.Duration
 
 internal class StoreReverseGeocoder(
     private val store: Store<ApproximatedLocation, Option<String>>,
@@ -49,7 +49,7 @@ internal class StoreReverseGeocoder(
                 ifRight = { false },
             )
             if (shouldRetry) {
-                delay(retryDelay.toMillis())
+                delay(retryDelay)
             }
         } while (shouldRetry)
     }

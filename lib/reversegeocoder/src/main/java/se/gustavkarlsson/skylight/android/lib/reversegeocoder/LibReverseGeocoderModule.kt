@@ -10,8 +10,8 @@ import dagger.Reusable
 import kotlinx.coroutines.CoroutineDispatcher
 import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 import se.gustavkarlsson.skylight.android.core.Io
-import se.gustavkarlsson.skylight.android.core.utils.seconds
 import java.util.Locale
+import kotlin.time.Duration.Companion.seconds
 
 @Module
 @ContributesTo(AppScopeMarker::class)

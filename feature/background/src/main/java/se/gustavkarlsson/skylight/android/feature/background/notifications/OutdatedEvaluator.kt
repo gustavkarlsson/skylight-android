@@ -1,8 +1,9 @@
 package se.gustavkarlsson.skylight.android.feature.background.notifications
 
-import org.threeten.bp.Instant
-import org.threeten.bp.LocalTime.NOON
-import se.gustavkarlsson.skylight.android.core.utils.until
+import kotlinx.datetime.Instant
+import kotlinx.datetime.atTime
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import javax.inject.Inject
 
@@ -11,11 +12,11 @@ internal class OutdatedEvaluator @Inject constructor(
 ) {
 
     fun isOutdated(time: Instant): Boolean {
-        val currentZoneId = this.time.zoneId()
+        val currentTimeZone = this.time.timeZone()
         val now = this.time.now()
-        val today = now.atZone(currentZoneId).toLocalDate()
-        val noonToday = NOON.atDate(today).atZone(currentZoneId).toInstant()
-        val age = time until now
-        return age.toHours() > 12 || now > noonToday && time < noonToday
+        val today = now.toLocalDateTime(currentTimeZone).date
+        val noonToday = today.atTime(12, 0, 0).toInstant(currentTimeZone)
+        val age = now - time
+        return age.inWholeHours > 12 || now > noonToday && time < noonToday
     }
 }
