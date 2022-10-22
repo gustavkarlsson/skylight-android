@@ -2,7 +2,6 @@
 * Better colors
 
 ## Soon
-* Retire ThreeTenABP
 * Snackbar message when toggling notification using icon. Also mention level?
 * Should everything using Store also be singletons? (to utilize its cache)?
 * Add kotlin bom
