@@ -18,6 +18,7 @@ dependencies {
     api("androidx.lifecycle:lifecycle-runtime-ktx:${Versions.androidLifecycle}")
 
     api("androidx.compose.ui:ui:${Versions.compose}")
+    debugApi("androidx.compose.ui:ui-tooling:${Versions.compose}")
     api("androidx.compose.ui:ui-tooling-preview:${Versions.compose}")
     api("androidx.compose.compiler:compiler:${Versions.compose}")
     api("androidx.compose.foundation:foundation:${Versions.compose}")
