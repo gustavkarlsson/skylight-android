@@ -3,6 +3,7 @@ package se.gustavkarlsson.skylight.android.feature.main.state
 import arrow.core.NonEmptyList
 import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.lib.aurora.AuroraForecastReport
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.location.LocationResult
@@ -18,6 +19,7 @@ internal sealed interface State {
     val currentLocation: Loadable<LocationResult>
     val currentLocationName: Loadable<ReverseGeocodingResult>
     val selectedAuroraReport: LoadableAuroraReport
+    val selectedAuroraForecastReport: Loadable<AuroraForecastReport>
     val search: Search
     val selectedPlace: Place?
     val places: NonEmptyList<Place>?
@@ -30,6 +32,7 @@ internal sealed interface State {
         override val currentLocationName: Loadable<ReverseGeocodingResult>,
         override val selectedPlace: Place?,
         override val selectedAuroraReport: LoadableAuroraReport,
+        override val selectedAuroraForecastReport: Loadable<AuroraForecastReport>,
         override val search: Search,
         override val places: NonEmptyList<Place>?,
         override val settings: Settings?,
@@ -42,6 +45,7 @@ internal sealed interface State {
         override val currentLocationName: Loadable<ReverseGeocodingResult>,
         override val selectedPlace: Place,
         override val selectedAuroraReport: LoadableAuroraReport,
+        override val selectedAuroraForecastReport: Loadable<AuroraForecastReport>,
         override val search: Search,
         override val places: NonEmptyList<Place>,
         override val settings: Settings,

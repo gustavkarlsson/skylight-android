@@ -30,6 +30,7 @@ private fun State.Loading.updateLoading(): State {
             currentLocationName = currentLocationName,
             selectedPlace = selectedPlace,
             selectedAuroraReport = selectedAuroraReport,
+            selectedAuroraForecastReport = selectedAuroraForecastReport,
             search = search,
             places = places,
             settings = settings,
