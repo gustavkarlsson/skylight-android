@@ -139,6 +139,7 @@ object MainViewModelModule {
         currentLocationName = Loading,
         selectedPlace = null,
         selectedAuroraReport = LoadableAuroraReport.LOADING,
+        selectedAuroraForecastReport = Loading,
         search = Search.Inactive,
         places = null,
         settings = null,
