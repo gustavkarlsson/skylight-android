@@ -11,7 +11,7 @@ interface AuroraComponent {
 
     fun auroraReportProvider(): AuroraReportProvider
 
-    fun completeAuroraReportChanceEvaluator(): ChanceEvaluator<CompleteAuroraReport>
+    fun auroraReportChanceEvaluator(): ChanceEvaluator<AuroraReport>
 
     fun chanceLevelFormatter(): Formatter<ChanceLevel>
 

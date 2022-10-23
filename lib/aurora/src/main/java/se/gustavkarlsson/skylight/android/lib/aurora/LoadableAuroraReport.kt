@@ -17,14 +17,14 @@ data class LoadableAuroraReport(
     val weather: Loadable<WeatherResult>,
 ) {
 
-    fun toCompleteAuroraReport(): CompleteAuroraReport? =
+    fun toAuroraReport(): AuroraReport? =
         if (location != null &&
             kpIndex is Loaded &&
             geomagLocation is Loaded &&
             darkness is Loaded &&
             weather is Loaded
         ) {
-            CompleteAuroraReport(
+            AuroraReport(
                 location = location,
                 kpIndex = kpIndex.value,
                 geomagLocation = geomagLocation.value,

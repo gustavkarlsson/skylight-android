@@ -25,13 +25,13 @@ internal class CombiningAuroraReportProvider @Inject constructor(
     private val kpIndexProvider: KpIndexProvider,
     private val weatherProvider: WeatherProvider,
 ) : AuroraReportProvider {
-    override suspend fun get(location: Location): CompleteAuroraReport =
+    override suspend fun get(location: Location): AuroraReport =
         coroutineScope {
             val kpIndex = async { kpIndexProvider.get() }
             val geomagLocation = geomagLocationProvider.get(location)
             val darkness = darknessProvider.get(location)
             val weather = async { weatherProvider.get(location) }
-            val report = CompleteAuroraReport(
+            val report = AuroraReport(
                 location,
                 kpIndex.await(),
                 geomagLocation,
