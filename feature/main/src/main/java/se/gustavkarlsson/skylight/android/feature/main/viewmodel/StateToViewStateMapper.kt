@@ -171,14 +171,18 @@ internal class StateToViewStateMapper @Inject constructor(
     private fun createPlaceVisibleContent(state: State.Ready): ContentState.PlaceVisible {
         return ContentState.PlaceVisible(
             placeData = listOf(
-                PlaceData.Current(
-                    chanceLevelText = createChangeLevelText(state),
-                    notificationsButtonState = createNotificationButtonState(state),
-                    factorItems = createFactorItems(state),
-                    onNotificationClickedEvent = createOnNotificationClickedEvent(state),
-                ),
-                PlaceData.Forecast,
+                createCurrentPlaceData(state),
+                createForecastPlaceData(state),
             ),
+        )
+    }
+
+    private fun createCurrentPlaceData(state: State.Ready): PlaceData.Current {
+        return PlaceData.Current(
+            chanceLevelText = createChangeLevelText(state),
+            notificationsButtonState = createNotificationButtonState(state),
+            factorItems = createFactorItems(state),
+            onNotificationClickedEvent = createOnNotificationClickedEvent(state),
         )
     }
 
@@ -299,6 +303,11 @@ internal class StateToViewStateMapper @Inject constructor(
         val selectedPlace = state.selectedPlace
         val enabled = selectedPlace.id in state.settings.placeIdsWithNotification
         return Event.SetNotifications(selectedPlace, !enabled)
+    }
+
+    // FIXME pass presentable data
+    private fun createForecastPlaceData(state: State.Ready): PlaceData.Forecast {
+        return PlaceData.Forecast
     }
 
     // TODO avoid duplication with similar function below
