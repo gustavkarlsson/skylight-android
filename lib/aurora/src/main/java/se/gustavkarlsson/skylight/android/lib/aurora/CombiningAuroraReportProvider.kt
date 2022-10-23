@@ -60,7 +60,7 @@ internal class CombiningAuroraReportProvider @Inject constructor(
             darknessProvider.stream(location),
             weatherProvider.stream(location),
         ) { kpIndex, darkness, weather ->
-            LoadableAuroraReport(location, kpIndex, geomagLocation, darkness, weather)
+            LoadableAuroraReport(location, kpIndex, geomagLocation, Loaded(darkness), weather)
         }
     }
 
