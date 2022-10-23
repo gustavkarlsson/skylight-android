@@ -11,7 +11,7 @@ import se.gustavkarlsson.skylight.android.feature.background.notifications.Notif
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notifier
 import se.gustavkarlsson.skylight.android.feature.background.notifications.PlaceWithChance
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
-import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
+import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReport
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
 import se.gustavkarlsson.skylight.android.lib.places.Place
@@ -28,7 +28,7 @@ internal class BackgroundWorkImpl @Inject constructor(
     private val locationProvider: LocationProvider,
     private val reportProvider: AuroraReportProvider,
     private val notificationEvaluator: NotificationEvaluator,
-    private val chanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
+    private val chanceEvaluator: ChanceEvaluator<AuroraReport>,
     private val notifier: Notifier,
     private val time: Time,
 ) : BackgroundWork {

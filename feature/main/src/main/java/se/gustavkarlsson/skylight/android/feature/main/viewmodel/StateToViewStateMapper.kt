@@ -13,7 +13,7 @@ import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.state.Search
 import se.gustavkarlsson.skylight.android.feature.main.state.State
 import se.gustavkarlsson.skylight.android.feature.main.state.TimeSpan
-import se.gustavkarlsson.skylight.android.lib.aurora.CompleteAuroraReport
+import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReport
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
 import se.gustavkarlsson.skylight.android.lib.geocoder.PlaceSuggestion
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
@@ -31,7 +31,7 @@ import javax.inject.Inject
 import se.gustavkarlsson.skylight.android.core.R as CoreR
 
 internal class StateToViewStateMapper @Inject constructor(
-    private val auroraChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
+    private val auroraChanceEvaluator: ChanceEvaluator<AuroraReport>,
     private val chanceLevelFormatter: Formatter<ChanceLevel>,
     private val darknessChanceEvaluator: ChanceEvaluator<Darkness>,
     private val darknessFormatter: Formatter<Darkness>,
@@ -183,7 +183,7 @@ internal class StateToViewStateMapper @Inject constructor(
     }
 
     private fun createChangeLevelText(state: State): TextRef {
-        val chance = state.selectedAuroraReport.toCompleteAuroraReport()
+        val chance = state.selectedAuroraReport.toAuroraReport()
             ?.let(auroraChanceEvaluator::evaluate)
             ?: Chance.UNKNOWN
         val level = ChanceLevel.fromChance(chance)

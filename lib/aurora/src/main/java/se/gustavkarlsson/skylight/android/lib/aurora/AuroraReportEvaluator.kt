@@ -10,14 +10,14 @@ import se.gustavkarlsson.skylight.android.lib.weather.Weather
 import javax.inject.Inject
 
 @Reusable
-internal class CompleteAuroraReportEvaluator @Inject constructor(
+internal class AuroraReportEvaluator @Inject constructor(
     private val kpIndexEvaluator: ChanceEvaluator<KpIndex>,
     private val geomagLocationEvaluator: ChanceEvaluator<GeomagLocation>,
     private val weatherEvaluator: ChanceEvaluator<Weather>,
     private val darknessEvaluator: ChanceEvaluator<Darkness>,
-) : ChanceEvaluator<CompleteAuroraReport> {
+) : ChanceEvaluator<AuroraReport> {
 
-    override fun evaluate(value: CompleteAuroraReport): Chance {
+    override fun evaluate(value: AuroraReport): Chance {
         val activityChance = value.kpIndex.fold(
             ifLeft = { Chance.UNKNOWN },
             ifRight = { kpIndex -> kpIndexEvaluator.evaluate(kpIndex) },

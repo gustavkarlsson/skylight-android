@@ -19,7 +19,12 @@ object LibAuroraModule {
     internal fun auroraReportProvider(impl: CombiningAuroraReportProvider): AuroraReportProvider = impl
 
     @Provides
-    internal fun completeAuroraReportChanceEvaluator(
-        impl: CompleteAuroraReportEvaluator,
-    ): ChanceEvaluator<CompleteAuroraReport> = impl
+    internal fun auroraForecastReportProvider(
+        impl: CombiningAuroraForecastReportProvider,
+    ): AuroraForecastReportProvider = impl
+
+    @Provides
+    internal fun auroraReportChanceEvaluator(
+        impl: AuroraReportEvaluator,
+    ): ChanceEvaluator<AuroraReport> = impl
 }
