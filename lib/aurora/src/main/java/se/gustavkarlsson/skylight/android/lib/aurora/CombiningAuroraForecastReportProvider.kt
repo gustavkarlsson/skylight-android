@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.aurora
 
-import arrow.core.none
 import dagger.Reusable
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -10,6 +9,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
+import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.darkness.DarknessForecastProvider
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationProvider
@@ -53,13 +53,13 @@ internal class CombiningAuroraForecastReportProvider @Inject constructor(
         val geomagLocation = geomagLocationProvider.get(location)
         return combine(
             kpIndexForecastProvider.stream().map { it.orNull() },
-            darknessForecastProvider.stream(location).map { it.orNull() },
+            darknessForecastProvider.stream(location),
             weatherForecastProvider.stream(location).map { it.orNull() },
         ) { kpIndex, darkness, weather ->
-            if (kpIndex != null && darkness != null && weather != null) {
+            if (kpIndex != null && weather != null) {
                 Loadable(AuroraForecastReport(location, kpIndex, geomagLocation, darkness, weather))
             } else {
-                none()
+                Loading
             }
         }
     }

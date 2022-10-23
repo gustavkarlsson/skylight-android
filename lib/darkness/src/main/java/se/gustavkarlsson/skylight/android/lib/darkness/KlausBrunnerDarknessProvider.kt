@@ -6,8 +6,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
-import se.gustavkarlsson.skylight.android.core.entities.Loadable
-import se.gustavkarlsson.skylight.android.core.entities.Loaded
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.time.Time
@@ -35,7 +33,7 @@ internal class KlausBrunnerDarknessProvider(
         return darkness
     }
 
-    override fun stream(location: Location): Flow<Loadable<Darkness>> =
+    override fun stream(location: Location): Flow<Darkness> =
         pollDarkness(location).distinctUntilChanged()
             .distinctUntilChanged()
             .onEach { logInfo { "Streamed darkness: $it" } }
@@ -43,7 +41,7 @@ internal class KlausBrunnerDarknessProvider(
     private fun pollDarkness(location: Location) = flow {
         while (true) {
             val darknessReport = getDarkness(location, time.now())
-            this.emit(Loaded(darknessReport))
+            emit(darknessReport)
             delay(pollingInterval)
         }
     }
