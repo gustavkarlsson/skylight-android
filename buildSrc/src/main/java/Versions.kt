@@ -3,8 +3,8 @@ import org.gradle.api.JavaVersion
 object Versions {
     // Config
     const val minSdk = 26
-    const val compileSdk = 33
-    const val targetSdk = 33
+    const val compileSdk = 34
+    const val targetSdk = 34
     val java = JavaVersion.VERSION_1_8
     const val kotlin = "1.7.20" // Must also update in buildSrc/build.gradle.kts
     const val androidGradle = "8.2.0-alpha16" // Must also update in buildSrc/build.gradle.kts
