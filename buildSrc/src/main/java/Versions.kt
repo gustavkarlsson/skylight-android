@@ -6,7 +6,7 @@ object Versions {
     const val compileSdk = 34
     const val targetSdk = 34
     val java = JavaVersion.VERSION_1_8
-    const val kotlin = "1.7.20" // Must also update in buildSrc/build.gradle.kts
+    const val kotlin = "1.9.0" // Must also update in buildSrc/build.gradle.kts
     const val androidGradle = "8.2.0-alpha16" // Must also update in buildSrc/build.gradle.kts
     const val jgit = "5.12.0.202106070339-r"
 
@@ -39,8 +39,8 @@ object Versions {
     const val kotlinxSerialization = "1.4.1"
 
     const val arrow = "1.1.3"
-    const val dagger = "2.44"
-    const val anvil = "2.4.2"
+    const val dagger = "2.47"
+    const val anvil = "2.4.7"
     const val kotlinDateTime = "0.4.0"
     const val solarPositioning = "0.0.9"
     const val sqldelight = "1.5.4"
@@ -55,7 +55,7 @@ object Versions {
     const val markwon = "4.6.2"
     const val store = "4.0.5"
     const val compose = "1.3.0-rc01"
-    const val composeCompiler = "1.3.2"
+    const val composeCompiler = "1.5.1"
     const val composeConstraintLayout = "1.0.1"
     const val accompanist = "0.26.5-rc"
 
