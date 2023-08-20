@@ -10,7 +10,7 @@ object Versions {
     const val androidGradle = "8.2.0-alpha16" // Must also update in buildSrc/build.gradle.kts
     const val jgit = "5.12.0.202106070339-r"
 
-    const val playPublisher = "3.7.0"
+    const val playPublisher = "3.8.4"
     const val ktlintGradle = "11.5.1"
     const val ktlint = "0.50.0"
 
@@ -33,7 +33,7 @@ object Versions {
     const val assent = "3.0.2"
     const val kotlinxCoroutines = "1.7.3"
 
-    const val okHttp = "4.10.0"
+    const val okHttp = "4.11.0"
     const val retrofit = "2.9.0"
     const val retrofitKotlinSerialization = "1.0.0"
     const val kotlinxSerialization = "1.5.1"
