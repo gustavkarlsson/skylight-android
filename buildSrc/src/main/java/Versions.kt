@@ -16,22 +16,22 @@ object Versions {
 
     // App
     // Google
-    const val googleServices = "4.3.14"
-    const val playServicesLocation = "21.0.0"
+    const val googleServices = "4.3.15"
+    const val playServicesLocation = "21.0.1"
     const val playServicesGcm = "17.0.0"
 
-    const val crashlyticsGradle = "2.9.2"
-    const val crashlytics = "18.3.1"
+    const val crashlyticsGradle = "2.9.8"
+    const val crashlytics = "18.4.0"
 
-    const val androidAppcompat = "1.5.1"
-    const val androidActivity = "1.6.0"
-    const val androidAnnotation = "1.5.0"
-    const val androidCore = "1.9.0"
-    const val androidLifecycle = "2.5.1"
-    const val androidWorkManager = "2.7.1"
+    const val androidAppcompat = "1.6.1"
+    const val androidActivity = "1.7.2"
+    const val androidAnnotation = "1.6.0"
+    const val androidCore = "1.10.1"
+    const val androidLifecycle = "2.6.1"
+    const val androidWorkManager = "2.8.1"
 
     const val assent = "3.0.0-RC4"
-    const val kotlinxCoroutines = "1.6.4"
+    const val kotlinxCoroutines = "1.7.3"
 
     const val okHttp = "4.10.0"
     const val retrofit = "2.9.0"
@@ -60,7 +60,7 @@ object Versions {
     const val accompanist = "0.31.6-rc"
 
     // Test
-    const val junit = "4.12"
+    const val junit = "4.13.2"
     const val assertk = "0.10"
     const val mockito = "2.22.0"
     const val mockitoKotlin = "1.6.0"
