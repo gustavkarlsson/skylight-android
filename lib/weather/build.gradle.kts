@@ -27,6 +27,8 @@ tasks.matching { it.name.startsWith("publish") }.configureEach {
 android {
     commonConfig()
 
+    buildFeatures.buildConfig = true
+
     defaultConfig {
         val openWeatherMapApiKey = parsedOpenWeatherMapApiKey ?: "openweathermap_api_key_not_set"
         buildConfigField("String", "OPENWEATHERMAP_API_KEY", "\"$openWeatherMapApiKey\"")
@@ -46,7 +48,7 @@ dependencies {
             Versions.retrofitKotlinSerialization,
     )
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.kotlinxSerialization}")
-    implementation("com.dropbox.mobile.store:store4:${Versions.store}")
+    implementation("org.mobilenativefoundation.store:store4:${Versions.store}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 

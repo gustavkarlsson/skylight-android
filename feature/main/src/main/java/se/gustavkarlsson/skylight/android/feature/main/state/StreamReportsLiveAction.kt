@@ -44,7 +44,9 @@ internal class StreamReportsLiveAction(
             .flatMapLatest { live ->
                 if (live) {
                     stateFlow.reports()
-                } else emptyFlow()
+                } else {
+                    emptyFlow()
+                }
             }
             .throttleLatest(throttleDuration)
             .collectLatest { report ->

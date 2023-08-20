@@ -164,7 +164,9 @@ private class Renderer(
         val smallestDimension = if (higherThanWide) width else height
         val (scaleY, scaleX) = if (higherThanWide) {
             (height / width) to 1.0f
-        } else 1.0f to (width / height)
+        } else {
+            1.0f to (width / height)
+        }
         val downScaledStartY = y - ((height / 2) / scaleY)
         val downScaledEndY = y + ((height / 2) / scaleY)
         val downScaledWidth = width / scaleX

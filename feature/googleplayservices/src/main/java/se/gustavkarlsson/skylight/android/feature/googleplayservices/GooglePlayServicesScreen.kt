@@ -40,6 +40,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.collectAsLifecycleAwareState
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
 import se.gustavkarlsson.skylight.android.lib.ui.getService
+import se.gustavkarlsson.skylight.android.core.R as CoreR
 
 private val VIEW_MODEL_ID = ServiceId("googlePlayServicesViewModel")
 
@@ -130,7 +131,7 @@ private fun ErrorSnackbar(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val messageText = stringResource(R.string.google_play_services_install_failed)
-    val dismissText = stringResource(R.string.dismiss)
+    val dismissText = stringResource(CoreR.string.dismiss)
     LaunchedEffect(key1 = errorSnackbarVisible) {
         if (errorSnackbarVisible && snackbarHostState.currentSnackbarData == null) {
             snackbarHostState.showSnackbar(

@@ -30,7 +30,9 @@ internal class StoreKpIndexProvider(private val store: Store<Unit, KpIndex>) : K
         return try {
             val kpIndex = if (fresh) {
                 store.fresh(Unit)
-            } else store.get(Unit)
+            } else {
+                store.get(Unit)
+            }
             kpIndex.right()
         } catch (e: CancellationException) {
             throw e

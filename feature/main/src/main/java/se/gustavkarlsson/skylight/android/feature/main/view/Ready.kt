@@ -23,6 +23,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.LargeDialog
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
+import se.gustavkarlsson.skylight.android.core.R as CoreR
 
 @Composable
 internal fun Ready(
@@ -98,7 +99,7 @@ internal fun Ready(
                     image = { LocationIcon() },
                     title = stringResource(R.string.location_service_disabled_title),
                     description = stringResource(R.string.location_service_disabled_message),
-                    primaryActionText = stringResource(R.string.enable),
+                    primaryActionText = stringResource(CoreR.string.enable),
                     onClickPrimaryAction = { onEvent(Event.ResolveLocationSettings(activity)) },
                     secondaryActionText = stringResource(R.string.location_permission_select_manually),
                     onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },

@@ -36,7 +36,9 @@ internal class SettingsModuleStarter(
             .mapNotNull { (placeId, triggerLevel) ->
                 if (triggerLevel != null) {
                     placeId to triggerLevel
-                } else null
+                } else {
+                    null
+                }
             }
             .toMap()
 

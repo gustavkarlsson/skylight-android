@@ -22,7 +22,7 @@ dependencies {
             Versions.retrofitKotlinSerialization,
     )
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.kotlinxSerialization}")
-    implementation("com.dropbox.mobile.store:store4:${Versions.store}")
+    implementation("org.mobilenativefoundation.store:store4:${Versions.store}")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 

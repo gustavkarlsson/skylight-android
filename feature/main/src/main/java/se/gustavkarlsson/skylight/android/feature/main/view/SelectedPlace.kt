@@ -198,7 +198,9 @@ private fun PlaceButtons(
         ) {
             val icon = if (notificationsButtonState.checked) {
                 Icons.Notifications
-            } else Icons.NotificationsNone
+            } else {
+                Icons.NotificationsNone
+            }
             Icon(icon, tint = Colors.primary, contentDescription = null)
         }
     }
@@ -242,7 +244,9 @@ private fun Cards(
                 onClick = {
                     expandedIndex = if (expanded) {
                         null
-                    } else index
+                    } else {
+                        index
+                    }
                 },
             )
         }

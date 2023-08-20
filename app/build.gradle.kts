@@ -87,6 +87,8 @@ android {
     commonConfig()
     composeConfig()
 
+    buildFeatures.buildConfig = true
+
     defaultConfig {
         applicationId = "se.gustavkarlsson.skylight.android"
         targetSdk = Versions.targetSdk
@@ -145,7 +147,7 @@ android {
         }
         resValue("string", "app_name_manifest", manifestAName)
     }
-    packagingOptions {
+    packaging {
         with(resources.excludes) {
             add("META-INF/licenses/**")
             add("META-INF/AL2.0")
@@ -199,7 +201,7 @@ dependencies {
 
     // Compose
     implementation("androidx.activity:activity-compose:${Versions.androidActivity}")
-    implementation("androidx.compose.animation:animation:${Versions.compose}")
+    implementation("androidx.compose.animation:animation")
 
     // Testing
     testImplementation("junit:junit:${Versions.junit}")

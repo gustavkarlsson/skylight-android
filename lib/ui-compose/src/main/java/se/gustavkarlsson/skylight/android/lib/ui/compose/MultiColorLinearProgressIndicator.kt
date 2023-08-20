@@ -14,7 +14,9 @@ fun MultiColorLinearProgressIndicator(
     val color = getColor(progress)
     val backgroundColor = if (progress != null) {
         color.copy(alpha = ProgressIndicatorDefaults.IndicatorBackgroundOpacity)
-    } else Colors.onSurface.copy(alpha = ProgressIndicatorDefaults.IndicatorBackgroundOpacity)
+    } else {
+        Colors.onSurface.copy(alpha = ProgressIndicatorDefaults.IndicatorBackgroundOpacity)
+    }
     LinearProgressIndicator(
         modifier = modifier,
         color = color,

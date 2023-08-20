@@ -71,7 +71,9 @@ fun SearchField(
             .onFocusChanged { focus ->
                 val newState = if (focus.isFocused) {
                     SearchFieldState.Active(activeText ?: "")
-                } else SearchFieldState.Inactive
+                } else {
+                    SearchFieldState.Inactive
+                }
                 onStateChanged(newState)
             },
         textStyle = textStyle,
@@ -91,14 +93,18 @@ fun SearchField(
                     )
                 }
             }
-        } else null,
+        } else {
+            null
+        },
         placeholder = {
             Text(placeholderText)
         },
         onValueChange = { newText ->
             val newState = if (active) {
                 SearchFieldState.Active(newText)
-            } else SearchFieldState.Inactive
+            } else {
+                SearchFieldState.Inactive
+            }
             onStateChanged(newState)
         },
         colors = TextFieldDefaults.textFieldColors(

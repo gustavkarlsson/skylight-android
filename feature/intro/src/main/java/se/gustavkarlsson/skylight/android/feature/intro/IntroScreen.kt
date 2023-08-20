@@ -28,6 +28,8 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
 import se.gustavkarlsson.skylight.android.lib.ui.compose.LargeDialog
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
+import se.gustavkarlsson.skylight.android.core.R as CoreR
+import se.gustavkarlsson.skylight.android.lib.ui.R as UiR
 
 private val VIEW_MODEL_ID = ServiceId("introViewModel")
 
@@ -77,7 +79,7 @@ private fun Content(
                 Spacer(modifier = Modifier.height(64.dp))
                 Image(
                     modifier = Modifier.fillMaxWidth(0.6f),
-                    painter = painterResource(R.drawable.app_logo),
+                    painter = painterResource(UiR.drawable.app_logo),
                     contentScale = ContentScale.FillWidth,
                     contentDescription = null,
                 )
@@ -87,7 +89,7 @@ private fun Content(
             description = stringResource(R.string.intro_desc),
             primaryActionText = stringResource(R.string.intro_continue),
             onClickPrimaryAction = onContinueClicked,
-            secondaryActionText = stringResource(R.string.privacy_policy),
+            secondaryActionText = stringResource(CoreR.string.privacy_policy),
             onClickSecondaryAction = onPrivacyPolicyClicked,
         )
     }

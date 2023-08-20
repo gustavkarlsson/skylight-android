@@ -36,6 +36,7 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.MarkdownText
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
+import se.gustavkarlsson.skylight.android.core.R as CoreR
 
 @Parcelize
 object PrivacyPolicyScreen : Screen {
@@ -84,7 +85,7 @@ private fun Content(
                         }
                     },
                     title = {
-                        Text(stringResource(R.string.privacy_policy))
+                        Text(stringResource(CoreR.string.privacy_policy))
                     },
                 )
             },

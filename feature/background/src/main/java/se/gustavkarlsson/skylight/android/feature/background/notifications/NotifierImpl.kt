@@ -16,6 +16,7 @@ import se.gustavkarlsson.skylight.android.feature.background.AuroraAlertsChannel
 import se.gustavkarlsson.skylight.android.feature.background.R
 import se.gustavkarlsson.skylight.android.lib.places.setPlaceId
 import javax.inject.Inject
+import android.R as AndroidR
 
 internal class NotifierImpl @Inject constructor(
     private val context: Context,
@@ -60,7 +61,7 @@ internal class NotifierImpl @Inject constructor(
             ChanceLevel.NONE, ChanceLevel.UNKNOWN, null -> NotificationCompat.PRIORITY_MIN
         }
 
-    private fun createColor(): Int = context.theme.resolveColor(R.attr.colorPrimary)
+    private fun createColor(): Int = context.theme.resolveColor(AndroidR.attr.colorPrimary)
 
     private fun createText(notification: Notification) =
         notificationFormatter.format(notification).resolve(context)

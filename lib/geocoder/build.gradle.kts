@@ -26,6 +26,8 @@ tasks.matching { it.name.startsWith("publish") }.configureEach {
 android {
     commonConfig()
 
+    buildFeatures.buildConfig = true
+
     defaultConfig {
         val mapboxApiKey = parsedMapboxApiKey ?: "mapbox_api_key_not_set"
         buildConfigField("String", "MAPBOX_API_KEY", "\"$mapboxApiKey\"")

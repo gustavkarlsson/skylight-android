@@ -53,7 +53,9 @@ internal class ContinuouslySearchAction(
             .distinctUntilChangedBy { search ->
                 if (search is Search.Active) {
                     search.query.trim()
-                } else null
+                } else {
+                    null
+                }
             }
             .filterIsInstance<Search.Active>()
             .map { search -> search.query.trim() }

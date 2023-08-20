@@ -36,6 +36,8 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
+import se.gustavkarlsson.skylight.android.core.R as CoreR
+import se.gustavkarlsson.skylight.android.lib.ui.R as UiR
 
 private val VIEW_MODE_ID = ServiceId("aboutViewModel")
 
@@ -81,7 +83,7 @@ private fun Content(
                         }
                     },
                     title = {
-                        Text(stringResource(R.string.about))
+                        Text(stringResource(CoreR.string.about))
                     },
                 )
             },
@@ -96,13 +98,13 @@ private fun Content(
                 Spacer(modifier = Modifier.height(64.dp))
                 Image(
                     modifier = Modifier.fillMaxWidth(0.6f),
-                    painter = painterResource(R.drawable.app_logo),
+                    painter = painterResource(UiR.drawable.app_logo),
                     contentScale = ContentScale.FillWidth,
                     contentDescription = null,
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 Text(
-                    text = stringResource(R.string.app_name),
+                    text = stringResource(CoreR.string.app_name),
                     style = Typography.h4,
                 )
                 Spacer(modifier = Modifier.height(32.dp))

@@ -19,7 +19,9 @@ internal class StreamSelectedPlaceAction @Inject constructor(
                 stateFlow.update {
                     val newReport = if (selectedPlace.savedLocation == this.selectedPlace?.savedLocation) {
                         selectedAuroraReport
-                    } else LoadableAuroraReport.LOADING // TODO Get from cache?
+                    } else {
+                        LoadableAuroraReport.LOADING // TODO Get from cache?
+                    }
                     when (this) {
                         is State.Loading -> copy(
                             selectedPlace = selectedPlace,
