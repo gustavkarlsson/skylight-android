@@ -12,5 +12,7 @@ fun Intent.getPlaceId(): PlaceId? {
     val value = getLongExtra(KEY_PLACE_ID, Long.MIN_VALUE)
     return if (value == Long.MIN_VALUE) {
         null
-    } else PlaceId.fromLong(value)
+    } else {
+        PlaceId.fromLong(value)
+    }
 }

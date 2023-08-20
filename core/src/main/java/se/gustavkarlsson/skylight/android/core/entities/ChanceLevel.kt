@@ -5,7 +5,8 @@ enum class ChanceLevel {
     NONE,
     LOW,
     MEDIUM,
-    HIGH;
+    HIGH,
+    ;
 
     infix fun isGreaterOrEqual(triggerLevel: TriggerLevel): Boolean =
         when (this) {

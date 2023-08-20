@@ -35,5 +35,7 @@ private fun State.Loading.updateLoading(): State {
             settings = settings,
             placeToDelete = null,
         )
-    } else this
+    } else {
+        this
+    }
 }

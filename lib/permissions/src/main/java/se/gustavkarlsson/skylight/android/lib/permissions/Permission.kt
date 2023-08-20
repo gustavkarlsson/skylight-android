@@ -32,7 +32,7 @@ enum class Permission(
                 add(Manifest.permission.ACCESS_COARSE_LOCATION)
             }
         }.nonEmptyUnsafe(),
-    );
+    ),
 }
 
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.Q)

@@ -79,7 +79,9 @@ internal fun TopAppBar(
                 Crossfade(targetState = active) { active ->
                     val imageVector = if (active) {
                         Icons.ArrowBack
-                    } else Icons.Search
+                    } else {
+                        Icons.Search
+                    }
                     Icon(
                         imageVector = imageVector,
                         contentDescription = null,

@@ -41,7 +41,9 @@ internal class PermissionManager @Inject constructor(
         val result = ContextCompat.checkSelfPermission(context, permission.checkKey)
         return if (result == PackageManager.PERMISSION_GRANTED) {
             Access.Granted
-        } else Access.Denied
+        } else {
+            Access.Denied
+        }
     }
 
     override suspend fun request(activity: FragmentActivity, permission: Permission) {

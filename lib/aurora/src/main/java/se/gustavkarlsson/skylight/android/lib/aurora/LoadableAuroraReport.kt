@@ -31,7 +31,9 @@ data class LoadableAuroraReport(
                 darkness = darkness.value,
                 weather = weather.value,
             )
-        } else null
+        } else {
+            null
+        }
 
     companion object {
         val LOADING = LoadableAuroraReport(

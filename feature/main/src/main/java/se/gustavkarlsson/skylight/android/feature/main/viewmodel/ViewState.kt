@@ -124,19 +124,25 @@ internal sealed interface SearchResult {
                 get() {
                     return if (name != null) {
                         TextRef.string(name)
-                    } else TextRef.stringRes(R.string.your_location)
+                    } else {
+                        TextRef.stringRes(R.string.your_location)
+                    }
                 }
             override val subtitle: TextRef?
                 get() {
                     return if (name != null) {
                         TextRef.stringRes(R.string.your_location)
-                    } else null
+                    } else {
+                        null
+                    }
                 }
             override val icon = Icons.MyLocation
             override val trailingIcon: ImageVector?
                 get() = if (notifications) {
                     Icons.Notifications
-                } else null
+                } else {
+                    null
+                }
             override val clickEvent: Event get() = Event.ClickSearchResult(this)
             override val longClickEvent: Nothing? = null
         }
@@ -152,7 +158,9 @@ internal sealed interface SearchResult {
             override val trailingIcon: ImageVector?
                 get() = if (notifications) {
                     Icons.Notifications
-                } else null
+                } else {
+                    null
+                }
             override val clickEvent: Event get() = Event.ClickSearchResult(this)
             override val longClickEvent: Event get() = Event.LongClickSearchResult(this)
         }

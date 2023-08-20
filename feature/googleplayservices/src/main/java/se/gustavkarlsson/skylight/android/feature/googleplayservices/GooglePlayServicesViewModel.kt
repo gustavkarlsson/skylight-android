@@ -33,7 +33,9 @@ internal class GooglePlayServicesViewModel @Inject constructor(
     val success: Flow<Unit> = store.state.mapNotNull { state ->
         if (state == Install.Success) {
             Unit
-        } else null
+        } else {
+            null
+        }
     }
 
     fun installGooglePlayServices(activity: Activity) {

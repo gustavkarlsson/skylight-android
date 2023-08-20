@@ -22,7 +22,9 @@ internal class ServiceRegistry @Inject constructor() : ServiceCatalog, ServiceCl
             .mapNotNull { (id, entry) ->
                 if (entry.tag in tags) {
                     id
-                } else null
+                } else {
+                    null
+                }
             }
         logInfo { "Clearing services for tags '${tags.map { it.value }}': '${ids.map { it.value }}'" }
         for (id in ids) {
@@ -42,7 +44,9 @@ internal class ServiceRegistry @Inject constructor() : ServiceCatalog, ServiceCl
         val serviceDescription =
             if (entry == null) {
                 "null"
-            } else "service with tag '${entry.tag.value}'"
+            } else {
+                "service with tag '${entry.tag.value}'"
+            }
         logDebug { "Requested service '${id.value}' and got $serviceDescription" }
     }
 }

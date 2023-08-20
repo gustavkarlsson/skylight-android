@@ -265,7 +265,9 @@ internal class StateToViewStateMapper @Inject constructor(
                         Place.Current -> false
                         is Place.Saved -> place.name.contains(filter, ignoreCase = true)
                     }
-                } else true
+                } else {
+                    true
+                }
             }
             .map { place ->
                 val selected = place.id == state.selectedPlace.id

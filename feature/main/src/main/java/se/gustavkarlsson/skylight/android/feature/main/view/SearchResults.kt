@@ -146,7 +146,9 @@ private fun ListItem(
 ) {
     val itemModifier = if (item.selected) {
         Modifier.background(Colors.onSurface.copy(alpha = 0.1f))
-    } else Modifier
+    } else {
+        Modifier
+    }
     ListItem(
         modifier = itemModifier.combinedClickable(
             onLongClick = item.longClickEvent?.let { { onEvent(it) } },

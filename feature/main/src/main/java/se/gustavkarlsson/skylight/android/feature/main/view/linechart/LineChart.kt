@@ -64,7 +64,9 @@ fun LineChart(
                 minY = allYs.min(),
                 maxY = allYs.max(),
             )
-        } else null
+        } else {
+            null
+        }
         pointsByLine to valueRange
     }
     val viewport = remember(viewportFactory, valueRange) {
@@ -134,7 +136,7 @@ private data class ChartScope(
         val range = max - min
         val k = size.width / range
         val m = -(min * k)
-        { ((k * this) + m).toFloat() }
+        return@lazy { ((k * this) + m).toFloat() }
     }
     val toYCoordinate: Double.() -> Float by lazy {
         // min and max are flipped, because draw coordinate system has Y inverted
@@ -143,7 +145,7 @@ private data class ChartScope(
         val range = max - min
         val k = size.height / range
         val m = -(min * k)
-        { ((k * this) + m).toFloat() }
+        return@lazy { ((k * this) + m).toFloat() }
     }
     val valueToOffset: Point.() -> Offset = { Offset(x.toXCoordinate(), y.toYCoordinate()) }
 }
