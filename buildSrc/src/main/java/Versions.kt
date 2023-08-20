@@ -11,8 +11,8 @@ object Versions {
     const val jgit = "5.12.0.202106070339-r"
 
     const val playPublisher = "3.7.0"
-    const val ktlintGradle = "11.0.0"
-    const val ktlint = "0.44.0" // Skip 0.45.x as it has a bug: https://github.com/pinterest/ktlint/pull/1450
+    const val ktlintGradle = "11.5.1"
+    const val ktlint = "0.50.0"
 
     // App
     // Google
