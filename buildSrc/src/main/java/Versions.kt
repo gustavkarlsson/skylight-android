@@ -33,7 +33,7 @@ object Versions {
     const val assent = "3.0.2"
     const val kotlinxCoroutines = "1.7.3"
 
-    const val okHttp = "4.10.0"
+    const val okHttp = "4.11.0"
     const val retrofit = "2.9.0"
     const val retrofitKotlinSerialization = "1.0.0"
     const val kotlinxSerialization = "1.5.1"
