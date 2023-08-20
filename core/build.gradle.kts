@@ -13,6 +13,7 @@ android {
 }
 
 dependencies {
+    implementation(platform("androidx.compose:compose-bom:${Versions.composeBom}"))
     api("androidx.core:core-ktx:${Versions.androidCore}")
     api("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.kotlinDateTime}")
     api("io.arrow-kt:arrow-core:${Versions.arrow}")

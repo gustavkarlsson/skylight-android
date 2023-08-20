@@ -16,7 +16,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":lib:scopedservice"))
 
-    implementation("androidx.compose.runtime:runtime:${Versions.compose}")
+    implementation("androidx.compose.runtime:runtime")
 
     kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
 }

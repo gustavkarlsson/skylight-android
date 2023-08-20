@@ -54,7 +54,7 @@ object Versions {
     const val textref = "1.3.1"
     const val markwon = "4.6.2"
     const val store = "4.0.5"
-    const val compose = "1.3.0-rc01"
+    const val composeBom = "2023.08.00"
     const val composeCompiler = "1.5.1"
     const val composeConstraintLayout = "1.0.1"
     const val accompanist = "0.26.5-rc"

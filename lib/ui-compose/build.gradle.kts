@@ -17,15 +17,14 @@ dependencies {
 
     api("androidx.lifecycle:lifecycle-runtime-ktx:${Versions.androidLifecycle}")
 
-    api("androidx.compose.ui:ui:${Versions.compose}")
-    debugApi("androidx.compose.ui:ui-tooling:${Versions.compose}")
-    api("androidx.compose.ui:ui-tooling-preview:${Versions.compose}")
-    api("androidx.compose.compiler:compiler:${Versions.compose}")
-    api("androidx.compose.foundation:foundation:${Versions.compose}")
-    api("androidx.compose.material:material:${Versions.compose}")
-    api("androidx.compose.material:material-icons-core:${Versions.compose}")
-    api("androidx.compose.material:material-icons-extended:${Versions.compose}")
-    api("androidx.compose.animation:animation:${Versions.compose}")
+    api("androidx.compose.ui:ui")
+    debugApi("androidx.compose.ui:ui-tooling")
+    api("androidx.compose.ui:ui-tooling-preview")
+    api("androidx.compose.foundation:foundation")
+    api("androidx.compose.material:material")
+    api("androidx.compose.material:material-icons-core")
+    api("androidx.compose.material:material-icons-extended")
+    api("androidx.compose.animation:animation")
     api("androidx.constraintlayout:constraintlayout-compose:${Versions.composeConstraintLayout}")
 
     api("com.google.accompanist:accompanist-insets-ui:${Versions.accompanist}")
