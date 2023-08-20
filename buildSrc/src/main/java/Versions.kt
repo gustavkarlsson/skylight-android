@@ -57,7 +57,7 @@ object Versions {
     const val composeBom = "2023.08.00"
     const val composeCompiler = "1.5.1"
     const val composeConstraintLayout = "1.0.1"
-    const val accompanist = "0.26.5-rc"
+    const val accompanist = "0.31.6-rc"
 
     // Test
     const val junit = "4.12"
