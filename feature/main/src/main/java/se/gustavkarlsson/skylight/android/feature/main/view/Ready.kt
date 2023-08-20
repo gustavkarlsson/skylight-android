@@ -1,22 +1,40 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
 import android.app.Activity
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import se.gustavkarlsson.skylight.android.feature.main.R
+import se.gustavkarlsson.skylight.android.feature.main.view.linechart.AutomaticGridFactory
+import se.gustavkarlsson.skylight.android.feature.main.view.linechart.AutomaticLabelFactory
+import se.gustavkarlsson.skylight.android.feature.main.view.linechart.DefaultGridLine
+import se.gustavkarlsson.skylight.android.feature.main.view.linechart.GridLine
+import se.gustavkarlsson.skylight.android.feature.main.view.linechart.Label
+import se.gustavkarlsson.skylight.android.feature.main.view.linechart.Line
+import se.gustavkarlsson.skylight.android.feature.main.view.linechart.LineChart
+import se.gustavkarlsson.skylight.android.feature.main.view.linechart.Point
+import se.gustavkarlsson.skylight.android.feature.main.view.linechart.StraightLineDrawer
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ContentState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.PlaceData
@@ -25,6 +43,8 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.LargeDialog
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
+import java.text.DecimalFormat
+import kotlin.time.Duration.Companion.hours
 import se.gustavkarlsson.skylight.android.core.R as CoreR
 
 @Composable
@@ -63,16 +83,63 @@ internal fun Ready(
                                 onEvent = onEvent,
                             )
                         }
-                        PlaceData.Forecast -> {
-                            // FIXME implement
-                            Text(
+                        is PlaceData.Forecast -> {
+                            Box(
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .padding(WindowInsets.navigationBars.asPaddingValues())
-                                    .padding(paddingValues)
-                                    .padding(32.dp),
-                                text = "Forecast",
-                            )
+                                    .padding(paddingValues),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                val points = data.chancesByTime.map { (timestamp, chance) ->
+                                    Point(timestamp.epochSeconds.toDouble(), chance.value ?: 0.0)
+                                }
+                                val lines = listOf(Line(points, StraightLineDrawer(Color.Cyan)))
+                                LineChart(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .aspectRatio(2f),
+                                    lines = lines,
+                                    viewportFactory = { it.copy(minY = 0.0, maxY = 1.0) },
+                                    xLabelFactory = AutomaticLabelFactory(
+                                        targetCount = 8.0,
+                                        baseInterval = 1.hours.inWholeSeconds.toDouble(),
+                                        color = Color.White,
+                                        format = {
+                                            val time = Instant.fromEpochSeconds(it.toLong())
+                                            val local = time.toLocalDateTime(TimeZone.currentSystemDefault())
+                                            buildString {
+                                                if (local.hour < 10) {
+                                                    append('0')
+                                                }
+                                                append(local.hour)
+                                                append(":00")
+                                            }
+                                        }
+                                    ),
+                                    yLabelFactory = {
+                                        listOf(
+                                            Label(0.33 / 2, "Low", Color.White),
+                                            Label(0.5, "Medium", Color.White),
+                                            Label(0.66 + (0.33 / 2), "High", Color.White),
+                                        )
+                                    },
+                                    horizontalGridFactory = {
+                                        val drawer = DefaultGridLine.copy(color = Color.Gray)
+                                        listOf(
+                                            GridLine(0.33 / 2, drawer),
+                                            GridLine(0.5, drawer),
+                                            GridLine(0.66 + (0.33 / 2), drawer),
+                                        )
+                                    },
+                                    verticalGridFactory = AutomaticGridFactory(
+                                        targetCount = 8.0,
+                                        baseInterval = 1.hours.inWholeSeconds.toDouble(),
+                                        drawer = DefaultGridLine.copy(color = Color.Gray),
+                                    ),
+                                    contentPadding = PaddingValues(start = 64.dp, bottom = 48.dp),
+                                )
+                            }
                         }
                     }
                 }
