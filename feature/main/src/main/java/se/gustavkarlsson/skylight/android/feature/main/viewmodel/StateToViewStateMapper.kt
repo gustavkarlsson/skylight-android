@@ -29,6 +29,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherError
 import javax.inject.Inject
+import se.gustavkarlsson.skylight.android.core.R as CoreR
 
 internal class StateToViewStateMapper @Inject constructor(
     private val auroraChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>,
@@ -87,7 +88,9 @@ internal class StateToViewStateMapper @Inject constructor(
                         val name = createCurrentLocationDisplayName(state)
                         if (name != null) {
                             TextRef.string(name)
-                        } else TextRef.stringRes(R.string.your_location)
+                        } else {
+                            TextRef.stringRes(CoreR.string.your_location)
+                        }
                     }
                     is Place.Saved -> TextRef.string(selectedPlace.name)
                 }
@@ -145,8 +148,8 @@ internal class StateToViewStateMapper @Inject constructor(
         return DialogData(
             text = TextRef.stringRes(R.string.delete_place_question, placeToDelete.name),
             dismissEvent = Event.CancelPlaceDeletion,
-            confirmData = ButtonData(TextRef.stringRes(R.string.delete), Event.DeletePlace(placeToDelete)),
-            cancelData = ButtonData(TextRef.stringRes(R.string.cancel), Event.CancelPlaceDeletion),
+            confirmData = ButtonData(TextRef.stringRes(CoreR.string.delete), Event.DeletePlace(placeToDelete)),
+            cancelData = ButtonData(TextRef.stringRes(CoreR.string.cancel), Event.CancelPlaceDeletion),
         )
     }
 

@@ -7,7 +7,7 @@ object Versions {
     const val targetSdk = 33
     val java = JavaVersion.VERSION_1_8
     const val kotlin = "1.7.20" // Must also update in buildSrc/build.gradle.kts
-    const val androidGradle = "7.3.1" // Must also update in buildSrc/build.gradle.kts
+    const val androidGradle = "8.2.0-alpha16" // Must also update in buildSrc/build.gradle.kts
     const val jgit = "5.12.0.202106070339-r"
 
     const val playPublisher = "3.7.0"

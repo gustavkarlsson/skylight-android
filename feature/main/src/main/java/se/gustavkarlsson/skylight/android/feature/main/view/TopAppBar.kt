@@ -45,6 +45,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchField
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
+import se.gustavkarlsson.skylight.android.core.R as CoreR
 
 @Preview
 @Composable
@@ -98,7 +99,7 @@ internal fun TopAppBar(
         },
         actions = {
             IconButton(onClick = onSettingsClicked) {
-                Icon(Icons.Settings, contentDescription = stringResource(R.string.settings))
+                Icon(Icons.Settings, contentDescription = stringResource(CoreR.string.settings))
             }
         },
     )

@@ -1,9 +1,9 @@
 import com.android.build.api.dsl.CommonExtension
 
-fun CommonExtension<*, *, *, *>.commonConfig() {
+fun CommonExtension<*, *, *, *, *>.commonConfig() {
     compileSdk = Versions.compileSdk
 
-    packagingOptions {
+    packaging {
         resources.excludes += "META-INF/LICENSE"
         resources.excludes += "META-INF/NOTICE"
         resources.excludes += "META-INF/*.kotlin_module"

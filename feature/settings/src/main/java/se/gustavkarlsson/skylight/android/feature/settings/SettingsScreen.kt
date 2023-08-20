@@ -45,6 +45,7 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
 import se.gustavkarlsson.skylight.android.lib.ui.compose.collectAsLifecycleAwareState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
+import se.gustavkarlsson.skylight.android.core.R as CoreR
 
 private val VIEW_MODE_ID = ServiceId("settingsViewModel")
 
@@ -105,7 +106,7 @@ private fun Content(
                         }
                     },
                     title = {
-                        Text(stringResource(R.string.settings))
+                        Text(stringResource(CoreR.string.settings))
                     },
                 )
             },
@@ -204,7 +205,7 @@ private fun AboutItem(onClick: () -> Unit) {
             Icon(imageVector = Icons.Info, contentDescription = null)
         },
     ) {
-        Text(text = stringResource(R.string.about))
+        Text(text = stringResource(CoreR.string.about))
     }
 }
 
@@ -217,6 +218,6 @@ private fun PrivacyPolicyItem(onClick: () -> Unit) {
             Icon(imageVector = Icons.PrivacyTip, contentDescription = null)
         },
     ) {
-        Text(text = stringResource(R.string.privacy_policy))
+        Text(text = stringResource(CoreR.string.privacy_policy))
     }
 }

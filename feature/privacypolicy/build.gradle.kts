@@ -7,7 +7,7 @@ plugins {
 android {
     commonConfig()
     composeConfig()
-    sourceSets["main"].res.srcDir("$buildDir/generated/privacypolicy")
+    sourceSets["main"].res.srcDir(layout.buildDirectory.dir("generated/privacypolicy"))
     namespace = "se.gustavkarlsson.skylight.android.feature.privacypolicy"
 }
 
@@ -19,8 +19,8 @@ dependencies {
 val copyPrivacyPolicyFile = task<Copy>("copyPrivacyPolicyFile") {
     description = "Copies the privacy policy file to a project res directory"
     from("$rootDir/PRIVACY_POLICY.md")
-    into("$buildDir/generated/privacypolicy/raw")
-    rename(String::toLowerCase)
+    into(layout.buildDirectory.dir("generated/privacypolicy/raw"))
+    rename(String::lowercase)
 }
 
 tasks["preBuild"].dependsOn(copyPrivacyPolicyFile)

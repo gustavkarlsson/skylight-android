@@ -13,6 +13,8 @@ android {
     commonConfig()
     composeConfig()
 
+    buildFeatures.buildConfig = true
+
     defaultConfig {
         val repo = RepositoryBuilder().run {
             gitDir = File(rootDir, "/.git")

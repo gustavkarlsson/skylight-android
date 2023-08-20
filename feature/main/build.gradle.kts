@@ -10,6 +10,8 @@ android {
     commonConfig()
     composeConfig()
 
+    buildFeatures.buildConfig = true
+
     setFlavorDimensions(listOf("environment"))
 
     productFlavors {

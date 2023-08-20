@@ -27,6 +27,8 @@ tasks.matching { it.name.startsWith("publish") }.configureEach {
 android {
     commonConfig()
 
+    buildFeatures.buildConfig = true
+
     defaultConfig {
         val openWeatherMapApiKey = parsedOpenWeatherMapApiKey ?: "openweathermap_api_key_not_set"
         buildConfigField("String", "OPENWEATHERMAP_API_KEY", "\"$openWeatherMapApiKey\"")
