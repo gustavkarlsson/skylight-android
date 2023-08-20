@@ -13,7 +13,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.whenCreated
 import com.ioki.textref.TextRef
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
@@ -66,10 +65,8 @@ object MainScreen : Screen {
 
     private fun requestPermission(activity: FragmentActivity, permission: Permission) {
         activity.lifecycleScope.launch {
-            activity.lifecycle.whenCreated {
-                PermissionsComponent.instance.permissionRequester()
-                    .request(activity, permission)
-            }
+            PermissionsComponent.instance.permissionRequester()
+                .request(activity, permission)
         }
     }
 
@@ -156,6 +153,7 @@ private fun Content(
                     onClickOpenSettings = onClickOpenSettings,
                 )
             }
+
             is ViewState.RequiresBackgroundLocationPermission.UseDialog -> {
                 RequiresBackgroundLocationPermissionUseDialog(
                     description = state.description,
@@ -163,6 +161,7 @@ private fun Content(
                     onClickTurnOffNotifications = onClickTurnOffNotifications,
                 )
             }
+
             is ViewState.RequiresBackgroundLocationPermission.UseAppSettings -> {
                 RequiresBackgroundLocationPermissionUseAppSettings(
                     description = state.description,

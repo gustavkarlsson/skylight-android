@@ -4,8 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.whenCreated
+import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.lib.navigation.BackPressHandler
@@ -36,11 +37,9 @@ class MainActivity : AppCompatActivity() {
 
     init {
         lifecycleScope.launch {
-            while (true) {
-                lifecycle.whenCreated {
-                    navigator.leave.collect {
-                        super.onBackPressed()
-                    }
+            lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
+                navigator.leave.collect {
+                    super.onBackPressed()
                 }
             }
         }
