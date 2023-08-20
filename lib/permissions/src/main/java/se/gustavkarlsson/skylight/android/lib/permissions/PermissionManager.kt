@@ -6,12 +6,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import arrow.core.NonEmptyList
 import com.afollestad.assent.coroutines.awaitPermissionsResult
+import com.afollestad.assent.toPermission
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import se.gustavkarlsson.skylight.android.core.AppScope
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import javax.inject.Inject
-import com.afollestad.assent.Permission.Companion as AssentPermission
 
 @AppScope
 internal class PermissionManager @Inject constructor(
@@ -57,7 +57,7 @@ internal class PermissionManager @Inject constructor(
     }
 
     private suspend fun doRequest(activity: FragmentActivity, keys: NonEmptyList<String>): Access {
-        val assentPermissions = keys.map { AssentPermission.parse(it) }.toTypedArray()
+        val assentPermissions = keys.map { it.toPermission() }.toTypedArray()
         val result = activity.awaitPermissionsResult(*assentPermissions)
         return when {
             assentPermissions.any { it in result.granted() } -> Access.Granted
