@@ -2,6 +2,8 @@ package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
 import androidx.annotation.StringRes
 import arrow.core.Either
+import arrow.core.getOrElse
+import arrow.core.right
 import com.ioki.textref.TextRef
 import kotlinx.datetime.Instant
 import se.gustavkarlsson.skylight.android.core.entities.Chance
@@ -28,6 +30,8 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherError
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 import se.gustavkarlsson.skylight.android.core.R as CoreR
 
 internal class StateToViewStateMapper @Inject constructor(
@@ -307,7 +311,40 @@ internal class StateToViewStateMapper @Inject constructor(
 
     // FIXME pass presentable data
     private fun createForecastPlaceData(state: State.Ready): PlaceData.Forecast {
-        return PlaceData.Forecast
+        val chancesByTime = state.selectedAuroraForecastReport.map { report ->
+            val kpIndexes = report.kpIndex.getOrElse { emptyList() }
+            val weathers = report.weather.getOrElse { emptyList() }
+            val darknesses = report.darkness
+
+            val startTime = listOfNotNull(
+                kpIndexes.firstOrNull()?.timestamp,
+                weathers.firstOrNull()?.timestamp,
+                darknesses.firstOrNull()?.timestamp,
+            ).maxOrNull() ?: return@map emptyMap()
+            val endTime = listOfNotNull(
+                kpIndexes.lastOrNull()?.timestamp,
+                weathers.lastOrNull()?.timestamp,
+                darknesses.lastOrNull()?.timestamp,
+            ).minOrNull() ?: return@map emptyMap()
+
+            val timestamps = generateSequence(startTime) { prev ->
+                val next = prev + 15.minutes
+                if (next < endTime) {
+                    next
+                } else {
+                    null
+                }
+            }
+
+            timestamps.associateWith { time ->
+                val kp = kpIndexes.getInterpolatedValueAt(time) { it.timestamp }
+                val weather = weathers.getInterpolatedValueAt(time) { it.timestamp }
+                val darkness = darknesses.getInterpolatedValueAt(time) { it.timestamp }
+                val r = AuroraReport(report.location, kp.right(), report.geomagLocation, darkness, weather.right())
+                auroraChanceEvaluator.evaluate(r)
+            }
+        }.getOrElse { emptyMap() }
+        return PlaceData.Forecast(chancesByTime)
     }
 
     // TODO avoid duplication with similar function below
@@ -384,6 +421,10 @@ internal class StateToViewStateMapper @Inject constructor(
             )
         },
     )
+}
+
+private fun <T> List<T>.getInterpolatedValueAt(time: Instant, getTimestamp: (T) -> Instant): T {
+    return first { getTimestamp(it) > time }
 }
 
 private val searchResultOrderComparator: Comparator<SearchResult>

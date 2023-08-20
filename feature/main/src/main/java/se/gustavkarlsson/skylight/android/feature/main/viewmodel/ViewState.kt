@@ -8,7 +8,9 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.ioki.textref.TextRef
+import kotlinx.datetime.Instant
 import se.gustavkarlsson.skylight.android.core.R
+import se.gustavkarlsson.skylight.android.core.entities.Chance
 import se.gustavkarlsson.skylight.android.feature.main.state.TimeSpan
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.Place
@@ -92,7 +94,7 @@ internal sealed interface PlaceData {
         val onNotificationClickedEvent: Event,
     ) : PlaceData
 
-    object Forecast : PlaceData
+    data class Forecast(val chancesByTime: Map<Instant, Chance>) : PlaceData
 }
 
 internal data class BannerData(
