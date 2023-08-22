@@ -15,17 +15,17 @@ dependencies {
     implementation(project(":lib:time"))
     implementation(project(":lib:location"))
 
-    implementation("net.e175.klaus:solarpositioning:${Versions.solarPositioning}")
+    implementation(libs.solarpositioning)
 
-    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
+    kapt(libs.dagger.compiler)
 
     // Testing
-    testImplementation("junit:junit:${Versions.junit}")
-    testImplementation("org.mockito:mockito-inline:${Versions.mockito}")
-    testImplementation("com.nhaarman:mockito-kotlin-kt1.1:${Versions.mockitoKotlin}") {
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.mockito.kotlin) {
         exclude("org.jetbrains.kotlin")
     }
-    testImplementation("com.willowtreeapps.assertk:assertk:${Versions.assertk}") {
+    testImplementation(libs.assertk) {
         exclude("org.jetbrains.kotlin")
     }
 }

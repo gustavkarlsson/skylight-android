@@ -14,7 +14,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":lib:location"))
 
-    implementation("org.mobilenativefoundation.store:store4:${Versions.store}")
+    implementation(libs.store)
 
-    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
+    kapt(libs.dagger.compiler)
 }

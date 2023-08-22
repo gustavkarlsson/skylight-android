@@ -39,7 +39,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":lib:location"))
 
-    implementation("com.mapbox.mapboxsdk:mapbox-sdk-services:${Versions.mapboxServices}")
+    implementation(libs.mapbox.services)
 
-    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
+    kapt(libs.dagger.compiler)
 }

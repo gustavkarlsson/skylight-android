@@ -23,9 +23,8 @@ dependencies {
     implementation(project(":lib:location"))
     implementation(project(":lib:time"))
 
-    implementation("com.squareup.sqldelight:android-driver:${Versions.sqldelight}")
-    implementation("com.squareup.sqldelight:coroutines-extensions:${Versions.sqldelight}")
-    implementation("androidx.datastore:datastore-preferences:${Versions.dataStore}")
+    implementation(libs.bundles.sqldelight)
+    implementation(libs.androidx.datastore.preferences)
 
-    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
+    kapt(libs.dagger.compiler)
 }

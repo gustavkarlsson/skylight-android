@@ -3,10 +3,10 @@ plugins {
     kotlin("android")
     kotlin("kapt")
     id("com.squareup.anvil")
-    id("kotlin-parcelize")
+    kotlin("plugin.parcelize")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
-    id("com.github.triplet.play") version Versions.playPublisher
+    id("com.github.triplet.play")
 }
 
 val versionNameProperty: String? by lazy {
@@ -91,7 +91,7 @@ android {
 
     defaultConfig {
         applicationId = "se.gustavkarlsson.skylight.android"
-        targetSdk = Versions.targetSdk
+        targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = parsedVersionCode ?: 99999999
         versionName = parsedVersionName ?: "99.99.99"
     }
@@ -135,6 +135,8 @@ android {
 
     applicationVariants.all {
         val isProductionRelease = buildType.name == "release" && flavorName == "production"
+
+        @Suppress("DEPRECATION")
         val manifestAName = buildString {
             if (isProductionRelease) {
                 append(APP_NAME)
@@ -185,31 +187,32 @@ dependencies {
     implementation(project(":feature:privacypolicy"))
     implementation(project(":feature:settings"))
 
-    implementation("androidx.annotation:annotation:${Versions.androidAnnotation}")
+    implementation(libs.androidx.annotation)
 
     // Dagger
-    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
+    kapt(libs.dagger.compiler)
 
     // Crashlytics
-    implementation("com.google.firebase:firebase-crashlytics-ktx:${Versions.crashlytics}")
+    implementation(libs.firebase.crashlytics.ktx)
 
     // Leakcanary
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:${Versions.leakcanary}")
+    debugImplementation(libs.leakcanary.android)
 
     // Logcat
-    implementation("com.squareup.logcat:logcat:${Versions.logcat}")
+    implementation(libs.logcat)
 
     // Compose
-    implementation("androidx.activity:activity-compose:${Versions.androidActivity}")
-    implementation("androidx.compose.animation:animation")
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.compose.animation)
 
     // Testing
-    testImplementation("junit:junit:${Versions.junit}")
-    testImplementation("org.mockito:mockito-inline:${Versions.mockito}")
-    testImplementation("com.nhaarman:mockito-kotlin-kt1.1:${Versions.mockitoKotlin}") {
+    // TODO Make version catalog bundle
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.mockito.kotlin) {
         exclude("org.jetbrains.kotlin")
     }
-    testImplementation("com.willowtreeapps.assertk:assertk:${Versions.assertk}") {
+    testImplementation(libs.assertk) {
         exclude("org.jetbrains.kotlin")
     }
 }

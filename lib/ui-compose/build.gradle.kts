@@ -1,6 +1,6 @@
 plugins {
     id("com.android.library")
-    id("kotlin-android")
+    kotlin("android")
 }
 
 android {
@@ -13,20 +13,20 @@ dependencies {
     implementation(project(":core"))
     api(project(":lib:ui"))
 
-    implementation("io.noties.markwon:core:${Versions.markwon}")
+    implementation(libs.markwon.core)
 
-    api("androidx.lifecycle:lifecycle-runtime-ktx:${Versions.androidLifecycle}")
+    api(libs.androidx.lifecycle.runtime.ktx)
 
-    api("androidx.compose.ui:ui")
-    debugApi("androidx.compose.ui:ui-tooling")
-    api("androidx.compose.ui:ui-tooling-preview")
-    api("androidx.compose.foundation:foundation")
-    api("androidx.compose.material:material")
-    api("androidx.compose.material:material-icons-core")
-    api("androidx.compose.material:material-icons-extended")
-    api("androidx.compose.animation:animation")
-    api("androidx.constraintlayout:constraintlayout-compose:${Versions.composeConstraintLayout}")
+    api(libs.compose.ui)
+    debugApi(libs.compose.ui.tooling)
+    api(libs.compose.ui.tooling.preview)
+    api(libs.compose.foundation)
+    api(libs.compose.material)
+    api(libs.compose.material.icons.core)
+    api(libs.compose.material.icons.extended)
+    api(libs.compose.animation)
+    api(libs.constraintlayout.compose)
 
-    api("com.google.accompanist:accompanist-insets-ui:${Versions.accompanist}")
-    api("com.google.accompanist:accompanist-systemuicontroller:${Versions.accompanist}")
+    api(libs.accompanist.insets.ui)
+    api(libs.accompanist.systemuicontroller)
 }

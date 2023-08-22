@@ -3,7 +3,7 @@ plugins {
     kotlin("android")
     kotlin("kapt")
     id("com.squareup.anvil")
-    kotlin("plugin.serialization") version Versions.kotlin
+    kotlin("plugin.serialization")
 }
 
 val parsedOpenWeatherMapApiKey: String? by lazy {
@@ -41,24 +41,18 @@ dependencies {
     implementation(project(":lib:time"))
     implementation(project(":lib:location"))
 
-    // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
-    implementation(
-        "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:" +
-            Versions.retrofitKotlinSerialization,
-    )
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.kotlinxSerialization}")
-    implementation("org.mobilenativefoundation.store:store4:${Versions.store}")
+    implementation(libs.bundles.retrofit)
+    implementation(libs.store)
 
-    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
+    kapt(libs.dagger.compiler)
 
     // Testing
-    testImplementation("junit:junit:${Versions.junit}")
-    testImplementation("org.mockito:mockito-inline:${Versions.mockito}")
-    testImplementation("com.nhaarman:mockito-kotlin-kt1.1:${Versions.mockitoKotlin}") {
+    testImplementation(libs.junit)
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.mockito.kotlin) {
         exclude("org.jetbrains.kotlin")
     }
-    testImplementation("com.willowtreeapps.assertk:assertk:${Versions.assertk}") {
+    testImplementation(libs.assertk) {
         exclude("org.jetbrains.kotlin")
     }
 }
