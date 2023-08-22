@@ -54,7 +54,7 @@ internal class BackgroundWorkImpl @Inject constructor(
 
         return placesWithChance.map { list ->
             Notification(list, time.now())
-        }.orNull()
+        }.getOrNull()
     }
 
     private suspend fun getPlaceWithChance(placeId: PlaceId): PlaceWithChance? {
@@ -69,7 +69,7 @@ internal class BackgroundWorkImpl @Inject constructor(
 
     private suspend fun getLocation(place: Place): Location? =
         when (place) {
-            Place.Current -> locationProvider.get().orNull()
+            Place.Current -> locationProvider.get().getOrNull()
             is Place.Saved -> place.location
         }
 }

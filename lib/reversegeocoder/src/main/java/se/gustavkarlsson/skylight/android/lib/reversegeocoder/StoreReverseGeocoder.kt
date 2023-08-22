@@ -56,7 +56,7 @@ internal class StoreReverseGeocoder(
 
     private suspend fun getResult(location: Location): ReverseGeocodingResult = Either
         .catch {
-            store.get(location.approximate(approximationMeters)).orNull()
+            store.get(location.approximate(approximationMeters)).getOrNull()
         }
         .mapLeft { throwable ->
             when (throwable) {

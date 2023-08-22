@@ -6,7 +6,6 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Looper
 import androidx.core.location.LocationManagerCompat
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
@@ -24,7 +23,6 @@ internal class LocationManagerStatusProvider @Inject constructor(
     private val permissionChecker: PermissionChecker,
 ) : LocationServiceStatusProvider {
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @SuppressLint("MissingPermission")
     override val locationServiceStatus: Flow<LocationServiceStatus> = callbackFlow {
         val callback: () -> Unit = {

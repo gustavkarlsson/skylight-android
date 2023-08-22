@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.scan
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.time.Duration
-import kotlin.time.ExperimentalTime
 import kotlin.time.TimeMark
 import kotlin.time.TimeSource
 
@@ -30,7 +29,6 @@ fun <T> Flow<T>.windowed(size: Int): Flow<NonEmptyList<T>> {
     }
 }
 
-@OptIn(ExperimentalTime::class)
 fun <T> Flow<T>.throttleLatest(minDelay: Duration): Flow<T> = channelFlow {
     val lastEmitTimeRef = AtomicReference<TimeMark?>(null)
     collectLatest { value ->
@@ -44,7 +42,6 @@ fun <T> Flow<T>.throttleLatest(minDelay: Duration): Flow<T> = channelFlow {
     }
 }
 
-@OptIn(ExperimentalTime::class)
 private fun now(): TimeMark = TimeSource.Monotonic.markNow()
 
 fun <T, R> StateFlow<T>.mapState(

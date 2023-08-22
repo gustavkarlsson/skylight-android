@@ -33,10 +33,7 @@ object LibWeatherModule {
     @Provides
     internal fun weatherEvaluator(): ChanceEvaluator<Weather> = WeatherEvaluator
 
-    @OptIn(
-        ExperimentalTime::class,
-        ExperimentalSerializationApi::class,
-    )
+    @OptIn(ExperimentalTime::class)
     @Provides
     @Reusable
     internal fun weatherProvider(

@@ -64,7 +64,7 @@ internal class ContinuouslySearchAction(
             .collectLatest { query ->
                 // TODO Ensure no race condition
                 launch {
-                    val currentLocation = stateFlow.value.currentLocation.orNull()?.orNull()
+                    val currentLocation = stateFlow.value.currentLocation.getOrNull()?.getOrNull()
                     val result = geocoder.geocode(query, biasAround = currentLocation)
                     stateFlow.update { update(result) }
                 }
