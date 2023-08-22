@@ -21,7 +21,7 @@ sqldelight {
 
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:${Versions.protobuf}"
+        artifact = "com.google.protobuf:protoc:${libs.versions.protobuf.get()}"
     }
 
     generateProtoTasks {
@@ -40,11 +40,10 @@ dependencies {
     implementation(project(":lib:places"))
 
     // Legacy. Only exists for migration purposes
-    implementation("com.squareup.sqldelight:android-driver:${Versions.sqldelight}")
-    implementation("com.squareup.sqldelight:coroutines-extensions:${Versions.sqldelight}")
+    implementation(libs.bundles.sqldelight)
 
-    implementation("androidx.datastore:datastore:${Versions.dataStore}")
-    implementation("com.google.protobuf:protobuf-javalite:${Versions.protobuf}")
+    implementation(libs.androidx.datastore)
+    implementation(libs.protobuf.javalite)
 
-    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
+    kapt(libs.dagger.compiler)
 }

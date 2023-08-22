@@ -3,7 +3,7 @@ plugins {
     kotlin("android")
     kotlin("kapt")
     id("com.squareup.anvil")
-    id("kotlin-parcelize")
+    kotlin("plugin.parcelize")
 }
 
 android {
@@ -16,9 +16,9 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":lib:ui-compose"))
 
-    implementation("com.google.android.gms:play-services-gcm:${Versions.playServicesGcm}")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.kotlinxCoroutines}")
-    implementation("com.github.gustavkarlsson.conveyor:conveyor-core:${Versions.conveyor}")
+    implementation(libs.play.services.gcm)
+    implementation(libs.kotlinx.coroutines.play.services)
+    implementation(libs.conveyor.core)
 
-    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
+    kapt(libs.dagger.compiler)
 }

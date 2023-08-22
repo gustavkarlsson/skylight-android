@@ -13,7 +13,7 @@ android {
 dependencies {
     implementation(project(":core"))
 
-    api("com.squareup.okhttp3:okhttp:${Versions.okHttp}") // Dagger requires api
+    api(libs.okhttp) // Dagger requires api
 
-    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
+    kapt(libs.dagger.compiler)
 }

@@ -13,7 +13,7 @@ android {
 dependencies {
     implementation(project(":core"))
 
-    implementation("com.afollestad.assent:coroutines:${Versions.assent}")
+    implementation(libs.assent.coroutines)
 
-    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
+    kapt(libs.dagger.compiler)
 }

@@ -1,12 +1,18 @@
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.RepositoryBuilder
 
+buildscript {
+    dependencies {
+        classpath("org.eclipse.jgit:org.eclipse.jgit:${libs.versions.jgit.get()}")
+    }
+}
+
 plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
     id("com.squareup.anvil")
-    id("kotlin-parcelize")
+    kotlin("plugin.parcelize")
 }
 
 android {
@@ -55,5 +61,5 @@ dependencies {
     implementation(project(":lib:ui-compose"))
     implementation(project(":lib:time"))
 
-    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
+    kapt(libs.dagger.compiler)
 }

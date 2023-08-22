@@ -1,3 +1,22 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenCentral()
+        google()
+        maven { setUrl("https://s3.amazonaws.com/repo.commonsware.com") }
+        maven { setUrl("https://jitpack.io") }
+        maven { setUrl("https://oss.sonatype.org/content/repositories/snapshots") }
+        maven { setUrl("https://plugins.gradle.org/m2/") }
+    }
+}
+
 include(
     ":app",
     ":core",

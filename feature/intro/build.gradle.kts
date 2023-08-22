@@ -3,7 +3,7 @@ plugins {
     kotlin("android")
     kotlin("kapt")
     id("com.squareup.anvil")
-    id("kotlin-parcelize")
+    kotlin("plugin.parcelize")
 }
 
 android {
@@ -17,5 +17,5 @@ dependencies {
     implementation(project(":lib:ui-compose"))
     implementation(project(":lib:runversion"))
 
-    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
+    kapt(libs.dagger.compiler)
 }

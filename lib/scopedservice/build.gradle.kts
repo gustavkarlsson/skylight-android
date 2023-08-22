@@ -13,5 +13,5 @@ android {
 dependencies {
     implementation(project(":core"))
 
-    kapt("com.google.dagger:dagger-compiler:${Versions.dagger}")
+    kapt(libs.dagger.compiler)
 }

@@ -13,12 +13,13 @@ android {
 }
 
 dependencies {
-    implementation(platform("androidx.compose:compose-bom:${Versions.composeBom}"))
-    api("androidx.core:core-ktx:${Versions.androidCore}")
-    api("org.jetbrains.kotlinx:kotlinx-datetime:${Versions.kotlinDateTime}")
-    api("io.arrow-kt:arrow-core:${Versions.arrow}")
-    api("com.google.dagger:dagger:${Versions.dagger}")
-    api("com.github.ioki-mobility:TextRef:${Versions.textref}")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlinxCoroutines}")
-    api("androidx.appcompat:appcompat:${Versions.androidAppcompat}")
+    api(platform(libs.compose.bom))
+    api(platform(libs.firebase.bom))
+    api(libs.androidx.core.ktx)
+    api(libs.kotlinx.datetime)
+    api(libs.arrow.core)
+    api(libs.dagger)
+    api(libs.textref)
+    api(libs.kotlinx.coroutines.core)
+    api(libs.androidx.appcompat)
 }
