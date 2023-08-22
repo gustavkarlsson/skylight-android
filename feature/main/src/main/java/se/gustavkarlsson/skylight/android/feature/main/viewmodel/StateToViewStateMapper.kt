@@ -291,9 +291,9 @@ internal class StateToViewStateMapper @Inject constructor(
     private fun createCurrentLocationDisplayName(state: State): String? {
         return state.currentLocationName
             .mapNotNull { result ->
-                result.orNull()
+                result.getOrNull()
             }
-            .orNull()
+            .getOrNull()
     }
 
     private fun createOnNotificationClickedEvent(state: State.Ready): Event {

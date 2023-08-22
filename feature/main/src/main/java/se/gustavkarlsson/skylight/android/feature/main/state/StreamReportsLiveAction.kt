@@ -77,7 +77,7 @@ internal class StreamReportsLiveAction(
         map { state ->
             when (val selectedPlace = state.selectedPlace) {
                 null -> null
-                Place.Current -> state.currentLocation.orNull()?.orNull() // TODO don't ignore location errors?
+                Place.Current -> state.currentLocation.getOrNull()?.getOrNull() // TODO don't ignore location errors?
                 is Place.Saved -> selectedPlace.location
             }
         }.distinctUntilChanged()

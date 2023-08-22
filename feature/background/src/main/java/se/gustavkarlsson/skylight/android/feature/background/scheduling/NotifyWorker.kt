@@ -7,7 +7,6 @@ import kotlinx.coroutines.CancellationException
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.feature.background.BackgroundComponent
-import kotlin.time.ExperimentalTime
 import kotlin.time.TimeSource
 
 internal class NotifyWorker(
@@ -15,7 +14,6 @@ internal class NotifyWorker(
     workerParams: WorkerParameters,
 ) : CoroutineWorker(appContext, workerParams) {
 
-    @OptIn(ExperimentalTime::class)
     override suspend fun doWork(): Result {
         val work = BackgroundComponent.instance.backgroundWork()
         logInfo { "Starting work" }
