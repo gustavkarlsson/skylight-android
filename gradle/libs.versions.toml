@@ -1,11 +1,12 @@
 [versions]
 
 # Tooling
+androidGradlePlugin = "8.2.0-beta01"
 jgit = "5.12.0.202106070339-r"
-kotlin = "1.9.0" # Must also update in buildSrc/build.gradle.kts
+kotlin = "1.9.0"
 ktlintGradle = "11.5.1"
 playPublisher = "3.8.4"
-targetSdk = "34"
+targetSdk = "33"
 
 # App
 accompanist = "0.31.6-rc"
@@ -22,7 +23,7 @@ composeBom = "2023.08.00"
 composeCompiler = "1.5.1"
 composeConstraintLayout = "1.0.1"
 conveyor = "cc93e41adc" # TODO use release version
-firebaseBom = "32.2.2"
+firebaseBom = "32.2.3"
 crashlyticsGradle = "2.9.8" # Make sure this matches the bom: https://firebase.google.com/support/release-notes/android
 dagger = "2.47"
 dataStore = "1.0.0"
@@ -56,6 +57,7 @@ commonsIo = "2.4"
 [libraries]
 accompanist-insets-ui = { module = "com.google.accompanist:accompanist-insets-ui", version.ref = "accompanist" }
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
+android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidActivity" }
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidAnnotation" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidAppcompat" }
@@ -85,6 +87,7 @@ dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-crashlytics-ktx = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 junit = { module = "junit:junit", version.ref = "junit" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutines" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinDateTime" }

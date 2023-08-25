@@ -3,7 +3,8 @@ package se.gustavkarlsson.skylight.android.lib.reversegeocoder
 import arrow.core.Either
 import arrow.core.Option
 import arrow.core.flatMap
-import arrow.core.rightIfNotNull
+import arrow.core.left
+import arrow.core.right
 import com.dropbox.android.external.store4.Store
 import com.dropbox.android.external.store4.get
 import kotlinx.coroutines.delay
@@ -65,6 +66,6 @@ internal class StoreReverseGeocoder(
             }
         }
         .flatMap { name ->
-            name.rightIfNotNull { ReverseGeocodingError.NotFound }
+            name?.right() ?: ReverseGeocodingError.NotFound.left()
         }
 }
