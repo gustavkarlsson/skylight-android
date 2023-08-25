@@ -5,7 +5,7 @@ jgit = "5.12.0.202106070339-r"
 kotlin = "1.9.0" # Must also update in buildSrc/build.gradle.kts
 ktlintGradle = "11.5.1"
 playPublisher = "3.8.4"
-targetSdk = "34"
+targetSdk = "33"
 
 # App
 accompanist = "0.31.6-rc"
