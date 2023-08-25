@@ -290,8 +290,8 @@ internal class StateToViewStateMapper @Inject constructor(
 
     private fun createCurrentLocationDisplayName(state: State): String? {
         return state.currentLocationName
-            .mapNotNull { result ->
-                result.getOrNull()
+            .flatMap { result ->
+                result.getOrNone()
             }
             .getOrNull()
     }
