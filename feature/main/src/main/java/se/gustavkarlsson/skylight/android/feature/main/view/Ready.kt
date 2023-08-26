@@ -24,13 +24,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import kotlinx.datetime.Clock
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.view.linechart.AutomaticGridFactory
-import se.gustavkarlsson.skylight.android.feature.main.view.linechart.AutomaticLabelFactory
 import se.gustavkarlsson.skylight.android.feature.main.view.linechart.DefaultGridLine
+import se.gustavkarlsson.skylight.android.feature.main.view.linechart.EmptyLabelFactory
 import se.gustavkarlsson.skylight.android.feature.main.view.linechart.GridLine
 import se.gustavkarlsson.skylight.android.feature.main.view.linechart.Label
 import se.gustavkarlsson.skylight.android.feature.main.view.linechart.Line
@@ -46,6 +50,9 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.LargeDialog
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import java.text.DecimalFormat
+import java.time.format.TextStyle
+import java.util.Locale
+import kotlin.math.min
 import kotlin.time.Duration.Companion.hours
 import se.gustavkarlsson.skylight.android.core.R as CoreR
 
@@ -86,6 +93,7 @@ internal fun Ready(
                                 onEvent = onEvent,
                             )
                         }
+
                         is PlaceData.Forecast -> {
                             Box(
                                 modifier = Modifier
@@ -101,32 +109,42 @@ internal fun Ready(
                                 LineChart(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .aspectRatio(2f),
+                                        .aspectRatio(1.5f),
                                     lines = lines,
-                                    viewportFactory = { it.copy(minY = 0.0, maxY = 1.0) },
-                                    xLabelFactory = AutomaticLabelFactory(
-                                        targetCount = 8.0,
-                                        baseInterval = 1.hours.inWholeSeconds.toDouble(),
-                                        color = Color.White,
-                                        format = {
-                                            val time = Instant.fromEpochSeconds(it.toLong())
-                                            val local = time.toLocalDateTime(TimeZone.currentSystemDefault())
-                                            buildString {
-                                                if (local.hour < 10) {
-                                                    append('0')
-                                                }
-                                                append(local.hour)
-                                                append(":00")
-                                            }
-                                        }
-                                    ),
-                                    yLabelFactory = {
-                                        listOf(
-                                            Label(0.33 / 2, "Low", Color.White),
-                                            Label(0.5, "Medium", Color.White),
-                                            Label(0.66 + (0.33 / 2), "High", Color.White),
+                                    viewportFactory = { valueRange ->
+                                        // X is epoch seconds
+                                        // y is chance
+                                        valueRange.copy(
+                                            // FIXME don't get current time from here
+                                            minX = min(valueRange.minX, Clock.System.now().epochSeconds.toDouble()),
+                                            minY = 0.0,
+                                            maxY = 1.0,
                                         )
                                     },
+                                    xLabelFactory = { epochSecondsRange ->
+                                        // FIXME don't get TZ from here
+                                        val timeZone = TimeZone.currentSystemDefault()
+                                        val startTime = Instant.fromEpochSeconds(epochSecondsRange.start.toLong())
+                                            .toLocalDateTime(timeZone)
+                                        val endTime = Instant.fromEpochSeconds(epochSecondsRange.endInclusive.toLong())
+                                            .toLocalDateTime(timeZone)
+                                        buildList {
+                                            var date = startTime.date
+                                            while (date in startTime.date..endTime.date) {
+                                                val label = Label(
+                                                    value = date.atStartOfDayIn(timeZone).epochSeconds.toDouble(),
+                                                    text = date.dayOfWeek.getDisplayName(
+                                                        TextStyle.FULL,
+                                                        Locale.getDefault(), // FIXME don't get locale from here
+                                                    ),
+                                                    color = Color.White,
+                                                )
+                                                add(label)
+                                                date = date.plus(DatePeriod(days = 1))
+                                            }
+                                        }
+                                    },
+                                    yLabelFactory = EmptyLabelFactory,
                                     horizontalGridFactory = {
                                         val drawer = DefaultGridLine.copy(color = Color.Gray)
                                         listOf(
@@ -140,13 +158,14 @@ internal fun Ready(
                                         baseInterval = 1.hours.inWholeSeconds.toDouble(),
                                         drawer = DefaultGridLine.copy(color = Color.Gray),
                                     ),
-                                    contentPadding = PaddingValues(start = 64.dp, bottom = 48.dp),
+                                    contentPadding = PaddingValues(bottom = 48.dp),
                                 )
                             }
                         }
                     }
                 }
             }
+
             is ContentState.Searching -> {
                 SearchResults(
                     modifier = Modifier
@@ -156,6 +175,7 @@ internal fun Ready(
                     onEvent = onEvent,
                 )
             }
+
             is ContentState.RequiresLocationPermission.UseDialog -> {
                 LargeDialog(
                     modifier = Modifier
@@ -170,6 +190,7 @@ internal fun Ready(
                     onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
                 )
             }
+
             is ContentState.RequiresLocationPermission.UseAppSettings -> {
                 LargeDialog(
                     modifier = Modifier
@@ -184,6 +205,7 @@ internal fun Ready(
                     onClickSecondaryAction = { onEvent(Event.SearchChanged(SearchFieldState.Active(""))) },
                 )
             }
+
             is ContentState.RequiresLocationService -> {
                 val activity = LocalContext.current as Activity
                 LargeDialog(
