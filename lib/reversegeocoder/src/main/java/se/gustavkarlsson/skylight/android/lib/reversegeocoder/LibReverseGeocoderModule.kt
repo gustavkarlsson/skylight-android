@@ -2,12 +2,12 @@ package se.gustavkarlsson.skylight.android.lib.reversegeocoder
 
 import android.content.Context
 import android.location.Geocoder
-import com.dropbox.android.external.store4.StoreBuilder
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
 import kotlinx.coroutines.CoroutineDispatcher
+import org.mobilenativefoundation.store.store5.StoreBuilder
 import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 import se.gustavkarlsson.skylight.android.core.Io
 import java.util.Locale

@@ -1,7 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.kpindex
 
-import com.dropbox.android.external.store4.MemoryPolicy
-import com.dropbox.android.external.store4.StoreBuilder
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
@@ -11,6 +9,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
+import org.mobilenativefoundation.store.store5.MemoryPolicy
+import org.mobilenativefoundation.store.store5.StoreBuilder
 import retrofit2.Retrofit
 import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 import se.gustavkarlsson.skylight.android.core.Io
@@ -19,7 +19,6 @@ import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.ExperimentalTime
 
 @Module
 @ContributesTo(AppScopeMarker::class)
@@ -31,7 +30,6 @@ object LibKpIndexModule {
     @Provides
     internal fun kpIndexEvaluator(): ChanceEvaluator<KpIndex> = KpIndexEvaluator
 
-    @OptIn(ExperimentalTime::class)
     @Provides
     @Reusable
     internal fun kpIndexProvider(

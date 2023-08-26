@@ -14,7 +14,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":lib:location"))
 
-    implementation(libs.store)
+    implementation(libs.bundles.store)
 
     kapt(libs.dagger.compiler)
 }

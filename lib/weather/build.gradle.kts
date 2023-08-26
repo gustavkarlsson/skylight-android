@@ -42,7 +42,7 @@ dependencies {
     implementation(project(":lib:location"))
 
     implementation(libs.bundles.retrofit)
-    implementation(libs.store)
+    implementation(libs.bundles.store)
 
     kapt(libs.dagger.compiler)
 

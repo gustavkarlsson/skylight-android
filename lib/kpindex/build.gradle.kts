@@ -16,7 +16,7 @@ dependencies {
     implementation(project(":lib:time"))
 
     implementation(libs.bundles.retrofit)
-    implementation(libs.store)
+    implementation(libs.bundles.store)
 
     kapt(libs.dagger.compiler)
 
