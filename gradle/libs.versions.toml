@@ -19,6 +19,7 @@ androidWorkManager = "2.8.1"
 anvil = "2.4.7"
 arrow = "1.2.0"
 assent = "3.0.2"
+atomicfu = "0.20.2"
 composeBom = "2023.08.00"
 composeCompiler = "1.5.1"
 composeConstraintLayout = "1.0.1"
@@ -44,7 +45,7 @@ retrofit = "2.9.0"
 retrofitKotlinSerialization = "1.0.0"
 solarPositioning = "0.0.9"
 sqldelight = "1.5.5"
-store = "4.0.7" # TODO Upgrade to Store5
+store = "5.0.0-beta03"
 textref = "1.3.1"
 
 # Test
@@ -69,6 +70,7 @@ androidx-workmanager-runtime-ktx = { module = "androidx.work:work-runtime-ktx", 
 arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 assent-coroutines = { module = "com.afollestad.assent:coroutines", version.ref = "assent" }
 assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
+atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
 commonsio = { module = "commons-io:commons-io", version.ref = "commonsIo" }
 compose-animation = { module = "androidx.compose.animation:animation" }
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
@@ -107,7 +109,7 @@ retrofit-kotlinx-serialization = { module = "com.jakewharton.retrofit:retrofit2-
 solarpositioning = { module = "net.e175.klaus:solarpositioning", version.ref = "solarPositioning" }
 sqldelight-android-driver = { module = "com.squareup.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-coroutines-extensions = { module = "com.squareup.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-store = { module = "org.mobilenativefoundation.store:store4", version.ref = "store" }
+store = { module = "org.mobilenativefoundation.store:store5", version.ref = "store" }
 textref = { module = "com.github.ioki-mobility:TextRef", version.ref = "textref" }
 
 [plugins]
@@ -115,3 +117,4 @@ textref = { module = "com.github.ioki-mobility:TextRef", version.ref = "textref"
 [bundles]
 sqldelight = ["sqldelight-android-driver", "sqldelight-coroutines-extensions"]
 retrofit = ["retrofit", "retrofit-kotlinx-serialization", "kotlinx-serialization-json"]
+store = ["store", "atomicfu"]

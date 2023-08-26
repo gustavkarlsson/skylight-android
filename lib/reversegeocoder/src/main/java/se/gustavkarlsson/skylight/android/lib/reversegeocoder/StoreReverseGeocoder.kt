@@ -5,13 +5,13 @@ import arrow.core.Option
 import arrow.core.flatMap
 import arrow.core.left
 import arrow.core.right
-import com.dropbox.android.external.store4.Store
-import com.dropbox.android.external.store4.get
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
+import org.mobilenativefoundation.store.store5.Store
+import org.mobilenativefoundation.store.store5.impl.extensions.get
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Loaded
 import se.gustavkarlsson.skylight.android.core.entities.Loading

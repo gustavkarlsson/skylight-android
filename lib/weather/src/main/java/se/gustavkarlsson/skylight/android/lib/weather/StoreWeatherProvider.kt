@@ -2,16 +2,16 @@ package se.gustavkarlsson.skylight.android.lib.weather
 
 import arrow.core.left
 import arrow.core.right
-import com.dropbox.android.external.store4.Store
-import com.dropbox.android.external.store4.StoreRequest
-import com.dropbox.android.external.store4.StoreResponse
-import com.dropbox.android.external.store4.fresh
-import com.dropbox.android.external.store4.get
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import org.mobilenativefoundation.store.store5.Store
+import org.mobilenativefoundation.store.store5.StoreReadRequest
+import org.mobilenativefoundation.store.store5.StoreReadResponse
+import org.mobilenativefoundation.store.store5.impl.extensions.fresh
+import org.mobilenativefoundation.store.store5.impl.extensions.get
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Loaded
 import se.gustavkarlsson.skylight.android.core.entities.Loading
@@ -53,14 +53,14 @@ internal class StoreWeatherProvider(
             .onEach { logInfo { "Streamed weather: $it" } }
 
     private fun streamResults(location: Location): Flow<Loadable<WeatherResult>> =
-        store.stream(StoreRequest.cached(location.approximate(approximationMeters), refresh = false))
+        store.stream(StoreReadRequest.cached(location.approximate(approximationMeters), refresh = false))
             .map { response ->
                 when (response) {
-                    is StoreResponse.Loading -> Loading
-                    is StoreResponse.Data -> Loaded(response.value.right())
-                    is StoreResponse.Error.Exception ->
+                    is StoreReadResponse.Loading -> Loading
+                    is StoreReadResponse.Data -> Loaded(response.value.right())
+                    is StoreReadResponse.Error.Exception ->
                         Loaded(response.error.toWeatherError().left())
-                    is StoreResponse.Error.Message, is StoreResponse.NoNewData ->
+                    is StoreReadResponse.Error.Message, is StoreReadResponse.NoNewData ->
                         error("Unsupported response type: $response")
                 }
             }

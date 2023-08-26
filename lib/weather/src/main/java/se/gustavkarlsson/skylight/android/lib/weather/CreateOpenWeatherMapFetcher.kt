@@ -1,12 +1,12 @@
 package se.gustavkarlsson.skylight.android.lib.weather
 
-import com.dropbox.android.external.store4.Fetcher
-import com.dropbox.android.external.store4.FetcherResult
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import org.mobilenativefoundation.store.store5.Fetcher
+import org.mobilenativefoundation.store.store5.FetcherResult
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
@@ -36,6 +36,7 @@ internal fun createOpenWeatherMapFetcher(
                 throw e
             } catch (e: Exception) {
                 emit(FetcherResult.Error.Exception(e))
+                return@flow
             }
         }
     }.flowOn(dispatcher)
