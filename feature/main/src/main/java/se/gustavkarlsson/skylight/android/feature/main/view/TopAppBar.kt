@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package se.gustavkarlsson.skylight.android.feature.main.view
 
 import androidx.compose.animation.AnimatedVisibility
@@ -5,6 +7,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -20,6 +23,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.AppBarDefaults
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.Icon
@@ -51,10 +56,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.pagerTabIndicatorOffset
-import com.google.accompanist.pager.rememberPagerState
 import com.ioki.textref.TextRef
 import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.feature.main.R
@@ -69,19 +71,17 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Typography
 import se.gustavkarlsson.skylight.android.lib.ui.compose.textRef
 import se.gustavkarlsson.skylight.android.core.R as CoreR
 
-@OptIn(ExperimentalPagerApi::class)
 @Preview
 @Composable
 private fun PreviewTopAppBar() {
     TopAppBar(
         state = AppBarState.Searching("I'm searchi"),
-        pagerState = rememberPagerState(),
+        pagerState = rememberPagerState { 2 },
         onSettingsClicked = {},
         onEvent = {},
     )
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 internal fun TopAppBar(
     state: AppBarState,
@@ -143,7 +143,6 @@ internal fun TopAppBar(
     )
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun Tabs(
     state: AppBarState.PlaceVisible,
