@@ -2,8 +2,8 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
-    id("com.squareup.anvil")
-    id("com.squareup.sqldelight")
+    alias(libs.plugins.anvil)
+    alias(libs.plugins.sqldelight)
 }
 
 android {

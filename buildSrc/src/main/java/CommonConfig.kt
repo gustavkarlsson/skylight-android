@@ -1,7 +1,8 @@
 import com.android.build.api.dsl.CommonExtension
+import org.gradle.api.JavaVersion
 
 fun CommonExtension<*, *, *, *, *>.commonConfig() {
-    compileSdk = Versions.compileSdk
+    compileSdk = 34
 
     packaging {
         resources.excludes += "META-INF/LICENSE"
@@ -15,12 +16,12 @@ fun CommonExtension<*, *, *, *, *>.commonConfig() {
     }
 
     compileOptions {
-        sourceCompatibility = Versions.java
-        targetCompatibility = Versions.java
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     defaultConfig {
-        minSdk = Versions.minSdk
+        minSdk = 26
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
     }

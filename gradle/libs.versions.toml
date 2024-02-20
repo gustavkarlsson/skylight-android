@@ -6,7 +6,6 @@ jgit = "5.12.0.202106070339-r"
 kotlin = "1.9.0"
 ktlintGradle = "11.5.1"
 playPublisher = "3.8.4"
-targetSdk = "33"
 
 # App
 accompanist = "0.31.6-rc"
@@ -21,7 +20,6 @@ arrow = "1.2.0"
 assent = "3.0.2"
 atomicfu = "0.20.2"
 composeBom = "2023.08.00"
-composeCompiler = "1.5.1"
 composeConstraintLayout = "1.0.1"
 conveyor = "cc93e41adc" # TODO use release version
 firebaseBom = "32.2.3"
@@ -112,7 +110,18 @@ sqldelight-coroutines-extensions = { module = "com.squareup.sqldelight:coroutine
 store = { module = "org.mobilenativefoundation.store:store5", version.ref = "store" }
 textref = { module = "com.github.ioki-mobility:TextRef", version.ref = "textref" }
 
+# Builds
+jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
+
 [plugins]
+anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
+protobuf = { id = "com.google.protobuf", version.ref = "protobufGradle" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }
+sqldelight = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+googleservices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlyticsGradle" }
+playpublisher = { id = "com.github.triplet.play", version.ref = "playPublisher" }
 
 [bundles]
 sqldelight = ["sqldelight-android-driver", "sqldelight-coroutines-extensions"]
