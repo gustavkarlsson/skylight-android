@@ -18,7 +18,6 @@ allprojects {
 
     tasks.withType<KotlinCompile> {
         kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_1_8.toString()
             freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
         }
     }
@@ -31,6 +30,7 @@ allprojects {
 
     afterEvaluate {
         extensions.findByType<KotlinProjectExtension>()?.apply {
+            jvmToolchain(17)
             sourceSets.all {
                 languageSettings {
                     progressiveMode = true
