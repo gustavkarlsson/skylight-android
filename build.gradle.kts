@@ -18,7 +18,7 @@ allprojects {
 
     tasks.withType<KotlinCompile> {
         kotlinOptions {
-            freeCompilerArgs = freeCompilerArgs + "-opt-in=kotlin.RequiresOptIn"
+            freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
         }
     }
 
@@ -41,5 +41,5 @@ allprojects {
 }
 
 task<Delete>("clean") {
-    delete(rootProject.layout.buildDirectory)
+    delete(layout.buildDirectory)
 }
