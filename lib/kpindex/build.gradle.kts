@@ -22,10 +22,6 @@ dependencies {
 
     // Testing
     testImplementation(libs.junit)
-    testImplementation(libs.mockito.inline)
-    testImplementation(libs.mockito.kotlin) {
-        exclude("org.jetbrains.kotlin")
-    }
     testImplementation(libs.assertk) {
         exclude("org.jetbrains.kotlin")
     }
