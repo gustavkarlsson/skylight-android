@@ -1,6 +1,6 @@
 import com.android.build.api.dsl.CommonExtension
 
-fun CommonExtension<*, *, *, *, *>.commonConfig() {
+fun CommonExtension<*, *, *, *, *, *>.commonConfig() {
     compileSdk = 34
 
     packaging {
