@@ -1,7 +1,7 @@
 import com.android.build.api.dsl.CommonExtension
 
-fun CommonExtension<*, *, *, *, *>.commonConfig() {
-    compileSdk = Versions.compileSdk
+fun CommonExtension<*, *, *, *, *, *>.commonConfig() {
+    compileSdk = 34
 
     packaging {
         resources.excludes += "META-INF/LICENSE"
@@ -14,13 +14,8 @@ fun CommonExtension<*, *, *, *, *>.commonConfig() {
         execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
 
-    compileOptions {
-        sourceCompatibility = Versions.java
-        targetCompatibility = Versions.java
-    }
-
     defaultConfig {
-        minSdk = Versions.minSdk
+        minSdk = 26
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArguments["clearPackageData"] = "true"
     }

@@ -3,7 +3,7 @@ import org.eclipse.jgit.lib.RepositoryBuilder
 
 buildscript {
     dependencies {
-        classpath("org.eclipse.jgit:org.eclipse.jgit:${libs.versions.jgit.get()}")
+        classpath(libs.jgit)
     }
 }
 
@@ -11,7 +11,7 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
-    id("com.squareup.anvil")
+    alias(libs.plugins.anvil)
     kotlin("plugin.parcelize")
 }
 

@@ -2,7 +2,7 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
-    id("com.squareup.anvil")
+    alias(libs.plugins.anvil)
     kotlin("plugin.parcelize")
 }
 

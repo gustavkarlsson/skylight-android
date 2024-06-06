@@ -3,34 +3,25 @@ package se.gustavkarlsson.skylight.android.feature.background.notifications
 import assertk.assert
 import assertk.assertions.isEqualTo
 import assertk.tableOf
-import com.nhaarman.mockito_kotlin.whenever
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
-import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
 
-@RunWith(MockitoJUnitRunner::class)
 internal class OutdatedEvaluatorTest {
 
-    @Mock
-    lateinit var mockTime: Time
+    private var now = Instant.DISTANT_PAST
+    private var timeZone = TimeZone.UTC
 
-    lateinit var impl: OutdatedEvaluator
-
-    @Before
-    fun setUp() {
-        whenever(mockTime.timeZone()).thenReturn(ZONE_OFFSET)
-        impl = OutdatedEvaluator(
-            mockTime,
-        )
+    private val fakeTime = object : Time {
+        override fun now(): Instant = now
+        override fun timeZone(): TimeZone = timeZone
     }
+
+    private val impl = OutdatedEvaluator(fakeTime)
 
     @Test
     fun testMultiple() {
@@ -48,7 +39,7 @@ internal class OutdatedEvaluatorTest {
             .row(AFTER_NOON - 1.days, BEFORE_NOON, true)
             .row(AFTER_NOON - 1.days, AFTER_NOON, true)
             .forAll { time, now, expected ->
-                whenever(mockTime.now()).thenReturn(now)
+                this.now = now
 
                 val actual = impl.isOutdated(time)
 
@@ -57,7 +48,6 @@ internal class OutdatedEvaluatorTest {
     }
 
     companion object {
-        private val ZONE_OFFSET = TimeZone.UTC
         private val MIDNIGHT = Instant.fromEpochMilliseconds(0)
         private val BEFORE_MIDNIGHT = MIDNIGHT - 1.seconds
         private val AFTER_MIDNIGHT = MIDNIGHT + 1.seconds

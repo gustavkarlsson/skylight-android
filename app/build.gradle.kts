@@ -2,11 +2,11 @@ plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("kapt")
-    id("com.squareup.anvil")
+    alias(libs.plugins.anvil)
     kotlin("plugin.parcelize")
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
-    id("com.github.triplet.play")
+    alias(libs.plugins.googleservices)
+    alias(libs.plugins.crashlytics)
+    alias(libs.plugins.playpublisher)
 }
 
 val versionNameProperty: String? by lazy {
@@ -91,7 +91,7 @@ android {
 
     defaultConfig {
         applicationId = "se.gustavkarlsson.skylight.android"
-        targetSdk = libs.versions.targetSdk.get().toInt()
+        targetSdk = 34
         versionCode = parsedVersionCode ?: 99999999
         versionName = parsedVersionName ?: "99.99.99"
     }
@@ -208,10 +208,6 @@ dependencies {
     // Testing
     // TODO Make version catalog bundle
     testImplementation(libs.junit)
-    testImplementation(libs.mockito.inline)
-    testImplementation(libs.mockito.kotlin) {
-        exclude("org.jetbrains.kotlin")
-    }
     testImplementation(libs.assertk) {
         exclude("org.jetbrains.kotlin")
     }

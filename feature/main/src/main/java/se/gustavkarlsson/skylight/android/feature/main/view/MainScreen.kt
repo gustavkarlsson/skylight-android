@@ -59,6 +59,7 @@ object MainScreen : Screen {
 
     private fun openAppDetails(activity: Activity) {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+        intent.setPackage(activity.packageName)
         intent.data = Uri.fromParts("package", activity.packageName, null)
         activity.startActivity(intent)
     }

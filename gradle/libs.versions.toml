@@ -1,12 +1,11 @@
 [versions]
 
 # Tooling
-androidGradlePlugin = "8.2.0-beta01"
+androidGradlePlugin = "8.4.1"
 jgit = "5.12.0.202106070339-r"
 kotlin = "1.9.0"
 ktlintGradle = "11.5.1"
 playPublisher = "3.8.4"
-targetSdk = "33"
 
 # App
 accompanist = "0.31.6-rc"
@@ -21,7 +20,6 @@ arrow = "1.2.0"
 assent = "3.0.2"
 atomicfu = "0.20.2"
 composeBom = "2023.08.00"
-composeCompiler = "1.5.1"
 composeConstraintLayout = "1.0.1"
 conveyor = "cc93e41adc" # TODO use release version
 firebaseBom = "32.2.3"
@@ -51,8 +49,6 @@ textref = "1.3.1"
 # Test
 junit = "4.13.2"
 assertk = "0.10"
-mockito = "2.22.0"
-mockitoKotlin = "1.6.0"
 commonsIo = "2.4"
 
 [libraries]
@@ -98,8 +94,6 @@ leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", ve
 logcat = { module = "com.squareup.logcat:logcat", version.ref = "logcat" }
 mapbox-services = { module = "com.mapbox.mapboxsdk:mapbox-sdk-services", version.ref = "mapboxServices" }
 markwon-core = { module = "io.noties.markwon:core", version.ref = "markwon" }
-mockito-inline = { module = "org.mockito:mockito-inline", version.ref = "mockito" }
-mockito-kotlin = { module = "com.nhaarman:mockito-kotlin-kt1.1", version.ref = "mockitoKotlin" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okHttp" }
 play-services-gcm = { module = "com.google.android.gms:play-services-gcm", version.ref = "playServicesGcm" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
@@ -112,7 +106,18 @@ sqldelight-coroutines-extensions = { module = "com.squareup.sqldelight:coroutine
 store = { module = "org.mobilenativefoundation.store:store5", version.ref = "store" }
 textref = { module = "com.github.ioki-mobility:TextRef", version.ref = "textref" }
 
+# Builds
+jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
+
 [plugins]
+anvil = { id = "com.squareup.anvil", version.ref = "anvil" }
+protobuf = { id = "com.google.protobuf", version.ref = "protobufGradle" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlintGradle" }
+sqldelight = { id = "com.squareup.sqldelight", version.ref = "sqldelight" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+googleservices = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlyticsGradle" }
+playpublisher = { id = "com.github.triplet.play", version.ref = "playPublisher" }
 
 [bundles]
 sqldelight = ["sqldelight-android-driver", "sqldelight-coroutines-extensions"]

@@ -2,7 +2,7 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("kapt")
-    id("com.squareup.anvil")
+    alias(libs.plugins.anvil)
     kotlin("plugin.serialization")
 }
 
@@ -48,10 +48,6 @@ dependencies {
 
     // Testing
     testImplementation(libs.junit)
-    testImplementation(libs.mockito.inline)
-    testImplementation(libs.mockito.kotlin) {
-        exclude("org.jetbrains.kotlin")
-    }
     testImplementation(libs.assertk) {
         exclude("org.jetbrains.kotlin")
     }
