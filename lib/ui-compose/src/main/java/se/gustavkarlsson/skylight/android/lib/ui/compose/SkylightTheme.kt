@@ -11,10 +11,8 @@ import androidx.compose.material.lightColors
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 data class SkylightColors(
     val material: Colors,
@@ -77,13 +75,9 @@ fun SkylightTheme(
     content: @Composable () -> Unit,
 ) {
     val colors = if (darkMode) darkPalette else lightPalette
-    val systemUiController = rememberSystemUiController()
     CompositionLocalProvider(
         LocalColors provides colors,
     ) {
-        SideEffect {
-            systemUiController.setSystemBarsColor(color = Color.Transparent, darkIcons = !darkMode)
-        }
         MaterialTheme(
             colors = colors.material,
             typography = skylightTypography,
@@ -105,3 +99,4 @@ val Typography: Typography
     get() = MaterialTheme.typography
 
 val Icons: Icons.Filled = Icons.Default
+val AutoMirroredIcons: Icons.AutoMirrored.Filled = Icons.AutoMirrored.Default

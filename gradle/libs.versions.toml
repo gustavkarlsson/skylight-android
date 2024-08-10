@@ -3,28 +3,27 @@
 # Tooling
 androidGradlePlugin = "8.5.2"
 jgit = "6.10.0.202406032230-r"
-kotlin = "1.9.0"
-ktlintGradle = "12.1.1"
+kotlin = "1.9.24" # TODO Upgrade to Kotlin 2 once Anvil supports it
+ktlintGradle = "11.6.1"
 playPublisher = "3.10.1"
 
 # App
-accompanist = "0.31.6-rc"
 androidActivity = "1.9.1"
 androidAnnotation = "1.8.2"
 androidAppcompat = "1.7.0"
 androidCore = "1.13.1"
 androidLifecycle = "2.8.4"
 androidWorkManager = "2.9.1"
-anvil = "2.4.7"
+anvil = "2.4.9"
 arrow = "1.2.4"
 assent = "3.0.2"
 atomicfu = "0.25.0"
-composeBom = "2023.08.00"
+composeBom = "2024.06.00"
 composeConstraintLayout = "1.0.1"
 conveyor = "cc93e41adc" # TODO use release version
 firebaseBom = "33.1.2"
 crashlyticsGradle = "3.0.2" # Make sure this matches the bom: https://firebase.google.com/support/release-notes/android
-dagger = "2.47"
+dagger = "2.51.1"
 dataStore = "1.1.1"
 googleServices = "4.4.2"
 kotlinDateTime = "0.6.0"
@@ -51,8 +50,6 @@ assertk = "0.10"
 commonsIo = "2.4"
 
 [libraries]
-accompanist-insets-ui = { module = "com.google.accompanist:accompanist-insets-ui", version.ref = "accompanist" }
-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidActivity" }
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "androidAnnotation" }

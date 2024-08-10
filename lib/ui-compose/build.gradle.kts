@@ -26,7 +26,4 @@ dependencies {
     api(libs.compose.material.icons.extended)
     api(libs.compose.animation)
     api(libs.constraintlayout.compose)
-
-    api(libs.accompanist.insets.ui)
-    api(libs.accompanist.systemuicontroller)
 }
