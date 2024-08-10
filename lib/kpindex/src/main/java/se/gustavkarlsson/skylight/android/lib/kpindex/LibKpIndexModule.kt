@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.kpindex
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.squareup.anvil.annotations.ContributesTo
 import dagger.Module
 import dagger.Provides
@@ -12,6 +11,7 @@ import okhttp3.OkHttpClient
 import org.mobilenativefoundation.store.store5.MemoryPolicy
 import org.mobilenativefoundation.store.store5.StoreBuilder
 import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import se.gustavkarlsson.skylight.android.core.AppScopeMarker
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
@@ -40,7 +40,7 @@ object LibKpIndexModule {
         val json = Json { ignoreUnknownKeys = true }
 
         @Suppress("EXPERIMENTAL_API_USAGE")
-        val converterFactory = json.asConverterFactory(MediaType.get("application/json"))
+        val converterFactory = json.asConverterFactory(MediaType.get("application/json; charset=UTF8"))
 
         val api = Retrofit.Builder()
             .client(okHttpClient)
