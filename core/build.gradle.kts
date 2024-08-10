@@ -22,4 +22,5 @@ dependencies {
     api(libs.textref)
     api(libs.kotlinx.coroutines.core)
     api(libs.androidx.appcompat)
+    api(libs.androidx.activity.compose)
 }

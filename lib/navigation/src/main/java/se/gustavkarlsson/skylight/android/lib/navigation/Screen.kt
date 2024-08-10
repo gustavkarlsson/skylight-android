@@ -9,8 +9,6 @@ interface Screen : Parcelable {
     val type: Type
     val scopeStart: String? get() = null
 
-    fun onBackPress(): BackPress = BackPress.NOT_HANDLED
-
     @Composable
     fun Content(activity: AppCompatActivity, tag: ServiceTag)
 
@@ -22,8 +20,4 @@ interface Screen : Parcelable {
         Settings,
         PrivacyPolicy,
     }
-}
-
-enum class BackPress {
-    HANDLED, NOT_HANDLED
 }

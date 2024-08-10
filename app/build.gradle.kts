@@ -202,7 +202,6 @@ dependencies {
     implementation(libs.logcat)
 
     // Compose
-    implementation(libs.androidx.activity.compose)
     implementation(libs.compose.animation)
 
     // Testing

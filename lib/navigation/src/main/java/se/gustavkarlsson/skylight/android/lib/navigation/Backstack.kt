@@ -19,9 +19,7 @@ class Backstack private constructor(private val _screens: List<Screen>) : Parcel
 
         other as Backstack
 
-        if (_screens != other._screens) return false
-
-        return true
+        return _screens == other._screens
     }
 
     override fun hashCode(): Int {
@@ -37,5 +35,3 @@ fun Backstack.update(block: (NonEmptyList<Screen>) -> NonEmptyList<Screen>): Bac
     val newScreens = block(screens)
     return Backstack(newScreens)
 }
-
-val Backstack.topScreen: Screen get() = screens.last()

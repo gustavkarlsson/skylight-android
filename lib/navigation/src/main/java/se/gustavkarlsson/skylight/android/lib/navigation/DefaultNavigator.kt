@@ -2,13 +2,10 @@ package se.gustavkarlsson.skylight.android.lib.navigation
 
 import arrow.core.NonEmptyList
 import arrow.core.getOrElse
-import arrow.core.nonEmptyListOf
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import se.gustavkarlsson.skylight.android.core.AppScope
+import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.core.utils.nonEmpty
 import javax.inject.Inject
@@ -17,7 +14,7 @@ import javax.inject.Inject
 internal class DefaultNavigator @Inject constructor(
     private val defaultScreen: Screen,
     private val overrides: Set<@JvmSuppressWildcards NavigationOverride>,
-) : Navigator, BackPressHandler {
+) : Navigator {
 
     private val mutableBackstackChanges = let {
         val targetBackstack = Backstack(defaultScreen)
@@ -27,13 +24,6 @@ internal class DefaultNavigator @Inject constructor(
     }
 
     override val backstackChanges: StateFlow<BackstackChange> = mutableBackstackChanges
-
-    private val mutableLeaveFlow = MutableSharedFlow<Unit>(
-        extraBufferCapacity = 1,
-        onBufferOverflow = BufferOverflow.DROP_LATEST,
-    )
-
-    override val leave: Flow<Unit> = mutableLeaveFlow
 
     override fun setBackstack(newBackstack: Backstack) = changeBackstack {
         logInfo { "Setting backstack to $newBackstack" }
@@ -67,26 +57,13 @@ internal class DefaultNavigator @Inject constructor(
         screens.takeWhile { it.scopeStart != scope }
     }
 
-    override fun onBackPress() {
-        when (currentBackstack.topScreen.onBackPress()) {
-            BackPress.HANDLED -> {
-                logInfo { "Top screen handled back press" }
-            }
-            BackPress.NOT_HANDLED -> {
-                logInfo { "Top screen did not handle back press" }
-                closeScreen()
-            }
-        }
-    }
-
     // TODO Atomic update
     private fun changeBackstack(change: (screens: NonEmptyList<Screen>) -> List<Screen>) {
         val oldBackstack = backstackChanges.value.new
         val changedScreens = change(oldBackstack.screens)
         val targetScreens = changedScreens.nonEmpty().getOrElse {
-            logInfo { "Nothing more on backstack, resetting to $defaultScreen and leaving" }
-            mutableLeaveFlow.tryEmit(Unit)
-            nonEmptyListOf(defaultScreen)
+            logError { "Attempt to clear entire backstack detected. Aborting navigation" }
+            return
         }
         val targetBackstack = Backstack(targetScreens)
         val newBackstack = overrideBackstack(oldBackstack, targetBackstack)
