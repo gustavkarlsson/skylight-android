@@ -1,9 +1,10 @@
 package se.gustavkarlsson.skylight.android
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -39,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 navigator.leave.collect {
+                    // TODO This doesn't seem to be recommended anymore
                     super.onBackPressed()
                 }
             }
@@ -47,7 +49,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        enableEdgeToEdge()
         MainActivityComponent.instance.inject(this)
         intent?.getPlaceId()?.let { placeId ->
             onNewPlaceId(placeId)
@@ -55,9 +57,9 @@ class MainActivity : AppCompatActivity() {
         renderer.render(this)
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        intent?.getPlaceId()?.let { placeId ->
+        intent.getPlaceId()?.let { placeId ->
             onNewPlaceId(placeId)
         }
     }
@@ -71,5 +73,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // TODO This doesn't seem to be recommended anymore
+    @Suppress("OVERRIDE_DEPRECATION")
+    @SuppressLint("MissingSuperCall")
     override fun onBackPressed() = backPressHandler.onBackPress()
 }

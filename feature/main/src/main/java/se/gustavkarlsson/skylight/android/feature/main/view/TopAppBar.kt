@@ -23,7 +23,7 @@ import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Surface
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.contentColorFor
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.primarySurface
@@ -40,6 +40,7 @@ import com.ioki.textref.TextRef
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.AppBarState
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
+import se.gustavkarlsson.skylight.android.lib.ui.compose.AutoMirroredIcons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchField
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
@@ -78,7 +79,7 @@ internal fun TopAppBar(
             ) {
                 Crossfade(targetState = active) { active ->
                     val imageVector = if (active) {
-                        Icons.ArrowBack
+                        AutoMirroredIcons.ArrowBack
                     } else {
                         Icons.Search
                     }
