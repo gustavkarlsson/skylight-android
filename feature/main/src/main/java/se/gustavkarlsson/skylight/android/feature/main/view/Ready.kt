@@ -49,13 +49,13 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.Colors
 import se.gustavkarlsson.skylight.android.lib.ui.compose.Icons
 import se.gustavkarlsson.skylight.android.lib.ui.compose.LargeDialog
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
-import java.text.DecimalFormat
 import java.time.format.TextStyle
 import java.util.Locale
 import kotlin.math.min
 import kotlin.time.Duration.Companion.hours
 import se.gustavkarlsson.skylight.android.core.R as CoreR
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun Ready(
     state: ViewState.Ready,

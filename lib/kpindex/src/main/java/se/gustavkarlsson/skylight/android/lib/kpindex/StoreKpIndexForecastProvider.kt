@@ -2,16 +2,16 @@ package se.gustavkarlsson.skylight.android.lib.kpindex
 
 import arrow.core.left
 import arrow.core.right
-import com.dropbox.android.external.store4.Store
-import com.dropbox.android.external.store4.StoreRequest
-import com.dropbox.android.external.store4.StoreResponse
-import com.dropbox.android.external.store4.fresh
-import com.dropbox.android.external.store4.get
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import org.mobilenativefoundation.store.store5.Store
+import org.mobilenativefoundation.store.store5.StoreReadRequest
+import org.mobilenativefoundation.store.store5.StoreReadResponse
+import org.mobilenativefoundation.store.store5.impl.extensions.fresh
+import org.mobilenativefoundation.store.store5.impl.extensions.get
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Loaded
 import se.gustavkarlsson.skylight.android.core.entities.Loading
@@ -29,7 +29,9 @@ internal class StoreKpIndexForecastProvider(private val store: Store<Unit, KpInd
         return try {
             val forecast = if (fresh) {
                 store.fresh(Unit)
-            } else store.get(Unit)
+            } else {
+                store.get(Unit)
+            }
             forecast.right()
         } catch (e: CancellationException) {
             throw e
@@ -44,15 +46,15 @@ internal class StoreKpIndexForecastProvider(private val store: Store<Unit, KpInd
             .onEach { logInfo { "Streamed Kp index forecast: $it" } }
 
     private fun streamResults(): Flow<Loadable<KpIndexForecastResult>> =
-        store.stream(StoreRequest.cached(Unit, refresh = false))
+        store.stream(StoreReadRequest.cached(Unit, refresh = false))
             .map { response ->
                 when (response) {
-                    is StoreResponse.Loading -> Loading
-                    is StoreResponse.Data -> Loaded(response.value.right())
-                    is StoreResponse.Error.Exception ->
+                    is StoreReadResponse.Loading -> Loading
+                    is StoreReadResponse.Data -> Loaded(response.value.right())
+                    is StoreReadResponse.Error.Exception ->
                         Loaded(response.error.toKpIndexError().left())
 
-                    is StoreResponse.Error.Message, is StoreResponse.NoNewData ->
+                    is StoreReadResponse.Error.Message, is StoreReadResponse.NoNewData ->
                         error("Unsupported response type: $response")
                 }
             }

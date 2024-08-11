@@ -47,7 +47,6 @@ object LibWeatherModule {
             .create(OpenWeatherMapApi::class.java)
     }
 
-    @OptIn(ExperimentalTime::class)
     @Provides
     @Reusable
     internal fun weatherProvider(
@@ -81,7 +80,6 @@ object LibWeatherModule {
         )
     }
 
-    @OptIn(ExperimentalTime::class)
     @Provides
     @Reusable
     internal fun weatherForecastProvider(

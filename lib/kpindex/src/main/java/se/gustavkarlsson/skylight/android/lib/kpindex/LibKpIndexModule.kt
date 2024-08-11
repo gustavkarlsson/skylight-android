@@ -46,7 +46,6 @@ object LibKpIndexModule {
             .create(KpIndexApi::class.java)
     }
 
-    @OptIn(ExperimentalTime::class)
     @Provides
     @Reusable
     internal fun kpIndexProvider(
@@ -54,7 +53,6 @@ object LibKpIndexModule {
         @Io dispatcher: CoroutineDispatcher,
         time: Time,
     ): KpIndexProvider {
-
         val pollingInterval = 15.minutes
         val fetcher = createKpIndexFetcher(
             api = api,
@@ -76,14 +74,12 @@ object LibKpIndexModule {
         return StoreKpIndexProvider(store = store)
     }
 
-    @OptIn(ExperimentalTime::class)
     @Provides
     @Reusable
     internal fun kpIndexForecastProvider(
         api: KpIndexApi,
         @Io dispatcher: CoroutineDispatcher,
     ): KpIndexForecastProvider {
-
         val pollingInterval = 60.minutes
         val fetcher = createKpIndexForecastFetcher(
             api = api,
