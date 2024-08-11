@@ -17,7 +17,4 @@ class NavigationModule(private val screens: Screens) {
 
     @Provides
     internal fun provideNavigator(navigator: DefaultNavigator): Navigator = navigator
-
-    @Provides
-    internal fun provideBackPressHandler(navigator: DefaultNavigator): BackPressHandler = navigator
 }

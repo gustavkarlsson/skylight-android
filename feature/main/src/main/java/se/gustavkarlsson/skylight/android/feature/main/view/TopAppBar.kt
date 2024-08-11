@@ -1,5 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -68,6 +69,9 @@ internal fun TopAppBar(
         contentPadding = WindowInsets.statusBars.asPaddingValues(),
         navigationIcon = {
             val active = state is AppBarState.Searching
+            BackHandler(enabled = active) {
+                onEvent(Event.SearchChanged(SearchFieldState.Inactive))
+            }
             IconButton(
                 onClick = {
                     if (active) {

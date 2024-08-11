@@ -22,7 +22,6 @@ import se.gustavkarlsson.skylight.android.feature.main.viewmodel.Event
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.MainViewModel
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.MainViewModelComponent
 import se.gustavkarlsson.skylight.android.feature.main.viewmodel.ViewState
-import se.gustavkarlsson.skylight.android.lib.navigation.BackPress
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.screens
@@ -31,7 +30,6 @@ import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceId
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ScreenBackground
-import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.ui.compose.collectAsLifecycleAwareState
 import se.gustavkarlsson.skylight.android.lib.ui.getOrRegisterService
@@ -46,16 +44,6 @@ object MainScreen : Screen {
     override val scopeStart get() = "main"
 
     private val optionalViewModel get() = getService<MainViewModel>(VIEW_MODEL_ID)
-
-    override fun onBackPress(): BackPress {
-        return when ((optionalViewModel?.state?.value as? ViewState.Ready)?.appBar) {
-            null, is AppBarState.PlaceSelected -> BackPress.NOT_HANDLED
-            is AppBarState.Searching -> {
-                optionalViewModel?.onEvent(Event.SearchChanged(SearchFieldState.Inactive))
-                BackPress.HANDLED
-            }
-        }
-    }
 
     private fun openAppDetails(activity: Activity) {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
