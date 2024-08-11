@@ -27,7 +27,9 @@ internal class StreamSelectedPlaceAction @Inject constructor(
                     }
                     val newForecast = if (selectedPlace.savedLocation == this.selectedPlace?.savedLocation) {
                         selectedAuroraForecastReport
-                    } else Loading
+                    } else {
+                        Loading
+                    }
                     when (this) {
                         is State.Loading -> copy(
                             selectedPlace = selectedPlace,

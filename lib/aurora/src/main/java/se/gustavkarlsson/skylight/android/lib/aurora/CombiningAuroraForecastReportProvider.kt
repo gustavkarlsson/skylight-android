@@ -52,9 +52,9 @@ internal class CombiningAuroraForecastReportProvider @Inject constructor(
     private fun streamWithLocation(location: Location): Flow<Loadable<AuroraForecastReport>> {
         val geomagLocation = geomagLocationProvider.get(location)
         return combine(
-            kpIndexForecastProvider.stream().map { it.orNull() },
+            kpIndexForecastProvider.stream().map { it.getOrNull() },
             darknessForecastProvider.stream(location),
-            weatherForecastProvider.stream(location).map { it.orNull() },
+            weatherForecastProvider.stream(location).map { it.getOrNull() },
         ) { kpIndex, darkness, weather ->
             if (kpIndex != null && weather != null) {
                 Loadable(AuroraForecastReport(location, kpIndex, geomagLocation, darkness, weather))

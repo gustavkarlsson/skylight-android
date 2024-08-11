@@ -2,8 +2,8 @@
 
 package se.gustavkarlsson.skylight.android.feature.main.view
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -36,6 +36,7 @@ import androidx.compose.material.ProvideTextStyle
 import androidx.compose.material.Surface
 import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults
+import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material.Text
 import androidx.compose.material.contentColorFor
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -56,7 +57,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.ioki.textref.TextRef
 import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.feature.main.R
@@ -157,7 +157,7 @@ private fun Tabs(
             selectedTabIndex = pagerState.currentPage,
             indicator = { tabPositions ->
                 TabRowDefaults.Indicator(
-                    Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
+                    Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage]),
                 )
             },
             backgroundColor = Color.Transparent,

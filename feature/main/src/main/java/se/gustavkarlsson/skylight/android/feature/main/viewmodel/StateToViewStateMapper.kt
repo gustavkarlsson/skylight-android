@@ -30,7 +30,6 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherError
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import se.gustavkarlsson.skylight.android.core.R as CoreR
 

@@ -10,8 +10,8 @@ import se.gustavkarlsson.skylight.android.feature.background.notifications.Notif
 import se.gustavkarlsson.skylight.android.feature.background.notifications.NotificationEvaluator
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notifier
 import se.gustavkarlsson.skylight.android.feature.background.notifications.PlaceWithChance
-import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReport
+import se.gustavkarlsson.skylight.android.lib.aurora.AuroraReportProvider
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.location.LocationProvider
 import se.gustavkarlsson.skylight.android.lib.places.Place
