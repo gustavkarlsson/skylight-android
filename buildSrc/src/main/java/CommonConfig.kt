@@ -1,7 +1,7 @@
 import com.android.build.api.dsl.CommonExtension
 
 fun CommonExtension<*, *, *, *, *, *>.commonConfig() {
-    compileSdk = 34
+    compileSdk = 35
 
     packaging {
         resources.excludes += "META-INF/LICENSE"
