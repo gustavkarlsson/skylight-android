@@ -13,11 +13,11 @@ jobs:
     name: Check
     runs-on: ubuntu-20.04
     steps:
-      - name: Check out
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Set up JDK
-        uses: actions/setup-java@v2
+      - name: Setup JDK
+        uses: actions/setup-java@v4
         with:
           distribution: zulu
           java-version: 17
@@ -28,13 +28,13 @@ jobs:
         run: echo "$GOOGLE_SERVICES_JSON_BASE64" | base64 --decode > app/google-services.json
 
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v3
 
-      - name: Run
+      - name: Run checks
         run: ./gradlew check --no-daemon
 
       - name: Upload reports
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         if: ${{ always() }}
         with:
           name: reports
