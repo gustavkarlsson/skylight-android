@@ -1,7 +1,7 @@
 [versions]
 
 # Tooling
-androidGradlePlugin = "8.7.2"
+androidGradlePlugin = "8.8.0"
 jgit = "6.10.0.202406032230-r"
 kotlin = "1.9.24" # TODO Upgrade to Kotlin 2 once Anvil supports it
 ktlintGradle = "11.6.1"
