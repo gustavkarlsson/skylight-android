@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
-import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.Clock
@@ -207,7 +206,7 @@ internal fun Ready(
             }
 
             is ContentState.RequiresLocationService -> {
-                val activity = LocalContext.current as Activity
+                val activity = requireNotNull(LocalActivity.current)
                 LargeDialog(
                     modifier = Modifier
                         .dialogModifiers()

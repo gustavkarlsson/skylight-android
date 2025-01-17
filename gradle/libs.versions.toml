@@ -1,14 +1,14 @@
 [versions]
 
 # Tooling
-androidGradlePlugin = "8.7.2"
+androidGradlePlugin = "8.8.0"
 jgit = "6.10.0.202406032230-r"
 kotlin = "1.9.24" # TODO Upgrade to Kotlin 2 once Anvil supports it
 ktlintGradle = "11.6.1"
 playPublisher = "3.10.1"
 
 # App
-androidActivity = "1.9.3"
+androidActivity = "1.10.0"
 androidAnnotation = "1.9.1"
 androidAppcompat = "1.7.0"
 androidCore = "1.15.0"
@@ -18,20 +18,20 @@ anvil = "2.4.9"
 arrow = "1.2.4"
 assent = "3.0.2"
 atomicfu = "0.25.0"
-composeBom = "2024.11.00"
+composeBom = "2025.01.00"
 composeConstraintLayout = "1.1.0"
 conveyor = "cc93e41adc" # TODO use release version
-firebaseBom = "33.6.0"
+firebaseBom = "33.8.0"
 crashlyticsGradle = "3.0.2" # Make sure this matches the bom: https://firebase.google.com/support/release-notes/android
-dagger = "2.51.1"
-dataStore = "1.1.1"
+dagger = "2.55"
+dataStore = "1.1.2"
 googleServices = "4.4.2"
-kotlinDateTime = "0.6.0"
-kotlinxCoroutines = "1.8.1"
+kotlinDateTime = "0.6.1"
+kotlinxCoroutines = "1.9.0"
 kotlinxSerialization = "1.6.3" # TODO Upgrade after updating Kotlin to 2.0+
 leakcanary = "2.14"
 logcat = "0.1"
-mapboxServices = "5.8.0" # TODO Upgrade to 7+, but where are the artifacts?
+mapboxServices = "7.3.1"
 markwon = "4.6.2"
 okHttp = "4.12.0"
 playServicesGcm = "17.0.0"
