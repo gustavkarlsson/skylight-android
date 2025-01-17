@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.main.view
 
-import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,7 +12,6 @@ import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import se.gustavkarlsson.skylight.android.feature.main.R
@@ -91,7 +90,7 @@ internal fun Ready(
                 )
             }
             is ContentState.RequiresLocationService -> {
-                val activity = LocalContext.current as Activity
+                val activity = requireNotNull(LocalActivity.current)
                 LargeDialog(
                     modifier = Modifier
                         .dialogModifiers()

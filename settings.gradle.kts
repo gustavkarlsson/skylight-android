@@ -14,6 +14,7 @@ dependencyResolutionManagement {
         maven { setUrl("https://jitpack.io") }
         maven { setUrl("https://oss.sonatype.org/content/repositories/snapshots") }
         maven { setUrl("https://plugins.gradle.org/m2/") }
+        maven { setUrl("https://api.mapbox.com/downloads/v2/releases/maven") }
     }
 }
 
