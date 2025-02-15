@@ -5,22 +5,23 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.core.Global
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
 import se.gustavkarlsson.skylight.android.feature.background.notifications.NotificationChannelCreator
 import se.gustavkarlsson.skylight.android.feature.background.scheduling.Scheduler
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsRepository
 import java.io.File
-import javax.inject.Inject
 
-internal class BackgroundModuleStarter @Inject constructor(
+@Inject
+internal class BackgroundModuleStarter(
     private val context: Context,
     private val scheduler: Scheduler,
     private val settingsRepository: SettingsRepository,
     private val notificationChannelCreator: NotificationChannelCreator,
     @Global private val scope: CoroutineScope,
 ) : ModuleStarter {
-    override suspend fun start() {
+    override fun start() {
         deleteOldNotifiedPrefsFile()
         scope.launch {
             notificationChannelCreator.createChannel()

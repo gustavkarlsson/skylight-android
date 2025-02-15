@@ -3,25 +3,28 @@ package se.gustavkarlsson.skylight.android.lib.settings
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
-import com.squareup.anvil.annotations.ContributesTo
 import com.squareup.sqldelight.android.AndroidSqliteDriver
-import dagger.Module
-import dagger.Provides
-import dagger.Reusable
-import dagger.multibindings.IntoSet
 import kotlinx.coroutines.CoroutineDispatcher
-import se.gustavkarlsson.skylight.android.core.AppScopeMarker
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
+import se.gustavkarlsson.skylight.android.core.CoreComponent
 import se.gustavkarlsson.skylight.android.core.Io
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
+import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.settings.proto.SettingsMessage
 
-@Module
-@ContributesTo(AppScopeMarker::class)
-object LibSettingsModule {
+@Component
+abstract class LibSettingsComponent internal constructor(
+    @Component internal val coreComponent: CoreComponent,
+    @Component internal val placesComponent: PlacesComponent,
+) {
+
+    abstract val settingsRepository: SettingsRepository
+
+    abstract val moduleStarter: ModuleStarter
 
     @Provides
-    @Reusable
     internal fun settings(
         context: Context,
         placesRepository: PlacesRepository,
@@ -31,8 +34,7 @@ object LibSettingsModule {
     }
 
     @Provides
-    @IntoSet
-    fun moduleStarter(
+    internal fun moduleStarter(
         context: Context,
         @Io dispatcher: CoroutineDispatcher,
         settingsRepository: SettingsRepository,
@@ -41,6 +43,13 @@ object LibSettingsModule {
         val database = Database(driver)
         val queries = database.dbSettingsQueries
         return SettingsModuleStarter(queries, settingsRepository, dispatcher)
+    }
+
+    companion object {
+        val instance: LibSettingsComponent = LibSettingsComponent::class.create(
+            coreComponent = CoreComponent.instance,
+            placesComponent = PlacesComponent.instance,
+        )
     }
 }
 

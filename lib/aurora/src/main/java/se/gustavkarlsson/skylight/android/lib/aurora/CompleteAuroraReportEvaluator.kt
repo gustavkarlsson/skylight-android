@@ -1,16 +1,15 @@
 package se.gustavkarlsson.skylight.android.lib.aurora
 
-import dagger.Reusable
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.core.entities.Chance
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.lib.darkness.Darkness
 import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocation
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndex
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
-import javax.inject.Inject
 
-@Reusable
-internal class CompleteAuroraReportEvaluator @Inject constructor(
+@Inject
+internal class CompleteAuroraReportEvaluator(
     private val kpIndexEvaluator: ChanceEvaluator<KpIndex>,
     private val geomagLocationEvaluator: ChanceEvaluator<GeomagLocation>,
     private val weatherEvaluator: ChanceEvaluator<Weather>,

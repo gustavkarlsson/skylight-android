@@ -9,12 +9,12 @@ import com.afollestad.assent.coroutines.awaitPermissionsResult
 import com.afollestad.assent.toPermission
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import se.gustavkarlsson.skylight.android.core.AppScope
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
-import javax.inject.Inject
 
-@AppScope
-internal class PermissionManager @Inject constructor(
+@Inject
+@PermissionsScope
+internal class PermissionManager(
     private val context: Context,
 ) : PermissionChecker, PermissionRequester {
 
@@ -30,9 +30,8 @@ internal class PermissionManager @Inject constructor(
     }
 
     private fun getPermissions(): Permissions {
-        val map = Permission.values().associate { permission ->
-            val access = getAccess(permission)
-            permission to access
+        val map = Permission.entries.associateWith { permission ->
+            getAccess(permission)
         }
         return Permissions(map)
     }

@@ -1,8 +1,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    kotlin("kapt")
-    alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -19,7 +18,7 @@ dependencies {
     implementation(project(":lib:reversegeocoder"))
     implementation(project(":lib:location"))
 
-    kapt(libs.dagger.compiler)
+    ksp(libs.kotlin.inject.compiler)
 
     // Testing
     testImplementation(libs.junit)

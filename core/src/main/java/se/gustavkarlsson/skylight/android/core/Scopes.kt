@@ -1,13 +1,14 @@
 package se.gustavkarlsson.skylight.android.core
 
-import javax.inject.Scope
+import me.tatarka.inject.annotations.Scope
+import kotlin.annotation.AnnotationTarget.CLASS
+import kotlin.annotation.AnnotationTarget.FUNCTION
+import kotlin.annotation.AnnotationTarget.PROPERTY_GETTER
 
 @Scope
-@Retention(AnnotationRetention.RUNTIME)
+@Target(CLASS, FUNCTION, PROPERTY_GETTER)
 annotation class ViewModelScope
 
 @Scope
-@Retention(AnnotationRetention.RUNTIME)
-annotation class AppScope
-
-abstract class AppScopeMarker private constructor()
+@Target(CLASS, FUNCTION, PROPERTY_GETTER)
+annotation class CoreScope
