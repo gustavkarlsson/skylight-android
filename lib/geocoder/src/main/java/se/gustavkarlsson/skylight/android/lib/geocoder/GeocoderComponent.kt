@@ -1,21 +1,22 @@
 package se.gustavkarlsson.skylight.android.lib.geocoder
 
-import com.squareup.anvil.annotations.ContributesTo
-import se.gustavkarlsson.skylight.android.core.AppScopeMarker
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
+import se.gustavkarlsson.skylight.android.core.CoreComponent
 
-@ContributesTo(AppScopeMarker::class)
-interface GeocoderComponent {
+@Component
+abstract class GeocoderComponent internal constructor(
+    @Component internal val coreComponent: CoreComponent,
+) {
 
-    fun geocoder(): Geocoder
+    abstract val geocoder: Geocoder
 
-    interface Setter {
-        fun setGeocoderComponent(component: GeocoderComponent) {
-            instance = component
-        }
-    }
+    @Provides
+    internal fun geocoder(impl: MapboxGeocoder): Geocoder = impl
 
     companion object {
-        lateinit var instance: GeocoderComponent
-            private set
+        val instance: GeocoderComponent = GeocoderComponent::class.create(
+            coreComponent = CoreComponent.instance,
+        )
     }
 }

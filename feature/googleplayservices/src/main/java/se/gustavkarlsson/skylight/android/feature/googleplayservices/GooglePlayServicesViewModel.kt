@@ -10,17 +10,20 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
 import se.gustavkarlsson.conveyor.Store
 import se.gustavkarlsson.conveyor.issue
 import se.gustavkarlsson.skylight.android.core.Main
+import se.gustavkarlsson.skylight.android.core.ViewModelScope
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.utils.mapState
 import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
-import javax.inject.Inject
 
-internal class GooglePlayServicesViewModel @Inject constructor(
+@Inject
+@ViewModelScope
+internal class GooglePlayServicesViewModel(
     @Main private val dispatcher: CoroutineDispatcher,
 ) : CoroutineScopedService() {
 

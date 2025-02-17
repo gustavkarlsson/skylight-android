@@ -1,21 +1,19 @@
 package se.gustavkarlsson.skylight.android.feature.settings
 
-import com.squareup.anvil.annotations.MergeComponent
-import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent as LibSettingsComponent
+import me.tatarka.inject.annotations.Component
+import se.gustavkarlsson.skylight.android.core.ViewModelScope
+import se.gustavkarlsson.skylight.android.lib.settings.LibSettingsComponent
 
-@MergeComponent(
-    scope = SettingsScopeMarker::class,
-    dependencies = [LibSettingsComponent::class],
-)
-internal interface SettingsComponent {
-    fun viewModel(): SettingsViewModel
+@Component
+@ViewModelScope
+internal abstract class SettingsComponent(
+    @Component internal val settingsComponent: LibSettingsComponent,
+) {
+    abstract fun viewModel(): SettingsViewModel
 
     companion object {
-        fun build(): SettingsComponent =
-            DaggerSettingsComponent.builder()
-                .settingsComponent(LibSettingsComponent.instance)
-                .build()
+        fun build(): SettingsComponent = SettingsComponent::class.create(
+            settingsComponent = LibSettingsComponent.instance,
+        )
     }
 }
-
-abstract class SettingsScopeMarker private constructor()

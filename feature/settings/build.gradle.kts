@@ -1,9 +1,9 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    kotlin("kapt")
-    alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
     kotlin("plugin.parcelize")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -17,7 +17,8 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":lib:ui-compose"))
+    implementation(project(":lib:places"))
     implementation(project(":lib:settings"))
 
-    kapt(libs.dagger.compiler)
+    ksp(libs.kotlin.inject.compiler)
 }

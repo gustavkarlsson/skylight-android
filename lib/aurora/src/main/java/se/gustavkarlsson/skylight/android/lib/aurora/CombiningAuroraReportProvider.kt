@@ -1,6 +1,5 @@
 package se.gustavkarlsson.skylight.android.lib.aurora
 
-import dagger.Reusable
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -8,6 +7,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.core.entities.Loaded
 import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
@@ -16,10 +16,9 @@ import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationProvi
 import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexProvider
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherProvider
-import javax.inject.Inject
 
-@Reusable
-internal class CombiningAuroraReportProvider @Inject constructor(
+@Inject
+internal class CombiningAuroraReportProvider(
     private val darknessProvider: DarknessProvider,
     private val geomagLocationProvider: GeomagLocationProvider,
     private val kpIndexProvider: KpIndexProvider,

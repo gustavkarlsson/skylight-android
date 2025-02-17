@@ -3,9 +3,10 @@ package se.gustavkarlsson.skylight.android.feature.background.notifications
 import android.app.ActivityManager
 import android.app.ActivityManager.RunningAppProcessInfo
 import android.app.KeyguardManager
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-internal class AppVisibilityEvaluator @Inject constructor(
+@Inject
+internal class AppVisibilityEvaluator(
     private val keyguardManager: KeyguardManager,
 ) {
 

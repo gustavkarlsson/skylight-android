@@ -1,12 +1,13 @@
 package se.gustavkarlsson.skylight.android.lib.scopedservice
 
-import se.gustavkarlsson.skylight.android.core.AppScope
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
-import javax.inject.Inject
 
-@AppScope // TODO Scope to Activity instead using a ViewModel?
-internal class ServiceRegistry @Inject constructor() : ServiceCatalog, ServiceClearer {
+// TODO Scope to Activity instead using a ViewModel?
+@Inject
+@ScopedServiceScope
+internal class ServiceRegistry : ServiceCatalog, ServiceClearer {
     private val services = mutableMapOf<ServiceId, ServiceEntry>()
 
     @Synchronized

@@ -1,8 +1,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    kotlin("kapt")
-    alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -17,5 +16,5 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.kotlinx.coroutines.play.services)
 
-    kapt(libs.dagger.compiler)
+    ksp(libs.kotlin.inject.compiler)
 }

@@ -1,27 +1,31 @@
 package se.gustavkarlsson.skylight.android.core
 
-import javax.inject.Qualifier
+import me.tatarka.inject.annotations.Qualifier
+import kotlin.annotation.AnnotationTarget.FUNCTION
+import kotlin.annotation.AnnotationTarget.PROPERTY_GETTER
+import kotlin.annotation.AnnotationTarget.TYPE
+import kotlin.annotation.AnnotationTarget.VALUE_PARAMETER
 
 @Qualifier
-@Retention(AnnotationRetention.RUNTIME)
+@Target(PROPERTY_GETTER, FUNCTION, VALUE_PARAMETER, TYPE)
 annotation class Main
 
 @Qualifier
-@Retention(AnnotationRetention.RUNTIME)
+@Target(PROPERTY_GETTER, FUNCTION, VALUE_PARAMETER, TYPE)
 annotation class Io
 
 @Qualifier
-@Retention(AnnotationRetention.RUNTIME)
+@Target(PROPERTY_GETTER, FUNCTION, VALUE_PARAMETER, TYPE)
 annotation class Computation
 
 @Qualifier
-@Retention(AnnotationRetention.RUNTIME)
+@Target(PROPERTY_GETTER, FUNCTION, VALUE_PARAMETER, TYPE)
 annotation class Global
 
 @Qualifier
-@Retention(AnnotationRetention.RUNTIME)
+@Target(PROPERTY_GETTER, FUNCTION, VALUE_PARAMETER, TYPE)
 annotation class VersionCode
 
 @Qualifier
-@Retention(AnnotationRetention.RUNTIME)
+@Target(PROPERTY_GETTER, FUNCTION, VALUE_PARAMETER, TYPE)
 annotation class VersionName

@@ -1,25 +1,30 @@
 package se.gustavkarlsson.skylight.android.lib.darkness
 
-import com.squareup.anvil.annotations.ContributesTo
-import se.gustavkarlsson.skylight.android.core.AppScopeMarker
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
+import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 
-@ContributesTo(AppScopeMarker::class)
-interface DarknessComponent {
+@Component
+abstract class DarknessComponent internal constructor(
+    @Component internal val timeComponent: TimeComponent,
+) {
 
-    fun darknessChanceEvaluator(): ChanceEvaluator<Darkness>
+    @get:Provides
+    val darknessFormatter: Formatter<Darkness> = DarknessFormatter
 
-    fun darknessFormatter(): Formatter<Darkness>
+    @get:Provides
+    val darknessEvaluator: ChanceEvaluator<Darkness> = DarknessEvaluator
 
-    interface Setter {
-        fun setDarknessComponent(component: DarknessComponent) {
-            instance = component
-        }
-    }
+    abstract val darknessProvider: DarknessProvider
+
+    @Provides
+    internal fun darknessProvider(impl: KlausBrunnerDarknessProvider): DarknessProvider = impl
 
     companion object {
-        lateinit var instance: DarknessComponent
-            private set
+        val instance: DarknessComponent = DarknessComponent::class.create(
+            timeComponent = TimeComponent.instance,
+        )
     }
 }

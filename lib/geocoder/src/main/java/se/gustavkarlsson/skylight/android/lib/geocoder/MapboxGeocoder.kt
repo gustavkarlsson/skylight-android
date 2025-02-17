@@ -7,13 +7,13 @@ import arrow.core.right
 import com.mapbox.api.geocoding.v5.MapboxGeocoding
 import com.mapbox.api.geocoding.v5.models.GeocodingResponse
 import com.mapbox.geojson.Point
-import dagger.Reusable
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
+import me.tatarka.inject.annotations.Inject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,10 +23,8 @@ import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import java.io.IOException
 import java.util.Locale
-import javax.inject.Inject
 import kotlin.coroutines.resume
 
-@Reusable
 internal class MapboxGeocoder(
     private val accessToken: String,
     private val getLocales: () -> NonEmptyList<Locale>,

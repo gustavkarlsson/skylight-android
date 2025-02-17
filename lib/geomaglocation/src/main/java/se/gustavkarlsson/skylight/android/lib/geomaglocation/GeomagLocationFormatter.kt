@@ -1,13 +1,12 @@
 package se.gustavkarlsson.skylight.android.lib.geomaglocation
 
 import com.ioki.textref.TextRef
-import dagger.Reusable
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import java.util.Locale
-import javax.inject.Inject
 
-@Reusable
-internal class GeomagLocationFormatter @Inject constructor(
+@Inject
+internal class GeomagLocationFormatter(
     private val locale: () -> Locale,
 ) : Formatter<GeomagLocation> {
     override fun format(value: GeomagLocation): TextRef {

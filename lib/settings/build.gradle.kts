@@ -1,8 +1,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    kotlin("kapt")
-    alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.sqldelight)
     alias(libs.plugins.protobuf)
 }
@@ -45,5 +44,5 @@ dependencies {
     implementation(libs.androidx.datastore)
     implementation(libs.protobuf.javalite)
 
-    kapt(libs.dagger.compiler)
+    ksp(libs.kotlin.inject.compiler)
 }

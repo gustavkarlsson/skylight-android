@@ -1,5 +1,5 @@
 package se.gustavkarlsson.skylight.android.feature.background.scheduling
 
-interface BackgroundWork {
+fun interface BackgroundWork {
     suspend operator fun invoke()
 }

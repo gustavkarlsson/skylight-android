@@ -1,21 +1,22 @@
 package se.gustavkarlsson.skylight.android.lib.runversion
 
-import com.squareup.anvil.annotations.ContributesTo
-import se.gustavkarlsson.skylight.android.core.AppScopeMarker
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
+import se.gustavkarlsson.skylight.android.core.CoreComponent
 
-@ContributesTo(AppScopeMarker::class)
-interface RunVersionComponent {
+@Component
+abstract class RunVersionComponent internal constructor(
+    @Component internal val coreComponent: CoreComponent,
+) {
 
-    fun runVersionManager(): RunVersionManager
+    abstract val runVersionManager: RunVersionManager
 
-    interface Setter {
-        fun setRunVersionComponent(component: RunVersionComponent) {
-            instance = component
-        }
-    }
+    @Provides
+    internal fun runVersionManager(impl: DataStoreRunVersionManager): RunVersionManager = impl
 
     companion object {
-        lateinit var instance: RunVersionComponent
-            private set
+        val instance: RunVersionComponent = RunVersionComponent::class.create(
+            coreComponent = CoreComponent.instance,
+        )
     }
 }

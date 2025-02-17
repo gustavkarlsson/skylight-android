@@ -1,7 +1,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -18,9 +18,11 @@ dependencies {
     api(libs.androidx.core.ktx)
     api(libs.kotlinx.datetime)
     api(libs.arrow.core)
-    api(libs.dagger)
+    api(libs.kotlin.inject.runtime)
     api(libs.textref)
     api(libs.kotlinx.coroutines.core)
     api(libs.androidx.appcompat)
     api(libs.androidx.activity.compose)
+
+    ksp(libs.kotlin.inject.compiler)
 }

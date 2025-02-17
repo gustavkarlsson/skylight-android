@@ -1,13 +1,14 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
 import kotlinx.coroutines.runBlocking
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionManager
-import javax.inject.Inject
 
-internal class IntroNavigationOverride @Inject constructor(
+@Inject
+internal class IntroNavigationOverride(
     private val runVersionManager: RunVersionManager,
 ) : NavigationOverride {
     override val priority = 10

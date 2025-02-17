@@ -47,7 +47,7 @@ object AboutScreen : Screen {
     @Composable
     override fun Content(activity: AppCompatActivity, tag: ServiceTag) {
         val viewModel = getOrRegisterService(VIEW_MODE_ID, tag) {
-            AboutComponent.build().viewModel()
+            AboutViewModelComponent.build().viewModel
         }
         val text = textRef(viewModel.detailsText)
         Content(

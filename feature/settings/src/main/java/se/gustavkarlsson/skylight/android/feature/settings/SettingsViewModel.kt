@@ -6,13 +6,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Inject
+import se.gustavkarlsson.skylight.android.core.ViewModelScope
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.settings.Settings
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsRepository
 import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
-import javax.inject.Inject
 
-internal class SettingsViewModel @Inject constructor(
+@Inject
+@ViewModelScope
+internal class SettingsViewModel(
     private val settingsRepository: SettingsRepository,
 ) : CoroutineScopedService() {
     val state: StateFlow<ViewState> = settingsRepository.stream()
@@ -38,7 +41,7 @@ private fun createPlacesWithTriggerLevelText(settings: Settings): TextRef {
 }
 
 private fun createTriggerLevelItems(notificationTriggerLevel: TriggerLevel): List<TriggerLevelItem> {
-    return TriggerLevel.values()
+    return TriggerLevel.entries
         .sortedBy { it.displayIndex }
         .map { triggerLevel ->
             val text = triggerLevel.shortText

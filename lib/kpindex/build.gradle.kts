@@ -1,8 +1,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    kotlin("kapt")
-    alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
     kotlin("plugin.serialization")
 }
 
@@ -14,11 +13,12 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":lib:time"))
+    implementation(project(":lib:okhttp"))
 
     implementation(libs.bundles.retrofit)
     implementation(libs.bundles.store)
 
-    kapt(libs.dagger.compiler)
+    ksp(libs.kotlin.inject.compiler)
 
     // Testing
     testImplementation(libs.junit)

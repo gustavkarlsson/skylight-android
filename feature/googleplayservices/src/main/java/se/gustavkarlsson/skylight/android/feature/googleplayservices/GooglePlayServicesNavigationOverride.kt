@@ -1,15 +1,14 @@
 package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
-import dagger.Reusable
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
-import javax.inject.Inject
 
 private val REQUIRING_SCREEN_NAMES = setOf(Screen.Type.Main)
 
-@Reusable
-internal class GooglePlayServicesNavigationOverride @Inject constructor(
+@Inject
+internal class GooglePlayServicesNavigationOverride(
     private val googlePlayServicesChecker: GmsGooglePlayServicesChecker,
 ) : NavigationOverride {
     override val priority = 8

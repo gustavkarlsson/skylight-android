@@ -2,6 +2,7 @@ package se.gustavkarlsson.skylight.android.feature.background.scheduling
 
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.utils.nonEmpty
@@ -19,9 +20,9 @@ import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsRepository
 import se.gustavkarlsson.skylight.android.lib.time.Time
-import javax.inject.Inject
 
-internal class BackgroundWorkImpl @Inject constructor(
+@Inject
+internal class BackgroundWorkImpl(
     private val placesRepository: PlacesRepository,
     private val settingsRepository: SettingsRepository,
     private val appVisibilityEvaluator: AppVisibilityEvaluator,

@@ -1,10 +1,11 @@
 package se.gustavkarlsson.skylight.android.feature.background.notifications
 
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.feature.background.persistence.LastNotificationRepository
 import se.gustavkarlsson.skylight.android.feature.background.persistence.NotificationRecord
-import javax.inject.Inject
 
-internal class NotificationEvaluatorImpl @Inject constructor(
+@Inject
+internal class NotificationEvaluatorImpl(
     private val lastNotificationRepository: LastNotificationRepository,
     private val outdatedEvaluator: OutdatedEvaluator,
 ) : NotificationEvaluator {

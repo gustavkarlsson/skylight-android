@@ -1,12 +1,12 @@
 package se.gustavkarlsson.skylight.android.lib.darkness
 
-import dagger.Reusable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.Instant
+import me.tatarka.inject.annotations.Inject
 import net.e175.klaus.solarpositioning.Grena3
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
 import se.gustavkarlsson.skylight.android.core.entities.Loaded
@@ -14,11 +14,9 @@ import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.util.GregorianCalendar
-import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 
-@Reusable
 internal class KlausBrunnerDarknessProvider(
     private val time: Time,
     private val pollingInterval: Duration,

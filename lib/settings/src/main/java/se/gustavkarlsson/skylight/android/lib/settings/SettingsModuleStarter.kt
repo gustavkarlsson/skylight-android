@@ -4,6 +4,7 @@ import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import se.gustavkarlsson.skylight.android.core.ModuleStarter
 import se.gustavkarlsson.skylight.android.core.entities.TriggerLevel
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
@@ -14,8 +15,10 @@ internal class SettingsModuleStarter(
     private val settingsRepository: SettingsRepository,
     private val dispatcher: CoroutineDispatcher,
 ) : ModuleStarter {
-    override suspend fun start() {
-        migrateFromSqlDelightToDataStore()
+    override fun start() {
+        runBlocking {
+            migrateFromSqlDelightToDataStore()
+        }
     }
 
     private suspend fun migrateFromSqlDelightToDataStore() {

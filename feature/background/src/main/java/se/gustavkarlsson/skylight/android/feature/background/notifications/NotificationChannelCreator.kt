@@ -3,11 +3,12 @@ package se.gustavkarlsson.skylight.android.feature.background.notifications
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.feature.background.AuroraAlertsChannelId
 import se.gustavkarlsson.skylight.android.feature.background.AuroraAlertsChannelName
-import javax.inject.Inject
 
-internal class NotificationChannelCreator @Inject constructor(
+@Inject
+internal class NotificationChannelCreator(
     private val notificationManager: NotificationManager,
     @AuroraAlertsChannelId private val id: String,
     @AuroraAlertsChannelName private val name: String,

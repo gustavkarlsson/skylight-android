@@ -6,9 +6,9 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 

@@ -15,7 +15,7 @@ internal class NotifyWorker(
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
-        val work = BackgroundComponent.instance.backgroundWork()
+        val work = BackgroundComponent.instance.backgroundWork
         logInfo { "Starting work" }
         val startTime = TimeSource.Monotonic.markNow()
         return try {

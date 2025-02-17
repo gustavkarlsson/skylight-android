@@ -1,25 +1,30 @@
 package se.gustavkarlsson.skylight.android.lib.geomaglocation
 
-import com.squareup.anvil.annotations.ContributesTo
-import se.gustavkarlsson.skylight.android.core.AppScopeMarker
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
+import se.gustavkarlsson.skylight.android.core.CoreComponent
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 
-@ContributesTo(AppScopeMarker::class)
-interface GeomagLocationComponent {
+@Component
+abstract class GeomagLocationComponent internal constructor(
+    @Component internal val coreComponent: CoreComponent,
+) {
 
-    fun geomagLocationChanceEvaluator(): ChanceEvaluator<GeomagLocation>
+    @get:Provides
+    val geomagLocationChanceEvaluator: ChanceEvaluator<GeomagLocation> = GeomagLocationEvaluator
 
-    fun geomagLocationFormatter(): Formatter<GeomagLocation>
+    @get:Provides
+    val geomagLocationProvider: GeomagLocationProvider = GeomagLocationProviderImpl
 
-    interface Setter {
-        fun setGeomagLocationComponent(component: GeomagLocationComponent) {
-            instance = component
-        }
-    }
+    abstract val geomagLocationFormatter: Formatter<GeomagLocation>
+
+    @Provides
+    internal fun geomagLocationFormatter(impl: GeomagLocationFormatter): Formatter<GeomagLocation> = impl
 
     companion object {
-        lateinit var instance: GeomagLocationComponent
-            private set
+        val instance: GeomagLocationComponent = GeomagLocationComponent::class.create(
+            coreComponent = CoreComponent.instance,
+        )
     }
 }

@@ -1,6 +1,7 @@
 package se.gustavkarlsson.skylight.android.core.utils
 
 import arrow.core.NonEmptyList
+import kotlinx.coroutines.ExperimentalForInheritanceCoroutinesApi
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -48,6 +49,7 @@ fun <T, R> StateFlow<T>.mapState(
     transform: (value: T) -> R,
 ): StateFlow<R> = MappedStateFlow(this, transform)
 
+@OptIn(ExperimentalForInheritanceCoroutinesApi::class)
 private class MappedStateFlow<T, R>(
     private val source: StateFlow<T>,
     private val transform: (T) -> R,

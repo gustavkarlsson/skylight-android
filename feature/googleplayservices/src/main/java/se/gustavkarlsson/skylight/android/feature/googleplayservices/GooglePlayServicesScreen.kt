@@ -55,7 +55,7 @@ internal data class GooglePlayServicesScreen(private val target: Backstack) : Sc
     @Composable
     override fun Content(activity: AppCompatActivity, tag: ServiceTag) {
         val viewModel = getOrRegisterService(VIEW_MODEL_ID, tag) {
-            GooglePlayServicesComponent.build().viewModel()
+            GooglePlayServicesViewModelComponent.build().viewModel
         }
         val errorSnackbarVisible = viewModel.error.collectAsLifecycleAwareState()
         LaunchedEffect(key1 = null) {

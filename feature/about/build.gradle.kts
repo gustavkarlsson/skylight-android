@@ -10,9 +10,9 @@ buildscript {
 plugins {
     id("com.android.library")
     kotlin("android")
-    kotlin("kapt")
-    alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
     kotlin("plugin.parcelize")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -61,5 +61,5 @@ dependencies {
     implementation(project(":lib:ui-compose"))
     implementation(project(":lib:time"))
 
-    kapt(libs.dagger.compiler)
+    ksp(libs.kotlin.inject.compiler)
 }

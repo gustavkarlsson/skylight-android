@@ -1,23 +1,36 @@
 package se.gustavkarlsson.skylight.android.lib.permissions
 
-import com.squareup.anvil.annotations.ContributesTo
-import se.gustavkarlsson.skylight.android.core.AppScopeMarker
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
+import me.tatarka.inject.annotations.Scope
+import se.gustavkarlsson.skylight.android.core.CoreComponent
+import kotlin.annotation.AnnotationTarget.CLASS
+import kotlin.annotation.AnnotationTarget.FUNCTION
+import kotlin.annotation.AnnotationTarget.PROPERTY_GETTER
 
-@ContributesTo(AppScopeMarker::class)
-interface PermissionsComponent {
+@Component
+@PermissionsScope
+abstract class PermissionsComponent internal constructor(
+    @Component internal val coreComponent: CoreComponent,
+) {
 
-    fun permissionChecker(): PermissionChecker
+    abstract val permissionChecker: PermissionChecker
 
-    fun permissionRequester(): PermissionRequester
+    abstract val permissionRequester: PermissionRequester
 
-    interface Setter {
-        fun setPermissionsComponent(component: PermissionsComponent) {
-            instance = component
-        }
-    }
+    @Provides
+    internal fun permissionChecker(impl: PermissionManager): PermissionChecker = impl
+
+    @Provides
+    internal fun permissionRequester(impl: PermissionManager): PermissionRequester = impl
 
     companion object {
-        lateinit var instance: PermissionsComponent
-            private set
+        val instance: PermissionsComponent = PermissionsComponent::class.create(
+            coreComponent = CoreComponent.instance,
+        )
     }
 }
+
+@Scope
+@Target(CLASS, FUNCTION, PROPERTY_GETTER)
+annotation class PermissionsScope

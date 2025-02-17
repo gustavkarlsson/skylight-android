@@ -12,13 +12,14 @@ import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.permissions.Access
 import se.gustavkarlsson.skylight.android.lib.permissions.Permission
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
-import javax.inject.Inject
 
-internal class LocationManagerStatusProvider @Inject constructor(
+@Inject
+internal class LocationManagerStatusProvider(
     private val locationManager: LocationManager,
     private val permissionChecker: PermissionChecker,
 ) : LocationServiceStatusProvider {
