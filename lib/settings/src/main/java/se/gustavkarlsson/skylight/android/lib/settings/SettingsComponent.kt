@@ -15,7 +15,7 @@ import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
 import se.gustavkarlsson.skylight.android.lib.settings.proto.SettingsMessage
 
 @Component
-abstract class LibSettingsComponent internal constructor(
+abstract class SettingsComponent internal constructor(
     @Component internal val coreComponent: CoreComponent,
     @Component internal val placesComponent: PlacesComponent,
 ) {
@@ -46,7 +46,7 @@ abstract class LibSettingsComponent internal constructor(
     }
 
     companion object {
-        val instance: LibSettingsComponent = LibSettingsComponent::class.create(
+        val instance: SettingsComponent = SettingsComponent::class.create(
             coreComponent = CoreComponent.instance,
             placesComponent = PlacesComponent.instance,
         )

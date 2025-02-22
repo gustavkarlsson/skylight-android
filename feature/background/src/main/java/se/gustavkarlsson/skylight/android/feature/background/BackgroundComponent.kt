@@ -25,7 +25,7 @@ import se.gustavkarlsson.skylight.android.feature.background.scheduling.Schedule
 import se.gustavkarlsson.skylight.android.lib.aurora.AuroraComponent
 import se.gustavkarlsson.skylight.android.lib.location.LocationComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
-import se.gustavkarlsson.skylight.android.lib.settings.LibSettingsComponent
+import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
 import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 
 @Component
@@ -33,7 +33,7 @@ abstract class BackgroundComponent(
     @Component internal val coreComponent: CoreComponent,
     @Component internal val timeComponent: TimeComponent,
     @Component internal val placesComponent: PlacesComponent,
-    @Component internal val settingsComponent: LibSettingsComponent,
+    @Component internal val settingsComponent: SettingsComponent,
     @Component internal val locationComponent: LocationComponent,
     @Component internal val auroraComponent: AuroraComponent,
 ) {
@@ -87,7 +87,7 @@ abstract class BackgroundComponent(
             coreComponent = CoreComponent.instance,
             timeComponent = TimeComponent.instance,
             placesComponent = PlacesComponent.instance,
-            settingsComponent = LibSettingsComponent.instance,
+            settingsComponent = SettingsComponent.instance,
             locationComponent = LocationComponent.instance,
             auroraComponent = AuroraComponent.instance,
         )

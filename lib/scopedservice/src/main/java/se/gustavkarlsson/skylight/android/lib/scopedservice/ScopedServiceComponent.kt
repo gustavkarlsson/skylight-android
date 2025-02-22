@@ -21,6 +21,7 @@ abstract class ScopedServiceComponent {
     @Provides
     internal fun serviceClearer(impl: ServiceRegistry): ServiceClearer = impl
 
+    // TODO Should this be a singleton? Should there be a way to save/restore state when activity is killed?
     companion object {
         val instance: ScopedServiceComponent = ScopedServiceComponent::class.create()
     }

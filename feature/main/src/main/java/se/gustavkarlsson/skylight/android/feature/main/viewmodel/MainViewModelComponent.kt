@@ -37,7 +37,7 @@ import se.gustavkarlsson.skylight.android.lib.permissions.PermissionChecker
 import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoderComponent
-import se.gustavkarlsson.skylight.android.lib.settings.LibSettingsComponent
+import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
 
@@ -55,7 +55,7 @@ internal abstract class MainViewModelComponent(
     @Component val placesComponent: PlacesComponent,
     @Component val geocoderComponent: GeocoderComponent,
     @Component val reverseGeocoderComponent: ReverseGeocoderComponent,
-    @Component val libSettingsComponent: LibSettingsComponent,
+    @Component val settingsComponent: SettingsComponent,
 ) {
     abstract val viewModel: MainViewModel
 
@@ -143,7 +143,7 @@ internal abstract class MainViewModelComponent(
             geomagLocationComponent = GeomagLocationComponent.instance,
             geocoderComponent = GeocoderComponent.instance,
             reverseGeocoderComponent = ReverseGeocoderComponent.instance,
-            libSettingsComponent = LibSettingsComponent.instance,
+            settingsComponent = SettingsComponent.instance,
         )
     }
 }

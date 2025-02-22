@@ -56,7 +56,7 @@ object SettingsScreen : Screen {
     @Composable
     override fun Content(activity: AppCompatActivity, tag: ServiceTag) {
         val viewModel = getOrRegisterService(VIEW_MODE_ID, tag) {
-            SettingsComponent.build().viewModel()
+            SettingsViewModelComponent.build().viewModel()
         }
         val viewState by viewModel.state.collectAsLifecycleAwareState()
         Content(
