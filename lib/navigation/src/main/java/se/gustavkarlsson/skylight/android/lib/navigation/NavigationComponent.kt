@@ -23,7 +23,7 @@ abstract class NavigationComponent internal constructor(
     internal fun provideDefaultScreen(screens: Screens): Screen = screens.main
 
     companion object {
-        lateinit var instance: NavigationComponent // FIXME how to set up instance? What about scope?
+        lateinit var instance: NavigationComponent
     }
 }
 
