@@ -1,26 +1,22 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
-import com.squareup.anvil.annotations.MergeComponent
-import se.gustavkarlsson.skylight.android.core.AppComponent
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
+import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
 import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionComponent
 
-@MergeComponent(
-    scope = IntroScopeMarker::class,
-    dependencies = [
-        AppComponent::class,
-        RunVersionComponent::class,
-    ],
-)
-internal interface IntroComponent {
-    fun viewModel(): IntroViewModel
+@Component
+abstract class IntroComponent(
+    @Component internal val runVersionComponent: RunVersionComponent,
+) {
+    abstract val navigationOverride: NavigationOverride
+
+    @Provides
+    internal fun navigationOverride(impl: IntroNavigationOverride): NavigationOverride = impl
 
     companion object {
-        fun build(): IntroComponent =
-            DaggerIntroComponent.builder()
-                .appComponent(AppComponent.instance)
-                .runVersionComponent(RunVersionComponent.instance)
-                .build()
+        val instance: IntroComponent = IntroComponent::class.create(
+            runVersionComponent = RunVersionComponent.instance,
+        )
     }
 }
-
-abstract class IntroScopeMarker private constructor()

@@ -1,28 +1,46 @@
 package se.gustavkarlsson.skylight.android.lib.aurora
 
-import com.squareup.anvil.annotations.ContributesTo
-import se.gustavkarlsson.skylight.android.core.AppScopeMarker
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.services.ChanceEvaluator
 import se.gustavkarlsson.skylight.android.core.services.Formatter
+import se.gustavkarlsson.skylight.android.lib.darkness.DarknessComponent
+import se.gustavkarlsson.skylight.android.lib.geomaglocation.GeomagLocationComponent
+import se.gustavkarlsson.skylight.android.lib.kpindex.KpIndexComponent
+import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
 
-@ContributesTo(AppScopeMarker::class)
-interface AuroraComponent {
+@Component
+abstract class AuroraComponent internal constructor(
+    @Component internal val darknessComponent: DarknessComponent,
+    @Component internal val geomagLocationComponent: GeomagLocationComponent,
+    @Component internal val kpIndexComponent: KpIndexComponent,
+    @Component internal val weatherComponent: WeatherComponent,
+) {
 
-    fun auroraReportProvider(): AuroraReportProvider
+    abstract val completeAuroraReportChanceEvaluator: ChanceEvaluator<CompleteAuroraReport>
 
-    fun completeAuroraReportChanceEvaluator(): ChanceEvaluator<CompleteAuroraReport>
+    abstract val auroraReportProvider: AuroraReportProvider
 
-    fun chanceLevelFormatter(): Formatter<ChanceLevel>
+    @get:Provides
+    val chanceLevelFormatter: Formatter<ChanceLevel> = ChanceLevelFormatter
 
-    interface Setter {
-        fun setAuroraComponent(component: AuroraComponent) {
-            instance = component
-        }
-    }
+    @Provides
+    internal fun auroraReportProvider(
+        impl: CombiningAuroraReportProvider,
+    ): AuroraReportProvider = impl
+
+    @Provides
+    internal fun completeAuroraReportChanceEvaluator(
+        impl: CompleteAuroraReportEvaluator,
+    ): ChanceEvaluator<CompleteAuroraReport> = impl
 
     companion object {
-        lateinit var instance: AuroraComponent
-            private set
+        val instance: AuroraComponent = AuroraComponent::class.create(
+            darknessComponent = DarknessComponent.instance,
+            geomagLocationComponent = GeomagLocationComponent.instance,
+            kpIndexComponent = KpIndexComponent.instance,
+            weatherComponent = WeatherComponent.instance,
+        )
     }
 }

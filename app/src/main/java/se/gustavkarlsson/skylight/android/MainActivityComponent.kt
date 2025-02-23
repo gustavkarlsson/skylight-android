@@ -1,21 +1,20 @@
 package se.gustavkarlsson.skylight.android
 
-import com.squareup.anvil.annotations.ContributesTo
-import se.gustavkarlsson.skylight.android.core.AppScopeMarker
+import me.tatarka.inject.annotations.Component
+import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
+import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedServiceComponent
 
-@ContributesTo(AppScopeMarker::class)
-interface MainActivityComponent {
-
-    fun inject(mainActivity: MainActivity)
-
-    interface Setter {
-        fun setMainActivityComponent(component: MainActivityComponent) {
-            instance = component
-        }
-    }
+@Component
+internal abstract class MainActivityComponent(
+    @Component val navigationComponent: NavigationComponent,
+    @Component val scopedServiceComponent: ScopedServiceComponent,
+) {
+    abstract val renderer: Renderer
 
     companion object {
-        lateinit var instance: MainActivityComponent
-            private set
+        val instance: MainActivityComponent = MainActivityComponent::class.create(
+            navigationComponent = NavigationComponent.instance,
+            scopedServiceComponent = ScopedServiceComponent.instance,
+        )
     }
 }

@@ -1,18 +1,18 @@
 package se.gustavkarlsson.skylight.android.feature.about
 
 import com.ioki.textref.TextRef
-import dagger.Reusable
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.core.VersionCode
 import se.gustavkarlsson.skylight.android.core.VersionName
+import se.gustavkarlsson.skylight.android.core.ViewModelScope
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ScopedService
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import java.time.format.DateTimeFormatter
-import javax.inject.Inject
 
-@Reusable
+@ViewModelScope
 internal class AboutViewModel(
     private val time: Time,
     private val showDevelopData: Boolean,

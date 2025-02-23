@@ -1,8 +1,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    kotlin("kapt")
-    alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -13,5 +12,5 @@ android {
 dependencies {
     implementation(project(":core"))
 
-    kapt(libs.dagger.compiler)
+    ksp(libs.kotlin.inject.compiler)
 }

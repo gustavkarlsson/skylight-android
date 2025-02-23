@@ -3,9 +3,10 @@ package se.gustavkarlsson.skylight.android.feature.googleplayservices
 import android.content.Context
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import javax.inject.Inject
+import me.tatarka.inject.annotations.Inject
 
-internal class GmsGooglePlayServicesChecker @Inject constructor(
+@Inject
+internal class GmsGooglePlayServicesChecker(
     private val context: Context,
 ) : GooglePlayServicesChecker {
 

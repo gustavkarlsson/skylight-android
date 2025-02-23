@@ -1,21 +1,32 @@
 package se.gustavkarlsson.skylight.android.lib.scopedservice
 
-import com.squareup.anvil.annotations.ContributesTo
-import se.gustavkarlsson.skylight.android.core.AppScopeMarker
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
+import me.tatarka.inject.annotations.Scope
+import kotlin.annotation.AnnotationTarget.CLASS
+import kotlin.annotation.AnnotationTarget.FUNCTION
+import kotlin.annotation.AnnotationTarget.PROPERTY_GETTER
 
-@ContributesTo(AppScopeMarker::class)
-interface ScopedServiceComponent {
+@Component
+@ScopedServiceScope
+abstract class ScopedServiceComponent {
 
-    fun serviceCatalog(): ServiceCatalog
+    abstract val serviceCatalog: ServiceCatalog
 
-    interface Setter {
-        fun setScopedServiceComponent(component: ScopedServiceComponent) {
-            instance = component
-        }
-    }
+    abstract val serviceClearer: ServiceClearer
 
+    @Provides
+    internal fun serviceCatalog(impl: ServiceRegistry): ServiceCatalog = impl
+
+    @Provides
+    internal fun serviceClearer(impl: ServiceRegistry): ServiceClearer = impl
+
+    // TODO Should this be a singleton? Should there be a way to save/restore state when activity is killed?
     companion object {
-        lateinit var instance: ScopedServiceComponent
-            private set
+        val instance: ScopedServiceComponent = ScopedServiceComponent::class.create()
     }
 }
+
+@Scope
+@Target(CLASS, FUNCTION, PROPERTY_GETTER)
+annotation class ScopedServiceScope

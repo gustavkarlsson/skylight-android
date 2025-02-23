@@ -7,7 +7,7 @@ import se.gustavkarlsson.skylight.android.feature.settings.SettingsScreen
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.navigation.Screens
 
-internal object DefaultScreens : Screens {
+object DefaultScreens : Screens {
     override val main: Screen = MainScreen
     override val about: Screen = AboutScreen
     override val settings: Screen = SettingsScreen

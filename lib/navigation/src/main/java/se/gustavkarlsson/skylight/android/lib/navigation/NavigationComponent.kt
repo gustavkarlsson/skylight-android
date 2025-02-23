@@ -1,23 +1,32 @@
 package se.gustavkarlsson.skylight.android.lib.navigation
 
-import com.squareup.anvil.annotations.ContributesTo
-import se.gustavkarlsson.skylight.android.core.AppScopeMarker
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
+import me.tatarka.inject.annotations.Scope
+import kotlin.annotation.AnnotationTarget.CLASS
+import kotlin.annotation.AnnotationTarget.FUNCTION
+import kotlin.annotation.AnnotationTarget.PROPERTY_GETTER
 
-@ContributesTo(AppScopeMarker::class)
-interface NavigationComponent {
+@Component
+@NavigationScope
+abstract class NavigationComponent internal constructor(
+    @get:Provides val screens: Screens,
+    @get:Provides val navigationOverrides: Set<NavigationOverride>,
+) {
 
-    fun navigator(): Navigator
+    abstract val navigator: Navigator
 
-    fun screens(): Screens
+    @Provides
+    internal fun provideNavigator(impl: DefaultNavigator): Navigator = impl
 
-    interface Setter {
-        fun setNavigationComponent(component: NavigationComponent) {
-            instance = component
-        }
-    }
+    @Provides
+    internal fun provideDefaultScreen(screens: Screens): Screen = screens.main
 
     companion object {
         lateinit var instance: NavigationComponent
-            private set
     }
 }
+
+@Scope
+@Target(CLASS, FUNCTION, PROPERTY_GETTER)
+annotation class NavigationScope

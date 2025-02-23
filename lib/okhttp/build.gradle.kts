@@ -1,8 +1,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    kotlin("kapt")
-    alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -13,7 +12,7 @@ android {
 dependencies {
     implementation(project(":core"))
 
-    api(libs.okhttp) // Dagger requires api
+    api(libs.okhttp)
 
-    kapt(libs.dagger.compiler)
+    ksp(libs.kotlin.inject.compiler)
 }

@@ -1,12 +1,13 @@
 package se.gustavkarlsson.skylight.android.feature.main.state
 
 import kotlinx.coroutines.flow.collectLatest
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
 import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
-import javax.inject.Inject
 
-internal class StreamPlacesAction @Inject constructor(
+@Inject
+internal class StreamPlacesAction(
     private val placesRepository: PlacesRepository,
 ) : Action<State> {
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {

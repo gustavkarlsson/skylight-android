@@ -6,14 +6,15 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.Screen
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceClearer
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
 import se.gustavkarlsson.skylight.android.lib.ui.compose.collectAsLifecycleAwareState
-import javax.inject.Inject
 
-internal class Renderer @Inject constructor(
+@Inject
+internal class Renderer(
     private val navigator: Navigator,
     private val serviceClearer: ServiceClearer,
 ) {
