@@ -1,7 +1,7 @@
 [versions]
 
 # Tooling
-androidGradlePlugin = "8.8.0"
+androidGradlePlugin = "8.11.0"
 jgit = "6.10.0.202406032230-r"
 kotlin = "2.1.0" # Must match ksp version
 ktlintGradle = "11.6.1"
