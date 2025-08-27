@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.weather
 
-import assertk.assert
+import assertk.assertThat
 import assertk.assertions.isBetween
 import assertk.assertions.isEqualTo
 import org.junit.Test
@@ -19,34 +19,34 @@ class WeatherEvaluatorTest {
     fun _0CloudPercentageEvaluatesToMax() {
         val chance = impl.evaluate(Weather(0, timestamp))
 
-        assert(chance).isEqualTo(MAX)
+        assertThat(chance).isEqualTo(MAX)
     }
 
     @Test
     fun _100CloudPercentageEvaluatesToImpossible() {
         val chance = impl.evaluate(Weather(100, timestamp))
 
-        assert(chance).isEqualTo(IMPOSSIBLE)
+        assertThat(chance).isEqualTo(IMPOSSIBLE)
     }
 
     @Test
     fun minus1CloudPercentageEvaluatesToUnknown() {
         val chance = impl.evaluate(Weather(-1, timestamp))
 
-        assert(chance).isEqualTo(UNKNOWN)
+        assertThat(chance).isEqualTo(UNKNOWN)
     }
 
     @Test
     fun _101CloudPercentageEvaluatesToUnknown() {
         val chance = impl.evaluate(Weather(101, timestamp))
 
-        assert(chance).isEqualTo(UNKNOWN)
+        assertThat(chance).isEqualTo(UNKNOWN)
     }
 
     @Test
     fun _50CloudPercentageEvaluatesToMediumChance() {
         val chance = impl.evaluate(Weather(25, timestamp))
 
-        assert(chance).isBetween(Chance(0.4), Chance(0.6))
+        assertThat(chance).isBetween(Chance(0.4), Chance(0.6))
     }
 }

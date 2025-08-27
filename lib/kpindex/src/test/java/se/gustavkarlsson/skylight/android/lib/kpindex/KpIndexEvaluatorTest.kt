@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.kpindex
 
-import assertk.assert
+import assertk.assertThat
 import assertk.assertions.isBetween
 import assertk.assertions.isEqualTo
 import org.junit.Test
@@ -19,34 +19,34 @@ class KpIndexEvaluatorTest {
     fun _0KpIndexEvaluatesToImpossible() {
         val chance = impl.evaluate(KpIndex(0.0, timestamp))
 
-        assert(chance).isEqualTo(IMPOSSIBLE)
+        assertThat(chance).isEqualTo(IMPOSSIBLE)
     }
 
     @Test
     fun _9KpIndexEvaluatesToMax() {
         val chance = impl.evaluate(KpIndex(9.0, timestamp))
 
-        assert(chance).isEqualTo(MAX)
+        assertThat(chance).isEqualTo(MAX)
     }
 
     @Test
     fun _4KpIndexEvaluatesToMediumChance() {
         val chance = impl.evaluate(KpIndex(4.0, timestamp))
 
-        assert(chance).isBetween(Chance(0.4), Chance(0.5))
+        assertThat(chance).isBetween(Chance(0.4), Chance(0.5))
     }
 
     @Test
     fun minus1KpIndexEvaluatesToUnknown() {
         val chance = impl.evaluate(KpIndex(-1.0, timestamp))
 
-        assert(chance).isEqualTo(UNKNOWN)
+        assertThat(chance).isEqualTo(UNKNOWN)
     }
 
     @Test
     fun _10KpIndexEvaluatesToUnknown() {
         val chance = impl.evaluate(KpIndex(10.0, timestamp))
 
-        assert(chance).isEqualTo(UNKNOWN)
+        assertThat(chance).isEqualTo(UNKNOWN)
     }
 }

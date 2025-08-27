@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.background.notifications
 
-import assertk.assert
+import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.tableOf
 import kotlinx.datetime.TimeZone
@@ -43,7 +43,7 @@ internal class OutdatedEvaluatorTest {
 
                 val actual = impl.isOutdated(time)
 
-                assert(actual).isEqualTo(expected)
+                assertThat(actual).isEqualTo(expected)
             }
     }
 
