@@ -1,15 +1,15 @@
 package se.gustavkarlsson.skylight.android.feature.background.notifications
 
-import assertk.assert
+import assertk.assertThat
 import assertk.assertions.isEqualTo
 import assertk.tableOf
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import org.junit.Test
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 
 internal class OutdatedEvaluatorTest {
 
@@ -43,7 +43,7 @@ internal class OutdatedEvaluatorTest {
 
                 val actual = impl.isOutdated(time)
 
-                assert(actual).isEqualTo(expected)
+                assertThat(actual).isEqualTo(expected)
             }
     }
 

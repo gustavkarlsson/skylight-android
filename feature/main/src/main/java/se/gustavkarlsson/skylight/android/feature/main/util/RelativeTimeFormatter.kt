@@ -2,9 +2,9 @@ package se.gustavkarlsson.skylight.android.feature.main.util
 
 import android.text.format.DateUtils
 import com.ioki.textref.TextRef
-import kotlinx.datetime.Instant
 import se.gustavkarlsson.skylight.android.feature.main.R
 import kotlin.time.Duration
+import kotlin.time.Instant
 
 internal interface RelativeTimeFormatter {
     fun format(time: Instant, now: Instant, minResolution: Duration): TextRef

@@ -193,7 +193,7 @@ dependencies {
     ksp(libs.kotlin.inject.compiler)
 
     // Crashlytics
-    implementation(libs.firebase.crashlytics.ktx)
+    implementation(libs.firebase.crashlytics)
 
     // Leakcanary
     debugImplementation(libs.leakcanary.android)

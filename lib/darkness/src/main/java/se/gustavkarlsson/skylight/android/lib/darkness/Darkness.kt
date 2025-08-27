@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.darkness
 
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 data class Darkness(
     val sunZenithAngle: Double,
