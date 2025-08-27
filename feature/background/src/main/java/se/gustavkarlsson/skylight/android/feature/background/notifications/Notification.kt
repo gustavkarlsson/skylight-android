@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.background.notifications
 
 import arrow.core.NonEmptyList
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.lib.places.Place
 

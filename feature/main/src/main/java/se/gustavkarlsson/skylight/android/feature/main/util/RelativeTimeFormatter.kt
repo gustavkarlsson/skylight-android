@@ -2,7 +2,7 @@ package se.gustavkarlsson.skylight.android.feature.main.util
 
 import android.text.format.DateUtils
 import com.ioki.textref.TextRef
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import se.gustavkarlsson.skylight.android.feature.main.R
 import kotlin.time.Duration
 

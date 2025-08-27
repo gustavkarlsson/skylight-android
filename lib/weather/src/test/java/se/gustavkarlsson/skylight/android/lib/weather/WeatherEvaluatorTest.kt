@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.lib.weather
 import assertk.assert
 import assertk.assertions.isBetween
 import assertk.assertions.isEqualTo
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import org.junit.Test
 import se.gustavkarlsson.skylight.android.core.entities.Chance
 import se.gustavkarlsson.skylight.android.core.entities.Chance.Companion.IMPOSSIBLE

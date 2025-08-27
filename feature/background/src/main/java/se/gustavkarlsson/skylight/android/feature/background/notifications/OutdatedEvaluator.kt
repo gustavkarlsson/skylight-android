@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.background.notifications
 
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import kotlinx.datetime.atTime
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime

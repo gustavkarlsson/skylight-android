@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.material.icons.filled.Warning
 import arrow.core.Either
 import com.ioki.textref.TextRef
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.core.entities.Chance
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel

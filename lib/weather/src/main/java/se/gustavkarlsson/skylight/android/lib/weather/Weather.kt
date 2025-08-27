@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.weather
 
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 data class Weather(
     val cloudPercentage: Int, // Validate/coerce

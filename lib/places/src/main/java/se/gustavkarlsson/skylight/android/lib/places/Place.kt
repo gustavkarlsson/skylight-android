@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.places
 
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import se.gustavkarlsson.skylight.android.lib.location.Location
 
 sealed interface Place {

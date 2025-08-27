@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.feature.background.persistence
 
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 

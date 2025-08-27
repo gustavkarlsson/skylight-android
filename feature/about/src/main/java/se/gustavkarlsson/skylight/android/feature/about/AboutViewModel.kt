@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.feature.about
 
 import com.ioki.textref.TextRef
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.datetime.toLocalDateTime
 import me.tatarka.inject.annotations.Inject
