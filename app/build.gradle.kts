@@ -91,7 +91,7 @@ android {
 
     defaultConfig {
         applicationId = "se.gustavkarlsson.skylight.android"
-        targetSdk = 35
+        targetSdk = 36
         versionCode = parsedVersionCode ?: 99999999
         versionName = parsedVersionName ?: "99.99.99"
     }

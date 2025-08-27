@@ -1,7 +1,7 @@
 [versions]
 
 # Tooling
-androidGradlePlugin = "8.11.1"
+androidGradlePlugin = "8.13.0-rc01"
 jgit = "6.10.0.202406032230-r"
 kotlin = "2.2.10" # Must match ksp version
 ktlintGradle = "11.6.1"
@@ -11,7 +11,7 @@ playPublisher = "3.10.1"
 androidActivity = "1.10.1"
 androidAnnotation = "1.9.1"
 androidAppcompat = "1.7.1"
-androidCore = "1.16.0"
+androidCore = "1.17.0"
 androidLifecycle = "2.9.3"
 androidWorkManager = "2.10.3"
 arrow = "1.2.4"
