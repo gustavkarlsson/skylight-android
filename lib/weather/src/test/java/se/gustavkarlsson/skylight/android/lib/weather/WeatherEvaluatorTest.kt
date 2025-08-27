@@ -3,12 +3,12 @@ package se.gustavkarlsson.skylight.android.lib.weather
 import assertk.assert
 import assertk.assertions.isBetween
 import assertk.assertions.isEqualTo
-import kotlin.time.Instant
 import org.junit.Test
 import se.gustavkarlsson.skylight.android.core.entities.Chance
 import se.gustavkarlsson.skylight.android.core.entities.Chance.Companion.IMPOSSIBLE
 import se.gustavkarlsson.skylight.android.core.entities.Chance.Companion.MAX
 import se.gustavkarlsson.skylight.android.core.entities.Chance.Companion.UNKNOWN
+import kotlin.time.Instant
 
 class WeatherEvaluatorTest {
 

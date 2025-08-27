@@ -1,8 +1,8 @@
 package se.gustavkarlsson.skylight.android.feature.background.persistence
 
-import kotlin.time.Instant
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
+import kotlin.time.Instant
 
 internal data class NotificationRecord(
     val data: Set<PlaceIdWithChance>,

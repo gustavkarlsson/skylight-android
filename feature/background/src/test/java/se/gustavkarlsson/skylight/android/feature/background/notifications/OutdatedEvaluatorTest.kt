@@ -3,13 +3,13 @@ package se.gustavkarlsson.skylight.android.feature.background.notifications
 import assertk.assert
 import assertk.assertions.isEqualTo
 import assertk.tableOf
-import kotlin.time.Instant
 import kotlinx.datetime.TimeZone
 import org.junit.Test
 import se.gustavkarlsson.skylight.android.lib.time.Time
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 
 internal class OutdatedEvaluatorTest {
 

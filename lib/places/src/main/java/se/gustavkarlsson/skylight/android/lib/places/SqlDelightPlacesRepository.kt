@@ -8,11 +8,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import kotlin.time.Instant
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.places.db.DbPlace
 import se.gustavkarlsson.skylight.android.lib.places.db.DbPlaceQueries
 import se.gustavkarlsson.skylight.android.lib.time.Time
+import kotlin.time.Instant
 
 internal class SqlDelightPlacesRepository(
     private val queries: DbPlaceQueries,

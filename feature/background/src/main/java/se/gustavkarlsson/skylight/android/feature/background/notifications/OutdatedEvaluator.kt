@@ -1,11 +1,11 @@
 package se.gustavkarlsson.skylight.android.feature.background.notifications
 
-import kotlin.time.Instant
 import kotlinx.datetime.atTime
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.lib.time.Time
+import kotlin.time.Instant
 
 @Inject
 internal class OutdatedEvaluator(

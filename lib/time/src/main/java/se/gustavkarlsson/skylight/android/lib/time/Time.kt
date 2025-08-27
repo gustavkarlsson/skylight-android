@@ -1,7 +1,7 @@
 package se.gustavkarlsson.skylight.android.lib.time
 
-import kotlin.time.Instant
 import kotlinx.datetime.TimeZone
+import kotlin.time.Instant
 
 interface Time {
     fun now(): Instant
