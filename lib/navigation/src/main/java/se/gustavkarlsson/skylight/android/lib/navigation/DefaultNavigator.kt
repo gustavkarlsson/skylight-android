@@ -4,20 +4,20 @@ import arrow.core.NonEmptyList
 import arrow.core.getOrElse
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import se.gustavkarlsson.skylight.android.core.AppScope
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.core.logging.logError
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.core.utils.nonEmpty
-import javax.inject.Inject
 
-@AppScope // TODO Scope to Activity instead using a ViewModel?
-internal class DefaultNavigator @Inject constructor(
+@Inject
+@NavigationScope // TODO Scope to Activity instead using a ViewModel?
+internal class DefaultNavigator(
     private val defaultScreen: Screen,
-    private val overrides: Set<@JvmSuppressWildcards NavigationOverride>,
+    private val overrides: Set<NavigationOverride>,
 ) : Navigator {
 
     private val mutableBackstackChanges = let {
-        val targetBackstack = Backstack(defaultScreen)
+        val targetBackstack = Backstack.ofScreen(defaultScreen)
         val newBackstack = overrideBackstack(targetBackstack, targetBackstack)
         logInfo { "Setting backstack to: $newBackstack" }
         MutableStateFlow(BackstackChange(newBackstack, newBackstack))
@@ -65,7 +65,7 @@ internal class DefaultNavigator @Inject constructor(
             logError { "Attempt to clear entire backstack detected. Aborting navigation" }
             return
         }
-        val targetBackstack = Backstack(targetScreens)
+        val targetBackstack = Backstack.ofScreens(targetScreens)
         val newBackstack = overrideBackstack(oldBackstack, targetBackstack)
         logInfo { "Setting backstack to: $newBackstack" }
         mutableBackstackChanges.value = BackstackChange(oldBackstack, newBackstack)

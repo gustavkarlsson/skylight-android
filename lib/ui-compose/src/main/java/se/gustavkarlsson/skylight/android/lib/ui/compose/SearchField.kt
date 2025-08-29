@@ -52,7 +52,7 @@ fun SearchField(
 ) {
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
-    val focusRequester = FocusRequester()
+    val focusRequester = remember { FocusRequester() }
     var canClearFocus by remember { mutableStateOf(false) } // Prevents clearing focus when started as Inactive
     val active = state is SearchFieldState.Active
     val activeText = (state as? SearchFieldState.Active)?.text

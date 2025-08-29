@@ -2,20 +2,9 @@ package se.gustavkarlsson.skylight.android.feature.main.util
 
 import android.text.format.DateUtils
 import com.ioki.textref.TextRef
-import com.squareup.anvil.annotations.ContributesTo
-import dagger.Module
-import dagger.Provides
-import kotlinx.datetime.Instant
 import se.gustavkarlsson.skylight.android.feature.main.R
-import se.gustavkarlsson.skylight.android.feature.main.viewmodel.MainScopeMarker
 import kotlin.time.Duration
-
-@Module
-@ContributesTo(MainScopeMarker::class)
-object RelativeTimeFormatterModule {
-    @Provides
-    internal fun relativeTimeFormatter(): RelativeTimeFormatter = DateUtilsRelativeTimeFormatter
-}
+import kotlin.time.Instant
 
 internal interface RelativeTimeFormatter {
     fun format(time: Instant, now: Instant, minResolution: Duration): TextRef

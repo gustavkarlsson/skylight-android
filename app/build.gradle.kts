@@ -1,12 +1,12 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    kotlin("kapt")
-    alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
     kotlin("plugin.parcelize")
     alias(libs.plugins.googleservices)
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.playpublisher)
+    alias(libs.plugins.compose.compiler)
 }
 
 val versionNameProperty: String? by lazy {
@@ -91,7 +91,7 @@ android {
 
     defaultConfig {
         applicationId = "se.gustavkarlsson.skylight.android"
-        targetSdk = 35
+        targetSdk = 36
         versionCode = parsedVersionCode ?: 99999999
         versionName = parsedVersionName ?: "99.99.99"
     }
@@ -189,11 +189,11 @@ dependencies {
 
     implementation(libs.androidx.annotation)
 
-    // Dagger
-    kapt(libs.dagger.compiler)
+    // DI
+    ksp(libs.kotlin.inject.compiler)
 
     // Crashlytics
-    implementation(libs.firebase.crashlytics.ktx)
+    implementation(libs.firebase.crashlytics)
 
     // Leakcanary
     debugImplementation(libs.leakcanary.android)

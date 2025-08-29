@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     kotlin("android")
     kotlin("plugin.parcelize")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {

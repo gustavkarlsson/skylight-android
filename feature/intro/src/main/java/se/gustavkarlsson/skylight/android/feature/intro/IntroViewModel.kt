@@ -1,13 +1,16 @@
 package se.gustavkarlsson.skylight.android.feature.intro
 
 import kotlinx.coroutines.launch
+import me.tatarka.inject.annotations.Inject
+import se.gustavkarlsson.skylight.android.core.ViewModelScope
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
 import se.gustavkarlsson.skylight.android.lib.navigation.navigator
 import se.gustavkarlsson.skylight.android.lib.runversion.RunVersionManager
 import se.gustavkarlsson.skylight.android.lib.ui.CoroutineScopedService
-import javax.inject.Inject
 
-internal class IntroViewModel @Inject constructor(
+@Inject
+@ViewModelScope
+internal class IntroViewModel(
     private val versionManager: RunVersionManager,
 ) : CoroutineScopedService() {
     fun registerScreenSeen(target: Backstack) {

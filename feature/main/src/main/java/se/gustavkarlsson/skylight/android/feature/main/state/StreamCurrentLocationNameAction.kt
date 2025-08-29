@@ -6,13 +6,14 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
 import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoder
-import javax.inject.Inject
 
-internal class StreamCurrentLocationNameAction @Inject constructor(
+@Inject
+internal class StreamCurrentLocationNameAction(
     private val reverseGeocoder: ReverseGeocoder,
 ) : Action<State> {
 

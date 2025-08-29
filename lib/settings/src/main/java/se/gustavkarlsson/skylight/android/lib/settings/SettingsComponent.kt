@@ -1,21 +1,59 @@
 package se.gustavkarlsson.skylight.android.lib.settings
 
-import com.squareup.anvil.annotations.ContributesTo
-import se.gustavkarlsson.skylight.android.core.AppScopeMarker
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
+import com.squareup.sqldelight.android.AndroidSqliteDriver
+import kotlinx.coroutines.CoroutineDispatcher
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
+import se.gustavkarlsson.skylight.android.core.CoreComponent
+import se.gustavkarlsson.skylight.android.core.Io
+import se.gustavkarlsson.skylight.android.core.ModuleStarter
+import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
+import se.gustavkarlsson.skylight.android.lib.places.PlacesRepository
+import se.gustavkarlsson.skylight.android.lib.settings.proto.SettingsMessage
 
-@ContributesTo(AppScopeMarker::class)
-interface SettingsComponent {
+@Component
+abstract class SettingsComponent internal constructor(
+    @Component internal val coreComponent: CoreComponent,
+    @Component internal val placesComponent: PlacesComponent,
+) {
 
-    fun settings(): SettingsRepository
+    abstract val settingsRepository: SettingsRepository
 
-    interface Setter {
-        fun setSettingsComponent(component: SettingsComponent) {
-            instance = component
-        }
+    abstract val moduleStarter: ModuleStarter
+
+    @Provides
+    internal fun settings(
+        context: Context,
+        placesRepository: PlacesRepository,
+    ): SettingsRepository {
+        val dataStore = context.settingsDataStore
+        return DataStoreSettingsRepository(dataStore, placesRepository)
+    }
+
+    @Provides
+    internal fun moduleStarter(
+        context: Context,
+        @Io dispatcher: CoroutineDispatcher,
+        settingsRepository: SettingsRepository,
+    ): ModuleStarter {
+        val driver = AndroidSqliteDriver(Database.Schema, context, "settings.db")
+        val database = Database(driver)
+        val queries = database.dbSettingsQueries
+        return SettingsModuleStarter(queries, settingsRepository, dispatcher)
     }
 
     companion object {
-        lateinit var instance: SettingsComponent
-            private set
+        val instance: SettingsComponent = SettingsComponent::class.create(
+            coreComponent = CoreComponent.instance,
+            placesComponent = PlacesComponent.instance,
+        )
     }
 }
+
+private val Context.settingsDataStore: DataStore<SettingsMessage> by dataStore(
+    fileName = "settings.pb",
+    serializer = SettingsSerializer,
+)

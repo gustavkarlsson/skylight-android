@@ -1,18 +1,24 @@
 package se.gustavkarlsson.skylight.android.lib.places
 
+import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import arrow.core.NonEmptyList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import me.tatarka.inject.annotations.Inject
 
+@Inject
 internal class PlacesRepoSelectedPlaceRepository(
     placesRepo: PlacesRepository,
-    private val selectedIdDatastore: DataStore<Preferences>,
+    context: Context,
 ) : SelectedPlaceRepository {
+
+    private val selectedIdDatastore = context.dataStore
 
     override suspend fun set(placeId: PlaceId) {
         selectedIdDatastore.edit { prefs ->
@@ -41,5 +47,7 @@ private fun selectBestPlace(places: NonEmptyList<Place>, selectedId: PlaceId): P
         place.id == selectedId
     } ?: places.first()
 }
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "selected_place")
 
 private val PLACE_ID_KEY = longPreferencesKey("place_id")

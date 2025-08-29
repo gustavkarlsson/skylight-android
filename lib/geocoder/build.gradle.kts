@@ -1,8 +1,7 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    kotlin("kapt")
-    alias(libs.plugins.anvil)
+    alias(libs.plugins.ksp)
 }
 
 val parsedMapboxApiKey: String? by lazy {
@@ -41,5 +40,5 @@ dependencies {
 
     implementation(libs.mapbox.services)
 
-    kapt(libs.dagger.compiler)
+    ksp(libs.kotlin.inject.compiler)
 }

@@ -8,9 +8,6 @@ import se.gustavkarlsson.skylight.android.core.utils.nonEmptyUnsafe
 
 @Parcelize
 class Backstack private constructor(private val _screens: List<Screen>) : Parcelable {
-    constructor(screens: NonEmptyList<Screen>) : this(screens.toList())
-    constructor(screen: Screen) : this(nonEmptyListOf(screen))
-
     val screens: NonEmptyList<Screen> get() = _screens.nonEmptyUnsafe()
 
     override fun equals(other: Any?): Boolean {
@@ -29,9 +26,14 @@ class Backstack private constructor(private val _screens: List<Screen>) : Parcel
     override fun toString(): String {
         return "Backstack(screens=$screens)"
     }
+
+    companion object {
+        fun ofScreens(screens: NonEmptyList<Screen>) = Backstack(screens.toList())
+        fun ofScreen(screen: Screen) = Backstack(nonEmptyListOf(screen))
+    }
 }
 
 fun Backstack.update(block: (NonEmptyList<Screen>) -> NonEmptyList<Screen>): Backstack {
     val newScreens = block(screens)
-    return Backstack(newScreens)
+    return Backstack.ofScreens(newScreens)
 }

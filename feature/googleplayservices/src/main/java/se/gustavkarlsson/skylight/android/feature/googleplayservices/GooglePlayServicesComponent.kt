@@ -1,21 +1,22 @@
 package se.gustavkarlsson.skylight.android.feature.googleplayservices
 
-import com.squareup.anvil.annotations.MergeComponent
-import se.gustavkarlsson.skylight.android.core.AppComponent
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
+import se.gustavkarlsson.skylight.android.core.CoreComponent
+import se.gustavkarlsson.skylight.android.lib.navigation.NavigationOverride
 
-@MergeComponent(
-    scope = GooglePlayServicesScopeMarker::class,
-    dependencies = [AppComponent::class],
-)
-internal interface GooglePlayServicesComponent {
-    fun viewModel(): GooglePlayServicesViewModel
+@Component
+abstract class GooglePlayServicesComponent(
+    @Component internal val coreComponent: CoreComponent,
+) {
+    abstract val navigationOverride: NavigationOverride
+
+    @Provides
+    internal fun navigationOverride(impl: GooglePlayServicesNavigationOverride): NavigationOverride = impl
 
     companion object {
-        fun build(): GooglePlayServicesComponent =
-            DaggerGooglePlayServicesComponent.builder()
-                .appComponent(AppComponent.instance)
-                .build()
+        val instance: GooglePlayServicesComponent = GooglePlayServicesComponent::class.create(
+            coreComponent = CoreComponent.instance,
+        )
     }
 }
-
-abstract class GooglePlayServicesScopeMarker private constructor()

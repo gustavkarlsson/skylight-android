@@ -1,22 +1,29 @@
 package se.gustavkarlsson.skylight.android.feature.background.persistence
 
+import android.content.Context
 import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.SharedPreferencesMigration
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.first
-import kotlinx.datetime.Instant
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import se.gustavkarlsson.skylight.android.feature.background.notifications.Notification
 import se.gustavkarlsson.skylight.android.feature.background.notifications.PlaceWithChance
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import java.io.IOException
+import kotlin.time.Instant
 
+@Inject
 internal class DataStoreLastNotificationRepository(
-    private val dataStore: DataStore<Preferences>,
+    context: Context,
 ) : LastNotificationRepository {
+
+    private val dataStore = context.dataStore
 
     override suspend fun get(): NotificationRecord? {
         return try {
@@ -64,7 +71,7 @@ internal class DataStoreLastNotificationRepository(
 
     private fun getChanceLevel(value: Any?): ChanceLevel {
         val ordinal = value as Int
-        return ChanceLevel.values()[ordinal]
+        return ChanceLevel.entries[ordinal]
     }
 
     override suspend fun insert(notification: Notification) {
@@ -92,6 +99,15 @@ internal class DataStoreLastNotificationRepository(
 
     private fun PlaceWithChance.getValue(): Int = chanceLevel.ordinal
 }
+
+private const val PREFS_FILE_NAME = "last_notification"
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
+    name = PREFS_FILE_NAME,
+    produceMigrations = { context ->
+        listOf(SharedPreferencesMigration(context, PREFS_FILE_NAME))
+    },
+)
 
 private val TIMESTAMP_KEY = longPreferencesKey("timestamp")
 private const val PLACE_ID_KEY_PREFIX = "place_"

@@ -10,15 +10,16 @@ import android.util.TypedValue
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
 import androidx.core.app.NotificationCompat
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.services.Formatter
 import se.gustavkarlsson.skylight.android.feature.background.AuroraAlertsChannelId
 import se.gustavkarlsson.skylight.android.feature.background.R
 import se.gustavkarlsson.skylight.android.lib.places.setPlaceId
-import javax.inject.Inject
 import android.R as AndroidR
 
-internal class NotifierImpl @Inject constructor(
+@Inject
+internal class NotifierImpl(
     private val context: Context,
     private val notificationManager: NotificationManager,
     private val notificationFormatter: Formatter<Notification>,

@@ -13,31 +13,28 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import se.gustavkarlsson.skylight.android.core.logging.logDebug
 import se.gustavkarlsson.skylight.android.lib.navigation.Backstack
+import se.gustavkarlsson.skylight.android.lib.navigation.NavigationComponent
 import se.gustavkarlsson.skylight.android.lib.navigation.Navigator
 import se.gustavkarlsson.skylight.android.lib.navigation.Screens
 import se.gustavkarlsson.skylight.android.lib.places.PlaceId
+import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.lib.places.getPlaceId
-import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    @Inject
-    internal lateinit var navigator: Navigator
+    private val navigator: Navigator = NavigationComponent.instance.navigator
 
-    @Inject
-    internal lateinit var renderer: Renderer
+    private val renderer: Renderer = MainActivityComponent.instance.renderer
 
-    @Inject
-    internal lateinit var selectedPlaceRepository: SelectedPlaceRepository
+    private val selectedPlaceRepository: SelectedPlaceRepository =
+        PlacesComponent.instance.selectedPlaceRepository
 
-    @Inject
-    internal lateinit var screens: Screens
+    private val screens: Screens = NavigationComponent.instance.screens
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        MainActivityComponent.instance.inject(this)
         setupBackPressHandling()
         intent?.getPlaceId()?.let { placeId ->
             onNewPlaceId(placeId)
@@ -82,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         onNewPlaceJob?.cancel()
         onNewPlaceJob = lifecycleScope.launch {
             selectedPlaceRepository.set(placeId)
-            navigator.setBackstack(Backstack(screens.main))
+            navigator.setBackstack(Backstack.ofScreen(screens.main))
         }
     }
 }

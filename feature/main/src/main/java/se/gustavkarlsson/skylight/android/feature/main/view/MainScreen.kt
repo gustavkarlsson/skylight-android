@@ -55,7 +55,7 @@ object MainScreen : Screen {
 
     private fun requestPermission(activity: FragmentActivity, permission: Permission) {
         activity.lifecycleScope.launch {
-            PermissionsComponent.instance.permissionRequester()
+            PermissionsComponent.instance.permissionRequester
                 .request(activity, permission)
         }
     }
@@ -63,7 +63,7 @@ object MainScreen : Screen {
     @Composable
     override fun Content(activity: AppCompatActivity, tag: ServiceTag) {
         val viewModel = getOrRegisterService(VIEW_MODEL_ID, tag) {
-            MainViewModelComponent.build().viewModel()
+            MainViewModelComponent.build().viewModel
         }
         val state by viewModel.state.collectAsLifecycleAwareState()
         RefreshLocationPermission(activity)

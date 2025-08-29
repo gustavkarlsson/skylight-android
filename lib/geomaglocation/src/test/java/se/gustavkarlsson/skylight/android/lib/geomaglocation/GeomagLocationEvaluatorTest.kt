@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.geomaglocation
 
-import assertk.assert
+import assertk.assertThat
 import assertk.assertions.isBetween
 import assertk.assertions.isEqualTo
 import org.junit.Test
@@ -17,48 +17,48 @@ class GeomagLocationEvaluatorTest {
     fun _0LatitudeEvaluatesToImpossible() {
         val chance = impl.evaluate(GeomagLocation(0.0))
 
-        assert(chance).isEqualTo(IMPOSSIBLE)
+        assertThat(chance).isEqualTo(IMPOSSIBLE)
     }
 
     @Test
     fun _90LatitudeEvaluatesToImpossible() {
         val chance = impl.evaluate(GeomagLocation(90.0))
 
-        assert(chance).isEqualTo(IMPOSSIBLE)
+        assertThat(chance).isEqualTo(IMPOSSIBLE)
     }
 
     @Test
     fun minus90LatitudeEvaluatesToImpossible() {
         val chance = impl.evaluate(GeomagLocation(-90.0))
 
-        assert(chance).isEqualTo(IMPOSSIBLE)
+        assertThat(chance).isEqualTo(IMPOSSIBLE)
     }
 
     @Test
     fun bestLatitudeEvaluatesToMax() {
         val chance = impl.evaluate(GeomagLocation(BEST))
 
-        assert(chance).isEqualTo(MAX)
+        assertThat(chance).isEqualTo(MAX)
     }
 
     @Test
     fun minusBestLatitudeEvaluatesToMax() {
         val chance = impl.evaluate(GeomagLocation(-BEST))
 
-        assert(chance).isEqualTo(MAX)
+        assertThat(chance).isEqualTo(MAX)
     }
 
     @Test
     fun _60LatitudeEvaluatesToMediumChance() {
         val chance = impl.evaluate(GeomagLocation(60.0))
 
-        assert(chance).isBetween(Chance(0.4), Chance(0.6))
+        assertThat(chance).isBetween(Chance(0.4), Chance(0.6))
     }
 
     @Test
     fun minus60LatitudeEvaluatesToMediumChance() {
         val chance = impl.evaluate(GeomagLocation(-60.0))
 
-        assert(chance).isBetween(Chance(0.4), Chance(0.6))
+        assertThat(chance).isBetween(Chance(0.4), Chance(0.6))
     }
 }

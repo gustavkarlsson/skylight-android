@@ -1,21 +1,15 @@
 package se.gustavkarlsson.skylight.android.lib.time
 
-import com.squareup.anvil.annotations.ContributesTo
-import se.gustavkarlsson.skylight.android.core.AppScopeMarker
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
 
-@ContributesTo(AppScopeMarker::class)
-interface TimeComponent {
+@Component
+abstract class TimeComponent {
 
-    fun time(): Time
-
-    interface Setter {
-        fun setTimeComponent(component: TimeComponent) {
-            instance = component
-        }
-    }
+    @get:Provides
+    val time: Time = SystemTime
 
     companion object {
-        lateinit var instance: TimeComponent
-            private set
+        val instance: TimeComponent = TimeComponent::class.create()
     }
 }

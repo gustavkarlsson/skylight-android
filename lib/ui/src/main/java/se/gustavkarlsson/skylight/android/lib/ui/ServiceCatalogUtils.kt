@@ -6,12 +6,12 @@ import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceId
 import se.gustavkarlsson.skylight.android.lib.scopedservice.ServiceTag
 
 fun registerService(id: ServiceId, tag: ServiceTag, service: ScopedService) {
-    val serviceCatalog = ScopedServiceComponent.instance.serviceCatalog()
+    val serviceCatalog = ScopedServiceComponent.instance.serviceCatalog
     serviceCatalog.register(id, tag, service)
 }
 
 inline fun <reified T : ScopedService> getService(id: ServiceId): T? {
-    val serviceCatalog = ScopedServiceComponent.instance.serviceCatalog()
+    val serviceCatalog = ScopedServiceComponent.instance.serviceCatalog
     val service = serviceCatalog[id] ?: return null
     check(service is T) {
         "Service is not of type: ${T::class.java.name} (${service.javaClass.name})"

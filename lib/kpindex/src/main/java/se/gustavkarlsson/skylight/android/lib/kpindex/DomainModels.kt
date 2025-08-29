@@ -1,6 +1,6 @@
 package se.gustavkarlsson.skylight.android.lib.kpindex
 
-import kotlinx.datetime.Instant
+import kotlin.time.Instant
 
 data class KpIndex(
     val value: Double,

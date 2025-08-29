@@ -7,7 +7,7 @@ class Permissions internal constructor(
     internal val map: Map<Permission, Access>,
 ) {
     init {
-        val requiredKeys = Permission.values().asList()
+        val requiredKeys = Permission.entries
         val missingKeys = requiredKeys - map.keys
         require(missingKeys.isEmpty()) {
             "Keys missing: $missingKeys"

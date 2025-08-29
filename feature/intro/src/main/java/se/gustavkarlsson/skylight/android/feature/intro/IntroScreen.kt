@@ -42,7 +42,7 @@ internal data class IntroScreen(private val target: Backstack) : Screen {
     @Composable
     override fun Content(activity: AppCompatActivity, tag: ServiceTag) {
         val viewModel = getOrRegisterService(VIEW_MODEL_ID, tag) {
-            IntroComponent.build().viewModel()
+            IntroViewModelComponent.build().viewModel
         }
         Content(
             onPrivacyPolicyClicked = {

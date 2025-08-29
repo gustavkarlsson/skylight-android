@@ -2,15 +2,16 @@ package se.gustavkarlsson.skylight.android.feature.main.state
 
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
 import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.lib.aurora.LoadableAuroraReport
 import se.gustavkarlsson.skylight.android.lib.places.SelectedPlaceRepository
 import se.gustavkarlsson.skylight.android.lib.places.savedLocation
-import javax.inject.Inject
 
-internal class StreamSelectedPlaceAction @Inject constructor(
+@Inject
+internal class StreamSelectedPlaceAction(
     private val selectedPlaceRepository: SelectedPlaceRepository,
 ) : Action<State> {
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {

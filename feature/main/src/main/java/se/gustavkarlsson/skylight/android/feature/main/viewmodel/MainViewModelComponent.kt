@@ -2,16 +2,15 @@ package se.gustavkarlsson.skylight.android.feature.main.viewmodel
 
 import android.content.Context
 import android.os.Build
-import com.squareup.anvil.annotations.ContributesTo
-import com.squareup.anvil.annotations.MergeComponent
-import dagger.Module
-import dagger.Provides
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
+import me.tatarka.inject.annotations.Component
+import me.tatarka.inject.annotations.Provides
+import me.tatarka.inject.annotations.Qualifier
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.Store
-import se.gustavkarlsson.skylight.android.core.AppComponent
+import se.gustavkarlsson.skylight.android.core.CoreComponent
 import se.gustavkarlsson.skylight.android.core.ViewModelScope
 import se.gustavkarlsson.skylight.android.core.entities.Loading
 import se.gustavkarlsson.skylight.android.feature.main.R
@@ -39,56 +38,26 @@ import se.gustavkarlsson.skylight.android.lib.permissions.PermissionsComponent
 import se.gustavkarlsson.skylight.android.lib.places.PlacesComponent
 import se.gustavkarlsson.skylight.android.lib.reversegeocoder.ReverseGeocoderComponent
 import se.gustavkarlsson.skylight.android.lib.settings.SettingsComponent
-import se.gustavkarlsson.skylight.android.lib.time.TimeComponent
 import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherComponent
-import javax.inject.Qualifier
 
+@Component
 @ViewModelScope
-@MergeComponent(
-    scope = MainScopeMarker::class,
-    dependencies = [
-        AppComponent::class,
-        TimeComponent::class,
-        WeatherComponent::class,
-        LocationComponent::class,
-        AuroraComponent::class,
-        PermissionsComponent::class,
-        PlacesComponent::class,
-        DarknessComponent::class,
-        KpIndexComponent::class,
-        GeomagLocationComponent::class,
-        GeocoderComponent::class,
-        ReverseGeocoderComponent::class,
-        SettingsComponent::class,
-    ],
-)
-internal interface MainViewModelComponent {
-    fun viewModel(): MainViewModel
-
-    companion object {
-        fun build(): MainViewModelComponent =
-            DaggerMainViewModelComponent.builder()
-                .appComponent(AppComponent.instance)
-                .timeComponent(TimeComponent.instance)
-                .weatherComponent(WeatherComponent.instance)
-                .locationComponent(LocationComponent.instance)
-                .auroraComponent(AuroraComponent.instance)
-                .permissionsComponent(PermissionsComponent.instance)
-                .placesComponent(PlacesComponent.instance)
-                .darknessComponent(DarknessComponent.instance)
-                .kpIndexComponent(KpIndexComponent.instance)
-                .geomagLocationComponent(GeomagLocationComponent.instance)
-                .geocoderComponent(GeocoderComponent.instance)
-                .reverseGeocoderComponent(ReverseGeocoderComponent.instance)
-                .settingsComponent(SettingsComponent.instance)
-                .build()
-    }
-}
-
-@Module
-@ContributesTo(MainScopeMarker::class)
-object MainViewModelModule {
+internal abstract class MainViewModelComponent(
+    @Component val coreComponent: CoreComponent,
+    @Component val darknessComponent: DarknessComponent,
+    @Component val kpIndexComponent: KpIndexComponent,
+    @Component val geomagLocationComponent: GeomagLocationComponent,
+    @Component val permissionsComponent: PermissionsComponent,
+    @Component val weatherComponent: WeatherComponent,
+    @Component val locationComponent: LocationComponent,
+    @Component val auroraComponent: AuroraComponent,
+    @Component val placesComponent: PlacesComponent,
+    @Component val geocoderComponent: GeocoderComponent,
+    @Component val reverseGeocoderComponent: ReverseGeocoderComponent,
+    @Component val settingsComponent: SettingsComponent,
+) {
+    abstract val viewModel: MainViewModel
 
     @Provides
     @ViewModelScope
@@ -161,10 +130,25 @@ object MainViewModelModule {
         initialState: State,
         startActions: List<@JvmSuppressWildcards Action<State>>,
     ): Store<State> = Store(initialState, startActions)
+
+    companion object {
+        fun build(): MainViewModelComponent = MainViewModelComponent::class.create(
+            coreComponent = CoreComponent.instance,
+            weatherComponent = WeatherComponent.instance,
+            locationComponent = LocationComponent.instance,
+            auroraComponent = AuroraComponent.instance,
+            permissionsComponent = PermissionsComponent.instance,
+            placesComponent = PlacesComponent.instance,
+            darknessComponent = DarknessComponent.instance,
+            kpIndexComponent = KpIndexComponent.instance,
+            geomagLocationComponent = GeomagLocationComponent.instance,
+            geocoderComponent = GeocoderComponent.instance,
+            reverseGeocoderComponent = ReverseGeocoderComponent.instance,
+            settingsComponent = SettingsComponent.instance,
+        )
+    }
 }
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 internal annotation class BackgroundLocationName
-
-abstract class MainScopeMarker private constructor()

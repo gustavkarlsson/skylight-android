@@ -5,7 +5,7 @@ import arrow.core.Either
 import arrow.core.getOrElse
 import arrow.core.right
 import com.ioki.textref.TextRef
-import kotlinx.datetime.Instant
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.core.entities.Chance
 import se.gustavkarlsson.skylight.android.core.entities.ChanceLevel
 import se.gustavkarlsson.skylight.android.core.entities.Loadable
@@ -29,11 +29,12 @@ import se.gustavkarlsson.skylight.android.lib.places.PlaceId
 import se.gustavkarlsson.skylight.android.lib.ui.compose.ToggleButtonState
 import se.gustavkarlsson.skylight.android.lib.weather.Weather
 import se.gustavkarlsson.skylight.android.lib.weather.WeatherError
-import javax.inject.Inject
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Instant
 import se.gustavkarlsson.skylight.android.core.R as CoreR
 
-internal class StateToViewStateMapper @Inject constructor(
+@Inject
+internal class StateToViewStateMapper(
     private val auroraChanceEvaluator: ChanceEvaluator<AuroraReport>,
     private val chanceLevelFormatter: Formatter<ChanceLevel>,
     private val darknessChanceEvaluator: ChanceEvaluator<Darkness>,

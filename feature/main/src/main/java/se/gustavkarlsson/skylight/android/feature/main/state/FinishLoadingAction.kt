@@ -2,11 +2,12 @@ package se.gustavkarlsson.skylight.android.feature.main.state
 
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterIsInstance
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.conveyor.Action
 import se.gustavkarlsson.conveyor.AtomicStateFlow
-import javax.inject.Inject
 
-internal class FinishLoadingAction @Inject constructor() : Action<State> {
+@Inject
+internal class FinishLoadingAction() : Action<State> {
     override suspend fun execute(stateFlow: AtomicStateFlow<State>) {
         stateFlow
             .filterIsInstance<State.Loading>()
