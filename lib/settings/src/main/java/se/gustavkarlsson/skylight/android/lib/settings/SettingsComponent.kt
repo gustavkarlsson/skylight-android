@@ -3,7 +3,7 @@ package se.gustavkarlsson.skylight.android.lib.settings
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
-import com.squareup.sqldelight.android.AndroidSqliteDriver
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import kotlinx.coroutines.CoroutineDispatcher
 import me.tatarka.inject.annotations.Component
 import me.tatarka.inject.annotations.Provides

@@ -12,9 +12,12 @@ android {
 }
 
 sqldelight {
-    database("Database") {
-        schemaOutputDirectory = file("src/main/sqldelight")
-        verifyMigrations = true
+    databases {
+        create("Database") {
+            schemaOutputDirectory = file("src/main/sqldelight")
+            packageName.set("se.gustavkarlsson.skylight.android.lib.settings")
+            verifyMigrations = true
+        }
     }
 }
 

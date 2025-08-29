@@ -43,6 +43,6 @@ allprojects {
     }
 }
 
-task<Delete>("clean") {
+tasks.register<Delete>("clean") {
     delete(layout.buildDirectory)
 }
