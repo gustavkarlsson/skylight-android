@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         onNewPlaceJob?.cancel()
         onNewPlaceJob = lifecycleScope.launch {
             selectedPlaceRepository.set(placeId)
-            navigator.setBackstack(Backstack(screens.main))
+            navigator.setBackstack(Backstack.ofScreen(screens.main))
         }
     }
 }
