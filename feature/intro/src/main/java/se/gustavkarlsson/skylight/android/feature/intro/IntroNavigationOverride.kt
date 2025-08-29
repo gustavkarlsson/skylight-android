@@ -16,7 +16,7 @@ internal class IntroNavigationOverride(
     override fun override(oldBackstack: Backstack, targetBackstack: Backstack): Backstack? {
         val introScreenOnStack = targetBackstack.screens.any { it.type == Screen.Type.Intro }
         return when {
-            !introScreenOnStack && isFirstRun() -> Backstack(IntroScreen(targetBackstack))
+            !introScreenOnStack && isFirstRun() -> Backstack.ofScreen(IntroScreen(targetBackstack))
             else -> null
         }
     }

@@ -21,7 +21,7 @@ internal class GooglePlayServicesNavigationOverride(
             targetBackstack.screens.any { it.type in REQUIRING_SCREEN_NAMES } &&
                 targetBackstack.screens.none { it.type == Screen.Type.GooglePlayServices } &&
                 !googlePlayServicesChecker.isAvailable ->
-                Backstack(GooglePlayServicesScreen(targetBackstack))
+                Backstack.ofScreen(GooglePlayServicesScreen(targetBackstack))
             else -> null
         }
     }

@@ -17,7 +17,7 @@ internal class DefaultNavigator(
 ) : Navigator {
 
     private val mutableBackstackChanges = let {
-        val targetBackstack = Backstack(defaultScreen)
+        val targetBackstack = Backstack.ofScreen(defaultScreen)
         val newBackstack = overrideBackstack(targetBackstack, targetBackstack)
         logInfo { "Setting backstack to: $newBackstack" }
         MutableStateFlow(BackstackChange(newBackstack, newBackstack))
@@ -65,7 +65,7 @@ internal class DefaultNavigator(
             logError { "Attempt to clear entire backstack detected. Aborting navigation" }
             return
         }
-        val targetBackstack = Backstack(targetScreens)
+        val targetBackstack = Backstack.ofScreens(targetScreens)
         val newBackstack = overrideBackstack(oldBackstack, targetBackstack)
         logInfo { "Setting backstack to: $newBackstack" }
         mutableBackstackChanges.value = BackstackChange(oldBackstack, newBackstack)

@@ -1,11 +1,11 @@
 [versions]
 
 # Tooling
-androidGradlePlugin = "8.13.0-rc01"
+androidGradlePlugin = "8.13.0-rc02"
 jgit = "6.10.0.202406032230-r"
 kotlin = "2.2.10" # Must match ksp version
-ktlintGradle = "11.6.1"
-playPublisher = "3.10.1"
+ktlintGradle = "12.3.0"
+playPublisher = "3.12.1"
 
 # App
 androidActivity = "1.10.1"
@@ -14,13 +14,13 @@ androidAppcompat = "1.7.1"
 androidCore = "1.17.0"
 androidLifecycle = "2.9.3"
 androidWorkManager = "2.10.3"
-arrow = "1.2.4"
+arrow = "2.1.2"
 assent = "3.0.2"
 atomicfu = "0.29.0"
 composeBom = "2025.08.01"
 composeConstraintLayout = "1.1.1"
 conveyor = "cc93e41adc" # TODO use release version
-firebaseBom = "34.1.0"
+firebaseBom = "34.2.0"
 crashlyticsGradle = "3.0.6" # Make sure this matches the bom: https://firebase.google.com/support/release-notes/android
 dataStore = "1.1.7"
 googleServices = "4.4.3"
