@@ -5,7 +5,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.datetime.Instant
 import org.mobilenativefoundation.store.store5.Fetcher
 import org.mobilenativefoundation.store.store5.FetcherResult
 import se.gustavkarlsson.skylight.android.core.logging.logError
@@ -13,6 +12,7 @@ import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.core.logging.logWarn
 import java.io.IOException
 import kotlin.time.Duration
+import kotlin.time.Instant
 
 internal fun createKpIndexForecastFetcher(
     api: KpIndexApi,

@@ -40,22 +40,30 @@ abstract class KpIndexComponent internal constructor(
 
     abstract val kpIndexProvider: KpIndexProvider
 
+    abstract val kpIndexForecastProvider: KpIndexForecastProvider
+
     @Provides
     @KpIndexScope
-    internal fun kpIndexProvider(
+    internal fun kpIndexApi(
         okHttpClient: OkHttpClient,
-        @Io dispatcher: CoroutineDispatcher,
-        time: Time,
-    ): KpIndexProvider {
+    ): KpIndexApi {
         val json = Json { ignoreUnknownKeys = true }
 
         @Suppress("EXPERIMENTAL_API_USAGE")
         val converterFactory =
             json.asConverterFactory("application/json; charset=UTF8".toMediaType())
 
-        val api = Retrofit.Builder().client(okHttpClient).addConverterFactory(converterFactory)
+        return Retrofit.Builder().client(okHttpClient).addConverterFactory(converterFactory)
             .baseUrl("https://skylight-api.com/").build().create(KpIndexApi::class.java)
+    }
 
+    @Provides
+    @KpIndexScope
+    internal fun kpIndexProvider(
+        api: KpIndexApi,
+        @Io dispatcher: CoroutineDispatcher,
+        time: Time,
+    ): KpIndexProvider {
         val pollingInterval = 15.minutes
         val fetcher = createKpIndexFetcher(
             api = api,
@@ -71,6 +79,28 @@ abstract class KpIndexComponent internal constructor(
         val store = StoreBuilder.from(fetcher).cachePolicy(cachePolicy).build()
 
         return StoreKpIndexProvider(store = store)
+    }
+
+    @Provides
+    @KpIndexScope
+    internal fun kpIndexForecastProvider(
+        api: KpIndexApi,
+        @Io dispatcher: CoroutineDispatcher,
+    ): KpIndexForecastProvider {
+        val pollingInterval = 60.minutes
+        val fetcher = createKpIndexForecastFetcher(
+            api = api,
+            retryDelay = 15.seconds,
+            pollingInterval = pollingInterval,
+            dispatcher = dispatcher,
+        )
+
+        val expiry = (pollingInterval / 2)
+        val cachePolicy = MemoryPolicy.builder<Unit, KpIndexForecast>().setExpireAfterWrite(expiry).build()
+
+        val store = StoreBuilder.from(fetcher).cachePolicy(cachePolicy).build()
+
+        return StoreKpIndexForecastProvider(store = store)
     }
 
     companion object {

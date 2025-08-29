@@ -1,19 +1,19 @@
 package se.gustavkarlsson.skylight.android.lib.darkness
 
-import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toJavaZoneId
 import net.e175.klaus.solarpositioning.Grena3
 import se.gustavkarlsson.skylight.android.lib.location.Location
-import java.time.ZoneOffset
-import java.util.GregorianCalendar
-import java.util.TimeZone
+import java.time.ZonedDateTime
+import kotlin.time.Instant
+import kotlin.time.toJavaInstant
 
-internal fun getDarkness(location: Location, timestamp: Instant): Darkness {
-    val sunZenithAngle = calculateSunZenithAngle(location, timestamp)
+internal fun getDarkness(location: Location, timestamp: Instant, timeZone: TimeZone): Darkness {
+    val sunZenithAngle = calculateSunZenithAngle(location, timestamp.toJavaInstant().atZone(timeZone.toJavaZoneId()))
     return Darkness(sunZenithAngle, timestamp)
 }
 
-private fun calculateSunZenithAngle(location: Location, time: Instant): Double {
-    val date = time.toGregorianCalendar()
+private fun calculateSunZenithAngle(location: Location, date: ZonedDateTime): Double {
     val azimuthAndZenithAngle = Grena3.calculateSolarPosition(
         date,
         location.latitude,
@@ -22,6 +22,3 @@ private fun calculateSunZenithAngle(location: Location, time: Instant): Double {
     )
     return azimuthAndZenithAngle.zenithAngle
 }
-
-private fun Instant.toGregorianCalendar() = GregorianCalendar(TimeZone.getTimeZone(ZoneOffset.UTC))
-    .apply { timeInMillis = toEpochMilliseconds() }

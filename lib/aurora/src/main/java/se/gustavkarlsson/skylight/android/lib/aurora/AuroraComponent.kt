@@ -37,6 +37,11 @@ abstract class AuroraComponent internal constructor(
         impl: AuroraReportEvaluator,
     ): ChanceEvaluator<AuroraReport> = impl
 
+    @Provides
+    internal fun auroraForecastReportProvider(
+        impl: CombiningAuroraForecastReportProvider,
+    ): AuroraForecastReportProvider = impl
+
     companion object {
         val instance: AuroraComponent = AuroraComponent::class.create(
             darknessComponent = DarknessComponent.instance,

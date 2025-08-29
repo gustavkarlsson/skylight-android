@@ -1,21 +1,20 @@
 package se.gustavkarlsson.skylight.android.lib.darkness
 
-import dagger.Reusable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
-import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import me.tatarka.inject.annotations.Inject
 import se.gustavkarlsson.skylight.android.core.logging.logInfo
 import se.gustavkarlsson.skylight.android.lib.location.Location
 import se.gustavkarlsson.skylight.android.lib.time.Time
-import javax.inject.Inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Instant
 
-@Reusable
 internal class KlausBrunnerDarknessForecastProvider(
     private val time: Time,
     private val pollingInterval: Duration,
@@ -30,13 +29,13 @@ internal class KlausBrunnerDarknessForecastProvider(
     )
 
     override fun get(location: Location): DarknessForecast {
-        val darknesses = generateDarknesses(time.now(), location)
+        val darknesses = generateDarknesses(time.now(), time.timeZone(), location)
         val forecast = DarknessForecast(darknesses.toList())
         logInfo { "Provided darkness forecast: $forecast" }
         return forecast
     }
 
-    private fun generateDarknesses(start: Instant, location: Location): Sequence<Darkness> {
+    private fun generateDarknesses(start: Instant, timeZone: TimeZone, location: Location): Sequence<Darkness> {
         return generateSequence(start) { lastTimestamp ->
             val timestamp = lastTimestamp + 30.minutes
             if (timestamp > start + 7.days) {
@@ -45,7 +44,7 @@ internal class KlausBrunnerDarknessForecastProvider(
                 timestamp
             }
         }.map { timestamp ->
-            getDarkness(location, timestamp)
+            getDarkness(location, timestamp, timeZone)
         }
     }
 
@@ -56,7 +55,7 @@ internal class KlausBrunnerDarknessForecastProvider(
 
     private fun pollDarkness(location: Location) = flow {
         while (true) {
-            val darknesses = generateDarknesses(time.now(), location)
+            val darknesses = generateDarknesses(time.now(), time.timeZone(), location)
             val forecast = DarknessForecast(darknesses.toList())
             emit(forecast)
             delay(pollingInterval)

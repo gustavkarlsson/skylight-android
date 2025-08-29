@@ -19,8 +19,13 @@ abstract class DarknessComponent internal constructor(
 
     abstract val darknessProvider: DarknessProvider
 
+    abstract val darknessForecastProvider: DarknessForecastProvider
+
     @Provides
     internal fun darknessProvider(impl: KlausBrunnerDarknessProvider): DarknessProvider = impl
+
+    @Provides
+    internal fun darknessForecastProvider(impl: KlausBrunnerDarknessForecastProvider): DarknessForecastProvider = impl
 
     companion object {
         val instance: DarknessComponent = DarknessComponent::class.create(

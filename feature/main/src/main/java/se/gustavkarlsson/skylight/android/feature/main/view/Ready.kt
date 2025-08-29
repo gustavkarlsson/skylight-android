@@ -23,12 +23,11 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import kotlinx.datetime.Clock
 import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.plus
+import kotlinx.datetime.toJavaDayOfWeek
 import kotlinx.datetime.toLocalDateTime
 import se.gustavkarlsson.skylight.android.feature.main.R
 import se.gustavkarlsson.skylight.android.feature.main.view.linechart.AutomaticGridFactory
@@ -51,7 +50,9 @@ import se.gustavkarlsson.skylight.android.lib.ui.compose.SearchFieldState
 import java.time.format.TextStyle
 import java.util.Locale
 import kotlin.math.min
+import kotlin.time.Clock
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Instant
 import se.gustavkarlsson.skylight.android.core.R as CoreR
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -132,7 +133,7 @@ internal fun Ready(
                                             while (date in startTime.date..endTime.date) {
                                                 val label = Label(
                                                     value = date.atStartOfDayIn(timeZone).epochSeconds.toDouble(),
-                                                    text = date.dayOfWeek.getDisplayName(
+                                                    text = date.dayOfWeek.toJavaDayOfWeek().getDisplayName(
                                                         TextStyle.FULL,
                                                         Locale.getDefault(), // FIXME don't get locale from here
                                                     ),
